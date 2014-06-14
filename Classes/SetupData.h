@@ -19,7 +19,6 @@
 @property (nonatomic, retain) NSMutableArray *channels;
 @property (nonatomic, retain) NSMutableArray *configuredCams;
 
-- (id)init;
 - (id)initWithChannels:(NSMutableArray *)channs andProfiles:(NSMutableArray *)cps;
 - (BOOL)saveSessionData;
 - (BOOL)restoreSessionData;

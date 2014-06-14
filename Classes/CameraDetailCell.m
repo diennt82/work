@@ -3,7 +3,7 @@
 //  BlinkHD_ios
 //
 //  Created by openxcell on 5/19/14.
-//  Copyright (c) 2014 Smart Panda Ltd. All rights reserved.
+//  Copyright (c) 2014 eBuyNow eCommerce Limited. All rights reserved.
 //
 
 #import "CameraDetailCell.h"
@@ -14,24 +14,18 @@
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        
-        NSArray *nibArray = [[NSBundle mainBundle]loadNibNamed:@"CameraDetailCell" owner:self options:nil];
-        self = [nibArray objectAtIndex:0];
         self.backgroundColor = COLOR_RGB(43.0, 50.0, 56.0);
     }
     return self;
 }
 
-- (void)awakeFromNib
+- (void)dealloc
 {
-    // Initialization code
-}
-
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated
-{
-    [super setSelected:selected animated:animated];
-
-    // Configure the view for the selected state
+    [_btnChangeName release];
+    [_btnChangeImage release];
+    [_lblCameraName release];
+    [_lblCamVer release];
+    [super dealloc];
 }
 
 @end

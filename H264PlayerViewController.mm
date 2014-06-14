@@ -3,7 +3,7 @@
 //  MBP_ios
 //
 //  Created by NxComm on 3/9/13.
-//  Copyright (c) 2013 Smart Panda Ltd. All rights reserved.
+//  Copyright (c) 2013 eBuyNow eCommerce Limited. All rights reserved.
 //
 
 #import "H264PlayerViewController.h"
@@ -159,9 +159,11 @@
 @property (nonatomic, retain) NSString *viewVideoIn;
 #endif
 
+@property (nonatomic, retain) UIControl *backCover;
+
 - (void)centerScrollViewContents;
-- (void)scrollViewDoubleTapped:(UITapGestureRecognizer*)recognizer;
-- (void)scrollViewTwoFingerTapped:(UITapGestureRecognizer*)recognizer;
+- (void)scrollViewDoubleTapped:(UITapGestureRecognizer *)recognizer;
+- (void)scrollViewTwoFingerTapped:(UITapGestureRecognizer *)recognizer;
 
 @end
 
@@ -212,7 +214,7 @@ double _ticks = 0;
     CFRelease(soundFileURLRef);
     
     [self updateNavigationBarAndToolBar];
-    [self addHubbleLogo_Back];
+    //[self addHubbleLogo_Back];
     
     self.imageViewStreamer = [[UIImageView alloc] initWithFrame:_imageViewVideo.frame];
     //[self.imageViewStreamer setContentMode:UIViewContentModeScaleAspectFit];
@@ -277,13 +279,6 @@ double _ticks = 0;
     [self becomeActive];
 }
 
-//At first time, we set to FALSE after call checkOrientation()
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    _syncPortraitAndLandscape = NO;
-}
-
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -345,15 +340,30 @@ double _ticks = 0;
     }
     
     [self checkOrientation];
+    
+    if ( !_backCover ) {
+        // Cover the back button so we can overide the default back action
+        self.backCover = [[UIControl alloc] initWithFrame:CGRectMake( 0, 0, 100, 44)]; // Width setup for @"Cameras"
+        
+        // Show the cover for testing
+        //_backCover.backgroundColor = [UIColor colorWithRed:1.0 green:0.0 blue:0.0 alpha:0.15];
+        
+        [_backCover addTarget:self action:@selector(prepareGoBackToCameraList:) forControlEvents:UIControlEventTouchUpInside];
+        UINavigationBar *navBar = self.navigationController.navigationBar;
+        [navBar addSubview:_backCover];
+        [_backCover release];
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
     [self stopTimerRecoring];
+    [_backCover removeFromSuperview];
 }
 
-- (void)viewDidUnload {
+- (void)viewDidUnload
+{
     [super viewDidUnload];
     
     NSLog(@"%s", __FUNCTION__);
@@ -526,13 +536,13 @@ double _ticks = 0;
     UITapGestureRecognizer *doubleTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(scrollViewDoubleTapped:)];
     doubleTapRecognizer.numberOfTapsRequired = 2;
     doubleTapRecognizer.numberOfTouchesRequired = 1;
-    [self.imageViewStreamer addGestureRecognizer:doubleTapRecognizer];
+    [_imageViewStreamer addGestureRecognizer:doubleTapRecognizer];
     [doubleTapRecognizer release];
     
     UITapGestureRecognizer *twoFingerTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(scrollViewTwoFingerTapped:)];
     twoFingerTapRecognizer.numberOfTapsRequired = 1;
     twoFingerTapRecognizer.numberOfTouchesRequired = 2;
-    [self.imageViewStreamer addGestureRecognizer:twoFingerTapRecognizer];
+    [_imageViewStreamer addGestureRecognizer:twoFingerTapRecognizer];
     [twoFingerTapRecognizer release];
 }
 
@@ -541,10 +551,10 @@ double _ticks = 0;
  */
 - (void)removeGestureRecognizerAtPortraitMode
 {
-    for(UITapGestureRecognizer *gesture in [self.imageViewStreamer gestureRecognizers]) {
-        if([gesture isKindOfClass:[UITapGestureRecognizer class]]) {
+    for (UITapGestureRecognizer *gesture in [_imageViewStreamer gestureRecognizers]) {
+        if ([gesture isKindOfClass:[UITapGestureRecognizer class]]) {
             if (gesture.numberOfTapsRequired == 2 || gesture.numberOfTouchesRequired == 2) {
-                [self.imageViewStreamer removeGestureRecognizer:gesture];
+                [_imageViewStreamer removeGestureRecognizer:gesture];
             }
         }
     }
@@ -4263,8 +4273,6 @@ double _ticks = 0;
         }
         
         [self showControlMenu];
-        //add hubble_logo_back
-        //[self addHubbleLogo_Back];
         _isLandScapeMode = NO;
 	}
     

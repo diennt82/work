@@ -550,12 +550,15 @@
 
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if(indexPath.section==0) {
+    if (indexPath.section == 0) {
         //General Setting
         static NSString *cellIdentifier = @"CameraDetailCell";
         CameraDetailCell *camDetCell = (CameraDetailCell*)[tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-        if(camDetCell==nil) {
-            camDetCell = [[CameraDetailCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+        if ( !camDetCell ) {
+            [[NSBundle mainBundle] loadNibNamed:@"CameraDetailCell" owner:self options:nil];
+            camDetCell = (CameraDetailCell *)_tableViewCell;
+            self.tableViewCell = nil;
+            
             [camDetCell.btnChangeImage addTarget:self action:@selector(btnChangeCameraIcon) forControlEvents:UIControlEventTouchUpInside];
             [camDetCell.btnChangeName addTarget:self action:@selector(btnChangeCameraName) forControlEvents:UIControlEventTouchUpInside];
             
@@ -565,7 +568,6 @@
         camDetCell.lblCameraName.text = self.camChannel.profile.name;
         camDetCell.lblCamVer.text = self.camChannel.profile.fw_version;
         return camDetCell;
-
     }
     else {
         //Sensitive Setting
@@ -1256,6 +1258,7 @@
     
     if ( !_sensitivityInfo) {
         self.sensitivityInfo = [[SensitivityInfo alloc] init];
+        [_sensitivityInfo release];
     }
     
     if ( !_jsonComm ) {
@@ -1263,6 +1266,7 @@
                                                               Selector:nil
                                                           FailSelector:nil
                                                              ServerErr:nil];
+        [_jsonComm release];
     }
     
     NSDictionary *responseDict = [_jsonComm sendCommandBlockedWithRegistrationId:self.camChannel.profile.registrationID
@@ -1289,7 +1293,7 @@
                     settingsArray[i] = [settingsArray[i] substringFromIndex:3];
                 }
                 
-                self.sensitivityInfo.motionOn      = [settingsArray[0] integerValue];
+                self.sensitivityInfo.motionOn = [settingsArray[0] integerValue];
                 NSLog(@"%@, %d", settingsArray[0], [settingsArray[0] integerValue]);
                 
                 if ([settingsArray[1] integerValue] <= 10) {

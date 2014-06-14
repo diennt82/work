@@ -3,7 +3,7 @@
 //  BlinkHD_ios
 //
 //  Created by Developer on 12/20/13.
-//  Copyright (c) 2013 Smart Panda Ltd. All rights reserved.
+//  Copyright (c) 2013 eBuyNow eCommerce Limited. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
@@ -14,18 +14,16 @@
 @protocol TimelineVCDelegate <NSObject>
 
 - (void)stopStreamToPlayback;
+
 //@optional
 //- (void) refreshTableView;
 
 @end
+
 #define DATE_COMPONENTS (NSYearCalendarUnit| NSMonthCalendarUnit | NSDayCalendarUnit | NSWeekCalendarUnit |  NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit | NSWeekdayCalendarUnit | NSWeekdayOrdinalCalendarUnit)
 #define CURRENT_CALENDAR [NSCalendar currentCalendar]
 
-
 @interface TimelineViewController : UITableViewController
-{
-    NSArray *aryDatePrefix;
-}
 
 @property (nonatomic, assign) id<TimelineVCDelegate> timelineVCDelegate;
 @property (nonatomic, assign) CamChannel *camChannel;
@@ -33,6 +31,6 @@
 @property (nonatomic, assign) UINavigationController *navVC;
 @property (nonatomic, assign) id parentVC;
 
-- (void)loadEvents: (CamChannel *)camChannel;
+- (void)loadEvents:(CamChannel *)camChannel;
 
 @end

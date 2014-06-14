@@ -12,8 +12,9 @@
 
 @interface CameraMenuViewController : UIViewController
 
-@property (nonatomic, copy) NSString *cameraName;
+@property (nonatomic, assign) IBOutlet UITableViewCell *tableViewCell;
 @property (nonatomic, assign) id<ConnectionMethodDelegate> cameraMenuDelegate;
 @property (nonatomic, assign) CamChannel *camChannel;
+@property (nonatomic, copy) NSString *cameraName;
 
 @end

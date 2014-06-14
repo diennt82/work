@@ -391,25 +391,26 @@ void checkingApplicationCrashed()
 
 - (BOOL)shouldAlertForThisMac:(NSString *)mac_without_colon
 {
+    BOOL shouldAlert = NO;
     SetupData *savedData = [[SetupData alloc] init];
-	if ([savedData restoreSessionData] == TRUE) {
+    
+	if ( [savedData restoreSessionData] ) {
 		NSArray *restored_profiles = savedData.configuredCams;
         CamProfile *cp = nil;
-        for (int i = 0; i< restored_profiles.count; i++) {
+        for (int i = 0; i < restored_profiles.count; i++) {
             cp = (CamProfile *)restored_profiles[i];
             if ( cp.mac_address ) {
-                NSString *  mac_wo_colon = [Util strip_colon_fr_mac:cp.mac_address]; 
+                NSString *mac_wo_colon = [Util strip_colon_fr_mac:cp.mac_address]; 
                 if ([mac_wo_colon isEqualToString:mac_without_colon]) {
-                    [savedData release];
-                    return TRUE;
+                    shouldAlert = YES;
+                    break;
                 }
             }
         }
 	}
     
     [savedData release];
-    
-    return FALSE; 
+    return shouldAlert;
 }
 
 + (NSString *)GetUUID

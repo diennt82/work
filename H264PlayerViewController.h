@@ -3,7 +3,7 @@
 //  MBP_ios
 //
 //  Created by NxComm on 3/9/13.
-//  Copyright (c) 2013 Smart Panda Ltd. All rights reserved.
+//  Copyright (c) 2013 eBuyNow eCommerce Limited. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>

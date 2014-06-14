@@ -61,7 +61,9 @@
                                                           Selector:@selector(getCamListSuccess:)
                                                       FailSelector:@selector(getCamListFailure:)
                                                          ServerErr:@selector(getCamListServerUnreachable)];
-    NSDictionary *responseDict = [self.jsonComm getAllDevicesBlockedWithApiKey:[userDefaults objectForKey:@"PortalApiKey"]];
+    [_jsonComm release];
+    
+    NSDictionary *responseDict = [_jsonComm getAllDevicesBlockedWithApiKey:[userDefaults objectForKey:@"PortalApiKey"]];
     if (responseDict) {
         NSArray *dataArr = responseDict[@"data"];
         NSMutableArray *cam_profiles = [self parse_camera_list:dataArr];
@@ -95,7 +97,9 @@
                                                           Selector:@selector(getCamListSuccess:)
                                                       FailSelector:@selector(getCamListFailure:)
                                                          ServerErr:@selector(getCamListServerUnreachable)];
-    NSDictionary *responseDict = [self.jsonComm getAllDevicesBlockedWithApiKey:[userDefaults objectForKey:@"PortalApiKey"]];
+    [_jsonComm release];
+    
+    NSDictionary *responseDict = [_jsonComm getAllDevicesBlockedWithApiKey:[userDefaults objectForKey:@"PortalApiKey"]];
     if (responseDict) {
         NSArray *dataArr = responseDict[@"data"];
         NSMutableArray *cam_profiles = [self parse_camera_list:dataArr];
@@ -129,8 +133,9 @@
                                                           Selector:@selector(getCamListSuccess:)
                                                       FailSelector:@selector(getCamListFailure:)
                                                          ServerErr:@selector(getCamListServerUnreachable)];
+    [_jsonComm release];
 
-    NSDictionary *responseDict = [self.jsonComm getAllDevicesBlockedWithApiKey:[userDefaults objectForKey:@"PortalApiKey"]];
+    NSDictionary *responseDict = [_jsonComm getAllDevicesBlockedWithApiKey:[userDefaults objectForKey:@"PortalApiKey"]];
     if (responseDict) {
         NSArray *dataArr = responseDict[@"data"];
         NSMutableArray *cam_profiles = [self parse_camera_list:dataArr];
@@ -187,9 +192,7 @@
                                                                                     Selector:nil
                                                                                 FailSelector:nil
                                                                                    ServerErr:nil];
-    
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    
     NSString *apiKey    = [userDefaults objectForKey:@"PortalApiKey"];
     NSString *udid      = [userDefaults objectForKey:CAMERA_UDID];
     NSString *hostSSID  = [userDefaults objectForKey:HOST_SSID];
@@ -230,11 +233,12 @@
                                                           Selector:nil
                                                       FailSelector:nil
                                                          ServerErr:nil];
+    [_jsonComm release];
     
     NSDictionary *responseDict = [_jsonComm getAllDevicesBlockedWithApiKey:[[NSUserDefaults standardUserDefaults] objectForKey:@"PortalApiKey"]];
+    
 #if 0
     responseDict = nil;
-    
     [NSThread sleepForTimeInterval:20];
 #endif
     
@@ -249,12 +253,10 @@
 
 - (void)query_snapshot_from_server:(NSArray *)cam_profiles
 {
-    
 }
 
 - (void)query_stream_mode_for_cam:(CamProfile *)cp
 {
-    
 }
 
 - (void)getCamListSuccess:(NSDictionary *)responseDict
@@ -364,12 +366,11 @@
 }
 
 /*
- 
  Response code 200 :
  Response msg :
  Cam = 0834, Mac = BC38D2404093, last_comm_from_cam = 2013-04-30 11:19:56, time_up_to_request = 19887, streaming_mode = 3, ipUpdatedDate = 2013-04-30 11:19:56, sysDate = 2013-05-14 06:47:54, Is_camera_Active = 0, local_ip = 192.168.1.44, camera_ip = 218.189.253.110, isAvailable = 0, codec = MJPEG, cameraFirmwareVersion = 0
- 
  */
+
 #define CAM_LIST_ENTRY_NUM_TOKEN 13
 #define TOTAL_CAM     @"Total_Cameras="
 #define CAM_NAME      @" Cam = "
@@ -464,79 +465,88 @@
 
 - (void)sync_online_and_offline_data:(NSMutableArray *)online_profiles
 {
-    SetupData *offline_data = [[[SetupData alloc] init] autorelease];
+    SetupData *offline_data = [[SetupData alloc] init];
 	
-	if ([offline_data restoreSessionData] == TRUE) {
+	if ( [offline_data restoreSessionData] ) {
         NSLog(@"Has offline data ");
 	}
 	else {
 		NSLog(@"No offline data ");
 	}
     
-    if (online_profiles == nil) {
+    if ( !online_profiles ) {
 		NSLog(@"No online data, Clear offline data");
 		offline_data.configuredCams = [[NSMutableArray alloc] init];
+        [offline_data.configuredCams release];
 		
 		//create 4 blank channels
 		offline_data.channels = [[NSMutableArray alloc] init];
+        [offline_data.channels release];
+        
 		CamChannel *ch;
 		for (int i = 0; i < 4; i++) {
-			ch = [[CamChannel alloc]initWithChannelIndex:i];
+			ch = [[CamChannel alloc] initWithChannelIndex:i];
 			[offline_data.channels addObject:ch];
+            [ch release];
 		}
 		
-		//save channels & empty profiles
+		//save; channels & empty profiles
 		[offline_data saveSessionData];
-		return;
 	}
-	
-	NSMutableArray *offline_profiles = online_profiles;
-	offline_data.configuredCams = online_profiles;
+    else {
+        NSMutableArray *offline_profiles = online_profiles;
+        offline_data.configuredCams = online_profiles;
 
-	// rebinding
-	if ( offline_data.configuredCams && offline_data.channels ) {
-		NSMutableArray *channels = offline_data.channels;
-		CamChannel *ch;
-		for (int i = 0; i < channels.count; i++) {
-			ch = channels[i];
-			[ch reset];
-		}
-		
-		CamProfile *cp;
-		for (int i = 0; i < offline_profiles.count; i++) {
-			cp = [offline_profiles objectAtIndex:i];
-			if ( cp ) {
-				for (int j = 0; j < channels.count; j++) {
-					ch = channels[j];
-					if (ch.channel_configure_status == CONFIGURE_STATUS_NOT_ASSIGNED) {
-						[ch setCamProfile:cp];
-						[cp setChannel:ch];
-						break;
-					}
-				}
-			}
-		}
-	}
-	else {
-		NSLog(@"offline data: channels = nil or profile = nil");
-		
-		NSMutableArray *channels = [[[NSMutableArray alloc]init] autorelease];
-		CamProfile *cp;
-		for (int i = 0; i < 4; i++) {
-			CamChannel *ch = [[[CamChannel alloc]initWithChannelIndex:i] autorelease];
-			if ( i < offline_profiles.count && offline_profiles[i] ) {
-				cp = offline_profiles[i];
-				[ch setCamProfile:cp];
-				[cp setChannel:ch];
-			}
-			
-			[channels addObject:ch];
-		}
+        // rebinding
+        if ( offline_data.configuredCams && offline_data.channels ) {
+            NSMutableArray *channels = offline_data.channels;
+            CamChannel *ch;
+            for (int i = 0; i < channels.count; i++) {
+                ch = channels[i];
+                [ch reset];
+            }
+            
+            CamProfile *cp;
+            for (int i = 0; i < offline_profiles.count; i++) {
+                cp = [offline_profiles objectAtIndex:i];
+                if ( cp ) {
+                    for (int j = 0; j < channels.count; j++) {
+                        ch = channels[j];
+                        if (ch.channel_configure_status == CONFIGURE_STATUS_NOT_ASSIGNED) {
+                            [ch setCamProfile:cp];
+                            [cp setChannel:ch];
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        else {
+            NSLog(@"offline data: channels = nil or profile = nil");
+            
+            NSMutableArray *channels = [[NSMutableArray alloc] init];
+            
+            CamProfile *cp;
+            for (int i = 0; i < 4; i++) {
+                CamChannel *ch = [[CamChannel alloc] initWithChannelIndex:i];
+                if ( i < offline_profiles.count && offline_profiles[i] ) {
+                    cp = offline_profiles[i];
+                    [ch setCamProfile:cp];
+                    [cp setChannel:ch];
+                }
+                
+                [channels addObject:ch];
+                [ch release];
+            }
 
-		offline_data.channels = channels;
-	}
-	
-	[offline_data saveSessionData];
+            offline_data.channels = channels;
+            [channels release];
+        }
+        
+        [offline_data saveSessionData];
+    }
+    
+    [offline_data release];
 }
 
 @end

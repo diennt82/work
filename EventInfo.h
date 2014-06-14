@@ -3,7 +3,7 @@
 //  BlinkHD_ios
 //
 //  Created by Developer on 12/20/13.
-//  Copyright (c) 2013 Smart Panda Ltd. All rights reserved.
+//  Copyright (c) 2013 eBuyNow eCommerce Limited. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -13,10 +13,10 @@
 
 @property (nonatomic) NSInteger eventID; //35
 @property (nonatomic) NSInteger alert;//: 4,
-@property (retain, nonatomic) NSString *value;//: "20131231112818000",
-@property (retain, nonatomic) NSString *alert_name;//: "motion detected",
-@property (retain, nonatomic) NSString *time_stamp;//: "2013-12-31T04:30:15Z",
-@property (retain, nonatomic) ClipInfo *clipInfo;
+@property (nonatomic, retain) NSString *value;//: "20131231112818000",
+@property (nonatomic, retain) NSString *alert_name;//: "motion detected",
+@property (nonatomic, retain) NSString *time_stamp;//: "2013-12-31T04:30:15Z",
+@property (nonatomic, retain) ClipInfo *clipInfo;
 @property (nonatomic) NSInteger numberVideo;
 
 @end

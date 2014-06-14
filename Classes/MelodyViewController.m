@@ -3,7 +3,7 @@
 //  BlinkHD_ios
 //
 //  Created by Nxcomm Developer on 22/11/13.
-//  Copyright (c) 2013 Smart Panda Ltd. All rights reserved.
+//  Copyright (c) 2013 eBuyNow eCommerce Limited. All rights reserved.
 //
 
 #define NUM_MELODY 6
@@ -17,21 +17,20 @@
 
 @interface MelodyViewController ()
 {
-    NSArray* _melodies;
     BOOL valueMelodiesMap[6];
     UIFont *semiBoldFont, *regularFont;
 }
 
-@property (retain, nonatomic) IBOutlet UIBarButtonItem *melodyTitle;
-@property (retain, nonatomic) IBOutlet UISwitch *musicSwitch;
-
-
-@property (retain, nonatomic) NSArray* melodies;
+@property (nonatomic, retain) IBOutlet UIBarButtonItem *melodyTitle;
+@property (nonatomic, retain) IBOutlet UISwitch *musicSwitch;
+@property (nonatomic, retain) NSArray *melodies;
 
 @end
 
 @implementation MelodyViewController
-@synthesize melodies = _melodies;
+
+#pragma mark - UIViewController methods
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -47,28 +46,26 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
-    NSString * mel1 = NSLocalizedStringWithDefaultValue(@"melody_I",  nil, [NSBundle mainBundle],
-                                                        @"Melody 1",  nil);
-    NSString * mel2 = NSLocalizedStringWithDefaultValue(@"melody_II", nil, [NSBundle mainBundle],
-                                                        @"Melody 2",  nil);
-    NSString * mel3 = NSLocalizedStringWithDefaultValue(@"melody_III",nil, [NSBundle mainBundle],
-                                                        @"Melody 3",  nil);
-    NSString * mel4 = NSLocalizedStringWithDefaultValue(@"melody_IV", nil, [NSBundle mainBundle],
-                                                        @"Melody 4",  nil);
-    NSString * mel5 = NSLocalizedStringWithDefaultValue(@"melody_V",  nil, [NSBundle mainBundle],
-                                                        @"Melody 5",  nil);
+    NSString *mel1 = LocStr(@"melody_I");
+    NSString *mel2 = LocStr(@"melody_II");
+    NSString *mel3 = LocStr(@"melody_III");
+    NSString *mel4 = LocStr(@"melody_IV");
+    NSString *mel5 = LocStr(@"melody_V");
+                            
     //if (self.selectedChannel.profile.modelID == 6) // SharedCam
-    if ([self isSharedCam:self.selectedChannel.profile.registrationID]) // SharedCam
-    {
-        NSString * mel6 = NSLocalizedStringWithDefaultValue(@"melody_VI", nil, [NSBundle mainBundle],
-                                                            @"All Melodies", nil);
+    if ([self isSharedCam:self.selectedChannel.profile.registrationID]) {
+        // SharedCam
+        NSString *mel6 = LocStr(@"melody_VI");
+        
         //All Melodies
         self.melodies = [[NSArray alloc] initWithObjects:mel1,mel2,mel3,mel4, mel5, mel6,nil];
     }
-    else // Expect CameraHD
-    {
+    else {
+        // Expect CameraHD
         self.melodies = [[NSArray alloc] initWithObjects:mel1,mel2,mel3,mel4, mel5,nil];
     }
+    
+    [_melodies release];
     
     self.melodyTableView.delegate = self;
     self.melodyTableView.dataSource = self;
@@ -77,82 +74,70 @@
     self.trackedViewName = GAI_CATEGORY;
 }
 
-- (void)loadFont
-{
-    if (isiPhone5)
-    {
-        semiBoldFont = [UIFont applyHubbleFontName:PN_SEMIBOLD_FONT withSize:19];
-        regularFont = [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:19];
-    }
-    else if (isiPhone4)
-    {
-        semiBoldFont = [UIFont applyHubbleFontName:PN_SEMIBOLD_FONT withSize:17];
-        regularFont = [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:17];
-    }
-    else
-    {
-        //maybe iPad
-        semiBoldFont = [UIFont applyHubbleFontName:PN_SEMIBOLD_FONT withSize:30];
-        regularFont = [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:30];
-    }
-}
-- (BOOL)isSharedCam: (NSString *)regID
-{
-    if (regID != nil)
-    {
-        if (regID.length == 26)
-        {
-            if ([[regID substringWithRange:NSMakeRange(2, 4)] isEqualToString:@"0036"])
-            {
-                return TRUE;
-            }
-        }
-    }
-    
-    return FALSE;
-}
+#pragma mark - Public methods
 
-- (void)didReceiveMemoryWarning
+- (void)updateUIMelody:(NSInteger)playingIndex
 {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-- (void)dealloc {
-    [_melodyTableView release];
-    [_melodyTitle release];
-    [_musicSwitch release];
-    [_selectedChannel release];
-    [super dealloc];
+    if (playingIndex == -1)
+        return;
+    valueMelodiesMap[playingIndex] = YES;
+    [self.melodyTableView reloadData];
 }
 
 - (void)setMelodyState_fg:(NSInteger)melodyIndex
 {
     self.melodyIndex = melodyIndex - 1;
     
-    if (melodyIndex == 0)
-    {
+    if (melodyIndex == 0) {
         [self.musicSwitch setOn:FALSE];
     }
-    else
-    {
+    else {
         [self.musicSwitch setOn:TRUE];
         [self.melodyTableView reloadData];
     }
+}
+
+#pragma mark - Private methods
+
+- (void)loadFont
+{
+    if (isiPhone5) {
+        semiBoldFont = [UIFont applyHubbleFontName:PN_SEMIBOLD_FONT withSize:19];
+        regularFont = [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:19];
+    }
+    else if (isiPhone4) {
+        semiBoldFont = [UIFont applyHubbleFontName:PN_SEMIBOLD_FONT withSize:17];
+        regularFont = [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:17];
+    }
+    else {
+        //maybe iPad
+        semiBoldFont = [UIFont applyHubbleFontName:PN_SEMIBOLD_FONT withSize:30];
+        regularFont = [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:30];
+    }
+}
+
+- (BOOL)isSharedCam:(NSString *)regID
+{
+    if (regID.length == 26) {
+        if ([[regID substringWithRange:NSMakeRange(2, 4)] isEqualToString:@"0036"]) {
+            return YES;
+        }
+    }
+    
+    return NO;
 }
 
 - (void)setMelodyStatus_fg: (NSNumber *)melodyIndex
 {
     NSInteger melodyIdx = [melodyIndex integerValue];
     
-    NSString * command = @"";
-    if (melodyIdx == 0 ) //mute
-	{
+    NSString *command = @"";
+    if (melodyIdx == 0 ) {
+        //mute
 		command = @"melodystop";
 		[self.musicSwitch setOn:FALSE];
 	}
-	else
-	{
+	else {
 		command = [NSString stringWithFormat:@"melody%d", melodyIdx];
 		[self.musicSwitch setOn:TRUE];
         
@@ -160,18 +145,15 @@
     
     [self.melodyVcDelegate setMelodyWithIndex:melodyIdx];
     
-    if (self.selectedChannel.profile .isInLocal == TRUE)
-    {
+    if (self.selectedChannel.profile .isInLocal == TRUE) {
         HttpCommunication *httpCommunication = [[HttpCommunication alloc] init];
         httpCommunication.device_ip = self.selectedChannel.profile.ip_address;
         httpCommunication.device_port = self.selectedChannel.profile.port;
         
         [httpCommunication sendCommandAndBlock_raw:command];
-        
         [httpCommunication release];
     }
-    else
-    {
+    else {
         BMS_JSON_Communication *jsonCommunication = [[BMS_JSON_Communication alloc] initWithObject:self
                                                                                            Selector:nil
                                                                                        FailSelector:nil
@@ -192,35 +174,27 @@
 }
 
 #pragma mark - Action
+
 - (IBAction)doneTouchAction:(id)sender
 {
     [self.view removeFromSuperview];
 }
 
 
-- (IBAction)melodySwitchValueChanged:(id)sender {
-    
+- (IBAction)melodySwitchValueChanged:(id)sender
+{
     UISwitch *aSwtich = (UISwitch *)sender;
-    
-    if (!aSwtich.isOn)
-    {
+    if (!aSwtich.isOn) {
         self.melodyIndex = -1;
         [self.melodyTableView reloadData];
         [self setMelodyStatus_fg:[NSNumber numberWithInteger:_melodyIndex + 1]];
     }
 }
 
-- (void)updateUIMelody:(NSInteger)playingIndex
-{
-    if (playingIndex == -1)
-        return;
-    valueMelodiesMap[playingIndex] = YES;
-    [self.melodyTableView reloadData];
-}
-
 #pragma mark TableView delegate
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
 	//return _melodies.count;
     return 1;
 }
@@ -235,22 +209,18 @@
 
 -(void) tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (isPhoneLandscapeMode)
-    {
+    if (isPhoneLandscapeMode) {
         cell.alpha = 0.6; //0.6;
-    } else
-    {
+    }
+    else {
         cell.alpha = 1.0; //1.0;
     }
-    
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
     UITableViewCell *cell = nil;
-    if (isPhoneLandscapeMode)
-    {
+    if (isPhoneLandscapeMode) {
         static NSString *CellIdentifier = @"MelodyCellId_land";
         
         cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -267,21 +237,17 @@
         
         //update font
         ((CellMelody *)cell).labelCellMelody.textColor = [UIColor blackColor];
-        if (valueMelodiesMap[indexPath.section] == TRUE)
-        {
+        if ( valueMelodiesMap[indexPath.section] ) {
             ((CellMelody *)cell).labelCellMelody.font = semiBoldFont;
             ((CellMelody *)cell).imageCellMelody.image = [UIImage imageNamed:@"camera_action_pause.png"];;
         }
-        else
-        {
+        else {
             ((CellMelody *)cell).labelCellMelody.font = regularFont;
             ((CellMelody *)cell).imageCellMelody.image = [UIImage imageNamed:@"camera_action_play.png"];
         }
     }
-    else
-    {
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
+    else {
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
             static NSString *CellIdentifier = @"MelodyCellId_iPad";
             
             cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -290,8 +256,8 @@
                 cell = cellMelody_iPad;
                 cellMelody_iPad = nil;
             }
-        } else
-        {
+        }
+        else {
             static NSString *CellIdentifier = @"MelodyCellId";
             
             cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -309,39 +275,33 @@
         
         //update font
         ((CellMelody *)cell).labelCellMelody.textColor = [UIColor blackColor];
-        if (valueMelodiesMap[indexPath.section] == TRUE)
-        {
+        if ( valueMelodiesMap[indexPath.section] ) {
             ((CellMelody *)cell).labelCellMelody.font = semiBoldFont;
             ((CellMelody *)cell).imageCellMelody.image = [UIImage imageCameraActionPause];;
         }
-        else
-        {
+        else {
             ((CellMelody *)cell).labelCellMelody.font = regularFont;
             ((CellMelody *)cell).imageCellMelody.image = [UIImage imageCameraActionPlay];
         }
     }
     
-    return cell ;
+    return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-
-    if (isPhoneLandscapeMode)
-    {
+    if (isPhoneLandscapeMode) {
         return 33;
     }
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-    {
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         return 88;
     }
-    else
-    {
+    else {
         return HEIGHT_CELL_TABLE_IPHONE;
     }
 }
 
-- (void)tableView: (UITableView *)tableView didSelectRowAtIndexPath: (NSIndexPath *)indexPath
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"MelodyVC select row: %d", indexPath.row] withProperties:nil];
     
@@ -354,26 +314,35 @@
     
     valueMelodiesMap[indexPath.section] = !valueMelodiesMap[indexPath.section];
     
-    if (valueMelodiesMap[indexPath.section] == TRUE)
-    {
+    if ( valueMelodiesMap[indexPath.section] ) {
         _melodyIndex = indexPath.section;
         
-        for (int i = 0; i < _melodies.count; i++)
-        {
-            if (i != indexPath.section)
-            {
+        for (int i = 0; i < _melodies.count; i++) {
+            if (i != indexPath.section) {
                 valueMelodiesMap[i] = FALSE;
             }
         }
     }
-    else
-    {
+    else {
         _melodyIndex = -1;
     }
     
 	[self performSelector:@selector(setMelodyStatus_fg:)
                withObject:[NSNumber numberWithInt:(_melodyIndex + 1)]
                afterDelay:0.1];
+}
+
+#pragma mark - Memory management methods
+
+- (void)dealloc
+{
+    [_melodyTableView release];
+    [_melodyTitle release];
+    [_musicSwitch release];
+    [_selectedChannel release];
+    [_melodies release];
+    
+    [super dealloc];
 }
 
 @end

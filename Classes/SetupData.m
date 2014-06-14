@@ -16,14 +16,19 @@
 	self = [super init];
     if (self) {
         self.channels = channs;
-        //cps may be nil--- as it's not used
-        self.configuredCams = cps;
+        self.configuredCams = cps; // cps may be nil as it's not used
     }
 	return self;
 }
 
 - (void)dealloc
 {
+    // Clean up the CamProfile/CamChannel release cycle bug
+    for (CamChannel *channel in _channels) {
+        [channel.profile setChannel:nil];
+        [channel setCamProfile:nil];
+    }
+    
 	[_channels release];
 	[_configuredCams release];
     [super dealloc];
@@ -39,7 +44,7 @@
 	
 	/* Store channels
 	 ?? : what if there are less then 4 channels ??*/
-	int numberOfChannel = [self.channels count];
+	int numberOfChannel = _channels.count;
 	fwrite(&numberOfChannel, sizeof(int), 1, fd);
 	
 	NSMutableData *chann = nil;
@@ -77,19 +82,17 @@
 - (BOOL)restoreSessionData
 {
 	NSString *file = [Util getDataFileName];
-	NSMutableData *channelData;
-	CamChannel *channel1, *channel2, *channel3, *channel4;
-	
 	FILE *fd = fopen([file UTF8String], "rb");
-	int barker = -1;
-	
 	if (fd == NULL) {
-		return FALSE;
+		return NO;
 	}
 	
+    NSMutableData *channelData = [[NSMutableData alloc] init];
+	CamChannel *channel1, *channel2, *channel3, *channel4;
+
 	// read barker
+	int barker = -1;
 	fread(&barker, sizeof(int), 1, fd);
-    channelData = [[NSMutableData alloc] init];
 	
 	if (barker == DATA_BARKER) {
 		int numberOfChannel = -1;
@@ -142,11 +145,13 @@
 		free(buff);
 		
 		self.channels = [[NSMutableArray alloc] initWithObjects:channel1, channel2, channel3, channel4, nil];
+        [_channels release];
 		
 		// restore cam profiles
 		int numOfProfile = -1;
 		fread(&numOfProfile, sizeof(int), 1, fd);
 		self.configuredCams = [[NSMutableArray alloc] initWithCapacity:numOfProfile];
+        [_configuredCams release];
         
 		int cp_count = 0;
         int profile_len = -1 ;
@@ -154,6 +159,7 @@
 		while (cp_count < numOfProfile) {
 			//Read cam profile entry len
 			fread(&profile_len, sizeof(int), 1, fd);
+            
 #if DEBUG_RESTORE_DATA
             NSLog(@"setup:restore profile len %d ", profile_len);
 #endif
@@ -166,7 +172,6 @@
 			[channelData appendBytes:buff length:profile_len];
             
 			CamProfile *cp = [CamProfile restoreFromData:channelData];
-			
 			[self.configuredCams addObject:cp];
 			
 			// clear data
@@ -174,21 +179,19 @@
 			free(buff);
 			cp_count ++;
 		}
-		
-		[channelData release];
-		fclose(fd);
 	}
     else {
+        unlink([file UTF8String]);
+        
 #if DEBUG_RESTORE_DATA
         NSLog(@"Wrong data barker, delete the file ");
 #endif
-        [channelData release];
-        
-        fclose(fd);
-        unlink([file UTF8String]);
     }
 	
-	return TRUE;
+    fclose(fd);
+    [channelData release];
+    
+	return YES;
 }
 
 @end
