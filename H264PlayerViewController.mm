@@ -1761,12 +1761,12 @@ double _ticks = 0;
     
     do {
         //send probes
-        [self.client sendAudioProbesToIp: self.selectedChannel.profile.camera_mapped_address
-                                 andPort:self.selectedChannel.profile.camera_stun_audio_port];
+        [_client sendAudioProbesToIp:_selectedChannel.profile.camera_mapped_address
+                                 andPort:_selectedChannel.profile.camera_stun_audio_port];
         [NSThread sleepForTimeInterval:0.3];
         
-        [self.client sendVideoProbesToIp: self.selectedChannel.profile.camera_mapped_address
-                                 andPort:self.selectedChannel.profile.camera_stun_video_port];
+        [_client sendVideoProbesToIp:_selectedChannel.profile.camera_mapped_address
+                                 andPort:_selectedChannel.profile.camera_stun_video_port];
         //[NSThread sleepForTimeInterval:0.3];
         
         timeout = [NSDate dateWithTimeIntervalSinceNow:0.5];
@@ -1776,13 +1776,11 @@ double _ticks = 0;
             NSLog(@"startStunStream: userWantToCancel >>>>");
             break;
         }
-        
     }
 
-    while ( (self.selectedChannel.stream_url == nil) ||
-           (self.selectedChannel.stream_url.length == 0) );
+    while ( !_selectedChannel.stream_url || _selectedChannel.stream_url.length == 0 );
     
-    if (userWantToCancel != TRUE) {
+    if ( !userWantToCancel ) {
         self.probeTimer = [NSTimer scheduledTimerWithTimeInterval:1.0
                                                            target:self
                                                          selector:@selector(periodicProbe:)
@@ -1790,29 +1788,29 @@ double _ticks = 0;
                                                           repeats:YES];
     }
     
-    NSLog(@"--URL: %@", self.selectedChannel.stream_url);
+    NSLog(@"--URL: %@", _selectedChannel.stream_url);
     [self startStream];
 }
 
 - (void)startStream
 {
-    self.h264StreamerIsInStopped = FALSE;
+    self.h264StreamerIsInStopped = NO;
     
-    if (userWantToCancel == TRUE) {
+    if ( userWantToCancel ) {
         NSLog(@"startStream: userWantToCancel >>>>");
         //force this to gobacktoCameralist
-        [self handleMessage:MEDIA_ERROR_SERVER_DIED
-                       ext1:0
-                       ext2:0];
+        [self handleMessage:MEDIA_ERROR_SERVER_DIED ext1:0 ext2:0];
         return;
     }
     
-    if (_returnFromPlayback) {
+    if ( _returnFromPlayback ) {
         NSLog(@"H264VC - startStream --> break to Playback");
         return;
     }
+    
     self.mediaProcessStatus = 1;
     NSLog(@"%s mediaProcessStatus: %d", __FUNCTION__, _mediaProcessStatus);
+    
 #if 1
     h264StreamerListener = new H264PlayerListener(self);
     MediaPlayer::Instance()->setListener(h264StreamerListener);
@@ -1820,21 +1818,19 @@ double _ticks = 0;
     //self.mediaProcessStatus = 2;
     [self performSelectorInBackground:@selector(startStream_bg) withObject:nil];
 #else
-    while (h264Streamer != NULL)
-    {
+    while (h264Streamer != NULL) {
         //NSLog(@"%s userWantToCancel: %d, _currentMediaStatus: %d", __FUNCTION__, userWantToCancel, _currentMediaStatus);
         
-        if (userWantToCancel== TRUE || _currentMediaStatus == MEDIA_INFO_HAS_FIRST_IMAGE) // 904
-        {
+        if ( userWantToCancel || _currentMediaStatus == MEDIA_INFO_HAS_FIRST_IMAGE ) {
+            // 904
             return;
         }
         
-        NSDate * endDate = [NSDate dateWithTimeIntervalSinceNow:0.5];
+        NSDate *endDate = [NSDate dateWithTimeIntervalSinceNow:0.5];
         [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:endDate];
     }
     
     h264Streamer = new MediaPlayer(false, [_cameraModel isEqualToString:CP_MODEL_SHARED_CAM]);
-    
     h264StreamerListener = new H264PlayerListener(self);
     h264Streamer->setListener(h264StreamerListener);
     
@@ -1862,7 +1858,7 @@ double _ticks = 0;
     
 	[userDefaults setBool:!(isOffline) forKey:_is_Loggedin];
     
-	if (_current_ssid != nil) {
+	if ( _current_ssid ) {
 		[userDefaults setObject:_current_ssid forKey:_streamingSSID];
 	}
     
@@ -1871,26 +1867,25 @@ double _ticks = 0;
     //`NSLog(@"Play with TCP Option >>>>> ") ;
     //mp->setPlayOption(MEDIA_STREAM_RTSP_WITH_TCP);
     
-    NSString * url = self.selectedChannel.stream_url;
+    NSString *url = _selectedChannel.stream_url;
     NSLog(@"%s url: %@, h264Streamer: %p", __FUNCTION__, url, h264Streamer);
+    
     self.mediaProcessStatus = 2;
      NSLog(@"%s mediaProcessStatus: %d", __FUNCTION__, _mediaProcessStatus);
+    
 #if 1
-    do
-    {
-        if (url == nil || [url isEqualToString:@""])
-        {
+    do {
+        if ( !url || [url isEqualToString:@""]) {
             break;
         }
         
         status = MediaPlayer::Instance()->setDataSource([url UTF8String]);
         
-        if (status != NO_ERROR) // NOT OK
-        {
+        if (status != NO_ERROR) {
+            // NOT OK
             NSLog(@"setDataSource  failed");
             
-            if (self.selectedChannel.profile.isInLocal)
-            {
+            if (self.selectedChannel.profile.isInLocal) {
                 self.messageStreamingState = @"Camera is not accessible";
             }
 
@@ -1903,8 +1898,8 @@ double _ticks = 0;
         //self.mediaProcessStatus = 4;
         status = MediaPlayer::Instance()->prepare();
         
-        if (status != NO_ERROR) // NOT OK
-        {
+        if (status != NO_ERROR) {
+            // NOT OK
             break;
         }
         
@@ -1912,22 +1907,20 @@ double _ticks = 0;
         //self.mediaProcessStatus = 5;
         status = MediaPlayer::Instance()->start();
         
-        
-        if (status != NO_ERROR) // NOT OK
-        {
+        if (status != NO_ERROR) {
+            // NOT OK
             break;
         }
     }
+    
     while (false);
     
-     NSLog(@"%s mediaProcessStatus: %d", __FUNCTION__, _mediaProcessStatus);
+    NSLog(@"%s mediaProcessStatus: %d", __FUNCTION__, _mediaProcessStatus);
     self.mediaProcessStatus = 3;
     
 #else
-    do
-    {
-        if (url == nil || h264Streamer == NULL)
-        {
+    do {
+        if ( !url || !h264Streamer ) {
             break;
         }
         
@@ -1966,18 +1959,12 @@ double _ticks = 0;
     while (false);
 #endif
     
-    if (status == NO_ERROR)
-    {
-        [self handleMessage:MEDIA_PLAYER_STARTED
-                       ext1:0
-                       ext2:0];
+    if (status == NO_ERROR) {
+        [self handleMessage:MEDIA_PLAYER_STARTED ext1:0 ext2:0];
     }
-    else
-    {
+    else {
         //Consider it's down and perform necessary action ..
-        [self handleMessage:MEDIA_ERROR_SERVER_DIED
-                       ext1:0
-                       ext2:0];
+        [self handleMessage:MEDIA_ERROR_SERVER_DIED ext1:0 ext2:0];
     }
 }
 
@@ -2003,8 +1990,7 @@ double _ticks = 0;
     userWantToCancel = TRUE;
     self.selectedChannel.stopStreaming = TRUE;
     
-    if (_audioOutStreamRemote)
-    {
+    if (_audioOutStreamRemote) {
         [self performSelectorInBackground:@selector(closeRemoteTalkback) withObject:nil];
         [_audioOutStreamRemote disconnectFromAudioSocketRemote];
     }
@@ -2012,50 +1998,43 @@ double _ticks = 0;
     
     NSLog(@"%s _mediaProcessStatus: %d", __FUNCTION__, _mediaProcessStatus);
     
-    if (_earlierVC)
-    {
+    if (_earlierVC){
         [_earlierVC release];
     }
     
-    if (_timelineVC)
-    {
+    if (_timelineVC) {
         _timelineVC.timelineVCDelegate = nil;
     }
     
-    if (_jsonCommBlocked)
-    {
+    if (_jsonCommBlocked) {
         [_jsonCommBlocked release];
     }
     
-    if (_mediaProcessStatus == 0)
-    {
+    if (_mediaProcessStatus == 0) {
         [self goBack];
     }
-    else if(_mediaProcessStatus == 1)
-    {
+    else if (_mediaProcessStatus == 1) {
         MediaPlayer::Instance()->sendInterrupt();
         [self stopStream];
         [self goBack];
     }
-    else if (_mediaProcessStatus == 2)
-    {
+    else if (_mediaProcessStatus == 2) {
         MediaPlayer::Instance()->sendInterrupt();
     }
-    else
-    {
+    else {
         //MediaPlayer::Instance()->sendInterrupt();
         [self stopStream];
         [self goBack];
     }
     
 #else
-    if (self.currentMediaStatus == 0 && MediaPlayer::Instance() == NULL) // Media player haven't start yet.
-    {
+    if (self.currentMediaStatus == 0 && MediaPlayer::Instance() == NULL) {
+        // Media player haven't start yet.
         [self performSelector:@selector(goBackToCameraList)
                    withObject:nil
                    afterDelay:0.001];
     }
-    else if( self.currentMediaStatus == MEDIA_INFO_HAS_FIRST_IMAGE ||
+    else if ( self.currentMediaStatus == MEDIA_INFO_HAS_FIRST_IMAGE ||
             self.currentMediaStatus == MEDIA_PLAYER_STARTED       ||
             ( MediaPlayer::Instance() != NULL))
     {
@@ -2064,8 +2043,7 @@ double _ticks = 0;
         MediaPlayer::Instance()->sendInterrupt();
         [self goBackToCameraList];
     }
-    else
-    {
+    else {
         [self goBackToCameraList];
     }
 #endif
@@ -2074,11 +2052,11 @@ double _ticks = 0;
 - (void)goBackToCameraList
 {
     [self stopPeriodicBeep];
-    if (self.timerRemoteStreamTimeOut && [_timerRemoteStreamTimeOut isValid])
-    {
+    if ( _timerRemoteStreamTimeOut && [_timerRemoteStreamTimeOut isValid] ) {
         [_timerRemoteStreamTimeOut invalidate];
         _timerRemoteStreamTimeOut = nil;
     }
+    
     //_isShowCustomIndicator = NO;
     //no need call stopStream in offline mode
     [self stopStream];
