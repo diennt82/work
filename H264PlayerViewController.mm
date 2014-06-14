@@ -581,32 +581,6 @@ double _ticks = 0;
     [titleView sizeToFit];
 }
 
-- (void)addHubbleLogo_Back
-{
-    UIImage *image = [UIImage imageNamed:@"Hubble_back_text"];
-    CGRect frame = CGRectMake(0, 0, image.size.width, image.size.height);
-    
-    //init a normal UIButton using that image
-    UIButton* button = [[UIButton alloc] initWithFrame:frame];
-    [button setBackgroundImage:image forState:UIControlStateNormal];
-    [button setBackgroundImage:image forState:UIControlStateHighlighted];
-     [button setBackgroundImage:image forState:UIControlStateSelected];
-    [button setBackgroundImage:image forState:UIControlStateDisabled];
-
-    //[button setShowsTouchWhenHighlighted:YES];
-    
-    //set the button to handle clicks - this one calls a method called 'downloadClicked'
-    [button addTarget:self action:@selector(prepareGoBackToCameraList:) forControlEvents:UIControlEventTouchUpInside];
-    
-    //finally, create your UIBarButtonItem using that button
-    UIBarButtonItem* barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:button];
-    
-    //then set it.  phew.
-    [self.navigationItem setLeftBarButtonItem:barButtonItem];
-    
-    [barButtonItem release];
-}
-
 - (void)updateNavigationBarAndToolBar
 {
     if ( ![self.selectedChannel.profile isSharedCam] ) {
@@ -2799,11 +2773,11 @@ double _ticks = 0;
     }
 }
 
-- (void)setTemperatureState_Fg: (NSString *)temperature
+- (void)setTemperatureState_Fg:(NSString *)temperature
 {
     // Update UI
-    // start
-    [self.ib_temperature.subviews makeObjectsPerformSelector: @selector(removeFromSuperview)];
+    [_ib_temperature.subviews makeObjectsPerformSelector: @selector(removeFromSuperview)];
+    
     NSString *stringTemperature = [NSString stringWithFormat:@"%d", (int)roundf([temperature floatValue])];
     _degreeCString = stringTemperature;
     
@@ -2818,14 +2792,11 @@ double _ticks = 0;
     degreeCelsius.textAlignment = NSTextAlignmentLeft;
     
     NSString *degreeCel;
-    
-    if (_isDegreeFDisplay)
-    {
+    if (_isDegreeFDisplay) {
         degreeCel = @"°F";
         stringTemperature = _degreeFString;
     }
-    else
-    {
+    else {
         degreeCel = @"°C";
         stringTemperature = _degreeCString;
     }
@@ -2834,15 +2805,13 @@ double _ticks = 0;
     
     UIFont *degreeFont;
     UIFont *temperatureFont;
-    float positionYOfBottomView = self.ib_temperature.frame.origin.y;//240.0f;
+    float positionYOfBottomView = _ib_temperature.frame.origin.y;
     
-    if (!isiOS7AndAbove)
-    {
+    if (!isiOS7AndAbove) {
         positionYOfBottomView = positionYOfBottomView - 44;
     }
     
-    if (_isLandScapeMode)
-    {
+    if (_isLandScapeMode) {
         degreeCelsius.backgroundColor=[UIColor clearColor];
         degreeCelsius.textColor=[UIColor whiteColor];
         float xPosTemperature;
@@ -2851,16 +2820,15 @@ double _ticks = 0;
         CGSize degreeCelBoundingBox;
         CGFloat deltaWidth = 20;
         
-        if (isiPhone5 || isiPhone4)
-        {
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
             degreeFont = [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:13];
             temperatureFont = [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:53];
         }
-        else // Expect iPad
-        {
+        else {
+            // iPad
             degreeFont = [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:30];
             temperatureFont = [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:100];
-            positionYOfBottomView = self.ib_temperature.frame.origin.y;
+            positionYOfBottomView = _ib_temperature.frame.origin.y;
             deltaWidth += 72;
         }
         
@@ -2874,32 +2842,31 @@ double _ticks = 0;
         stringBoundingBox = [stringTemperature sizeWithAttributes:@{NSFontAttributeName: temperatureFont}];
         degreeCelBoundingBox = [degreeCel sizeWithAttributes:@{NSFontAttributeName: degreeFont}];
         
-        xPosTemperature = SCREEN_HEIGHT - self.ib_temperature.bounds.size.width - 40 + (self.ib_temperature.bounds.size.width - stringBoundingBox.width)/2;
+        xPosTemperature = SCREEN_HEIGHT - self.ib_temperature.bounds.size.width - 40 + (_ib_temperature.bounds.size.width - stringBoundingBox.width)/2;
         yPosTemperature = SCREEN_WIDTH - deltaWidth - stringBoundingBox.height;
         
-        [self.ib_temperature setFrame:CGRectMake(xPosTemperature, yPosTemperature+10, self.ib_temperature.bounds.size.width, self.ib_temperature.bounds.size.height)];
-        [ib_switchDegree setFrame:CGRectMake(xPosTemperature, yPosTemperature, self.ib_temperature.bounds.size.width, self.ib_temperature.bounds.size.height)];
+        [self.ib_temperature setFrame:CGRectMake(xPosTemperature, yPosTemperature+10, _ib_temperature.bounds.size.width, self.ib_temperature.bounds.size.height)];
+        [ib_switchDegree setFrame:CGRectMake(xPosTemperature, yPosTemperature, _ib_temperature.bounds.size.width, _ib_temperature.bounds.size.height)];
         
         CGFloat widthString = stringBoundingBox.width;
-        CGFloat alignX = (self.ib_temperature.bounds.size.width + widthString)/2;
+        CGFloat alignX = (_ib_temperature.bounds.size.width + widthString)/2;
         [degreeCelsius setFrame:CGRectMake(alignX, 5, degreeCelBoundingBox.width, degreeCelBoundingBox.height)];
         [self.ib_temperature addSubview:degreeCelsius];
     }
-    else
-    {
-        if (isiPhone5)
-        {
-            degreeFont = [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:35];
-            temperatureFont = [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:135];
-            
+    else {
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+            if (isiPhone4) {
+                degreeFont = [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:30];
+                temperatureFont = [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:125];
+            }
+            else {
+                // iPhone 5+ (tall screen)
+                degreeFont = [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:35];
+                temperatureFont = [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:135];
+            }
         }
-        else if (isiPhone4)
-        {
-            degreeFont = [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:30];
-            temperatureFont = [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:125];
-        }
-        else
-        {
+        else {
+            // iPad
             degreeFont = [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:50];
             temperatureFont = [UIFont applyHubbleFontName:PN_LIGHT_FONT withSize:200];
             positionYOfBottomView = 543.0f;
@@ -2918,7 +2885,6 @@ double _ticks = 0;
         //CGSize degreeCelBoundingBox = [degreeCel sizeWithFont:degreeFont];
         CGSize degreeCelBoundingBox = [degreeCel sizeWithAttributes:@{NSFontAttributeName: degreeFont}];
         
-        
         CGFloat widthString = stringBoundingBox.width;
         CGFloat heightString = stringBoundingBox.height;
         CGFloat alignX = (SCREEN_WIDTH + widthString)/2 - degreeCelBoundingBox.width/2 + 8;
@@ -2930,506 +2896,428 @@ double _ticks = 0;
     [degreeCelsius release];
 }
 
-#pragma mark -
 #pragma mark - Stun probe timer
 
--(void) periodicProbe:(NSTimer *) exp
+-(void)periodicProbe:(NSTimer *)exp
 {
-    if (userWantToCancel == TRUE  ||
-        _selectedChannel.stopStreaming == TRUE)
-    {
+    if ( userWantToCancel || _selectedChannel.stopStreaming ) {
         NSLog(@"Stop probing ... ");
     }
-    else if (self.client != nil)
-    {
-        NSDate * timeout;
-        
-        NSRunLoop * mainloop = [NSRunLoop currentRunLoop];
+    else if ( self.client ) {
+        NSRunLoop *mainloop = [NSRunLoop currentRunLoop];
         NSLog(@"send probes ... ");
-        //send probes
-        
-        [self.client sendVideoProbesToIp: self.selectedChannel.profile.camera_mapped_address
-                                 andPort:self.selectedChannel.profile.camera_stun_video_port];
-        
-        timeout = [NSDate dateWithTimeIntervalSinceNow:0.5];
+
+        NSDate *timeout = [NSDate dateWithTimeIntervalSinceNow:0.5];
+
+        [_client sendVideoProbesToIp:_selectedChannel.profile.camera_mapped_address
+                             andPort:_selectedChannel.profile.camera_stun_video_port];
         [mainloop runUntilDate:timeout];
         
-        
-        
-        [self.client sendAudioProbesToIp: self.selectedChannel.profile.camera_mapped_address
-                                 andPort:self.selectedChannel.profile.camera_stun_audio_port];
-        timeout = [NSDate dateWithTimeIntervalSinceNow:0.5];
+        [_client sendAudioProbesToIp:_selectedChannel.profile.camera_mapped_address
+                             andPort:_selectedChannel.profile.camera_stun_audio_port];
         [mainloop runUntilDate:timeout];
     }
 }
 
-#pragma mark -
 #pragma mark - Stun client delegate
 
--(void)symmetric_check_result: (BOOL) isBehindSymmetricNat
+-(void)symmetric_check_result:(BOOL)isBehindSymmetricNat
 {
     NSInteger result = (isBehindSymmetricNat == TRUE)?TYPE_SYMMETRIC_NAT:TYPE_NON_SYMMETRIC_NAT;
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
-    if ([userDefaults boolForKey:@"enable_stun"] == TRUE)
-    {
+    if ( [userDefaults boolForKey:@"enable_stun"] ) {
         [userDefaults setInteger:result forKey:APP_IS_ON_SYMMETRIC_NAT];
         [userDefaults synchronize];
     }
     
     dispatch_queue_t qt = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
+    dispatch_async(qt, ^{
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
+        //NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
+        NSString *stringUDID = self.selectedChannel.profile.registrationID;
+        
+        NSDate *dateStage1 = [NSDate date];
+        
+        if ( !_jsonCommBlocked ) {
+            self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                         Selector:nil
+                                                                     FailSelector:nil
+                                                                        ServerErr:nil];
+        }
+        
+        NSDictionary *responseDict;
+        
+        if (isBehindSymmetricNat == TRUE) // USE RELAY
+        {
+#ifdef SHOW_DEBUG_INFO
+            _viewVideoIn = @"R";
+#endif
+            //responseDict = [jsonComm createSessionBlockedWithRegistrationId:mac
+            responseDict = [_jsonCommBlocked createSessionBlockedWithRegistrationId:stringUDID
+                                                                      andClientType:@"BROWSER"
+                                                                          andApiKey:apiKey];
+            NSLog(@"USE RELAY TO VIEW- userWantsToCancel:%d, returnFromPlayback:%d, responsed: %@", userWantToCancel, _returnFromPlayback, responseDict);
+            
+            NSTimeInterval diff = [[NSDate date] timeIntervalSinceDate:dateStage1];
+            NSString *gaiActionTime = GAI_ACTION(1, diff);
+            
+            [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
+                                                            withAction:gaiActionTime
+                                                             withLabel:nil
+                                                             withValue:nil];
+            
+            NSLog(@"%s stage 1 takes %f seconds \n Start stage 2 \n %@", __FUNCTION__, diff, gaiActionTime);
+            self.timeStartingStageTwo = [NSDate date];
+            
+            if (!userWantToCancel && !_returnFromPlayback && [UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
+                if ( responseDict) {
+                    if ([[responseDict objectForKey:@"status"] intValue] == 200) {
+                        NSString *urlResponse = [[responseDict objectForKey:@"data"] objectForKey:@"url"];
+                        
+                        if ([urlResponse hasPrefix:ME_WOWZA] &&
+                            [userDefaults boolForKey:VIEW_NXCOMM_WOWZA] == TRUE)
+                        {
+                            self.selectedChannel.stream_url = [urlResponse stringByReplacingOccurrencesOfString:ME_WOWZA withString:NXCOMM_WOWZA];
+                        }
+                        else {
+                            self.selectedChannel.stream_url = urlResponse;
+                        }
+                        
+                        self.selectedChannel.communication_mode = COMM_MODE_STUN_RELAY2;
+                        
+                        NSLog(@"%s Start stage 2", __FUNCTION__);
+                        
+                        [self performSelectorOnMainThread:@selector(startStream)
+                                               withObject:nil
+                                            waitUntilDone:NO];
+                        
+                        self.messageStreamingState = @"Low data bandwidth detected. Trying to connect...";
+                    }
+                    else {
+                        //handle Bad response
+                        NSLog(@"%s ERROR: %@", __FUNCTION__, [responseDict objectForKey:@"message"]);
+#if 1
+                        self.messageStreamingState = @"Camera is not accessible";
+                        _isShowTextCameraIsNotAccesible = YES;
+                        
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            [self.ib_lbCameraNotAccessible setHidden:NO];
+                        });
+                        
+                        [self symmetric_check_result:TRUE];
+#else
+                        NSArray * args = [NSArray arrayWithObjects:
+                                          [NSNumber numberWithInt:MEDIA_ERROR_SERVER_DIED],nil];
+                        //force server died
+                        [self performSelectorOnMainThread:@selector(handleMessageOnMainThread:)
+                                               withObject:args
+                                            waitUntilDone:NO];
+#endif
+                    }
+                }
+                else {
+                    NSLog(@"SERVER unreachable (timeout) ");
+                    self.messageStreamingState = @"Camera is not accessible";
+                    _isShowTextCameraIsNotAccesible = YES;
+#if 1
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [self.ib_lbCameraNotAccessible setHidden:NO];
+                        [self performSelector:@selector(setupCamera) withObject:nil afterDelay:10];
+                    });
+#else
+                    NSArray * args = [NSArray arrayWithObjects:
+                                      [NSNumber numberWithInt:MEDIA_ERROR_SERVER_DIED],nil];
+                    
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [self performSelector:@selector(handleMessageOnMainThread:) withObject:args afterDelay:10];
+                    });
+#endif
+                }
+            }
+            else {
+                NSLog(@"%s View is invisible OR in background mode. Do nothing!", __FUNCTION__);
+            }
+        }
+        else {
+            // USE RTSP/STUN
+            // Set port1, port2
+            NSLog(@"TRY TO USE RTSP/STUN TO VIEW***********************");
+#ifdef SHOW_DEBUG_INFO
+            _viewVideoIn = @"S";
+#endif
+            if ([_client create_stun_forwarder:_selectedChannel] != 0 ) {
+                //TODO: Handle error
+            }
+            
+            NSString * cmd_string = [NSString stringWithFormat:@"action=command&command=get_session_key&mode=p2p_stun_rtsp&port1=%d&port2=%d&ip=%@",
+                                     _selectedChannel.local_stun_audio_port,
+                                     _selectedChannel.local_stun_video_port,
+                                     _selectedChannel.public_ip];
+            
+            responseDict =  [_jsonCommBlocked  sendCommandBlockedWithRegistrationId:stringUDID
+                                                                         andCommand:cmd_string
+                                                                          andApiKey:apiKey];
+            if ( responseDict ) {
+                NSLog(@"symmetric_check_result, responseDict: %@", responseDict);
+                
+                NSString *body = [[[responseDict objectForKey: @"data"] objectForKey: @"device_response"] objectForKey: @"body"];
+                //"get_session_key: error=200,port1=37171&port2=47608&ip=115.77.250.193,mode=p2p_stun_rtsp"
+                
+                NSLog(@"Respone - camera response : %@, Number of STUN error: %d", body, _numberOfSTUNError);
+                if ( body ) {
+                    NSArray *tokens = [body componentsSeparatedByString:@","];
+                    if ( [[tokens objectAtIndex:0] hasSuffix:@"error=200"]) {
+                        //roughly check for "error=200"
+                        if (_numberOfSTUNError >= 3) {
+                            // Switch to RELAY because STUN try probe & failed many times
+                            NSLog(@"Switch to RELAY - Number of STUN error: %d", _numberOfSTUNError);
+                            
+                            /* close current session  before continue*/
+                            cmd_string = @"action=command&command=close_p2p_rtsp_stun";
+                            
+                            //responseDict =
+                            [_jsonCommBlocked  sendCommandBlockedWithRegistrationId:stringUDID
+                                                                         andCommand:cmd_string
+                                                                          andApiKey:apiKey];
+                            if ( !userWantToCancel ) {
+                                self.numberOfSTUNError = 0;
+                                
+                                //[self handleMessage:H264_SWITCHING_TO_RELAY_SERVER ext1:0 ext2:0];
+                                NSArray * args = [NSArray arrayWithObjects:
+                                                  [NSNumber numberWithInt:H264_SWITCHING_TO_RELAY_SERVER],nil];
+#ifdef SHOW_DEBUG_INFO
+                                _viewVideoIn = @"R";
+#endif
+                                //relay
+                                [self performSelectorOnMainThread:@selector(handleMessageOnMainThread:)
+                                                       withObject:args
+                                                    waitUntilDone:NO];
+                            }
+                        }
+                        else {
+                            NSString *ports_ip = tokens[1];
+                            
+                            NSArray *token1s = [ports_ip componentsSeparatedByString:@"&"];
+                            NSString *port1_str = token1s[0];
+                            NSString *port2_str = token1s[1];
+                            NSString *cam_ip = token1s[2];
+                            
+                            _selectedChannel.profile.camera_mapped_address = [[cam_ip componentsSeparatedByString:@"="] objectAtIndex:1];
+                            _selectedChannel.profile.camera_stun_audio_port = [(NSString *)[[port1_str componentsSeparatedByString:@"="] objectAtIndex:1] intValue];
+                            _selectedChannel.profile.camera_stun_video_port =[(NSString *)[[port2_str componentsSeparatedByString:@"="] objectAtIndex:1] intValue];
+                            
+                            if ( !userWantToCancel ) {
+#ifdef SHOW_DEBUG_INFO
+                                _viewVideoIn = @"S";
+#endif
+                                [self performSelectorOnMainThread:@selector(startStunStream)
+                                                       withObject:nil
+                                                    waitUntilDone:NO];
+                            }
+                        }
+                    }
+                    else {
+                        NSLog(@"Respone error - camera response error: %@", body);
+                        
+                        /* close current session  before continue*/
+                        cmd_string = @"action=command&command=close_p2p_rtsp_stun";
+                        
+                        //responseDict =
+                        [_jsonCommBlocked  sendCommandBlockedWithRegistrationId:stringUDID
+                                                                     andCommand:cmd_string
+                                                                      andApiKey:apiKey];
+                        
+                        if ( !userWantToCancel ) {
+#ifdef SHOW_DEBUG_INFO
+                            _viewVideoIn = @"R";
+#endif
+                            NSArray *args = @[[NSNumber numberWithInt:H264_SWITCHING_TO_RELAY_SERVER]];
+                            
+                            //relay
+                            [self performSelectorOnMainThread:@selector(handleMessageOnMainThread:)
+                                                   withObject:args
+                                                waitUntilDone:NO];
+                        }
+                    }
+                }
+                else {
+                    NSLog(@"Respone error - can't parse \"body\"field from: %@", responseDict);
+                    
+                    NSArray *args = @[[NSNumber numberWithInt:MEDIA_ERROR_SERVER_DIED]];
+                    
+                    //force server died
+                    [self performSelectorOnMainThread:@selector(handleMessageOnMainThread:)
+                                           withObject:args
+                                        waitUntilDone:NO];
+                    
+                }
+            }
+            else {
+                NSLog(@"SERVER unreachable (timeout) - responseDict == nil --> Need test this more");
+                
+                NSArray *args = @[[NSNumber numberWithInt:MEDIA_ERROR_SERVER_DIED]];
+                
+                [self performSelectorOnMainThread:@selector(handleMessageOnMainThread:)
+                                       withObject:args
+                                    waitUntilDone:NO];
+            }
+        }
+    });
     
-    dispatch_async(qt,
-                   ^{
-                       NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-                       NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
-                       //NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
-                       NSString *stringUDID = self.selectedChannel.profile.registrationID;
-                       
-                       NSDate *dateStage1 = [NSDate date];
-                       
-                       if (_jsonCommBlocked == nil)
-                       {
-                           self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                                                        Selector:nil
-                                                                                    FailSelector:nil
-                                                                                       ServerErr:nil];
-                       }
-                       
-                       NSDictionary *responseDict;
-                       //NSLog(@"%@", responseDict);
-                       
-                       
-                       if (isBehindSymmetricNat == TRUE) // USE RELAY
-                       {
-#ifdef SHOW_DEBUG_INFO
-                           _viewVideoIn = @"R";
-#endif
-                           //responseDict = [jsonComm createSessionBlockedWithRegistrationId:mac
-                           responseDict = [_jsonCommBlocked createSessionBlockedWithRegistrationId:stringUDID
-                                                                                     andClientType:@"BROWSER"
-                                                                                         andApiKey:apiKey];
-                           NSLog(@"USE RELAY TO VIEW- userWantsToCancel:%d, returnFromPlayback:%d, responsed: %@", userWantToCancel, _returnFromPlayback, responseDict);
-                           
-                           NSTimeInterval diff = [[NSDate date] timeIntervalSinceDate:dateStage1];
-                           NSString *gaiActionTime = GAI_ACTION(1, diff);
-                           
-                           [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
-                                                                           withAction:gaiActionTime
-                                                                            withLabel:nil
-                                                                            withValue:nil];
-                           
-                           NSLog(@"%s stage 1 takes %f seconds \n Start stage 2 \n %@", __FUNCTION__, diff, gaiActionTime);
-                           self.timeStartingStageTwo = [NSDate date];
-                           
-                           if (!userWantToCancel && !_returnFromPlayback && [UIApplication sharedApplication].applicationState == UIApplicationStateActive)
-                           {
-                               if (responseDict != nil)
-                               {
-                                   if ([[responseDict objectForKey:@"status"] intValue] == 200)
-                                   {
-                                       NSString *urlResponse = [[responseDict objectForKey:@"data"] objectForKey:@"url"];
-                                       
-                                       if ([urlResponse hasPrefix:ME_WOWZA] &&
-                                           [userDefaults boolForKey:VIEW_NXCOMM_WOWZA] == TRUE)
-                                       {
-                                           self.selectedChannel.stream_url = [urlResponse stringByReplacingOccurrencesOfString:ME_WOWZA withString:NXCOMM_WOWZA];
-                                       }
-                                       else
-                                       {
-                                           self.selectedChannel.stream_url = urlResponse;
-                                       }
-                                       
-                                       self.selectedChannel.communication_mode = COMM_MODE_STUN_RELAY2;
-                                       
-                                       NSLog(@"%s Start stage 2", __FUNCTION__);
-                                       
-                                       [self performSelectorOnMainThread:@selector(startStream)
-                                                              withObject:nil
-                                                           waitUntilDone:NO];
-                                       
-                                       self.messageStreamingState = @"Low data bandwidth detected. Trying to connect...";
-                                   }
-                                   else
-                                   {
-                                       //handle Bad response
-                                       NSLog(@"%s ERROR: %@", __FUNCTION__, [responseDict objectForKey:@"message"]);
-#if 1
-                                       self.messageStreamingState = @"Camera is not accessible";
-                                       _isShowTextCameraIsNotAccesible = YES;
-                                       
-                                       dispatch_async(dispatch_get_main_queue(), ^{
-                                           [self.ib_lbCameraNotAccessible setHidden:NO];
-                                       });
-                                       
-                                       [self symmetric_check_result:TRUE];
-#else
-                                       NSArray * args = [NSArray arrayWithObjects:
-                                                         [NSNumber numberWithInt:MEDIA_ERROR_SERVER_DIED],nil];
-                                       //force server died
-                                       [self performSelectorOnMainThread:@selector(handleMessageOnMainThread:)
-                                                              withObject:args
-                                                           waitUntilDone:NO];
-#endif
-                                   }
-                               }
-                               else
-                               {
-                                   NSLog(@"SERVER unreachable (timeout) ");
-                                   self.messageStreamingState = @"Camera is not accessible";
-                                   _isShowTextCameraIsNotAccesible = YES;
-#if 1
-                                   dispatch_async(dispatch_get_main_queue(), ^{
-                                       [self.ib_lbCameraNotAccessible setHidden:NO];
-                                       [self performSelector:@selector(setupCamera) withObject:nil afterDelay:10];
-                                   });
-#else
-                                   NSArray * args = [NSArray arrayWithObjects:
-                                                     [NSNumber numberWithInt:MEDIA_ERROR_SERVER_DIED],nil];
-                                   
-                                   
-                                   
-                                   dispatch_async(dispatch_get_main_queue(), ^{
-                                       [self performSelector:@selector(handleMessageOnMainThread:) withObject:args afterDelay:10];
-                                   });
-#endif
-                               }
-                           }
-                           else
-                           {
-                               NSLog(@"%s View is invisible OR in background mode. Do nothing!", __FUNCTION__);
-                           }
-                       }
-                       else // USE RTSP/STUN
-                       {
-                           
-                           //Set port1, port2
-                           NSLog(@"TRY TO USE RTSP/STUN TO VIEW***********************");
-#ifdef SHOW_DEBUG_INFO
-                           _viewVideoIn = @"S";
-#endif
-                           if ([self.client create_stun_forwarder:self.selectedChannel] != 0 )
-                           {
-                               //TODO: Handle error
-                           }
-                           NSString * cmd_string = [NSString stringWithFormat:@"action=command&command=get_session_key&mode=p2p_stun_rtsp&port1=%d&port2=%d&ip=%@",
-                                                    self.selectedChannel.local_stun_audio_port,
-                                                    self.selectedChannel.local_stun_video_port,
-                                                    self.selectedChannel.public_ip];
-                           
-                           responseDict =  [_jsonCommBlocked  sendCommandBlockedWithRegistrationId:stringUDID
-                                                                                        andCommand:cmd_string
-                                                                                         andApiKey:apiKey];
-                           
-                           if (responseDict != nil)
-                           {
-                               NSLog(@"symmetric_check_result, responseDict: %@", responseDict);
-                               
-                               NSString *body = [[[responseDict objectForKey: @"data"] objectForKey: @"device_response"] objectForKey: @"body"];
-                               //"get_session_key: error=200,port1=37171&port2=47608&ip=115.77.250.193,mode=p2p_stun_rtsp"
-                               
-                               NSLog(@"Respone - camera response : %@, Number of STUN error: %d", body, _numberOfSTUNError);
-                               if (body != nil )
-                               {
-                                   NSArray * tokens = [body componentsSeparatedByString:@","];
-                                   
-                                   
-                                   if ( [[tokens objectAtIndex:0] hasSuffix:@"error=200"]) //roughly check for "error=200"
-                                   {
-                                       if (_numberOfSTUNError >= 3) // Switch to RELAY because STUN try probe & failed many times
-                                       {
-                                           NSLog(@"Switch to RELAY - Number of STUN error: %d", _numberOfSTUNError);
-                                           
-                                           /* close current session  before continue*/
-                                           cmd_string = @"action=command&command=close_p2p_rtsp_stun";
-                                           
-                                           //responseDict =
-                                           [_jsonCommBlocked  sendCommandBlockedWithRegistrationId:stringUDID
-                                                                                        andCommand:cmd_string
-                                                                                         andApiKey:apiKey];
-                                           
-                                           if (userWantToCancel == FALSE)
-                                           {
-                                               self.numberOfSTUNError = 0;
-                                               
-                                               //[self handleMessage:H264_SWITCHING_TO_RELAY_SERVER ext1:0 ext2:0];
-                                               NSArray * args = [NSArray arrayWithObjects:
-                                                                 [NSNumber numberWithInt:H264_SWITCHING_TO_RELAY_SERVER],nil];
-#ifdef SHOW_DEBUG_INFO
-                                               _viewVideoIn = @"R";
-#endif
-                                               //relay
-                                               [self performSelectorOnMainThread:@selector(handleMessageOnMainThread:)
-                                                                      withObject:args
-                                                                   waitUntilDone:NO];
-                                           }
-                                       }
-                                       else
-                                       {
-                                           NSString * ports_ip = [tokens objectAtIndex:1];
-                                           
-                                           NSArray * token1s = [ports_ip componentsSeparatedByString:@"&"];
-                                           NSString * port1_str = [token1s objectAtIndex:0];
-                                           NSString * port2_str = [token1s objectAtIndex:1];
-                                           NSString * cam_ip = [token1s objectAtIndex:2];
-                                           
-                                           
-                                           
-                                           self.selectedChannel.profile.camera_mapped_address = [[cam_ip componentsSeparatedByString:@"="] objectAtIndex:1];
-                                           self.selectedChannel.profile.camera_stun_audio_port = [(NSString *)[[port1_str componentsSeparatedByString:@"="] objectAtIndex:1] intValue];
-                                           self.selectedChannel.profile.camera_stun_video_port =[(NSString *)[[port2_str componentsSeparatedByString:@"="] objectAtIndex:1] intValue];
-                                           
-                                           if (userWantToCancel == FALSE)
-                                           {
-#ifdef SHOW_DEBUG_INFO
-                                               _viewVideoIn = @"S";
-#endif
-                                               [self performSelectorOnMainThread:@selector(startStunStream)
-                                                                      withObject:nil
-                                                                   waitUntilDone:NO];
-                                           }
-                                       }
-                                   }
-                                   else
-                                   {
-                                       NSLog(@"Respone error - camera response error: %@", body);
-                                       
-                                       
-                                       /* close current session  before continue*/
-                                       cmd_string = @"action=command&command=close_p2p_rtsp_stun";
-                                       
-                                       //responseDict =
-                                       [_jsonCommBlocked  sendCommandBlockedWithRegistrationId:stringUDID
-                                                                                    andCommand:cmd_string
-                                                                                     andApiKey:apiKey];
-                                       
-                                       if (userWantToCancel == FALSE)
-                                       {
-#ifdef SHOW_DEBUG_INFO
-                                           _viewVideoIn = @"R";
-#endif
-                                           NSArray * args = [NSArray arrayWithObjects:
-                                                             [NSNumber numberWithInt:H264_SWITCHING_TO_RELAY_SERVER],nil];
-                                           
-                                           //relay
-                                           [self performSelectorOnMainThread:@selector(handleMessageOnMainThread:)
-                                                                  withObject:args
-                                                               waitUntilDone:NO];
-                                       }
-                                       
-                                   }
-                               }
-                               else
-                               {
-                                   NSLog(@"Respone error - can't parse \"body\"field from: %@", responseDict);
-                                   
-                                   NSArray * args = [NSArray arrayWithObjects:
-                                                     [NSNumber numberWithInt:MEDIA_ERROR_SERVER_DIED],nil];
-                                   //force server died
-                                   [self performSelectorOnMainThread:@selector(handleMessageOnMainThread:)
-                                                          withObject:args
-                                                       waitUntilDone:NO];
-                                   
-                               }
-                               
-                           }
-                           else
-                           {
-                               NSLog(@"SERVER unreachable (timeout) - responseDict == nil --> Need test this more");
-                               
-                               NSArray * args = [NSArray arrayWithObjects:
-                                                 [NSNumber numberWithInt:MEDIA_ERROR_SERVER_DIED],nil];
-                               
-                               [self performSelectorOnMainThread:@selector(handleMessageOnMainThread:)
-                                                      withObject:args
-                                                   waitUntilDone:NO];
-                           }
-                       }
-                       
-                   }
-                   
-                   
-                   );
     dispatch_release(qt);
     
-    if (isBehindSymmetricNat != TRUE)
-    {
-        
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0),
-                       ^{
-                           NSString *bodyKey = @"";
-                           
-                           if (self.selectedChannel.profile.isInLocal )
-                           {
-                               [HttpCom instance].comWithDevice.device_ip   = self.selectedChannel.profile.ip_address;
-                               [HttpCom instance].comWithDevice.device_port = self.selectedChannel.profile.port;
-                               
-                               NSData *responseData = [[HttpCom instance].comWithDevice sendCommandAndBlock_raw:@"get_resolution"];
-                               
-                               if (responseData != nil)
-                               {
-                                   bodyKey = [[[NSString alloc] initWithData:responseData encoding: NSUTF8StringEncoding] autorelease];
-                                   
-                                   NSLog(@"symmetric_check_result response string: %@", bodyKey);
-                               }
-                           }
-                           else if(self.selectedChannel.profile.minuteSinceLastComm <= 5) // Remote
-                           {
-                               NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-                               
-                               //NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
-                               NSString *stringUDID = self.selectedChannel.profile.registrationID;
-                               NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
-                               NSLog(@"Log - registrationID: %@, apikey: %@", stringUDID, apiKey);
-                               
-                               if (_jsonCommBlocked == nil)
-                               {
-                                   self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                                                                Selector:nil
-                                                                                            FailSelector:nil
-                                                                                               ServerErr:nil];
-                               }
-                               
-                               NSDictionary *responseDict = [_jsonCommBlocked sendCommandBlockedWithRegistrationId:stringUDID
-                                                                                                        andCommand:[NSString stringWithFormat:@"action=command&command=get_resolution"]
-                                                                                                         andApiKey:apiKey];
-                               if (responseDict != nil)
-                               {
-                                   
-                                   NSInteger status = [[responseDict objectForKey:@"status"] intValue];
-                                   if (status == 200)
-                                   {
-                                       bodyKey = [[[responseDict objectForKey:@"data"] objectForKey:@"device_response"] objectForKey:@"body"];
-                                   }
-                               }
-                               
-                               NSLog(@"symmetric_check_result responseDict = %@", responseDict);
-                           }
-                           
-                           if (![bodyKey isEqualToString:@""])
-                           {
-                               NSArray * tokens = [bodyKey componentsSeparatedByString:@": "];
-                               if ([tokens count] >=2 )
-                               {
-                                   NSString *modeVideo = [tokens objectAtIndex:1];
-                                   
-                                   
-                                   if ([modeVideo isEqualToString:@"480p"]) // ok
-                                   {
-                                       self.selectedChannel.stream_url = [[NSBundle mainBundle] pathForResource:@"stream480p" ofType:@"sdp"];
-                                   }
-                                   else if ([modeVideo isEqualToString:@"VGA640_480"]) // Camera server resolution
-                                   {
-                                       self.selectedChannel.stream_url = [[NSBundle mainBundle] pathForResource:@"streamvga" ofType:@"sdp"];
-                                   }
-                                   else if ([modeVideo isEqualToString:@"QVGA320_240"]) // Camera server resolution
-                                   {
-                                       self.selectedChannel.stream_url = [[NSBundle mainBundle] pathForResource:@"streamqvga" ofType:@"sdp"];
-                                   }
-                                   else if ([modeVideo isEqualToString:@"720p_926"])
-                                   {
-                                       self.selectedChannel.stream_url = [[NSBundle mainBundle] pathForResource:@"blink11hd720p" ofType:@"sdp"];
-                                   }
-                                   else if ([modeVideo isEqualToString:@"480p_926"])
-                                   {
-                                       self.selectedChannel.stream_url = [[NSBundle mainBundle] pathForResource:@"blink11hd480p" ofType:@"sdp"];
-                                   }
-                                   else if ([modeVideo isEqualToString:@"360p_926"] )
-                                   {
-                                       self.selectedChannel.stream_url = [[NSBundle mainBundle] pathForResource:@"blink11hd360p" ofType:@"sdp"];
-                                   }
-                                   else //if([modeVideo isEqualToString:@"720p_10"] || [modeVideo isEqualToString:@"720p_15"])
-                                   {
-                                       self.selectedChannel.stream_url = [[NSBundle mainBundle] pathForResource:@"stream720p" ofType:@"sdp"];
-                                   }
-                               }
-                               else
-                               {
-                                   self.selectedChannel.stream_url = [[NSBundle mainBundle] pathForResource:@"stream720p_10_926" ofType:@"sdp"];
-                               }
-                           }
-                           else
-                           {
-                               
-                               self.selectedChannel.stream_url = [[NSBundle mainBundle] pathForResource:@"stream720p" ofType:@"sdp"];
-                           }
-                           
-                       });
-        
+    if ( isBehindSymmetricNat ) {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+            NSString *bodyKey = @"";
+            
+            if (self.selectedChannel.profile.isInLocal ) {
+                [HttpCom instance].comWithDevice.device_ip   = _selectedChannel.profile.ip_address;
+                [HttpCom instance].comWithDevice.device_port = _selectedChannel.profile.port;
+                
+                NSData *responseData = [[HttpCom instance].comWithDevice sendCommandAndBlock_raw:@"get_resolution"];
+                if ( responseData ) {
+                    bodyKey = [[[NSString alloc] initWithData:responseData encoding: NSUTF8StringEncoding] autorelease];
+                    NSLog(@"symmetric_check_result response string: %@", bodyKey);
+                }
+            }
+            else if (_selectedChannel.profile.minuteSinceLastComm <= 5) {
+                // Remote
+                NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+                
+                //NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
+                NSString *stringUDID = _selectedChannel.profile.registrationID;
+                NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
+                NSLog(@"Log - registrationID: %@, apikey: %@", stringUDID, apiKey);
+                
+                if ( !_jsonCommBlocked ) {
+                    self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                                 Selector:nil
+                                                                             FailSelector:nil
+                                                                                ServerErr:nil];
+                }
+                
+                NSDictionary *responseDict = [_jsonCommBlocked sendCommandBlockedWithRegistrationId:stringUDID
+                                                                                         andCommand:[NSString stringWithFormat:@"action=command&command=get_resolution"]
+                                                                                          andApiKey:apiKey];
+                if ( responseDict ) {
+                    NSInteger status = [responseDict[@"status"] intValue];
+                    if (status == 200) {
+                        bodyKey = [[responseDict[@"data"] objectForKey:@"device_response"] objectForKey:@"body"];
+                    }
+                }
+                
+                NSLog(@"symmetric_check_result responseDict = %@", responseDict);
+            }
+            
+            if (![bodyKey isEqualToString:@""]) {
+                NSArray *tokens = [bodyKey componentsSeparatedByString:@": "];
+                
+                if ([tokens count] >=2 ) {
+                    NSString *modeVideo = tokens[1];
+                    
+                    if ([modeVideo isEqualToString:@"480p"]) // ok
+                    {
+                        self.selectedChannel.stream_url = [[NSBundle mainBundle] pathForResource:@"stream480p" ofType:@"sdp"];
+                    }
+                    else if ([modeVideo isEqualToString:@"VGA640_480"]) // Camera server resolution
+                    {
+                        self.selectedChannel.stream_url = [[NSBundle mainBundle] pathForResource:@"streamvga" ofType:@"sdp"];
+                    }
+                    else if ([modeVideo isEqualToString:@"QVGA320_240"]) // Camera server resolution
+                    {
+                        self.selectedChannel.stream_url = [[NSBundle mainBundle] pathForResource:@"streamqvga" ofType:@"sdp"];
+                    }
+                    else if ([modeVideo isEqualToString:@"720p_926"])
+                    {
+                        self.selectedChannel.stream_url = [[NSBundle mainBundle] pathForResource:@"blink11hd720p" ofType:@"sdp"];
+                    }
+                    else if ([modeVideo isEqualToString:@"480p_926"])
+                    {
+                        self.selectedChannel.stream_url = [[NSBundle mainBundle] pathForResource:@"blink11hd480p" ofType:@"sdp"];
+                    }
+                    else if ([modeVideo isEqualToString:@"360p_926"] )
+                    {
+                        self.selectedChannel.stream_url = [[NSBundle mainBundle] pathForResource:@"blink11hd360p" ofType:@"sdp"];
+                    }
+                    else //if([modeVideo isEqualToString:@"720p_10"] || [modeVideo isEqualToString:@"720p_15"])
+                    {
+                        self.selectedChannel.stream_url = [[NSBundle mainBundle] pathForResource:@"stream720p" ofType:@"sdp"];
+                    }
+                }
+                else {
+                    self.selectedChannel.stream_url = [[NSBundle mainBundle] pathForResource:@"stream720p_10_926" ofType:@"sdp"];
+                }
+            }
+            else {
+                self.selectedChannel.stream_url = [[NSBundle mainBundle] pathForResource:@"stream720p" ofType:@"sdp"];
+            }
+            
+        });
     } //if (isBehindSymmetricNat != TRUE)
 }
 
 - (void)remoteConnectingViaSymmectric
 {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0),
-                   ^{
-                       NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-                       NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
-                       //NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
-                       NSString *stringUDID = self.selectedChannel.profile.registrationID;
-                       
-                       if (_jsonCommBlocked == nil)
-                       {
-                           self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                                                        Selector:nil
-                                                                                    FailSelector:nil
-                                                                                       ServerErr:nil];
-                       }
-                       
-                       NSDictionary *responseDict = [_jsonCommBlocked createSessionBlockedWithRegistrationId:stringUDID
-                                                                                               andClientType:@"BROWSER"
-                                                                                                   andApiKey:apiKey];
-                       NSLog(@"remoteConnectingViaSymmectric: %@", responseDict);
-                       if (responseDict != nil)
-                       {
-                           if ([[responseDict objectForKey:@"status"] intValue] == 200)
-                           {
-                               NSString *urlResponse = [[responseDict objectForKey:@"data"] objectForKey:@"url"];
-                               
-                               NSUserDefaults *userDefalts = [NSUserDefaults standardUserDefaults];
-                               
-                               if ([urlResponse hasPrefix:ME_WOWZA] &&
-                                   [userDefalts boolForKey:VIEW_NXCOMM_WOWZA] == TRUE)
-                               {
-                                   self.selectedChannel.stream_url = [urlResponse stringByReplacingOccurrencesOfString:ME_WOWZA withString:NXCOMM_WOWZA];
-                               }
-                               else
-                               {
-                                   self.selectedChannel.stream_url = urlResponse;
-                               }
-                               
-                               if (userWantToCancel == FALSE)
-                               {
-                                   self.selectedChannel.communication_mode = COMM_MODE_STUN_RELAY2;
-                                   [self performSelectorOnMainThread:@selector(startStream)
-                                                          withObject:nil
-                                                       waitUntilDone:NO];
-                               }
-                               
-                           }
-                           else
-                           {
-                               //handle Bad response
-                               NSArray * args = [NSArray arrayWithObjects:
-                                                 [NSNumber numberWithInt:MEDIA_ERROR_SERVER_DIED],nil];
-                               //force server died
-                               [self performSelectorOnMainThread:@selector(handleMessageOnMainThread:)
-                                                      withObject:args
-                                                   waitUntilDone:NO];
-                           }
-                       }
-                       else
-                       {
-                           NSLog(@"SERVER unreachable (timeout) ");
-                           //TODO : handle SERVER unreachable (timeout)
-                       }
-                   });
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
+        //NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
+        NSString *stringUDID = self.selectedChannel.profile.registrationID;
+        
+        if ( !_jsonCommBlocked ) {
+            self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                         Selector:nil
+                                                                     FailSelector:nil
+                                                                        ServerErr:nil];
+        }
+        
+        NSDictionary *responseDict = [_jsonCommBlocked createSessionBlockedWithRegistrationId:stringUDID
+                                                                                andClientType:@"BROWSER"
+                                                                                    andApiKey:apiKey];
+        NSLog(@"remoteConnectingViaSymmectric: %@", responseDict);
+        if ( responseDict) {
+            if ([responseDict[@"status"] intValue] == 200) {
+                NSString *urlResponse = [[responseDict objectForKey:@"data"] objectForKey:@"url"];
+                NSUserDefaults *userDefalts = [NSUserDefaults standardUserDefaults];
+                
+                if ([urlResponse hasPrefix:ME_WOWZA] &&
+                    [userDefalts boolForKey:VIEW_NXCOMM_WOWZA] == TRUE)
+                {
+                    _selectedChannel.stream_url = [urlResponse stringByReplacingOccurrencesOfString:ME_WOWZA withString:NXCOMM_WOWZA];
+                }
+                else {
+                    _selectedChannel.stream_url = urlResponse;
+                }
+                
+                if ( !userWantToCancel ) {
+                    _selectedChannel.communication_mode = COMM_MODE_STUN_RELAY2;
+                    [self performSelectorOnMainThread:@selector(startStream)
+                                           withObject:nil
+                                        waitUntilDone:NO];
+                }
+            }
+            else {
+                //handle Bad response
+                NSArray *args = @[[NSNumber numberWithInt:MEDIA_ERROR_SERVER_DIED]];
+                
+                //force server died
+                [self performSelectorOnMainThread:@selector(handleMessageOnMainThread:)
+                                       withObject:args
+                                    waitUntilDone:NO];
+            }
+        }
+        else {
+            NSLog(@"SERVER unreachable (timeout) ");
+            //TODO : handle SERVER unreachable (timeout)
+        }
+    });
 }
 
-#pragma mark -
 #pragma mark - DirectionPad
 
-- (void)updateKnobUI: (NSInteger )direction
+- (void)updateKnobUI:(NSInteger)direction
 {
     CGFloat transformX = 0;
     CGFloat transformY = 0;
@@ -3482,7 +3370,7 @@ double _ticks = 0;
     //NSLog(@"%f, %f", transformX, transformY);
 }
 
-- (void)updateHandleUI: (NSInteger)direction
+- (void)updateHandleUI:(NSInteger)direction
 {
     CGFloat transformX = 0;
     CGFloat transformY = 0;
@@ -3547,7 +3435,7 @@ double _ticks = 0;
 }
 
 /* Periodically called every 200ms */
-- (void) v_directional_change_callback:(NSTimer *) timer_exp
+- (void)v_directional_change_callback:(NSTimer *)timer_exp
 {
 	/* currentDirUD holds the LATEST direction,
      lastDirUD holds the LAST direction that we have seen
@@ -3555,9 +3443,7 @@ double _ticks = 0;
 	 */
 	@synchronized(_imgViewDrectionPad)
 	{
-        
-		if (lastDirUD != DIRECTION_V_NON)
-        {
+		if (lastDirUD != DIRECTION_V_NON) {
             [[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView V directional change" withProperties:nil];
             
             [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
@@ -3573,7 +3459,7 @@ double _ticks = 0;
 	}
 }
 
-- (void) send_UD_dir_to_rabot:(int ) direction
+- (void)send_UD_dir_to_rabot:(int)direction
 {
 	NSString * dir_str = nil;
 	float duty_cycle = 0;
@@ -3601,10 +3487,8 @@ double _ticks = 0;
 			break;
 	}
     
-	if (dir_str != nil)
-	{
-        if (_selectedChannel.profile.isInLocal)
-		{
+	if (dir_str) {
+        if (_selectedChannel.profile.isInLocal) {
             //[HttpCom instance].comWithDevice.device_ip   = self.selectedChannel.profile.ip_address;
             //[HttpCom instance].comWithDevice.device_port = self.selectedChannel.profile.port;
             
@@ -3613,14 +3497,12 @@ double _ticks = 0;
             
             [[HttpCom instance].comWithDevice sendCommand:dir_str];
 		}
-		else if(_selectedChannel.profile.minuteSinceLastComm <= 5)
-		{
+		else if (_selectedChannel.profile.minuteSinceLastComm <= 5) {
             //NSString *mac = [Util strip_colon_fr_mac:_selectedChannel.profile.mac_address];
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
             NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
             
-            if (_jsonCommBlocked == nil)
-            {
+            if (_jsonCommBlocked == nil) {
                 self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
                                                                              Selector:nil
                                                                          FailSelector:nil
@@ -3635,14 +3517,12 @@ double _ticks = 0;
 	}
 }
 
-- (void)h_directional_change_callback:(NSTimer *) timer_exp
+- (void)h_directional_change_callback:(NSTimer *)timer_exp
 {
     //BOOL need_to_send = FALSE;
-    
     @synchronized(_imgViewDrectionPad)
 	{
-		if ( lastDirLR != DIRECTION_H_NON)
-        {
+		if ( lastDirLR != DIRECTION_H_NON ) {
 			//need_to_send = TRUE;
             [[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView H directional change" withProperties:nil];
             
@@ -3664,7 +3544,7 @@ double _ticks = 0;
 	}
 }
 
-- (void) send_LR_dir_to_rabot:(int ) direction
+- (void)send_LR_dir_to_rabot:(int)direction
 {
 	NSString * dir_str = nil;
     
@@ -3692,23 +3572,19 @@ double _ticks = 0;
     
     NSLog(@"dir_str: %@", dir_str);
     
-	if (dir_str != nil)
-	{
-        if (_selectedChannel.profile.isInLocal)
-        {
+	if ( dir_str ) {
+        if ( _selectedChannel.profile.isInLocal ) {
             //[HttpCom instance].comWithDevice.device_ip   = self.selectedChannel.profile.ip_address;
             //[HttpCom instance].comWithDevice.device_port = self.selectedChannel.profile.port;
             //Non block send-
             [[HttpCom instance].comWithDevice sendCommand:dir_str];
 		}
-		else if ( _selectedChannel.profile.minuteSinceLastComm <= 5)
-		{
+		else if ( _selectedChannel.profile.minuteSinceLastComm <= 5 ) {
             //NSString *mac = [Util strip_colon_fr_mac:_selectedChannel.profile.mac_address];
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
             NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
             
-            if (_jsonCommBlocked == nil)
-            {
+            if ( !_jsonCommBlocked ) {
                 self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
                                                                              Selector:nil
                                                                          FailSelector:nil
@@ -3723,22 +3599,19 @@ double _ticks = 0;
 	}
 }
 
-- (void) updateVerticalDirection_begin:(int)dir inStep: (uint) step
+- (void)updateVerticalDirection_begin:(int)dir inStep:(uint)step
 {
 	unsigned int newDirection = 0;
     
-	if (dir == 0)
-	{
+	if (dir == 0) {
 		newDirection = DIRECTION_V_NON;
 	}
 	else //Dir is either V_UP or V_DN
 	{
-		if (dir >0)
-		{
+		if (dir >0) {
 			newDirection = DIRECTION_V_DN;
 		}
-		else
-		{
+		else {
 			newDirection = DIRECTION_V_UP;
 		}
 	}
@@ -3756,22 +3629,19 @@ double _ticks = 0;
 	[send_UD_dir_req_timer setFireDate:now ];
 }
 
-- (void) updateVerticalDirection:(int)dir inStep: (uint) step withAnimation:(BOOL)animate
+- (void)updateVerticalDirection:(int)dir inStep:(uint)step withAnimation:(BOOL)animate
 {
 	unsigned int newDirection = 0;
     
-	if (dir == 0)
-	{
+	if (dir == 0) {
 		newDirection = DIRECTION_V_NON;
 	}
-	else //Dir is either V_UP or V_DN
-	{
-		if (dir >0)
-		{
+	else {
+        // Dir is either V_UP or V_DN
+		if (dir >0) {
 			newDirection = DIRECTION_V_DN;
 		}
-		else
-		{
+		else {
 			newDirection = DIRECTION_V_UP;
 		}
 	}
@@ -3779,56 +3649,48 @@ double _ticks = 0;
 	@synchronized(_imgViewDrectionPad)
 	{
 		currentDirUD = newDirection;
-        
         [self updateKnobUI:currentDirUD];
         [self updateHandleUI:currentDirUD];
 	}
 }
 
-- (void) updateVerticalDirection_end:(int)dir inStep: (uint) step
+- (void)updateVerticalDirection_end:(int)dir inStep:(uint)step
 {
 	@synchronized(_imgViewDrectionPad)
 	{
 		currentDirUD = DIRECTION_V_NON;
-        
         [self updateKnobUI:DIRECTION_V_NON];
         [self updateHandleUI:DIRECTION_V_NON];
 	}
 }
 
-- (void) updateHorizontalDirection_end:(int)dir inStep: (uint) step
+- (void)updateHorizontalDirection_end:(int)dir inStep:(uint)step
 {
 	@synchronized(_imgViewDrectionPad)
 	{
 		currentDirLR = DIRECTION_H_NON;
-        
         [self updateKnobUI:DIRECTION_H_NON];
         [self updateHandleUI:DIRECTION_H_NON];
 	}
 }
 
-- (void)updateHorizontalDirection_begin:(int)dir inStep: (uint) step
+- (void)updateHorizontalDirection_begin:(int)dir inStep:(uint)step
 {
-    if (_timerHideMenu != nil)
-    {
+    if ( _timerHideMenu ) {
         [self.timerHideMenu invalidate];
         self.timerHideMenu = nil;
     }
     
 	unsigned int newDirection = 0;
     
-	if (dir == 0)
-	{
+	if (dir == 0) {
 		newDirection = DIRECTION_H_NON;
 	}
-	else
-	{
-		if (dir >0)
-		{
+	else {
+		if (dir >0) {
 			newDirection = DIRECTION_H_RT;
 		}
-		else
-		{
+		else {
 			newDirection = DIRECTION_H_LF;
 		}
 	}
@@ -3836,7 +3698,6 @@ double _ticks = 0;
 	@synchronized(_imgViewDrectionPad)
 	{
 		currentDirLR= newDirection;
-        
         [self updateKnobUI:currentDirLR];
         [self updateHandleUI:currentDirLR];
 	}
@@ -3846,22 +3707,18 @@ double _ticks = 0;
 	[send_LR_dir_req_timer setFireDate:now ];
 }
 
-- (void) updateHorizontalDirection:(int)dir inStep: (uint) step withAnimation:(BOOL) animate
+- (void)updateHorizontalDirection:(int)dir inStep:(uint)step withAnimation:(BOOL)animate
 {
 	unsigned int newDirection = 0;
     
-	if (dir == 0)
-	{
+	if (dir == 0) {
 		newDirection = DIRECTION_H_NON;
 	}
-	else
-	{
-		if (dir >0)
-		{
+	else {
+		if (dir >0) {
 			newDirection = DIRECTION_H_RT;
 		}
-		else
-		{
+		else {
 			newDirection = DIRECTION_H_LF;
 		}
 	}
@@ -3869,27 +3726,21 @@ double _ticks = 0;
 	@synchronized(_imgViewDrectionPad)
 	{
 		currentDirLR = newDirection;
-        
         [self updateKnobUI:currentDirLR];
         [self updateHandleUI:currentDirLR];
 	}
 }
 
-#pragma  mark -
-#pragma mark Touches
+#pragma  mark - Touches
 
 //----- handle all touches here then propagate into directionview
 
-- (void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
 	NSArray *allTouches = [touches allObjects];
-    
-    for (UITouch *touch in allTouches)
-    {
-        if(touch.view.tag == 999)
-        {
-            if (_timerHideMenu != nil)
-            {
+    for (UITouch *touch in allTouches) {
+        if(touch.view.tag == 999) {
+            if ( _timerHideMenu ) {
                 [self.timerHideMenu invalidate];
                 self.timerHideMenu = nil;
             }
@@ -3900,16 +3751,12 @@ double _ticks = 0;
     }
 }
 
-- (void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
 	NSArray *allTouches = [touches allObjects];
-    
-    for (UITouch *touch in allTouches)
-    {
-        if(touch.view.tag == 999)
-        {
-            if (_timerHideMenu != nil)
-            {
+    for (UITouch *touch in allTouches) {
+        if(touch.view.tag == 999) {
+            if ( _timerHideMenu ) {
                 [self.timerHideMenu invalidate];
                 self.timerHideMenu = nil;
             }
@@ -3925,14 +3772,11 @@ double _ticks = 0;
     }
 }
 
-- (void) touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
 	NSArray *allTouches = [touches allObjects];
-    
-    for (UITouch *touch in allTouches)
-    {
-        if(touch.view.tag == 999)
-        {
+    for (UITouch *touch in allTouches) {
+        if(touch.view.tag == 999) {
             //NSLog(@"ok");
             CGPoint location = [touch locationInView:touch.view];
             [self touchEventAt:location phase:touch.phase];
