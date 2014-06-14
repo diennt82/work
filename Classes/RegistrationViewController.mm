@@ -3,53 +3,45 @@
 //  BlinkHD_ios
 //
 //  Created by Developer on 2/11/14.
-//  Copyright (c) 2014 Smart Panda Ltd. All rights reserved.
+//  Copyright (c) 2014 eBuyNow eCommerce Limited. All rights reserved.
 //
 
-#import "RegistrationViewController.h"
 #import <MonitorCommunication/MonitorCommunication.h>
+
+#import "RegistrationViewController.h"
 #import "KISSMetricsAPI.h"
 #import "Step_10_ViewController.h"
 #import "UserAccount.h"
-//#import "TermsCondController.h"
 #import "ToUViewController.h"
 
-#define GAI_CATEGORY    @  "Registration view"
+#define GAI_CATEGORY @"Registration view"
 
 @interface RegistrationViewController () <UITextFieldDelegate>
     
-@property (retain, nonatomic) IBOutlet UITextField *tfUsername;
-@property (retain, nonatomic) IBOutlet UITextField *tfEmail;
-@property (retain, nonatomic) IBOutlet UITextField *tfPassword;
-@property (retain, nonatomic) IBOutlet UITextField *tfConfirmPassword;
-@property (retain, nonatomic) IBOutlet UIButton *btnCheckbox;
-@property (retain, nonatomic) IBOutlet UIButton *btnCreate;
-@property (retain, nonatomic) IBOutlet UIView *viewProgress;
+@property (nonatomic, retain) IBOutlet UITextField *tfUsername;
+@property (nonatomic, retain) IBOutlet UITextField *tfEmail;
+@property (nonatomic, retain) IBOutlet UITextField *tfPassword;
+@property (nonatomic, retain) IBOutlet UITextField *tfConfirmPassword;
+@property (nonatomic, retain) IBOutlet UIButton *btnCheckbox;
+@property (nonatomic, retain) IBOutlet UIButton *btnCreate;
+@property (nonatomic, retain) IBOutlet UIView *viewProgress;
 
-@property (retain, nonatomic) NSString *stringUsername;
-@property (retain, nonatomic) NSString *stringPassword;
-@property (retain, nonatomic) NSString *stringCPassword;
-@property (retain, nonatomic) NSString *stringEmail;
+@property (nonatomic, retain) NSString *stringUsername;
+@property (nonatomic, retain) NSString *stringPassword;
+@property (nonatomic, retain) NSString *stringCPassword;
+@property (nonatomic, retain) NSString *stringEmail;
 @end
 
 @implementation RegistrationViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
+#pragma mark - UIViewController methods
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
-    if (UIScreen.mainScreen.bounds.size.height < 568)
-    {
+    if (UIScreen.mainScreen.bounds.size.height < 568) {
         [[NSBundle mainBundle] loadNibNamed:@"RegistrationViewController_35"
                                       owner:self
                                     options:nil];
@@ -78,8 +70,7 @@
     
     self.trackedViewName = GAI_CATEGORY;
     
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-    {
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         UIButton *btnCheckbox = (UIButton *)[self.view viewWithTag:501];
         
         btnCheckbox.frame = CGRectMake(_btnCreate.frame.origin.x - 6, btnCheckbox.frame.origin.y, btnCheckbox.frame.size.width, btnCheckbox.frame.size.height);
@@ -117,7 +108,7 @@
 
 #pragma mark - Methods
 
--(void) validateAllFieldsAndEnableSignUp
+- (void)validateAllFieldsAndEnableSignUp
 {
     if ((_tfUsername.text.length > 0) &&
         (_tfEmail.text.length > 0) &&
@@ -129,27 +120,24 @@
         //Enable the "Create" button
         self.btnCreate.enabled = YES;
     }
-    else
-    {
+    else {
         //disable the "Create"  button
         self.btnCreate.enabled = NO;
     }
 }
 
-- (void)animateTextField: (UITextField *)textField withUp:(BOOL) up
+- (void)animateTextField:(UITextField *)textField withUp:(BOOL)up
 {
     //const int movementDistance = 80; // tweak as needed
     const float movementDuration = 0.3f; // tweak as needed
     
     NSInteger movementDistance = 180; // tweak as needed
     
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-    {
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         movementDistance = 190;
     }
     
-    if (UIScreen.mainScreen.bounds.size.height < 568)
-    {
+    if (UIScreen.mainScreen.bounds.size.height < 568) {
         movementDistance = 155;
     }
     
@@ -164,53 +152,42 @@
 
 - (void)checkInputDataToLogin
 {
-    NSString * msg = nil ;
-    NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
-                                                      @"Ok", nil);
-    NSString *title = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed",nil, [NSBundle mainBundle],
-                                                        @"Create Account Failed" , nil);
-    BOOL checkFailed = TRUE;
+    BOOL checkFailed = YES;
     
-    NSString * regex = @"[a-zA-Z0-9._-]+";
-    NSPredicate * validatedUsername = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
+    NSString *regex = @"[a-zA-Z0-9._-]+";
+    NSPredicate *validatedUsername = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
     BOOL isValidateUsername = [validatedUsername evaluateWithObject:_tfUsername.text];
 
+    NSString *msg = nil ;
+
     //UserName at least 5 chars and at most 20 characters
-    if ([_tfUsername.text length] < 5 || 20 < [_tfUsername.text length])
-    {
+    if ([_tfUsername.text length] < 5 || 20 < [_tfUsername.text length]) {
         msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg",nil, [NSBundle mainBundle],
                                                 @"User name has to be between 5-20 characters" , nil);
     }
-    else if (!isValidateUsername)
-    {
+    else if (!isValidateUsername) {
         msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg5", nil, [NSBundle mainBundle],
                                                 @"Username should not contain special characters except for - _ and ."  , nil);
     }
-    else if (([_tfPassword.text length] < 8) ||
-             ([_tfPassword.text length] > 12) )
-    {
+    else if (([_tfPassword.text length] < 8) || ([_tfPassword.text length] > 12) ) {
         msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg1",nil, [NSBundle mainBundle],
                                                 @"Password has to be between 8-12 characters" , nil);
     }
-    else if ( ![_tfPassword.text isEqualToString:_tfConfirmPassword.text])
-    {
+    else if ( ![_tfPassword.text isEqualToString:_tfConfirmPassword.text]) {
         msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg2",nil, [NSBundle mainBundle],
                                                 @"Password does not match" , nil);
     }
-    else if(![self isValidEmail:_tfEmail.text])
-    {
+    else if (![self isValidEmail:_tfEmail.text]) {
         msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg3",nil, [NSBundle mainBundle],
                                                 @"Invalid email. Email address should be of the form somebody@somewhere.com"  , nil);
     }
-    
-    else if (![RegistrationViewController isWifiConnectionAvailable] )
-    {
+    else if (![RegistrationViewController isWifiConnectionAvailable] ) {
         msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg4",nil, [NSBundle mainBundle],
                                                 @"Please select a Wifi network to connect"  , nil);
     }
-    else //Good info now..
-    {
-        checkFailed = FALSE;
+    else {
+        // Good info now ...
+        checkFailed = NO;
         [self.view endEditing:YES];
         [self.view addSubview:_viewProgress];
         //Register user ...
@@ -229,44 +206,39 @@
                                      andEmail:_stringEmail
                                   andPassword:_stringPassword
                       andPasswordConfirmation:_stringCPassword];
-        
     }
-    
-    if (checkFailed)
-    {
+
+    if (checkFailed) {
         //ERROR condition
-        UIAlertView *alertViewError = [[UIAlertView alloc]
-                               initWithTitle:title
-                               message:msg
-                               delegate:nil
-                               cancelButtonTitle:nil
-                               otherButtonTitles:ok, nil];
+        UIAlertView *alertViewError = [[UIAlertView alloc] initWithTitle:LocStr(@"Create_Account_Failed")
+                                                                 message:msg
+                                                                delegate:nil
+                                                       cancelButtonTitle:nil
+                                                       otherButtonTitles:LocStr(@"OK"), nil];
         [alertViewError show];
         [alertViewError release];
     }
 }
 
--(BOOL) isValidEmail:(NSString *) email
+- (BOOL)isValidEmail:(NSString *)email
 {
-    if ([email rangeOfString:@"@"].location == NSNotFound)
-    {
+    if ([email rangeOfString:@"@"].location == NSNotFound) {
         return NO;
     }
     
-    NSArray * array = [email componentsSeparatedByString:@"@"];
+    NSArray *array = [email componentsSeparatedByString:@"@"];
     
-    if (array.count > 2) //qwe@uyt.uyt@dd - Too many @ characters
-    {
+    if (array.count > 2) {
+        //qwe@uyt.uyt@dd - Too many @ characters
         return NO;
     }
     
-    NSString * domain = [array objectAtIndex:1];
+    NSString *domain = array[1];
     NSLog(@"Domain is : %@",domain);
     
     NSError *error = NULL;
     NSRegularExpression *regexExpr = [NSRegularExpression regularExpressionWithPattern:@"\\([^\\)]*\\)" options:NSRegularExpressionCaseInsensitive error:&error];
-    NSString *modifiedString = [regexExpr stringByReplacingMatchesInString:domain options:0 range:NSMakeRange(0, [domain length]) withTemplate:@""];
-    
+    NSString *modifiedString = [regexExpr stringByReplacingMatchesInString:domain options:0 range:NSMakeRange(0, domain.length) withTemplate:@""];
     NSLog(@"modifiedString ------> %@", modifiedString);
     
     NSString * regex = @"[_a-zA-Z0-9-]+(\\.[_a-zA-Z0-9-]+)+";
@@ -280,8 +252,7 @@
     Reachability* wifiReach = [Reachability reachabilityForLocalWiFi];
     NetworkStatus netStatus = [wifiReach currentReachabilityStatus];
     
-    if (netStatus != ReachableViaWiFi)
-    {
+    if (netStatus != ReachableViaWiFi) {
         return NO;
     }
     
@@ -303,26 +274,21 @@
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
     [self validateAllFieldsAndEnableSignUp];
-    
     return YES;
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
-    if (textField == _tfUsername)
-    {
+    if (textField == _tfUsername) {
         [_tfEmail becomeFirstResponder];
     }
-    else if (textField == _tfEmail)
-    {
+    else if (textField == _tfEmail) {
         [_tfPassword becomeFirstResponder];
     }
-    else if(textField == _tfPassword)
-    {
+    else if(textField == _tfPassword) {
         [_tfConfirmPassword becomeFirstResponder];
     }
-    else
-    {
+    else {
         [textField resignFirstResponder];
     }
     
@@ -341,8 +307,7 @@
 	[userDefaults setObject:_stringEmail    forKey:@"PortalUseremail"];
 	[userDefaults setObject:_stringUsername forKey:@"PortalUsername"];
 	[userDefaults setObject:_stringPassword forKey:@"PortalPassword"];
-    [userDefaults setObject:[[responseData objectForKey:@"data"] objectForKey:@"authentication_token"]
-                     forKey:@"PortalApiKey"];
+    [userDefaults setObject:[responseData[@"data"] objectForKey:@"authentication_token"] forKey:@"PortalApiKey"];
     [userDefaults synchronize];
     
     UserAccount *account = [[UserAccount alloc] initWithUser:_stringUsername
@@ -361,8 +326,7 @@
     
     [self.navigationController popToRootViewControllerAnimated:YES];
     
-    if (_delegate)
-    {
+    if (_delegate) {
         [_delegate sendStatus:SHOW_CAMERA_LIST];
     }
 }
@@ -371,21 +335,15 @@
 {
     [self.viewProgress removeFromSuperview];
     
-    NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
-                                                      @"Ok", nil);
-    NSString * title = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed",nil, [NSBundle mainBundle],
-                                                         @"Create Account Failed" , nil);
-    NSString *msg = [error_response objectForKey:@"message"];
-    UIAlertView *_alert = [[UIAlertView alloc]
-                           initWithTitle:title
-                           message:msg
-                           delegate:self
-                           cancelButtonTitle:ok
-                           otherButtonTitles:nil];
-    [_alert show];
-    [_alert release];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:LocStr(@"Create_Account_Failed")
+                                                     message:error_response[@"message"]
+                                                    delegate:self
+                                           cancelButtonTitle:LocStr(@"Ok")
+                                           otherButtonTitles:nil];
+    [alert show];
+    [alert release];
     
-    [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Regsiter failed - user: %@, error: %@", _stringUsername, msg] withProperties:nil];
+    [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Regsiter failed - user: %@, error: %@", _stringUsername, alert.message] withProperties:nil];
     
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:[NSString stringWithFormat:@"Register successfully - user: %@", _stringUsername]
@@ -397,22 +355,12 @@
 {
     [self.viewProgress removeFromSuperview];
 	
-    NSString * msg1 = NSLocalizedStringWithDefaultValue(@"Registration_Error",nil, [NSBundle mainBundle],
-                                                        @"Registration Error" , nil);
-    
-    NSString * msg = NSLocalizedStringWithDefaultValue(@"Registration_Error_1" ,nil, [NSBundle mainBundle],
-                                                       @"BMS Server is unreachable. Please goto WIFI setting to ensure iOS device is connected to router/3G network" , nil);
-    
-    NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
-                                                      @"Ok", nil);
-    
 	//ERROR condition
-	UIAlertView *alert = [[UIAlertView alloc]
-						  initWithTitle:msg1
-						  message:msg
-						  delegate:self
-						  cancelButtonTitle:ok
-						  otherButtonTitles:nil];
+	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:LocStr(@"Registration_Error")
+                                                    message:LocStr(@"Registration_Error_1")
+                                                   delegate:self
+                                          cancelButtonTitle:LocStr(@"Ok")
+                                          otherButtonTitles:nil];
 	[alert show];
 	[alert release];
     
@@ -424,7 +372,7 @@
                                                      withValue:nil];
 }
 
--(IBAction)btnTermsConditionPressed:(id)sender
+- (IBAction)btnTermsConditionPressed:(id)sender
 {
     /*TermsCondController *tcVC = [[TermsCondController alloc] initWithNibName:@"TermsCondController" bundle:nil];
     [self.navigationController pushViewController:tcVC animated:YES];
@@ -432,23 +380,20 @@
      */
     ToUViewController *vc;
     
-    if (isiPhone5 || isiPhone4){
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
         vc= [[ToUViewController alloc] initWithNibName:@"ToUViewController" bundle:nil];
-    }else{
+    }
+    else {
+        // iPad
         vc= [[ToUViewController alloc] initWithNibName:@"ToUViewController_ipad" bundle:nil];
     }
+    
     [self.navigationController pushViewController:vc animated:YES];
     [vc release];
-    
 }
 
-- (void)didReceiveMemoryWarning
+- (void)dealloc
 {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-- (void)dealloc {
     [_tfEmail release];
     [_tfPassword release];
     [_tfConfirmPassword release];
@@ -458,4 +403,5 @@
     [_tfUsername release];
     [super dealloc];
 }
+
 @end
