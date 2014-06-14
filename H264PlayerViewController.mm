@@ -648,80 +648,96 @@ double _ticks = 0;
 
 - (void)nowButtonAciton:(id)sender
 {
-    [[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView Touch up inside NOW btn item" withProperties:nil];
-    
-    [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
-                                                    withAction:@"nowButtonAciton"
-                                                     withLabel:@"Now"
-                                                     withValue:nil];
-    
-    _hideCustomIndicatorAndTextNotAccessble = NO;
-    
-    [nowButton setEnabled:NO];
-    [earlierButton setEnabled:YES];
-    
-    [nowButton setTitleTextAttributes:@{
-                                        NSFontAttributeName: [UIFont fontWithName:PN_SEMIBOLD_FONT size:17.0],
-                                        NSForegroundColorAttributeName: [UIColor barItemSelectedColor]
-                                        } forState:UIControlStateNormal];
-    [earlierButton setTitleTextAttributes:@{
-                                            NSFontAttributeName: [UIFont fontWithName:PN_LIGHT_FONT size:17.0],
+    // Check to see if we really need to do anything
+    if ( !_earlierVC.view.hidden ) {
+        // Ensure CAM_IN_VEW is set so that view rotations happen as needed.
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        [userDefaults setObject:_selectedChannel.profile.mac_address forKey:CAM_IN_VEW];
+        [userDefaults synchronize];
+        
+        [[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView Touch up inside NOW btn item" withProperties:nil];
+        
+        [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
+                                                        withAction:@"nowButtonAciton"
+                                                         withLabel:@"Now"
+                                                         withValue:nil];
+        
+        _hideCustomIndicatorAndTextNotAccessble = NO;
+        
+        [nowButton setEnabled:NO];
+        [earlierButton setEnabled:YES];
+        
+        [nowButton setTitleTextAttributes:@{
+                                            NSFontAttributeName: [UIFont fontWithName:PN_SEMIBOLD_FONT size:17.0],
                                             NSForegroundColorAttributeName: [UIColor barItemSelectedColor]
                                             } forState:UIControlStateNormal];
-    
-    self.earlierNavi.isEarlierView = NO;
-    
-    if (_wantToShowTimeLine) {
-        [self showTimelineView];
-        _wantToShowTimeLine = NO;
+        [earlierButton setTitleTextAttributes:@{
+                                                NSFontAttributeName: [UIFont fontWithName:PN_LIGHT_FONT size:17.0],
+                                                NSForegroundColorAttributeName: [UIColor barItemSelectedColor]
+                                                } forState:UIControlStateNormal];
+        
+        self.earlierNavi.isEarlierView = NO;
+        
+        if (_wantToShowTimeLine) {
+            [self showTimelineView];
+            _wantToShowTimeLine = NO;
+        }
+        
+        _earlierVC.view.hidden = YES;
+        
+        [self displayCustomIndicator];
     }
-    
-    _earlierVC.view.hidden = YES;
-    
-    [self displayCustomIndicator];
 }
 
 - (void)earlierButtonAction:(id)sender
 {
-    [[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView Touch up inside EARLIER btn item" withProperties:nil];
+    // Check to see if we really need to do anything
+    if ( !_earlierVC || _earlierNavi.view.hidden ) {
+        // Remove the CAM_IN_VEW so that view rotations happen as needed.
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        [userDefaults removeObjectForKey:CAM_IN_VEW];
+        [userDefaults synchronize];
     
-    [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
-                                                    withAction:@"earlierButtonAction"
-                                                     withLabel:@"Earlier"
-                                                     withValue:nil];
-    
-    _hideCustomIndicatorAndTextNotAccessble = YES;
-    
-    [earlierButton setEnabled:NO];
-    [nowButton setEnabled:YES];
-    
-    [nowButton setTitleTextAttributes:@{
-                                        NSFontAttributeName: [UIFont fontWithName:PN_LIGHT_FONT size:17.0],
-                                        NSForegroundColorAttributeName: [UIColor barItemSelectedColor]
-                                        } forState:UIControlStateNormal];
-    [earlierButton setTitleTextAttributes:@{
-                                            NSFontAttributeName: [UIFont fontWithName:PN_SEMIBOLD_FONT size:17.0],
+        [[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView Touch up inside EARLIER btn item" withProperties:nil];
+        
+        [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
+                                                        withAction:@"earlierButtonAction"
+                                                         withLabel:@"Earlier"
+                                                         withValue:nil];
+        
+        _hideCustomIndicatorAndTextNotAccessble = YES;
+        
+        [earlierButton setEnabled:NO];
+        [nowButton setEnabled:YES];
+        
+        [nowButton setTitleTextAttributes:@{
+                                            NSFontAttributeName: [UIFont fontWithName:PN_LIGHT_FONT size:17.0],
                                             NSForegroundColorAttributeName: [UIColor barItemSelectedColor]
                                             } forState:UIControlStateNormal];
-    
-    [self.customIndicator setHidden:YES];
-    self.earlierNavi.isEarlierView = YES;
-    
-    //_wantToShowTimeLine = YES;
-    
-    if ( !_earlierVC ) {
-        self.earlierVC = [[EarlierViewController alloc] initWithParentVC:self camChannel:self.selectedChannel];
-        self.earlierVC.nav = self.navigationController;
-        _earlierVC.view.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+        [earlierButton setTitleTextAttributes:@{
+                                                NSFontAttributeName: [UIFont fontWithName:PN_SEMIBOLD_FONT size:17.0],
+                                                NSForegroundColorAttributeName: [UIColor barItemSelectedColor]
+                                                } forState:UIControlStateNormal];
+        
+        [self.customIndicator setHidden:YES];
+        self.earlierNavi.isEarlierView = YES;
+        
+        //_wantToShowTimeLine = YES;
+        
+        if ( !_earlierVC ) {
+            self.earlierVC = [[EarlierViewController alloc] initWithParentVC:self camChannel:self.selectedChannel];
+            self.earlierVC.nav = self.navigationController;
+            _earlierVC.view.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+        }
+        
+        [self.view addSubview:_earlierVC.view];
+        
+        _earlierVC.view.hidden = NO;
+        [self.view bringSubviewToFront:_earlierVC.view];
+        [_earlierVC setCamChannel:self.selectedChannel];
+        
+        [self stopTalkbackUnexpected];
     }
-    
-    [self.view addSubview:_earlierVC.view];
-    
-    _earlierVC.view.hidden = NO;
-    [self.view bringSubviewToFront:_earlierVC.view];
-    [_earlierVC setCamChannel:self.selectedChannel];
-    
-    [self stopTalkbackUnexpected];
 }
 
 #pragma mark - Action
