@@ -550,6 +550,8 @@
 
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    UITableViewCell *cell = nil;
+    
     if (indexPath.section == 0) {
         //General Setting
         static NSString *cellIdentifier = @"CameraDetailCell";
@@ -567,65 +569,67 @@
         
         camDetCell.lblCameraName.text = self.camChannel.profile.name;
         camDetCell.lblCamVer.text = self.camChannel.profile.fw_version;
-        return camDetCell;
+        
+        cell =  camDetCell;
     }
     else {
         //Sensitive Setting
         if (indexPath.row==0 || indexPath.row==1) {
             //Motion & Sound
             static NSString *CellIdentifier = @"SensitivityCell";
-            SensitivityCell *cell = [self.tableViewSettings dequeueReusableCellWithIdentifier:CellIdentifier];
+            SensitivityCell *sensitivityCell = [self.tableViewSettings dequeueReusableCellWithIdentifier:CellIdentifier];
             
             NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"SensitivityCell" owner:nil options:nil];
             for (id curObj in objects) {
                 if ([curObj isKindOfClass:[UITableViewCell class]]) {
-                    cell = (SensitivityCell *)curObj;
-                    cell.backgroundColor = COLOR_RGB(43.0, 50.0, 56.0);
+                    sensitivityCell = (SensitivityCell *)curObj;
                     break;
                 }
             }
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.sensitivityCellDelegate = self;
-            cell.rowIndex = indexPath.row ;
+            sensitivityCell.selectionStyle = UITableViewCellSelectionStyleNone;
+            sensitivityCell.sensitivityCellDelegate = self;
+            sensitivityCell.rowIndex = indexPath.row ;
             
             if (indexPath.row == 0) {
-                cell.nameLabel.text = @"Motion";
-                cell.switchValue   = _sensitivityInfo.motionOn;
-                cell.settingsValue = _sensitivityInfo.motionValue;
+                sensitivityCell.nameLabel.text = @"Motion";
+                sensitivityCell.switchValue   = _sensitivityInfo.motionOn;
+                sensitivityCell.settingsValue = _sensitivityInfo.motionValue;
             }
             else {
-                cell.nameLabel.text = @"Sound";
-                cell.switchValue   = _sensitivityInfo.soundOn;
-                cell.settingsValue = _sensitivityInfo.soundValue;
+                sensitivityCell.nameLabel.text = @"Sound";
+                sensitivityCell.switchValue   = _sensitivityInfo.soundOn;
+                sensitivityCell.settingsValue = _sensitivityInfo.soundValue;
             }
             
-            return cell;
+            cell = sensitivityCell;
         }
         else {
             // (indexPath.row==2) Tempreture Cell
             static NSString *CellIdentifier = @"SensitivityTemperatureCell";
-            SensitivityTemperatureCell *cell = [self.tableViewSettings dequeueReusableCellWithIdentifier:CellIdentifier];
+            SensitivityTemperatureCell *stCell = [self.tableViewSettings dequeueReusableCellWithIdentifier:CellIdentifier];
             
             NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"SensitivityTemperatureCell" owner:nil options:nil];
             for (id curObj in objects) {
                 if ([curObj isKindOfClass:[SensitivityTemperatureCell class]]) {
-                    cell = (SensitivityTemperatureCell *)curObj;
-                    cell.backgroundColor = COLOR_RGB(43.0, 50.0, 56.0);
+                    stCell = (SensitivityTemperatureCell *)curObj;
                     break;
                 }
             }
             
-            cell.isFahrenheit    = _sensitivityInfo.tempIsFahrenheit;
-            cell.isSwitchOnLeft  = _sensitivityInfo.tempLowOn;
-            cell.isSwitchOnRight = _sensitivityInfo.tempHighOn;
-            cell.tempValueLeft   = _sensitivityInfo.tempLowValue;
-            cell.tempValueRight  = _sensitivityInfo.tempHighValue;
-            cell.sensitivityTempCellDelegate = self;
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            stCell.isFahrenheit    = _sensitivityInfo.tempIsFahrenheit;
+            stCell.isSwitchOnLeft  = _sensitivityInfo.tempLowOn;
+            stCell.isSwitchOnRight = _sensitivityInfo.tempHighOn;
+            stCell.tempValueLeft   = _sensitivityInfo.tempLowValue;
+            stCell.tempValueRight  = _sensitivityInfo.tempHighValue;
+            stCell.sensitivityTempCellDelegate = self;
+            stCell.selectionStyle = UITableViewCellSelectionStyleNone;
             
-            return cell;
+            cell = stCell;
         }
     }
+    
+    cell.backgroundColor = COLOR_RGB(43.0, 50.0, 56.0);
+    return cell;
 }
 
 #pragma mark - Table view delegate
