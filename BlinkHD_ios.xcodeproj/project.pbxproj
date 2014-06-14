@@ -19,6 +19,7 @@
 		26B2D8C3193F6B74005E5F2E /* 114.png in Resources */ = {isa = PBXBuildFile; fileRef = 26B2D8B9193F6B74005E5F2E /* 114.png */; };
 		26B2D8C4193F6B74005E5F2E /* 120.png in Resources */ = {isa = PBXBuildFile; fileRef = 26B2D8BA193F6B74005E5F2E /* 120.png */; };
 		26B2D8C5193F6B74005E5F2E /* 152.png in Resources */ = {isa = PBXBuildFile; fileRef = 26B2D8BB193F6B74005E5F2E /* 152.png */; };
+		26C1B98D194CE45100083F63 /* NSString+UrlEncode.m in Sources */ = {isa = PBXBuildFile; fileRef = 26C1B98C194CE45100083F63 /* NSString+UrlEncode.m */; };
 		288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765A40DF7441C002DB57D /* CoreGraphics.framework */; };
 		28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD733E0D9D9553002E5188 /* MainWindow.xib */; };
 		28D7ACF80DDB3853001CB0EB /* MBP_iosViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 28D7ACF70DDB3853001CB0EB /* MBP_iosViewController.mm */; };
@@ -779,6 +780,8 @@
 		26B2D8BB193F6B74005E5F2E /* 152.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 152.png; sourceTree = "<group>"; };
 		26B2D8D3193F8EE1005E5F2E /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		26B2D8D5193F8EE1005E5F2E /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		26C1B98B194CE45100083F63 /* NSString+UrlEncode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+UrlEncode.h"; sourceTree = "<group>"; };
+		26C1B98C194CE45100083F63 /* NSString+UrlEncode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+UrlEncode.m"; sourceTree = "<group>"; };
 		288765A40DF7441C002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		28AD733E0D9D9553002E5188 /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainWindow.xib; sourceTree = "<group>"; };
 		28D7ACF60DDB3853001CB0EB /* MBP_iosViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBP_iosViewController.h; sourceTree = "<group>"; };
@@ -1785,6 +1788,8 @@
 				3851C3B716D5CD03007D3781 /* StartMonitorCallback.h */,
 				38E3C85A1694033500A13A70 /* AlertPrompt.h */,
 				38E3C85B1694033500A13A70 /* AlertPrompt.m */,
+				26C1B98B194CE45100083F63 /* NSString+UrlEncode.h */,
+				26C1B98C194CE45100083F63 /* NSString+UrlEncode.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -3497,9 +3502,9 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				CLASSPREFIX = "eBuyNow eCommerce Limited";
+				CLASSPREFIX = "";
 				LastUpgradeCheck = 0510;
-				ORGANIZATIONNAME = "Smart Panda Ltd";
+				ORGANIZATIONNAME = "eBuyNow eCommerce Limited";
 				TargetAttributes = {
 					1D6058900D05DD3D006BFB54 = {
 						DevelopmentTeam = 4BXBVPGK3K;
@@ -4187,6 +4192,7 @@
 				38CA70A715F7669D002CD1C5 /* NSData+Conversion.m in Sources */,
 				A10E6BBE18D2F13E00B10EDD /* ChangeImageViewController.m in Sources */,
 				8B9376B618729AC900E20756 /* ClipInfo.m in Sources */,
+				26C1B98D194CE45100083F63 /* NSString+UrlEncode.m in Sources */,
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
 				8B92A0901863E68B005923D2 /* TimelineCell.m in Sources */,
 				8B92A0951863E9DC005923D2 /* TimelineActivityCell.m in Sources */,
