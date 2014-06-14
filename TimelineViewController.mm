@@ -6,21 +6,23 @@
 //  Copyright (c) 2013 eBuyNow eCommerce Limited. All rights reserved.
 //
 
-#define TEST 0
+#import <MonitorCommunication/MonitorCommunication.h>
 
 #import "TimelineViewController.h"
 #import "TimelineCell.h"
 #import "TimelineActivityCell.h"
-#import "EventInfo.h"
 #import "TimelineButtonCell.h"
-#import "PlaybackViewController.h"
-#import <MonitorCommunication/MonitorCommunication.h>
-#import "PlaylistInfo.h"
-#import "H264PlayerViewController.h"
 #import "TimeLinePremiumCell.h"
-#import "define.h"
 #import "TimelineDatabase.h"
+#import "PlaybackViewController.h"
+#import "PlaylistInfo.h"
+#import "EventInfo.h"
+#import "H264PlayerViewController.h"
 #import "NSData+Base64.h"
+#import "NSString+UrlEncode.h"
+#import "define.h"
+
+#define TEST 0
 
 @interface TimelineViewController () <PlaybackDelegate>
 
@@ -46,6 +48,8 @@
 
 @implementation TimelineViewController
 
+#pragma mark - UIViewController methods
+
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
@@ -60,16 +64,8 @@
 {
     [super viewDidLoad];
     
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    
     self.aryDatePrefix = [[NSArray alloc] initWithObjects:@"th", @"st", @"nd", @"rd",@"th",@"th", @"th", @"th", @"th", @"th",nil];
     [_aryDatePrefix release];
-    
-    self.navigationController.navigationBarHidden = YES;
     
     self.camChannel = ((H264PlayerViewController *)_parentVC).selectedChannel;
     
@@ -80,6 +76,7 @@
     self.is12hr = [[NSUserDefaults standardUserDefaults] boolForKey:@"IS_12_HR"];
     
     self.eventPage = 1;
+    
 #if 1
     UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
     [refreshControl addTarget:self
@@ -90,7 +87,6 @@
 #endif
     
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    //[[UIApplication sharedApplication] setStatusBarOrientation:UIDeviceOrientationPortrait animated:NO];
 }
 
 - (void)dealloc
@@ -113,24 +109,20 @@
     [super dealloc];
 }
 
-#pragma mark - Encoding URL string
+#pragma mark - Public methods
 
-- (NSString *)urlEncodeUsingEncoding:(NSStringEncoding)encoding forString:(NSString *)aString
+- (void)loadEvents:(CamChannel *)camChannel
 {
-    CFStringRef stringRef = CFURLCreateStringByAddingPercentEscapes(NULL,
-                                                                    (CFStringRef)aString,
-                                                                    NULL,
-                                                                    (CFStringRef)@"!*'\"();:@=+$,?%#[]% ",
-                                                                    CFStringConvertNSStringEncodingToEncoding(encoding));
-    // Create an NSString so we can call release on the CFStringRef.
-    // TODO: --> will have to cast as follows after ARC conversion: (__bridge NSString *)
-    NSString *encodedStr = [NSString stringWithString:(NSString *)stringRef];
-    CFRelease(stringRef);
+    self.camChannel = camChannel;
+    //[self performSelectorInBackground:@selector(getEventsList_bg:) withObject:camChannel];
     
-    return encodedStr;
+    [self performSelectorInBackground:@selector(getEventFromDb:) withObject:camChannel];
+    [self performSelectorInBackground:@selector(getEventsList_bg2:) withObject:camChannel];
+    
+    //[self.refreshControl endRefreshing];
 }
 
-#pragma mark - Method
+#pragma mark - Private methods
 
 - (void)createRefreshTimer
 {
@@ -148,7 +140,7 @@
 
 - (void)refreshNewEvents:(UIRefreshControl *)sender
 {
-    if (!_isLoading) {
+    if ( !_isLoading ) {
         //Refresh means loading the first page again
         _isLoading = TRUE;
         self.eventPage = 1;
@@ -165,7 +157,7 @@
 {
     NSLog(@"Timeline - refreshEvents - isLoading: %d", _isLoading);
     
-    if (_isLoading == FALSE) {
+    if ( !_isLoading ) {
         if (self.timerRefreshData != nil) {
             [self.timerRefreshData invalidate];
             self.timerRefreshData = nil;
@@ -182,17 +174,6 @@
         [self.tableView reloadData];
         [self loadEvents:self.camChannel];
     }
-}
-
-- (void)loadEvents:(CamChannel *)camChannel
-{
-    self.camChannel = camChannel;
-    //[self performSelectorInBackground:@selector(getEventsList_bg:) withObject:camChannel];
-    
-    [self performSelectorInBackground:@selector(getEventFromDb:) withObject:camChannel];
-    [self performSelectorInBackground:@selector(getEventsList_bg2:) withObject:camChannel];
-
-    //[self.refreshControl endRefreshing];
 }
 
 - (void)getEventFromDb:(CamChannel *)camChannel
@@ -228,7 +209,7 @@
 
     NSLog(@"There are %d in databases", self.events.count );
     
-    if (self.events.count == 0) {
+    if (_events.count == 0) {
         self.isEventAlready = TRUE;
         self.stringIntelligentMessage = @"There is currently no new event";
         self.stringCurrentDate = @"";
@@ -237,7 +218,7 @@
          */
     }
     else {
-        for (EventInfo *eventInfo in self.events) {
+        for (EventInfo *eventInfo in _events) {
             NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
             [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
             [dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
@@ -258,7 +239,7 @@
         
         [self updateIntelligentMessageWithNumberOfVOX:numberOfVOX numberOfMovement:numberOfMovement];
         
-        if ([self.camChannel.profile isNotAvailable]) {
+        if ([_camChannel.profile isNotAvailable]) {
             self.stringIntelligentMessage = @"Monitor is offline";
             self.stringCurrentDate = @"";
         }
@@ -282,7 +263,7 @@
     NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
     NSString *userName = [userDefaults objectForKey:@"PortalUsername"];
     
-    if (_jsonComm == nil) {
+    if ( !_jsonComm ) {
         self.jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
                                                               Selector:nil
                                                           FailSelector:nil
@@ -301,10 +282,9 @@
     [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
     NSString *dateInStringFormated = [dateFormatter stringFromDate:self.currentDate];
-    
     [dateFormatter release];
     
-    dateInStringFormated = [self urlEncodeUsingEncoding:NSUTF8StringEncoding forString:dateInStringFormated];
+    dateInStringFormated = [NSString urlEncode:dateInStringFormated usingEncoding:NSUTF8StringEncoding];
     NSLog(@"Loading page : %d before date: %@", self.eventPage, dateInStringFormated);
     
     //Load event from server
@@ -318,8 +298,8 @@
                                                                           apiKey:apiKey];
     BOOL shouldResetEventPage = FALSE;
     
-    if (responseDict != nil) {
-        if ([[responseDict objectForKey:@"status"] integerValue] == 200) {
+    if ( responseDict ) {
+        if ([responseDict[@"status"] integerValue] == 200) {
             // work
             // 1. Deletes old data from database
             // 2. Inserts new data to database
@@ -335,10 +315,10 @@
             
             NSInteger limitedDate = [yesterday timeIntervalSince1970];
 #endif
-            TimelineDatabase * mDatabase = [ TimelineDatabase getSharedInstance];
+            TimelineDatabase *mDatabase = [ TimelineDatabase getSharedInstance];
             [mDatabase deleteEventsForCamera:camChannel.profile.registrationID limitedDate:0];
             
-            NSArray *events = [[responseDict objectForKey:@"data"] objectForKey:@"events"];
+            NSArray *events = [responseDict[@"data"] objectForKey:@"events"];
             
             if ( events.count > 0 ) {
                 for (NSDictionary *event in events) {
@@ -349,9 +329,9 @@
                     eventInfo.alert      = [[event objectForKey:@"alert"] integerValue];
                     
                     NSString * data_str1  = nil;
-                    if ([event objectForKey:@"data"] != [NSNull null]) {
-                        NSArray  * data  = (NSArray *)[event objectForKey:@"data"] ;
-                        NSError * error = nil;
+                    if (event[@"data"] != [NSNull null]) {
+                        NSArray  *data  = (NSArray *)event[@"data"] ;
+                        NSError *error = nil;
                         NSData *jsonData = [NSJSONSerialization dataWithJSONObject:data options:NSJSONWritingPrettyPrinted error:&error];
                         
                         data_str1 =  [jsonData base64EncodedString];
@@ -364,7 +344,7 @@
                     NSDate *eventDate = [dateFormatter dateFromString:eventInfo.time_stamp]; //2013-12-31 07:38:35 +0000
                     [dateFormatter release];
                     
-                    NSString * event_id = [event objectForKey:@"id"];
+                    NSString *event_id = event[@"id"];
                     
                     int eventTimeInMs = [eventDate timeIntervalSince1970];
                     int status =  [mDatabase saveEventWithId:event_id
@@ -375,7 +355,7 @@
                                                   event_data:data_str1
                                                  camera_udid:camChannel.profile.registrationID
                                                     owner_id:userName];
-                    if ( status == 0) {
+                    if ( status == 0 ) {
                         //Successfully inserted at least 1 record, -> need reload
                         //Toggle this flag to true to signal ui to reload
                         self.hasUpdate = YES;
@@ -409,7 +389,7 @@
     
     self.isLoading = FALSE;
     
-    if ( self.hasUpdate == YES) {
+    if ( self.hasUpdate ) {
         NSLog(@"has inserted new record, trigger update ui now");
         dispatch_async(dispatch_get_main_queue(), ^{
             //[self loadEvents:self.camChannel];
@@ -439,8 +419,8 @@
             self.stringIntelligentMessage = @"There has been a lot of noise";
         }
     }
-    //(numberOfVOX >= 0)
     else {
+        // numberOfVOX >= 0
         if (numberOfMovement >= 4) {
             self.stringIntelligentMessage = @"There has been a lot of movement";
         }
@@ -462,8 +442,10 @@
             }
         }
     }
-    
-    self.stringIntelligentMessage = [NSString stringWithFormat:@"%@ at %@",self.stringIntelligentMessage,self.camChannel.profile.name];
+
+    if ( _camChannel.profile.name ) {
+        self.stringIntelligentMessage = [NSString stringWithFormat:@"%@ at %@", _stringIntelligentMessage, _camChannel.profile.name];
+    }
 }
 
 - (void)loadMoreEvent_bg
@@ -479,10 +461,9 @@
     [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
     
     NSString *dateInStringFormated = [dateFormatter stringFromDate:_currentDate];
-    
     [dateFormatter release];
     
-    dateInStringFormated = [self urlEncodeUsingEncoding:NSUTF8StringEncoding forString:dateInStringFormated];
+    dateInStringFormated = [NSString urlEncode:dateInStringFormated usingEncoding:NSUTF8StringEncoding];
     
     if ( !_jsonComm ) {
         self.jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
@@ -637,15 +618,13 @@
     // Get the date time in NSString
     [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+    
     NSString *dateInStringFormated = [dateFormatter stringFromDate:_currentDate];
     NSLog(@"%@, %@", dateInStringFormated, _stringCurrentDate);
-    
     [dateFormatter release];
     
-    dateInStringFormated = [self urlEncodeUsingEncoding:NSUTF8StringEncoding forString:dateInStringFormated];
-    
-    NSString *alertsString = @"1,2,3,4";
-    self.alertsString = [self urlEncodeUsingEncoding:NSUTF8StringEncoding forString:alertsString];
+    dateInStringFormated = [NSString urlEncode:dateInStringFormated withEncoding:NSUTF8StringEncoding];;
+    self.alertsString = [NSString urlEncode:@"1,2,3,4" withEncoding:NSUTF8StringEncoding];
     
     NSDictionary *responseDict = [_jsonComm getListOfEventsBlockedWithRegisterId:camChannel.profile.registrationID
                                                                  beforeStartTime:dateInStringFormated//@"2013-12-28 20:10:18"
@@ -1209,7 +1188,6 @@
 
 #pragma mark - Table view delegate
 
-// In a xib-based application, navigation from a table can be handled in -tableView:didSelectRowAtIndexPath:
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -1237,7 +1215,7 @@
             clipInfo.mac_addr = [Util strip_colon_fr_mac:_camChannel.profile.mac_address];
             clipInfo.registrationID = _camChannel.profile.registrationID;
             
-            playbackViewController.clip_info = clipInfo;
+            playbackViewController.clipInfo = clipInfo;
             playbackViewController.intEventId = event.eventID;
             playbackViewController.plabackVCDelegate = self;
             
