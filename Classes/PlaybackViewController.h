@@ -19,7 +19,9 @@
 @protocol PlaybackDelegate <NSObject>
 
 @optional
--(void)motioEventDeleted;
+
+- (void)motionEventDeleted;
+- (void)playbackStopped;
 
 @end
 
@@ -30,7 +32,7 @@
     IBOutlet UIView *progressView;
 }
 
-@property (nonatomic, assign) id<PlaybackDelegate> plabackVCDelegate;
+@property (nonatomic, assign) id<PlaybackDelegate> playbackVCDelegate;
 @property (nonatomic, retain) NSMutableArray *clips;
 
 @property (nonatomic, retain) IBOutlet UIImageView *imageVideo;

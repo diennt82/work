@@ -48,8 +48,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
-    //load new nib for landscape iPad
+
+    // Load new nib for landscape iPad
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         [[NSBundle mainBundle] loadNibNamed:@"PlaybackViewController_ipad" owner:self options:nil];
     }
@@ -80,6 +80,11 @@
 {
     [self.navigationController setNavigationBarHidden:YES animated:YES];
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationNone];
+    
+    // Ensure that view rotations are disabled
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults removeObjectForKey:CAM_IN_VEW];
+    [userDefaults synchronize];
     
     //Here is show indicator
     _activityIndicator.hidden = NO;
@@ -256,9 +261,7 @@
     if (status != NO_ERROR) {
         // NOT OK
         printf("setDataSource error: %d\n", status);
-        [self handleMessage:MEDIA_ERROR_SERVER_DIED
-                       ext1:0
-                       ext2:0];
+        [self handleMessage:MEDIA_ERROR_SERVER_DIED ext1:0 ext2:0];
         return;
     }
     
@@ -291,16 +294,12 @@
     if (status != NO_ERROR) {
         // NOT OK
         printf("start() error: %d\n", status);
-        [self handleMessage:MEDIA_ERROR_SERVER_DIED
-                       ext1:0
-                       ext2:0];
+        [self handleMessage:MEDIA_ERROR_SERVER_DIED ext1:0 ext2:0];
         return;
     }
     
     if (status == NO_ERROR) {
-        [self handleMessage:MEDIA_PLAYER_STARTED
-                       ext1:0
-                       ext2:0];
+        [self handleMessage:MEDIA_PLAYER_STARTED ext1:0 ext2:0];
     }
 #else
     
@@ -313,9 +312,7 @@
         // NOT OK
         NSLog(@"setDataSource error: %d\n", status);
         
-        [self handleMessage:MEDIA_ERROR_SERVER_DIED
-                       ext1:0
-                       ext2:0];
+        [self handleMessage:MEDIA_ERROR_SERVER_DIED ext1:0 ext2:0];
         return;
     }
     
@@ -364,12 +361,15 @@
             break;
 
         case MEDIA_PLAYER_STARTED:
+        {
             NSLog(@"%s msg: MEDIA_PLAYER_STARTED", __FUNCTION__);
             self.mediaCurrentState = msg;
             break;
+        }
             
         case MEDIA_ERROR_SERVER_DIED:
         case MEDIA_PLAYBACK_COMPLETE:
+        {
             //DONE Playback
             //clean up
             NSLog(@"Got playback complete>>>>  OUT ");
@@ -381,8 +381,10 @@
                 NSLog(@"%s NOT call goBackToPlayList", __FUNCTION__);
             }
             break;
+        }
             
         case MEDIA_SEEK_COMPLETE:
+        {
             dispatch_async(dispatch_get_main_queue(), ^{
                 self.activityIndicator.hidden = YES;
                 self.ib_playPlayBack.selected = NO;
@@ -390,6 +392,7 @@
                 [self performSelector:@selector(watcher) withObject:nil afterDelay:2];
             });
             break;
+        }
             
         default:
             break;
@@ -448,34 +451,6 @@
     return YES;
 }
 
-#pragma mark - Memory management
-
-- (void)dealloc {
-    NSLog(@"%s", __FUNCTION__);
-    
-    [_imageVideo release];
-    
-    [_list_refresher release];
-    
-    [_activityIndicator release];
-    [_clipInfo release];
-    [_clips release];
-    [_ib_closePlayBack release];
-    [_ib_playPlayBack release];
-    [_ib_sliderPlayBack release];
-    [_ib_timerPlayBack release];
-    [_ib_zoomingPlayBack release];
-    [_ib_viewOverlayVideo release];
-    [_ib_delete release];
-    [_ib_download release];
-    [_ib_share release];
-    [_ib_viewControlPlayer release];
-    [_ib_myOverlay release];
-    [_ib_bg_top_player release];
-    
-    [super dealloc];
-}
-
 - (void)goBackToPlayList
 {
     self.userWantToBack = TRUE;
@@ -488,6 +463,10 @@
     }
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
+    if ([_playbackVCDelegate respondsToSelector:@selector(playbackStopped)]) {
+        [_playbackVCDelegate playbackStopped];
+    }
     
     if ( self.navigationController ) {
         if ([[UIDevice currentDevice] orientation] == UIDeviceOrientationLandscapeLeft ||
@@ -507,25 +486,18 @@
 #else
         NotifViewController *vc = [self.navigationController.viewControllers objectAtIndex:(self.navigationController.viewControllers.count - 2)];
         
-        NSLog(@"Playback with nav controller pop all:%@", vc);
-        
         if ([vc isKindOfClass:[NotifViewController class]]) {
-            NSLog(@"Playback with nav controller pop to NotifViewController");
-            //[self.navigationController popToRootViewControllerAnimated:NO];
             [self.navigationController popViewControllerAnimated:NO];
             [vc ignoreTouchAction:nil];
         }
         else {
             // Timeline
-            //id tmp = [self.navigationController.viewControllers objectAtIndex:2];
-            //NSLog(@"%s goBackToPlayList - vc: %@", __FUNCTION__, NSStringFromClass([tmp class]));
             [self.navigationController popViewControllerAnimated:YES];
         }
 #endif
     }
     else {
-        NSLog(@"Playback no nav controller");
-        [self dismissViewControllerAnimated:YES completion:nil];
+        [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
     }
 }
 
@@ -548,7 +520,7 @@
     }
 }
 
--(void)checkOrientation
+- (void)checkOrientation
 {
 	[self adjustViewsForOrientation:[UIApplication sharedApplication].statusBarOrientation];
 }
@@ -625,22 +597,21 @@
 {
     UIDeviceOrientation orietation = UIDeviceOrientationPortrait;
     
-    if ([[UIDevice currentDevice] orientation] == UIDeviceOrientationPortrait)
-    {
+    if ([[UIDevice currentDevice] orientation] == UIDeviceOrientationPortrait) {
         orietation = UIDeviceOrientationLandscapeRight;
     }
     
     if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]) {
-        objc_msgSend([UIDevice currentDevice], @selector(setOrientation:),    orietation);
+        objc_msgSend([UIDevice currentDevice], @selector(setOrientation:), orietation);
     }
 }
 
 - (IBAction)deleteVideo:(id)sender
 {
-    if(self.intEventId==0)
-    {
+    if (self.intEventId==0) {
         return;
     }
+    
     [self hideControlMenu];
     
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
@@ -648,42 +619,34 @@
     
     dispatch_time_t startTime = dispatch_time(DISPATCH_TIME_NOW, 0.1 * NSEC_PER_SEC);
     dispatch_after(startTime, dispatch_get_main_queue(), ^{
-        
         NSString *apiKey = [[NSUserDefaults standardUserDefaults] stringForKey:@"PortalApiKey"];
-        NSString *strEventID = [NSString stringWithFormat:@"%d",self.intEventId];
+        NSString *strEventID = [NSString stringWithFormat:@"%d", _intEventId];
         
-        BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self Selector:nil  FailSelector:nil ServerErr:nil];
-        
+        BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self Selector:nil FailSelector:nil ServerErr:nil];
         NSDictionary *responseDict = [jsonComm deleteEventsBlockedWithRegistrationId:_clipInfo.registrationID eventIds:strEventID apiKey:apiKey];
         [jsonComm release];
         
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-        if (responseDict)
-        {
-            if ([[responseDict objectForKey:@"status"] integerValue] == 200)
-            {
-                [[TimelineDatabase getSharedInstance]  deleteEventWithID:strEventID];
-                if([self.plabackVCDelegate respondsToSelector:@selector(motioEventDeleted)])
-                {
-                    [self.plabackVCDelegate motioEventDeleted];
+        if ( responseDict ) {
+            if ([responseDict[@"status"] integerValue] == 200) {
+                [[TimelineDatabase getSharedInstance] deleteEventWithID:strEventID];
+                if ([_playbackVCDelegate respondsToSelector:@selector(motionEventDeleted)]) {
+                    [_playbackVCDelegate motionEventDeleted];
                 }
+                
                 [self closePlayBack:nil];
             }
-            else if([responseDict objectForKey:@"message"])
-            {
-                Alert(nil, [responseDict objectForKey:@"message"]);
+            else if ( responseDict[@"message"] ) {
+                Alert(nil, responseDict[@"message"]);
             }
-            else
-            {
+            else {
                 Alert(nil, @"Error occured. Please try again.");
             }
         }
-        else
-        {
+        else {
             Alert(@"Failed: Server is unreachable", @"Please check your network connection");
         }
     });
-    
 }
 
 - (IBAction)downloadVideo:(id)sender
@@ -702,18 +665,14 @@
 {
     NSLog(@"%s", __FUNCTION__);
     
-    if (_playbackStreamer   &&
-        !_isPause           &&
-        _playbackStreamer->isPlaying())
-    {
+    if ( _playbackStreamer && !_isPause && _playbackStreamer->isPlaying()) {
         self.isPause = YES;
         _playbackStreamer->pause();
         self.ib_playPlayBack.selected = YES;
         self.view.userInteractionEnabled = NO;
         [self.ib_myOverlay setHidden:NO];
 
-        if (_timerHideMenu != nil)
-        {
+        if ( _timerHideMenu ) {
             [self.timerHideMenu invalidate];
             self.timerHideMenu = nil;
         }
@@ -723,12 +682,9 @@
 - (IBAction)sliderProgressTouchUpInsideAction:(UISlider *)sender
 {
     double seekTarget = sender.value * _duration;
-    
     NSLog(@"%s value: %f, target: %f", __FUNCTION__, sender.value, seekTarget);//0.666,667 --> 666,667
     
-    if (_playbackStreamer   &&
-        _isPause)
-    {
+    if ( _playbackStreamer && _isPause) {
         self.activityIndicator.hidden = NO;
         self.isPause = NO;
         
@@ -750,14 +706,11 @@
 
 - (IBAction)closePlayBack:(id)sender
 {
-    //handle remove all callback, notification here
-    //stop handle method watcher
-    
+    // Handle removing all callback notifications here.
     [NSObject cancelPreviousPerformRequestsWithTarget:self
                                              selector:@selector(watcher)
                                                object:nil];
-    if (_isPause)
-    {
+    if ( _isPause ) {
         MediaPlayer::Instance()->resume();
     }
     
@@ -768,31 +721,26 @@
 {
     NSLog(@"%s wants to pause: %d", __FUNCTION__, _isPause);
 #if 1
-    if (_isPause)
-    {
+    if (_isPause) {
         self.isPause = NO;
         MediaPlayer::Instance()->resume();
         [self watcher];
         self.ib_playPlayBack.selected = NO;
     }
-    else if(MediaPlayer::Instance()->isPlaying())
-    {
+    else if (MediaPlayer::Instance()->isPlaying()) {
         self.isPause = YES;
         MediaPlayer::Instance()->pause();
         self.ib_playPlayBack.selected = YES;
     }
 #else
-    if (_playbackStreamer)
-    {
-        if (_isPause)
-        {
+    if (_playbackStreamer) {
+        if (_isPause) {
             self.isPause = NO;
             _playbackStreamer->resume();
             [self watcher];
             self.ib_playPlayBack.selected = NO;
         }
-        else if(_playbackStreamer->isPlaying())
-        {
+        else if (_playbackStreamer->isPlaying()) {
             self.isPause = YES;
             _playbackStreamer->pause();
             self.ib_playPlayBack.selected = YES;
@@ -803,11 +751,9 @@
 
 
 #pragma mark Display Time
--(void)watcher
+- (void)watcher
 {
-    //NSLog(@"%s", __FUNCTION__);
-    if (MediaPlayer::Instance() == NULL || _isPause || _userWantToBack)
-    {
+    if (MediaPlayer::Instance() == NULL || _isPause || _userWantToBack) {
         return;
     }
     
@@ -832,7 +778,8 @@
                                     repeats:NO];
 }
 
-- (NSString *) timeFormat: (float) seconds {
+- (NSString *)timeFormat:(float)seconds
+{
     NSLog(@"%s seconds: %f", __FUNCTION__, seconds);
     int minutes = seconds / 60;
     int sec     = fabs(round((int)seconds % 60));
@@ -847,7 +794,7 @@
 
 #pragma mark - Poll camera events
 
--(void) getCameraPlaylistForEvent:(NSTimer *) clipTimer
+- (void)getCameraPlaylistForEvent:(NSTimer *)clipTimer
 {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
@@ -857,7 +804,7 @@
                                                                             ServerErr:nil];
     NSString *mac = _clipInfo.mac_addr;
     NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
-    NSString * event_timecode = [NSString stringWithFormat:@"%@_0%@_%@", mac,_clipInfo.alertType, _clipInfo.alertVal];
+    NSString *event_timecode = [NSString stringWithFormat:@"%@_0%@_%@", mac,_clipInfo.alertType, _clipInfo.alertVal];
     
     NSDictionary * responseDic = [jsonComm getListOfEventsBlockedWithRegisterId:_clipInfo.registrationID
                                                                 beforeStartTime:nil//@"2013-12-28 20:10:18"
@@ -881,8 +828,7 @@
             NSArray *eventArr = [responseDict[@"data"] objectForKey:@"events"];
             
             NSLog(@"play list: %@ ",responseDict);
-            if (eventArr.count > 0)
-            {
+            if (eventArr.count > 0) {
                 NSArray *clipInEvents = [[eventArr objectAtIndex:0] objectForKey:@"data"];
                 
                 for (NSDictionary *clipInfo in clipInEvents) {
@@ -952,6 +898,41 @@
                                                            target:self
                                                          selector:@selector(getCameraPlaylistForEvent:)
                                                          userInfo:_clipInfo repeats:NO];
+}
+
+#pragma mark - Memory management
+
+- (void)dealloc
+{
+    NSLog(@"%s", __FUNCTION__);
+    
+    _playbackVCDelegate = nil;
+    _playbackStreamer = nil;
+    _listener = nil;
+    
+    [_clips release];
+    [_imageVideo release];
+    [_activityIndicator release];
+    [_ib_bg_top_player release];
+    [_ib_viewControlPlayer release];
+    [_ib_closePlayBack release];
+    [_ib_playPlayBack release];
+    [_ib_sliderPlayBack release];
+    [_ib_timerPlayBack release];
+    [_ib_zoomingPlayBack release];
+    [_ib_myOverlay release];
+    [_ib_viewOverlayVideo release];
+    [_ib_delete release];
+    [_ib_download release];
+    [_ib_share release];
+    [_list_refresher release];
+    [_clipInfo release];
+    [_camera_mac release];
+    [_urlVideo release];
+    [_clipsInEvent release];
+    [_timerHideMenu release];
+    
+    [super dealloc];
 }
 
 @end

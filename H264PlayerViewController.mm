@@ -291,68 +291,8 @@ double _ticks = 0;
                                                     withAction:@"viewWillAppear"
                                                      withLabel:nil
                                                      withValue:nil];
-    // Do any additional setup after loading the view.
-	[[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(h264_HandleEnteredBackground)
-                                                 name: UIApplicationDidEnterBackgroundNotification
-                                               object: nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(h264_HandleEnteredBackground)
-                                                 name: UIApplicationWillResignActiveNotification
-                                               object: nil];
 
-	[[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(h264_HandleBecomeActive)
-                                                 name: UIApplicationDidBecomeActiveNotification
-                                               object: nil];
-    //alway show custom indicator, when view appear
-    _isShowCustomIndicator = YES;
-    self.currentMediaStatus = 0;
-    self.shouldUpdateHorizeMenu = YES;
-    self.wantToShowTimeLine = YES;
-    _viewVideoIn = @"R";
-    
-    if (_returnFromPlayback == FALSE) {
-        _isFirstLoad = YES;
-        _isRecordInterface  = YES;
-        _isProcessRecording = NO;
-        _isListening = NO;
-        _ticks = 0.0;
-        
-        if ( _timelineVC ) {
-            self.timelineVC.camChannel = self.selectedChannel;
-        }
-    }
-    else {
-        [[UIApplication sharedApplication] setStatusBarHidden:NO];
-        self.returnFromPlayback = FALSE;
-        
-        //[self scanCamera];
-        
-        [self performSelectorOnMainThread:@selector(scanCamera)
-                               withObject:nil
-                            waitUntilDone:NO];
-        self.h264StreamerIsInStopped = FALSE;
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        [userDefaults setObject:_selectedChannel.profile.mac_address forKey:CAM_IN_VEW];
-        [userDefaults synchronize];
-    }
-    
-    [self checkOrientation];
-    
-    if ( !_backCover ) {
-        // Cover the back button so we can overide the default back action
-        self.backCover = [[UIControl alloc] initWithFrame:CGRectMake( 0, 0, 100, 44)]; // Width setup for @"Cameras"
-        
-        // Show the cover for testing
-        //_backCover.backgroundColor = [UIColor colorWithRed:1.0 green:0.0 blue:0.0 alpha:0.15];
-        
-        [_backCover addTarget:self action:@selector(prepareGoBackToCameraList:) forControlEvents:UIControlEventTouchUpInside];
-        UINavigationBar *navBar = self.navigationController.navigationBar;
-        [navBar addSubview:_backCover];
-        [_backCover release];
-    }
+    [self startStreamPlayback];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -622,96 +562,89 @@ double _ticks = 0;
 
 - (void)nowButtonAciton:(id)sender
 {
-    // Check to see if we really need to do anything
-    if ( !_earlierVC.view.hidden ) {
-        // Ensure CAM_IN_VEW is set so that view rotations happen as needed.
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        [userDefaults setObject:_selectedChannel.profile.mac_address forKey:CAM_IN_VEW];
-        [userDefaults synchronize];
-        
-        [[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView Touch up inside NOW btn item" withProperties:nil];
-        
-        [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
-                                                        withAction:@"nowButtonAciton"
-                                                         withLabel:@"Now"
-                                                         withValue:nil];
-        
-        _hideCustomIndicatorAndTextNotAccessble = NO;
-        
-        [nowButton setEnabled:NO];
-        [earlierButton setEnabled:YES];
-        
-        [nowButton setTitleTextAttributes:@{
-                                            NSFontAttributeName: [UIFont fontWithName:PN_SEMIBOLD_FONT size:17.0],
+    // Ensure CAM_IN_VEW is set so that view rotations happen as needed.
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setObject:_selectedChannel.profile.mac_address forKey:CAM_IN_VEW];
+    [userDefaults synchronize];
+    
+    [[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView Touch up inside NOW btn item" withProperties:nil];
+    
+    [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
+                                                    withAction:@"nowButtonAciton"
+                                                     withLabel:@"Now"
+                                                     withValue:nil];
+    
+    _hideCustomIndicatorAndTextNotAccessble = NO;
+    
+    [nowButton setEnabled:NO];
+    [earlierButton setEnabled:YES];
+    
+    [nowButton setTitleTextAttributes:@{
+                                        NSFontAttributeName: [UIFont fontWithName:PN_SEMIBOLD_FONT size:17.0],
+                                        NSForegroundColorAttributeName: [UIColor barItemSelectedColor]
+                                        } forState:UIControlStateNormal];
+    [earlierButton setTitleTextAttributes:@{
+                                            NSFontAttributeName: [UIFont fontWithName:PN_LIGHT_FONT size:17.0],
                                             NSForegroundColorAttributeName: [UIColor barItemSelectedColor]
                                             } forState:UIControlStateNormal];
-        [earlierButton setTitleTextAttributes:@{
-                                                NSFontAttributeName: [UIFont fontWithName:PN_LIGHT_FONT size:17.0],
-                                                NSForegroundColorAttributeName: [UIColor barItemSelectedColor]
-                                                } forState:UIControlStateNormal];
-        
-        self.earlierNavi.isEarlierView = NO;
-        
-        if (_wantToShowTimeLine) {
-            [self showTimelineView];
-            _wantToShowTimeLine = NO;
-        }
-        
-        _earlierVC.view.hidden = YES;
-        
-        [self displayCustomIndicator];
+    
+    self.earlierNavi.isEarlierView = NO;
+    
+    if (_wantToShowTimeLine) {
+        [self showTimelineView];
+        _wantToShowTimeLine = NO;
     }
+    
+    _earlierVC.view.hidden = YES;
+    _earlierVC.camChannel = nil;
+    
+    [self displayCustomIndicator];
 }
 
 - (void)earlierButtonAction:(id)sender
 {
-    // Check to see if we really need to do anything
-    if ( !_earlierVC || _earlierNavi.view.hidden ) {
-        // Remove the CAM_IN_VEW so that view rotations happen as needed.
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        [userDefaults removeObjectForKey:CAM_IN_VEW];
-        [userDefaults synchronize];
+    // Remove the CAM_IN_VEW so that view rotations happen as needed.
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults removeObjectForKey:CAM_IN_VEW];
+    [userDefaults synchronize];
+
+    [[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView Touch up inside EARLIER btn item" withProperties:nil];
     
-        [[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView Touch up inside EARLIER btn item" withProperties:nil];
-        
-        [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
-                                                        withAction:@"earlierButtonAction"
-                                                         withLabel:@"Earlier"
-                                                         withValue:nil];
-        
-        _hideCustomIndicatorAndTextNotAccessble = YES;
-        
-        [earlierButton setEnabled:NO];
-        [nowButton setEnabled:YES];
-        
-        [nowButton setTitleTextAttributes:@{
-                                            NSFontAttributeName: [UIFont fontWithName:PN_LIGHT_FONT size:17.0],
+    [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
+                                                    withAction:@"earlierButtonAction"
+                                                     withLabel:@"Earlier"
+                                                     withValue:nil];
+    
+    _hideCustomIndicatorAndTextNotAccessble = YES;
+    
+    [earlierButton setEnabled:NO];
+    [nowButton setEnabled:YES];
+    
+    [nowButton setTitleTextAttributes:@{
+                                        NSFontAttributeName: [UIFont fontWithName:PN_LIGHT_FONT size:17.0],
+                                        NSForegroundColorAttributeName: [UIColor barItemSelectedColor]
+                                        } forState:UIControlStateNormal];
+    [earlierButton setTitleTextAttributes:@{
+                                            NSFontAttributeName: [UIFont fontWithName:PN_SEMIBOLD_FONT size:17.0],
                                             NSForegroundColorAttributeName: [UIColor barItemSelectedColor]
                                             } forState:UIControlStateNormal];
-        [earlierButton setTitleTextAttributes:@{
-                                                NSFontAttributeName: [UIFont fontWithName:PN_SEMIBOLD_FONT size:17.0],
-                                                NSForegroundColorAttributeName: [UIColor barItemSelectedColor]
-                                                } forState:UIControlStateNormal];
-        
-        [self.customIndicator setHidden:YES];
-        self.earlierNavi.isEarlierView = YES;
-        
-        //_wantToShowTimeLine = YES;
-        
-        if ( !_earlierVC ) {
-            self.earlierVC = [[EarlierViewController alloc] initWithParentVC:self camChannel:self.selectedChannel];
-            self.earlierVC.nav = self.navigationController;
-            _earlierVC.view.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-        }
-        
-        [self.view addSubview:_earlierVC.view];
-        
-        _earlierVC.view.hidden = NO;
-        [self.view bringSubviewToFront:_earlierVC.view];
-        [_earlierVC setCamChannel:self.selectedChannel];
-        
-        [self stopTalkbackUnexpected];
+    
+    [self.customIndicator setHidden:YES];
+    self.earlierNavi.isEarlierView = YES;
+    
+    //_wantToShowTimeLine = YES;
+    
+    if ( !_earlierVC ) {
+        self.earlierVC = [[EarlierViewController alloc] initWithParentVC:self camChannel:self.selectedChannel];
+        _earlierVC.view.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     }
+    
+    [self.view addSubview:_earlierVC.view];
+    [self.view bringSubviewToFront:_earlierVC.view];
+    _earlierVC.view.hidden = NO;
+    _earlierVC.camChannel = self.selectedChannel;
+    
+    [self stopTalkbackUnexpected];
 }
 
 #pragma mark - Action
@@ -781,19 +714,16 @@ double _ticks = 0;
     self.messageStreamingState = @"Low data bandwidth detected. Trying to connect...";
 }
 
-- (void)handleMessage:(int) msg ext1: (int) ext1 ext2:(int) ext2
+- (void)handleMessage:(int)msg ext1:(int)ext1 ext2:(int)ext2
 {
-    //NSLog(@"Got msg: %d ext1:%d ext2:%d ", msg, ext1, ext2);
-    
-    NSArray * args = [NSArray arrayWithObjects:
-                      [NSNumber numberWithInt:msg],
+    NSArray *args = @[[NSNumber numberWithInt:msg],
                       [NSNumber numberWithInt:ext1],
-                      [NSNumber numberWithInt:ext2], nil];
+                      [NSNumber numberWithInt:ext2]];
     
     [self performSelectorOnMainThread:@selector(handleMessageOnMainThread:) withObject:args waitUntilDone:NO];
 }
 
-- (void)handleMessageOnMainThread: (NSArray * )args
+- (void)handleMessageOnMainThread:(NSArray *)args
 {
     NSNumber *numberMsg = (NSNumber *)[args objectAtIndex:0];
     int msg = [numberMsg integerValue];
@@ -1263,10 +1193,7 @@ double _ticks = 0;
 
 - (void)createStreamSession
 {
-    if (userWantToCancel        ||
-        _returnFromPlayback     ||
-        !MediaPlayer::Instance()->isPlaying())
-    {
+    if (userWantToCancel || _returnFromPlayback || !MediaPlayer::Instance()->isPlaying()) {
         return;
     }
     
@@ -1293,9 +1220,9 @@ double _ticks = 0;
     });
 }
 
-#pragma mark Delegate Timeline
+#pragma mark - TimelineVCDelegate protocol methods
 
-- (void)stopStreamToPlayback
+- (void)stopStreamPlayback
 {
     NSLog(@"%s - currentMediaStatus: %d, h264Streamer: %p", __FUNCTION__, _currentMediaStatus, h264Streamer);
     self.returnFromPlayback = TRUE;
@@ -1310,25 +1237,19 @@ double _ticks = 0;
 #if 1
     NSLog(@"%s _mediaProcessStatus: %d", __FUNCTION__, _mediaProcessStatus);
     
-    if (_mediaProcessStatus == 0)
-    {
+    if (_mediaProcessStatus == 0) {
         
     }
-    else if(_mediaProcessStatus == 1)
-    {
+    else if(_mediaProcessStatus == 1) {
         MediaPlayer::Instance()->sendInterrupt();
         [self stopStream];
-        
     }
-    else if (_mediaProcessStatus == 2)
-    {
+    else if (_mediaProcessStatus == 2) {
         MediaPlayer::Instance()->sendInterrupt();
     }
-    else
-    {
+    else {
         MediaPlayer::Instance()->sendInterrupt();
         [self stopStream];
-
     }
 #else
     if (self.currentMediaStatus == MEDIA_INFO_HAS_FIRST_IMAGE ||
@@ -1337,12 +1258,78 @@ double _ticks = 0;
     {
         [self stopStream];
     }
-    else if (MediaPlayer::Instance() != NULL)
-    {
+    else if (MediaPlayer::Instance() != NULL) {
         MediaPlayer::Instance()->sendInterrupt(); // Assuming h264Streamer stop itself.
     }
 #endif
+    
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)startStreamPlayback
+{
+	[[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(h264_HandleEnteredBackground)
+                                                 name: UIApplicationDidEnterBackgroundNotification
+                                               object: nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(h264_HandleEnteredBackground)
+                                                 name: UIApplicationWillResignActiveNotification
+                                               object: nil];
+    
+	[[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(h264_HandleBecomeActive)
+                                                 name: UIApplicationDidBecomeActiveNotification
+                                               object: nil];
+    
+    //alway show custom indicator, when view appear
+    _isShowCustomIndicator = YES;
+    self.currentMediaStatus = 0;
+    self.shouldUpdateHorizeMenu = YES;
+    self.wantToShowTimeLine = YES;
+    _viewVideoIn = @"R";
+    
+    if ( !_returnFromPlayback ) {
+        _isFirstLoad = YES;
+        _isRecordInterface  = YES;
+        _isProcessRecording = NO;
+        _isListening = NO;
+        _ticks = 0.0;
+        
+        if ( _timelineVC ) {
+            self.timelineVC.camChannel = self.selectedChannel;
+        }
+    }
+    else {
+        [[UIApplication sharedApplication] setStatusBarHidden:NO];
+        self.returnFromPlayback = FALSE;
+        
+        [self performSelectorOnMainThread:@selector(scanCamera)
+                               withObject:nil
+                            waitUntilDone:NO];
+        
+        self.h264StreamerIsInStopped = FALSE;
+    }
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setObject:_selectedChannel.profile.mac_address forKey:CAM_IN_VEW];
+    [userDefaults synchronize];
+    
+    [self checkOrientation];
+    
+    if ( !_backCover ) {
+        // Cover the back button so we can overide the default back action
+        self.backCover = [[UIControl alloc] initWithFrame:CGRectMake( 0, 0, 100, 44)]; // Width setup for @"Cameras"
+        
+        // Show the cover for testing
+        //_backCover.backgroundColor = [UIColor colorWithRed:1.0 green:0.0 blue:0.0 alpha:0.15];
+        
+        [_backCover addTarget:self action:@selector(prepareGoBackToCameraList:) forControlEvents:UIControlEventTouchUpInside];
+        UINavigationBar *navBar = self.navigationController.navigationBar;
+        [navBar addSubview:_backCover];
+        [_backCover release];
+    }
 }
 
 #pragma mark - Delegate Melody
@@ -1446,8 +1433,8 @@ double _ticks = 0;
                                                     withAction:@"Become Active"
                                                      withLabel:nil
                                                      withValue:[NSNumber numberWithDouble:userWantToCancel]];
-    if (userWantToCancel == TRUE || _returnFromPlayback)
-    {
+    
+    if ( userWantToCancel || _returnFromPlayback) {
         return;
     }
     
@@ -1455,7 +1442,7 @@ double _ticks = 0;
     self.currentMediaStatus = 0;
     self.wantToShowTimeLine = YES;
     
-    if (!self.earlierNavi.isEarlierView) {
+    if (!_earlierNavi.isEarlierView) {
         [self showTimelineView];
     }
     
@@ -1475,8 +1462,6 @@ double _ticks = 0;
         return;
     }
     
-    //[self checkOrientation];
-    
     [self scanCamera];
 }
 
@@ -1490,8 +1475,7 @@ double _ticks = 0;
                                                      withLabel:@"Homekey"
                                                      withValue:[NSNumber numberWithDouble:userWantToCancel]];
     
-    if (userWantToCancel == TRUE || _returnFromPlayback)
-    {
+    if (userWantToCancel || _returnFromPlayback) {
         return;
     }
     
@@ -1500,35 +1484,28 @@ double _ticks = 0;
     [self stopPeriodicBeep];
     [self stopPeriodicPopup];
     
-    if (_alertViewTimoutRemote)
-    {
+    if (_alertViewTimoutRemote) {
         [_alertViewTimoutRemote dismissWithClickedButtonIndex:-1 animated:NO];
     }
     
-    if (_audioOutStreamRemote)
-    {
+    if (_audioOutStreamRemote) {
         [_audioOutStreamRemote disconnectFromAudioSocketRemote];
     }
+    
 #if 1
-    if (_mediaProcessStatus == 0)
-    {
+    if (_mediaProcessStatus == 0) {
         
     }
-    else if(_mediaProcessStatus == 1)
-    {
+    else if(_mediaProcessStatus == 1) {
         MediaPlayer::Instance()->sendInterrupt();
         [self stopStream];
-        
     }
-    else if (_mediaProcessStatus == 2)
-    {
+    else if (_mediaProcessStatus == 2) {
         MediaPlayer::Instance()->sendInterrupt();
     }
-    else
-    {
+    else {
         MediaPlayer::Instance()->sendInterrupt();
         [self stopStream];
-        
     }
 #else
     if (self.currentMediaStatus == MEDIA_INFO_HAS_FIRST_IMAGE ||
@@ -1538,14 +1515,13 @@ double _ticks = 0;
         NSLog(@"H264VC - handleEnteredBackground - IF()");
         [self stopStream];
     }
-    else
-        if(h264Streamer != NULL)
-        {
-            NSLog(@"H264VC - handleEnteredBackground - else if(h264Streamer != nil)");
-            
-            h264Streamer->sendInterrupt();
-        }
+    else if( h264Streamer )
+    {
+        NSLog(@"H264VC - handleEnteredBackground - else if(h264Streamer != nil)");
+        h264Streamer->sendInterrupt();
+    }
 #endif
+    
     self.h264StreamerIsInStopped = TRUE;
     self.imageViewVideo.backgroundColor = [UIColor blackColor];
     self.imageViewStreamer.backgroundColor = [UIColor blackColor];
@@ -1565,19 +1541,17 @@ double _ticks = 0;
     return YES;
 }
 
-
 - (void)becomeActive
 {
     if (![_cameraModel isEqualToString:CP_MODEL_SHARED_CAM]) {
         // CameraHD
         self.timelineVC = [[TimelineViewController alloc] init];
         [self.view addSubview:_timelineVC.view];
-        self.timelineVC.timelineVCDelegate = self;
-        self.timelineVC.camChannel = self.selectedChannel;
-        self.timelineVC.navVC = self.navigationController;
-        self.timelineVC.parentVC = self;
+        _timelineVC.timelineVCDelegate = self;
+        _timelineVC.camChannel = self.selectedChannel;
+        _timelineVC.parentVC = self;
         
-        [self.timelineVC loadEvents:self.selectedChannel];
+        [_timelineVC loadEvents:_selectedChannel];
     }
     
     self.selectedChannel.stopStreaming = NO;
@@ -2298,7 +2272,7 @@ double _ticks = 0;
             [self hideControlMenu];
         }
         
-        [self hidenAllBottomView];
+        [self hideAllBottomView];
         
         
         //TODO: enable this
@@ -2631,36 +2605,27 @@ double _ticks = 0;
 
 #pragma mark - Temperature
 
-- (void)getCameraTemperature_bg: (id)sender
+- (void)getCameraTemperature_bg:(id)sender
 {
-    /*
-     * If back, Need not to update UI
-     */
-    
-    if (userWantToCancel == TRUE)
-    {
+    // If back, Need not to update UI
+    if ( userWantToCancel) {
         return;
     }
     
     NSString *responseString = @"";
     
-    if (self.selectedChannel.profile .isInLocal == TRUE)
-    {
+    if ( _selectedChannel.profile.isInLocal ) {
         //[HttpCom instance].comWithDevice.device_ip   = self.selectedChannel.profile.ip_address;
         //[HttpCom instance].comWithDevice.device_port = self.selectedChannel.profile.port;
         //[HttpCom instance].comWithDevice.device_port = 80;// Hack code for Focus66.
         
         NSData *responseData = [[HttpCom instance].comWithDevice sendCommandAndBlock_raw:@"value_temperature"];
-        
-        if (responseData != nil)
-        {
+        if ( responseData ) {
             responseString = [[[NSString alloc] initWithData:responseData encoding: NSUTF8StringEncoding] autorelease];
         }
     }
-    else
-    {
-        if (_jsonCommBlocked == nil)
-        {
+    else {
+        if ( !_jsonCommBlocked ) {
             self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
                                                                          Selector:nil
                                                                      FailSelector:nil
@@ -2675,12 +2640,9 @@ double _ticks = 0;
         NSDictionary *responseDict = [_jsonCommBlocked sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
                                                                                  andCommand:@"action=command&command=value_temperature"
                                                                                   andApiKey:apiKey];
-        
-        if (responseDict != nil)
-        {
+        if ( responseDict ) {
             NSInteger status = [[responseDict objectForKey:@"status"] intValue];
-            if (status == 200)
-            {
+            if (status == 200) {
                 responseString = [[[responseDict objectForKey:@"data"] objectForKey:@"device_response"] objectForKey:@"body"]; // value_temperature: 29.2
             }
         }
@@ -2694,21 +2656,13 @@ double _ticks = 0;
     {
         NSRange tmpRange = [responseString rangeOfString:@": "];
         
-        if (tmpRange.location != NSNotFound)
-        {
+        if (tmpRange.location != NSNotFound) {
             NSArray *arrayBody = [responseString componentsSeparatedByString:@": "];
-            
-            if (arrayBody != nil &&
-                arrayBody.count == 2)
-            {
+            if (arrayBody.count == 2) {
                 self.stringTemperature = [arrayBody objectAtIndex:1];
                 
-                /*
-                 * If back, Need not to update UI
-                 */
-                
-                if (userWantToCancel == TRUE)
-                {
+                //If back, Need not to update UI
+                if ( userWantToCancel ) {
                     return;
                 }
                 
@@ -2716,36 +2670,27 @@ double _ticks = 0;
                                        withObject:_stringTemperature
                                     waitUntilDone:NO];
             }
-            else
-            {
+            else {
                 //NSLog(@"Error - Command is not found or wrong format: %@", responseString);
             }
         }
-        else
-        {
+        else {
             //NSLog(@"Error - Command is not found or wrong format: %@", responseString);
         }
     }
-    else
-    {
+    else {
         // Do nothings | reset UI
         //NSLog(@"Error - Command is not found or wrong format: %@", responseString);
     }
     
     // Make sure Update temperature once after that check condition
-    if (sender != nil &&
-        [sender isKindOfClass:[NSTimer class]])
-    {
-        if (self.ib_temperature.hidden == YES || // Label tmperature was hidden
-            userWantToCancel == TRUE ||          // Back out
-            self.h264StreamerIsInStopped == TRUE)
-        {
+    if ( [sender isKindOfClass:[NSTimer class]] ) {
+        if ( _ib_temperature.hidden || userWantToCancel || _h264StreamerIsInStopped ) {
             [((NSTimer *)sender) invalidate];
             sender = nil;
             self.existTimerTemperature = FALSE;
             
             NSLog(@"Log - Invalidate Timer get temperature");
-            
             return;
         }
     }
@@ -3063,8 +3008,7 @@ double _ticks = 0;
                                 self.numberOfSTUNError = 0;
                                 
                                 //[self handleMessage:H264_SWITCHING_TO_RELAY_SERVER ext1:0 ext2:0];
-                                NSArray * args = [NSArray arrayWithObjects:
-                                                  [NSNumber numberWithInt:H264_SWITCHING_TO_RELAY_SERVER],nil];
+                                NSArray *args = @[[NSNumber numberWithInt:H264_SWITCHING_TO_RELAY_SERVER]];
 #ifdef SHOW_DEBUG_INFO
                                 _viewVideoIn = @"R";
 #endif
@@ -3888,29 +3832,21 @@ double _ticks = 0;
 	}
 }
 
-
-
 #pragma mark - Rotation screen
+
 - (BOOL)shouldAutorotate
 {
-    
-    if (userWantToCancel == TRUE ||
-        _earlierNavi.isEarlierView)
-    {
+    if ( userWantToCancel || _earlierNavi.isEarlierView ) {
         return NO;
     }
-    
-	//return YES;//
     return !_disableAutorotateFlag;
 }
 
 -(NSUInteger)supportedInterfaceOrientations
 {
-    if (_earlierNavi.isEarlierView)
-    {
+    if (_earlierNavi.isEarlierView) {
         return UIInterfaceOrientationMaskPortrait;
     }
-    
     return UIInterfaceOrientationMaskAll;
 }
 
@@ -4158,7 +4094,7 @@ double _ticks = 0;
     [self setupPtt];
     [self applyFont];
     [self hideControlMenu];
-    [self hidenAllBottomView];
+    [self hideAllBottomView];
     [self updateBottomView];
     
     if (_selectedItemMenu != -1) {
@@ -4654,7 +4590,8 @@ double _ticks = 0;
 
 #pragma mark -
 #pragma mark HorizMenu Delegate
--(void) horizMenu:(ScrollHorizontalMenu *)horizMenu itemSelectedAtIndex:(NSUInteger)index
+
+- (void)horizMenu:(ScrollHorizontalMenu *)horizMenu itemSelectedAtIndex:(NSUInteger)index
 {
     /*
      //new
@@ -4671,27 +4608,20 @@ double _ticks = 0;
     _wantToShowTimeLine = NO;
     _isFirstLoad = NO;
     
-    if ([_cameraModel isEqualToString:CP_MODEL_SHARED_CAM])
-    {
-        if ([_sharedCamConnectedTo isEqualToString:@"MACOS"])
-        {
-            if (index == 0)
-            {
+    if ([_cameraModel isEqualToString:CP_MODEL_SHARED_CAM]) {
+        if ([_sharedCamConnectedTo isEqualToString:@"MACOS"]) {
+            if (index == 0) {
                 self.selectedItemMenu = INDEX_RECORDING;
             }
-            else if (index == 1)
-            {
+            else if (index == 1) {
                 self.selectedItemMenu = INDEX_TEMP;
             }
-            else
-            {
+            else {
                 //do nothing
             }
         }
-        else
-        {
-            switch (index)
-            {
+        else {
+            switch (index) {
                 case 0:
                     self.selectedItemMenu = INDEX_PAN_TILT;
                     break;
@@ -4714,12 +4644,8 @@ double _ticks = 0;
             }
         }
     }
-    else if ([_cameraModel isEqualToString:CP_MODEL_CONCURRENT])
-    {
-        //        if (_isInLocal)
-        //        {
-        switch (index)
-        {
+    else if ([_cameraModel isEqualToString:CP_MODEL_CONCURRENT]) {
+        switch (index) {
             case 0:
                 self.selectedItemMenu = INDEX_MICRO;
                 break;
@@ -4738,15 +4664,12 @@ double _ticks = 0;
                 break;
                 
             default:
-                break;
+                ;
         }
     }
-    else// if ([_cameraModel isEqualToString:CP_MODEL_BLE])
-    {
-        //        if (_isInLocal)
-        //        {
-        switch (index)
-        {
+    else {
+        // [_cameraModel isEqualToString:CP_MODEL_BLE]
+        switch (index) {
             case INDEX_PAN_TILT:
                 self.selectedItemMenu = INDEX_PAN_TILT;
                 break;
@@ -4789,17 +4712,14 @@ double _ticks = 0;
 
 - (void)updateBottomView
 {
-    if (_wantToShowTimeLine || self.horizMenu.isAllButtonDeselected)
-    {
-        [self hidenAllBottomView];
+    if (_wantToShowTimeLine || _horizMenu.isAllButtonDeselected) {
+        [self hideAllBottomView];
         [self showTimelineView];
     }
-    else
-    {
-        [self hidenAllBottomView];
+    else {
+        [self hideAllBottomView];
         
-        if (_selectedItemMenu == INDEX_PAN_TILT)
-        {
+        if (_selectedItemMenu == INDEX_PAN_TILT) {
             [self.view bringSubviewToFront:_imgViewDrectionPad];
             [self.view bringSubviewToFront:_imageViewKnob];
             [self.view bringSubviewToFront:_imageViewHandle];
@@ -4808,13 +4728,11 @@ double _ticks = 0;
             self.imageViewKnob.center = _imgViewDrectionPad.center;
             self.imageViewHandle.center = _imgViewDrectionPad.center;
         }
-        else if (_selectedItemMenu == INDEX_MICRO)
-        {
+        else if (_selectedItemMenu == INDEX_MICRO) {
             [self.view bringSubviewToFront:self.ib_ViewTouchToTalk];
             [self.ib_ViewTouchToTalk setHidden:NO];
         }
-        else if (_selectedItemMenu == INDEX_RECORDING)
-        {
+        else if (_selectedItemMenu == INDEX_RECORDING) {
             [self.view bringSubviewToFront:self.ib_viewRecordTTT];
             [self.ib_viewRecordTTT setHidden:NO];
             
@@ -4827,44 +4745,33 @@ double _ticks = 0;
                 [self.ib_buttonChangeAction setHidden:YES];
             }
         }
-        else if (_selectedItemMenu == INDEX_MELODY)
-        {
+        else if (_selectedItemMenu == INDEX_MELODY) {
             [self.melodyViewController.view setHidden:NO];
             
-            if ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeLeft ||
-                [UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeRight)
-            {
+            if (UIInterfaceOrientationIsLandscape([UIApplication sharedApplication].statusBarOrientation)) {
                 self.wantToShowTimeLine = YES;
             }
             
             CGRect rect;
             
-            if (_isLandScapeMode)
-            {
-                if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-                {
+            if (_isLandScapeMode) {
+                if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
                     rect = CGRectMake(SCREEN_HEIGHT - 236, SCREEN_WIDTH - 400, 236, 165);
                 }
-                else
-                {
-                    if (isiPhone4)
-                    {
+                else {
+                    if (isiPhone4) {
                         rect = CGRectMake(SCREEN_HEIGHT - 159, 65, 159, 204);
                     }
-                    else
-                    {
+                    else {
                         rect = CGRectMake(393, 78, 175, 165);
                     }
                 }
             }
-            else
-            {
-                if (isiOS7AndAbove)
-                {
+            else {
+                if (isiOS7AndAbove) {
                     rect = CGRectMake(0, self.ib_ViewTouchToTalk.frame.origin.y - 5, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
                 }
-                else
-                {
+                else {
                     rect = CGRectMake(0, self.ib_ViewTouchToTalk.frame.origin.y - 30 - 44, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
                 }
             }
@@ -4880,14 +4787,12 @@ double _ticks = 0;
             [self.melodyViewController.melodyTableView setNeedsDisplay];
             
         }
-        else if (_selectedItemMenu == INDEX_TEMP)
-        {
+        else if (_selectedItemMenu == INDEX_TEMP) {
             [self.ib_temperature setHidden:NO];
             [ib_switchDegree setHidden:NO];
             [self.view bringSubviewToFront:ib_switchDegree];
             
-            if (_existTimerTemperature == FALSE)
-            {
+            if ( !_existTimerTemperature ) {
                 self.existTimerTemperature = TRUE;
                 NSLog(@"Log - Create Timer to get Temperature");
                 //should call it first and then update later
@@ -4899,10 +4804,9 @@ double _ticks = 0;
                                                 repeats:YES];
             }
         }
-        else
-        {
+        else {
             //first hide all bottom view
-            //[self hidenAllBottomView];
+            //[self hideAllBottomView];
             //and then display time line
             [self showTimelineView];
         }
@@ -4911,7 +4815,7 @@ double _ticks = 0;
     [self stopTalkbackUnexpected];
 }
 
-- (void)hidenAllBottomView
+- (void)hideAllBottomView
 {
     [self.imgViewDrectionPad setHidden:YES];
     self.imageViewKnob.hidden = YES;
@@ -4950,14 +4854,14 @@ double _ticks = 0;
     
     NSLog(@"H264Player - didReceiveMemoryWarning - force restart stream if running");
     
-    if (MediaPlayer::Instance()->isPlaying())
-    {
+    if (MediaPlayer::Instance()->isPlaying()) {
         NSLog(@"H264Player - send interrupt ");
         MediaPlayer::Instance()->sendInterrupt();
     }
 }
 
-- (void)dealloc {
+- (void)dealloc
+{
     [_imageViewVideo release];
     [_imageViewStreamer release];
     [_progressView release];
@@ -5980,7 +5884,7 @@ double _ticks = 0;
     }
 }
 
--(BOOL) isCurrentConnection3G
+- (BOOL)isCurrentConnection3G
 {
     Reachability *reachability = [Reachability reachabilityForInternetConnection];
     [reachability startNotifier];
@@ -6121,26 +6025,24 @@ double _ticks = 0;
     [finalResult release];
 }
 
--(BOOL) isInTheSameNetworkAsCamera :(CamProfile *) cp
+- (BOOL)isInTheSameNetworkAsCamera:(CamProfile *)cp
 {
     long ip = 0, ownip =0 ;
     long netMask = 0 ;
 	struct ifaddrs *ifa = NULL, *ifList;
     
-    NSString * bc = @"";
-	NSString * own = @"";
+    NSString *bc = @"";
+	NSString *own = @"";
+    
 	[MBP_iosViewController getBroadcastAddress:&bc AndOwnIp:&own ipasLong:&ownip];
     
     getifaddrs(&ifList); // should check for errors
     
     for (ifa = ifList; ifa != NULL; ifa = ifa->ifa_next) {
-        if (ifa->ifa_netmask != NULL)
-        {
+        if (ifa->ifa_netmask != NULL) {
             ip = (( struct sockaddr_in *)ifa->ifa_addr)->sin_addr.s_addr;
-            if (ip == ownip)
-            {
+            if (ip == ownip) {
                 netMask = (( struct sockaddr_in *)ifa->ifa_netmask)->sin_addr.s_addr;
-                
                 break;
             }
         }
@@ -6148,20 +6050,16 @@ double _ticks = 0;
     
     freeifaddrs(ifList); // clean up after yourself
     
-    if (netMask ==0 || ip ==0)
-    {
-        return FALSE;
+    if (netMask ==0 || ip ==0) {
+        return NO;
     }
     
     long camera_ip =0 ;
-    if (cp != nil &&
-        cp.ip_address != nil)
-    {
+    if ( cp.ip_address ) {
         NSArray * tokens = [cp.ip_address componentsSeparatedByString:@"."];
-        if ([tokens count] != 4)
-        {
+        if (tokens.count != 4) {
             //sth is wrong
-            return FALSE;
+            return NO;
         }
         
         camera_ip = [tokens[0] integerValue] |
@@ -6169,39 +6067,31 @@ double _ticks = 0;
         ([tokens[2] integerValue] << 16) |
         ([tokens[3] integerValue] << 24) ;
         
-        if ( (camera_ip & netMask) == (ip & netMask))
-        {
+        if ( (camera_ip & netMask) == (ip & netMask)) {
             NSLog(@"H264 - Camera is in same subnet");
-            return TRUE;
+            return YES;
         }
     }
     
-    return FALSE;
+    return NO;
 }
 
--(BOOL) isCurrentIpAddressValid :(CamProfile *) cp
+- (BOOL)isCurrentIpAddressValid:(CamProfile *)cp
 {
-    if (cp != nil &&
-        cp.ip_address != nil)
-    {
+    if ( cp.ip_address ) {
         [HttpCom instance].comWithDevice.device_ip = cp.ip_address;
         [HttpCom instance].comWithDevice.device_port = 80; // HARD code one more time.
         
-        
         NSString *mac = [[HttpCom instance].comWithDevice sendCommandAndBlock:GET_MAC_ADDRESS withTimeout:3.0f];
         
-        if (mac != nil && mac.length == 12)
-        {
+        if ( mac.length == 12 ) {
             mac = [Util add_colon_to_mac:mac];
-            
-            if ([mac isEqual:cp.mac_address])
-            {
-                return TRUE;
+            if ([mac isEqual:cp.mac_address]) {
+                return YES;
             }
         }
     }
-    
-    return FALSE;
+    return NO;
 }
 
 #pragma mark - Bonjour delegate
@@ -6210,67 +6100,52 @@ double _ticks = 0;
 {
 }
 
-
-
 #pragma mark - Custom Indicator
--(void)start_animation_with_orientation
+
+- (void)start_animation_with_orientation
 {
-    self.customIndicator.hidden = NO;
-    [self.view addSubview:self.customIndicator];
-    [self.view  bringSubviewToFront:self.customIndicator];
+    _customIndicator.hidden = NO;
+    [self.view addSubview:_customIndicator];
+    [self.view  bringSubviewToFront:_customIndicator];
     
-    self.customIndicator.animationDuration = 1.5;
-    self.customIndicator.animationRepeatCount = 0;
-    [self.customIndicator startAnimating];
-    
+    _customIndicator.animationDuration = 1.5;
+    _customIndicator.animationRepeatCount = 0;
+    [_customIndicator startAnimating];
 }
 
 - (void)displayCustomIndicator
 {
-    if (_isShowCustomIndicator && !_hideCustomIndicatorAndTextNotAccessble)
-    {
-        
-        if (self.alertTimer != nil && [self.alertTimer isValid])
-        {
+    if (_isShowCustomIndicator && !_hideCustomIndicatorAndTextNotAccessble) {
+        if ( [self.alertTimer isValid] ) {
             //some periodic is running dont care
             NSLog(@"some periodic is running dont care");
         }
-        else
-        {
-            if (_disconnectAlert == YES)
-            {
-                self.alertTimer = [NSTimer scheduledTimerWithTimeInterval:15.0
-                                                                   target:self
-                                                                 selector:@selector(periodicBeep:)
-                                                                 userInfo:nil
-                                                                  repeats:YES];
-            }
+        else if ( _disconnectAlert ) {
+            self.alertTimer = [NSTimer scheduledTimerWithTimeInterval:15.0
+                                                               target:self
+                                                             selector:@selector(periodicBeep:)
+                                                             userInfo:nil
+                                                              repeats:YES];
         }
-        
         
         [self start_animation_with_orientation];
         
+        _ib_lbCameraNotAccessible.text = _messageStreamingState;
         
-        
-        self.ib_lbCameraNotAccessible.text = _messageStreamingState;
-        
-        if (_isShowTextCameraIsNotAccesible)
-        {
-            [self.ib_lbCameraNotAccessible setHidden:NO];
+        if (_isShowTextCameraIsNotAccesible) {
+            [_ib_lbCameraNotAccessible setHidden:NO];
         }
-        else
-        {
-            [self.ib_lbCameraNotAccessible setHidden:YES];
+        else {
+            [_ib_lbCameraNotAccessible setHidden:YES];
         }
     }
-    else
-    {
+    else {
         [self stopPeriodicBeep];
         _isShowTextCameraIsNotAccesible = NO;
-        [self.customIndicator stopAnimating];
-        [self.customIndicator setHidden:YES];
-        [self.ib_lbCameraNotAccessible setHidden:YES];
-        [self.ib_lbCameraName setText:self.selectedChannel.profile.name];
+        [_customIndicator stopAnimating];
+        [_customIndicator setHidden:YES];
+        [_ib_lbCameraNotAccessible setHidden:YES];
+        [_ib_lbCameraName setText:_selectedChannel.profile.name];
     }
 }
 

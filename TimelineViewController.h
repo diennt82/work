@@ -13,7 +13,8 @@
 
 @protocol TimelineVCDelegate <NSObject>
 
-- (void)stopStreamToPlayback;
+- (void)stopStreamPlayback;
+- (void)startStreamPlayback;
 
 @end
 
@@ -25,8 +26,7 @@
 @property (nonatomic, assign) id<TimelineVCDelegate> timelineVCDelegate;
 @property (nonatomic, assign) CamChannel *camChannel;
 @property (nonatomic, retain) NSMutableArray *eventArrayTestData;
-@property (nonatomic, assign) UINavigationController *navVC;
-@property (nonatomic, assign) id parentVC;
+@property (nonatomic, assign) UIViewController *parentVC;
 
 - (void)loadEvents:(CamChannel *)camChannel;
 

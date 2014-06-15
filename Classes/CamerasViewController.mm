@@ -425,7 +425,6 @@
             else {
                 // Show Timeline view
                 TimelineViewController *timelineVC = [[TimelineViewController alloc] init];
-                timelineVC.navVC = self.navigationController;
                 timelineVC.hidesBottomBarWhenPushed = YES;
                 [timelineVC loadEvents:ch];
                 

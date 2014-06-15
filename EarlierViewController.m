@@ -17,7 +17,7 @@
 
 @property (nonatomic, retain) UIControl *backCover;
 @property (nonatomic, assign) MHTabBarController *tabBarController;
-@property (nonatomic, assign) id parentVC;
+@property (nonatomic, assign) UIViewController *parentVC;
 @property (nonatomic) BOOL isDidLoad;
 
 @end
@@ -35,7 +35,7 @@
     return self;
 }
 
-- (id)initWithParentVC:(id)parentVC camChannel:(CamChannel *)camChannel
+- (id)initWithParentVC:(UIViewController *)parentVC camChannel:(CamChannel *)camChannel
 {
     self = [super init];
     if (self) {
@@ -56,8 +56,12 @@
     }
     
     self.timelineVC = [[TimelineViewController alloc] init];
-    [_timelineVC setTitle:@"Timeline"];
-    
+    _timelineVC.title = @"Timeline";
+    if ( [_parentVC conformsToProtocol:@protocol(TimelineVCDelegate)] ) {
+        _timelineVC.timelineVCDelegate = (id<TimelineVCDelegate>)_parentVC;
+    }
+    _timelineVC.parentVC = _parentVC;
+
     NSArray *viewControllers;
     if (CUE_RELEASE_FLAG) {
         viewControllers = @[_timelineVC];
@@ -79,12 +83,12 @@
     //load event for timeline
     if ([self.camChannel.profile isNotAvailable]) {
         self.view.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-        self.timelineVC.navVC = self.navigationController;
         _tabBarController.hidesBottomBarWhenPushed = YES;
     }
     else {
-        self.timelineVC.navVC = _nav;
-        self.timelineVC.timelineVCDelegate = self.parentVC;
+        if ( [_parentVC conformsToProtocol:@protocol(TimelineVCDelegate)] ) {
+            _timelineVC.timelineVCDelegate = (id<TimelineVCDelegate>)_parentVC;
+        }
     }
     
     [_timelineVC loadEvents:_camChannel];

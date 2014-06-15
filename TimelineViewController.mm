@@ -1203,7 +1203,7 @@
         NSString *urlFile = clip.urlFile;
         
         if (![urlFile isEqual:[NSNull null]] && ![urlFile isEqualToString:@""]) {
-            [_timelineVCDelegate stopStreamToPlayback];
+            [_timelineVCDelegate stopStreamPlayback];
             
             NSString *alertString = [NSString stringWithFormat:@"%d", event.alert];
             PlaybackViewController *playbackViewController = [[PlaybackViewController alloc] init];
@@ -1217,11 +1217,9 @@
             
             playbackViewController.clipInfo = clipInfo;
             playbackViewController.intEventId = event.eventID;
-            playbackViewController.plabackVCDelegate = self;
+            playbackViewController.playbackVCDelegate = self;
             
-            NSLog(@"Push the view controller of navVC.- %@", self.navVC);
-            [self.navVC pushViewController:playbackViewController animated:YES];
-            
+            [_parentVC presentViewController:playbackViewController animated:YES completion:nil];
             [playbackViewController release];
             [clipInfo release];
         }
@@ -1234,9 +1232,14 @@
 
 #pragma mark - PlayBackDelegate Methods
 
-- (void)motioEventDeleted
+- (void)motionEventDeleted
 {
     [self getEventFromDb:_camChannel];
+}
+
+- (void)playbackStopped
+{
+    [_timelineVCDelegate startStreamPlayback];
 }
 
 @end

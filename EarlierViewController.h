@@ -14,9 +14,8 @@
 
 @property (nonatomic, retain) TimelineViewController *timelineVC;
 @property (nonatomic, assign) CamChannel *camChannel;
-@property (nonatomic, assign) UINavigationController *nav;
 
 - (id)initWithCamChannel:(CamChannel *)camChannel;
-- (id)initWithParentVC:(id)parentVC camChannel: (CamChannel *)camChannel;
+- (id)initWithParentVC:(UIViewController *)parentVC camChannel: (CamChannel *)camChannel;
 
 @end
