@@ -1219,7 +1219,12 @@
             playbackViewController.intEventId = event.eventID;
             playbackViewController.playbackVCDelegate = self;
             
-            [_parentVC presentViewController:playbackViewController animated:YES completion:nil];
+            if ( _parentVC ) {
+                [_parentVC presentViewController:playbackViewController animated:YES completion:nil];
+            }
+            else {
+                [self.navigationController pushViewController:playbackViewController animated:YES];
+            }
             [playbackViewController release];
             [clipInfo release];
         }
