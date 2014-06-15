@@ -100,12 +100,14 @@
         }
         
         if ( ch ) {
-            H264PlayerViewController *h264PlayerViewController = [[H264PlayerViewController alloc] init];
-            h264PlayerViewController.selectedChannel = ch;
-            h264PlayerViewController.h264PlayerVCDelegate = self;
-            
-            [self.navigationController pushViewController:h264PlayerViewController animated:YES];
-            [h264PlayerViewController release];
+            if ( ![ch.profile isNotAvailable] ) {
+                H264PlayerViewController *h264PlayerViewController = [[H264PlayerViewController alloc] init];
+                h264PlayerViewController.selectedChannel = ch;
+                h264PlayerViewController.h264PlayerVCDelegate = self;
+                
+                [self.navigationController pushViewController:h264PlayerViewController animated:YES];
+                [h264PlayerViewController release];
+            }
         }
         else {
             NSLog(@"[CamerasViewController viewDidAppear:] did not find a camera!");
