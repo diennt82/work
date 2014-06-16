@@ -1290,7 +1290,6 @@
         if(actionSheet.cancelButtonIndex!=buttonIndex)
         {
             //self.camChannel.profile.registrationID
-            
             NSArray *paths = NSSearchPathForDirectoriesInDomains
             (NSDocumentDirectory, NSUserDomainMask, YES);
             NSString  *strPath = [[paths objectAtIndex:0] retain];
@@ -1321,15 +1320,18 @@
 
 -(IBAction)btnSnapshotRefreshPressed:(id)sender
 {
-    imgVSnapshot.animationImages =[NSArray arrayWithObjects:
+    if(!imgVSnapshot.isAnimating)
+    {
+        imgVSnapshot.animationImages =[NSArray arrayWithObjects:
                                    [UIImage imageNamed:@"loader_big_a"],
                                    [UIImage imageNamed:@"loader_big_b"],
                                    [UIImage imageNamed:@"loader_big_c"],
                                    [UIImage imageNamed:@"loader_big_d"],
                                    [UIImage imageNamed:@"loader_big_e"],
                                    nil];
-    imgVSnapshot.animationDuration = 1.5;
-    [imgVSnapshot startAnimating];
+        imgVSnapshot.animationDuration = 1.5;
+        [imgVSnapshot startAnimating];
+    }
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0),
                    ^{
@@ -1387,20 +1389,25 @@
     {
         if ([[responseDict objectForKey:@"status"] integerValue] == 200)
         {
-            BMS_JSON_Communication *jsonCommDeviceInfo = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                                                               Selector:nil
-                                                                                           FailSelector:nil
-                                                                                              ServerErr:nil];
-            NSDictionary *responseDictDInfo = [jsonCommDeviceInfo getDeviceBasicInfoBlockedWithRegistrationId:self.camChannel.profile.registrationID andApiKey:_apiKey];
-            if (responseDictDInfo)
-            {
-                if ([[responseDictDInfo objectForKey:@"status"] integerValue] == 200)
-                {
-                    NSLog(@"-- %@",[[responseDictDInfo valueForKey:@"data"] valueForKey:@"snaps_url"]);
-                    return [[responseDictDInfo valueForKey:@"data"] valueForKey:@"snaps_url"];
-                }
-            }
-            
+            sleep(15);
+            return [self getSnapImageUrlFromServer];
+        }
+    }
+    return nil;
+}
+
+-(NSString *)getSnapImageUrlFromServer
+{
+    BMS_JSON_Communication *jsonCommDeviceInfo = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                                       Selector:nil
+                                                                                   FailSelector:nil
+                                                                                      ServerErr:nil];
+    NSDictionary *responseDictDInfo = [jsonCommDeviceInfo getDeviceBasicInfoBlockedWithRegistrationId:self.camChannel.profile.registrationID andApiKey:_apiKey];
+    if (responseDictDInfo)
+    {
+        if ([[responseDictDInfo objectForKey:@"status"] integerValue] == 200)
+        {            
+            return [[responseDictDInfo valueForKey:@"data"] valueForKey:@"snaps_url"];
         }
     }
     return nil;
