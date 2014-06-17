@@ -12,6 +12,13 @@
 #import "KISSMetricsAPI.h"
 #import "EarlierNavigationController.h"
 
+@interface MBP_iosAppDelegate()
+
+@property (retain, nonatomic) BMS_JSON_Communication *jsonComm;
+@property (retain, nonatomic) NSString * devTokenStr;
+@property (nonatomic) BOOL shouldCancelRegisterApp;
+
+@end
 
 @implementation MBP_iosAppDelegate
 
@@ -459,6 +466,7 @@ void checkingApplicationCrashed()
 }
 
 - (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)devToken {
+    self.devTokenStr = [devToken hexadecimalString];
     
     UIPasteboard *appPasteBoard = [UIPasteboard pasteboardWithName:@"Monitoreverywhere_HD" create:YES];
 	appPasteBoard.persistent = YES;
@@ -469,7 +477,7 @@ void checkingApplicationCrashed()
     
     NSString *uuidString = [appPasteBoard string];
     //NSString *uuidString = [MBP_iosAppDelegate GetUUID];
-    NSLog(@"uuidString: %@", uuidString);
+    NSLog(@"uuidString: %@, isMT:%d", uuidString, [NSThread isMainThread]);
     
     NSString *applicationName = NSBundle.mainBundle.infoDictionary  [@"CFBundleDisplayName"];
     applicationName = [applicationName stringByAppendingFormat:@"-%@", [UIDevice currentDevice].name];
@@ -480,50 +488,30 @@ void checkingApplicationCrashed()
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
     
-    BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
-                                                                             Selector:nil
-                                                                         FailSelector:nil
-                                                                            ServerErr:nil] autorelease];
-   
-//    //API
-    NSDictionary *responseDict = [jsonComm registerAppBlockedWithName:applicationName
-                                                        andDeviceCode:uuidString
-                                                   andSoftwareVersion:swVersion
-                                                            andApiKey:apiKey];
+    NSLog(@"%s MT:%d, _shouldCancelRegisterApp:%d", __FUNCTION__, [NSThread isMainThread], _shouldCancelRegisterApp);
     
-    
-    NSString *appId = [[responseDict objectForKey:@"data"] objectForKey:@"id"];
-    
-    //NSLog(@"My token is: %@", devToken);
-    
-    
-    NSString * devTokenStr = [devToken hexadecimalString];
-
-    [userDefaults setObject:devTokenStr forKey:_push_dev_token];
-    [userDefaults setObject:appId forKey:@"APP_ID"];
-    [userDefaults synchronize];
-    
-    
-    NSString * certType = @"1"; // for testflight
-    
-    NSString *bundleIdentifier = [[NSBundle mainBundle] bundleIdentifier];
-    if ( [bundleIdentifier isEqualToString:@"com.binatonetelecom.hubble"])
+    if (!_shouldCancelRegisterApp)
     {
-        certType = @"0";
+        if (_jsonComm)
+        {
+            [_jsonComm release];
+            self.jsonComm = nil;
+        }
+        
+        self.jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                              Selector:@selector(registerAppSuccessWithResponse:)
+                                                          FailSelector:@selector(registerAppFailedWithResponse:)
+                                                             ServerErr:@selector(registerAppFailedServerUnreachable)];
+        
+        [_jsonComm registerAppWithName:applicationName
+                         andDeviceCode:uuidString
+                    andSoftwareVersion:swVersion
+                             andApiKey:apiKey];
     }
-    
-                
-    
-    NSDictionary *responseRegNotifn = [jsonComm registerPushNotificationsBlockedWithAppId:appId
-                                                                      andNotificationType:@"apns"
-                                                                           andDeviceToken:devTokenStr
-                                                                                andApiKey:apiKey
-                                                                              andCertType:certType];
-    
-    
-    
-    NSLog(@"Log - push status = %d", [[responseRegNotifn objectForKey:@"status"] intValue]);
-     
+    else
+    {
+        NSLog(@"%s Already canceling", __FUNCTION__);
+    }
 }
 
 - (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)err {
@@ -684,13 +672,76 @@ void checkingApplicationCrashed()
 - (void)dealloc {
     [viewController release];
     [_window release];
+    [_jsonComm release];
     [super dealloc];
 }
 
+#pragma mark - Json communication call back
 
+- (void)registerAppSuccessWithResponse:(NSDictionary *)responseDict
+{
+    NSInteger status = [[responseDict objectForKey:@"status"] integerValue];
+    
+    NSLog(@"%s status:%d", __FUNCTION__, status);
+    
+    if (status == 200)
+    {
+        NSString *appId = [[responseDict objectForKey:@"data"] objectForKey:@"id"];
+        
+        [[NSUserDefaults standardUserDefaults] setObject:_devTokenStr forKey:_push_dev_token];
+        [[NSUserDefaults standardUserDefaults] setObject:appId forKey:@"APP_ID"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        
+        NSString * certType = @"1"; // for testflight
+        
+        NSString *bundleIdentifier = [[NSBundle mainBundle] bundleIdentifier];
+        
+        if ( [bundleIdentifier isEqualToString:@"com.binatonetelecom.hubble"])
+        {
+            certType = @"0";
+        }
+        
+        if (!_jsonComm)
+        {
+            self.jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                  Selector:nil
+                                                              FailSelector:nil
+                                                                 ServerErr:nil];
+        }
+        
+        NSDictionary *responseRegNotifn = [_jsonComm registerPushNotificationsBlockedWithAppId:appId
+                                                                          andNotificationType:@"apns"
+                                                                               andDeviceToken:_devTokenStr
+                                                                                    andApiKey:[[NSUserDefaults standardUserDefaults] objectForKey:@"PortalApiKey"]
+                                                                                  andCertType:certType];
+        
+        NSLog(@"Log - push status = %d", [[responseRegNotifn objectForKey:@"status"] intValue]);
+    }
+    else
+    {
+        NSLog(@"Register app error %d", status);
+    }
+}
 
+- (void)registerAppFailedWithResponse:(NSDictionary *)responseDict
+{
+    NSLog(@"%s response:%@", __FUNCTION__, responseDict);
+}
 
-//// IOS6 orientation stuff
+- (void)registerAppFailedServerUnreachable
+{
+    NSLog(@"%s ", __FUNCTION__);
+}
 
+- (void)cancelRegisterApp
+{
+    NSLog(@"%s MT:%d", __FUNCTION__, [NSThread isMainThread]);
+    self.shouldCancelRegisterApp = TRUE;
+    
+    if (_jsonComm)
+    {
+        [_jsonComm cancel];
+    }
+}
 
 @end

@@ -17,6 +17,7 @@
 #import "TimelineDatabase.h"
 #import "RegistrationViewController.h"
 #import "MBP_iosViewController.h"
+#import "MBP_iosAppDelegate.h"
 
 #define MOVEMENT_DURATION   0.3 //movementDuration
 #define _Use3G              @"use3GToConnect"
@@ -272,8 +273,34 @@
     }
     else
     {
-      //  [self logout];
-        [self performSelectorInBackground:@selector(logout) withObject:nil];
+        BOOL shouldCancelRegisterApp = FALSE;
+        
+        if (arrayCamProfile) // Fake data to handle error response!
+        {
+            if ([[arrayCamProfile objectAtIndex:0] integerValue] == 401 &&
+                [[arrayCamProfile objectAtIndex:1] hasPrefix:@"Access Denied."])//Access Denied.
+            {
+                [self performSelectorInBackground:@selector(logout) withObject:nil];
+            }
+            else
+            {
+                shouldCancelRegisterApp = TRUE;
+            }
+        }
+        else
+        {
+            shouldCancelRegisterApp = TRUE;
+        }
+        
+        if (shouldCancelRegisterApp)
+        {
+            MBP_iosAppDelegate *appDelegate = (MBP_iosAppDelegate *)[UIApplication sharedApplication].delegate;
+            [appDelegate cancelRegisterApp];
+            
+            self.buttonEnterPressedFlag = NO;
+            self.buttonEnter.enabled = YES;
+            self.viewProgress.hidden = YES;
+        }
     }
 }
 
@@ -770,7 +797,7 @@
                                                       apiKey:apiKey
                                                     listener:self];
     
-    [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Login successfully - user: %@", _stringUsername] withProperties:nil];
+    //[[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Login successfully - user: %@", _stringUsername] withProperties:nil];
     
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:[NSString stringWithFormat:@"Login succeeded-user:%@", _stringUsername]
@@ -779,8 +806,6 @@
     //BLOCKED method
     [account readCameraListAndUpdate];
     [account release];
-    
-    //[self dismissViewControllerAnimated:NO completion:^{}];
     
     NSLog(@"Login success! 3");
     
@@ -817,7 +842,7 @@
 	[alert show];
 	[alert release];
     
-    [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Login failed - user: %@, error: %@", _stringUsername, msg] withProperties:nil];
+    //[[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Login failed - user: %@, error: %@", _stringUsername, msg] withProperties:nil];
     
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:[NSString stringWithFormat:@"Login failed-user:%@, error: %@", _stringUsername, msg]
