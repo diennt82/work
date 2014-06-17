@@ -290,6 +290,28 @@
         else
         {
             shouldCancelRegisterApp = TRUE;
+            
+            NSLog(@"%s", __FUNCTION__);
+            
+            NSString * msg = NSLocalizedStringWithDefaultValue(@"Get_Camera_list_Error",nil, [NSBundle mainBundle],
+                                                               @"Get Camera list Error", nil);
+            
+            NSString * msg1 = NSLocalizedStringWithDefaultValue(@"Get_Camera_list_Error_msg1",nil, [NSBundle mainBundle],
+                                                                @"Server unreachable", nil);
+            
+            NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
+                                                              @"Ok", nil);
+            
+            
+            //ERROR condition
+            UIAlertView *alert = [[UIAlertView alloc]
+                                  initWithTitle:msg
+                                  message:msg1
+                                  delegate:nil
+                                  cancelButtonTitle:ok
+                                  otherButtonTitles:nil];
+            [alert show];
+            [alert release];
         }
         
         if (shouldCancelRegisterApp)
