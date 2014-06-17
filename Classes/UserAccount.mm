@@ -279,14 +279,12 @@
     [NSThread sleepForTimeInterval:20];
 #endif
     
-    if (responseDict != nil)
+    if (responseDict)
     {
         [self getCamListSuccess:responseDict];
     }
     else
     {
-        NSLog(@"Error - getCamListSuccess - responseDict = nil");
-
         [self getCamListServerUnreachable];
     }
 }
@@ -303,9 +301,8 @@
 
 -(void) getCamListSuccess:(NSDictionary *)responseDict
 {
-    NSLog(@"responseDict.count = %d", responseDict.count);
-    
     NSInteger status = [[responseDict objectForKey:@"status"] intValue];
+    NSLog(@"%s status:%d", __FUNCTION__, status);
     
     if (status == 200)
     {
@@ -324,7 +321,8 @@
         
         if (_delegate != nil)
         {
-            [_delegate finishStoreCameraListData:camProfiles success:TRUE];
+            [_delegate finishStoreCameraListData:camProfiles
+                                         success:TRUE];
         }
         else
         {
@@ -333,47 +331,28 @@
     }
     else
     {
-        NSLog(@"Error - body content status: %d", status);
-        NSString * msg = NSLocalizedStringWithDefaultValue(@"Get_Camera_list_Error",nil, [NSBundle mainBundle],
-                                                           @"Get Camera list Error", nil);
-        
-        NSString * msg1 = NSLocalizedStringWithDefaultValue(@"Get_Camera_list_Error_msg",nil, [NSBundle mainBundle],
-                                                            @"Server error: Invalid response", nil);
-        
-        NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
-                                                          @"Ok", nil);
-        //ERROR condition
-        UIAlertView *alert = [[UIAlertView alloc]
-                              initWithTitle:msg
-                              message:msg1
-                              delegate:nil
-                              cancelButtonTitle:ok
-                              otherButtonTitles:nil];
-        [alert show];
-        [alert release];
-
-        if (_delegate)
-        {
-            [_delegate finishStoreCameraListData:nil success:FALSE];
-        }
+        [self getCamListFailure:responseDict];
     }
 }
 
 -(void) getCamListFailure:(NSDictionary *)error_response
 {
-    NSLog(@"UserAccount - getCamListFailure with error code:%d", [[error_response objectForKey:@"status"] intValue]);
+    NSLog(@"%s %@", __FUNCTION__, error_response);
+    
     NSString * msg = NSLocalizedStringWithDefaultValue(@"Get_Camera_list_Error",nil, [NSBundle mainBundle],
                                                        @"Get Camera list Error", nil);
     
-    NSString * msg1 = NSLocalizedStringWithDefaultValue(@"Get_Camera_list_Error_msg",nil, [NSBundle mainBundle],
-                                                        @"Server error: %@", nil);
+    //NSString * msg1 = NSLocalizedStringWithDefaultValue(@"Get_Camera_list_Error_msg",nil, [NSBundle mainBundle],
+    //                                                    @"Server error: %@", nil);
     
     NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
                                                       @"Ok", nil);
+    NSNumber *status = [error_response objectForKey:@"status"];
+    NSString *message = [error_response objectForKey:@"message"];
 	//ERROR condition
 	UIAlertView *alert = [[UIAlertView alloc]
 						  initWithTitle:msg
-						  message:[NSString stringWithFormat:msg1, [error_response objectForKey:@"message"]]
+						  message:message//[NSString stringWithFormat:msg1, message]
 						  delegate:nil
 						  cancelButtonTitle:ok
 						  otherButtonTitles:nil];
@@ -382,13 +361,15 @@
 	
     if (_delegate)
     {
-        [_delegate finishStoreCameraListData:nil success:FALSE];
+        [_delegate finishStoreCameraListData:[NSMutableArray arrayWithObjects:status, message, nil]
+                                     success:FALSE];
     }
 }
 
 - (void)getCamListServerUnreachable
 {
-	NSLog(@"UserAccount - getCamListServerUnreachable");
+	NSLog(@"%s", __FUNCTION__);
+    
     NSString * msg = NSLocalizedStringWithDefaultValue(@"Get_Camera_list_Error",nil, [NSBundle mainBundle],
                                                        @"Get Camera list Error", nil);
     

@@ -31,5 +31,7 @@
 
 @property (nonatomic) BOOL becomeActiveByNotificationFlag;
 
+- (void)cancelRegisterApp;
+
 @end
 
