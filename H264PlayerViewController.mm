@@ -7,163 +7,17 @@
 //
 
 #import "H264PlayerViewController.h"
-#import "EarlierViewController.h"
-#import "TimelineViewController.h"
+
+
 #import <CoreText/CTStringAttributes.h>
 #import "define.h"
 #import <CFNetwork/CFNetwork.h>
 #include <ifaddrs.h>
 
-//#import <GAI.h>
-#import "KISSMetricsAPI.h"
-
-#import "AudioOutStreamRemote.h"
-#import "EarlierNavigationController.h"
-#import "HttpCom.h"
-
-//#import "Reachability.h"
-#import "MBP_iosViewController.h"
 #import <SystemConfiguration/CaptiveNetwork.h>
 #import <objc/message.h>
 
-#define MODEL_SHARED_CAM @"0036"
-#define MODEL_CONCURRENT @"0066"
-#define MODEL_BLE        @"0083" //0836 {UAP | BLE}
 
-#define DIRECTION_V_NON  0x01
-#define DIRECTION_V_UP   0x02
-#define DIRECTION_V_DN   0x04
-#define DIRECTION_V_MASK 0xF0
-
-#define DIRECTION_H_NON 0x10
-#define DIRECTION_H_LF  0x20
-#define DIRECTION_H_RT  0x40
-#define DIRECTION_H_MASK 0x0F
-//define for zooming
-#define MAXIMUM_ZOOMING_SCALE   6.0
-#define MINIMUM_ZOOMING_SCALE   1.0f
-#define ZOOM_SCALE              1.5f
-#define CONTENT_SIZE_W_PORTRAIT 320
-#define CONTENT_SIZE_H_PORTRAIT 180
-#define CONTENT_SIZE_W_PORTRAIT_IPAD 768
-#define CONTENT_SIZE_H_PORTRAIT_IPAD 432
-//width and height of indicator
-#define INDICATOR_SIZE               37
-
-#define HIGH_STATUS_BAR 20;
-
-//define for Control Panel button
-#define INDEX_NO_SELECT     -1
-#define INDEX_PAN_TILT      0
-#define INDEX_MICRO         1
-#define INDEX_RECORDING     2
-#define INDEX_MELODY        3
-#define INDEX_TEMP          4
-
-#define PTT_ENGAGE_BTN 711
-
-#define TAG_ALERT_VIEW_REMOTE_TIME_OUT 559
-#define TAG_ALERT_SENDING_LOG          569
-
-#define _streamingSSID  @"string_Streaming_SSID"
-#define _is_Loggedin @"bool_isLoggedIn"
-#define TEST_REMOTE_TALKBACK 0 // TODO: DELETE
-#define SESSION_KEY @"SESSION_KEY"
-#define STREAM_ID   @"STREAM_ID"
-
-#define TF_DEBUG_FRAME_RATE_TAG 5001
-#define TF_DEBUG_RESOLUTION_TAG 5002
-#define TF_DEBUG_BIT_RATE_TAG   5003
-
-#define TIMEOUT_BUFFERING           15// 15 seconds
-#define TIMEOUT_REMOTE_STREAMING    5*60 // 5 minutes
-
-#define GAI_CATEGORY                @"Player view"
-
-#define GAI_MIN(stage)      (stage==1?1:4)
-#define GAI_MIDIUM(stage)   (stage==1?2:6)
-#define GAI_MAX(stage)      (stage==1?3:8)
-#define GAI_ACTION(stage, time) [NSString stringWithFormat:@"Stage %d time %@ than %d second(s)", stage, time<GAI_MAX(stage)?@"less":@"greater", time<GAI_MIN(stage)?GAI_MIN(stage):(time<GAI_MIDIUM(stage)?GAI_MIDIUM(stage):GAI_MAX(stage))]
-
-@interface H264PlayerViewController () <TimelineVCDelegate, BonjourDelegate, AudioOutStreamRemoteDelegate>
-{
-    BOOL _syncPortraitAndLandscape;
-    UIBarButtonItem *nowButton, *earlierButton;
-    BOOL _isLandScapeMode;//cheat to display correctly timeline bottom
-    BOOL _hideCustomIndicatorAndTextNotAccessble;
-    //check to show custom indicator
-    BOOL _isShowCustomIndicator;
-    //check to show custom indicator
-    BOOL _isShowTextCameraIsNotAccesible;
-}
-
-@property (retain, nonatomic) IBOutlet UIImageView *imageViewHandle;
-@property (retain, nonatomic) IBOutlet UIImageView *imageViewKnob;
-@property (retain, nonatomic) IBOutlet UIView *viewDebugInfo;
-
-@property (retain, nonatomic) EarlierViewController *earlierVC;
-@property (retain, nonatomic) TimelineViewController *timelineVC;
-@property (retain, nonatomic) UIImageView *imageViewStreamer;
-@property (nonatomic) BOOL isHorizeShow;
-@property (nonatomic, retain) NSTimer *timerHideMenu;
-@property (nonatomic) BOOL isEarlierView;
-@property (nonatomic) NSInteger numberOfSTUNError;
-@property (nonatomic, retain) NSString *stringTemperature;
-@property (nonatomic) BOOL existTimerTemperature;
-@property (nonatomic) BOOL cameraIsNotAvailable;
-@property (nonatomic, retain) NSThread *threadBonjour;
-@property (nonatomic, retain) NSMutableArray *bonjourList;
-@property (nonatomic) BOOL scanAgain;
-@property (nonatomic) BOOL isFahrenheit;
-@property (nonatomic, retain) NSString *cameraModel;
-@property (nonatomic, retain) NSTimer *timerRemoteStreamTimeOut;
-@property (nonatomic, retain) NSTimer *timerRemoteStreamKeepAlive;
-@property (nonatomic, retain) NSString *apiKey;
-
-@property (nonatomic, retain) NSString *sessionKey;
-@property (nonatomic, retain) NSString *streamID;
-@property (nonatomic) BOOL wantsCancelRemoteTalkback;
-@property (nonatomic, retain) AudioOutStreamRemote *audioOutStreamRemote;
-@property (nonatomic, retain) NSString *talkbackRemoteServer;
-//check if shared cam is connected to macOS
-@property (nonatomic, retain) NSString *sharedCamConnectedTo;
-@property (nonatomic) BOOL remoteViewTimeout;
-@property (nonatomic) BOOL disconnectAlert;
-@property (nonatomic) BOOL returnFromPlayback;
-@property (nonatomic) BOOL shouldUpdateHorizeMenu;
-@property (nonatomic) BOOL isInLocal;
-@property (nonatomic) BOOL isAlreadyHorizeMenu;
-@property (nonatomic, retain) BMS_JSON_Communication *jsonCommBlocked;
-@property (nonatomic, assign) EarlierNavigationController *earlierNavi;
-@property (nonatomic) BOOL wantToShowTimeLine;
-@property (nonatomic, retain) NSTimer *timerIncreaseBitRate;
-@property (nonatomic, retain) NSString *currentBitRate;
-@property (nonatomic, retain) NSString *messageStreamingState;
-@property (nonatomic, retain) NSTimer *timerBufferingTimeout;
-@property (nonatomic, retain) UIAlertView *alertViewTimoutRemote;
-@property (nonatomic, retain) NSDate *timeStartingStageTwo;
-@property (nonatomic) NSTimeInterval timeStageTwoTotal;
-@property (nonatomic, retain) NSDate *timeStartPlayerView;
-@property (nonatomic) NSInteger mediaProcessStatus;
-
-//property for Touch to Talk
-@property (nonatomic) BOOL walkieTalkieEnabled;
-@property (nonatomic) BOOL disableAutorotateFlag;
-@property (nonatomic) BOOL enablePTT;
-@property (nonatomic, retain) NSString *stringStatePTT;
-@property (nonatomic) NSInteger numbersOfRemoteViewError;
-@property (nonatomic, retain) NSString *current_ssid;
-
-#ifdef SHOW_DEBUG_INFO
-//for debug
-@property (nonatomic, retain) NSString *viewVideoIn;
-#endif
-
-- (void)centerScrollViewContents;
-- (void)scrollViewDoubleTapped:(UITapGestureRecognizer*)recognizer;
-- (void)scrollViewTwoFingerTapped:(UITapGestureRecognizer*)recognizer;
-
-@end
 
 @implementation H264PlayerViewController
 
@@ -176,6 +30,8 @@
 @synthesize selectedItemMenu = _selectedItemMenu;
 
 double _ticks = 0;
+
+
 #pragma mark - View
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -292,10 +148,10 @@ double _ticks = 0;
                                                object: nil];
     
     [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(h264_HandleEnteredBackground)
+                                             selector: @selector(h264_HandleAppInactive)
                                                  name: UIApplicationWillResignActiveNotification
                                                object: nil];
-
+    
 	[[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(h264_HandleBecomeActive)
                                                  name: UIApplicationDidBecomeActiveNotification
@@ -339,7 +195,7 @@ double _ticks = 0;
     }
     
     
-
+    
     
 }
 
@@ -597,9 +453,9 @@ double _ticks = 0;
     UIButton* button = [[UIButton alloc] initWithFrame:frame];
     [button setBackgroundImage:image forState:UIControlStateNormal];
     [button setBackgroundImage:image forState:UIControlStateHighlighted];
-     [button setBackgroundImage:image forState:UIControlStateSelected];
+    [button setBackgroundImage:image forState:UIControlStateSelected];
     [button setBackgroundImage:image forState:UIControlStateDisabled];
-
+    
     //[button setShowsTouchWhenHighlighted:YES];
     
     //set the button to handle clicks - this one calls a method called 'downloadClicked'
@@ -850,11 +706,11 @@ double _ticks = 0;
                                                                         selector:@selector(forceRestartStream:)
                                                                         userInfo:nil
                                                                          repeats:NO];
-         
+            
             
             break;
         case MEDIA_INFO_START_BUFFERING:
-
+            
             NSLog(@"%s MEDIA_INFO_START_BUFFERING", __FUNCTION__);
             
             if (_timerBufferingTimeout)
@@ -1055,7 +911,7 @@ double _ticks = 0;
                     [self performSelectorInBackground:@selector(checkIfUpgradeIsPossible) withObject:nil];
                     self.askForFWUpgradeOnce = NO;
                 }
-
+                
                 if (!self.selectedChannel.profile.isInLocal)
                 {
                     NSTimeInterval diff = [[NSDate date] timeIntervalSinceDate:_timeStartingStageTwo];
@@ -1415,7 +1271,7 @@ double _ticks = 0;
     {
         MediaPlayer::Instance()->sendInterrupt();
         [self stopStream];
-
+        
     }
 #else
     if (self.currentMediaStatus == MEDIA_INFO_HAS_FIRST_IMAGE ||
@@ -1530,6 +1386,8 @@ double _ticks = 0;
         return;
     }
     
+    
+    
     self.h264StreamerIsInStopped = FALSE;
     self.currentMediaStatus = 0;
     self.wantToShowTimeLine = YES;
@@ -1557,9 +1415,21 @@ double _ticks = 0;
         return;
     }
     
-    [self checkOrientation];
+    //this func gets call even after app enter inactive state -> we don't stop player then..thus do not restart player here
+    if ( _selectedChannel.stopStreaming == TRUE)
+    {
+        
+        [self checkOrientation];
+        
+        [self scanCamera];
+    }
+}
+
+
+-(void) h264_HandleAppInactive
+{
+    NSLog(@"App will resign active..  do nothing here");
     
-    [self scanCamera];
 }
 
 - (void)h264_HandleEnteredBackground
@@ -1591,44 +1461,30 @@ double _ticks = 0;
     {
         [_audioOutStreamRemote disconnectFromAudioSocketRemote];
     }
-#if 1
-    if (_mediaProcessStatus == 0)
+    
+    
+    if (_mediaProcessStatus == MEDIAPLAYER_NOT_INIT)
     {
         
     }
-    else if(_mediaProcessStatus == 1)
+    else if(_mediaProcessStatus == MEDIAPLAYER_SET_LISTENER)
     {
         MediaPlayer::Instance()->sendInterrupt();
         [self stopStream];
         
     }
-    else if (_mediaProcessStatus == 2)
+    else if (_mediaProcessStatus == MEDIAPLAYER_SET_DATASOURCE)
     {
         MediaPlayer::Instance()->sendInterrupt();
     }
-    else
+    else //MEDIAPLAYER_STARTED
     {
         MediaPlayer::Instance()->sendInterrupt();
         [self stopStream];
         
     }
-#else
-    if (self.currentMediaStatus == MEDIA_INFO_HAS_FIRST_IMAGE ||
-        self.currentMediaStatus == MEDIA_PLAYER_STARTED ||
-        (self.currentMediaStatus == 0 && h264Streamer == NULL)) // Media player haven't start yet.
-    {
-        NSLog(@"H264VC - handleEnteredBackground - IF()");
-        
-        [self stopStream];
-    }
-    else
-        if(h264Streamer != NULL)
-        {
-            NSLog(@"H264VC - handleEnteredBackground - else if(h264Streamer != nil)");
-            
-            h264Streamer->sendInterrupt();
-        }
-#endif
+    
+    
     self.h264StreamerIsInStopped = TRUE;
     self.imageViewVideo.backgroundColor = [UIColor blackColor];
     self.imageViewStreamer.backgroundColor = [UIColor blackColor];
@@ -1907,6 +1763,8 @@ double _ticks = 0;
     [self startStream];
 }
 
+
+
 -(void) startStream
 {
     self.h264StreamerIsInStopped = FALSE;
@@ -1926,35 +1784,17 @@ double _ticks = 0;
         NSLog(@"H264VC - startStream --> break to Playback");
         return;
     }
-    self.mediaProcessStatus = 1;
+    
+    self.mediaProcessStatus = MEDIAPLAYER_SET_LISTENER;
     NSLog(@"%s mediaProcessStatus: %d", __FUNCTION__, _mediaProcessStatus);
-#if 1
+    
+    
     h264StreamerListener = new H264PlayerListener(self);
     MediaPlayer::Instance()->setListener(h264StreamerListener);
     MediaPlayer::Instance()->setPlaybackAndSharedCam(false, [_cameraModel isEqualToString:CP_MODEL_SHARED_CAM]);
     //self.mediaProcessStatus = 2;
     [self performSelectorInBackground:@selector(startStream_bg) withObject:nil];
-#else
-    while (h264Streamer != NULL)
-    {
-        //NSLog(@"%s userWantToCancel: %d, _currentMediaStatus: %d", __FUNCTION__, userWantToCancel, _currentMediaStatus);
-        
-        if (userWantToCancel== TRUE || _currentMediaStatus == MEDIA_INFO_HAS_FIRST_IMAGE) // 904
-        {
-            return;
-        }
-        
-        NSDate * endDate = [NSDate dateWithTimeIntervalSinceNow:0.5];
-        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:endDate];
-    }
     
-    h264Streamer = new MediaPlayer(false, [_cameraModel isEqualToString:CP_MODEL_SHARED_CAM]);
-    
-    h264StreamerListener = new H264PlayerListener(self);
-    h264Streamer->setListener(h264StreamerListener);
-    
-    [self performSelectorInBackground:@selector(startStream_bg) withObject:nil];
-#endif
 }
 
 - (void)startStream_bg
@@ -1991,9 +1831,10 @@ double _ticks = 0;
     
     NSString * url = self.selectedChannel.stream_url;
     NSLog(@"%s url: %@, h264Streamer: %p", __FUNCTION__, url, h264Streamer);
-    self.mediaProcessStatus = 2;
-     NSLog(@"%s mediaProcessStatus: %d", __FUNCTION__, _mediaProcessStatus);
-#if 1
+    self.mediaProcessStatus = MEDIAPLAYER_SET_DATASOURCE;
+    NSLog(@"%s mediaProcessStatus: %d", __FUNCTION__, _mediaProcessStatus);
+    
+    
     do
     {
         if (url == nil || [url isEqualToString:@""])
@@ -2011,7 +1852,7 @@ double _ticks = 0;
             {
                 self.messageStreamingState = @"Camera is not accessible";
             }
-
+            
             break;
         }
         //self.mediaProcessStatus = 3;
@@ -2038,76 +1879,33 @@ double _ticks = 0;
     }
     while (false);
     
-     NSLog(@"%s mediaProcessStatus: %d", __FUNCTION__, _mediaProcessStatus);
-    self.mediaProcessStatus = 3;
+    NSLog(@"%s mediaProcessStatus: %d", __FUNCTION__, _mediaProcessStatus);
+    self.mediaProcessStatus = MEDIAPLAYER_STARTED;
     
-#else
-    do
+    
+    
+    
+    
+    if (status == NO_ERROR)
     {
-        if (url == nil || h264Streamer == NULL)
-        {
-            break;
-        }
-        
-        status = h264Streamer->setDataSource([url UTF8String]);
-        
-        if (status != NO_ERROR) // NOT OK
-        {
-            NSLog(@"setDataSource  failed");
-            
-            if (self.selectedChannel.profile.isInLocal)
-            {
-                self.messageStreamingState = @"Camera is not accessible";
-            }
-            
-            break;
-        }
-        
-        //h264Streamer->setVideoSurface(self.imageViewVideo);
-        //[self.scrollView insertSubview:_imageViewStreamer aboveSubview:_imageViewVideo];
-        h264Streamer->setVideoSurface(_imageViewStreamer);
-        
-        status=  h264Streamer->prepare();
-        
-        if (status != NO_ERROR) // NOT OK
-        {
-            break;
-        }
-        
-        // Play anyhow
-        
-        status=  h264Streamer->start();
-        
-        
-        if (status != NO_ERROR) // NOT OK
-        {
-            break;
-        }
+        [self handleMessage:MEDIA_PLAYER_STARTED
+                       ext1:0
+                       ext2:0];
     }
-    while (false);
-#endif
+    else
+    {
+        //Consider it's down and perform necessary action ..
+        [self handleMessage:MEDIA_ERROR_SERVER_DIED
+                       ext1:0
+                       ext2:0];
+    }
     
     
-        if (status == NO_ERROR)
-        {
-            [self handleMessage:MEDIA_PLAYER_STARTED
-                           ext1:0
-                           ext2:0];
-        }
-        else
-        {
-            //Consider it's down and perform necessary action ..
-            [self handleMessage:MEDIA_ERROR_SERVER_DIED
-                           ext1:0
-                           ext2:0];
-        }
-    
-
 }
 
 - (void)prepareGoBackToCameraList:(id)sender
 {
-     [[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView goes back" withProperties:nil];
+    [[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView goes back" withProperties:nil];
     
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:@"Go back"
@@ -2409,7 +2207,7 @@ double _ticks = 0;
         
         
         MediaPlayer::Instance()->setListener(NULL);
-       
+        
         delete h264StreamerListener;
         h264StreamerListener = NULL;
         
@@ -2450,7 +2248,7 @@ double _ticks = 0;
         //TODO: enable this
         //[self  stopStunStream];
         
-
+        
     }
 }
 
@@ -2467,10 +2265,10 @@ double _ticks = 0;
     else
     {
         self.alertViewTimoutRemote = [[UIAlertView alloc] initWithTitle:@"Remote Stream"
-                                                            message:@"The Camera has been viewed for about 5 minutes. Do you want to continue?"
-                                                           delegate:self
-                                                  cancelButtonTitle:@"View other camera"
-                                                  otherButtonTitles:@"Yes", nil];
+                                                                message:@"The Camera has been viewed for about 5 minutes. Do you want to continue?"
+                                                               delegate:self
+                                                      cancelButtonTitle:@"View other camera"
+                                                      otherButtonTitles:@"Yes", nil];
         _alertViewTimoutRemote.tag = TAG_ALERT_VIEW_REMOTE_TIME_OUT;
         
         [_alertViewTimoutRemote show];
@@ -3750,10 +3548,10 @@ double _ticks = 0;
             [self send_LR_dir_to_rabot: currentDirLR];
 		}
         
-//        if (need_to_send)
-//        {
-//            [self send_LR_dir_to_rabot: currentDirLR];
-//        }
+        //        if (need_to_send)
+        //        {
+        //            [self send_LR_dir_to_rabot: currentDirLR];
+        //        }
         
 		//Update directions
 		lastDirLR = currentDirLR;
@@ -4254,7 +4052,7 @@ double _ticks = 0;
         //load new nib for landscape iPad
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
-           
+            
             
             [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController_land_iPad"
                                           owner:self
@@ -4447,12 +4245,12 @@ double _ticks = 0;
                                            [UIImage imageNamed:@"loader_f"],
                                            nil];
     
-
+    
     
     
     [self displayCustomIndicator];
     
-        //trigger re-cal of videosize
+    //trigger re-cal of videosize
     if (MediaPlayer::Instance()->isPlaying())
     {
         _isShowCustomIndicator = NO;
@@ -5923,7 +5721,7 @@ double _ticks = 0;
              start recording :: TODO
              */
             
-           
+            
             
         }
         else
@@ -6276,7 +6074,7 @@ double _ticks = 0;
             {
                 self.selectedChannel.profile.port = 80; // HARD CODE for now
             }
-
+            
             [self performSelector:@selector(setupCamera)
                        withObject:nil afterDelay:0.1];
         }
