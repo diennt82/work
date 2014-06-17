@@ -215,7 +215,19 @@
 
 - (void)updateCustomSlider
 {
-    self.value = 90;
+    NSInteger nowInterval = (NSInteger)[[NSDate date] timeIntervalSince1970];
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSInteger timeExpire = [userDefaults integerForKey:TIME_TO_EXPIRED];
+    NSInteger deltaTime = nowInterval - timeExpire;
+    if (deltaTime >= 0)
+    {
+        self.value = 0;
+    }
+    else
+    {
+        self.value = round(abs(deltaTime)/60.0);
+    }
+
 }
 #pragma mark - Timer to udpate text
 - (void)updateProgress: (UICircularSlider *) sender
