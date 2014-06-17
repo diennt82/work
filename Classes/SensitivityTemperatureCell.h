@@ -29,4 +29,6 @@
 
 @property (nonatomic, assign) id<SensitivityTemperaureCellDelegate> sensitivityTempCellDelegate;
 
+- (BOOL)shouldWaitForUpdateSettings;
+
 @end

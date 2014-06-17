@@ -68,6 +68,8 @@
 @property (nonatomic, retain) UIAlertView *alertViewRename;
 
 @property (retain, nonatomic) IBOutlet UIView *vwHeaderCamDetail,*vwHeaderNotSens;
+@property (nonatomic) BOOL shouldWaitForUpdateSettings;
+@property (assign, nonatomic) SensitivityTemperatureCell *sensitivityTemperatureCell;
 
 @end
 
@@ -87,6 +89,7 @@
 {
     [super viewDidLoad];
     intTableSectionStatus = 0;
+    self.shouldWaitForUpdateSettings = FALSE;
     
     self.tableViewSettings.delegate = self;
     self.tableViewSettings.dataSource = self;
@@ -132,7 +135,8 @@
     
     //then set it.  phew.
     [self.navigationItem setLeftBarButtonItem:barButtonItem];
-    
+    self.navigationItem.leftBarButtonItem.enabled = YES;
+    [self.navigationItem setHidesBackButton:YES];
     
     //Snapshot View
     vwSnapshot.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -167,7 +171,23 @@
 
 -(void)backButtonPressed
 {
-    [self.navigationController popViewControllerAnimated:YES];
+    self.navigationItem.leftBarButtonItem = NO;
+    self.shouldWaitForUpdateSettings = FALSE;
+    
+    if (_sensitivityTemperatureCell)
+    {
+        self.shouldWaitForUpdateSettings = [_sensitivityTemperatureCell shouldWaitForUpdateSettings];
+    }
+    
+    if (_shouldWaitForUpdateSettings)
+    {
+        MBProgressHUD *showError = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        [showError setLabelText:@"Updating..."];
+    }
+    else
+    {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
 }
 
 
@@ -739,8 +759,9 @@
             cell.tempValueLeft   = _sensitivityInfo.tempLowValue;
             cell.tempValueRight  = _sensitivityInfo.tempHighValue;
             cell.sensitivityTempCellDelegate = self;
-
-             cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            self.sensitivityTemperatureCell = cell;
+            
             return cell;
         }
     }
@@ -1168,13 +1189,50 @@
                                                                        andApiKey:_apiKey];
     //NSLog(@"SettingsVC - sendCommand: %@, response: %@", command, responseDict);
     
+    [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+    
+    NSInteger errorCode = -1;
+    NSString *errorMessage = @"Update failed";
+    
     if (responseDict)
     {
-        NSLog(@"SettingsVC - sendCommand successfully: %@, status: %@", command, [responseDict objectForKey:@"status"]);
+        errorCode = [[responseDict objectForKey:@"status"] integerValue];
+        
+        if (errorCode == 200)
+        {
+            errorCode = [[[[responseDict objectForKey:@"data"] objectForKey:@"device_response"] objectForKey:@"device_response_code"] integerValue];
+        }
+        else
+        {
+            errorMessage = [responseDict objectForKey:@"message"];
+        }
+    }
+    
+    NSLog(@"%s cmd:%@, error: %d", __func__, command, errorCode);
+    
+    if (errorCode == 200)
+    {
+        if (_shouldWaitForUpdateSettings)
+        {
+            self.shouldWaitForUpdateSettings = FALSE;
+            [self.navigationController popViewControllerAnimated:YES];
+        }
     }
     else
     {
-        NSLog(@"SettingsVC - sendCommand failed responseDict = nil: %@", command);
+        MBProgressHUD *showError = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        [showError setLabelText:errorMessage];
+        [showError setMode:MBProgressHUDModeText];
+        
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            
+            if (_shouldWaitForUpdateSettings)
+            {
+                self.shouldWaitForUpdateSettings = FALSE;
+                [self.navigationController popViewControllerAnimated:YES];
+            }
+        });
     }
 }
 
@@ -1290,7 +1348,6 @@
         if(actionSheet.cancelButtonIndex!=buttonIndex)
         {
             //self.camChannel.profile.registrationID
-            
             NSArray *paths = NSSearchPathForDirectoriesInDomains
             (NSDocumentDirectory, NSUserDomainMask, YES);
             NSString  *strPath = [[paths objectAtIndex:0] retain];
@@ -1321,15 +1378,18 @@
 
 -(IBAction)btnSnapshotRefreshPressed:(id)sender
 {
-    imgVSnapshot.animationImages =[NSArray arrayWithObjects:
+    if(!imgVSnapshot.isAnimating)
+    {
+        imgVSnapshot.animationImages =[NSArray arrayWithObjects:
                                    [UIImage imageNamed:@"loader_big_a"],
                                    [UIImage imageNamed:@"loader_big_b"],
                                    [UIImage imageNamed:@"loader_big_c"],
                                    [UIImage imageNamed:@"loader_big_d"],
                                    [UIImage imageNamed:@"loader_big_e"],
                                    nil];
-    imgVSnapshot.animationDuration = 1.5;
-    [imgVSnapshot startAnimating];
+        imgVSnapshot.animationDuration = 1.5;
+        [imgVSnapshot startAnimating];
+    }
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0),
                    ^{
@@ -1387,20 +1447,25 @@
     {
         if ([[responseDict objectForKey:@"status"] integerValue] == 200)
         {
-            BMS_JSON_Communication *jsonCommDeviceInfo = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                                                               Selector:nil
-                                                                                           FailSelector:nil
-                                                                                              ServerErr:nil];
-            NSDictionary *responseDictDInfo = [jsonCommDeviceInfo getDeviceBasicInfoBlockedWithRegistrationId:self.camChannel.profile.registrationID andApiKey:_apiKey];
-            if (responseDictDInfo)
-            {
-                if ([[responseDictDInfo objectForKey:@"status"] integerValue] == 200)
-                {
-                    NSLog(@"-- %@",[[responseDictDInfo valueForKey:@"data"] valueForKey:@"snaps_url"]);
-                    return [[responseDictDInfo valueForKey:@"data"] valueForKey:@"snaps_url"];
-                }
-            }
-            
+            sleep(15);
+            return [self getSnapImageUrlFromServer];
+        }
+    }
+    return nil;
+}
+
+-(NSString *)getSnapImageUrlFromServer
+{
+    BMS_JSON_Communication *jsonCommDeviceInfo = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                                       Selector:nil
+                                                                                   FailSelector:nil
+                                                                                      ServerErr:nil];
+    NSDictionary *responseDictDInfo = [jsonCommDeviceInfo getDeviceBasicInfoBlockedWithRegistrationId:self.camChannel.profile.registrationID andApiKey:_apiKey];
+    if (responseDictDInfo)
+    {
+        if ([[responseDictDInfo objectForKey:@"status"] integerValue] == 200)
+        {            
+            return [[responseDictDInfo valueForKey:@"data"] valueForKey:@"snaps_url"];
         }
     }
     return nil;

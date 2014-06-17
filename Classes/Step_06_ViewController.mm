@@ -59,13 +59,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view.
-    
-    [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(handleEnteredBackground)
-                                                 name: UIApplicationDidEnterBackgroundNotification
-                                               object: nil];
-    
     
     // Do any additional setup after loading the view.
     [[NSNotificationCenter defaultCenter] addObserver: self

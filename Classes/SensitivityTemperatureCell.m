@@ -367,6 +367,27 @@
     [_sensitivityTempCellDelegate valueChangedTempHighOn:_isSwitchOnRight];
 }
 
+- (BOOL)shouldWaitForUpdateSettings
+{
+    BOOL shouldWait = FALSE;
+    
+    if (_timerTempHighValueChanged &&
+        [_timerTempHighValueChanged isValid])
+    {
+        [_timerTempHighValueChanged fire];
+        shouldWait = TRUE;
+    }
+    
+    if (_timerTempLowValueChanged &&
+        [_timerTempLowValueChanged isValid])
+    {
+        [_timerTempLowValueChanged fire];
+        shouldWait = TRUE;
+    }
+    
+    return shouldWait;
+}
+
 - (void)dealloc {
     [_btnTypeTemperature release];
     [_lblTempValueLeft release];
