@@ -1433,8 +1433,8 @@
 		8B99DB7F18B8729F0009612A /* Icon-Small-40@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small-40@2x.png"; sourceTree = "<group>"; };
 		8B99DB8018B8729F0009612A /* Icon-Small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small.png"; sourceTree = "<group>"; };
 		8B99DB8118B8729F0009612A /* Icon-Small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small@2x.png"; sourceTree = "<group>"; };
-		8B99DB8618B872C30009612A /* iTunesArtwork */ = {isa = PBXFileReference; lastKnownFileType = file; path = iTunesArtwork; sourceTree = "<group>"; };
-		8B99DB8718B872C30009612A /* iTunesArtwork@2x */ = {isa = PBXFileReference; lastKnownFileType = file; path = "iTunesArtwork@2x"; sourceTree = "<group>"; };
+		8B99DB8618B872C30009612A /* iTunesArtwork */ = {isa = PBXFileReference; lastKnownFileType = text; path = iTunesArtwork; sourceTree = "<group>"; };
+		8B99DB8718B872C30009612A /* iTunesArtwork@2x */ = {isa = PBXFileReference; lastKnownFileType = text; path = "iTunesArtwork@2x"; sourceTree = "<group>"; };
 		8B99DB8A18B872FF0009612A /* mbp_icon76x76.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mbp_icon76x76.png; sourceTree = "<group>"; };
 		8B99DB8C18B873120009612A /* mbp_icon114x114.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mbp_icon114x114.png; sourceTree = "<group>"; };
 		8B99DB8E18B8732A0009612A /* mbp_icon120x120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mbp_icon120x120.png; sourceTree = "<group>"; };
@@ -4366,7 +4366,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = HubbleHome;
-				PROVISIONING_PROFILE = "BEE7B868-3871-4C3E-870A-2AE4C2B9FCDA";
+				PROVISIONING_PROFILE = "4DCFD4E3-30FE-4E57-B71C-0D8F9D36F6CE";
 				SDKROOT = iphoneos7.0;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
 				VALID_ARCHS = "armv6 armv7";
@@ -4415,7 +4415,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = HubbleHome;
-				PROVISIONING_PROFILE = "BEE7B868-3871-4C3E-870A-2AE4C2B9FCDA";
+				PROVISIONING_PROFILE = "4DCFD4E3-30FE-4E57-B71C-0D8F9D36F6CE";
 				SDKROOT = iphoneos7.0;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
 				VALIDATE_PRODUCT = YES;
@@ -4487,7 +4487,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = HubbleHome;
-				PROVISIONING_PROFILE = "BEE7B868-3871-4C3E-870A-2AE4C2B9FCDA";
+				PROVISIONING_PROFILE = "4DCFD4E3-30FE-4E57-B71C-0D8F9D36F6CE";
 				RAMEWORK_SEARCH_PATHS = "$(inherited) \"$(SRCROOT)\"";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";

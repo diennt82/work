@@ -98,6 +98,11 @@
                                                  name: UIApplicationDidEnterBackgroundNotification
                                                object: nil];
     
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(playbackBecomeInActive)
+                                                 name: UIApplicationWillResignActiveNotification
+                                               object: nil];
+    
 	[[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(playbackBecomeActive)
                                                  name: UIApplicationDidBecomeActiveNotification
@@ -176,7 +181,10 @@
         [self.list_refresher invalidate];
     }
 }
-
+-(void) playbackBecomeInActive
+{
+    _shouldRestartProcess = NO;
+}
 - (void)playbackBecomeActive
 {
     NSLog(@"%s _shouldRestartProcess:%d", __FUNCTION__, _shouldRestartProcess);
@@ -258,19 +266,14 @@
 
 -(void) startStream
 {
-#if 0
-    _playbackStreamer = new MediaPlayer(true, false);
-    self.shouldRestartProcess = TRUE;
-    _playbackStreamer->setListener(listener);
-    [self performSelectorInBackground:@selector(startStream_bg) withObject:nil];
-#else
+
 
     self.shouldRestartProcess = TRUE;
     
     MediaPlayer::Instance()->setListener(listener);
     MediaPlayer::Instance()->setPlaybackAndSharedCam(true, false);
     [self performSelectorInBackground:@selector(startStream_bg) withObject:nil];
-#endif
+
 }
 
 - (void)startStream_bg
