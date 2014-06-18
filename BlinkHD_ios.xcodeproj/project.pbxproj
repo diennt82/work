@@ -11,6 +11,8 @@
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
+		26977A411951E7E5005D45B9 /* CamerasViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 26977A401951E7E5005D45B9 /* CamerasViewController.xib */; };
+		26977A431951EAF2005D45B9 /* SettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 26977A421951EAF2005D45B9 /* SettingsViewController.xib */; };
 		26B2D8BE193F6B74005E5F2E /* 29.png in Resources */ = {isa = PBXBuildFile; fileRef = 26B2D8B4193F6B74005E5F2E /* 29.png */; };
 		26B2D8BF193F6B74005E5F2E /* 40.png in Resources */ = {isa = PBXBuildFile; fileRef = 26B2D8B5193F6B74005E5F2E /* 40.png */; };
 		26B2D8C0193F6B74005E5F2E /* 58.png in Resources */ = {isa = PBXBuildFile; fileRef = 26B2D8B6193F6B74005E5F2E /* 58.png */; };
@@ -770,6 +772,8 @@
 		1D3623240D0F684500981E51 /* MBP_iosAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBP_iosAppDelegate.h; sourceTree = "<group>"; };
 		1D3623250D0F684500981E51 /* MBP_iosAppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MBP_iosAppDelegate.mm; sourceTree = "<group>"; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		26977A401951E7E5005D45B9 /* CamerasViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CamerasViewController.xib; sourceTree = "<group>"; };
+		26977A421951EAF2005D45B9 /* SettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingsViewController.xib; sourceTree = "<group>"; };
 		26B2D8B4193F6B74005E5F2E /* 29.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 29.png; sourceTree = "<group>"; };
 		26B2D8B5193F6B74005E5F2E /* 40.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 40.png; sourceTree = "<group>"; };
 		26B2D8B6193F6B74005E5F2E /* 58.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 58.png; sourceTree = "<group>"; };
@@ -3113,6 +3117,7 @@
 				8B9ABBB418AA2A990079F4A3 /* Camera Menu */,
 				8B9C7E12185F268C0038B3A8 /* CamerasViewController.h */,
 				8B9C7E13185F268C0038B3A8 /* CamerasViewController.mm */,
+				26977A401951E7E5005D45B9 /* CamerasViewController.xib */,
 				8B9C7E17185F26B70038B3A8 /* CamerasCell.h */,
 				8B9C7E18185F26B70038B3A8 /* CamerasCell.m */,
 				8B9C7E1A185F26D40038B3A8 /* CamerasCell.xib */,
@@ -3127,9 +3132,10 @@
 				8BEDE2ED1861B73F00D3AE2B /* Disturb */,
 				8B9112CD18602854004301C5 /* Sensitivity */,
 				8B9112C718601041004301C5 /* General */,
+				8B9C7E11185F262D0038B3A8 /* Account */,
 				8B9112C218600B7C004301C5 /* SettingsViewController.h */,
 				8B9112C318600B7C004301C5 /* SettingsViewController.m */,
-				8B9C7E11185F262D0038B3A8 /* Account */,
+				26977A421951EAF2005D45B9 /* SettingsViewController.xib */,
 			);
 			name = Settings;
 			sourceTree = "<group>";
@@ -3696,6 +3702,7 @@
 				8B29A02B18AF500900D36BE5 /* Default~iphone.png in Resources */,
 				8B29A05E18AF500A00D36BE5 /* settings_temp_c@2x.png in Resources */,
 				A1B1E7E518E9135800F076B6 /* menu_settings_pressed@2x.png in Resources */,
+				26977A411951E7E5005D45B9 /* CamerasViewController.xib in Resources */,
 				8B29A05418AF500A00D36BE5 /* settings_line@2x.png in Resources */,
 				8B977B6C18C7026A00A61115 /* BLEConnectionCell.xib in Resources */,
 				8B9507AE18C9960D006D4945 /* setup_camera_b3.png in Resources */,
@@ -3982,6 +3989,7 @@
 				8B1D545E18658CBC008857F0 /* DotCell.png in Resources */,
 				8B29A02518AF500900D36BE5 /* loader_f@2x.png in Resources */,
 				8B29A08018AF500A00D36BE5 /* video_pause@2x.png in Resources */,
+				26977A431951EAF2005D45B9 /* SettingsViewController.xib in Resources */,
 				A1AC858818912859002A8CCD /* ProximaNova-Black.otf in Resources */,
 				8B299FD418AF500900D36BE5 /* camera_action_play_pressed@5.png in Resources */,
 				A1B1E7D118E9135800F076B6 /* buy_camera_btn_pressed@2x.png in Resources */,
