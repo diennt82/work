@@ -657,9 +657,19 @@ double _ticks = 0;
 
 - (void)forceRestartStream:(NSTimer *)timer
 {
-    NSLog(@"%s h264Streamer: %p", __FUNCTION__, h264Streamer);
-    [self handleMessage:MEDIA_ERROR_SERVER_DIED ext1:-99 ext2:-1];
-    self.messageStreamingState = @"Low data bandwidth detected. Trying to connect...";
+    if (userWantToCancel ||
+        _returnFromPlayback ||
+        [UIApplication sharedApplication].applicationState != UIApplicationStateActive)
+    {
+        NSLog(@"%s View is invisible or is in background mode --> do nothing here.", __FUNCTION__);
+    }
+    else
+    {
+        NSLog(@"%s ", __FUNCTION__);
+        
+        [self handleMessage:MEDIA_ERROR_SERVER_DIED ext1:-99 ext2:-1];
+        self.messageStreamingState = @"Low data bandwidth detected. Trying to connect...";
+    }
 }
 
 -(void) handleMessage:(int) msg ext1: (int) ext1 ext2:(int) ext2
