@@ -1410,8 +1410,11 @@ double _ticks = 0;
     BOOL cancelBecauseOfPn = [userDefaults boolForKey:HANDLE_PN];
     if (cancelBecauseOfPn == TRUE)
     {
-        NSLog(@"set user = true");
+        NSLog(@"&(*&(&(*&(& set user = true && CLEAR it");
         userWantToCancel = TRUE;
+        [userDefaults removeObjectForKey:HANDLE_PN];
+        [userDefaults synchronize];
+
         return;
     }
     
