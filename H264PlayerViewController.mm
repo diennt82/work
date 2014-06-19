@@ -711,8 +711,6 @@ double _ticks = 0;
         ext2 = [[args objectAtIndex:2] integerValue];
     }
     
-    //NSLog(@"currentMediaStatus: %d", msg);
-    
     switch (msg)
     {
         case MEDIA_INFO_GET_AUDIO_PACKET:
@@ -1398,7 +1396,7 @@ double _ticks = 0;
 #if 1
 - (void)h264_HandleDidEnterBackground
 {
-    NSLog(@"%s wants to cancel: %d, rtn frm Playback: %d, nav: %@, _timerBufferingTimeout:%p", __FUNCTION__, userWantToCancel, _returnFromPlayback, self.navigationController.visibleViewController.description, _timerBufferingTimeout);
+    NSLog(@"%s userWantToCancel:%d, returnFromPlayback:%d, mediaProcessStatus: %d, _timerBufferingTimeout:%p", __FUNCTION__, userWantToCancel, _returnFromPlayback, _mediaProcessStatus, _timerBufferingTimeout);
 
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:@"Enter background"
@@ -1442,7 +1440,15 @@ double _ticks = 0;
     }
     else if (_mediaProcessStatus == MEDIAPLAYER_SET_DATASOURCE)
     {
+        NSLog(@"%s", __FUNCTION__);
+        
         MediaPlayer::Instance()->sendInterrupt();
+        
+        self.backgroundTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+            NSLog(@"Background handler called. Not running background tasks anymore.");
+            [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTask];
+            self.backgroundTask = UIBackgroundTaskInvalid;
+        }];
     }
     else //MEDIAPLAYER_STARTED
     {
@@ -2367,8 +2373,11 @@ double _ticks = 0;
         MediaPlayer::Instance()->stop();
         
         
-        
-        
+        if (self.backgroundTask != UIBackgroundTaskInvalid)
+        {
+            [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTask];
+            self.backgroundTask = UIBackgroundTaskInvalid;
+        }
         
         [self cleanUpDirectionTimers];
         

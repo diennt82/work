@@ -332,6 +332,7 @@
 @property (nonatomic, retain) NSString *viewVideoIn;
 #endif
 
+@property (nonatomic) UIBackgroundTaskIdentifier backgroundTask;
 
 
 - (void)scan_done:(NSArray *) _scan_results;
