@@ -119,6 +119,24 @@ double _ticks = 0;
     
     self.customIndicator.image = [UIImage imageNamed:@"loader_a"];
     
+    
+    // Do any additional setup after loading the view.
+	[[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(h264_HandleEnteredBackground)
+                                                 name: UIApplicationDidEnterBackgroundNotification
+                                               object: nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(h264_HandleAppInactive)
+                                                 name: UIApplicationWillResignActiveNotification
+                                               object: nil];
+    
+	[[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(h264_HandleBecomeActive)
+                                                 name: UIApplicationDidBecomeActiveNotification
+                                               object: nil];
+    
+    
     NSLog(@"camera model is :%@", self.cameraModel);
     [self becomeActive];
 }
@@ -141,21 +159,7 @@ double _ticks = 0;
                                                     withAction:@"viewWillAppear"
                                                      withLabel:nil
                                                      withValue:nil];
-    // Do any additional setup after loading the view.
-	[[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(h264_HandleEnteredBackground)
-                                                 name: UIApplicationDidEnterBackgroundNotification
-                                               object: nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(h264_HandleAppInactive)
-                                                 name: UIApplicationWillResignActiveNotification
-                                               object: nil];
-    
-	[[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(h264_HandleBecomeActive)
-                                                 name: UIApplicationDidBecomeActiveNotification
-                                               object: nil];
+   
     //alway show custom indicator, when view appear
     _isShowCustomIndicator = YES;
     self.currentMediaStatus = 0;

@@ -580,7 +580,7 @@ void checkingApplicationCrashed()
    
     if (handling_PN == TRUE)
     {
-        NSLog(@"handling PN, we may be in view");
+        NSLog(@"handling PN, we may be in view & clear it");
         if ([userDefaults objectForKey:CAM_IN_VEW] != nil )
         {
             NSLog(@"A camera is in view.Stop it");
@@ -591,6 +591,8 @@ void checkingApplicationCrashed()
             
             
         }
+        
+        handling_PN = FALSE; //clear it
         
         
         
