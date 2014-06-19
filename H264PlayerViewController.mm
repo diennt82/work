@@ -141,6 +141,17 @@ double _ticks = 0;
                                                     withAction:@"viewWillAppear"
                                                      withLabel:nil
                                                      withValue:nil];
+#if 1
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(h264_HandleDidEnterBackground)
+                                                 name: UIApplicationDidEnterBackgroundNotification
+                                               object: nil];
+    
+	[[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(h264_HandleWillEnterForeground)
+                                                 name: UIApplicationWillEnterForegroundNotification
+                                               object: nil];
+#else
     // Do any additional setup after loading the view.
 	[[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(h264_HandleEnteredBackground)
@@ -156,6 +167,7 @@ double _ticks = 0;
                                              selector: @selector(h264_HandleBecomeActive)
                                                  name: UIApplicationDidBecomeActiveNotification
                                                object: nil];
+#endif
     //alway show custom indicator, when view appear
     _isShowCustomIndicator = YES;
     self.currentMediaStatus = 0;
@@ -1383,6 +1395,131 @@ double _ticks = 0;
     }
 }
 
+#if 1
+- (void)h264_HandleDidEnterBackground
+{
+    NSLog(@"%s wants to cancel: %d, rtn frm Playback: %d, nav: %@, _timerBufferingTimeout:%p", __FUNCTION__, userWantToCancel, _returnFromPlayback, self.navigationController.visibleViewController.description, _timerBufferingTimeout);
+
+    [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
+                                                    withAction:@"Enter background"
+                                                     withLabel:@"Homekey"
+                                                     withValue:[NSNumber numberWithDouble:userWantToCancel]];
+    
+    if (userWantToCancel == TRUE || _returnFromPlayback)
+    {
+        return;
+    }
+    
+    if (_timerBufferingTimeout)
+    {
+        [_timerBufferingTimeout invalidate];
+        self.timerBufferingTimeout = nil;
+    }
+    
+    _selectedChannel.stopStreaming = TRUE;
+    
+    [self stopPeriodicBeep];
+    [self stopPeriodicPopup];
+    
+    if (_alertViewTimoutRemote)
+    {
+        [_alertViewTimoutRemote dismissWithClickedButtonIndex:-1 animated:NO];
+    }
+    
+    if (_audioOutStreamRemote)
+    {
+        [_audioOutStreamRemote disconnectFromAudioSocketRemote];
+    }
+    
+    if (_mediaProcessStatus == MEDIAPLAYER_NOT_INIT)
+    {
+        
+    }
+    else if(_mediaProcessStatus == MEDIAPLAYER_SET_LISTENER)
+    {
+        MediaPlayer::Instance()->sendInterrupt();
+        [self stopStream];
+    }
+    else if (_mediaProcessStatus == MEDIAPLAYER_SET_DATASOURCE)
+    {
+        MediaPlayer::Instance()->sendInterrupt();
+    }
+    else //MEDIAPLAYER_STARTED
+    {
+        MediaPlayer::Instance()->sendInterrupt();
+        [self stopStream];
+    }
+    
+    self.h264StreamerIsInStopped = TRUE;
+    self.imageViewVideo.backgroundColor = [UIColor blackColor];
+    self.imageViewStreamer.backgroundColor = [UIColor blackColor];
+    
+    if (_selectedChannel.profile.isInLocal == TRUE)
+    {
+        NSLog(@"Enter Background.. Local ");
+    }
+    else if (_selectedChannel.profile.minuteSinceLastComm <= 5) // Remote
+    {
+        //NSLog(@"abort remote timer ");
+        [_selectedChannel abortViewTimer];
+    }
+}
+
+- (void)h264_HandleWillEnterForeground
+{
+    NSLog(@"%s wants to cancel: %d, rtn frm Playback: %d", __FUNCTION__, userWantToCancel, _returnFromPlayback);
+    
+    [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
+                                                    withAction:@"Become Active"
+                                                     withLabel:nil
+                                                     withValue:[NSNumber numberWithDouble:userWantToCancel]];
+    if (userWantToCancel == TRUE || _returnFromPlayback)
+    {
+        return;
+    }
+    
+    if (_timerBufferingTimeout)
+    {
+        [_timerBufferingTimeout invalidate];
+        self.timerBufferingTimeout = nil;
+    }
+    
+    self.h264StreamerIsInStopped = FALSE;
+    self.currentMediaStatus = 0;
+    self.wantToShowTimeLine = YES;
+    
+    if (!self.earlierNavi.isEarlierView)
+    {
+        [self showTimelineView];
+    }
+    
+    if(_selectedChannel.profile.isInLocal == TRUE)
+    {
+        NSLog(@"Become ACTIVE _  .. Local");
+    }
+    else if ( _selectedChannel.profile.minuteSinceLastComm <= 5) // Remote
+    {
+        NSLog(@"Become ACTIVE _  .. REMOTE");
+    }
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    BOOL cancelBecauseOfPn = [userDefaults boolForKey:HANDLE_PN];
+    if (cancelBecauseOfPn == TRUE)
+    {
+        NSLog(@"set user = true");
+        userWantToCancel = TRUE;
+        return;
+    }
+    
+    //this func gets call even after app enter inactive state -> we don't stop player then..thus do not restart player here
+    if ( _selectedChannel.stopStreaming == TRUE)
+    {
+        //[self checkOrientation];
+        
+        [self scanCamera];
+    }
+}
+#else
 - (void)h264_HandleBecomeActive
 {
     NSLog(@"%s wants to cancel: %d, rtn frm Playback: %d", __FUNCTION__, userWantToCancel, _returnFromPlayback);
@@ -1509,6 +1646,7 @@ double _ticks = 0;
         [_selectedChannel abortViewTimer];
     }
 }
+#endif
 
 - (BOOL)hidesBottomBarWhenPushed
 {
