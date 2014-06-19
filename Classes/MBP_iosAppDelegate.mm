@@ -29,8 +29,6 @@
 #pragma mark -
 #pragma mark Application lifecycle
 
-//Kiran Patel Git Hub Sync Test / Branch Test
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {    
     
     // Override point for customization after application launch.
@@ -592,7 +590,7 @@ void checkingApplicationCrashed()
             
         }
         
-        
+        handling_PN = FALSE; //clear it
         
     }
     else  if ([userDefaults objectForKey:CAM_IN_VEW] != nil )

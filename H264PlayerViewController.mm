@@ -111,7 +111,6 @@ double _ticks = 0;
     self.disconnectAlert   = [userDefaults boolForKey:@"disconnect_alert"];
     
     self.enablePTT = YES;
-    self.numbersOfRemoteViewError = 0;
     self.currentBitRate = @"128";
     self.messageStreamingState = @"Camera is not accessible";
     self.timeStartingStageTwo = 0;
@@ -671,7 +670,7 @@ double _ticks = 0;
 {
     if (userWantToCancel ||
         _returnFromPlayback ||
-        [UIApplication sharedApplication].applicationState != UIApplicationStateActive)
+        [UIApplication sharedApplication].applicationState == UIApplicationStateBackground)
     {
         NSLog(@"%s View is invisible or is in background mode --> do nothing here.", __FUNCTION__);
     }
@@ -820,31 +819,24 @@ double _ticks = 0;
             self.imageViewStreamer.frame = CGRectMake(left,
                                                       top,
                                                       destWidth, destHeight);
-            break;
         }
+            break;
+            
         case MEDIA_INFO_BITRATE_BPS:
         {
-            if (userWantToCancel == TRUE)
-            {
-                
-                NSLog(@"*[MEDIA_INFO_BITRATE_BPS] **SHOULD NOT HAPPEN FREQUENTLY* USER want to cancel **.. cancel after .1 sec...");
-                self.selectedChannel.stopStreaming = TRUE;
-                [self performSelector:@selector(goBackToCameraList)
-                           withObject:nil
-                           afterDelay:0.1];
-                break;
-            }
-            
-            if (self.h264StreamerIsInStopped == TRUE)
-            {
-                self.selectedChannel.stopStreaming = TRUE;
-                [self performSelector:@selector(stopStream)
-                           withObject:nil
-                           afterDelay:0.1];
-            }
             
 #ifdef SHOW_DEBUG_INFO
-            [self updateDebugInfoBitRate:ext1];
+            if (userWantToCancel ||
+                _h264StreamerIsInStopped ||
+                _returnFromPlayback ||
+                [UIApplication sharedApplication].applicationState != UIApplicationStateActive)
+            {
+                NSLog(@"MEDIA_INFO_BITRATE_BPS:%d View is invisible or inactive mode", ext1);
+            }
+            else
+            {
+                [self updateDebugInfoBitRate:ext1];
+            }
 #endif
         }
             break;
@@ -853,16 +845,6 @@ double _ticks = 0;
         {
             _isShowCustomIndicator = NO;
             [self displayCustomIndicator];
-            
-            [[NSUserDefaults standardUserDefaults] setBool:TRUE forKey:@"TEST_MEDIA"];
-            [[NSUserDefaults standardUserDefaults] synchronize];
-            
-            self.timeStageTwoTotal = [[NSDate date] timeIntervalSinceDate:_timeStartingStageTwo];
-            NSTimeInterval diff = [[NSDate date] timeIntervalSinceDate:_timeStartPlayerView];
-            
-            NSLog(@"%s total time: %f, stage 2 takes %f seconds", __FUNCTION__, diff, _timeStageTwoTotal);
-            
-            self.timeStartingStageTwo = 0;
             
             NSLog(@"[MEDIA_PLAYER_HAS_FIRST_IMAGE]");
             if(self.selectedChannel.profile.isInLocal == NO)
@@ -887,8 +869,6 @@ double _ticks = 0;
                 }
                 
                 [self createTimerKeepRemoteStreamAlive];
-                
-                self.numbersOfRemoteViewError = 1;
             }
             
             self.currentMediaStatus = msg;
@@ -905,24 +885,14 @@ double _ticks = 0;
             }
             
             [self stopPeriodicPopup];
-            
-            if (self.h264StreamerIsInStopped == TRUE)
+
+            if (userWantToCancel ||
+                _h264StreamerIsInStopped ||
+                _returnFromPlayback ||
+                [UIApplication sharedApplication].applicationState == UIApplicationStateBackground)
             {
-                self.selectedChannel.stopStreaming = TRUE;
-                [self performSelector:@selector(stopStream)
-                           withObject:nil
-                           afterDelay:0.1];
-                break;
-            }
-            
-            if (userWantToCancel == TRUE)
-            {
-                
                 NSLog(@"*[MEDIA_PLAYER_HAS_FIRST_IMAGE] *** USER want to cancel **.. cancel after .1 sec...");
-                self.selectedChannel.stopStreaming = TRUE;
-                [self performSelector:@selector(goBackToCameraList)
-                           withObject:nil
-                           afterDelay:0.1];
+                NSLog(@"MEDIA_PLAYER_HAS_FIRST_IMAGE View is invisible or in background mode");
             }
             else
             {
@@ -973,7 +943,7 @@ double _ticks = 0;
         case MEDIA_PLAYER_STARTED:
         {
             self.currentMediaStatus = msg;
-            
+#if 0
             if (userWantToCancel == TRUE)
             {
                 self.selectedChannel.stopStreaming = TRUE;
@@ -983,13 +953,16 @@ double _ticks = 0;
                 break;
             }
             
-            if (self.h264StreamerIsInStopped == TRUE)
+            NSLog(@"%s MEDIA_PLAYER_STARTED h264StreamerIsInStopped:%d", __FUNCTION__, _h264StreamerIsInStopped);
+
+            if (_h264StreamerIsInStopped == TRUE)
             {
                 self.selectedChannel.stopStreaming = TRUE;
                 [self performSelector:@selector(stopStream)
                            withObject:nil
                            afterDelay:0.1];
             }
+#endif
         }
             break;
             
@@ -1016,11 +989,8 @@ double _ticks = 0;
             
     		NSLog(@"Timeout While streaming  OR server DIED - userWantToCancel: %d, returnFromPlayback: %d, forceStop: %d", userWantToCancel, _returnFromPlayback, ext1);
             
-    		//mHandler.dispatchMessage(Message.obtain(mHandler, Streamer.MSG_VIDEO_STREAM_HAS_STOPPED_UNEXPECTEDLY));
-            
             if (userWantToCancel == TRUE)
             {
-                
                 NSLog(@"*[MEDIA_ERROR_TIMEOUT_WHILE_STREAMING] *** USER want to cancel **.. cancel after .1 sec...");
                 self.selectedChannel.stopStreaming = TRUE;
                 
@@ -1028,129 +998,81 @@ double _ticks = 0;
                 [self performSelector:@selector(goBackToCameraList)
                            withObject:nil
                            afterDelay:0.1];
-                
                 return;
             }
             else
             {
-                /*
-                 * Need not to do if went to Playback.
-                 */
-                
-                if (!_returnFromPlayback)
-                {
-                    [self displayCustomIndicator];
-                }
-            }
-            
-            if (self.h264StreamerIsInStopped == TRUE || _returnFromPlayback || [UIApplication sharedApplication].applicationState != UIApplicationStateActive)
-            {
+                [self stopStream];
                 self.selectedChannel.stopStreaming = TRUE;
-                [self performSelector:@selector(stopStream)
-                           withObject:nil
-                           afterDelay:0.1];
-                return;
-            }
-            
-            if (self.selectedChannel.communication_mode == COMM_MODE_STUN)
-            {
-                self.numberOfSTUNError++;
-            }
-            else if (self.selectedChannel.communication_mode == COMM_MODE_STUN_RELAY2)
-            {
-                if (_timerIncreaseBitRate)
-                {
-                    [_timerIncreaseBitRate invalidate];
-                    self.timerIncreaseBitRate = nil;
-                }
                 
-                self.numbersOfRemoteViewError++;
-                
-                if ([_currentBitRate isEqualToString:@"600"])
+                if (_h264StreamerIsInStopped ||
+                    _returnFromPlayback ||
+                    [UIApplication sharedApplication].applicationState == UIApplicationStateBackground)
                 {
-                    self.currentBitRate = @"550";// Dont care it set succeeded or failed!
-                    [self performSelectorInBackground:@selector(setVideoBitRateToCamera:) withObject:_currentBitRate];
-                }
-                else if ([_currentBitRate isEqualToString:@"550"])
-                {
-                    self.currentBitRate = @"500";// Dont care it set succeeded or failed!
-                    [self performSelectorInBackground:@selector(setVideoBitRateToCamera:) withObject:_currentBitRate];
-                }
-                else if ([_currentBitRate isEqualToString:@"500"])
-                {
-                    self.currentBitRate = @"450";// Dont care it set succeeded or failed!
-                    [self performSelectorInBackground:@selector(setVideoBitRateToCamera:) withObject:_currentBitRate];
-                }
-                else if ([_currentBitRate isEqualToString:@"450"])
-                {
-                    self.currentBitRate = @"400";// Dont care it set succeeded or failed!
-                    [self performSelectorInBackground:@selector(setVideoBitRateToCamera:) withObject:_currentBitRate];
-                }
-                else if ([_currentBitRate isEqualToString:@"400"])
-                {
-                    self.currentBitRate = @"350";// Dont care it set succeeded or failed!
-                    [self performSelectorInBackground:@selector(setVideoBitRateToCamera:) withObject:_currentBitRate];
-                }
-                else if ([_currentBitRate isEqualToString:@"350"])
-                {
-                    // Update current bit rate only set succeeded!
-                    [self performSelectorInBackground:@selector(setVideoBitRateToCamera:) withObject:@"300"];
+                    return;
                 }
                 else
                 {
-                    NSLog(@"%s: numbers of remote streaming error: %d, curr Bit-rate; %@", __FUNCTION__, _numbersOfRemoteViewError, _currentBitRate);
-                }
-            }
-            
-    		/* TODO:
-    		 *
-    		 * Why are we failling?
-    		 *    Our issue: Switch WIFIs, or WIFI <--> 3g
-    		 *               Going out of range
-    		 *
-    		 *    Camera issue: Camera turn off/ restarted / Ip changed
-    		 *
-    		 * What mode are we in
-    		 * - Local -> Recovery in local
-    		 * - Remote -> Recovery in REMOTE (UPNP or Wowza)
-    		 *
-             */
-            
-            // Stop Streamming
-            [self stopStream];
-            
-            // Start streaming
-            if (self.selectedChannel.profile.isInLocal == TRUE)
-            {
-                /* re-scan for the camera */
-                //[self scan_for_missing_camera];
-                //[self setupCamera];
-                [self scanCamera];
-            }
-            else //Remote connection -> go back and retry
-            {
-                //Restart streaming..
-                if (_timeStartingStageTwo > 0)
-                {
-                    NSTimeInterval diff = [[NSDate date] timeIntervalSinceDate:_timeStartingStageTwo];
+                    if (self.selectedChannel.communication_mode == COMM_MODE_STUN)
+                    {
+                        self.numberOfSTUNError++;
+                    }
+                    else if (self.selectedChannel.communication_mode == COMM_MODE_STUN_RELAY2)
+                    {
+                        if (_timerIncreaseBitRate)
+                        {
+                            [_timerIncreaseBitRate invalidate];
+                            self.timerIncreaseBitRate = nil;
+                        }
+                        
+                        [self downgradeRemoteStreamBitRate];
+                    }
                     
-                    NSString *gaiActionTime = GAI_ACTION(2, diff);
-                    NSLog(@"%s gaiActionTime: %@", __FUNCTION__, gaiActionTime);
+                    /* TODO:
+                     *
+                     * Why are we failling?
+                     *    Our issue: Switch WIFIs, or WIFI <--> 3g
+                     *               Going out of range
+                     *
+                     *    Camera issue: Camera turn off/ restarted / Ip changed
+                     *
+                     * What mode are we in
+                     * - Local -> Recovery in local
+                     * - Remote -> Recovery in REMOTE (UPNP or Wowza)
+                     *
+                     */
                     
-                    [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
-                                                                    withAction:gaiActionTime
-                                                                     withLabel:nil
-                                                                     withValue:nil];
-                    self.timeStartingStageTwo = 0;
+                    // Start streaming
+                    if (self.selectedChannel.profile.isInLocal == TRUE)
+                    {
+                        [self scanCamera];
+                    }
+                    else //Remote connection -> go back and retry
+                    {
+                        //Restart streaming..
+                        if (_timeStartingStageTwo > 0)
+                        {
+                            NSTimeInterval diff = [[NSDate date] timeIntervalSinceDate:_timeStartingStageTwo];
+                            
+                            NSString *gaiActionTime = GAI_ACTION(2, diff);
+                            NSLog(@"%s gaiActionTime: %@", __FUNCTION__, gaiActionTime);
+                            
+                            [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
+                                                                            withAction:gaiActionTime
+                                                                             withLabel:nil
+                                                                             withValue:nil];
+                            self.timeStartingStageTwo = 0;
+                        }
+                        
+                        NSLog(@"Re-start Remote streaming for : %@", self.selectedChannel.profile.mac_address);
+                        
+                        [NSTimer scheduledTimerWithTimeInterval:0.1
+                                                         target:self
+                                                       selector:@selector(setupCamera)
+                                                       userInfo:nil
+                                                        repeats:NO];
+                    }
                 }
-                
-                NSLog(@"Re-start Remote streaming for : %@", self.selectedChannel.profile.mac_address);
-                
-                [NSTimer scheduledTimerWithTimeInterval:0.1
-                                                 target:self
-                                               selector:@selector(setupCamera)
-                                               userInfo:nil
-                                                repeats:NO];
             }
         }
             break;
@@ -1179,10 +1101,6 @@ double _ticks = 0;
         default:
             break;
     }
-    
-    //NSLog(@"H264VC - handleMsg -imageVideo: %@, imageStreamer: %@", NSStringFromCGRect(_imageViewVideo.frame), NSStringFromCGRect(_imageViewStreamer.frame));
-    
-    
 }
 
 - (void)reCreateTimoutViewCamera
@@ -1255,6 +1173,44 @@ double _ticks = 0;
     });
 }
 
+- (void)downgradeRemoteStreamBitRate
+{
+    if ([_currentBitRate isEqualToString:@"600"])
+    {
+        self.currentBitRate = @"550";// Dont care it set succeeded or failed!
+        [self performSelectorInBackground:@selector(setVideoBitRateToCamera:) withObject:_currentBitRate];
+    }
+    else if ([_currentBitRate isEqualToString:@"550"])
+    {
+        self.currentBitRate = @"500";// Dont care it set succeeded or failed!
+        [self performSelectorInBackground:@selector(setVideoBitRateToCamera:) withObject:_currentBitRate];
+    }
+    else if ([_currentBitRate isEqualToString:@"500"])
+    {
+        self.currentBitRate = @"450";// Dont care it set succeeded or failed!
+        [self performSelectorInBackground:@selector(setVideoBitRateToCamera:) withObject:_currentBitRate];
+    }
+    else if ([_currentBitRate isEqualToString:@"450"])
+    {
+        self.currentBitRate = @"400";// Dont care it set succeeded or failed!
+        [self performSelectorInBackground:@selector(setVideoBitRateToCamera:) withObject:_currentBitRate];
+    }
+    else if ([_currentBitRate isEqualToString:@"400"])
+    {
+        self.currentBitRate = @"350";// Dont care it set succeeded or failed!
+        [self performSelectorInBackground:@selector(setVideoBitRateToCamera:) withObject:_currentBitRate];
+    }
+    else if ([_currentBitRate isEqualToString:@"350"])
+    {
+        // Update current bit rate only set succeeded!
+        [self performSelectorInBackground:@selector(setVideoBitRateToCamera:) withObject:@"300"];
+    }
+    else
+    {
+        NSLog(@"%s curr Bit-rate; %@", __FUNCTION__, _currentBitRate);
+    }
+}
+
 #pragma mark Delegate Timeline
 
 - (void)stopStreamToPlayback
@@ -1270,41 +1226,29 @@ double _ticks = 0;
     {
         [_audioOutStreamRemote disconnectFromAudioSocketRemote];
     }
-#if 1
-    NSLog(@"%s _mediaProcessStatus: %d", __FUNCTION__, _mediaProcessStatus);
+    if (_mediaProcessStatus == MEDIAPLAYER_NOT_INIT)
+    {
+    }
+    else if(_mediaProcessStatus == MEDIAPLAYER_SET_LISTENER)
+    {
+        //MediaPlayer::Instance()->sendInterrupt();
+        MediaPlayer::Instance()->setFFmpegInterrupt(true);
+        [self stopStream];
+    }
+    else if (_mediaProcessStatus == MEDIAPLAYER_SET_DATASOURCE)
+    {
+        NSLog(@"%s", __FUNCTION__);
+        
+        //MediaPlayer::Instance()->sendInterrupt();
+        MediaPlayer::Instance()->setFFmpegInterrupt(true);
+    }
+    else //MEDIAPLAYER_STARTED
+    {
+        //MediaPlayer::Instance()->sendInterrupt();
+        MediaPlayer::Instance()->setFFmpegInterrupt(true);
+        [self stopStream];
+    }
     
-    if (_mediaProcessStatus == 0)
-    {
-        
-    }
-    else if(_mediaProcessStatus == 1)
-    {
-        MediaPlayer::Instance()->sendInterrupt();
-        [self stopStream];
-        
-    }
-    else if (_mediaProcessStatus == 2)
-    {
-        MediaPlayer::Instance()->sendInterrupt();
-    }
-    else
-    {
-        MediaPlayer::Instance()->sendInterrupt();
-        [self stopStream];
-        
-    }
-#else
-    if (self.currentMediaStatus == MEDIA_INFO_HAS_FIRST_IMAGE ||
-        self.currentMediaStatus == MEDIA_PLAYER_STARTED ||
-        (self.currentMediaStatus == 0)) // Media player haven't start yet.
-    {
-        [self stopStream];
-    }
-    else if (MediaPlayer::Instance() != NULL)
-    {
-        MediaPlayer::Instance()->sendInterrupt(); // Assuming h264Streamer stop itself.
-    }
-#endif
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -1435,24 +1379,25 @@ double _ticks = 0;
     }
     else if(_mediaProcessStatus == MEDIAPLAYER_SET_LISTENER)
     {
-        MediaPlayer::Instance()->sendInterrupt();
+        //MediaPlayer::Instance()->sendInterrupt();
+        MediaPlayer::Instance()->setFFmpegInterrupt(true);
         [self stopStream];
     }
     else if (_mediaProcessStatus == MEDIAPLAYER_SET_DATASOURCE)
     {
-        NSLog(@"%s", __FUNCTION__);
-        
-        MediaPlayer::Instance()->sendInterrupt();
+        MediaPlayer::Instance()->setFFmpegInterrupt(true);
         
         self.backgroundTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
             NSLog(@"Background handler called. Not running background tasks anymore.");
             [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTask];
             self.backgroundTask = UIBackgroundTaskInvalid;
         }];
+        
+        NSLog(@"%s Waiting for call back from MediaPlayer lib. backgroundTask:%d", __FUNCTION__, _backgroundTask);
     }
     else //MEDIAPLAYER_STARTED
     {
-        MediaPlayer::Instance()->sendInterrupt();
+        //MediaPlayer::Instance()->setFFmpegInterrupt(true);
         [self stopStream];
     }
     
@@ -1634,7 +1579,6 @@ double _ticks = 0;
     {
         MediaPlayer::Instance()->sendInterrupt();
         [self stopStream];
-        
     }
     
     
@@ -1984,83 +1928,88 @@ double _ticks = 0;
     //mp->setPlayOption(MEDIA_STREAM_RTSP_WITH_TCP);
     
     NSString * url = self.selectedChannel.stream_url;
-    NSLog(@"%s url: %@, h264Streamer: %p", __FUNCTION__, url, h264Streamer);
-    self.mediaProcessStatus = MEDIAPLAYER_SET_DATASOURCE;
-    NSLog(@"%s mediaProcessStatus: %d", __FUNCTION__, _mediaProcessStatus);
+    NSLog(@"%s url: %@", __FUNCTION__, url);
     
-    
-    do
+    if (userWantToCancel ||
+        _returnFromPlayback ||
+        [UIApplication sharedApplication].applicationState == UIApplicationStateBackground)
     {
-        if (url == nil || [url isEqualToString:@""])
-        {
-            break;
-        }
-        
-        status = MediaPlayer::Instance()->setDataSource([url UTF8String]);
-        
-        if (status != NO_ERROR) // NOT OK
-        {
-            NSLog(@"setDataSource  failed");
-            
-            if (self.selectedChannel.profile.isInLocal)
-            {
-                self.messageStreamingState = @"Camera is not accessible";
-            }
-            
-            break;
-        }
-        //self.mediaProcessStatus = 3;
-        
-        MediaPlayer::Instance()->setVideoSurface(_imageViewStreamer);
-        
-        //self.mediaProcessStatus = 4;
-        status = MediaPlayer::Instance()->prepare();
-        
-        if (status != NO_ERROR) // NOT OK
-        {
-            break;
-        }
-        
-        // Play anyhow
-        //self.mediaProcessStatus = 5;
-        status = MediaPlayer::Instance()->start();
-        
-        
-        if (status != NO_ERROR) // NOT OK
-        {
-            break;
-        }
-    }
-    while (false);
-    
-    NSLog(@"%s mediaProcessStatus: %d", __FUNCTION__, _mediaProcessStatus);
-    self.mediaProcessStatus = MEDIAPLAYER_STARTED;
-    
-    
-    
-    
-    
-    if (status == NO_ERROR)
-    {
-        [self handleMessage:MEDIA_PLAYER_STARTED
-                       ext1:0
-                       ext2:0];
+        NSLog(@"%s View is invisible or is in background mode. Ignoring.", __FUNCTION__);
     }
     else
     {
-        //Consider it's down and perform necessary action ..
-        [self handleMessage:MEDIA_ERROR_SERVER_DIED
-                       ext1:0
-                       ext2:0];
+        self.mediaProcessStatus = MEDIAPLAYER_SET_DATASOURCE;
+        NSLog(@"%s mediaProcessStatus: %d", __FUNCTION__, _mediaProcessStatus);
+        
+        do
+        {
+            if (url == nil || [url isEqualToString:@""])
+            {
+                break;
+            }
+            
+            status = MediaPlayer::Instance()->setDataSource([url UTF8String]);
+            
+            if (status != NO_ERROR) // NOT OK
+            {
+                NSLog(@"setDataSource  failed");
+                
+                if (self.selectedChannel.profile.isInLocal)
+                {
+                    self.messageStreamingState = @"Camera is not accessible";
+                }
+                
+                break;
+            }
+            //self.mediaProcessStatus = 3;
+            
+            MediaPlayer::Instance()->setVideoSurface(_imageViewStreamer);
+            
+            //self.mediaProcessStatus = 4;
+            status = MediaPlayer::Instance()->prepare();
+            
+            if (status != NO_ERROR) // NOT OK
+            {
+                break;
+            }
+            
+            // Play anyhow
+            //self.mediaProcessStatus = 5;
+            status = MediaPlayer::Instance()->start();
+            
+            
+            if (status != NO_ERROR) // NOT OK
+            {
+                break;
+            }
+        }
+        while (false);
+        
+        NSLog(@"%s mediaProcessStatus: %d", __FUNCTION__, _mediaProcessStatus);
+        self.mediaProcessStatus = MEDIAPLAYER_STARTED;
+        
+        
+        
+        
+        
+        if (status == NO_ERROR)
+        {
+            [self handleMessage:MEDIA_PLAYER_STARTED
+                           ext1:0
+                           ext2:0];
+        }
+        else
+        {
+            //Consider it's down and perform necessary action ..
+            [self handleMessage:MEDIA_ERROR_SERVER_DIED
+                           ext1:0
+                           ext2:0];
+        }
     }
-    
-    
 }
 
 - (void)prepareGoBackToCameraList:(id)sender
 {
-    [[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView goes back" withProperties:nil];
-    
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:@"Go back"
                                                      withLabel:@"Hubble back button item"
@@ -2084,7 +2033,6 @@ double _ticks = 0;
         [self performSelectorInBackground:@selector(closeRemoteTalkback) withObject:nil];
         [_audioOutStreamRemote disconnectFromAudioSocketRemote];
     }
-#if 1
     
     NSLog(@"%s _mediaProcessStatus: %d", __FUNCTION__, _mediaProcessStatus);
     
@@ -2103,48 +2051,26 @@ double _ticks = 0;
         [_jsonCommBlocked release];
     }
     
-    if (_mediaProcessStatus == 0)
+    if (_mediaProcessStatus == MEDIAPLAYER_NOT_INIT)
     {
         [self goBack];
     }
-    else if(_mediaProcessStatus == 1)
+    else if(_mediaProcessStatus == MEDIAPLAYER_SET_LISTENER)
     {
-        MediaPlayer::Instance()->sendInterrupt();
+        MediaPlayer::Instance()->setFFmpegInterrupt(true);
         [self stopStream];
         [self goBack];
     }
-    else if (_mediaProcessStatus == 2)
+    else if (_mediaProcessStatus == MEDIAPLAYER_SET_DATASOURCE)
     {
-        MediaPlayer::Instance()->sendInterrupt();
+        NSLog(@"%s", __FUNCTION__);
+        MediaPlayer::Instance()->setFFmpegInterrupt(true);
     }
-    else
+    else //MEDIAPLAYER_STARTED
     {
-        //MediaPlayer::Instance()->sendInterrupt();
         [self stopStream];
         [self goBack];
     }
-    
-#else
-    if (self.currentMediaStatus == 0 && MediaPlayer::Instance() == NULL) // Media player haven't start yet.
-    {
-        [self performSelector:@selector(goBackToCameraList)
-                   withObject:nil
-                   afterDelay:0.001];
-    }
-    else if( self.currentMediaStatus == MEDIA_INFO_HAS_FIRST_IMAGE ||
-            self.currentMediaStatus == MEDIA_PLAYER_STARTED       ||
-            ( MediaPlayer::Instance() != NULL))
-    {
-        NSLog(@"H264VC- prepareGoBackToCameraList - just sendInterrupt");
-        
-        MediaPlayer::Instance()->sendInterrupt();
-        [self goBackToCameraList];
-    }
-    else
-    {
-        [self goBackToCameraList];
-    }
-#endif
 }
 
 - (void)goBackToCameraList
@@ -2337,7 +2263,8 @@ double _ticks = 0;
 
 - (void)stopStream
 {
-    NSLog(@"Calling suspend() on thread: %@", [NSThread currentThread]);
+    NSLog(@"%s MainThread: %d", __FUNCTION__, [NSThread isMainThread]);
+    
     _timerStopStreamAfter30s = nil;
     @synchronized(self)
     {
@@ -3073,7 +3000,7 @@ double _ticks = 0;
                            NSLog(@"%s stage 1 takes %f seconds \n Start stage 2 \n %@", __FUNCTION__, diff, gaiActionTime);
                            self.timeStartingStageTwo = [NSDate date];
                            
-                           if (!userWantToCancel && !_returnFromPlayback && [UIApplication sharedApplication].applicationState == UIApplicationStateActive)
+                           if (!userWantToCancel && !_returnFromPlayback && [UIApplication sharedApplication].applicationState != UIApplicationStateBackground)
                            {
                                if (responseDict != nil)
                                {

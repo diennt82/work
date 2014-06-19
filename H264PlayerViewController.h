@@ -125,10 +125,10 @@
 #define GAI_ACTION(stage, time) [NSString stringWithFormat:@"Stage %d time %@ than %d second(s)", stage, time<GAI_MAX(stage)?@"less":@"greater", time<GAI_MIN(stage)?GAI_MIN(stage):(time<GAI_MIDIUM(stage)?GAI_MIDIUM(stage):GAI_MAX(stage))]
 
 //mediaProcessStatus values
-#define MEDIAPLAYER_NOT_INIT  0
-#define MEDIAPLAYER_SET_LISTENER 1
-#define MEDIAPLAYER_SET_DATASOURCE 2
-#define MEDIAPLAYER_STARTED 3
+#define MEDIAPLAYER_NOT_INIT        0
+#define MEDIAPLAYER_SET_LISTENER    1
+#define MEDIAPLAYER_SET_DATASOURCE  2
+#define MEDIAPLAYER_STARTED         3
 
 
 
@@ -324,7 +324,6 @@
 @property (nonatomic) BOOL disableAutorotateFlag;
 @property (nonatomic) BOOL enablePTT;
 @property (nonatomic, retain) NSString *stringStatePTT;
-@property (nonatomic) NSInteger numbersOfRemoteViewError;
 @property (nonatomic, retain) NSString *current_ssid;
 
 #ifdef SHOW_DEBUG_INFO
