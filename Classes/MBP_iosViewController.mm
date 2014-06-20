@@ -975,7 +975,7 @@
                             if ([obj2 isKindOfClass:[PlaybackViewController class]])
                             {
                                 PlaybackViewController *playbackViewController = (PlaybackViewController *)obj2;
-                                [playbackViewController stopStream:nil];
+                                [playbackViewController closePlayBack:nil];
                             }
                         }
                         

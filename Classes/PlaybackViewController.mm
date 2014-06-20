@@ -29,8 +29,6 @@
 @property (nonatomic) double duration;
 @property (nonatomic) int64_t startPositionMovieFile;
 @property (nonatomic) double timeStarting;
-@property (nonatomic) BOOL shouldRestartProcess;
-@property (nonatomic) NSInteger mediaCurrentState;
 
 @end
 
@@ -79,8 +77,6 @@
     self.startPositionMovieFile = 0;
     self.duration = 1;
     self.timeStarting = 0;
-    self.shouldRestartProcess = FALSE;
-    self.mediaCurrentState = 0;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -97,7 +93,12 @@
                                              selector: @selector(playbackEnteredBackground)
                                                  name: UIApplicationDidEnterBackgroundNotification
                                                object: nil];
-    
+#if 1
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(playbackWillEnterForeground)
+                                                 name: UIApplicationWillEnterForegroundNotification
+                                               object: nil];
+#else
     [[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(playbackBecomeInActive)
                                                  name: UIApplicationWillResignActiveNotification
@@ -107,6 +108,7 @@
                                              selector: @selector(playbackBecomeActive)
                                                  name: UIApplicationDidBecomeActiveNotification
                                                object: nil];
+#endif
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -119,17 +121,32 @@
 
 -(void) viewWillDisappear:(BOOL)animated
 {
+    NSLog(@"%s", __FUNCTION__);
+    
     [self.navigationController.navigationBar setHidden:NO];
     [super viewWillDisappear:animated];
-    NSLog(@"%s viewWillDisappear: ", __FUNCTION__);
 }
 
 #pragma mark - NSNotificationCenter
 
 - (void)playbackEnteredBackground
 {
-    NSLog(@"%s mediaCurrentState:%d", __FUNCTION__, _mediaCurrentState);
 #if 1
+    NSLog(@"%s isPause:%d", __FUNCTION__, _isPause);
+    
+    if(MediaPlayer::Instance()->isPlaying())
+    {
+        self.isPause = YES;
+        MediaPlayer::Instance()->pause();
+        self.ib_playPlayBack.selected = YES;
+    }
+    else
+    {
+        NSLog(@"%s Already pause.", __FUNCTION__);
+    }
+#else
+    NSLog(@"%s mediaCurrentState:%d", __FUNCTION__, _mediaCurrentState);
+
     if (self.mediaCurrentState == MEDIA_PLAYER_STARTED)
     {
         NSLog(@"Playback - playbackEnteredBackground - IF()");
@@ -152,39 +169,25 @@
     {
         NSLog(@"Playback - playbackEnteredBackground - else{}");
     }
-#else
-    if (_playbackStreamer != NULL)
-    {
-        if (self.mediaCurrentState == MEDIA_PLAYER_STARTED)
-        {
-            NSLog(@"H264VC - handleEnteredBackground - IF()");
-            
-            if (_isPause)
-            {
-                self.isPause = NO;
-                _playbackStreamer->resume();
-                self.ib_playPlayBack.selected = NO;
-            }
-            
-            [self stopStream:nil];
-        }
-        else
-        {
-            NSLog(@"H264VC - handleEnteredBackground - else if(h264Streamer != nil)");
-            _playbackStreamer->sendInterrupt();
-        }
-    }
-#endif
     
     if (self.list_refresher != nil)
     {
         [self.list_refresher invalidate];
     }
+#endif
 }
+
+#if 1
+- (void)playbackWillEnterForeground
+{
+    NSLog(@"%s ", __FUNCTION__);
+}
+#else
 -(void) playbackBecomeInActive
 {
     _shouldRestartProcess = NO;
 }
+
 - (void)playbackBecomeActive
 {
     NSLog(@"%s _shouldRestartProcess:%d", __FUNCTION__, _shouldRestartProcess);
@@ -200,6 +203,7 @@
         [self becomeActive];
     }
 }
+#endif
 
 #pragma mark - PLAY VIDEO
 - (void)becomeActive
@@ -221,8 +225,6 @@
     listener->updateFinalClipCount(self.clips.count);
 #else
     
-    self.shouldRestartProcess = FALSE;
-    self.mediaCurrentState = -1;
     _clips = [[NSMutableArray alloc]init];
     //Decide whether or not to start the background polling
     
@@ -252,11 +254,11 @@
         self.urlVideo = self.clip_info.urlFile;
     }
 #endif
-    if ([UIApplication sharedApplication].applicationState != UIApplicationStateActive)
-    {
-        NSLog(@"%s. Inactive mode", __FUNCTION__);
-    }
-    else
+//    if ([UIApplication sharedApplication].applicationState != UIApplicationStateActive)
+//    {
+//        NSLog(@"%s. Inactive mode", __FUNCTION__);
+//    }
+//    else
     {
         [self performSelector:@selector(startStream)
                    withObject:nil
@@ -266,76 +268,15 @@
 
 -(void) startStream
 {
-
-
-    self.shouldRestartProcess = TRUE;
-    
     MediaPlayer::Instance()->setListener(listener);
     MediaPlayer::Instance()->setPlaybackAndSharedCam(true, false);
     [self performSelectorInBackground:@selector(startStream_bg) withObject:nil];
-
 }
 
 - (void)startStream_bg
 {
     status_t status = !NO_ERROR;
     NSString * url = self.urlVideo;
-#if 0
-    status = _playbackStreamer->setDataSource([url UTF8String]);
-    printf("setDataSource return: %d\n", status);
-    
-    if (status != NO_ERROR) // NOT OK
-    {
-        printf("setDataSource error: %d\n", status);
-        [self handleMessage:MEDIA_ERROR_SERVER_DIED
-                       ext1:0
-                       ext2:0];
-        return;
-    }
-    
-    _playbackStreamer->setVideoSurface(self.imageVideo);
-    
-    NSLog(@"Prepare the player");
-    status =  _playbackStreamer->prepare();
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.imageVideo setAlpha:1];
-        [self.activityIndicator setHidden:YES];
-        self.view.userInteractionEnabled = YES;
-        self.ib_myOverlay.hidden = NO;
-        [self.ib_sliderPlayBack setMinimumTrackTintColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"video_progress_green"]]];
-        [self watcher];
-    });
-    
-    printf("prepare return: %d\n", status);
-    
-    if (status != NO_ERROR) // NOT OK
-    {
-        printf("prepare() error: %d\n", status);
-        exit(1);
-    }
-    
-    status =  _playbackStreamer->start();
-    
-    printf("start() return: %d\n", status);
-    
-    if (status != NO_ERROR) // NOT OK
-    {
-        printf("start() error: %d\n", status);
-        [self handleMessage:MEDIA_ERROR_SERVER_DIED
-                       ext1:0
-                       ext2:0];
-        return;
-    }
-    
-    if (status == NO_ERROR)
-    {
-        [self handleMessage:MEDIA_PLAYER_STARTED
-                       ext1:0
-                       ext2:0];
-    }
-#else
-    self.mediaCurrentState = 0;
     status = MediaPlayer::Instance()->setDataSource([url UTF8String]);
     
     NSLog(@"%s status: %d", __FUNCTION__, status);
@@ -361,6 +302,7 @@
         self.view.userInteractionEnabled = YES;
         self.ib_myOverlay.hidden = NO;
         [self.ib_sliderPlayBack setMinimumTrackTintColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"video_progress_green"]]];
+        [self.ib_sliderPlayBack setValue:0];
         [self watcher];
     });
     
@@ -391,7 +333,6 @@
                        ext1:0
                        ext2:0];
     }
-#endif
 }
 
 -(void) handleMessage:(int) msg ext1: (int) ext1 ext2:(int) ext2
@@ -401,8 +342,16 @@
         case MEDIA_PLAYER_PREPARED:
             break;
         case MEDIA_PLAYER_STARTED:
+        {
             NSLog(@"%s msg: MEDIA_PLAYER_STARTED", __FUNCTION__);
-            self.mediaCurrentState = msg;
+            
+            if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground)
+            {
+                self.isPause = YES;
+                MediaPlayer::Instance()->pause();
+                self.ib_playPlayBack.selected = YES;
+            }
+        }
             break;
             
         case MEDIA_ERROR_SERVER_DIED:
@@ -413,6 +362,7 @@
             if (self.userWantToBack == FALSE && [UIApplication sharedApplication].applicationState == UIApplicationStateActive)
             {
                 NSLog(@"%s call goBackToPlayList", __FUNCTION__);
+                
                 [self goBackToPlayList];
             }
             else
@@ -438,7 +388,7 @@
 - (IBAction)stopStream:(id) sender
 {
     NSLog(@"Stop stream start ");
-#if 1
+
     if(MediaPlayer::Instance()->isPlaying())
     {
         MediaPlayer::Instance()->suspend();
@@ -451,29 +401,7 @@
         MediaPlayer::Instance()->stop();
         MediaPlayer::Instance()->setListener(nil);
     }
-#else
-    if (_playbackStreamer != NULL)
-    {
-        NSLog(@"Stop stream _playbackStreamer != NULL");
-        
-        if(_playbackStreamer->isPlaying())
-        {
-            _playbackStreamer->suspend();
-            _playbackStreamer->stop();
-            //_playbackStreamer->setListener(nil);
-            delete _playbackStreamer;
-            _playbackStreamer = NULL;
-        }
-        else // set Data source failed!
-        {
-            _playbackStreamer->suspend();
-            _playbackStreamer->stop();
-            _playbackStreamer->setListener(nil);
-            delete _playbackStreamer;
-            _playbackStreamer = NULL;
-        }
-    }
-#endif
+
     NSLog(@"Stop stream end");
 }
 
@@ -524,9 +452,10 @@
 }
 
 
-
 - (void)goBackToPlayList
 {
+    NSLog(@"%s", __FUNCTION__);
+    
     self.userWantToBack = TRUE;
     self.ib_playPlayBack.enabled = NO;
     
@@ -553,27 +482,7 @@
         
         [[UIApplication sharedApplication] setStatusBarHidden:NO
                                                 withAnimation:UIStatusBarAnimationNone];
-#if 1
         [self.navigationController popViewControllerAnimated:YES];
-#else
-        NotifViewController * vc = [self.navigationController.viewControllers objectAtIndex:(self.navigationController.viewControllers.count - 2)];
-        
-        NSLog(@"Playback with nav controller pop all:%@", vc);
-        
-        if ([vc isKindOfClass:[NotifViewController class]])
-        {
-            NSLog(@"Playback with nav controller pop to NotifViewController");
-            //[self.navigationController popToRootViewControllerAnimated:NO];
-            [self.navigationController popViewControllerAnimated:NO];
-            [vc ignoreTouchAction:nil];
-        }
-        else // Timeline
-        {
-            //id tmp = [self.navigationController.viewControllers objectAtIndex:2];
-            //NSLog(@"%s goBackToPlayList - vc: %@", __FUNCTION__, NSStringFromClass([tmp class]));
-            [self.navigationController popViewControllerAnimated:YES];
-        }
-#endif
     }
     else
     {
@@ -826,7 +735,7 @@
 - (IBAction)playVideo:(id)sender
 {
     NSLog(@"%s wants to pause: %d", __FUNCTION__, _isPause);
-#if 1
+
     if (_isPause)
     {
         self.isPause = NO;
@@ -840,24 +749,6 @@
         MediaPlayer::Instance()->pause();
         self.ib_playPlayBack.selected = YES;
     }
-#else
-    if (_playbackStreamer)
-    {
-        if (_isPause)
-        {
-            self.isPause = NO;
-            _playbackStreamer->resume();
-            [self watcher];
-            self.ib_playPlayBack.selected = NO;
-        }
-        else if(_playbackStreamer->isPlaying())
-        {
-            self.isPause = YES;
-            _playbackStreamer->pause();
-            self.ib_playPlayBack.selected = YES;
-        }
-    }
-#endif
 }
 
 

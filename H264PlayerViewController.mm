@@ -1225,7 +1225,7 @@ double _ticks = 0;
 
 - (void)stopStreamToPlayback
 {
-    NSLog(@"%s - currentMediaStatus: %d, h264Streamer: %p", __FUNCTION__, _currentMediaStatus, h264Streamer);
+    NSLog(@"%s _mediaProcessStatus: %d, isMT: %d", __FUNCTION__, _mediaProcessStatus, [NSThread isMainThread]);
     self.returnFromPlayback = TRUE;
     self.h264StreamerIsInStopped = TRUE;
     self.selectedChannel.stream_url = nil;
@@ -1236,6 +1236,7 @@ double _ticks = 0;
     {
         [_audioOutStreamRemote disconnectFromAudioSocketRemote];
     }
+    
     if (_mediaProcessStatus == MEDIAPLAYER_NOT_INIT)
     {
     }
@@ -1249,8 +1250,8 @@ double _ticks = 0;
     {
         NSLog(@"%s", __FUNCTION__);
         
-        MediaPlayer::Instance()->sendInterrupt();
-        //MediaPlayer::Instance()->setFFmpegInterrupt(true);
+        //MediaPlayer::Instance()->sendInterrupt();
+        MediaPlayer::Instance()->setFFmpegInterrupt(true);
     }
     else //MEDIAPLAYER_STARTED
     {
