@@ -965,6 +965,10 @@
     {
         if (indexPath.section == 0)
         {
+            if(self.isEventAlready)
+            {
+                return tableView.frame.size.height;
+            }
             return 77;
         }
 #if 1
@@ -989,6 +993,10 @@
                 {
                     return 77;
                 }
+            }
+            else if(_events.count==0)
+            {
+                return tableView.frame.size.height;
             }
             
             return 44;
@@ -1145,14 +1153,20 @@
     }
     else if (_events == nil || _events.count == 0)
     {
-        static NSString *CellIdentifier = @"Cell";
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        //static NSString *CellIdentifier = @"Cell";
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:nil];
         if (cell == nil) {
-            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil] autorelease];
         }
         
         // Configure the cell...
-        cell.textLabel.text = self.stringIntelligentMessage;
+        CGRect lframe = cell.textLabel.frame;
+        lframe = CGRectMake(0, 0, SCREEN_WIDTH, tableView.frame.size.height);
+        UILabel *lbl = [[UILabel alloc] initWithFrame:lframe];
+        lbl.text = self.stringIntelligentMessage;
+        lbl.textAlignment = NSTextAlignmentCenter;
+        [cell addSubview:lbl];
+        [lbl release];
         
         return cell;
     }
