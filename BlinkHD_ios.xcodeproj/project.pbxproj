@@ -69,6 +69,7 @@
 		5EAFC058192A0CB9001FB3AA /* CameraDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EAFC057192A0CB9001FB3AA /* CameraDetailCell.m */; };
 		5EAFC05A192A0D2D001FB3AA /* CameraDetailCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5EAFC059192A0D2D001FB3AA /* CameraDetailCell.xib */; };
 		5EAFC05E192A3DCA001FB3AA /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EAFC05D192A3DCA001FB3AA /* MBProgressHUD.m */; };
+		5EB6400C1954390600B280A1 /* focus661-black@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5EB6400B1954390600B280A1 /* focus661-black@2x.png */; };
 		5EBA45661940598000695155 /* MBP_iosViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5EBA45651940598000695155 /* MBP_iosViewController.xib */; };
 		5EBA458819405BEA00695155 /* Account_ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5EBA456819405BEA00695155 /* Account_ViewController.xib */; };
 		5EBA458919405BEA00695155 /* Account_ViewController_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5EBA456919405BEA00695155 /* Account_ViewController_ipad.xib */; };
@@ -862,6 +863,7 @@
 		5EAFC059192A0D2D001FB3AA /* CameraDetailCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CameraDetailCell.xib; sourceTree = "<group>"; };
 		5EAFC05C192A3DCA001FB3AA /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
 		5EAFC05D192A3DCA001FB3AA /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
+		5EB6400B1954390600B280A1 /* focus661-black@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "focus661-black@2x.png"; sourceTree = "<group>"; };
 		5EBA45651940598000695155 /* MBP_iosViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MBP_iosViewController.xib; sourceTree = "<group>"; };
 		5EBA456819405BEA00695155 /* Account_ViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Account_ViewController.xib; sourceTree = "<group>"; };
 		5EBA456919405BEA00695155 /* Account_ViewController_ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Account_ViewController_ipad.xib; sourceTree = "<group>"; };
@@ -2795,6 +2797,7 @@
 		8B95072F18C9960D006D4945 /* BLE */ = {
 			isa = PBXGroup;
 			children = (
+				5EB6400B1954390600B280A1 /* focus661-black@2x.png */,
 				8B95073018C9960D006D4945 /* BLE_camera_search@2x.png */,
 				8B95073118C9960D006D4945 /* BLE_camera_small@2x.png */,
 				8B95073218C9960D006D4945 /* BLE_pair.png */,
@@ -4148,6 +4151,7 @@
 				8B99DB9318B8759A0009612A /* Default-568h@2x.png in Resources */,
 				8B299F9A18AF500900D36BE5 /* video_grey_land@2x.png in Resources */,
 				A13AD81218D008490009F0E5 /* DoNotDisturbCell.xib in Resources */,
+				5EB6400C1954390600B280A1 /* focus661-black@2x.png in Resources */,
 				8B29A08818AF500A00D36BE5 /* video_progress_green.png in Resources */,
 				8B9ABB6B18A9FDEC0079F4A3 /* RegistrationViewController.xib in Resources */,
 				8B29A02918AF500900D36BE5 /* login_line@2x.png in Resources */,

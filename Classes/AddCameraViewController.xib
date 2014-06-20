@@ -42,7 +42,7 @@
                     <rect key="frame" x="36" y="213" width="110" height="115"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
-                    <state key="normal" image="camera_1.png">
+                    <state key="normal" image="focus661-black.png">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
@@ -61,7 +61,7 @@
                     </connections>
                 </button>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Focus 66" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Lgb-KC-oHF">
-                    <rect key="frame" x="45" y="334" width="93" height="21"/>
+                    <rect key="frame" x="43" y="334" width="93" height="21"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="16"/>
                     <color key="textColor" red="0.062745098040000002" green="0.062745098040000002" blue="0.062745098040000002" alpha="1" colorSpace="calibratedRGB"/>
@@ -93,9 +93,9 @@
         </view>
     </objects>
     <resources>
-        <image name="camera_1.png" width="110" height="115"/>
         <image name="camera_2.png" width="110" height="115"/>
         <image name="cancel_btn.png" width="295" height="50"/>
+        <image name="focus661-black.png" width="110" height="115"/>
         <image name="hubble_logo.png" width="120" height="30"/>
         <image name="setup_progress_blue.png" width="8" height="8"/>
         <image name="setup_progress_grey.png" width="8" height="8"/>
