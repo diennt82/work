@@ -151,6 +151,15 @@ double _ticks = 0;
                                              selector: @selector(h264_HandleWillEnterForeground)
                                                  name: UIApplicationWillEnterForegroundNotification
                                                object: nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(h264_HandleInactivePushes)
+                                                 name: PUSH_NOTIFY_BROADCAST_WHILE_APP_INACTIVE
+                                               object: nil];
+    
+
+    
+    
 #else
     // Do any additional setup after loading the view.
 	[[NSNotificationCenter defaultCenter] addObserver: self
@@ -1339,6 +1348,19 @@ double _ticks = 0;
 }
 
 #if 1
+
+//This is triggered if app has just received a push notification
+//   from an inactive stage : for eg: just comeback from background
+//   in this case, we should stop streaming right away.
+-(void)h264_HandleInactivePushes
+{
+    NSLog(@"%s enter >>>>>>>>>>>>>>>>>> call prepareGoBackToCameraList ", __FUNCTION__);
+
+    [self prepareGoBackToCameraList:nil];
+}
+
+
+
 - (void)h264_HandleDidEnterBackground
 {
     NSLog(@"%s userWantToCancel:%d, returnFromPlayback:%d, mediaProcessStatus: %d, _timerBufferingTimeout:%p", __FUNCTION__, userWantToCancel, _returnFromPlayback, _mediaProcessStatus, _timerBufferingTimeout);

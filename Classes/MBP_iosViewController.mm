@@ -1775,6 +1775,7 @@
     self.progressView.hidden = NO;
     
     
+    
     if ([self.camAlert.alertType isEqualToString:ALERT_TYPE_MOTION])
     {
         

@@ -13,6 +13,7 @@
 #import <MonitorCommunication/MonitorCommunication.h>
 #import <AudioToolbox/AudioToolbox.h>
 
+#import "MBP_iosAppDelegate.h"
 #import "PlaylistInfo.h"
 #import "PlaybackViewController.h"
 #import "PlaylistCell.h"
