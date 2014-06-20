@@ -1241,21 +1241,21 @@ double _ticks = 0;
     }
     else if(_mediaProcessStatus == MEDIAPLAYER_SET_LISTENER)
     {
-        //MediaPlayer::Instance()->sendInterrupt();
-        MediaPlayer::Instance()->setFFmpegInterrupt(true);
+        MediaPlayer::Instance()->sendInterrupt();
+        //MediaPlayer::Instance()->setFFmpegInterrupt(true);
         [self stopStream];
     }
     else if (_mediaProcessStatus == MEDIAPLAYER_SET_DATASOURCE)
     {
         NSLog(@"%s", __FUNCTION__);
         
-        //MediaPlayer::Instance()->sendInterrupt();
-        MediaPlayer::Instance()->setFFmpegInterrupt(true);
+        MediaPlayer::Instance()->sendInterrupt();
+        //MediaPlayer::Instance()->setFFmpegInterrupt(true);
     }
     else //MEDIAPLAYER_STARTED
     {
-        //MediaPlayer::Instance()->sendInterrupt();
-        MediaPlayer::Instance()->setFFmpegInterrupt(true);
+        MediaPlayer::Instance()->sendInterrupt();
+        //MediaPlayer::Instance()->setFFmpegInterrupt(true);
         [self stopStream];
     }
     
@@ -2115,14 +2115,16 @@ double _ticks = 0;
     }
     else if(_mediaProcessStatus == MEDIAPLAYER_SET_LISTENER)
     {
-        MediaPlayer::Instance()->setFFmpegInterrupt(true);
+        //MediaPlayer::Instance()->setFFmpegInterrupt(true);
+        MediaPlayer::Instance()->sendInterrupt();
         [self stopStream];
         [self goBack];
     }
     else if (_mediaProcessStatus == MEDIAPLAYER_SET_DATASOURCE)
     {
-        NSLog(@"%s", __FUNCTION__);
-        MediaPlayer::Instance()->setFFmpegInterrupt(true);
+        NSLog(@"%s Waiting for response from Media lib.", __FUNCTION__);
+        //MediaPlayer::Instance()->setFFmpegInterrupt(true);
+        MediaPlayer::Instance()->sendInterrupt();
     }
     else //MEDIAPLAYER_STARTED
     {
