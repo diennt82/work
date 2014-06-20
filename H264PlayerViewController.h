@@ -332,6 +332,7 @@
 #endif
 
 @property (nonatomic) UIBackgroundTaskIdentifier backgroundTask;
+@property (nonatomic) BOOL shouldRestartProcessing;
 
 
 - (void)scan_done:(NSArray *) _scan_results;

@@ -1380,13 +1380,14 @@ double _ticks = 0;
     }
     else if(_mediaProcessStatus == MEDIAPLAYER_SET_LISTENER)
     {
-        //MediaPlayer::Instance()->sendInterrupt();
-        MediaPlayer::Instance()->setFFmpegInterrupt(true);
+        MediaPlayer::Instance()->sendInterrupt();
+        //MediaPlayer::Instance()->setFFmpegInterrupt(true);
         [self stopStream];
     }
     else if (_mediaProcessStatus == MEDIAPLAYER_SET_DATASOURCE)
     {
-        MediaPlayer::Instance()->setFFmpegInterrupt(true);
+        MediaPlayer::Instance()->sendInterrupt();
+        //MediaPlayer::Instance()->setFFmpegInterrupt(true);
         
         self.backgroundTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
             NSLog(@"Background handler called. Not running background tasks anymore.");
@@ -1419,7 +1420,7 @@ double _ticks = 0;
 
 - (void)h264_HandleWillEnterForeground
 {
-    NSLog(@"%s wants to cancel: %d, rtn frm Playback: %d", __FUNCTION__, userWantToCancel, _returnFromPlayback);
+    NSLog(@"%s userWantToCancel:%d, returnFromPlayback:%d, mediaProcessStatus: %d, _shouldRestartProcessing:%d, UIBackgroundTaskInvalid:%d", __FUNCTION__, userWantToCancel, _returnFromPlayback, _mediaProcessStatus, _shouldRestartProcessing, UIBackgroundTaskInvalid);
     
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:@"Become Active"
@@ -1456,10 +1457,14 @@ double _ticks = 0;
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     BOOL cancelBecauseOfPn = [userDefaults boolForKey:HANDLE_PN];
+    
     if (cancelBecauseOfPn == TRUE)
     {
-        NSLog(@"set user = true");
+        NSLog(@"&(*&(&(*&(& set user = true && CLEAR it");
         userWantToCancel = TRUE;
+        [userDefaults removeObjectForKey:HANDLE_PN];
+        [userDefaults synchronize];
+        
         return;
     }
     
@@ -1469,34 +1474,30 @@ double _ticks = 0;
         if (_mediaProcessStatus == MEDIAPLAYER_NOT_INIT)
         {
             NSLog(@"%s Hanle exception here!", __FUNCTION__);
+            
+            if (_shouldRestartProcessing)
+            {
+                [self scanCamera];
+            }
+            else
+            {
+                NSLog(@"%s Do not restart processing", __FUNCTION__);
+            }
         }
         else
         {
             if (self.backgroundTask != UIBackgroundTaskInvalid)
             {
-                 MediaPlayer::Instance()->setFFmpegInterrupt(true);
+                ///MediaPlayer::Instance()->setFFmpegInterrupt(true);
+                NSLog(@"%s Waiting for stop streaming process.", __FUNCTION__);
+                MediaPlayer::Instance()->sendInterrupt();
             }
-            
-            NSInteger count = 0;
-            
-            while (_backgroundTask != UIBackgroundTaskInvalid)
+            else
             {
-                count++;
-                
-                if (count == 0 || count == 99999999)
-                {
-                    NSLog(@"%s Waiting for stop streaming process.", __FUNCTION__);
-                    count = 0;
-                }
-                
-                //NSLog(@"%s endBackgroundTask", __FUNCTION__);
-                //[self stopStream];
-                //[[UIApplication sharedApplication] endBackgroundTask:self.backgroundTask];
-                //self.backgroundTask = UIBackgroundTaskInvalid;
+                [self scanCamera];
             }
-            
-            [self scanCamera];
         }
+
     }
 }
 #else
@@ -1988,11 +1989,11 @@ double _ticks = 0;
                     self.messageStreamingState = @"Camera is not accessible";
                 }
                 
-                if (self.backgroundTask != UIBackgroundTaskInvalid)
-                {
-                    [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTask];
-                    self.backgroundTask = UIBackgroundTaskInvalid;
-                }
+//                if (self.backgroundTask != UIBackgroundTaskInvalid)
+//                {
+//                    [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTask];
+//                    self.backgroundTask = UIBackgroundTaskInvalid;
+//                }
                 
                 break;
             }
@@ -3018,10 +3019,12 @@ double _ticks = 0;
 #ifdef SHOW_DEBUG_INFO
                            _viewVideoIn = @"R";
 #endif
+                           self.shouldRestartProcessing = FALSE;
                            //responseDict = [jsonComm createSessionBlockedWithRegistrationId:mac
                            responseDict = [_jsonCommBlocked createSessionBlockedWithRegistrationId:stringUDID
                                                                                      andClientType:@"BROWSER"
                                                                                          andApiKey:apiKey];
+                           self.shouldRestartProcessing = TRUE;
                            NSLog(@"USE RELAY TO VIEW- userWantsToCancel:%d, returnFromPlayback:%d, responsed: %@", userWantToCancel, _returnFromPlayback, responseDict);
                            
                            NSTimeInterval diff = [[NSDate date] timeIntervalSinceDate:dateStage1];
