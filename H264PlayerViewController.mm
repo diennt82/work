@@ -119,6 +119,7 @@ double _ticks = 0;
     self.customIndicator.image = [UIImage imageNamed:@"loader_a"];
     
     NSLog(@"camera model is :%@", self.cameraModel);
+    self.backgroundTask = UIBackgroundTaskInvalid;
     [self becomeActive];
 }
 
@@ -1465,9 +1466,37 @@ double _ticks = 0;
     //this func gets call even after app enter inactive state -> we don't stop player then..thus do not restart player here
     if ( _selectedChannel.stopStreaming == TRUE)
     {
-        //[self checkOrientation];
-        
-        [self scanCamera];
+        if (_mediaProcessStatus == MEDIAPLAYER_NOT_INIT)
+        {
+            NSLog(@"%s Hanle exception here!", __FUNCTION__);
+        }
+        else
+        {
+            if (self.backgroundTask != UIBackgroundTaskInvalid)
+            {
+                 MediaPlayer::Instance()->setFFmpegInterrupt(true);
+            }
+            
+            NSInteger count = 0;
+            
+            while (_backgroundTask != UIBackgroundTaskInvalid)
+            {
+                count++;
+                
+                if (count == 0 || count == 99999999)
+                {
+                    NSLog(@"%s Waiting for stop streaming process.", __FUNCTION__);
+                    count = 0;
+                }
+                
+                //NSLog(@"%s endBackgroundTask", __FUNCTION__);
+                //[self stopStream];
+                //[[UIApplication sharedApplication] endBackgroundTask:self.backgroundTask];
+                //self.backgroundTask = UIBackgroundTaskInvalid;
+            }
+            
+            [self scanCamera];
+        }
     }
 }
 #else
@@ -1957,6 +1986,12 @@ double _ticks = 0;
                 if (self.selectedChannel.profile.isInLocal)
                 {
                     self.messageStreamingState = @"Camera is not accessible";
+                }
+                
+                if (self.backgroundTask != UIBackgroundTaskInvalid)
+                {
+                    [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTask];
+                    self.backgroundTask = UIBackgroundTaskInvalid;
                 }
                 
                 break;
