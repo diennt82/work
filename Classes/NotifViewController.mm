@@ -299,6 +299,7 @@
 
 - (void)getEventSnapshot_bg
 {
+    NSLog(@"%s Waiting for checking event's url", __FUNCTION__);
     //2013-12-20 20:10:18 (yyyy-MM-dd HH:mm:ss).
     // eventcode: 44334C7FA03C_04_20140310101412000
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -317,7 +318,7 @@
                                                                            size:nil
                                                                          apiKey:apiKey];
     
-    NSLog(@"Notif - responseDict: %@", responseDict);
+    //NSLog(@"Notif - responseDict: %@", responseDict);
     
     if (responseDict != nil)
     {

@@ -984,7 +984,7 @@
                         if ([obj isKindOfClass:[H264PlayerViewController class]])
                         {
                             H264PlayerViewController * h264PlayerViewController = (H264PlayerViewController *) obj;
-                            [h264PlayerViewController goBackToCameraList];
+                            [h264PlayerViewController prepareGoBackToCameraList:nil];
                         }
 					}
                     

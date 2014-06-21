@@ -15,7 +15,7 @@
 #import <MessageUI/MFMailComposeViewController.h>
 
 
-#define _push_dev_token @"PUSH_NOTIFICATION_DEVICE_TOKEN"
+//#define _push_dev_token @"PUSH_NOTIFICATION_DEVICE_TOKEN"
 #define PUSH_NOTIFY_BROADCAST_WHILE_APP_INACTIVE @"PUSH_NOTIFICATION_RECEIVED"
 
 

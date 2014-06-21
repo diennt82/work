@@ -16,6 +16,7 @@
 #import <objc/message.h>
 #import "TimelineDatabase.h"
 #import "MBProgressHUD.h"
+#import "MBP_iosAppDelegate.h"
 
 #define START 0
 #define END   100.0
@@ -27,7 +28,6 @@
 
 @property (nonatomic) BOOL isPause;
 @property (nonatomic) double duration;
-@property (nonatomic) int64_t startPositionMovieFile;
 @property (nonatomic) double timeStarting;
 
 @end
@@ -74,7 +74,6 @@
     singleTap.numberOfTapsRequired = 1;
     singleTap.numberOfTouchesRequired = 1;
     [self.view addGestureRecognizer:singleTap];
-    self.startPositionMovieFile = 0;
     self.duration = 1;
     self.timeStarting = 0;
 }
@@ -97,6 +96,10 @@
     [[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(playbackWillEnterForeground)
                                                  name: UIApplicationWillEnterForegroundNotification
+                                               object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(playbackInactivePushes)
+                                                 name: PUSH_NOTIFY_BROADCAST_WHILE_APP_INACTIVE
                                                object: nil];
 #else
     [[NSNotificationCenter defaultCenter] addObserver: self
@@ -182,6 +185,13 @@
 {
     NSLog(@"%s ", __FUNCTION__);
 }
+
+- (void)playbackInactivePushes
+{
+    NSLog(@"%s excute call closePlayback function", __FUNCTION__);
+    
+    [self closePlayBack:nil];
+}
 #else
 -(void) playbackBecomeInActive
 {
@@ -254,16 +264,9 @@
         self.urlVideo = self.clip_info.urlFile;
     }
 #endif
-//    if ([UIApplication sharedApplication].applicationState != UIApplicationStateActive)
-//    {
-//        NSLog(@"%s. Inactive mode", __FUNCTION__);
-//    }
-//    else
-    {
-        [self performSelector:@selector(startStream)
-                   withObject:nil
-                   afterDelay:0.1];
-    }
+    [self performSelector:@selector(startStream)
+               withObject:nil
+               afterDelay:0.1];
 }
 
 -(void) startStream
@@ -387,22 +390,34 @@
 
 - (IBAction)stopStream:(id) sender
 {
+    self.userWantToBack = TRUE;
+    self.ib_playPlayBack.enabled = NO;
+    
     NSLog(@"Stop stream start ");
 
     if(MediaPlayer::Instance()->isPlaying())
     {
+        NSLog(@"%s isPlaying", __FUNCTION__);
+        MediaPlayer::Instance()->setListener(nil);
         MediaPlayer::Instance()->suspend();
         MediaPlayer::Instance()->stop();
-        MediaPlayer::Instance()->setListener(nil);
     }
     else // set Data source failed!
     {
+        NSLog(@"%s has not played yet", __FUNCTION__);
+        MediaPlayer::Instance()->setListener(nil);
         MediaPlayer::Instance()->suspend();
         MediaPlayer::Instance()->stop();
-        MediaPlayer::Instance()->setListener(nil);
     }
 
     NSLog(@"Stop stream end");
+    
+    if (self.list_refresher != nil)
+    {
+        [self.list_refresher invalidate];
+    }
+    
+     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 #pragma mark - FONT
@@ -456,17 +471,7 @@
 {
     NSLog(@"%s", __FUNCTION__);
     
-    self.userWantToBack = TRUE;
-    self.ib_playPlayBack.enabled = NO;
-    
     [self stopStream:nil];
-    
-    if (self.list_refresher != nil)
-    {
-        [self.list_refresher invalidate];
-    }
-    
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
     
     if (self.navigationController != nil)
     {
@@ -718,8 +723,10 @@
 
 - (IBAction)closePlayBack:(id)sender
 {
-    //handle remove all callback, notification here
-    //stop handle method watcher
+    /*
+     * This function maybe be called from here --> sender is the close button.
+     * This function maybe be called from push notification --> sender is nil.
+     */
     
     [NSObject cancelPreviousPerformRequestsWithTarget:self
                                              selector:@selector(watcher)
@@ -729,7 +736,15 @@
         MediaPlayer::Instance()->resume();
     }
     
-    [self goBackToPlayList];
+    if (sender)
+    {
+        [self goBackToPlayList];
+    }
+    else
+    {
+        [self stopStream:nil];
+        [self.navigationController popToRootViewControllerAnimated:NO];
+    }
 }
 
 - (IBAction)playVideo:(id)sender

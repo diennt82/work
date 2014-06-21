@@ -340,6 +340,7 @@
 
 -(void) handleMessage:(int) msg ext1: (int) ext1 ext2:(int) ext2;
 - (void)goBackToCameraList;
+- (void)prepareGoBackToCameraList:(id)sender;
 
 
 - (void)centerScrollViewContents;
