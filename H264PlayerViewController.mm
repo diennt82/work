@@ -141,6 +141,17 @@ double _ticks = 0;
                                                     withAction:@"viewWillAppear"
                                                      withLabel:nil
                                                      withValue:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(h264_HandleInactivePushes)
+                                                 name: PUSH_NOTIFY_BROADCAST_WHILE_APP_INACTIVE
+                                               object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(h264_HandleActivePushes)
+                                                 name: PUSH_NOTIFY_BROADCAST_WHILE_APP_INVIEW
+                                               object: nil];
+    
+    
 #if 1
     [[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(h264_HandleDidEnterBackground)
@@ -152,11 +163,7 @@ double _ticks = 0;
                                                  name: UIApplicationWillEnterForegroundNotification
                                                object: nil];
     
-    [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(h264_HandleInactivePushes)
-                                                 name: PUSH_NOTIFY_BROADCAST_WHILE_APP_INACTIVE
-                                               object: nil];
-    
+   
 
     
     
@@ -1347,7 +1354,23 @@ double _ticks = 0;
     }
 }
 
-#if 1
+/*
+  This is triggered if app has just received a push notification 
+ AND it is from the same camera being view at the moment
+  we will try to re-load the timeline to reflect this new event
+ */
+
+-(void) h264_HandleActivePushes
+{
+    NSLog(@"%s enter >>>>>>>>>>>>>>>>>> reload timeline",__FUNCTION__);
+    if (self.timelineVC != nil)
+    {
+        
+        [self.timelineVC loadEvents:self.selectedChannel];
+    }
+    
+}
+
 
 //This is triggered if app has just received a push notification
 //   from an inactive stage : for eg: just comeback from background
@@ -1355,10 +1378,13 @@ double _ticks = 0;
 -(void)h264_HandleInactivePushes
 {
     NSLog(@"%s enter >>>>>>>>>>>>>>>>>> call prepareGoBackToCameraList ", __FUNCTION__);
-
+    
     [self prepareGoBackToCameraList:nil];
 }
 
+
+
+#if 1
 
 
 - (void)h264_HandleDidEnterBackground

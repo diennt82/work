@@ -361,25 +361,20 @@ void checkingApplicationCrashed()
             }
             else if ( [application applicationState] == UIApplicationStateInactive)
             {
-                NSLog(@"UIApplicationStateInactive");
+                NSLog(@"UIApplicationStateInactive - going to be active");
                 
                 [self performSelectorOnMainThread:@selector(activateNotificationViewController:) withObject:camAlert waitUntilDone:YES];
 
             }
             else
             {
-                // TODO: handle exception
+                //  handle exception
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:str6
                                                                 message:str2
                                                                delegate:self cancelButtonTitle:@"OK"
                                                       otherButtonTitles:nil];
                 [alert show];
             }
-            
-            //            if (shouldStoreAlert && [CameraAlert insertAlertForCamera:camAlert] == TRUE)
-            //            {
-            //                NSLog(@"Alert inserted successfully");
-            //            }
         }
         //[camAlert release]; camAlert leak memory but I can't release it.
     }
@@ -407,7 +402,7 @@ void checkingApplicationCrashed()
 - (void)activateNotificationViewController: (CameraAlert *)camAlert
 {
 
-    //send a broadcast to all active listeners to take care of all neccesary actions.
+    //send a broadcast to all active listeners to take care of all necessary actions.
     [[NSNotificationCenter defaultCenter] postNotificationName:PUSH_NOTIFY_BROADCAST_WHILE_APP_INACTIVE
                                                         object:nil];
     viewController.camAlert = camAlert;
