@@ -103,6 +103,7 @@ ProximaNova-SemiboldItalic.otf</string>
 	<array>
 		<string>remote-notification</string>
 		<string>audio</string>
+		<string>fetch</string>
 	</array>
 	<key>UIFileSharingEnabled</key>
 	<true/>

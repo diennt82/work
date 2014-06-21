@@ -147,7 +147,7 @@
 -(void)start_animation_with_orientation :(UIInterfaceOrientation) orientation
 {
     
-   
+    
     self.splashScreen.animationDuration = 1.5;
     self.splashScreen.animationRepeatCount = 0;
     
@@ -179,7 +179,7 @@
     
     [self presentViewController:playbackViewController animated:NO  completion:nil];
 #else
-
+    
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
@@ -196,7 +196,7 @@
         [self show_login_or_reg:nil];
     }
     
-
+    
 #endif
 }
 
@@ -363,7 +363,7 @@
         }
             break;
             
-		
+            
             
 		case SCAN_CAMERA:
         {
@@ -383,7 +383,7 @@
         }
 			break;
             
-		
+            
 		case AFTER_DEL_RELOGIN: //Only use when cancel from Add camera
         {
             
@@ -418,7 +418,7 @@
         {
             statusDialogLabel.hidden = YES;
             self.app_stage = APP_STAGE_LOGGING_IN;
-         
+            
             
             [self logoutAndUnregistration_bg];
             [self show_login_or_reg:nil];
@@ -542,7 +542,7 @@
 {
     
     if (isRebinded)
-    {        
+    {
         if ( [self isCurrentConnection3G] ||
             [self.restored_profiles count] ==0)
         {
@@ -671,6 +671,14 @@
 		if ( [[Util strip_colon_fr_mac:camInView] isEqualToString:camAlert.cameraMacNoColon])
 		{
 			NSLog(@"Silencely return, don't popup");
+            
+            //Broadcast a message to trigger updating event.
+            [[NSNotificationCenter defaultCenter] postNotificationName:PUSH_NOTIFY_BROADCAST_WHILE_APP_INVIEW
+                                                                object:nil];
+            
+            
+            
+            
 			return FALSE;
 		}
         
@@ -837,7 +845,7 @@
 #else
         
         NSLog(@"De-Register push with both parties: APNs and BMS ");
-
+        
         NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
         NSString *appId = [userDefaults objectForKey:@"APP_ID"];
         NSString * userName = [userDefaults objectForKey:@"PortalUsername"];
@@ -853,9 +861,9 @@
         
         
         BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                                                  Selector:nil
-                                                                              FailSelector:nil
-                                                                                 ServerErr:nil];
+                                                                                 Selector:nil
+                                                                             FailSelector:nil
+                                                                                ServerErr:nil];
         
         NSDictionary *responseDict = [jsonComm deleteAppBlockedWithAppId:appId
                                                                andApiKey:apiKey];
@@ -868,8 +876,8 @@
         [userDefaults synchronize];
         
         /*[self performSelectorOnMainThread:@selector(show_login_or_reg:)
-                               withObject:nil
-                            waitUntilDone:NO];*/
+         withObject:nil
+         waitUntilDone:NO];*/
         //[self show_login_or_reg:nil];
     }
 }
@@ -975,7 +983,7 @@
                             if ([obj2 isKindOfClass:[PlaybackViewController class]])
                             {
                                 PlaybackViewController *playbackViewController = (PlaybackViewController *)obj2;
-                                [playbackViewController stopStream:nil];
+                                [playbackViewController closePlayBack:nil];
                             }
                         }
                         
@@ -984,7 +992,7 @@
                         if ([obj isKindOfClass:[H264PlayerViewController class]])
                         {
                             H264PlayerViewController * h264PlayerViewController = (H264PlayerViewController *) obj;
-                            [h264PlayerViewController goBackToCameraList];
+                            [h264PlayerViewController prepareGoBackToCameraList:nil];
                         }
 					}
                     
@@ -1775,6 +1783,7 @@
     self.progressView.hidden = NO;
     
     
+    
     if ([self.camAlert.alertType isEqualToString:ALERT_TYPE_MOTION])
     {
         
@@ -1801,8 +1810,8 @@
         
         
         [self sendStatus:SHOW_CAMERA_LIST];
-       
-
+        
+        
     }
     
 }
@@ -1854,7 +1863,7 @@
         default:
             break;
     }
-
+    
     // Close the Mail Interface
     [self dismissViewControllerAnimated:YES completion:^{
         /*
