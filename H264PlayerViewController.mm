@@ -1681,8 +1681,6 @@ double _ticks = 0;
     self.imageViewHandle.hidden = YES;
     self.imageViewKnob.center = self.imgViewDrectionPad.center;
     self.imageViewHandle.center = self.imgViewDrectionPad.center;
-    
-    NSLog(@"H264VC - becomeActive -timeline: %@", NSStringFromCGRect(self.timelineVC.view.frame));
 }
 
 #pragma mark - Shared Cam
@@ -1745,12 +1743,11 @@ double _ticks = 0;
 
 - (void)createMonvementControlTimer
 {
-    [self cleanUpDirectionTimers];
-    if ([_cameraModel isEqualToString:CP_MODEL_BLE]) //MBP83
+    NSLog(@"%s model:%@", __FUNCTION__, _cameraModel);
+    
+    if([_cameraModel hasPrefix:CP_MODEL_008])
     {
-        
-        
-        NSLog(@"H264VC - createMonvementControlTimer");
+        [self cleanUpDirectionTimers];
         
         //Direction stuf
         /* Kick off the two timer for direction sensing */
@@ -2271,7 +2268,7 @@ double _ticks = 0;
 
 -(void) cleanUpDirectionTimers
 {
-    if ([_cameraModel isEqualToString:CP_MODEL_BLE]) //MBP83
+    if([_cameraModel hasPrefix:CP_MODEL_008])
     {
         /* Kick off the two timer for direction sensing */
         currentDirUD = DIRECTION_V_NON;
@@ -4038,7 +4035,7 @@ double _ticks = 0;
 
 - (void) touchEventAt:(CGPoint) location phase:(UITouchPhase) phase
 {
-    if ([_cameraModel isEqualToString:CP_MODEL_BLE]) //MBP83
+    if([_cameraModel hasPrefix:CP_MODEL_008])
     {
         switch (phase)
         {
@@ -5066,8 +5063,6 @@ double _ticks = 0;
     }
     else// if ([_cameraModel isEqualToString:CP_MODEL_BLE])
     {
-        //        if (_isInLocal)
-        //        {
         switch (index)
         {
             case INDEX_PAN_TILT:
