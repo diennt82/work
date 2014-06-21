@@ -188,9 +188,14 @@
 
 - (void)playbackInactivePushes
 {
-    NSLog(@"%s excute call closePlayback function", __FUNCTION__);
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    [hud setLabelText:@"Stop playback..."];
+    
+    NSLog(@"%s excuting closePlayback function", __FUNCTION__);
     
     [self closePlayBack:nil];
+    
+    [MBProgressHUD hideAllHUDsForView:self.view animated:NO];
 }
 #else
 -(void) playbackBecomeInActive
@@ -271,9 +276,18 @@
 
 -(void) startStream
 {
-    MediaPlayer::Instance()->setListener(listener);
-    MediaPlayer::Instance()->setPlaybackAndSharedCam(true, false);
-    [self performSelectorInBackground:@selector(startStream_bg) withObject:nil];
+    NSLog(@"%s", __FUNCTION__);
+    
+    if (MediaPlayer::Instance()->shouldWait)
+    {
+        [self performSelector:@selector(startStream) withObject:nil afterDelay:0.5f];
+    }
+    else
+    {
+        MediaPlayer::Instance()->setListener(listener);
+        MediaPlayer::Instance()->setPlaybackAndSharedCam(true, false);
+        [self performSelectorInBackground:@selector(startStream_bg) withObject:nil];
+    }
 }
 
 - (void)startStream_bg
@@ -843,6 +857,8 @@
 
 - (void)getPlaylistSuccessWithResponse: (NSDictionary *)responseDict
 {
+    NSLog(@"%s", __FUNCTION__);
+    
     BOOL got_last_clip = FALSE;
     
     if (responseDict != nil)
@@ -851,8 +867,9 @@
         {
             NSArray *eventArr = [[responseDict objectForKey:@"data"] objectForKey:@"events"];
             
-            NSLog(@"play list: %@ ",responseDict);
-            if (eventArr.count > 0)
+            //NSLog(@"play list: %@ ",responseDict);
+            if (![eventArr isEqual:[NSNull null]] &&
+                eventArr.count > 0)
             {
                 NSArray *clipInEvents = [[eventArr objectAtIndex:0] objectForKey:@"data"];
                 
@@ -896,7 +913,19 @@
                 
                 NSLog(@"there is %d in playlist", [_clips count]);
             }
+            else
+            {
+                NSLog(@"%s event is empty.", __FUNCTION__);
+            }
         }
+        else
+        {
+            NSLog(@"%s response status != 200.", __FUNCTION__);
+        }
+    }
+    else
+    {
+        NSLog(@"%s reponse in nill.", __FUNCTION__);
     }
     
     if (got_last_clip == TRUE)
@@ -919,7 +948,7 @@
 
 - (void)getPlaylistFailedWithResponse: (NSDictionary *)responseDict
 {
-    NSLog(@"getPlaylistFailedWithResponse");
+    NSLog(@"%s", __FUNCTION__);
     self.list_refresher = [NSTimer scheduledTimerWithTimeInterval:10.0
                                                            target:self
                                                          selector:@selector(getCameraPlaylistForEvent:)
@@ -929,7 +958,7 @@
 
 - (void)getPlaylistUnreachableSetver
 {
-    NSLog(@"getPlaylistUnreachableSetver");
+    NSLog(@"%s", __FUNCTION__);
     self.list_refresher = [NSTimer scheduledTimerWithTimeInterval:10.0
                                                            target:self
                                                          selector:@selector(getCameraPlaylistForEvent:)

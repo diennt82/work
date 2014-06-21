@@ -1239,6 +1239,7 @@ double _ticks = 0;
     
     if (_mediaProcessStatus == MEDIAPLAYER_NOT_INIT)
     {
+        MediaPlayer::Instance()->shouldWait = FALSE;
     }
     else if(_mediaProcessStatus == MEDIAPLAYER_SET_LISTENER)
     {
@@ -1250,8 +1251,8 @@ double _ticks = 0;
     {
         NSLog(@"%s", __FUNCTION__);
         
-        //MediaPlayer::Instance()->sendInterrupt();
-        MediaPlayer::Instance()->setFFmpegInterrupt(true);
+        MediaPlayer::Instance()->sendInterrupt();
+        //MediaPlayer::Instance()->setFFmpegInterrupt(true);
     }
     else //MEDIAPLAYER_STARTED
     {
