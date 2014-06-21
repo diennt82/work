@@ -280,6 +280,11 @@
         
         self.isEventAlready = TRUE;
         self.isLoading = FALSE;
+        
+        if (_events.count < 10)
+        {
+            self.shouldLoadMore = FALSE;
+        }
     }
     
     /* Reload the table view now */
@@ -459,7 +464,6 @@
         NSLog(@"has inserted new record, trigger update ui now");
         dispatch_async(dispatch_get_main_queue(), ^{
             
-            //[self loadEvents:self.camChannel];
             [self performSelectorInBackground:@selector(getEventFromDb:) withObject:camChannel];
             
         });
@@ -1104,7 +1108,7 @@
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ((indexPath.section == 1) && (indexPath.row == _events.count - 1) && !_isLoading) {
+    if ((indexPath.section == 1) && (indexPath.row == _events.count - 1) && !_isLoading && _shouldLoadMore) {
         NSLog(@"...start fetching more items.");
         //NSLog(@"%s load more", __FUNCTION__);
         self.isLoading = TRUE;

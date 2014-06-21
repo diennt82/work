@@ -14,22 +14,21 @@
 #import <MonitorCommunication/MonitorCommunication.h>
 #import <MessageUI/MFMailComposeViewController.h>
 
-
-#define _push_dev_token @"PUSH_NOTIFICATION_DEVICE_TOKEN"
-
 @class MBP_iosViewController;
 
 @interface MBP_iosAppDelegate : NSObject <UIApplicationDelegate, UIAlertViewDelegate, MFMailComposeViewControllerDelegate> {
     //UIWindow *window;
     MBP_iosViewController *viewController;
-    BOOL handling_PN; 
+    
+    
+
 
 }
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;
 @property (nonatomic, retain) IBOutlet MBP_iosViewController *viewController;
 
-@property (nonatomic) BOOL becomeActiveByNotificationFlag;
+
 
 - (void)cancelRegisterApp;
 

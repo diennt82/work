@@ -52,7 +52,7 @@
 - (IBAction)addCameraButtonTouchAction:(id)sender;
 - (IBAction)buyCameraButtonTouchAction:(id)sender;
 - (IBAction)addCameraButtonTouchDownAction:(id)sender;
-@property (retain, nonatomic) NSArray *snapshotImages;
+
 @property (nonatomic) BOOL isFirttime;
 
 @end
@@ -101,7 +101,6 @@
 {
     [super viewDidLoad];
     self.navigationController.navigationBarHidden = YES;
-    self.snapshotImages = [NSArray arrayWithObjects:@"mountain", @"garden", @"desk", @"bridge", nil];
     
     NSArray *paths = NSSearchPathForDirectoriesInDomains
     (NSDocumentDirectory, NSUserDomainMask, YES);
@@ -453,6 +452,7 @@
             if([curObj isKindOfClass:[UITableViewCell class]])
             {
                 cell = (CamerasCell *)curObj;
+                [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
                 break;
             }
         }
@@ -468,7 +468,12 @@
         if(img){
             cell.snapshotImage.image = img;
         }else{
-           cell.snapshotImage.image = [UIImage imageNamed:[_snapshotImages objectAtIndex:indexPath.row]];
+            NSString *strModel = [ch.profile getModel];
+            if([strModel isEqualToString:@"0083"]){
+                cell.snapshotImage.image = [UIImage imageNamed:@"camera_mbp_83"];
+            }else{
+                cell.snapshotImage.image = [UIImage imageNamed:@"camera_focus_66"];
+            }
         }       
         cell.ibCameraNameLabel.text = ch.profile.name;
         NSString *boundCameraName = ch.profile.name;
@@ -515,12 +520,12 @@
             if ([ch.profile.registrationID isEqualToString:regID])
             {
                 [cell.ibBGColorCameraSelected setBackgroundColor:[UIColor selectCameraItemColor]];
-                [cell setSelected:YES];
+                //[cell setSelected:YES];
             }
             else
             {
                 [cell.ibBGColorCameraSelected setBackgroundColor:[UIColor whiteColor]];
-                [cell setSelected:NO];
+                //[cell setSelected:NO];
             }
         }
         

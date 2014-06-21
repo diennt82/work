@@ -134,19 +134,8 @@
         _isBackgroundTaskRunning = YES;
     }
     
-#if 0
-    if (_eventsListAlready == FALSE)
-    {
-        //load events from server
-        // 1. Load latest snapshot event & events list
-        [self performSelectorInBackground:@selector(getEventSnapshot_bg) withObject:nil];
-        self.eventsListAlready = TRUE;
-    }
-    else
-    {
-        //do nothing
-    }
-#endif
+
+
 }
 
 - (void)layoutImageAndTextForButton: (UIButton *)button
@@ -242,20 +231,11 @@
          NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         [userDefaults setObject:self.registrationID forKey:REG_ID];
         [userDefaults synchronize];
-#if 1
+
+        
         [self.navigationController popToRootViewControllerAnimated:YES];
         [_notifDelegate sendStatus:SHOW_CAMERA_LIST];
-#else
-        // Will call dismiss eventually
-        
-        if (![self.presentedViewController isBeingDismissed])
-        {
-            [self dismissViewControllerAnimated:YES completion:^{
-                //[_notifDelegate sendStatus:SCAN_BONJOUR_CAMERA];
-                [_notifDelegate sendStatus:SHOW_CAMERA_LIST];
-            }];
-        }
-#endif
+
     }
 }
 
@@ -291,22 +271,18 @@
 - (IBAction)ignoreTouchAction:(id)sender
 {
     NSLog(@"%s _notifDelegate:%@", __FUNCTION__, _notifDelegate);
-#if 1
+
     [self cancelTaskDoInBackground];
     [self.navigationController popToRootViewControllerAnimated:NO];
     [_notifDelegate sendStatus:SHOW_CAMERA_LIST2];
-#else
-    [self.navigationController popToRootViewControllerAnimated:NO];
     
-    // Will call dismiss eventually
     
-    if (![self.presentedViewController isBeingDismissed]) {
-        [self dismissViewControllerAnimated:YES completion:^{
-            //[_notifDelegate sendStatus:SCAN_BONJOUR_CAMERA];
-            [_notifDelegate sendStatus:SHOW_CAMERA_LIST2];
-        }];
-    }
-#endif
+    //clear this to avoid affecting the flow.
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults removeObjectForKey:HANDLE_PN];
+    [userDefaults synchronize];
+    
+
 }
 
 #pragma mark - Encoding URL string
@@ -323,6 +299,7 @@
 
 - (void)getEventSnapshot_bg
 {
+    NSLog(@"%s Waiting for checking event's url", __FUNCTION__);
     //2013-12-20 20:10:18 (yyyy-MM-dd HH:mm:ss).
     // eventcode: 44334C7FA03C_04_20140310101412000
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -341,7 +318,7 @@
                                                                            size:nil
                                                                          apiKey:apiKey];
     
-    NSLog(@"Notif - responseDict: %@", responseDict);
+    //NSLog(@"Notif - responseDict: %@", responseDict);
     
     if (responseDict != nil)
     {
