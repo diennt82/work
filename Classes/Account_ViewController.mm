@@ -14,6 +14,7 @@
 #import <MessageUI/MFMailComposeViewController.h>
 #import "NSData+AESCrypt.h"
 #import "CustomIOS7AlertView.h"
+#import "MBProgressHUD.h"
 
 @interface Account_ViewController () <MFMailComposeViewControllerDelegate, UIAlertViewDelegate>
 
@@ -423,6 +424,8 @@
             NSString *passwordConfrm = tfConfPass.text;
             NSString *oldPass = tfOldPass.text;
             
+            //FIXME: lenght >= 8 chars, provide correct popup message
+            
             if ((password && password.length > 0)  &&
                 (passwordConfrm && passwordConfrm.length > 0) &&
                 (oldPass && oldPass.length > 0) &&
@@ -459,6 +462,9 @@
 
 -(void)checkOldPass:(NSString *)strOldPass NewPass:(NSString *)strNewPass
 {
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    [hud setLabelText:@"Please wait ..."];
+    
     BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
                                                                               Selector:@selector(loginSuccessWithResponse:)
                                                                           FailSelector:@selector(loginFailedWithError:)
@@ -493,17 +499,20 @@
                                         delegate:nil
                                cancelButtonTitle:nil
                                otherButtonTitles:@"OK", nil] autorelease] show];
+         
+            [MBProgressHUD hideAllHUDsForView:self.view animated:NO];
         }
     }
     else
     {
         NSLog(@"Error - loginSuccessWithResponse: reponseDict = nil");
+        [MBProgressHUD hideAllHUDsForView:self.view animated:NO];
     }
 }
 
 - (void) loginFailedWithError:(NSDictionary *) responseError
 {
-    
+    [MBProgressHUD hideAllHUDsForView:self.view animated:NO];
     [[[[UIAlertView alloc] initWithTitle:@"Change Password Failed"
                                  message:@"Enter correct old password."
                                 delegate:nil
@@ -513,6 +522,7 @@
 
 - (void)loginFailedServerUnreachable
 {
+    [MBProgressHUD hideAllHUDsForView:self.view animated:NO];
     [[[[UIAlertView alloc] initWithTitle:@"Failed: Server is unreachable"
                                  message:nil
                                 delegate:nil
@@ -547,6 +557,7 @@
 
 - (void)changePasswordFialedWithError:(NSDictionary *)error_response
 {
+    [MBProgressHUD hideAllHUDsForView:self.view animated:NO];
     [[[[UIAlertView alloc] initWithTitle:@"Change Password Failed"
                                  message:[error_response objectForKey:@"message"]
                                 delegate:nil
@@ -556,6 +567,7 @@
 
 - (void)changePasswordFailedServerUnreachable
 {
+    [MBProgressHUD hideAllHUDsForView:self.view animated:NO];
     [[[[UIAlertView alloc] initWithTitle:@"Failed: Server is unreachable"
                                  message:nil
                                 delegate:nil
@@ -590,7 +602,7 @@
             [[NSUserDefaults standardUserDefaults] setObject:apiKey forKey:@"PortalApiKey"];
             [[NSUserDefaults standardUserDefaults] synchronize];
 
-            
+            [MBProgressHUD hideAllHUDsForView:self.view animated:NO];
             [[[[UIAlertView alloc] initWithTitle:@"Change Password"
                                          message:@"Successful"
                                         delegate:nil
@@ -601,7 +613,7 @@
         else
         {
             NSLog(@"Invalid response: %@", responseDict);
-            
+            [MBProgressHUD hideAllHUDsForView:self.view animated:NO];
             [[[[UIAlertView alloc] initWithTitle:@"Change Password Failed"
                                          message:@"Enter correct old password."
                                         delegate:nil
@@ -611,13 +623,14 @@
     }
     else
     {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:NO];
         NSLog(@"Error - loginSuccessWithResponse: reponseDict = nil");
     }
 }
 
 - (void) reloginFailedWithError:(NSDictionary *) responseError
 {
-    
+    [MBProgressHUD hideAllHUDsForView:self.view animated:NO];
     [[[[UIAlertView alloc] initWithTitle:@"Change Password Failed"
                                  message:@"Enter correct old password."
                                 delegate:nil
@@ -627,6 +640,7 @@
 
 - (void)reloginFailedServerUnreachable
 {
+    [MBProgressHUD hideAllHUDsForView:self.view animated:NO];
     [[[[UIAlertView alloc] initWithTitle:@"Failed: Server is unreachable"
                                  message:nil
                                 delegate:nil
