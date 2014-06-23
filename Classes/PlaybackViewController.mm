@@ -406,6 +406,7 @@
 {
     self.userWantToBack = TRUE;
     self.ib_playPlayBack.enabled = NO;
+    MediaPlayer::Instance()->shouldWait = FALSE;
     
     NSLog(@"Stop stream start ");
 
@@ -419,9 +420,13 @@
     else // set Data source failed!
     {
         NSLog(@"%s has not played yet", __FUNCTION__);
+#if 1
+        MediaPlayer::Instance()->sendInterrupt();
+#else
         MediaPlayer::Instance()->setListener(nil);
         MediaPlayer::Instance()->suspend();
         MediaPlayer::Instance()->stop();
+#endif
     }
 
     NSLog(@"Stop stream end");

@@ -18,6 +18,7 @@
 #import "CameraAlert.h"
 #import "MenuViewController.h"
 #import "TimelineDatabase.h"
+#import "NotifViewController.h"
 
 #define DIRECTION_V_NON  0x01
 #define DIRECTION_V_UP   0x02
@@ -133,7 +134,7 @@
 @property (nonatomic, retain) CameraAlert *camAlert;
 
 @property (nonatomic, retain) MenuViewController *menuVC;
-//@property (nonatomic, retain) NSTimer * fullScreenTimer, *alertTimer; 
+@property (nonatomic, retain) NotifViewController *notifViewController;
 
 
 - (void) initialize ;

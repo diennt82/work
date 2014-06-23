@@ -18,7 +18,6 @@
 #import "MBP_iosViewController.h"
 #import "PlayListViewController.h"
 #import "H264PlayerViewController.h"
-#import "NotifViewController.h"
 
 #import "Step_02_ViewController.h"
 #import "RegistrationViewController.h"
@@ -891,6 +890,8 @@
     
     if (tag == ALERT_PUSH_RECVED_NON_MOTION)
     {
+        NSLog(@"%s alert ALERT_PUSH_RECVED_NON_MOTION", __FUNCTION__);
+        
         switch(buttonIndex)
         {
 			case 0:
@@ -899,7 +900,6 @@
 				break;
 			case 1:
             {
-                [self hideMFMailComposeView];
 				[self dismissMenuHubbleView];
                 
                 NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -921,8 +921,11 @@
                 
 		}
     }
+    
 	if (tag == ALERT_PUSH_RECVED_RESCAN_AFTER)
 	{
+        NSLog(@"%s alert: ALERT_PUSH_RECVED_RESCAN_AFTER", __FUNCTION__);
+        
 		switch(buttonIndex)
         {
 			case 0:
@@ -931,7 +934,8 @@
 				break;
 			case 1:
             {
-                [self hideMFMailComposeView];
+                NSLog(@"%s, %d", __FUNCTION__, self.navigationController.viewControllers.count);
+                
                 [self dismissMenuHubbleView];
                 [self showNotifViewController:latestCamAlert];
                 [latestCamAlert release];
@@ -940,7 +944,7 @@
                 [pushAlert release];
                 pushAlert = nil;
                 
-                NSLog(@"alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex: %p, %p", self, latestCamAlert);
+                //NSLog(@"alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex: %p, %p", self, latestCamAlert);
             }
                 break;
 			default:
@@ -950,13 +954,14 @@
 	}
 	else if (tag == ALERT_PUSH_RECVED_RELOGIN_AFTER)
 	{
+        NSLog(@"%s alert ALERT_PUSH_RECVED_RELOGIN_AFTER", __FUNCTION__);
+        
 		switch(buttonIndex)
         {
 			case 0:
 				break;
 			case 1:
             {
-                [self hideMFMailComposeView];
                 [self dismissMenuHubbleView];
 				[self sendStatus:LOGIN];
             }
@@ -969,6 +974,8 @@
 	}
     else if (tag == ALERT_PUSH_SERVER_ANNOUNCEMENT)
     {
+        NSLog(@"%s alert ALERT_PUSH_SERVER_ANNOUNCEMENT", __FUNCTION__);
+        
         switch(buttonIndex)
         {
 			case 0://IGNORE
@@ -1007,6 +1014,8 @@
     }
     else if (tag == 11)
     {
+        NSLog(@"%s alert Send Email", __FUNCTION__);
+        
         if (buttonIndex == 1)
         {
             if ([MFMailComposeViewController canSendMail])
@@ -1089,29 +1098,15 @@
     [picker release];
 }
 
-- (void)hideMFMailComposeView
-{
-    /*
-     * Try to hide MFMailComposeViewController's keyboard first.
-     */
-    
-    // Workaround: MFMailComposeViewController does not dismiss keyboard when application enters background or changes view screen.
-    UITextView *dummyTextView = [[[UITextView alloc] init] autorelease];
-    [((UIWindow *)[[[UIApplication sharedApplication] windows] objectAtIndex:0]).rootViewController.presentedViewController.view addSubview:dummyTextView];
-    [dummyTextView becomeFirstResponder];
-    [dummyTextView resignFirstResponder];
-    [dummyTextView removeFromSuperview];
-    // End of workaround
-}
-
 - (void)dismissMenuHubbleView
 {
+    NSLog(@"%s", __FUNCTION__);
+    
     if (_menuVC != nil)
     {
-        NSLog(@"RESCAN_AFTER close all windows and thread");
-        
         NSArray * views = _menuVC.navigationController.viewControllers;
         NSLog(@"views count = %d",[views count] );
+        
         if ( [views count] > 1)
         {
             if (views.count > 2)
@@ -1133,6 +1128,8 @@
                 [h264PlayerViewController prepareGoBackToCameraList:nil];
             }
         }
+
+        [_menuVC removeSubviews];
     }
     
     [self dismissViewControllerAnimated:NO completion:^{}];
@@ -1140,6 +1137,23 @@
 
 - (void)showNotifViewController:(CameraAlert *)cameraAlert
 {
+    id aViewController = self.navigationController.viewControllers[self.navigationController.viewControllers.count - 1];
+    
+    NSLog(@"%s %d %@", __FUNCTION__, self.navigationController.viewControllers.count, aViewController);
+    
+    if ([aViewController isKindOfClass:[PlaybackViewController class]])
+    {
+        PlaybackViewController *playbackViewController = (PlaybackViewController *)aViewController;
+        [playbackViewController closePlayBack:nil];
+    }
+    else if ([aViewController isKindOfClass:[NotifViewController class]])
+    {
+        NotifViewController *aNotifVC = ((NotifViewController *)aViewController);
+        aNotifVC.notifDelegate = nil;
+        [aNotifVC cancelTaskDoInBackground];
+        [aNotifVC.navigationController popToRootViewControllerAnimated:NO];
+    }
+    
     NotifViewController *notifVC = [[NotifViewController alloc] init];
     
     @synchronized(self)

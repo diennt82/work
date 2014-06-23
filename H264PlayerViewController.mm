@@ -2134,6 +2134,8 @@ double _ticks = 0;
         [_jsonCommBlocked release];
     }
     
+    MediaPlayer::Instance()->shouldWait = FALSE;
+    
     if (_mediaProcessStatus == MEDIAPLAYER_NOT_INIT)
     {
         [self goBack];

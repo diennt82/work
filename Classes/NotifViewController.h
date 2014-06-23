@@ -16,7 +16,6 @@
 @interface NotifViewController : UIViewController{
 
     BMS_JSON_Communication *jsonComm;
-    BOOL _isBackgroundTaskRunning;
 }
 
 @property(nonatomic, retain) id <ConnectionMethodDelegate> notifDelegate;
@@ -34,5 +33,6 @@
 
 
 - (IBAction)ignoreTouchAction:(id)sender;
+- (void)cancelTaskDoInBackground;
 
 @end
