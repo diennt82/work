@@ -541,12 +541,8 @@
     [userDefaults setObject:self.strNewChangedPass forKey:@"PortalPassword"];
     [userDefaults synchronize];
     
-    [[[[UIAlertView alloc] initWithTitle:@"Change Password"
-                                 message:@"Successful"
-                                delegate:nil
-                       cancelButtonTitle:nil
-                       otherButtonTitles:@"OK", nil] autorelease] show];
-    
+    //Response data does not give the new apikey, need to try login again to get it
+    [self getNewApiKey];
 }
 
 - (void)changePasswordFialedWithError:(NSDictionary *)error_response
@@ -566,6 +562,83 @@
                        cancelButtonTitle:nil
                        otherButtonTitles:@"OK", nil] autorelease] show];
 }
+#pragma mark - Verify new password
+
+-(void) getNewApiKey
+{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString * strNewpass =[userDefaults objectForKey:@"PortalPassword"];
+    
+    BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
+                                                                              Selector:@selector(reloginSuccessWithResponse:)
+                                                                          FailSelector:@selector(reloginFailedWithError:)
+                                                                             ServerErr:@selector(reloginFailedServerUnreachable)] autorelease];
+    
+    
+    NSString *strUserId = [[NSUserDefaults standardUserDefaults] objectForKey:@"PortalUsername"];
+    [jsonComm loginWithLogin:strUserId andPassword:strNewpass];
+    
+}
+- (void) reloginSuccessWithResponse:(NSDictionary *)responseDict
+{
+   	if (responseDict) {
+        NSInteger statusCode = [[responseDict objectForKey:@"status"] intValue];
+        
+        if (statusCode == 200) // success
+        {
+            NSString *apiKey = [[responseDict objectForKey:@"data"] objectForKey:@"authentication_token"];
+            [[NSUserDefaults standardUserDefaults] setObject:apiKey forKey:@"PortalApiKey"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+
+            
+            [[[[UIAlertView alloc] initWithTitle:@"Change Password"
+                                         message:@"Successful"
+                                        delegate:nil
+                               cancelButtonTitle:nil
+                               otherButtonTitles:@"OK", nil] autorelease] show];
+
+        }
+        else
+        {
+            NSLog(@"Invalid response: %@", responseDict);
+            
+            [[[[UIAlertView alloc] initWithTitle:@"Change Password Failed"
+                                         message:@"Enter correct old password."
+                                        delegate:nil
+                               cancelButtonTitle:nil
+                               otherButtonTitles:@"OK", nil] autorelease] show];
+        }
+    }
+    else
+    {
+        NSLog(@"Error - loginSuccessWithResponse: reponseDict = nil");
+    }
+}
+
+- (void) reloginFailedWithError:(NSDictionary *) responseError
+{
+    
+    [[[[UIAlertView alloc] initWithTitle:@"Change Password Failed"
+                                 message:@"Enter correct old password."
+                                delegate:nil
+                       cancelButtonTitle:nil
+                       otherButtonTitles:@"OK", nil] autorelease] show];
+}
+
+- (void)reloginFailedServerUnreachable
+{
+    [[[[UIAlertView alloc] initWithTitle:@"Failed: Server is unreachable"
+                                 message:nil
+                                delegate:nil
+                       cancelButtonTitle:nil
+                       otherButtonTitles:@"OK", nil] autorelease] show];
+    
+}
+
+
+
+
+
 
 #pragma mark - UIAlert view delegate
 

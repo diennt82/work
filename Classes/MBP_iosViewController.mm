@@ -700,7 +700,7 @@
         if (pushAlert != nil &&
             [pushAlert isVisible])
         {
-            NSLog(@"Dialog exist, don't popup");
+            NSLog(@"Dialog exist, don't popup, current msg:%@, title: %@", pushAlert.message, pushAlert.title);
             
             @synchronized(self)
             {
