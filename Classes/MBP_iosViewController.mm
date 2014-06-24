@@ -901,6 +901,7 @@
 			case 1:
             {
 				[self dismissMenuHubbleView];
+                [self dismissNotificationViewController];
                 
                 NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
                 [userDefaults setObject:latestCamAlert.registrationID forKey:REG_ID];
@@ -937,6 +938,7 @@
                 NSLog(@"%s, %d", __FUNCTION__, self.navigationController.viewControllers.count);
                 
                 [self dismissMenuHubbleView];
+                [self dismissNotificationViewController];
                 [self showNotifViewController:latestCamAlert];
                 [latestCamAlert release];
                 latestCamAlert = nil;
@@ -1127,15 +1129,20 @@
                 H264PlayerViewController * h264PlayerViewController = (H264PlayerViewController *) obj;
                 [h264PlayerViewController prepareGoBackToCameraList:nil];
             }
+            else if([obj isKindOfClass:[EarlierViewController class]]) // Camera is offline
+            {
+                [((EarlierViewController *)obj).navigationController popToRootViewControllerAnimated:NO];
+            }
         }
 
         [_menuVC removeSubviews];
+        _menuVC.menuDelegate = nil;
     }
     
     [self dismissViewControllerAnimated:NO completion:^{}];
 }
 
-- (void)showNotifViewController:(CameraAlert *)cameraAlert
+- (void)dismissNotificationViewController
 {
     id aViewController = self.navigationController.viewControllers[self.navigationController.viewControllers.count - 1];
     
@@ -1153,7 +1160,10 @@
         [aNotifVC cancelTaskDoInBackground];
         [aNotifVC.navigationController popToRootViewControllerAnimated:NO];
     }
-    
+}
+
+- (void)showNotifViewController:(CameraAlert *)cameraAlert
+{
     NotifViewController *notifVC = [[NotifViewController alloc] init];
     
     @synchronized(self)
@@ -1735,8 +1745,12 @@
 
 - (void)showNotificationViewController: (NSTimer *)exp
 {
+    NSLog(@"%s", __FUNCTION__);
+    
     //Back from login- login success
     [self dismissViewControllerAnimated:NO completion:nil];
+    [self dismissMenuHubbleView];
+    [self dismissNotificationViewController];
     self.progressView.hidden = NO;
     
     if ([self.camAlert.alertType isEqualToString:ALERT_TYPE_MOTION])

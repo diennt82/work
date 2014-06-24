@@ -269,16 +269,22 @@
         self.urlVideo = self.clip_info.urlFile;
     }
 #endif
-    [self performSelector:@selector(startStream)
-               withObject:nil
-               afterDelay:0.1];
+//    [self performSelector:@selector(startStream)
+//               withObject:nil
+//               afterDelay:0.1];
+    [self startStream];
 }
 
 -(void) startStream
 {
     NSLog(@"%s", __FUNCTION__);
     
-    if (MediaPlayer::Instance()->shouldWait)
+    if (_userWantToBack)
+    {
+        return;
+    }
+    
+    if (MediaPlayer::Instance()->isShouldWait())
     {
         [self performSelector:@selector(startStream) withObject:nil afterDelay:0.5f];
     }
@@ -404,9 +410,11 @@
 
 - (IBAction)stopStream:(id) sender
 {
+    NSLog(@"%s", __FUNCTION__);
+    
     self.userWantToBack = TRUE;
     self.ib_playPlayBack.enabled = NO;
-    MediaPlayer::Instance()->shouldWait = FALSE;
+    MediaPlayer::Instance()->setShouldWait(FALSE);
     
     NSLog(@"Stop stream start ");
 

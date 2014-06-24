@@ -175,6 +175,8 @@
 
 - (IBAction)playEventTouchAction:(id)sender
 {
+    NSLog(@"%s", __FUNCTION__);
+    
     if (!_isFreeUser)
     {
         if (![_clipsInEvent isEqual:[NSNull null]] &&

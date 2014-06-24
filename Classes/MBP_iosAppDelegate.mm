@@ -363,7 +363,9 @@ void checkingApplicationCrashed()
             {
                 NSLog(@"UIApplicationStateInactive - going to be active");
                 
-                [self performSelectorOnMainThread:@selector(activateNotificationViewController:) withObject:camAlert waitUntilDone:YES];
+                [self performSelectorOnMainThread:@selector(activateNotificationViewController:)
+                                       withObject:camAlert
+                                    waitUntilDone:YES];
 
             }
             else
