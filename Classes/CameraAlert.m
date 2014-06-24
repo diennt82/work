@@ -396,7 +396,7 @@ static sqlite3_stmt *init_statement = nil;
     NSDate *today = [NSDate date];
     
     NSDateComponents *dayComponent = [[NSDateComponents alloc] init];
-    dayComponent.hour = -1;
+    dayComponent.day = -1;
     NSDate *yesterday = [gregorian dateByAddingComponents:dayComponent
                                                    toDate:today
                                                   options:0];

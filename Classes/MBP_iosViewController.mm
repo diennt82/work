@@ -813,7 +813,7 @@
     [df_local setTimeZone:[NSTimeZone localTimeZone]];
     df_local.dateFormat = @"hh:mm a, dd-MM-yyyy";
     
-    msg = [NSString stringWithFormat:@"%@ on %@",msg,[df_local stringFromDate:eventDate]];
+    msg = [NSString stringWithFormat:@"%@ at %@",msg,[df_local stringFromDate:eventDate]];
     
     [df_local release];
     
@@ -909,6 +909,8 @@
         /* Drop all timeline for this user */
         [[TimelineDatabase getSharedInstance] clearEventForUserName:userName];
         
+        /* clear all alert histories */
+        [CameraAlert clearAllAlerts];
         
         BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
                                                                                  Selector:nil
@@ -925,10 +927,6 @@
         
         [userDefaults synchronize];
         
-        /*[self performSelectorOnMainThread:@selector(show_login_or_reg:)
-         withObject:nil
-         waitUntilDone:NO];*/
-        //[self show_login_or_reg:nil];
     }
 }
 
@@ -1006,7 +1004,13 @@
 			default:
 				break;
                 
+                
+                
 		}
+        if (latestCamAlert != nil)
+        {
+            [CameraAlert clearAllAlertForCamera:latestCamAlert.cameraMacNoColon];
+        }
     }
 	if (tag == ALERT_PUSH_RECVED_RESCAN_AFTER)
 	{
@@ -1084,70 +1088,12 @@
 				break;
                 
 		}
-	}
-	else if (tag == ALERT_PUSH_RECVED_RELOGIN_AFTER)
-	{
-		switch(buttonIndex)
+        
+        
+        if (latestCamAlert != nil)
         {
-			case 0:
-				break;
-			case 1:
-            {
-                /*
-                 * Try to hide MFMailComposeViewController's keyboard first.
-                 */
-                
-                // Workaround: MFMailComposeViewController does not dismiss keyboard when application enters background or changes view screen.
-                UITextView *dummyTextView = [[[UITextView alloc] init] autorelease];
-                [((UIWindow *)[[[UIApplication sharedApplication] windows] objectAtIndex:0]).rootViewController.presentedViewController.view addSubview:dummyTextView];
-                [dummyTextView becomeFirstResponder];
-                [dummyTextView resignFirstResponder];
-                [dummyTextView removeFromSuperview];
-                // End of workaround
-                
-				if (_menuVC != nil)
-				{
-					NSLog(@"RELOGIN_AFTER close all windows and thread");
-                    
-					//[dashBoard.navigationController popToRootViewControllerAnimated:NO];
-                    
-					NSArray * views = _menuVC.navigationController.viewControllers;
-					NSLog(@"views count = %d",[views count] );
-					if ( [views count] > 1)
-					{
-						if (views.count > 2)
-                        {
-                            id obj2 = [views objectAtIndex:2];
-                            
-                            if ([obj2 isKindOfClass:[PlaybackViewController class]])
-                            {
-                                PlaybackViewController *playbackViewController = (PlaybackViewController *)obj2;
-                                [playbackViewController stopStream:nil];
-                            }
-                        }
-                        
-                        id obj = [views objectAtIndex:1];
-                        
-                        if ([obj isKindOfClass:[H264PlayerViewController class]])
-                        {
-                            H264PlayerViewController * h264PlayerViewController = (H264PlayerViewController *) obj;
-                            [h264PlayerViewController goBackToCameraList];
-                        }
-					}
-				}
-                
-				//[self dismissModalViewControllerAnimated:NO];
-                [self dismissViewControllerAnimated:NO completion:^{}];
-                
-                
-				[self sendStatus:LOGIN];
-            }
-				break;
-                
-			default:
-				break;
-                
-		}
+            [CameraAlert clearAllAlertForCamera:latestCamAlert.cameraMacNoColon];
+        }
 	}
     else if (tag == ALERT_PUSH_SERVER_ANNOUNCEMENT)
     {
