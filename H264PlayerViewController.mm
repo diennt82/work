@@ -99,7 +99,7 @@ double _ticks = 0;
     //set text name for camera name
     [self.ib_lbCameraName setText:self.selectedChannel.profile.name];
     
-    _isDegreeFDisplay = [userDefaults boolForKey:@"IS_FAHRENHEIT"];
+    _isDegreeFDisplay = [userDefaults boolForKey:IS_FAHRENHEIT];
     _resolution = @"";
     
     NSString *serverInput = [userDefaults stringForKey:@"name_server"];
@@ -5844,7 +5844,7 @@ double _ticks = 0;
     _isDegreeFDisplay = !_isDegreeFDisplay;
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setBool:_isDegreeFDisplay forKey:@"IS_FAHRENHEIT"];
+    [userDefaults setBool:_isDegreeFDisplay forKey:IS_FAHRENHEIT];
     [userDefaults synchronize];
     
     [self setTemperatureState_Fg:_stringTemperature];

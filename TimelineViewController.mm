@@ -79,7 +79,7 @@
     
     self.stringIntelligentMessage = @"Loading...";
     self.isLoading = TRUE;
-    self.is12hr = [[NSUserDefaults standardUserDefaults] boolForKey:@"IS_12_HR"];
+    self.is12hr = [[NSUserDefaults standardUserDefaults] boolForKey:IS_12_HR];
     
     self.eventPage = 1;
 #if 1
