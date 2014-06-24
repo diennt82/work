@@ -18,6 +18,7 @@
 #import "CameraAlert.h"
 #import "MenuViewController.h"
 #import "TimelineDatabase.h"
+#import "NotifViewController.h"
 
 #define DIRECTION_V_NON  0x01
 #define DIRECTION_V_UP   0x02
@@ -42,6 +43,7 @@
 #define ALERT_PUSH_RECVED_RELOGIN_AFTER 201
 #define ALERT_PUSH_SERVER_ANNOUNCEMENT  203
 #define ALERT_PUSH_RECVED_NON_MOTION    204
+#define ALERT_PUSH_RECVED_MULTIPLE      205
 
 
 
@@ -113,6 +115,8 @@
     NSThread * bonjourThread;
     
 
+    
+
 }
 
 @property (nonatomic, retain) IBOutlet UIView * progressView;
@@ -133,7 +137,6 @@
 @property (nonatomic, retain) CameraAlert *camAlert;
 
 @property (nonatomic, retain) MenuViewController *menuVC;
-//@property (nonatomic, retain) NSTimer * fullScreenTimer, *alertTimer; 
 
 
 - (void) initialize ;

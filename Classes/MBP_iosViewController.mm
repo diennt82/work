@@ -18,7 +18,6 @@
 #import "MBP_iosViewController.h"
 #import "PlayListViewController.h"
 #import "H264PlayerViewController.h"
-#import "NotifViewController.h"
 
 #import "Step_02_ViewController.h"
 #import "RegistrationViewController.h"
@@ -304,6 +303,7 @@
 	[restored_profiles release];
     
     [bonjourThread release];
+    
 	[super dealloc];
 }
 
@@ -662,8 +662,20 @@
 	//mac with COLON
 	NSString * camInView = (NSString*)[userDefaults objectForKey:CAM_IN_VEW];
     
-    NSLog(@"camInView: %@ camAlert.cameraMacNoColon:%@", camInView,camAlert.cameraMacNoColon);
+    NSLog(@"camInView: %@ ", camInView);
 	
+    NSLog(@"camAlert.cameraMacNoColon:%@, alert time: %@", camAlert.cameraMacNoColon,camAlert.alertTime);
+    
+    NSDateFormatter *dateFormater = [[NSDateFormatter alloc] init];
+    [dateFormater setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssXXXXX"];
+    [dateFormater setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+    NSError *error;
+    NSDate *eventDate ;
+    [dateFormater getObjectValue:&eventDate forString:camAlert.alertTime range:nil error:&error];
+    [dateFormater release];
+    
+    NSLog(@"eventDate: %@ & insert to database & clear obsolete history ", eventDate);
+    [CameraAlert clearObsoleteAlerts];
     
     
     if (camInView != nil)
@@ -677,8 +689,6 @@
                                                                 object:nil];
             
             
-            
-            
 			return FALSE;
 		}
         
@@ -686,21 +696,65 @@
     
     if (self.app_stage == APP_STAGE_SETUP)
     {
-        NSLog(@"APP_STAGE_SETUP. Don't popup!");
+        NSLog(@"APP_STAGE_SETUP. Don't popup! ignore?");
         return FALSE;
     }
+    
+    
+    [CameraAlert insertAlertForCamera:camAlert];
     
     NSLog(@"latestCamAlert is: %@", latestCamAlert);
     
     if (latestCamAlert != nil &&
         [latestCamAlert.cameraMacNoColon  isEqualToString:camAlert.cameraMacNoColon])
     {
-        NSLog(@"Same cam alert is currenlty stored.");
+        NSLog(@"Same cam alert is currenlty shown.");
         
-        if (pushAlert != nil &&
-            [pushAlert isVisible])
+        NSTimeInterval oldestTimestamp = [CameraAlert getOldestAlertTimestampOfCamera:camAlert.cameraMacNoColon];
+        NSDate * oldestDate = [NSDate dateWithTimeIntervalSince1970:oldestTimestamp];
+        
+        
+        if (pushAlert != nil && [pushAlert isVisible])
         {
-            NSLog(@"Dialog exist, don't popup");
+            NSLog(@"Dialog exist, don't popup, current msg:%@, title: %@", pushAlert.message, pushAlert.title);
+            
+            if (pushAlert.tag != ALERT_PUSH_RECVED_MULTIPLE)
+            {
+                [pushAlert dismissWithClickedButtonIndex:0 animated:NO];
+                [pushAlert release];
+                
+                
+                NSDateFormatter* df_local = [[NSDateFormatter alloc] init];
+                [df_local setTimeZone:[NSTimeZone localTimeZone]];
+                df_local.dateFormat = @"hh:mm a, dd-MM-yyyy";
+                NSString * combined_msg =[NSString stringWithFormat:@"Multiple detections at camera since %@",
+                                          [df_local stringFromDate:oldestDate]];
+                
+                [df_local release];
+                
+                
+                NSString * view_camera= NSLocalizedStringWithDefaultValue(@"Go_to_camera",nil, [NSBundle mainBundle],
+                                                                          @"Go to camera", nil);
+                
+                NSString * cancel = NSLocalizedStringWithDefaultValue(@"Cancel",nil, [NSBundle mainBundle],
+                                                                      @"Cancel", nil);
+                
+                
+                pushAlert = [[UIAlertView alloc]
+                             initWithTitle:camAlert.cameraName
+                             message:combined_msg
+                             delegate:self
+                             cancelButtonTitle:cancel
+                             otherButtonTitles:view_camera,nil];
+                
+                pushAlert.tag = ALERT_PUSH_RECVED_MULTIPLE;
+                [pushAlert show];
+                
+            }
+            else
+            {
+                NSLog(@"already shown the aggregation message");
+            }
             
             @synchronized(self)
             {
@@ -716,6 +770,13 @@
             }
             
             return FALSE;
+        }
+        else if (pushAlert != nil && ![pushAlert isVisible])
+        {
+            [pushAlert dismissWithClickedButtonIndex:0 animated:NO];
+            [pushAlert release];
+            pushAlert= nil;
+            
         }
     }
     
@@ -747,7 +808,13 @@
     NSString * cancel = NSLocalizedStringWithDefaultValue(@"Cancel",nil, [NSBundle mainBundle],
                                                           @"Cancel", nil);
     
+    NSDateFormatter* df_local = [[NSDateFormatter alloc] init];
+    [df_local setTimeZone:[NSTimeZone localTimeZone]];
+    df_local.dateFormat = @"hh:mm a, dd-MM-yyyy";
     
+    msg = [NSString stringWithFormat:@"%@ at %@",msg,[df_local stringFromDate:eventDate]];
+    
+    [df_local release];
     
     NSLog(@"pushAlert : %@",pushAlert);
     
@@ -768,24 +835,14 @@
                  cancelButtonTitle:cancel
                  otherButtonTitles:msg2,nil];
     
-    //if ([self isThisMacStoredOffline:camAlert.cameraMacNoColon])
+    
+    pushAlert.tag = ALERT_PUSH_RECVED_NON_MOTION;
+    
+    if([camAlert.alertType isEqualToString:ALERT_TYPE_MOTION])
     {
-        
-        pushAlert.tag = ALERT_PUSH_RECVED_NON_MOTION;
-        
-        if([camAlert.alertType isEqualToString:ALERT_TYPE_MOTION])
-        {
-            pushAlert.tag = ALERT_PUSH_RECVED_RESCAN_AFTER;
-        }
-        
-        
+        pushAlert.tag = ALERT_PUSH_RECVED_RESCAN_AFTER;
     }
-    //	else
-    //	{
-    //		NSLog(@"Relogin");
-    //		[self sendStatus:2];
-    //		pushAlert.tag = ALERT_PUSH_RECVED_RELOGIN_AFTER;
-    //	}
+    
     
     @synchronized(self)
     {
@@ -812,15 +869,7 @@
 
 -(void) playSound
 {
-#if 0
-	//201201011 This is needed to play the system sound on top of audio from camera
-	UInt32 sessionCategory = kAudioSessionCategory_AmbientSound;    // 1
-	AudioSessionSetProperty (
-                             kAudioSessionProperty_AudioCategory,                        // 2
-                             sizeof (sessionCategory),                                   // 3
-                             &sessionCategory                                            // 4
-                             );
-#endif
+    
 	//Play beep
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
@@ -859,6 +908,8 @@
         /* Drop all timeline for this user */
         [[TimelineDatabase getSharedInstance] clearEventForUserName:userName];
         
+        /* clear all alert histories */
+        [CameraAlert clearAllAlerts];
         
         BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
                                                                                  Selector:nil
@@ -875,10 +926,6 @@
         
         [userDefaults synchronize];
         
-        /*[self performSelectorOnMainThread:@selector(show_login_or_reg:)
-         withObject:nil
-         waitUntilDone:NO];*/
-        //[self show_login_or_reg:nil];
     }
 }
 
@@ -889,8 +936,10 @@
 {
 	int tag = alertView.tag ;
     
-    if (tag == ALERT_PUSH_RECVED_NON_MOTION)
+    if (tag == ALERT_PUSH_RECVED_NON_MOTION || tag == ALERT_PUSH_RECVED_MULTIPLE)
     {
+        NSLog(@"%s alert ALERT_PUSH_RECVED_NON_MOTION", __FUNCTION__);
+        
         switch(buttonIndex)
         {
 			case 0:
@@ -899,45 +948,8 @@
 				break;
 			case 1:
             {
-                /*
-                 * Try to hide MFMailComposeViewController's keyboard first.
-                 */
-                // Workaround: MFMailComposeViewController does not dismiss keyboard when application enters background or changes view screen.
-                UITextView *dummyTextView = [[[UITextView alloc] init] autorelease];
-                [((UIWindow *)[[[UIApplication sharedApplication] windows] objectAtIndex:0]).rootViewController.presentedViewController.view addSubview:dummyTextView];
-                [dummyTextView becomeFirstResponder];
-                [dummyTextView resignFirstResponder];
-                [dummyTextView removeFromSuperview];
-                // End of workaround
-                
-				if (_menuVC != nil)
-				{
-					NSArray * views = _menuVC.navigationController.viewControllers;
-					NSLog(@"views count = %d",[views count] );
-					if ( [views count] > 1)
-					{
-                        if (views.count > 2)
-                        {
-                            id obj2 = [views objectAtIndex:2];
-                            
-                            if ([obj2 isKindOfClass:[PlaybackViewController class]])
-                            {
-                                PlaybackViewController *playbackViewController = (PlaybackViewController *)obj2;
-                                [playbackViewController stopStream:nil];
-                            }
-                        }
-                        
-                        id obj = [views objectAtIndex:1];
-                        
-                        if ([obj isKindOfClass:[H264PlayerViewController class]])
-                        {
-                            H264PlayerViewController * h264PlayerViewController = (H264PlayerViewController *) obj;
-                            [h264PlayerViewController goBackToCameraList];
-                        }
-					}
-                    
-                    [_menuVC dismissViewControllerAnimated:NO completion:^{}];
-				}
+				[self dismissMenuHubbleView];
+                [self dismissNotificationViewController];
                 
                 NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
                 [userDefaults setObject:latestCamAlert.registrationID forKey:REG_ID];
@@ -956,10 +968,19 @@
 			default:
 				break;
                 
+                
+                
 		}
+        if (latestCamAlert != nil)
+        {
+            [CameraAlert clearAllAlertForCamera:latestCamAlert.cameraMacNoColon];
+        }
     }
+    
 	if (tag == ALERT_PUSH_RECVED_RESCAN_AFTER)
 	{
+        NSLog(@"%s alert: ALERT_PUSH_RECVED_RESCAN_AFTER", __FUNCTION__);
+        
 		switch(buttonIndex)
         {
 			case 0:
@@ -968,68 +989,20 @@
 				break;
 			case 1:
             {
-				if (_menuVC != nil)
-				{
-					NSLog(@"RESCAN_AFTER close all windows and thread");
-                    
-					NSArray * views = _menuVC.navigationController.viewControllers;
-					NSLog(@"views count = %d",[views count] );
-					if ( [views count] > 1)
-					{
-                        if (views.count > 2)
-                        {
-                            id obj2 = [views objectAtIndex:2];
-                            
-                            if ([obj2 isKindOfClass:[PlaybackViewController class]])
-                            {
-                                PlaybackViewController *playbackViewController = (PlaybackViewController *)obj2;
-                                [playbackViewController closePlayBack:nil];
-                            }
-                        }
-                        
-                        id obj = [views objectAtIndex:1];
-                        
-                        if ([obj isKindOfClass:[H264PlayerViewController class]])
-                        {
-                            H264PlayerViewController * h264PlayerViewController = (H264PlayerViewController *) obj;
-                            [h264PlayerViewController prepareGoBackToCameraList:nil];
-                        }
-					}
-                    
-                    [_menuVC dismissViewControllerAnimated:NO completion:^{}];
-				}
+                NSLog(@"%s, %d", __FUNCTION__, self.navigationController.viewControllers.count);
                 
-				//[self dismissViewControllerAnimated:NO completion:nil];
-                
-                NotifViewController *notifVC = [[NotifViewController alloc] init];
-                
-                @synchronized(self)
-                {
-                    
-                    //Feed in data now
-                    notifVC.cameraMacNoColon = latestCamAlert.cameraMacNoColon;// @"34159E8D4F7F";//latestCamAlert.cameraMacNoColon;
-                    notifVC.cameraName  = latestCamAlert.cameraName;//@"SharedCam8D4F7F";//latestCamAlert.cameraName;
-                    notifVC.alertType   = latestCamAlert.alertType;//@"4";//latestCamAlert.alertType;
-                    notifVC.alertVal    = latestCamAlert.alertVal;//@"20130921064439810";//latestCamAlert.alertVal;
-                    notifVC.registrationID = latestCamAlert.registrationID;
-                    notifVC.alertTime = latestCamAlert.alertTime;
-                    notifVC.NotifDelegate = self;
-                    
-                    [latestCamAlert release];
-                    latestCamAlert = nil;
-                }
-                
-                [self.navigationController pushViewController:notifVC animated:NO];
-                
-                //UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:notifVC];
-                //[self presentViewController:nav animated:YES completion:^{}];
+                [self dismissMenuHubbleView];
+                [self dismissNotificationViewController];
+                [self showNotifViewController:latestCamAlert];
+                [latestCamAlert release];
+                latestCamAlert = nil;
                 
                 [pushAlert release];
                 pushAlert = nil;
                 
-                NSLog(@"alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex: %p, %p", self, latestCamAlert);
-				break;
+                //NSLog(@"alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex: %p, %p", self, latestCamAlert);
             }
+                break;
 			default:
 				break;
                 
@@ -1037,59 +1010,15 @@
 	}
 	else if (tag == ALERT_PUSH_RECVED_RELOGIN_AFTER)
 	{
+        NSLog(@"%s alert ALERT_PUSH_RECVED_RELOGIN_AFTER", __FUNCTION__);
+        
 		switch(buttonIndex)
         {
 			case 0:
 				break;
 			case 1:
             {
-                /*
-                 * Try to hide MFMailComposeViewController's keyboard first.
-                 */
-                
-                // Workaround: MFMailComposeViewController does not dismiss keyboard when application enters background or changes view screen.
-                UITextView *dummyTextView = [[[UITextView alloc] init] autorelease];
-                [((UIWindow *)[[[UIApplication sharedApplication] windows] objectAtIndex:0]).rootViewController.presentedViewController.view addSubview:dummyTextView];
-                [dummyTextView becomeFirstResponder];
-                [dummyTextView resignFirstResponder];
-                [dummyTextView removeFromSuperview];
-                // End of workaround
-                
-				if (_menuVC != nil)
-				{
-					NSLog(@"RELOGIN_AFTER close all windows and thread");
-                    
-					//[dashBoard.navigationController popToRootViewControllerAnimated:NO];
-                    
-					NSArray * views = _menuVC.navigationController.viewControllers;
-					NSLog(@"views count = %d",[views count] );
-					if ( [views count] > 1)
-					{
-						if (views.count > 2)
-                        {
-                            id obj2 = [views objectAtIndex:2];
-                            
-                            if ([obj2 isKindOfClass:[PlaybackViewController class]])
-                            {
-                                PlaybackViewController *playbackViewController = (PlaybackViewController *)obj2;
-                                [playbackViewController stopStream:nil];
-                            }
-                        }
-                        
-                        id obj = [views objectAtIndex:1];
-                        
-                        if ([obj isKindOfClass:[H264PlayerViewController class]])
-                        {
-                            H264PlayerViewController * h264PlayerViewController = (H264PlayerViewController *) obj;
-                            [h264PlayerViewController goBackToCameraList];
-                        }
-					}
-				}
-                
-				//[self dismissModalViewControllerAnimated:NO];
-                [self dismissViewControllerAnimated:NO completion:^{}];
-                
-                
+                [self dismissMenuHubbleView];
 				[self sendStatus:LOGIN];
             }
 				break;
@@ -1098,9 +1027,16 @@
 				break;
                 
 		}
+  
+        if (latestCamAlert != nil)
+        {
+            [CameraAlert clearAllAlertForCamera:latestCamAlert.cameraMacNoColon];
+        }
 	}
     else if (tag == ALERT_PUSH_SERVER_ANNOUNCEMENT)
     {
+        NSLog(@"%s alert ALERT_PUSH_SERVER_ANNOUNCEMENT", __FUNCTION__);
+        
         switch(buttonIndex)
         {
 			case 0://IGNORE
@@ -1111,6 +1047,7 @@
                 NSArray * texts = [alertView.message componentsSeparatedByString:@" "];
                 NSString * url = nil;
                 BOOL found = FALSE;
+                
                 for (int i = texts.count-1; i > 0; i --)
                 {
                     url =(NSString *) [texts objectAtIndex:i];
@@ -1138,55 +1075,13 @@
     }
     else if (tag == 11)
     {
+        NSLog(@"%s alert Send Email", __FUNCTION__);
+        
         if (buttonIndex == 1)
         {
             if ([MFMailComposeViewController canSendMail])
             {
-                MFMailComposeViewController *picker = [[MFMailComposeViewController alloc] init];
-                picker.mailComposeDelegate = self;
-                
-                NSString *cachesDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-                NSString *logCrashedPath = [cachesDirectory stringByAppendingPathComponent:@"application_crash.log"];
-                NSString *logPath0 = [cachesDirectory stringByAppendingPathComponent:@"application0.log"];
-                
-                NSData *dataLog = [NSData dataWithContentsOfFile:logCrashedPath];
-                NSData *dataLog0 = nil;
-                
-                if ([[NSFileManager defaultManager] fileExistsAtPath:logPath0])
-                {
-                    dataLog0 = [NSData dataWithContentsOfFile:logPath0];
-                }
-                
-                NSInteger length = dataLog.length;
-                
-                if (dataLog0)
-                {
-                    length += dataLog0.length;
-                }
-                
-                NSMutableData *dataZip = [NSMutableData dataWithLength:length];
-                
-                if (dataLog0)
-                {
-                    [dataZip appendData:dataLog0];
-                }
-                
-                [dataZip appendData:dataLog];
-                
-                dataZip = [NSData gzipData:dataZip];
-                
-                [picker addAttachmentData:[dataZip AES128EncryptWithKey:CES128_ENCRYPTION_PASSWORD] mimeType:@"text/plain" fileName:@"application_crash.log"];
-                
-                // Set the subject of email
-                [picker setSubject:@"iOS app crash log"];
-                NSArray *toRecipents = [NSArray arrayWithObject:@"ios.crashreport@cvisionhk.com"];
-                [picker setToRecipients:toRecipents];
-                
-                // Show email view
-                [self presentViewController:picker animated:YES completion:nil];
-                
-                // Release picker
-                [picker release];
+                [self showMFMailComposeView];
             }
             else
             {
@@ -1215,6 +1110,137 @@
     
 }
 
+- (void)showMFMailComposeView
+{
+    MFMailComposeViewController *picker = [[MFMailComposeViewController alloc] init];
+    picker.mailComposeDelegate = self;
+    
+    NSString *cachesDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    NSString *logCrashedPath = [cachesDirectory stringByAppendingPathComponent:@"application_crash.log"];
+    NSString *logPath0 = [cachesDirectory stringByAppendingPathComponent:@"application0.log"];
+    
+    NSData *dataLog = [NSData dataWithContentsOfFile:logCrashedPath];
+    NSData *dataLog0 = nil;
+    
+    if ([[NSFileManager defaultManager] fileExistsAtPath:logPath0])
+    {
+        dataLog0 = [NSData dataWithContentsOfFile:logPath0];
+    }
+    
+    NSInteger length = dataLog.length;
+    
+    if (dataLog0)
+    {
+        length += dataLog0.length;
+    }
+    
+    NSMutableData *dataZip = [NSMutableData dataWithLength:length];
+    
+    if (dataLog0)
+    {
+        [dataZip appendData:dataLog0];
+    }
+    
+    [dataZip appendData:dataLog];
+    
+    dataZip = [NSData gzipData:dataZip];
+    
+    [picker addAttachmentData:[dataZip AES128EncryptWithKey:CES128_ENCRYPTION_PASSWORD] mimeType:@"text/plain" fileName:@"application_crash.log"];
+    
+    // Set the subject of email
+    [picker setSubject:@"iOS app crash log"];
+    NSArray *toRecipents = [NSArray arrayWithObject:@"ios.crashreport@cvisionhk.com"];
+    [picker setToRecipients:toRecipents];
+    
+    // Show email view
+    [self presentViewController:picker animated:YES completion:nil];
+    
+    // Release picker
+    [picker release];
+}
+
+- (void)dismissMenuHubbleView
+{
+    NSLog(@"%s", __FUNCTION__);
+    
+    if (_menuVC != nil)
+    {
+        NSArray * views = _menuVC.navigationController.viewControllers;
+        NSLog(@"views count = %d",[views count] );
+        
+        if ( [views count] > 1)
+        {
+            if (views.count > 2)
+            {
+                id obj2 = [views objectAtIndex:2];
+                
+                if ([obj2 isKindOfClass:[PlaybackViewController class]])
+                {
+                    PlaybackViewController *playbackViewController = (PlaybackViewController *)obj2;
+                    [playbackViewController closePlayBack:nil];
+                }
+            }
+            
+            id obj = [views objectAtIndex:1];
+            
+            if ([obj isKindOfClass:[H264PlayerViewController class]])
+            {
+                H264PlayerViewController * h264PlayerViewController = (H264PlayerViewController *) obj;
+                [h264PlayerViewController prepareGoBackToCameraList:nil];
+            }
+            else if([obj isKindOfClass:[EarlierViewController class]]) // Camera is offline
+            {
+                [((EarlierViewController *)obj).navigationController popToRootViewControllerAnimated:NO];
+            }
+        }
+
+        [_menuVC removeSubviews];
+        _menuVC.menuDelegate = nil;
+    }
+    
+    [self dismissViewControllerAnimated:NO completion:^{}];
+}
+
+- (void)dismissNotificationViewController
+{
+    id aViewController = self.navigationController.viewControllers[self.navigationController.viewControllers.count - 1];
+    
+    NSLog(@"%s %d %@", __FUNCTION__, self.navigationController.viewControllers.count, aViewController);
+    
+    if ([aViewController isKindOfClass:[PlaybackViewController class]])
+    {
+        PlaybackViewController *playbackViewController = (PlaybackViewController *)aViewController;
+        [playbackViewController closePlayBack:nil];
+    }
+    else if ([aViewController isKindOfClass:[NotifViewController class]])
+    {
+        NotifViewController *aNotifVC = ((NotifViewController *)aViewController);
+        aNotifVC.notifDelegate = nil;
+        [aNotifVC cancelTaskDoInBackground];
+        [aNotifVC.navigationController popToRootViewControllerAnimated:NO];
+    }
+}
+
+- (void)showNotifViewController:(CameraAlert *)cameraAlert
+{
+    NotifViewController *notifVC = [[NotifViewController alloc] init];
+    
+    @synchronized(self)
+    {
+        //Feed in data now
+        notifVC.cameraMacNoColon = cameraAlert.cameraMacNoColon;// @"34159E8D4F7F";
+        notifVC.cameraName       = cameraAlert.cameraName;//@"SharedCam8D4F7F";
+        notifVC.alertType        = cameraAlert.alertType;//@"4";
+        notifVC.alertVal         = cameraAlert.alertVal;//@"20130921064439810";
+        notifVC.registrationID   = cameraAlert.registrationID;
+        notifVC.alertTime        = cameraAlert.alertTime;
+        notifVC.notifDelegate    = self;
+    }
+    
+    [self.navigationController pushViewController:notifVC animated:NO];
+    
+    [notifVC release];
+}
 
 #pragma mark -
 #pragma mark Scan For cameras
@@ -1778,42 +1804,26 @@
 
 - (void)showNotificationViewController: (NSTimer *)exp
 {
+    NSLog(@"%s", __FUNCTION__);
+    
     //Back from login- login success
     [self dismissViewControllerAnimated:NO completion:nil];
+    [self dismissMenuHubbleView];
+    [self dismissNotificationViewController];
     self.progressView.hidden = NO;
-    
-    
     
     if ([self.camAlert.alertType isEqualToString:ALERT_TYPE_MOTION])
     {
-        
-        NotifViewController *notifVC = [[NotifViewController alloc] initWithNibName:@"NotifViewController"
-                                                                             bundle:Nil];
-        notifVC.notifDelegate = self;
-        //Feed in data now
-        
-        
-        notifVC.cameraMacNoColon = self.camAlert.cameraMacNoColon;
-        notifVC.cameraName       = self.camAlert.cameraName;
-        notifVC.alertType        = self.camAlert.alertType;
-        notifVC.alertVal         = self.camAlert.alertVal;
-        notifVC.registrationID   = self.camAlert.registrationID;
-        
-        
-        [self presentViewController:[[UINavigationController alloc]initWithRootViewController:notifVC] animated:YES completion:^{}];
+        [self showNotifViewController:self.camAlert];
     }
     else //Sound/Temphi/templo - go to camera
     {
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        [userDefaults setObject:latestCamAlert.registrationID forKey:REG_ID];
+        [userDefaults setObject:self.camAlert.registrationID forKey:REG_ID];
         [userDefaults synchronize];
         
-        
         [self sendStatus:SHOW_CAMERA_LIST];
-        
-        
     }
-    
 }
 
 

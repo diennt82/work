@@ -356,14 +356,19 @@ void checkingApplicationCrashed()
             //Next few lines: ORDER MATTERS
             if ( [application applicationState] == UIApplicationStateActive)
             {
-                //App is running now
+                //App is running now -> show a dialog popup
                 shouldStoreAlert = [viewController pushNotificationRcvedInForeground: camAlert];
             }
             else if ( [application applicationState] == UIApplicationStateInactive)
             {
-                NSLog(@"UIApplicationStateInactive - going to be active");
+                // App inactive in following cases:
+                //    - Launching -> switch directly to the camera/Motion view
+                //    - User pull down/up the menu , & click -> dont' do anything
+                NSLog(@"UIApplicationStateInactive - going to be active same thing");
                 
-                [self performSelectorOnMainThread:@selector(activateNotificationViewController:) withObject:camAlert waitUntilDone:YES];
+                [self performSelectorOnMainThread:@selector(activateNotificationViewController:)
+                                       withObject:camAlert
+                                    waitUntilDone:YES];
 
             }
             else
@@ -525,7 +530,7 @@ void checkingApplicationCrashed()
      */
     NSLog(@"applicationWillResignActive: %d", viewController.app_stage);
     
-    if (viewController.app_stage == APP_STAGE_SETUP)
+    //if (viewController.app_stage == APP_STAGE_SETUP)
     {
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         [userDefaults setInteger:viewController.app_stage forKey:@"ApplicationStage"];
@@ -586,9 +591,6 @@ void checkingApplicationCrashed()
         if ([userDefaults objectForKey:CAM_IN_VEW] != nil )
         {
             NSLog(@"A camera is in view.");
-            
-            
-            
         }
     }
     else if (viewController.app_stage == APP_STAGE_LOGGING_IN || viewController.app_stage == APP_STAGE_INIT)

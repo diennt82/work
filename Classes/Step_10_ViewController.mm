@@ -397,11 +397,11 @@
                 case DEV_STATUS_UNKOWN:
                 case DEV_STATUS_NOT_REGISTERED:
                 case DEV_STATUS_DELETED:
+                case DEV_STATUS_REGISTERED_OTHER_USER:
                     // Check again
                     break;
                     
                 case DEV_STATUS_NOT_IN_MASTER:
-                case DEV_STATUS_REGISTERED_OTHER_USER:
                 {
                     if (deviceStatus == DEV_STATUS_NOT_IN_MASTER)
                     {

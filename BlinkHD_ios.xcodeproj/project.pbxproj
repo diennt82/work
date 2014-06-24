@@ -742,9 +742,7 @@
 		A1B1E7D118E9135800F076B6 /* buy_camera_btn_pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A1B1E7AB18E9135800F076B6 /* buy_camera_btn_pressed@2x.png */; };
 		A1B1E7D218E9135800F076B6 /* buy_camera_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = A1B1E7AC18E9135800F076B6 /* buy_camera_btn.png */; };
 		A1B1E7D318E9135800F076B6 /* buy_camera_btn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A1B1E7AD18E9135800F076B6 /* buy_camera_btn@2x.png */; };
-		A1B1E7D418E9135800F076B6 /* camera_focus_66.png in Resources */ = {isa = PBXBuildFile; fileRef = A1B1E7AE18E9135800F076B6 /* camera_focus_66.png */; };
 		A1B1E7D518E9135800F076B6 /* camera_focus_66@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A1B1E7AF18E9135800F076B6 /* camera_focus_66@2x.png */; };
-		A1B1E7D618E9135800F076B6 /* camera_mbp_83.png in Resources */ = {isa = PBXBuildFile; fileRef = A1B1E7B018E9135800F076B6 /* camera_mbp_83.png */; };
 		A1B1E7D718E9135800F076B6 /* camera_mbp_83@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A1B1E7B118E9135800F076B6 /* camera_mbp_83@2x.png */; };
 		A1B1E7D818E9135800F076B6 /* camera_select.png in Resources */ = {isa = PBXBuildFile; fileRef = A1B1E7B218E9135800F076B6 /* camera_select.png */; };
 		A1B1E7D918E9135800F076B6 /* camera_select@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A1B1E7B318E9135800F076B6 /* camera_select@2x.png */; };
@@ -1637,9 +1635,7 @@
 		A1B1E7AB18E9135800F076B6 /* buy_camera_btn_pressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "buy_camera_btn_pressed@2x.png"; sourceTree = "<group>"; };
 		A1B1E7AC18E9135800F076B6 /* buy_camera_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = buy_camera_btn.png; sourceTree = "<group>"; };
 		A1B1E7AD18E9135800F076B6 /* buy_camera_btn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "buy_camera_btn@2x.png"; sourceTree = "<group>"; };
-		A1B1E7AE18E9135800F076B6 /* camera_focus_66.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_focus_66.png; sourceTree = "<group>"; };
 		A1B1E7AF18E9135800F076B6 /* camera_focus_66@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera_focus_66@2x.png"; sourceTree = "<group>"; };
-		A1B1E7B018E9135800F076B6 /* camera_mbp_83.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_mbp_83.png; sourceTree = "<group>"; };
 		A1B1E7B118E9135800F076B6 /* camera_mbp_83@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera_mbp_83@2x.png"; sourceTree = "<group>"; };
 		A1B1E7B218E9135800F076B6 /* camera_select.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_select.png; sourceTree = "<group>"; };
 		A1B1E7B318E9135800F076B6 /* camera_select@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera_select@2x.png"; sourceTree = "<group>"; };
@@ -1727,9 +1723,7 @@
 			isa = PBXGroup;
 			children = (
 				5EBA456719405BEA00695155 /* XIB FIles */,
-				8429C571193325EF00F5FCF8 /* TermsCondController.h */,
-				8429C572193325EF00F5FCF8 /* TermsCondController.m */,
-				8429C573193325EF00F5FCF8 /* TermsCondController.xib */,
+				8BB2D7FB1957DBC60038401F /* TermsCC */,
 				5E712D8E192B3332000858F1 /* UIActionSheetBloack */,
 				5EAFC05B192A3DCA001FB3AA /* MBProgressHUD */,
 				8B98D548192371060084C2FD /* Zip */,
@@ -2421,9 +2415,7 @@
 				A1B1E7AB18E9135800F076B6 /* buy_camera_btn_pressed@2x.png */,
 				A1B1E7AC18E9135800F076B6 /* buy_camera_btn.png */,
 				A1B1E7AD18E9135800F076B6 /* buy_camera_btn@2x.png */,
-				A1B1E7AE18E9135800F076B6 /* camera_focus_66.png */,
 				A1B1E7AF18E9135800F076B6 /* camera_focus_66@2x.png */,
-				A1B1E7B018E9135800F076B6 /* camera_mbp_83.png */,
 				A1B1E7B118E9135800F076B6 /* camera_mbp_83@2x.png */,
 				A1B1E7B218E9135800F076B6 /* camera_select.png */,
 				A1B1E7B318E9135800F076B6 /* camera_select@2x.png */,
@@ -3236,6 +3228,16 @@
 			name = Step_07;
 			sourceTree = "<group>";
 		};
+		8BB2D7FB1957DBC60038401F /* TermsCC */ = {
+			isa = PBXGroup;
+			children = (
+				8429C571193325EF00F5FCF8 /* TermsCondController.h */,
+				8429C572193325EF00F5FCF8 /* TermsCondController.m */,
+				8429C573193325EF00F5FCF8 /* TermsCondController.xib */,
+			);
+			name = TermsCC;
+			sourceTree = "<group>";
+		};
 		8BEDE2ED1861B73F00D3AE2B /* Disturb */ = {
 			isa = PBXGroup;
 			children = (
@@ -3901,7 +3903,6 @@
 				5E769B0519345B0E008D9CA7 /* loader_big_b@2x.png in Resources */,
 				8B9112D218602898004301C5 /* SensitivityCell.xib in Resources */,
 				5E769B0819345B0E008D9CA7 /* loader_big_e@2x.png in Resources */,
-				A1B1E7D418E9135800F076B6 /* camera_focus_66.png in Resources */,
 				8B299F8F18AF500900D36BE5 /* camera_action_video_land.png in Resources */,
 				A1B1E7E318E9135800F076B6 /* cart@2x.png in Resources */,
 				8B299FA018AF500900D36BE5 /* camera_action_mic@2x.png in Resources */,
@@ -4021,7 +4022,6 @@
 				8B9507B918C9960D006D4945 /* setup_check@2x.png in Resources */,
 				8B9507B318C9960D006D4945 /* setup_camera_led2@2x.png in Resources */,
 				8B9ABBB918AA2AC30079F4A3 /* CameraMenuViewController.xib in Resources */,
-				A1B1E7D618E9135800F076B6 /* camera_mbp_83.png in Resources */,
 				8B977B7218C709A100A61115 /* PAIRInstructionViewController.xib in Resources */,
 				A18635F218B6F43F00CB5CDA /* CellMelody.xib in Resources */,
 				A1ABF1BB187538280014FCB4 /* CreateBLEConnection_VController.xib in Resources */,
@@ -4362,7 +4362,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = HubbleHome;
-				PROVISIONING_PROFILE = "AC23F6F2-85E8-4AEE-9C7C-F41A556D9C25";
+				PROVISIONING_PROFILE = "37E5993F-C523-41C7-BAB0-D4E922AABC76";
 				SDKROOT = iphoneos7.0;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
 				VALID_ARCHS = "armv6 armv7";
@@ -4411,7 +4411,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = HubbleHome;
-				PROVISIONING_PROFILE = "AC23F6F2-85E8-4AEE-9C7C-F41A556D9C25";
+				PROVISIONING_PROFILE = "37E5993F-C523-41C7-BAB0-D4E922AABC76";
 				SDKROOT = iphoneos7.0;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
 				VALIDATE_PRODUCT = YES;
@@ -4435,7 +4435,7 @@
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = HubbleHome;
-				PROVISIONING_PROFILE = "BEE7B868-3871-4C3E-870A-2AE4C2B9FCDA";
+				PROVISIONING_PROFILE = "B7A1FC17-F9B3-470C-8E9B-4EFCFCF6B501";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external_include\"/**";
@@ -4483,7 +4483,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = HubbleHome;
-				PROVISIONING_PROFILE = "AC23F6F2-85E8-4AEE-9C7C-F41A556D9C25";
+				PROVISIONING_PROFILE = "37E5993F-C523-41C7-BAB0-D4E922AABC76";
 				RAMEWORK_SEARCH_PATHS = "$(inherited) \"$(SRCROOT)\"";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
@@ -4507,7 +4507,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = HubbleHome;
-				PROVISIONING_PROFILE = "BEE7B868-3871-4C3E-870A-2AE4C2B9FCDA";
+				PROVISIONING_PROFILE = "B7A1FC17-F9B3-470C-8E9B-4EFCFCF6B501";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external_include\"/**";
@@ -4531,7 +4531,7 @@
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = HubbleHome;
-				PROVISIONING_PROFILE = "BEE7B868-3871-4C3E-870A-2AE4C2B9FCDA";
+				PROVISIONING_PROFILE = "B7A1FC17-F9B3-470C-8E9B-4EFCFCF6B501";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external_include\"/**";

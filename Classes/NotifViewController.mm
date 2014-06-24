@@ -9,6 +9,7 @@
 #import "NotifViewController.h"
 #import "PlaybackViewController.h"
 #import "PlaylistInfo.h"
+#import "MBProgressHUD.h"
 
 @interface NotifViewController ()
 
@@ -31,6 +32,7 @@
 @property (nonatomic, retain) NSMutableArray *clipsInEvent;
 @property (nonatomic) BOOL isFreeUser;
 @property (nonatomic) BOOL isReturnFrmPlayback;
+@property (nonatomic) BOOL isBackgroundTaskRunning;
 
 @end
 
@@ -132,10 +134,10 @@
     else
     {
         _isBackgroundTaskRunning = YES;
+        
+        //MBProgressHUD *hubView = [MBProgressHUD showHUDAddedTo:_playEnventBtn animated:YES];
+        //hubView.dimBackground = YES;
     }
-    
-
-
 }
 
 - (void)layoutImageAndTextForButton: (UIButton *)button
@@ -173,6 +175,8 @@
 
 - (IBAction)playEventTouchAction:(id)sender
 {
+    NSLog(@"%s", __FUNCTION__);
+    
     if (!_isFreeUser)
     {
         if (![_clipsInEvent isEqual:[NSNull null]] &&
@@ -245,6 +249,7 @@
     
     CameraMenuViewController *cameraMenuCV = [[CameraMenuViewController alloc] init];
     cameraMenuCV.camChannel = self.camChannel;
+    
     if(self.parentVC)
     {
         MenuViewController *menuVC = (MenuViewController *)self.parentVC;
@@ -254,6 +259,7 @@
     {
         cameraMenuCV.cameraMenuDelegate = self.notifDelegate;
     }
+    
     [self.navigationController pushViewController:cameraMenuCV animated:YES];
     [cameraMenuCV release];
 }
@@ -270,9 +276,15 @@
 
 - (IBAction)ignoreTouchAction:(id)sender
 {
-    NSLog(@"%s _notifDelegate:%@", __FUNCTION__, _notifDelegate);
+    NSLog(@"%s notifDelegate:%@, isBgTask:%d", __FUNCTION__, _notifDelegate, _isBackgroundTaskRunning);
 
     [self cancelTaskDoInBackground];
+    
+    while (_isBackgroundTaskRunning)
+    {
+        NSLog(@"%s Waiting for bg task", __FUNCTION__);
+    }
+    
     [self.navigationController popToRootViewControllerAnimated:NO];
     [_notifDelegate sendStatus:SHOW_CAMERA_LIST2];
     
@@ -283,6 +295,7 @@
     [userDefaults synchronize];
     
 
+    NSLog(@"%s isBgTask:%d", __FUNCTION__, _isBackgroundTaskRunning);
 }
 
 #pragma mark - Encoding URL string
@@ -299,7 +312,8 @@
 
 - (void)getEventSnapshot_bg
 {
-    NSLog(@"%s Waiting for checking event's url", __FUNCTION__);
+    NSLog(@"%s Waiting for checking event's url, _isBackgroundTaskRunning:%d", __FUNCTION__, _isBackgroundTaskRunning);
+    
     //2013-12-20 20:10:18 (yyyy-MM-dd HH:mm:ss).
     // eventcode: 44334C7FA03C_04_20140310101412000
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -403,15 +417,18 @@
     NSString *urlFile = [[_clipsInEvent objectAtIndex:0] objectForKey:@"file"];
     
     if (([urlFile isEqual:[NSNull null]] ||
-         [urlFile isEqualToString:@""] || urlFile == nil) && _isBackgroundTaskRunning)
+         [urlFile isEqualToString:@""]   ||
+         urlFile == nil) &&
+        _isBackgroundTaskRunning)
     {
-        [self performSelectorInBackground:@selector(getEventSnapshot_bg) withObject:nil];
+        [self getEventSnapshot_bg];
     }
     else
     {
         dispatch_async(dispatch_get_main_queue(), ^{
             [self cancelTaskDoInBackground];
             NSLog(@"url is %@", urlFile);
+            //[MBProgressHUD hideHUDForView:_playEnventBtn animated:NO];
             [_playEnventBtn setEnabled:YES];
         });
     }
@@ -421,6 +438,7 @@
 - (void)cancelTaskDoInBackground
 {
     _isBackgroundTaskRunning = NO;
+    
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(getEventSnapshot_bg) object:nil];
 }
 - (void)didReceiveMemoryWarning

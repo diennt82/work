@@ -18,6 +18,7 @@
 #import "SensitivityInfo.h"
 #import "MBProgressHUD.h"
 #import "UIActionSheet+Blocks.h"
+#import "PublicDefine.h"
 
 
 
@@ -39,8 +40,10 @@
 #define SENSITIVITY_SOUND_MEDIUM    70
 #define SENSITIVITY_SOUND_HI        25
 
-
 #define ENABLE_CHANGE_IMAGE 0
+
+#define SENSITIVITY_MOTION_VALUE(x) (x<=SENSITIVITY_MOTION_LOW?0:(x<=SENSITIVITY_MOTION_MEDIUM?1:2))
+#define SENSITIVITY_SOUND_VALUE(x)  (x>=SENSITIVITY_SOUND_LOW?0:(x>=SENSITIVITY_SOUND_MEDIUM?1:2))
 
 @interface CameraMenuViewController () <UITableViewDataSource, UITableViewDelegate,SensitivityCellDelegate,SensitivityTemperaureCellDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 {
@@ -1086,20 +1089,7 @@
     
     if (rowIndx == 0) // Motion
     {
-        NSInteger motionValue = SENSITIVITY_MOTION_LOW;
-        
-        if (value == 0)
-        {
-            motionValue = SENSITIVITY_MOTION_LOW;
-        }
-        else if(value == 1)
-        {
-            motionValue = SENSITIVITY_MOTION_MEDIUM;
-        }
-        else // value = 2
-        {
-            motionValue = SENSITIVITY_MOTION_HI;
-        }
+        NSInteger motionValue = value==0?SENSITIVITY_MOTION_LOW:(value==1?SENSITIVITY_MOTION_MEDIUM:SENSITIVITY_MOTION_HI);
         
         cmd = [cmd stringByAppendingFormat:@"set_motion_sensitivity&setup=%d", motionValue];
         
@@ -1107,21 +1097,7 @@
     }
     else // Sound
     {
-        NSInteger soundValue = SENSITIVITY_SOUND_LOW;
-        
-        if (value == 0)
-        {
-            soundValue = SENSITIVITY_SOUND_LOW;
-        }
-        else if(value == 1)
-        {
-            soundValue = SENSITIVITY_SOUND_MEDIUM;
-        }
-        else // value = 2
-        {
-            soundValue = SENSITIVITY_SOUND_HI;
-        }
-        
+        NSInteger soundValue = value==0?SENSITIVITY_SOUND_LOW:(value==1?SENSITIVITY_SOUND_MEDIUM:SENSITIVITY_SOUND_HI);
         cmd = [cmd stringByAppendingFormat:@"vox_set_threshold&value=%d", soundValue];
         
         self.sensitivityInfo.soundOn = value;
@@ -1523,35 +1499,12 @@
                     }
                     
                     self.sensitivityInfo.motionOn      = [settingsArray[0] integerValue];
-                    NSLog(@"%@, %d", settingsArray[0], [settingsArray[0] integerValue]);
                     
-                    if ([settingsArray[1] integerValue] <= 10)
-                    {
-                        self.sensitivityInfo.motionValue = 0;
-                    }
-                    else if (10 < [settingsArray[1] integerValue] && [settingsArray[1] integerValue] <= 50)
-                    {
-                        self.sensitivityInfo.motionValue = 1;
-                    }
-                    else
-                    {
-                        self.sensitivityInfo.motionValue = 2;
-                    }
-                    
+                    self.sensitivityInfo.motionValue = SENSITIVITY_MOTION_VALUE([settingsArray[1] integerValue]);
+
                     self.sensitivityInfo.soundOn       = [settingsArray[2] boolValue];
                     
-                    if (80 <= [settingsArray[3] integerValue])
-                    {
-                        self.sensitivityInfo.soundValue = 0;
-                    }
-                    else if (70 <= [settingsArray[3] integerValue] && [settingsArray[3] integerValue] < 80)
-                    {
-                        self.sensitivityInfo.soundValue = 1;
-                    }
-                    else
-                    {
-                        self.sensitivityInfo.soundValue = 2;
-                    }
+                    self.sensitivityInfo.soundValue = SENSITIVITY_SOUND_VALUE([settingsArray[3] integerValue]);
                     
                     self.sensitivityInfo.tempLowOn     = [settingsArray[5] boolValue];
                     self.sensitivityInfo.tempHighOn    = [settingsArray[4] boolValue];
@@ -1559,13 +1512,15 @@
                     self.sensitivityInfo.tempLowValue  = [settingsArray[7] integerValue];
                     self.sensitivityInfo.tempHighValue = [settingsArray[6] integerValue];
                     
+                    self.sensitivityInfo.tempIsFahrenheit = [[NSUserDefaults standardUserDefaults] boolForKey:IS_FAHRENHEIT];
+                    NSLog(@"%s, mv:%d, sv:%d", __FUNCTION__, _sensitivityInfo.motionValue, _sensitivityInfo.soundValue);
                     //numOfRows[indexPath.section] = 4;
                     //self.isExistSensitivityData = TRUE;
                 }
                 else
                 {
                     //numOfRows[indexPath.section] = 2;
-                    intTableSectionStatus=0;
+                    intTableSectionStatus = 0;
                     self.sensitivityMessage = @"Error -Load Sensitivity Settings!";
                 }
             }
@@ -1573,7 +1528,7 @@
         else
         {
             //numOfRows[indexPath.section] = 2;
-            intTableSectionStatus=0;
+            intTableSectionStatus = 0;
             self.sensitivityMessage = @"Error -Load Sensitivity Settings error!";
         }
     }
