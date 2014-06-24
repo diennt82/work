@@ -341,6 +341,7 @@
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     BOOL isOffline = [userDefaults boolForKey:_OfflineMode];
     self.camerasVC.waitingForUpdateData = FALSE;
+    
     if (!isOffline &&
         !self.camerasVC.waitingForUpdateData &&
         !_notUpdateCameras)
@@ -493,6 +494,29 @@
 	return TRUE;
 }
 
+- (void)removeSubviews
+{
+    NSLog(@"%s", __FUNCTION__);
+    
+    if (_accountVC)
+    {
+        // Dismiss account view's subviews.
+        [_accountVC dismissViewControllerAnimated:NO completion:^{}];
+        
+        [_accountVC.view removeFromSuperview];
+    }
+    
+    if (_settingsVC)
+    {
+        [_settingsVC.view removeFromSuperview];
+    }
+    
+    if (_camerasVC)
+    {
+        [_camerasVC.view removeFromSuperview];
+    }
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -502,6 +526,8 @@
 - (void)dealloc
 {
     [_accountVC release];
+    [_settingsVC release];
+    [_camerasVC release];
     [super dealloc];
 }
 

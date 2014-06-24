@@ -1006,15 +1006,18 @@ double _ticks = 0;
             
     		NSLog(@"Timeout While streaming  OR server DIED - userWantToCancel: %d, returnFromPlayback: %d, forceStop: %d", userWantToCancel, _returnFromPlayback, ext1);
             
-            if (userWantToCancel == TRUE)
+            if (userWantToCancel == TRUE) // Event comes from BackButtonItem.
             {
                 NSLog(@"*[MEDIA_ERROR_TIMEOUT_WHILE_STREAMING] *** USER want to cancel **.. cancel after .1 sec...");
                 self.selectedChannel.stopStreaming = TRUE;
                 
-                
+#if 1
+                [self goBack];
+#else
                 [self performSelector:@selector(goBackToCameraList)
                            withObject:nil
                            afterDelay:0.1];
+#endif
                 return;
             }
             else
@@ -1246,7 +1249,7 @@ double _ticks = 0;
     
     if (_mediaProcessStatus == MEDIAPLAYER_NOT_INIT)
     {
-        MediaPlayer::Instance()->shouldWait = FALSE;
+        //MediaPlayer::Instance()->shouldWait = FALSE;
     }
     else if(_mediaProcessStatus == MEDIAPLAYER_SET_LISTENER)
     {
@@ -2117,6 +2120,14 @@ double _ticks = 0;
         [_audioOutStreamRemote disconnectFromAudioSocketRemote];
     }
     
+    [self stopPeriodicBeep];
+    
+    if (_timerRemoteStreamTimeOut && [_timerRemoteStreamTimeOut isValid])
+    {
+        [_timerRemoteStreamTimeOut invalidate];
+        self.timerRemoteStreamTimeOut = nil;
+    }
+    
     NSLog(@"%s _mediaProcessStatus: %d", __FUNCTION__, _mediaProcessStatus);
     
     if (_earlierVC)
@@ -2133,6 +2144,8 @@ double _ticks = 0;
     {
         [_jsonCommBlocked release];
     }
+    
+    MediaPlayer::Instance()->setShouldWait(FALSE);
     
     if (_mediaProcessStatus == MEDIAPLAYER_NOT_INIT)
     {
@@ -2158,6 +2171,7 @@ double _ticks = 0;
     }
 }
 
+#if 0
 - (void)goBackToCameraList
 {
     [self stopPeriodicBeep];
@@ -2181,6 +2195,7 @@ double _ticks = 0;
     
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
+#endif
 
 - (void)goBackToCamerasRemoteStreamTimeOut
 {
