@@ -304,6 +304,7 @@
 	[restored_profiles release];
     
     [bonjourThread release];
+    
 	[super dealloc];
 }
 
@@ -662,8 +663,20 @@
 	//mac with COLON
 	NSString * camInView = (NSString*)[userDefaults objectForKey:CAM_IN_VEW];
     
-    NSLog(@"camInView: %@ camAlert.cameraMacNoColon:%@", camInView,camAlert.cameraMacNoColon);
+    NSLog(@"camInView: %@ ", camInView);
 	
+    NSLog(@"camAlert.cameraMacNoColon:%@, alert time: %@", camAlert.cameraMacNoColon,camAlert.alertTime);
+    
+    NSDateFormatter *dateFormater = [[NSDateFormatter alloc] init];
+    [dateFormater setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssXXXXX"];
+    [dateFormater setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+    NSError *error;
+    NSDate *eventDate ;
+    [dateFormater getObjectValue:&eventDate forString:camAlert.alertTime range:nil error:&error];
+    [dateFormater release];
+    
+    NSLog(@"eventDate: %@ & insert to database & clear obsolete history ", eventDate);
+    [CameraAlert clearObsoleteAlerts];
     
     
     if (camInView != nil)
@@ -677,8 +690,6 @@
                                                                 object:nil];
             
             
-            
-            
 			return FALSE;
 		}
         
@@ -686,21 +697,65 @@
     
     if (self.app_stage == APP_STAGE_SETUP)
     {
-        NSLog(@"APP_STAGE_SETUP. Don't popup!");
+        NSLog(@"APP_STAGE_SETUP. Don't popup! ignore?");
         return FALSE;
     }
+    
+    
+    [CameraAlert insertAlertForCamera:camAlert];
     
     NSLog(@"latestCamAlert is: %@", latestCamAlert);
     
     if (latestCamAlert != nil &&
         [latestCamAlert.cameraMacNoColon  isEqualToString:camAlert.cameraMacNoColon])
     {
-        NSLog(@"Same cam alert is currenlty stored.");
+        NSLog(@"Same cam alert is currenlty shown.");
         
-        if (pushAlert != nil &&
-            [pushAlert isVisible])
+        NSTimeInterval oldestTimestamp = [CameraAlert getOldestAlertTimestampOfCamera:camAlert.cameraMacNoColon];
+        NSDate * oldestDate = [NSDate dateWithTimeIntervalSince1970:oldestTimestamp];
+        
+        
+        if (pushAlert != nil && [pushAlert isVisible])
         {
             NSLog(@"Dialog exist, don't popup, current msg:%@, title: %@", pushAlert.message, pushAlert.title);
+            
+            if (pushAlert.tag != ALERT_PUSH_RECVED_MULTIPLE)
+            {
+                [pushAlert dismissWithClickedButtonIndex:0 animated:NO];
+                [pushAlert release];
+                
+                
+                NSDateFormatter* df_local = [[NSDateFormatter alloc] init];
+                [df_local setTimeZone:[NSTimeZone localTimeZone]];
+                df_local.dateFormat = @"hh:mm a, dd-MM-yyyy";
+                NSString * combined_msg =[NSString stringWithFormat:@"Multiple detections at camera since %@",
+                                          [df_local stringFromDate:oldestDate]];
+                
+                [df_local release];
+                
+                
+                NSString * view_camera= NSLocalizedStringWithDefaultValue(@"Go_to_camera",nil, [NSBundle mainBundle],
+                                                                          @"Go to camera", nil);
+                
+                NSString * cancel = NSLocalizedStringWithDefaultValue(@"Cancel",nil, [NSBundle mainBundle],
+                                                                      @"Cancel", nil);
+                
+                
+                pushAlert = [[UIAlertView alloc]
+                             initWithTitle:camAlert.cameraName
+                             message:combined_msg
+                             delegate:self
+                             cancelButtonTitle:cancel
+                             otherButtonTitles:view_camera,nil];
+                
+                pushAlert.tag = ALERT_PUSH_RECVED_MULTIPLE;
+                [pushAlert show];
+                
+            }
+            else
+            {
+                NSLog(@"already shown the aggregation message");
+            }
             
             @synchronized(self)
             {
@@ -716,6 +771,13 @@
             }
             
             return FALSE;
+        }
+        else if (pushAlert != nil && ![pushAlert isVisible])
+        {
+            [pushAlert dismissWithClickedButtonIndex:0 animated:NO];
+            [pushAlert release];
+            pushAlert= nil;
+            
         }
     }
     
@@ -747,7 +809,13 @@
     NSString * cancel = NSLocalizedStringWithDefaultValue(@"Cancel",nil, [NSBundle mainBundle],
                                                           @"Cancel", nil);
     
+    NSDateFormatter* df_local = [[NSDateFormatter alloc] init];
+    [df_local setTimeZone:[NSTimeZone localTimeZone]];
+    df_local.dateFormat = @"hh:mm a, dd-MM-yyyy";
     
+    msg = [NSString stringWithFormat:@"%@ on %@",msg,[df_local stringFromDate:eventDate]];
+    
+    [df_local release];
     
     NSLog(@"pushAlert : %@",pushAlert);
     
@@ -768,24 +836,14 @@
                  cancelButtonTitle:cancel
                  otherButtonTitles:msg2,nil];
     
-    //if ([self isThisMacStoredOffline:camAlert.cameraMacNoColon])
+    
+    pushAlert.tag = ALERT_PUSH_RECVED_NON_MOTION;
+    
+    if([camAlert.alertType isEqualToString:ALERT_TYPE_MOTION])
     {
-        
-        pushAlert.tag = ALERT_PUSH_RECVED_NON_MOTION;
-        
-        if([camAlert.alertType isEqualToString:ALERT_TYPE_MOTION])
-        {
-            pushAlert.tag = ALERT_PUSH_RECVED_RESCAN_AFTER;
-        }
-        
-        
+        pushAlert.tag = ALERT_PUSH_RECVED_RESCAN_AFTER;
     }
-    //	else
-    //	{
-    //		NSLog(@"Relogin");
-    //		[self sendStatus:2];
-    //		pushAlert.tag = ALERT_PUSH_RECVED_RELOGIN_AFTER;
-    //	}
+    
     
     @synchronized(self)
     {
@@ -812,15 +870,7 @@
 
 -(void) playSound
 {
-#if 0
-	//201201011 This is needed to play the system sound on top of audio from camera
-	UInt32 sessionCategory = kAudioSessionCategory_AmbientSound;    // 1
-	AudioSessionSetProperty (
-                             kAudioSessionProperty_AudioCategory,                        // 2
-                             sizeof (sessionCategory),                                   // 3
-                             &sessionCategory                                            // 4
-                             );
-#endif
+    
 	//Play beep
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
@@ -889,7 +939,7 @@
 {
 	int tag = alertView.tag ;
     
-    if (tag == ALERT_PUSH_RECVED_NON_MOTION)
+    if (tag == ALERT_PUSH_RECVED_NON_MOTION || tag == ALERT_PUSH_RECVED_MULTIPLE)
     {
         switch(buttonIndex)
         {
@@ -1805,7 +1855,7 @@
     else //Sound/Temphi/templo - go to camera
     {
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        [userDefaults setObject:latestCamAlert.registrationID forKey:REG_ID];
+        [userDefaults setObject:self.camAlert.registrationID forKey:REG_ID];
         [userDefaults synchronize];
         
         

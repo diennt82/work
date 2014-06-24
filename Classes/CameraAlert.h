@@ -42,8 +42,11 @@
 -(id) initWithTimeStamp1:(NSInteger) timeStamp;
 
 +(void) reloadBlankTableIfNeeded;
++( NSTimeInterval ) getOldestAlertTimestampOfCamera:(NSString *) macWithColon;
 +( NSArray * ) getAllAlertForCamera:(NSString *) macWithColon;
 +( BOOL ) insertAlertForCamera:(CameraAlert *) camAlert;
+
++(void) clearObsoleteAlerts;
 +(void) clearAllAlertForCamera:(NSString *) macWithColon ;
 +(void) clearAllAlerts;
 
