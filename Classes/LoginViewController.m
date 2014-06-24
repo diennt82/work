@@ -627,6 +627,7 @@
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
 	
 	int tag = alertView.tag;
+#if 0
 	if (tag == 112) //OFFLINE mode ??
     {
         switch (buttonIndex) {
@@ -655,7 +656,9 @@
                 break;
         }
     }
-    else if (tag == 113) // 3g check
+    else
+#endif
+        if (tag == 113) // 3g check
     {
         switch (buttonIndex)
         {
@@ -883,6 +886,19 @@
     
     NSString * title = NSLocalizedStringWithDefaultValue(@"Login_Error" ,nil, [NSBundle mainBundle],
                                                          @"Login Error", nil);
+#if 1
+    NSString *msg = @"Server is unreachable or Connection is timeout";
+    NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok" ,nil, [NSBundle mainBundle],
+                                                      @"OK", nil);
+    UIAlertView *alert = [[UIAlertView alloc]
+						  initWithTitle:title
+						  message:msg
+						  delegate:self
+						  cancelButtonTitle:nil
+						  otherButtonTitles:ok, nil];
+	[alert show];
+	[alert release];
+#else
     NSString * msg = NSLocalizedStringWithDefaultValue(@"Login_Error_msg3" ,nil, [NSBundle mainBundle],
                                                        @"Server is unreachable. Do you want to access your cameras offline?" ,nil);
     
@@ -904,7 +920,7 @@
 	[alert release];
     
     [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Login failed - user: %@, error: Server unreachable", _stringUsername] withProperties:nil];
-    
+#endif
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:[NSString stringWithFormat:@"Login failed, Server unreachable-user:%@", _stringUsername]
                                                      withLabel:nil

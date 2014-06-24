@@ -84,8 +84,8 @@
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
-    valueGeneralSettings[0] = [userDefaults boolForKey:@"IS_12_HR"];
-    valueGeneralSettings[1] = [userDefaults boolForKey:@"IS_FAHRENHEIT"];
+    valueGeneralSettings[0] = [userDefaults boolForKey:IS_12_HR];
+    valueGeneralSettings[1] = [userDefaults boolForKey:IS_FAHRENHEIT];
     self.apiKey             = [userDefaults stringForKey:@"PortalApiKey"];
     
     valueSettings[0] = 0;
@@ -198,7 +198,7 @@
     
     self.numberOfSections = 2;
     self.selectedCamChannel = nil;
-    valueGeneralSettings[1] = [[NSUserDefaults standardUserDefaults] boolForKey:@"IS_FAHRENHEIT"];
+    valueGeneralSettings[1] = [[NSUserDefaults standardUserDefaults] boolForKey:IS_FAHRENHEIT];
     
     //if (shouldReloadData)
     {
@@ -233,7 +233,7 @@
     valueGeneralSettings[0] = is12hr;
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setBool:is12hr forKey:@"IS_12_HR"];
+    [userDefaults setBool:is12hr forKey:IS_12_HR];
     [userDefaults synchronize];
 }
 
@@ -241,7 +241,7 @@
 {
     valueGeneralSettings[1] = isFahrenheit;
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setBool:isFahrenheit forKey:@"IS_FAHRENHEIT"];
+    [userDefaults setBool:isFahrenheit forKey:IS_FAHRENHEIT];
     [userDefaults synchronize];
 }
 
