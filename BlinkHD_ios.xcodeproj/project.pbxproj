@@ -1723,9 +1723,7 @@
 			isa = PBXGroup;
 			children = (
 				5EBA456719405BEA00695155 /* XIB FIles */,
-				8429C571193325EF00F5FCF8 /* TermsCondController.h */,
-				8429C572193325EF00F5FCF8 /* TermsCondController.m */,
-				8429C573193325EF00F5FCF8 /* TermsCondController.xib */,
+				8BB2D7FB1957DBC60038401F /* TermsCC */,
 				5E712D8E192B3332000858F1 /* UIActionSheetBloack */,
 				5EAFC05B192A3DCA001FB3AA /* MBProgressHUD */,
 				8B98D548192371060084C2FD /* Zip */,
@@ -3230,6 +3228,16 @@
 			name = Step_07;
 			sourceTree = "<group>";
 		};
+		8BB2D7FB1957DBC60038401F /* TermsCC */ = {
+			isa = PBXGroup;
+			children = (
+				8429C571193325EF00F5FCF8 /* TermsCondController.h */,
+				8429C572193325EF00F5FCF8 /* TermsCondController.m */,
+				8429C573193325EF00F5FCF8 /* TermsCondController.xib */,
+			);
+			name = TermsCC;
+			sourceTree = "<group>";
+		};
 		8BEDE2ED1861B73F00D3AE2B /* Disturb */ = {
 			isa = PBXGroup;
 			children = (
@@ -4354,7 +4362,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = HubbleHome;
-				PROVISIONING_PROFILE = "AC23F6F2-85E8-4AEE-9C7C-F41A556D9C25";
+				PROVISIONING_PROFILE = "37E5993F-C523-41C7-BAB0-D4E922AABC76";
 				SDKROOT = iphoneos7.0;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
 				VALID_ARCHS = "armv6 armv7";
@@ -4403,7 +4411,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = HubbleHome;
-				PROVISIONING_PROFILE = "AC23F6F2-85E8-4AEE-9C7C-F41A556D9C25";
+				PROVISIONING_PROFILE = "37E5993F-C523-41C7-BAB0-D4E922AABC76";
 				SDKROOT = iphoneos7.0;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
 				VALIDATE_PRODUCT = YES;
@@ -4427,7 +4435,7 @@
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = HubbleHome;
-				PROVISIONING_PROFILE = "BEE7B868-3871-4C3E-870A-2AE4C2B9FCDA";
+				PROVISIONING_PROFILE = "B7A1FC17-F9B3-470C-8E9B-4EFCFCF6B501";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external_include\"/**";
@@ -4475,7 +4483,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = HubbleHome;
-				PROVISIONING_PROFILE = "AC23F6F2-85E8-4AEE-9C7C-F41A556D9C25";
+				PROVISIONING_PROFILE = "37E5993F-C523-41C7-BAB0-D4E922AABC76";
 				RAMEWORK_SEARCH_PATHS = "$(inherited) \"$(SRCROOT)\"";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
@@ -4499,7 +4507,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = HubbleHome;
-				PROVISIONING_PROFILE = "BEE7B868-3871-4C3E-870A-2AE4C2B9FCDA";
+				PROVISIONING_PROFILE = "B7A1FC17-F9B3-470C-8E9B-4EFCFCF6B501";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external_include\"/**";
@@ -4523,7 +4531,7 @@
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = HubbleHome;
-				PROVISIONING_PROFILE = "BEE7B868-3871-4C3E-870A-2AE4C2B9FCDA";
+				PROVISIONING_PROFILE = "B7A1FC17-F9B3-470C-8E9B-4EFCFCF6B501";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external_include\"/**";
