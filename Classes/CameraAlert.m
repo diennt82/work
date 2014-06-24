@@ -122,11 +122,19 @@ static sqlite3_stmt *init_statement = nil;
     // history(rcvTimeStamp integer primary key, cameraMacNoColon varchar(12), cameraName varchar, alertType varchar, alertTime varchar, alertVal varchar);
     //INSERT INTO Persons VALUES (...)
     
+    NSDateFormatter *dateFormater = [[NSDateFormatter alloc] init];
+    [dateFormater setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssXXXXX"];
+    [dateFormater setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+    NSError *error;
+    NSDate *eventDate ;
+    [dateFormater getObjectValue:&eventDate forString:camAlert.alertTime range:nil error:&error];
+    [dateFormater release];
     
-    int timeStamp = [[NSDate date] timeIntervalSince1970]; ; 
-    
-    
-    
+    int timeStamp  = [[NSDate date] timeIntervalSince1970];
+    if (eventDate != nil)
+    {
+        timeStamp = [eventDate timeIntervalSince1970];
+    }
     
     NSArray * paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString * documentDirectory = [paths objectAtIndex:0]; 
@@ -210,7 +218,6 @@ static sqlite3_stmt *init_statement = nil;
     }
     sqlite3_close(database);
     
-    
 }
 
 
@@ -257,6 +264,57 @@ static sqlite3_stmt *init_statement = nil;
     
 }
 
++( NSTimeInterval ) getOldestAlertTimestampOfCamera:(NSString *) macWithColon
+{
+    
+    NSArray * paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString * documentDirectory = [paths objectAtIndex:0];
+    NSString *writableDBPath = [documentDirectory stringByAppendingPathComponent:@".alert_history.sqlite"];
+    sqlite3 * database;
+    NSString * _mac = [Util strip_colon_fr_mac:macWithColon];
+    
+    int rcvTimeStamp = -1;
+    
+    if (sqlite3_open([writableDBPath UTF8String], &database) == SQLITE_OK)
+    {
+        NSString * _stmt = [NSString stringWithFormat:@"SELECT MIN(rcvTimeStamp) from history where cameraMacNoColon='%@'", _mac];
+#if DEBUG_CAM_ALERT_DB
+        NSLog(@"Db stmt: %@", _stmt);
+#endif
+        
+        const char * stmt = [_stmt UTF8String];
+        
+        sqlite3_stmt * statement ;
+        
+        if (sqlite3_prepare_v2(database, stmt, -1, &statement, NULL) == SQLITE_OK)
+        {
+            
+            while (sqlite3_step(statement) == SQLITE_ROW)
+            {
+                
+                
+                 rcvTimeStamp = sqlite3_column_int(statement, 0);
+                
+                
+                
+            }
+            
+#if DEBUG_CAM_ALERT_DB
+            NSLog(@"sqlite3_step !=  SQLITE_ROW");
+#endif
+        }
+        else
+        {
+            NSLog(@"sqlite3_prepare_v2 error: '%s'", sqlite3_errmsg(database));
+        }
+        
+    }
+    
+    sqlite3_close(database);
+    
+    
+    return rcvTimeStamp;
+}
 
 +( NSArray * ) getAllAlertForCamera:(NSString *) macWithColon 
 {
@@ -328,8 +386,63 @@ static sqlite3_stmt *init_statement = nil;
     return alerts; 
 }
 
-
-
+/* 
+ Clear any alert that is older than 12hr,
+    Timeline has recorded it.
+ */
++(void) clearObsoleteAlerts
+{
+    NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+    NSDate *today = [NSDate date];
+    
+    NSDateComponents *dayComponent = [[NSDateComponents alloc] init];
+    dayComponent.day = -1;
+    NSDate *yesterday = [gregorian dateByAddingComponents:dayComponent
+                                                   toDate:today
+                                                  options:0];
+    
+   
+    NSTimeInterval time12hrAgo = [yesterday timeIntervalSince1970];
+    
+    
+    NSArray * paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString * documentDirectory = [paths objectAtIndex:0];
+    NSString *writableDBPath = [documentDirectory stringByAppendingPathComponent:@".alert_history.sqlite"];
+    sqlite3 * database;
+    
+    
+    
+    if (sqlite3_open([writableDBPath UTF8String], &database) == SQLITE_OK)
+    {
+        //remove all entries
+        NSString * _stmt = [NSString stringWithFormat:@"delete from history where rcvTimeStamp < %d",(int)time12hrAgo ];
+        
+        
+        const char * stmt = [_stmt UTF8String];
+        sqlite3_stmt * statement ;
+        if (sqlite3_prepare_v2(database, stmt, -1, &statement, NULL) == SQLITE_OK)
+        {
+            if (sqlite3_step(statement) != SQLITE_DONE)
+            {
+#if DEBUG_CAM_ALERT_DB
+                NSLog(@"DEL alert fr database error");
+#endif
+            }
+            else {
+#if DEBUG_CAM_ALERT_DB
+                NSLog(@"DEL alert fr database OK");
+#endif
+            }
+            
+            sqlite3_finalize(statement);
+        }
+        
+    }
+    sqlite3_close(database);
+    
+    
+    return ;
+}
 
 
 
