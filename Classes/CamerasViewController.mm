@@ -382,7 +382,7 @@
         return 40; // your dynamic height...
     }
     
-    return 103;
+    return 108;
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
