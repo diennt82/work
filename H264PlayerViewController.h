@@ -339,7 +339,7 @@
 - (void)scan_done:(NSArray *) _scan_results;
 
 -(void) handleMessage:(int) msg ext1: (int) ext1 ext2:(int) ext2;
-- (void)goBackToCameraList;
+//- (void)goBackToCameraList;
 - (void)prepareGoBackToCameraList:(id)sender;
 
 
