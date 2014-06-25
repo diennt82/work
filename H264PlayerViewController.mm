@@ -4231,6 +4231,9 @@ double _ticks = 0;
     for (UIView *v in viewsToRemove) {
         [v removeFromSuperview];
     }
+    // I don't know why remove it.
+    [self.melodyViewController.view removeFromSuperview];
+    self.melodyViewController = nil;
     
 	if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight)
 	{
@@ -4280,8 +4283,6 @@ double _ticks = 0;
             [self.horizMenu reloadData:YES];
         }
         
-        // I don't know why remove it.
-        [self.melodyViewController.view removeFromSuperview];
         
         CGFloat imageViewHeight = SCREEN_HEIGHT * 9 / 16;
         CGRect newRect = CGRectMake(0, (SCREEN_WIDTH - imageViewHeight) / 2, SCREEN_HEIGHT, imageViewHeight);
@@ -4321,6 +4322,7 @@ double _ticks = 0;
         self.melodyViewController.selectedChannel = self.selectedChannel;
         self.melodyViewController.melodyVcDelegate = self;
         
+        
         [self.navigationController setNavigationBarHidden:NO];
         [[UIApplication sharedApplication] setStatusBarHidden:NO];
         self.view.backgroundColor = [UIColor whiteColor];
@@ -4329,6 +4331,7 @@ double _ticks = 0;
         {
             [self.horizMenu reloadData:NO];
         }
+        
         
         CGFloat imageViewHeight = SCREEN_WIDTH * 9 / 16;
         
@@ -4415,8 +4418,10 @@ double _ticks = 0;
         
 	}// end of portrait
     
+    
     [self.melodyViewController.melodyTableView setNeedsLayout];
     [self.melodyViewController.melodyTableView setNeedsDisplay];
+   
     
     self.imageViewStreamer.frame = _imageViewVideo.frame;
     [self.scrollView insertSubview:_imageViewStreamer aboveSubview:_imageViewVideo];
@@ -4430,9 +4435,6 @@ double _ticks = 0;
                                            [UIImage imageNamed:@"loader_e"],
                                            [UIImage imageNamed:@"loader_f"],
                                            nil];
-    
-    
-    
     
     [self displayCustomIndicator];
     
@@ -4453,9 +4455,6 @@ double _ticks = 0;
     [self hidenAllBottomView];
     [self updateBottomView];
     
-    if(_selectedItemMenu!=-1){
-        [self.horizMenu setSelectedIndex:_selectedItemMenu-1 animated:NO];
-    }
     
     //Earlier must at bottom of land, and port
     if (_isFirstLoad || _wantToShowTimeLine || _selectedItemMenu == -1)
@@ -4465,6 +4464,12 @@ double _ticks = 0;
     else
     {
         [self hideTimelineView];
+    }
+    
+    if(_selectedItemMenu!=-1){
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self.horizMenu setSelectedIndex:_selectedItemMenu-1 animated:NO];
+        });
     }
     
     self.ib_buttonTouchToTalk.enabled = _enablePTT;
@@ -5139,7 +5144,7 @@ double _ticks = 0;
             if ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeLeft ||
                 [UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeRight)
             {
-                self.wantToShowTimeLine = YES;
+                //self.wantToShowTimeLine = YES;
             }
             
             CGRect rect;
