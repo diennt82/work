@@ -146,7 +146,7 @@
         
         
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        [userDefaults setObject:cameraName_text forKey:@"CameraName"];
+        [userDefaults setObject:cameraName_text forKey:CAMERA_NAME];
         [userDefaults synchronize];
         
         
@@ -319,7 +319,7 @@
         
         
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        [userDefaults setObject:cameraName_text forKey:@"CameraName"];
+        [userDefaults setObject:cameraName_text forKey:CAMERA_NAME];
         [userDefaults synchronize];
         
         //
@@ -580,7 +580,7 @@
                                                                           FailSelector:@selector(addCamFailedWithError:)
                                                                              ServerErr:@selector(addCamFailedServerUnreachable)] autorelease];
     
-    NSString *stringCameraName = (NSString *) [userDefaults objectForKey:@"CameraName"];
+    NSString *stringCameraName = (NSString *) [userDefaults objectForKey:CAMERA_NAME];
     [jsonComm registerDeviceWithDeviceName:stringCameraName
                          andRegistrationID:udid
                                    andMode:@"upnp" // Need somethings more usefully

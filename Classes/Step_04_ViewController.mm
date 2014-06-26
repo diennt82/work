@@ -56,12 +56,6 @@
     [super viewWillDisappear:animated];
 }
 
-- (void)viewDidUnload
-{
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-}
-
 #pragma mark - Actions
 
 - (void)hubbleItemAction:(id)sender
@@ -234,7 +228,7 @@
         [self.view bringSubviewToFront:self.progressView];
         
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        [userDefaults setObject:cameraName_text forKey:@"CameraName"];
+        [userDefaults setObject:cameraName_text forKey:CAMERA_NAME];
         [userDefaults synchronize];
         
         /*20121129: phung skip authentication */
