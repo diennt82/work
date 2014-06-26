@@ -1367,11 +1367,12 @@ double _ticks = 0;
 
 -(void) h264_HandleActivePushes
 {
-    NSLog(@"%s enter >>>>>>>>>>>>>>>>>> reload timeline",__FUNCTION__);
+    NSLog(@"%s enter >>>>>>>>>>>>>>>>>> reload timeline 1",__FUNCTION__);
     if (self.timelineVC != nil)
     {
         
-        [self.timelineVC loadEvents:self.selectedChannel];
+        [self.timelineVC performSelectorInBackground:@selector(getExtraEvent_bg) withObject:nil];
+
     }
     
 }
