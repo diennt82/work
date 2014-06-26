@@ -643,14 +643,10 @@
 		974ACB7F168079CB005AE4C6 /* MonitorEverywhere_App_ios_Apple.html in Resources */ = {isa = PBXBuildFile; fileRef = 974ACB7E168079CB005AE4C6 /* MonitorEverywhere_App_ios_Apple.html */; };
 		9770CDF2143076CD009E69EF /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9770CDF1143076CD009E69EF /* CoreAudio.framework */; };
 		9770CEC81430783A009E69EF /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9770CEC71430783A009E69EF /* CFNetwork.framework */; };
-		978F090317DF06C80053972F /* PlaylistCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 978F090217DF06C70053972F /* PlaylistCell.xib */; };
 		9792B9AF17E2D1F6009C9F5D /* H264PlayerViewController_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9792B9AE17E2D1F6009C9F5D /* H264PlayerViewController_ipad.xib */; };
 		97987E421546AF2C0066C49B /* UserAccount.mm in Sources */ = {isa = PBXBuildFile; fileRef = 97987E411546AF2C0066C49B /* UserAccount.mm */; };
 		979BC69A17D9B97700B3B373 /* PlaybackViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 979BC69817D9B97700B3B373 /* PlaybackViewController.mm */; };
 		979BC69B17D9B97700B3B373 /* PlaybackViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 979BC69917D9B97700B3B373 /* PlaybackViewController.xib */; };
-		979BC69E17D9BA6C00B3B373 /* PlaylistCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 979BC69D17D9BA6B00B3B373 /* PlaylistCell.m */; };
-		979BC6A417D9BB9C00B3B373 /* PlayListViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 979BC6A217D9BB9C00B3B373 /* PlayListViewController.mm */; };
-		979BC6A517D9BB9C00B3B373 /* PlayListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 979BC6A317D9BB9C00B3B373 /* PlayListViewController.xib */; };
 		979BC6A817D9BCB200B3B373 /* PlaylistInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 979BC6A717D9BCB100B3B373 /* PlaylistInfo.m */; };
 		97A07FB117D5FD4A00653460 /* H264PlayerViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 97A07FAF17D5FD4A00653460 /* H264PlayerViewController.mm */; };
 		97A3BF4715453F69000C3546 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97A3BF4615453F69000C3546 /* CoreFoundation.framework */; };
@@ -1496,7 +1492,6 @@
 		9770CDF1143076CD009E69EF /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		9770CDF7143076DD009E69EF /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		9770CEC71430783A009E69EF /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
-		978F090217DF06C70053972F /* PlaylistCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PlaylistCell.xib; sourceTree = "<group>"; };
 		9792B9AE17E2D1F6009C9F5D /* H264PlayerViewController_ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = H264PlayerViewController_ipad.xib; sourceTree = "<group>"; };
 		97987D2C154698100066C49B /* ConnectionMethodDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConnectionMethodDelegate.h; sourceTree = "<group>"; };
 		97987D40154698A10066C49B /* SetupHttpDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SetupHttpDelegate.h; sourceTree = "<group>"; };
@@ -1506,11 +1501,6 @@
 		979BC69717D9B97700B3B373 /* PlaybackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaybackViewController.h; sourceTree = "<group>"; };
 		979BC69817D9B97700B3B373 /* PlaybackViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PlaybackViewController.mm; sourceTree = "<group>"; };
 		979BC69917D9B97700B3B373 /* PlaybackViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PlaybackViewController.xib; sourceTree = "<group>"; };
-		979BC69C17D9BA6B00B3B373 /* PlaylistCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaylistCell.h; sourceTree = "<group>"; };
-		979BC69D17D9BA6B00B3B373 /* PlaylistCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlaylistCell.m; sourceTree = "<group>"; };
-		979BC6A117D9BB9C00B3B373 /* PlayListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayListViewController.h; sourceTree = "<group>"; };
-		979BC6A217D9BB9C00B3B373 /* PlayListViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PlayListViewController.mm; sourceTree = "<group>"; };
-		979BC6A317D9BB9C00B3B373 /* PlayListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PlayListViewController.xib; sourceTree = "<group>"; };
 		979BC6A617D9BCB100B3B373 /* PlaylistInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaylistInfo.h; sourceTree = "<group>"; };
 		979BC6A717D9BCB100B3B373 /* PlaylistInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlaylistInfo.m; sourceTree = "<group>"; };
 		97A07FAE17D5FD4A00653460 /* H264PlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = H264PlayerViewController.h; sourceTree = "<group>"; };
@@ -3259,12 +3249,6 @@
 				979BC69917D9B97700B3B373 /* PlaybackViewController.xib */,
 				A1F3921618BB519F0048AD63 /* PlaybackViewController_land.xib */,
 				8B68F5D018066CE500661527 /* PlaybackViewController_ipad.xib */,
-				979BC69C17D9BA6B00B3B373 /* PlaylistCell.h */,
-				979BC69D17D9BA6B00B3B373 /* PlaylistCell.m */,
-				978F090217DF06C70053972F /* PlaylistCell.xib */,
-				979BC6A117D9BB9C00B3B373 /* PlayListViewController.h */,
-				979BC6A217D9BB9C00B3B373 /* PlayListViewController.mm */,
-				979BC6A317D9BB9C00B3B373 /* PlayListViewController.xib */,
 				979BC6A617D9BCB100B3B373 /* PlaylistInfo.h */,
 				979BC6A717D9BCB100B3B373 /* PlaylistInfo.m */,
 				A1E32FAE17E98A4700504538 /* PlaybackListener.mm */,
@@ -4124,7 +4108,6 @@
 				8B299F5918AF500900D36BE5 /* alert_learn.png in Resources */,
 				5EBA459819405BEA00695155 /* Step_05_ViewController_ipad.xib in Resources */,
 				8B29A08118AF500A00D36BE5 /* video_play.png in Resources */,
-				979BC6A517D9BB9C00B3B373 /* PlayListViewController.xib in Resources */,
 				8B92A0B01863FD13005923D2 /* EarlierViewController.xib in Resources */,
 				8B299FA418AF500900D36BE5 /* camera_action_pan_bg@2x.png in Resources */,
 				8B53659518B34DCA0018671F /* SensitivityTemperatureCell.xib in Resources */,
@@ -4134,7 +4117,6 @@
 				8B99DB8418B8729F0009612A /* Icon-Small.png in Resources */,
 				A1B1E7D218E9135800F076B6 /* buy_camera_btn.png in Resources */,
 				8B299FFB18AF500900D36BE5 /* upgrade_pressed@2x.png in Resources */,
-				978F090317DF06C80053972F /* PlaylistCell.xib in Resources */,
 				8B29A07F18AF500A00D36BE5 /* video_pause.png in Resources */,
 				8B299FCD18AF500900D36BE5 /* camera_action_pan_knob@5.png in Resources */,
 				A1B1E7E118E9135800F076B6 /* cart_pressed@2x.png in Resources */,
@@ -4272,11 +4254,9 @@
 				97A07FB117D5FD4A00653460 /* H264PlayerViewController.mm in Sources */,
 				979BC69A17D9B97700B3B373 /* PlaybackViewController.mm in Sources */,
 				A160B4DF18C0360800739B53 /* EarlierNavigationController.m in Sources */,
-				979BC69E17D9BA6C00B3B373 /* PlaylistCell.m in Sources */,
 				8B9CE1FB18C81DEA00B1B7F9 /* CustomIOS7AlertView.m in Sources */,
 				8B97A3C018BEE628008A38E1 /* UIBarButtonItem+Custom.m in Sources */,
 				A1ABF1AF187537D10014FCB4 /* Step_10_ViewController_ble.mm in Sources */,
-				979BC6A417D9BB9C00B3B373 /* PlayListViewController.mm in Sources */,
 				8B278BE7183DC51300A4FF50 /* NotificationSettingsViewController.m in Sources */,
 				8B92D45518865F0400120BCE /* SchedulingViewController.m in Sources */,
 				979BC6A817D9BCB200B3B373 /* PlaylistInfo.m in Sources */,
@@ -4362,7 +4342,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = HubbleHome;
-				PROVISIONING_PROFILE = "37E5993F-C523-41C7-BAB0-D4E922AABC76";
+				PROVISIONING_PROFILE = "B7A1FC17-F9B3-470C-8E9B-4EFCFCF6B501";
 				SDKROOT = iphoneos7.0;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
 				VALID_ARCHS = "armv6 armv7";
@@ -4411,7 +4391,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = HubbleHome;
-				PROVISIONING_PROFILE = "37E5993F-C523-41C7-BAB0-D4E922AABC76";
+				PROVISIONING_PROFILE = "B7A1FC17-F9B3-470C-8E9B-4EFCFCF6B501";
 				SDKROOT = iphoneos7.0;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
 				VALIDATE_PRODUCT = YES;
@@ -4483,7 +4463,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = HubbleHome;
-				PROVISIONING_PROFILE = "37E5993F-C523-41C7-BAB0-D4E922AABC76";
+				PROVISIONING_PROFILE = "B7A1FC17-F9B3-470C-8E9B-4EFCFCF6B501";
 				RAMEWORK_SEARCH_PATHS = "$(inherited) \"$(SRCROOT)\"";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
