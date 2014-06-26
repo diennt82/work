@@ -125,10 +125,6 @@
 		8B1D545C18658CBC008857F0 /* selected-img.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B1D545918658CBC008857F0 /* selected-img.png */; };
 		8B1D545D18658CBC008857F0 /* hour-img.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B1D545A18658CBC008857F0 /* hour-img.png */; };
 		8B1D545E18658CBC008857F0 /* DotCell.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B1D545B18658CBC008857F0 /* DotCell.png */; };
-		8B278BE7183DC51300A4FF50 /* NotificationSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B278BE5183DC51300A4FF50 /* NotificationSettingsViewController.m */; };
-		8B278BE8183DC51300A4FF50 /* NotificationSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B278BE6183DC51300A4FF50 /* NotificationSettingsViewController.xib */; };
-		8B278BEB183DC6B500A4FF50 /* NotificationSettingsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B278BEA183DC6B500A4FF50 /* NotificationSettingsCell.m */; };
-		8B278BED183DC6F800A4FF50 /* NotificationSettingsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B278BEC183DC6F700A4FF50 /* NotificationSettingsCell.xib */; };
 		8B299F5518AF500900D36BE5 /* alert_camera.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299E1218AF500800D36BE5 /* alert_camera.png */; };
 		8B299F5618AF500900D36BE5 /* alert_camera@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299E1318AF500800D36BE5 /* alert_camera@2x.png */; };
 		8B299F5718AF500900D36BE5 /* alert_camera_pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299E1418AF500800D36BE5 /* alert_camera_pressed.png */; };
@@ -917,12 +913,6 @@
 		8B1D545918658CBC008857F0 /* selected-img.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "selected-img.png"; sourceTree = "<group>"; };
 		8B1D545A18658CBC008857F0 /* hour-img.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "hour-img.png"; sourceTree = "<group>"; };
 		8B1D545B18658CBC008857F0 /* DotCell.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = DotCell.png; sourceTree = "<group>"; };
-		8B278BE4183DC51300A4FF50 /* NotificationSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationSettingsViewController.h; sourceTree = "<group>"; };
-		8B278BE5183DC51300A4FF50 /* NotificationSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationSettingsViewController.m; sourceTree = "<group>"; };
-		8B278BE6183DC51300A4FF50 /* NotificationSettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NotificationSettingsViewController.xib; sourceTree = "<group>"; };
-		8B278BE9183DC6B500A4FF50 /* NotificationSettingsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationSettingsCell.h; sourceTree = "<group>"; };
-		8B278BEA183DC6B500A4FF50 /* NotificationSettingsCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationSettingsCell.m; sourceTree = "<group>"; };
-		8B278BEC183DC6F700A4FF50 /* NotificationSettingsCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NotificationSettingsCell.xib; sourceTree = "<group>"; };
 		8B299E1218AF500800D36BE5 /* alert_camera.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = alert_camera.png; sourceTree = "<group>"; };
 		8B299E1318AF500800D36BE5 /* alert_camera@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "alert_camera@2x.png"; sourceTree = "<group>"; };
 		8B299E1418AF500800D36BE5 /* alert_camera_pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = alert_camera_pressed.png; sourceTree = "<group>"; };
@@ -1738,7 +1728,6 @@
 				8B9C7DFE185F22090038B3A8 /* MenuHubble */,
 				8BA18CA8184870330097D1AF /* DeviceSettings */,
 				8B9CCB9F183EF86C007C0F65 /* MelodyControl */,
-				8B278BE3183DC4BB00A4FF50 /* NotificationSettings */,
 				A1E07DC01814DA1200AE0566 /* Zone Detection */,
 				A1A98E8A180BF57700C8EBD3 /* PJ_NAT */,
 				979BC69617D9B8BA00B3B373 /* Playlist */,
@@ -2024,19 +2013,6 @@
 				8B1D545618658903008857F0 /* SchedulerViewController.xib */,
 			);
 			name = SchedulerTable;
-			sourceTree = "<group>";
-		};
-		8B278BE3183DC4BB00A4FF50 /* NotificationSettings */ = {
-			isa = PBXGroup;
-			children = (
-				8B278BE4183DC51300A4FF50 /* NotificationSettingsViewController.h */,
-				8B278BE5183DC51300A4FF50 /* NotificationSettingsViewController.m */,
-				8B278BE6183DC51300A4FF50 /* NotificationSettingsViewController.xib */,
-				8B278BE9183DC6B500A4FF50 /* NotificationSettingsCell.h */,
-				8B278BEA183DC6B500A4FF50 /* NotificationSettingsCell.m */,
-				8B278BEC183DC6F700A4FF50 /* NotificationSettingsCell.xib */,
-			);
-			name = NotificationSettings;
 			sourceTree = "<group>";
 		};
 		8B299E0E18AF500800D36BE5 /* asset */ = {
@@ -3705,7 +3681,6 @@
 				A1AC858B18912859002A8CCD /* ProximaNova-Extrabold.otf in Resources */,
 				8B299F5718AF500900D36BE5 /* alert_camera_pressed.png in Resources */,
 				38A62EA115CA2C9300DEA520 /* bb_cam_btn.png in Resources */,
-				8B278BE8183DC51300A4FF50 /* NotificationSettingsViewController.xib in Resources */,
 				38A62EA315CA2E1100DEA520 /* bb_recording_btn_d.png in Resources */,
 				5EBA459E19405BEA00695155 /* Step_08_ViewController.xib in Resources */,
 				8B29A06C18AF500A00D36BE5 /* maximize@2x.png in Resources */,
@@ -4074,7 +4049,6 @@
 				8B29A04618AF500A00D36BE5 /* remove_camera_pressed@2x.png in Resources */,
 				BC5B0FCE1701855600D2C308 /* cameraMenuRouter.plist in Resources */,
 				8B299FF818AF500900D36BE5 /* upgrade.png in Resources */,
-				8B278BED183DC6F800A4FF50 /* NotificationSettingsCell.xib in Resources */,
 				A1B1E7D318E9135800F076B6 /* buy_camera_btn@2x.png in Resources */,
 				A15431091818DEB800337EFE /* streamvga.sdp in Resources */,
 				8B29A04918AF500A00D36BE5 /* sensitivity.png in Resources */,
@@ -4237,7 +4211,6 @@
 				8B1D544D186581B8008857F0 /* SchedulerCell.m in Sources */,
 				97DA238416425FA100EE2528 /* ToUViewController.mm in Sources */,
 				A1ABF1BA187538280014FCB4 /* CreateBLEConnection_VController.mm in Sources */,
-				8B278BEB183DC6B500A4FF50 /* NotificationSettingsCell.m in Sources */,
 				38E3C85C1694033500A13A70 /* AlertPrompt.m in Sources */,
 				8B9283E918D2D2CD00D60EDA /* AudioOutStreamRemote.m in Sources */,
 				380CB0C716DC568500290587 /* Step_12_ViewController.m in Sources */,
@@ -4257,7 +4230,6 @@
 				8B9CE1FB18C81DEA00B1B7F9 /* CustomIOS7AlertView.m in Sources */,
 				8B97A3C018BEE628008A38E1 /* UIBarButtonItem+Custom.m in Sources */,
 				A1ABF1AF187537D10014FCB4 /* Step_10_ViewController_ble.mm in Sources */,
-				8B278BE7183DC51300A4FF50 /* NotificationSettingsViewController.m in Sources */,
 				8B92D45518865F0400120BCE /* SchedulingViewController.m in Sources */,
 				979BC6A817D9BCB200B3B373 /* PlaylistInfo.m in Sources */,
 				A1239E86186185F200A25A04 /* AudioOutStreamer.m in Sources */,
