@@ -39,6 +39,8 @@
 #import "KISSMetricsAPI.h"
 #import "HttpCom.h"
 #import "EarlierViewController.h"
+#import "CustomIOS7AlertView.h"
+#import "HubbleProgressView.h"
 
 
 
@@ -102,8 +104,10 @@
 
 #define PTT_ENGAGE_BTN 711
 
-#define TAG_ALERT_VIEW_REMOTE_TIME_OUT 559
-#define TAG_ALERT_SENDING_LOG          569
+#define TAG_ALERT_VIEW_REMOTE_TIME_OUT      559
+#define TAG_ALERT_SENDING_LOG               569
+#define TAG_ALERT_FW_OTA_UPGRADE_AVAILABLE  579
+#define TAG_ALERT_FW_OTA_UPGRADE_FAILED     589
 
 #define _streamingSSID  @"string_Streaming_SSID"
 #define _is_Loggedin @"bool_isLoggedIn"
@@ -131,6 +135,8 @@
 #define MEDIAPLAYER_SET_DATASOURCE  2
 #define MEDIAPLAYER_STARTED         3
 
+#define TIME_FW_OTA_UPGRADING       3*60;
+
 
 
 
@@ -143,7 +149,7 @@
 
 
 @interface H264PlayerViewController: GAITrackedViewController
-<PlayerCallbackHandler, ScanForCameraNotifier, StunClientDelegate, MelodyVCDelegate, UIScrollViewDelegate, ScrollHorizontalMenuDelegate, AudioOutStreamerDelegate, TimelineVCDelegate, AudioOutStreamRemoteDelegate, BonjourDelegate>
+<PlayerCallbackHandler, ScanForCameraNotifier, StunClientDelegate, MelodyVCDelegate, UIScrollViewDelegate, ScrollHorizontalMenuDelegate, AudioOutStreamerDelegate, TimelineVCDelegate, AudioOutStreamRemoteDelegate, BonjourDelegate, CustomIOS7AlertViewDelegate>
 {
     ScrollHorizontalMenu *_horizMenu;
     int _selectedItemMenu;
@@ -161,8 +167,6 @@
     
     
     BOOL userWantToCancel;
-    BOOL askForFWUpgradeOnce;
-    
     
     int currentDirUD, lastDirUD;
 	int delay_update_lastDir_count;
@@ -334,6 +338,11 @@
 
 @property (nonatomic) UIBackgroundTaskIdentifier backgroundTask;
 @property (nonatomic) BOOL shouldRestartProcessing;
+@property (nonatomic) BOOL isFWUpgradingInProgress;
+@property (nonatomic, retain) CustomIOS7AlertView *customeAlertView;
+@property (nonatomic, retain) NSString *fwUpgrading;
+@property (nonatomic, retain) UIAlertView *alertFWUpgrading;
+@property (nonatomic) BOOL upgradeDone;
 
 
 - (void)scan_done:(NSArray *) _scan_results;
