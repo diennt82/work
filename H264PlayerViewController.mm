@@ -4871,6 +4871,7 @@ double _ticks = 0;
     [self.scrollView setZoomScale:newZoomScale animated:YES];
 }
 
+#pragma mark - UIScrollViewDelegate
 - (UIView*)viewForZoomingInScrollView:(UIScrollView *)scrollView {
     // Return the view that we want to zoom
     //return self.imageViewVideo;
@@ -6521,8 +6522,7 @@ double _ticks = 0;
 -(void)start_animation_with_orientation
 {
     self.customIndicator.hidden = NO;
-    [self.view addSubview:self.customIndicator];
-    [self.view  bringSubviewToFront:self.customIndicator];
+//    [self.scrollView bringSubviewToFront:self.customIndicator];
     
     self.customIndicator.animationDuration = 1.5;
     self.customIndicator.animationRepeatCount = 0;
