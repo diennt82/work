@@ -378,6 +378,10 @@
         else if (indexPath.section == SEC_SECTION)
         {
             if (indexPath.row == SEC_INDEX) {
+                [self.securityCell setAccessoryType:UITableViewCellAccessoryNone];
+                if (self.isOtherNetwork) {
+                    [self.securityCell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
+                }
                 return securityCell;
             }
             if (indexPath.row == PASSWORD_INDEX)
@@ -436,16 +440,16 @@
     [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow]
                              animated:NO];
     
-    if ([self.ssid isEqualToString:@"Other Network"])
-    {
-        if (indexPath.section == SEC_SECTION)
-        {
-            if (indexPath.row == SEC_INDEX)
-            {
-                [self changeSecurityType];
-            }
-        }
-    }
+//    if ([self.ssid isEqualToString:@"Other Network"])
+//    {
+//        if (indexPath.section == SEC_SECTION)
+//        {
+//            if (indexPath.row == SEC_INDEX && self.isOtherNetwork)
+//            {
+//                [self changeSecurityType];
+//            }
+//        }
+//    }
     
     if (indexPath.section == SSID_SECTION)
     {
@@ -470,7 +474,7 @@
             UITextField * txtField = (UITextField*) [confPasswordCell viewWithTag:201];
             [txtField becomeFirstResponder];
         }
-        else if (indexPath.row == SEC_INDEX)
+        else if (indexPath.row == SEC_INDEX && self.isOtherNetwork == TRUE)
         {
             [self changeSecurityType];
         }
