@@ -126,6 +126,7 @@
     
 #if TARGET_IPHONE_SIMULATOR == 0
     
+#if 0 //disable local handle exception - use Crittercism
     NSSetUncaughtExceptionHandler(&HandleException);
     
     struct sigaction signalAction;
@@ -135,6 +136,7 @@
     sigaction(SIGABRT, &signalAction, NULL);
     sigaction(SIGILL, &signalAction, NULL);
     sigaction(SIGBUS, &signalAction, NULL);
+#endif 
     
     NSString *cachesDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
 	NSString *logPath = [cachesDirectory stringByAppendingPathComponent:@"application.log"];
