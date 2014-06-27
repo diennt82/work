@@ -1275,11 +1275,6 @@ double _ticks = 0;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-#pragma mak - Delegate Melody
-- (void)setMelodyWithIndex:(NSInteger)molodyIndex
-{
-}
-
 #pragma mark - Method
 
 - (void)singleTapGestureCaptured:(id)sender
@@ -2678,87 +2673,6 @@ double _ticks = 0;
 {
 }
 
-#pragma mark - Melody Control
-
-- (void)getMelodyValue_bg
-{
-    NSString *responseString = @"";
-    
-    if (self.selectedChannel.profile .isInLocal == TRUE)
-    {
-        //[HttpCom instance].comWithDevice.device_ip   = self.selectedChannel.profile.ip_address;
-        //[HttpCom instance].comWithDevice.device_port = self.selectedChannel.profile.port;
-        
-        NSData *responseData = [[HttpCom instance].comWithDevice sendCommandAndBlock_raw:@"value_melody"];
-        
-        if (responseData != nil)
-        {
-            responseString = [[[NSString alloc] initWithData:responseData encoding: NSUTF8StringEncoding] autorelease];
-        }
-    }
-    else
-    {
-        if (_jsonCommBlocked == nil)
-        {
-            self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                                         Selector:nil
-                                                                     FailSelector:nil
-                                                                        ServerErr:nil];
-        }
-        
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        
-        //NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
-        NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
-        
-        NSDictionary *responseDict = [_jsonCommBlocked sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
-                                                                                 andCommand:@"action=command&command=value_melody"
-                                                                                  andApiKey:apiKey];
-        if (responseDict != nil)
-        {
-            NSInteger status = [[responseDict objectForKey:@"status"] intValue];
-            if (status == 200)
-            {
-                responseString = [[[responseDict objectForKey:@"data"] objectForKey:@"device_response"] objectForKey:@"body"];
-            }
-        }
-    }
-    
-    NSLog(@"getMelodyValue_bg: %@", responseString);
-    
-    if (![responseString isEqualToString:@""])
-    {
-        NSRange tmpRange = [responseString rangeOfString:@": "];
-        
-        if (tmpRange.location != NSNotFound)
-        {
-            NSArray *tokens = [responseString componentsSeparatedByString:@": "];
-            
-            if (tokens.count > 1 )
-            {
-                NSString *melodyIndex = [tokens lastObject];
-                
-                if (userWantToCancel == FALSE)
-                {
-                    [self performSelectorOnMainThread:@selector(setMelodyState_Fg:)
-                                           withObject:melodyIndex
-                                        waitUntilDone:NO];
-                }
-            }
-        }
-    }
-    else
-    {
-    }
-}
-
-- (void)setMelodyState_Fg: (NSString *)melodyIndex
-{
-    NSInteger melody_index  = [melodyIndex intValue] - 1;
-    
-    [self.melodyViewController updateUIMelody:melody_index];
-}
-
 #pragma mark - Temperature
 
 - (void)getCameraTemperature_bg: (id)sender
@@ -2767,7 +2681,8 @@ double _ticks = 0;
      * If back, Need not to update UI
      */
     
-    if (userWantToCancel == TRUE)
+    if (userWantToCancel ||
+        _returnFromPlayback)
     {
         return;
     }
@@ -2776,16 +2691,7 @@ double _ticks = 0;
     
     if (self.selectedChannel.profile .isInLocal == TRUE)
     {
-        //[HttpCom instance].comWithDevice.device_ip   = self.selectedChannel.profile.ip_address;
-        //[HttpCom instance].comWithDevice.device_port = self.selectedChannel.profile.port;
-        //[HttpCom instance].comWithDevice.device_port = 80;// Hack code for Focus66.
-        
-        NSData *responseData = [[HttpCom instance].comWithDevice sendCommandAndBlock_raw:@"value_temperature"];
-        
-        if (responseData != nil)
-        {
-            responseString = [[[NSString alloc] initWithData:responseData encoding: NSUTF8StringEncoding] autorelease];
-        }
+        responseString = [[HttpCom instance].comWithDevice sendCommandAndBlock:@"value_temperature"];
     }
     else
     {
@@ -2797,14 +2703,9 @@ double _ticks = 0;
                                                                         ServerErr:nil];
         }
         
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        
-        //NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
-        NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
-        
         NSDictionary *responseDict = [_jsonCommBlocked sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
                                                                                  andCommand:@"action=command&command=value_temperature"
-                                                                                  andApiKey:apiKey];
+                                                                                  andApiKey:_apiKey];
         
         if (responseDict != nil)
         {
@@ -2837,7 +2738,8 @@ double _ticks = 0;
                  * If back, Need not to update UI
                  */
                 
-                if (userWantToCancel == TRUE)
+                if (userWantToCancel ||
+                    _returnFromPlayback)
                 {
                     return;
                 }
@@ -4274,7 +4176,7 @@ double _ticks = 0;
         }
         
         self.melodyViewController.selectedChannel = self.selectedChannel;
-        self.melodyViewController.melodyVcDelegate = self;
+        //self.melodyViewController.melodyVcDelegate = self;
         //landscape mode
         //hide navigation bar
         [self.navigationController setNavigationBarHidden:YES];
@@ -4322,7 +4224,7 @@ double _ticks = 0;
         //portrait mode
         
         self.melodyViewController.selectedChannel = self.selectedChannel;
-        self.melodyViewController.melodyVcDelegate = self;
+        //self.melodyViewController.melodyVcDelegate = self;
         
         
         [self.navigationController setNavigationBarHidden:NO];
@@ -5031,8 +4933,6 @@ double _ticks = 0;
     }
     else if ([_cameraModel isEqualToString:CP_MODEL_CONCURRENT])
     {
-        //        if (_isInLocal)
-        //        {
         switch (index)
         {
             case 0:
@@ -5092,7 +4992,7 @@ double _ticks = 0;
     [self updateBottomView];
     [self applyFont];
     
-    [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"PlayerView select item on horize menu - idx: %d", _selectedItemMenu] withProperties:nil];
+    //[[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"PlayerView select item on horize menu - idx: %d", _selectedItemMenu] withProperties:nil];
     
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:@"Select item on horize menu"
@@ -5102,15 +5002,14 @@ double _ticks = 0;
 
 - (void)updateBottomView
 {
+    [self hidenAllBottomView];
+    
     if (_wantToShowTimeLine || self.horizMenu.isAllButtonDeselected)
     {
-        [self hidenAllBottomView];
         [self showTimelineView];
     }
     else
     {
-        [self hidenAllBottomView];
-        
         if (_selectedItemMenu == INDEX_PAN_TILT)
         {
             [self.view bringSubviewToFront:_imgViewDrectionPad];
@@ -5188,10 +5087,10 @@ double _ticks = 0;
              TODO:need get status of laluby and update on UI.
              when landscape or portrait display correctly
              */
-            [self performSelectorInBackground:@selector(getMelodyValue_bg) withObject:nil];
-            [self.melodyViewController.melodyTableView setNeedsLayout];
-            [self.melodyViewController.melodyTableView setNeedsDisplay];
-            
+            //[self performSelectorInBackground:@selector(getMelodyValue_bg) withObject:nil];
+            [_melodyViewController performSelectorInBackground:@selector(getMelodyValue_bg) withObject:nil];
+            //[self.melodyViewController.melodyTableView setNeedsLayout];
+            //[self.melodyViewController.melodyTableView setNeedsDisplay];
         }
         else if (_selectedItemMenu == INDEX_TEMP)
         {
@@ -5308,6 +5207,7 @@ double _ticks = 0;
     [_jsonCommBlocked release];
     [_viewDebugInfo release];
     [_alertViewTimoutRemote release];
+    [_melodyViewController release];
     
     NSLog(@"%s", __FUNCTION__);
     
