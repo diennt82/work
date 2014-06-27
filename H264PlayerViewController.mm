@@ -2880,6 +2880,13 @@ double _ticks = 0;
     }
 }
 
+-(float) temperatureToFfromC: (float) degreeC
+{
+    float degreeF = ((degreeC * 9.0)/5.0) + 32;
+
+    return degreeF;
+}
+
 - (void)setTemperatureState_Fg: (NSString *)temperature
 {
     // Update UI
@@ -2887,10 +2894,10 @@ double _ticks = 0;
     [self.ib_temperature.subviews makeObjectsPerformSelector: @selector(removeFromSuperview)];
     NSString *stringTemperature = [NSString stringWithFormat:@"%d", (int)roundf([temperature floatValue])];
     _degreeCString = stringTemperature;
+  
     
-    float celsius = [_degreeCString floatValue];
-    float changeToFloat = (celsius * 9.0)/5.0;
-    NSInteger degreeF = (round(changeToFloat)) + 32;
+    int degreeF = (int) [self temperatureToFfromC:[temperature floatValue]];
+    
     _degreeFString = [NSString stringWithFormat:@"%d", degreeF];
     
     UILabel *degreeCelsius = [[UILabel alloc] init];
