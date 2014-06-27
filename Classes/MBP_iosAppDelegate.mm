@@ -174,7 +174,7 @@ void HandleException(NSException *exception) {
 }
 
 void HandleSignal(int signal) {
-    NSLog(@"We received a signal: %d", signal);
+    NSLog(@"We received a signal: %d, software_version: %@", signal, [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]);
     checkingApplicationCrashed();
     //Save somewhere that your app has crashed.
 }
