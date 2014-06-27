@@ -41,6 +41,7 @@
 #import "EarlierViewController.h"
 #import "CustomIOS7AlertView.h"
 #import "HubbleProgressView.h"
+#import "MBProgressHUD.h"
 
 
 
@@ -135,10 +136,10 @@
 #define MEDIAPLAYER_SET_DATASOURCE  2
 #define MEDIAPLAYER_STARTED         3
 
-#define TIME_FW_OTA_UPGRADING       3*60;
-
-
-
+#define TIMEOUT_FW_OTA_UPGRADING    70// 70*3 --> 3.5 mins
+#define FW_UPGRADE_IN_PROGRESS      0
+#define FW_UPGRADE_FAILED          -1
+#define FW_UPGRADE_SUCCEED          1
 
 @protocol H264PlayerVCDelegate <NSObject>
 
@@ -342,7 +343,8 @@
 @property (nonatomic, retain) CustomIOS7AlertView *customeAlertView;
 @property (nonatomic, retain) NSString *fwUpgrading;
 @property (nonatomic, retain) UIAlertView *alertFWUpgrading;
-@property (nonatomic) BOOL upgradeDone;
+@property (nonatomic) NSInteger fwUpgradedProgress;
+@property (nonatomic) NSInteger fwUpgradeStatus;
 
 
 - (void)scan_done:(NSArray *) _scan_results;

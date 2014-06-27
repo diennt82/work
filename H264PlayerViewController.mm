@@ -1253,7 +1253,7 @@ double _ticks = 0;
     response = [response stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     NSLog(@"%s response:%@", __FUNCTION__, response);
 #if 0
-    self.fwUpgrading = @"01.13.59";
+    self.fwUpgrading = @"01.13.61";
     NSLog(@"Upgrade possible");
     [self performSelectorOnMainThread:@selector(showFWUpgradeDialog:) withObject:_fwUpgrading waitUntilDone:NO];
 #else
@@ -2459,6 +2459,7 @@ double _ticks = 0;
         
         _isProcessRecording = FALSE;
         [self stopRecordingVideo];
+        [self stopPeriodicBeep];
         
         MediaPlayer::Instance()->suspend();
         MediaPlayer::Instance()->stop();
@@ -4781,9 +4782,24 @@ double _ticks = 0;
             {
                 case 1: // Yes
                 {
-                    self.isFWUpgradingInProgress = YES; // Entering bg control
-                    [self createHubbleAlertView];
-                    [self stopStream];
+                    NSString *response = [[HttpCom instance].comWithDevice sendCommandAndBlock:REQUEST_FW_UPGRADE];
+                    NSLog(@"%s response:%@", __FUNCTION__, response);
+                    
+                    if ([response isEqualToString:@"request_fw_upgrade: 0"])
+                    {
+                        MBProgressHUD *hub = [MBProgressHUD showHUDAddedTo:self.view animated:NO];
+                        [hub setLabelText:@"Checking Fw upgrade..."];
+                        self.isFWUpgradingInProgress = YES; // Entering bg control
+                        [self createHubbleAlertView];
+                        //[self performSelector:@selector(checkFwUpgrageStatus_bg) withObject:nil afterDelay:5];
+                        [self performSelectorInBackground:@selector(checkFwUpgrageStatus_bg)
+                                                    withObject:nil] ;
+                        [self stopStream];
+                    }
+                    else
+                    {
+                        NSLog(@"%s Cannot upgrade Fw now.", __FUNCTION__);
+                    }
                 }
                     break;
                     
@@ -6769,9 +6785,9 @@ double _ticks = 0;
     [alertView setContainerView:[self createDemoView]];
     
     // Modify the parameters
-//    [alertView setButtonTitles:[NSArray arrayWithObjects:@"Close1", @"Close2", nil]];
+    [alertView setButtonTitles:[NSArray arrayWithObjects:@"View other camera", nil]];
     
-    [alertView setButtonTitles:NULL];
+    //[alertView setButtonTitles:NULL];
     [alertView setDelegate:self];
     
     //You may use a Block, rather than a delegate.
@@ -6783,7 +6799,7 @@ double _ticks = 0;
     [alertView setUseMotionEffects:true];
     
     // And launch the dialog
-    [alertView show];
+    //[alertView show];
     
     self.customeAlertView = alertView;
 }
@@ -6793,16 +6809,22 @@ double _ticks = 0;
     NSLog(@"Delegate: Button at position %d is clicked on alertView %d.", buttonIndex, [alertView tag]);
     alertView.delegate = nil;
     [alertView close];
+    
+    if (buttonIndex == 0)
+    {
+        userWantToCancel = YES;
+        [self prepareGoBackToCameraList:nil];
+    }
 }
 
 - (void)closeCustomAlertView
 {
-    [self customIOS7dialogButtonTouchUpInside:_customeAlertView clickedButtonAtIndex:0];
+    [self customIOS7dialogButtonTouchUpInside:_customeAlertView clickedButtonAtIndex:1];
 }
 
 - (UIView *)createDemoView
 {
-    UIView *demoView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 230, 180)];
+    UIView *demoView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 230, 175)];
     
     UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(100, 15, 30, 30)];// autorelease];
     [imageView setImage:[UIImage imageNamed:@"loader_a"]];
@@ -6821,7 +6843,7 @@ double _ticks = 0;
     [imageView startAnimating];
     
     NSString * msg = NSLocalizedStringWithDefaultValue(@"fw_upgrade_2",nil, [NSBundle mainBundle],
-                                                       @"Upgrading firmware, do not power off the camera. This process may take up to 2 mins..." , nil);
+                                                       @"Upgrading firmware, do not power off the camera. This process may take up to 3 mins..." , nil);
     
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(20, 45, 200, 91)];// autorelease];
     label.textAlignment = NSTextAlignmentCenter;
@@ -6836,94 +6858,126 @@ double _ticks = 0;
     UILabel *lblProgress = [[UILabel alloc] initWithFrame:CGRectMake(170, 130, 50, 21)];
     lblProgress.text = @"--";
     [demoView addSubview:lblProgress];
-    
-    NSNumber *value = [NSNumber numberWithInt:0];
-    
-    NSString * command = [NSString stringWithFormat:@"%@", REQUEST_FW_UPGRADE];
-    
-    NSString *response = [[HttpCom instance].comWithDevice sendCommandAndBlock:command];
-    
-    NSLog(@"%s response:%@", __FUNCTION__, response);
+    self.fwUpgradedProgress = 0;
     
     [self performSelectorInBackground:@selector(upgradeFwProgress_bg:)
-                           withObject:[NSArray arrayWithObjects:progressView, lblProgress, value, nil]] ;
+                           withObject:[NSArray arrayWithObjects:progressView, lblProgress, nil]] ;
     
-    [self performSelectorInBackground:@selector(checkFwUpgrageStatus_bg)
-                           withObject:nil] ;
+//    [self performSelectorInBackground:@selector(checkFwUpgrageStatus_bg)
+//                           withObject:nil] ;
+    //[self performSelector:@selector(checkFwUpgrageStatus_bg) withObject:nil afterDelay:5];
     
     return [demoView autorelease];
 }
 
 - (void)upgradeFwProgress_bg:(NSArray *)obj
 {
-    [self performSelectorOnMainThread:@selector(upgradeFwProgress_ui:)
-                           withObject:obj
-                        waitUntilDone:YES];
+    NSLog(@"%s userWantToCancel:%d, _fwUpgradeStatus:%d", __FUNCTION__, userWantToCancel, _fwUpgradeStatus);
     
-    if ([obj[2] intValue] == 60 || _upgradeDone)
+    if (userWantToCancel)
     {
-        [self closeCustomAlertView];
-        
-        NSLog(@"%s Upgrade 100%% upgradeDone:%d", __FUNCTION__, _upgradeDone);
-        
-        if (_upgradeDone)
-        {
-            self.isFWUpgradingInProgress = NO;
-            
-            [self performSelectorOnMainThread:@selector(scanCamera)
-                                   withObject:nil
-                                waitUntilDone:NO];
-        }
-        else
-        {
-            NSString *ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
-                                                             @"OK" , nil);
-            UIAlertView *alertViewUpgradeFailed = [[UIAlertView alloc] initWithTitle:@"Upgrade firmware failed. Go back to Camera list."
-                                                                      message:nil
-                                                                     delegate:self
-                                                            cancelButtonTitle:nil
-                                                            otherButtonTitles:ok, nil];
-            alertViewUpgradeFailed.tag = TAG_ALERT_FW_OTA_UPGRADE_FAILED;
-            [alertViewUpgradeFailed show];
-            [alertViewUpgradeFailed release];
-        }
+        self.isFWUpgradingInProgress = NO;
+        NSLog(@"%s Backout.", __FUNCTION__);
     }
     else
     {
-        NSInteger value = [obj[2] integerValue];
-        value++;
+        [self performSelectorOnMainThread:@selector(upgradeFwProgress_ui:)
+                               withObject:obj
+                            waitUntilDone:YES];
         
-        NSNumber *number2 = [NSNumber numberWithInt:value];
-        
-        [NSThread sleepForTimeInterval:3];
-        [self upgradeFwProgress_bg:[NSArray arrayWithObjects:obj[0], obj[1], number2, nil]];
+        if (_fwUpgradedProgress >= TIMEOUT_FW_OTA_UPGRADING ||
+            _fwUpgradeStatus    != FW_UPGRADE_IN_PROGRESS)
+        {
+            [self closeCustomAlertView];
+            
+            NSLog(@"%s Upgrade 100%% fwUpgradeStatus:%d", __FUNCTION__, _fwUpgradeStatus);
+            
+            if (_fwUpgradeStatus == FW_UPGRADE_SUCCEED)
+            {
+                self.isFWUpgradingInProgress = NO;
+                _isShowCustomIndicator = YES;
+                [self displayCustomIndicator];
+                
+                [self performSelectorOnMainThread:@selector(scanCamera)
+                                       withObject:nil
+                                    waitUntilDone:NO];
+            }
+            else
+            {
+                NSString *ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
+                                                                 @"OK" , nil);
+                UIAlertView *alertViewUpgradeFailed = [[UIAlertView alloc] initWithTitle:@"Upgrade firmware failed. Go back to Camera list."
+                                                                                 message:nil
+                                                                                delegate:self
+                                                                       cancelButtonTitle:nil
+                                                                       otherButtonTitles:ok, nil];
+                alertViewUpgradeFailed.tag = TAG_ALERT_FW_OTA_UPGRADE_FAILED;
+                [alertViewUpgradeFailed show];
+                [alertViewUpgradeFailed release];
+            }
+        }
+        else
+        {
+            _fwUpgradedProgress++;
+            [NSThread sleepForTimeInterval:3];
+            [self upgradeFwProgress_bg:[NSArray arrayWithObjects:obj[0], obj[1], nil]];
+        }
     }
 }
 
 -(void) upgradeFwProgress_ui:(NSArray *) obj
 {
+    NSLog(@"%s progress:%d", __FUNCTION__, _fwUpgradedProgress);
+    
+    if (_fwUpgradedProgress == 2) //6s
+    {
+        [MBProgressHUD hideHUDForView:self.view animated:NO];
+        [_customeAlertView show];
+    }
+    
     UIProgressView *percentageProgress = (UIProgressView *)obj[0];
     UILabel *percentageLabel = obj[1];
     
-	float value =  (float)[obj[2] intValue]/60.f;
+	float value = (float)_fwUpgradedProgress / TIMEOUT_FW_OTA_UPGRADING;
     
-    percentageLabel.text = [NSString stringWithFormat:@"%d%%", (int)(value * 100)];
+    percentageLabel.text = [NSString stringWithFormat:@"%ld%%", lroundf(value * 100)];
     percentageProgress.progress = value;
 }
 
 - (void)checkFwUpgrageStatus_bg
 {
-    self.upgradeDone = [self checkFwUpgrageStatus];
+    //NSLog(@"%s userWantToCancel:%d, value:%d", __FUNCTION__, userWantToCancel, _fwUpgradedProgress);
     
-    if (!_upgradeDone)
+    if (userWantToCancel)
     {
-        [NSThread sleepForTimeInterval:2];
-        [self checkFwUpgrageStatus_bg];
+        NSLog(@"%s Backout.", __FUNCTION__);
+    }
+    else
+    {
+        self.fwUpgradeStatus = [self checkFwUpgrageStatus];
+        
+        if (_fwUpgradeStatus    == FW_UPGRADE_IN_PROGRESS &&
+            _fwUpgradedProgress < TIMEOUT_FW_OTA_UPGRADING)
+        {
+            [NSThread sleepForTimeInterval:2];
+            [self checkFwUpgrageStatus_bg];
+        }
+        else
+        {
+            NSLog(@"%s fwUpgradeStatus:%d, value:%d", __FUNCTION__, _fwUpgradeStatus, _fwUpgradedProgress);
+        }
     }
 }
 
-- (BOOL)checkFwUpgrageStatus
+- (NSInteger )checkFwUpgrageStatus
 {
+    if (_fwUpgradedProgress <= 2)// 6s
+    {
+        return FW_UPGRADE_IN_PROGRESS;
+    }
+    
+    NSInteger fwUpgradeStatus = FW_UPGRADE_IN_PROGRESS;
+    
     if (_jsonCommBlocked == nil)
     {
         self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
@@ -6935,7 +6989,7 @@ double _ticks = 0;
     NSDictionary *responseDict = [_jsonCommBlocked getDeviceBasicInfoBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
                                                                                      andApiKey:_apiKey];
     
-    //NSLog(@"%s response:%@", __FUNCTION__, responseDict);
+   // NSLog(@"%s response:%@", __FUNCTION__, responseDict);
     
     if (responseDict != nil)
     {
@@ -6943,19 +6997,37 @@ double _ticks = 0;
         
         if (status == 200)
         {
-            NSString *firmwareVersion = [[responseDict objectForKey:@"data"] objectForKey:@"firmware_version"];
+            NSDictionary *data = [responseDict objectForKey:@"data"];
+            self.selectedChannel.profile.fwStatus = [[data objectForKey:@"firmware_status"] integerValue];
             
-            if (firmwareVersion != nil && ![firmwareVersion isEqual:[NSNull null]])
+            id firmwareTime = [data objectForKey:@"firmware_time"];
+            
+            self.selectedChannel.profile.fwTime   = [firmwareTime isEqual:[NSNull null]]?nil:firmwareTime;
+
+            if (![self.selectedChannel.profile isFwUpgrading:[NSDate date]])
             {
-                if ([firmwareVersion isEqualToString:_fwUpgrading])
+                NSString *firmwareVersion = [data objectForKey:@"firmware_version"];
+                
+                if (firmwareVersion != nil && ![firmwareVersion isEqual:[NSNull null]])
                 {
-                    return TRUE;
+                    if ([firmwareVersion isEqualToString:_fwUpgrading])
+                    {
+                        fwUpgradeStatus = FW_UPGRADE_SUCCEED;
+                    }
+                    else
+                    {
+                        fwUpgradeStatus = FW_UPGRADE_FAILED;
+                    }
                 }
+            }
+            else
+            {
+                fwUpgradeStatus = FW_UPGRADE_IN_PROGRESS;
             }
         }
     }
     
-    return FALSE;
+    return fwUpgradeStatus;
 }
 
 @end
