@@ -544,6 +544,13 @@
     }
 }
 
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
+    CGRect rect = self.ib_viewOverlayVideo.frame;
+    rect.origin.x = (self.view.frame.size.width - self.ib_viewOverlayVideo.frame.size.width) / 2;
+    rect.origin.y = (self.view.frame.size.height - self.ib_viewOverlayVideo.frame.size.height) / 2;
+    [self.ib_viewOverlayVideo setFrame:rect];
+}
+
 -(void) checkOrientation
 {
 	[self adjustViewsForOrientation:[UIApplication sharedApplication].statusBarOrientation];
@@ -553,7 +560,13 @@
 {
 	if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight)
 	{
-        [self.imageVideo setFrame:CGRectMake(0, 0, SCREEN_HEIGHT, SCREEN_WIDTH)];
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+            CGRect rect = CGRectMake(0, 0, SCREEN_HEIGHT, 576);
+            rect.origin.y = (SCREEN_WIDTH - rect.size.height) / 2;
+            [self.imageVideo setFrame:rect];
+        } else {
+            [self.imageVideo setFrame:CGRectMake(0, 0, SCREEN_HEIGHT, SCREEN_WIDTH)];
+        }
         
         [self.ib_closePlayBack setImage:[UIImage imageNamed:@"video_fullscreen_close"] forState:UIControlStateNormal];
         [self.ib_closePlayBack setImage:[UIImage imageNamed:@"video_fullscreen_close_pressed"] forState:UIControlEventTouchDown];
