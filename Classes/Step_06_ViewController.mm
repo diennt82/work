@@ -693,7 +693,8 @@
     
     NSLog(@"set auth -set_auth_cmd: %d ", [fwVersion compare:FW_MILESTONE_F66_NEW_FLOW]);
     
-    [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Step06 - Add camera fw: %@", fwVersion] withProperties:nil];
+    //[[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Step06 - Add camera fw: %@", fwVersion] withProperties:nil];
+    [self defaultOnAllPNToCamera];
     
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:[NSString stringWithFormat:@"Send Wifi info to Camera-fw:%@", fwVersion]
@@ -781,6 +782,25 @@
     }
     
     return FALSE;
+}
+
+- (void)defaultOnAllPNToCamera
+{
+    NSString *result = @"";
+    
+    NSString *response = [[HttpCom instance].comWithDevice sendCommandAndBlock:@"set_motion_area&grid=1x1&zone=00"];
+    result = [result stringByAppendingString:response];
+    
+    response = [[HttpCom instance].comWithDevice sendCommandAndBlock:@"vox_enable"];
+    result = [result stringByAppendingFormat:@", %@", response];
+    
+    response = [[HttpCom instance].comWithDevice sendCommandAndBlock:@"set_temp_lo_enable&value=1"];
+    result = [result stringByAppendingFormat:@", %@", response];
+    
+    response = [[HttpCom instance].comWithDevice sendCommandAndBlock:@"set_temp_hi_enable&value=1"];
+    result = [result stringByAppendingFormat:@", %@", response];
+    
+    NSLog(@"%s respnse:%@", __FUNCTION__, result);
 }
 
 -(void)moveOnToCheckCameraOnlineStatus
