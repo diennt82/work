@@ -178,13 +178,12 @@
 
 - (void)sendCommandRebootCamera
 {
-    NSLog(@"Send command reset camera");
-    //    HttpCommunication *comm = [[HttpCommunication alloc]init];
-    NSString * command = RESTART_HTTP_CMD;
+    NSLog(@"%s", __FUNCTION__);
+    //HttpCommunication *comm = [[HttpCommunication alloc]init];
+    //NSString * command = RESTART_HTTP_CMD;
+    //NSLog(@"[HttpCom instance]: %p", [HttpCom instance]);
     
-    NSLog(@"[HttpCom instance]: %p", [HttpCom instance]);
-    
-    [[HttpCom instance].comWithDevice sendCommandAndBlock:command];
+    [[HttpCom instance].comWithDevice sendCommandAndBlock_raw:RESTART_HTTP_CMD];
 }
 
 - (void) hideProgess
@@ -285,7 +284,7 @@
                                                                           FailSelector:@selector(addCamFailedWithError:)
                                                                              ServerErr:@selector(addCamFailedServerUnreachable)] autorelease];
     //NSString *mac = [Util strip_colon_fr_mac:self.cameraMac];
-    NSString *camName = (NSString *) [userDefaults objectForKey:@"CameraName"];
+    NSString *camName = (NSString *) [userDefaults objectForKey:CAMERA_NAME];
     
     
     [jsonComm registerDeviceWithDeviceName:camName
@@ -334,7 +333,7 @@
                                                                     ServerErr:nil];
     }
     
-    NSString *camName = (NSString *) [userDefaults objectForKey:@"CameraName"];
+    NSString *camName = (NSString *) [userDefaults objectForKey:CAMERA_NAME];
     NSDictionary *responseDict = [_jsonCommBlocked registerDeviceBlockedWithProxyHost:PROXY_HOST
                                                                     proxyPort:PROXY_PORT
                                                                    deviceName:camName
@@ -422,7 +421,7 @@
                     }
                     
                     [self setStopScanning:nil];
-                    [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Step10 - Check camera status: %@", _statusMessage] withProperties:nil];
+                    //[[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Step10 - Check camera status: %@", _statusMessage] withProperties:nil];
                     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                                     withAction:[NSString stringWithFormat:@"Check camera status: %@", _statusMessage]
                                                                      withLabel:nil
@@ -436,7 +435,7 @@
                 case DEV_STATUS_REGISTERED_LOGGED_USER:
                     NSLog(@"Step_10_VC register successfully. Move on");
                     shouldCheckAgain = FALSE;
-                    [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Step10 - Check camera status: %d", deviceStatus] withProperties:nil];
+                    //[[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Step10 - Check camera status: %d", deviceStatus] withProperties:nil];
                     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                                     withAction:[NSString stringWithFormat:@"Check camera status: %@", _statusMessage]
                                                                      withLabel:nil
@@ -475,12 +474,13 @@
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
-    NSString *apiKey    = [userDefaults objectForKey:@"PortalApiKey"];
-    NSString *udid      = [userDefaults objectForKey:CAMERA_UDID];
-    NSString *hostSSID  = [userDefaults objectForKey:HOST_SSID];
+    NSString *apiKey     = [userDefaults objectForKey:@"PortalApiKey"];
+    NSString *udid       = [userDefaults objectForKey:CAMERA_UDID];
+    NSString *hostSSID   = [userDefaults objectForKey:HOST_SSID];
+    NSString *cameraName = [userDefaults objectForKey:CAMERA_NAME];
     
     NSDictionary *responseDict = [_jsonCommBlocked updateDeviceBasicInfoBlockedWithRegistrationId:udid
-                                                                                       deviceName:nil
+                                                                                       deviceName:cameraName
                                                                                          timeZone:nil
                                                                                              mode:nil
                                                                                   firmwareVersion:nil
@@ -544,7 +544,7 @@
     //current wifi
     NSString * currentSSID = [CameraPassword fetchSSIDInfo];
     //current wifi of camera setup
-    NSString *wifiCameraSetup = [userDefaults stringForKey:@"CameraName"];
+    NSString *wifiCameraSetup = [userDefaults stringForKey:CAMERA_SSID];
     
     
     if ((currentSSID == nil) || [currentSSID isEqualToString:wifiCameraSetup])
