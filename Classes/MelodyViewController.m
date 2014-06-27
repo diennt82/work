@@ -138,7 +138,7 @@
         }
     }
     
-    NSLog(@"%s responsed: %@", __func__, responseString);
+    NSLog(@"%s _melodyIndex:%d, responsed: %@", __func__, _melodyIndex, responseString);
     
     if (![responseString isEqualToString:@""])
     {
@@ -152,9 +152,16 @@
             {
                 NSInteger melodyIndex = [[tokens lastObject] integerValue] - 1;
                 
-                if (melodyIndex == -1)
-                    return;
-                valueMelodiesMap[melodyIndex] = YES;
+                for (int i = 0; i < _melodies.count; i++)
+                {
+                    valueMelodiesMap[i] = FALSE;
+                }
+                
+                if (melodyIndex != -1)
+                {
+                    valueMelodiesMap[melodyIndex]  = YES;
+                }
+                
                 [_melodyTableView reloadData];
             }
         }
