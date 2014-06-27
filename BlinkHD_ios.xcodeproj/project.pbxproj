@@ -106,6 +106,8 @@
 		5EBA45A619405BEA00695155 /* Step_12_ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5EBA458619405BEA00695155 /* Step_12_ViewController.xib */; };
 		5EBA45A719405BEA00695155 /* Step_12_ViewController_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5EBA458719405BEA00695155 /* Step_12_ViewController_ipad.xib */; };
 		8408F1811833222A00B00188 /* MonitorCommunication.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8408F1801833222A00B00188 /* MonitorCommunication.framework */; };
+		8412C990195D26F7000FEA1C /* dsym_upload.sh in Resources */ = {isa = PBXBuildFile; fileRef = 8412C98E195D26F7000FEA1C /* dsym_upload.sh */; };
+		8412C991195D26F7000FEA1C /* libCrittercism_v4_3_4.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8412C98F195D26F7000FEA1C /* libCrittercism_v4_3_4.a */; };
 		841D567B1834C1E600ACE7A7 /* streamqvga.sdp in Resources */ = {isa = PBXBuildFile; fileRef = 841D567A1834C1E600ACE7A7 /* streamqvga.sdp */; };
 		8429C574193325EF00F5FCF8 /* TermsCondController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8429C572193325EF00F5FCF8 /* TermsCondController.m */; };
 		8429C575193325EF00F5FCF8 /* TermsCondController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8429C573193325EF00F5FCF8 /* TermsCondController.xib */; };
@@ -696,7 +698,6 @@
 		A15110D718AB7D4600E116E1 /* TimeLinePremiumCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A15110D618AB7D4600E116E1 /* TimeLinePremiumCell.m */; };
 		A15110DD18AB7D9800E116E1 /* TimeLinePremiumCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A15110DC18AB7D9800E116E1 /* TimeLinePremiumCell.xib */; };
 		A15430FB1818CFD500337EFE /* H264MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A15430FA1818CFD500337EFE /* H264MediaPlayer.framework */; };
-		A15430FF1818D08A00337EFE /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A15430FD1818D08A00337EFE /* libTestFlight.a */; };
 		A15431011818D10200337EFE /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9770CDF7143076DD009E69EF /* AudioToolbox.framework */; };
 		A15431091818DEB800337EFE /* streamvga.sdp in Resources */ = {isa = PBXBuildFile; fileRef = A15431081818DEB800337EFE /* streamvga.sdp */; };
 		A15773A1186145DD00DEBD45 /* H264PlayerViewController_land_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = A157739F186145DD00DEBD45 /* H264PlayerViewController_land_iPad.xib */; };
@@ -814,7 +815,6 @@
 		38362C1C15FDEE400077E188 /* alert_history.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = alert_history.sqlite; sourceTree = "<group>"; };
 		3851C3B716D5CD03007D3781 /* StartMonitorCallback.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StartMonitorCallback.h; sourceTree = "<group>"; };
 		38699126167055B8009F3E66 /* MainWindow_ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainWindow_ipad.xib; sourceTree = "<group>"; };
-		38962C7F1769583A0016AE16 /* TestFlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestFlight.h; sourceTree = "<group>"; };
 		38962C821769587E0016AE16 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		38A13AF116363147000138EA /* UnderlinedUILabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnderlinedUILabel.h; sourceTree = "<group>"; };
 		38A13AF216363147000138EA /* UnderlinedUILabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UnderlinedUILabel.m; sourceTree = "<group>"; };
@@ -910,6 +910,11 @@
 		5EBA458619405BEA00695155 /* Step_12_ViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Step_12_ViewController.xib; sourceTree = "<group>"; };
 		5EBA458719405BEA00695155 /* Step_12_ViewController_ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Step_12_ViewController_ipad.xib; sourceTree = "<group>"; };
 		8408F1801833222A00B00188 /* MonitorCommunication.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MonitorCommunication.framework; path = "../ios-frameworks/MonitorCommunication.framework"; sourceTree = "<group>"; };
+		8412C98B195D26F7000FEA1C /* CRFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRFilter.h; sourceTree = "<group>"; };
+		8412C98C195D26F7000FEA1C /* Crittercism.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Crittercism.h; sourceTree = "<group>"; };
+		8412C98D195D26F7000FEA1C /* CrittercismDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrittercismDelegate.h; sourceTree = "<group>"; };
+		8412C98E195D26F7000FEA1C /* dsym_upload.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = dsym_upload.sh; sourceTree = "<group>"; };
+		8412C98F195D26F7000FEA1C /* libCrittercism_v4_3_4.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libCrittercism_v4_3_4.a; sourceTree = "<group>"; };
 		841D567A1834C1E600ACE7A7 /* streamqvga.sdp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = streamqvga.sdp; sourceTree = "<group>"; };
 		8429C571193325EF00F5FCF8 /* TermsCondController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TermsCondController.h; sourceTree = "<group>"; };
 		8429C572193325EF00F5FCF8 /* TermsCondController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TermsCondController.m; sourceTree = "<group>"; };
@@ -1602,7 +1607,6 @@
 		A15110DC18AB7D9800E116E1 /* TimeLinePremiumCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TimeLinePremiumCell.xib; sourceTree = "<group>"; };
 		A15430FA1818CFD500337EFE /* H264MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = H264MediaPlayer.framework; path = "../ios-frameworks/H264MediaPlayer.framework"; sourceTree = "<group>"; };
 		A15430FC1818D08A00337EFE /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = "../ios-frameworks/libcrypto.a"; sourceTree = "<group>"; };
-		A15430FD1818D08A00337EFE /* libTestFlight.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libTestFlight.a; path = "../ios-frameworks/libTestFlight.a"; sourceTree = "<group>"; };
 		A15431081818DEB800337EFE /* streamvga.sdp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = streamvga.sdp; sourceTree = "<group>"; };
 		A157739F186145DD00DEBD45 /* H264PlayerViewController_land_iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = H264PlayerViewController_land_iPad.xib; sourceTree = "<group>"; };
 		A15773A0186145DD00DEBD45 /* H264PlayerViewController_land.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = H264PlayerViewController_land.xib; sourceTree = "<group>"; };
@@ -1742,9 +1746,9 @@
 				A1ABF1CC18753C240014FCB4 /* CoreBluetooth.framework in Frameworks */,
 				8408F1811833222A00B00188 /* MonitorCommunication.framework in Frameworks */,
 				8BA5C47C1818DAAC006B4BB8 /* libcrypto.a in Frameworks */,
+				8412C991195D26F7000FEA1C /* libCrittercism_v4_3_4.a in Frameworks */,
 				A15431011818D10200337EFE /* AudioToolbox.framework in Frameworks */,
 				9770CDF2143076CD009E69EF /* CoreAudio.framework in Frameworks */,
-				A15430FF1818D08A00337EFE /* libTestFlight.a in Frameworks */,
 				A15430FB1818CFD500337EFE /* H264MediaPlayer.framework in Frameworks */,
 				A11E8C1317E2DB7E00915F84 /* libstdc++.dylib in Frameworks */,
 				38962C831769587E0016AE16 /* libz.dylib in Frameworks */,
@@ -1765,6 +1769,7 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				8412C98A195D26F7000FEA1C /* CrittercismSDK */,
 				84A66235195C0C2500EF7DB5 /* SDWebImage */,
 				5EBA456719405BEA00695155 /* XIB FIles */,
 				8BB2D7FB1957DBC60038401F /* TermsCC */,
@@ -1853,7 +1858,6 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
-				38962C7F1769583A0016AE16 /* TestFlight.h */,
 				A1ABF1CA187539A80014FCB4 /* define.h */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
@@ -1918,7 +1922,6 @@
 				8408F1801833222A00B00188 /* MonitorCommunication.framework */,
 				8BA23838182C8E130022581A /* CameraScanner.framework */,
 				A15430FC1818D08A00337EFE /* libcrypto.a */,
-				A15430FD1818D08A00337EFE /* libTestFlight.a */,
 				A15430FA1818CFD500337EFE /* H264MediaPlayer.framework */,
 				3803A86115FF42ED00B4DD97 /* libsqlite3.dylib */,
 				3803A85F15FF42DA00B4DD97 /* libsqlite3.0.dylib */,
@@ -2028,6 +2031,18 @@
 				5EBA458719405BEA00695155 /* Step_12_ViewController_ipad.xib */,
 			);
 			path = "XIB FIles";
+			sourceTree = "<group>";
+		};
+		8412C98A195D26F7000FEA1C /* CrittercismSDK */ = {
+			isa = PBXGroup;
+			children = (
+				8412C98B195D26F7000FEA1C /* CRFilter.h */,
+				8412C98C195D26F7000FEA1C /* Crittercism.h */,
+				8412C98D195D26F7000FEA1C /* CrittercismDelegate.h */,
+				8412C98E195D26F7000FEA1C /* dsym_upload.sh */,
+				8412C98F195D26F7000FEA1C /* libCrittercism_v4_3_4.a */,
+			);
+			path = CrittercismSDK;
 			sourceTree = "<group>";
 		};
 		844359EA1908F5E500148436 /* Timeline Dbs */ = {
@@ -3821,6 +3836,7 @@
 				8B299FCF18AF500900D36BE5 /* camera_action_pause@5.png in Resources */,
 				8B299F8118AF500900D36BE5 /* camera_action_pan_l_bg_land.png in Resources */,
 				A15110DD18AB7D9800E116E1 /* TimeLinePremiumCell.xib in Resources */,
+				8412C990195D26F7000FEA1C /* dsym_upload.sh in Resources */,
 				5EBA459919405BEA00695155 /* Step_06_ViewController.xib in Resources */,
 				A1AC286F1877A1F0000A866D /* CreateBLEConnection_VController_iPad.xib in Resources */,
 				A16995C818F6B8790075757C /* add_camera_pressed@2x.png in Resources */,
@@ -4441,6 +4457,7 @@
 					"$(SRCROOT)/../ios-frameworks",
 					"$(SRCROOT)/../ios-frameworks/pjsip/dist-uarch/lib",
 					"$(SRCROOT)/../ios-frameworks/GoogleAnalyticsLibrary",
+					"$(PROJECT_DIR)/Classes/CrittercismSDK",
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = (
@@ -4495,6 +4512,7 @@
 					"$(SRCROOT)/../ios-frameworks/pjsip/dist-uarch/lib",
 					"$(SRCROOT)/../ios-frameworks",
 					"$(SRCROOT)/../ios-frameworks/GoogleAnalyticsLibrary",
+					"$(PROJECT_DIR)/Classes/CrittercismSDK",
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = (
@@ -4568,6 +4586,7 @@
 					"$(SRCROOT)/../ios-frameworks/pjsip/dist-uarch/lib",
 					"$(SRCROOT)/../ios-frameworks",
 					"$(SRCROOT)/../ios-frameworks/GoogleAnalyticsLibrary",
+					"$(PROJECT_DIR)/Classes/CrittercismSDK",
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = (
