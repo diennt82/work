@@ -1590,7 +1590,8 @@ double _ticks = 0;
         {
             NSLog(@"%s Hanle exception here!", __FUNCTION__);
             
-            if (_shouldRestartProcessing)
+            if (_shouldRestartProcessing ||
+                _selectedChannel.profile.isInLocal)
             {
                 [self scanCamera];
             }
