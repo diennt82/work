@@ -1005,6 +1005,8 @@ double _ticks = 0;
             }
             
     		NSLog(@"Timeout While streaming  OR server DIED - userWantToCancel: %d, returnFromPlayback: %d, forceStop: %d", userWantToCancel, _returnFromPlayback, ext1);
+
+            [self stopStream];
             
             if (userWantToCancel == TRUE) // Event comes from BackButtonItem.
             {
@@ -1022,7 +1024,6 @@ double _ticks = 0;
             }
             else
             {
-                [self stopStream];
                 self.selectedChannel.stopStreaming = TRUE;
                 
                 if (_h264StreamerIsInStopped ||
