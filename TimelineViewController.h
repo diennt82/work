@@ -9,7 +9,8 @@
 #import <UIKit/UIKit.h>
 #import <CameraScanner/CameraScanner.h>
 //#import "PlaybackViewController.h"
-
+#import "UIImageView+WebCache.h"
+#import "TimelineActivityCell.h"
 
 @protocol TimelineVCDelegate <NSObject>
 
@@ -25,7 +26,9 @@
 @interface TimelineViewController : UITableViewController
 {
     NSArray *aryDatePrefix;
+    IBOutlet TimelineActivityCell * activityCell;
 }
+@property(nonatomic, retain) IBOutlet TimelineActivityCell * activityCell;
 
 @property (nonatomic, assign) id<TimelineVCDelegate> timelineVCDelegate;
 @property (nonatomic, assign) CamChannel *camChannel;
@@ -34,5 +37,6 @@
 @property (nonatomic, assign) id parentVC;
 
 - (void)loadEvents: (CamChannel *)camChannel;
+-(void)getExtraEvent_bg;
 
 @end
