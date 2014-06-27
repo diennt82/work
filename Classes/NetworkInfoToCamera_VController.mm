@@ -237,7 +237,7 @@
         else {
             ssidTextLength = textField.text.length + string.length;
         }
-        if (ssidTextLength > 0 && [self.tfPassword.text isEqualToString:self.tfConfirmPass.text]) {
+        if (ssidTextLength > 0 && self.tfPassword.text.length>0) {
             self.navigationItem.rightBarButtonItem.enabled = YES;
             self.navigationItem.rightBarButtonItem.tintColor = [UIColor blueColor];
         }
@@ -260,7 +260,7 @@
         else {
             passString = [textField.text stringByAppendingString:string];
         }
-        if (self.tfSSID.text.length > 0 && [passString isEqualToString:self.tfConfirmPass.text]) {
+        if (self.tfSSID.text.length > 0 && passString.length>0) {
             self.navigationItem.rightBarButtonItem.enabled = YES;
             self.navigationItem.rightBarButtonItem.tintColor = [UIColor blueColor];
         }
@@ -343,7 +343,8 @@
     if (textField.tag == 200) //password
     {
         self.password = textField.text;
-        [self.tfConfirmPass becomeFirstResponder];
+        //[self.tfConfirmPass becomeFirstResponder];
+        [textField resignFirstResponder];
     }
     else if (textField.tag ==201) //conf password
     {
@@ -456,7 +457,7 @@
             }
             else
             {
-                return 3;
+                return 2;
             }
         }
     }
@@ -614,20 +615,18 @@
     else
     {
         UITextField  * pass = (UITextField*)[self.passwordCell viewWithTag:200];
-        UITextField  * confpass = (UITextField*)[self.confPasswordCell viewWithTag:201];
+        //UITextField  * confpass = (UITextField*)[self.confPasswordCell viewWithTag:201];
         
-        if ( ([pass.text length] == 0 ) ||
-            ( [confpass.text length] ==0 ) ||
-            (![pass.text isEqualToString:confpass.text]))
+        if ( [pass.text length] == 0 )
         {
             //error
             
-            NSString * msg_fail = NSLocalizedStringWithDefaultValue(@"Confirm_Pass_Fail", nil, [NSBundle mainBundle], @"Le mot de passe ne correspond pas. S'il vous plaît, saisir à nouveau !", nil);
+           // NSString * msg_fail = NSLocalizedStringWithDefaultValue(@"Confirm_Pass_Fail", nil, [NSBundle mainBundle], @"Le mot de passe ne correspond pas. S'il vous plaît, saisir à nouveau !", nil);
             
             //ERROR condition
             UIAlertView *_alert = [[UIAlertView alloc]
-                                   initWithTitle:@"Confirm Password Failed"
-                                   message:msg_fail
+                                   initWithTitle:@"Password Failed"
+                                   message:@"Enter Password"
                                    delegate:self
                                    cancelButtonTitle:@"OK"
                                    otherButtonTitles:nil];
