@@ -1083,7 +1083,32 @@
         
         EventInfo *eventInfo = (EventInfo *)[_events objectAtIndex:indexPath.row];
         
-        cell.eventLabel.text = eventInfo.alert_name;
+        //Make the string first-letter-capitalized
+        NSString *text = eventInfo.alert_name;
+        NSString *capitalized = [[[text substringToIndex:1] uppercaseString] stringByAppendingString:[text substringFromIndex:1]];
+        
+        cell.eventLabel.text =capitalized;
+        
+        
+        int tempValue = [eventInfo.value integerValue];
+        //IF it is temp hi or temp lo alert add the temperature value
+        if ( (eventInfo.alert == 2 ||  eventInfo.alert == 3) &&  (tempValue != 1))
+        {
+            cell.eventLabel.text = [NSString stringWithFormat:@"%@ (%@\u2103)", capitalized, eventInfo.value];
+            
+            //tempValue ->Convert to F
+            //
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            BOOL isFahrenheit = [userDefaults  boolForKey:IS_FAHRENHEIT];
+            if (isFahrenheit == YES)
+            {
+                int degreeF =  [self temperatureToFfromC:(float)tempValue];
+                
+                cell.eventLabel.text = [NSString stringWithFormat:@"%@ (%d\u2109)", capitalized,degreeF];
+            }
+            
+        }
+        
         
         NSDateFormatter *dateFormater = [[NSDateFormatter alloc] init];
         [dateFormater setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
@@ -1405,6 +1430,13 @@
 -(void)motioEventDeleted
 {
     [self getEventFromDb:self.camChannel];
+}
+
+-(float) temperatureToFfromC: (float) degreeC
+{
+    float degreeF = ((degreeC * 9.0)/5.0) + 32;
+    
+    return degreeF;
 }
 
 @end
