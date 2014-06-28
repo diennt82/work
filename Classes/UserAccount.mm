@@ -9,28 +9,14 @@
 #import "UserAccount.h"
 #import "MBP_iosAppDelegate.h"
 
-@interface UserAccount()
 
-@property (nonatomic, retain) BMS_JSON_Communication *jsonComm;
-@property (nonatomic, assign) id<UserAccountDelegate> delegate;
-
-@end
 
 @implementation UserAccount
 
 @synthesize   userName,userPass;
-//@synthesize delegate;
+@synthesize  listener;
 
-- (id) initWithUser:(NSString *)user andPass:(NSString *)pass andApiKey: (NSString *)apiKey andListener:(id <ConnectionMethodDelegate>) d
-{
-    self = [super init];
-	self.userName = user;
-	self.userPass = pass;
-    self.apiKey = apiKey;
-	//self.delegate = d;
-    
-	return self;
-}
+
 
 - (id)initWithUser:(NSString *)user
           password:(NSString *)pass
@@ -41,10 +27,10 @@
     
     if (self)
     {
-        self.userName = user;
-        self.userPass = pass;
-        self.apiKey = apiKey;
-        self.delegate = d;
+        userName = user;
+        userPass = pass;
+        apiKey = apiKey;
+        listener = d;
     }
     
 	return self;
@@ -218,10 +204,10 @@
 
 - (void)updatesBasicInfoForCamera
 {
-        BMS_JSON_Communication *jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
+    BMS_JSON_Communication *jsonCommBlocked = [[[BMS_JSON_Communication alloc] initWithObject:self
                                                                      Selector:nil
                                                                  FailSelector:nil
-                                                                    ServerErr:nil];
+                                                                    ServerErr:nil] autorelease];
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
@@ -270,7 +256,7 @@
     self.jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
                                                           Selector:nil
                                                       FailSelector:nil
-                                                         ServerErr:nil];
+                                                         ServerErr:nil] ;
     
     NSDictionary *responseDict = [_jsonComm getAllDevicesBlockedWithApiKey:[[NSUserDefaults standardUserDefaults] objectForKey:@"PortalApiKey"]];
 #if 0
@@ -319,9 +305,9 @@
         
         [self sync_online_and_offline_data:camProfiles];
         
-        if (_delegate != nil)
+        if (listener != nil)
         {
-            [_delegate finishStoreCameraListData:camProfiles
+            [listener finishStoreCameraListData:camProfiles
                                          success:TRUE];
         }
         else
@@ -359,9 +345,9 @@
 	[alert show];
 	[alert release];
 	
-    if (_delegate)
+    if (listener)
     {
-        [_delegate finishStoreCameraListData:[NSMutableArray arrayWithObjects:status, message, nil]
+        [listener finishStoreCameraListData:[NSMutableArray arrayWithObjects:status, message, nil]
                                      success:FALSE];
     }
 }
@@ -396,9 +382,9 @@
     
     if (!isOffline)
     {
-        if (_delegate)
+        if (listener)
         {
-            [_delegate finishStoreCameraListData:nil
+            [listener finishStoreCameraListData:nil
                                          success:FALSE];
         }
     }

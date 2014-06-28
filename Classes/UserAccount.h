@@ -30,15 +30,17 @@
 	NSString * userName;
 	NSString * userPass;
 	
-	//id <ConnectionMethodDelegate> delegate;
+
 }
-//@property (nonatomic,assign) id <ConnectionMethodDelegate> delegate;
+
 @property (nonatomic,retain) NSString * userName, * userPass;
 
 @property (nonatomic, retain) NSString *apiKey;
-//@property (nonatomic, assign) id<UserAccountLoginDelegate> uaLoginDelegate;
+@property (nonatomic, retain) BMS_JSON_Communication *jsonComm;
+@property (nonatomic, assign) id<UserAccountDelegate> listener;
 
-//- (id) initWithUser:(NSString *)user andPass:(NSString *)pass andApiKey: (NSString *)apiKey andListener:(id <ConnectionMethodDelegate>) d;
+
+
 - (id)initWithUser:(NSString *)user
           password:(NSString *)pass
             apiKey:(NSString *)apiKey
