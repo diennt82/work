@@ -231,7 +231,6 @@ double _ticks = 0;
 {
     [self stopTimerRecoring];
     
-    //[[UIApplication sharedApplication] setStatusBarHidden:NO];
     [super viewWillDisappear:animated];
 }
 
@@ -1522,9 +1521,24 @@ double _ticks = 0;
     self.imageViewVideo.backgroundColor = [UIColor blackColor];
     self.imageViewStreamer.backgroundColor = [UIColor blackColor];
     
-    if (_selectedChannel.profile.isInLocal == TRUE)
+    if (_selectedChannel.profile.isInLocal)
     {
         NSLog(@"Enter Background.. Local ");
+        
+        if (_alertFWUpgrading && [_alertFWUpgrading isVisible])
+        {
+            if (_alertFWUpgrading.tag == TAG_ALERT_FW_OTA_UPGRADE_AVAILABLE)
+            {
+                NSLog(@"%s Dismiss TAG_ALERT_FW_OTA_UPGRADE_AVAILABLE & askForFWUpgradeOnce", __FUNCTION__);
+                self.askForFWUpgradeOnce = YES;
+                
+                [_alertFWUpgrading dismissWithClickedButtonIndex:0 animated:NO];
+            }
+            else
+            {
+                NSLog(@"%s alertFWUpgrading is changed tag", __FUNCTION__);
+            }
+        }
     }
     else if (_selectedChannel.profile.minuteSinceLastComm <= 5) // Remote
     {
@@ -1535,7 +1549,8 @@ double _ticks = 0;
 
 - (void)h264_HandleWillEnterForeground
 {
-    NSLog(@"%s userWantToCancel:%d, returnFromPlayback:%d, mediaProcessStatus: %d, _shouldRestartProcessing:%d, UIBackgroundTaskInvalid:%d", __FUNCTION__, userWantToCancel, _returnFromPlayback, _mediaProcessStatus, _shouldRestartProcessing, UIBackgroundTaskInvalid);
+    NSLog(@"%s userWantToCancel:%d, returnFromPlayback:%d, mediaProcessStatus: %d, _shouldRestartProcessing:%d, UIBackgroundTaskInvalid:%d, isFWUpgradingInProgress:%d",
+          __FUNCTION__, userWantToCancel, _returnFromPlayback, _mediaProcessStatus, _shouldRestartProcessing, UIBackgroundTaskInvalid, _isFWUpgradingInProgress);
     
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:@"Become Active"
@@ -2188,6 +2203,11 @@ double _ticks = 0;
     {
         [_timerRemoteStreamTimeOut invalidate];
         self.timerRemoteStreamTimeOut = nil;
+    }
+    
+    if (_alertFWUpgrading)
+    {
+        [_alertFWUpgrading dismissWithClickedButtonIndex:0 animated:NO];
     }
     
     NSLog(@"%s _mediaProcessStatus: %d", __FUNCTION__, _mediaProcessStatus);
@@ -6792,6 +6812,7 @@ double _ticks = 0;
     if (userWantToCancel)
     {
         self.isFWUpgradingInProgress = NO;
+        [self closeCustomAlertView];// PN
         NSLog(@"%s Backout.", __FUNCTION__);
     }
     else
