@@ -22,7 +22,6 @@
 @implementation H264PlayerViewController
 
 @synthesize  alertTimer;
-@synthesize  askForFWUpgradeOnce;
 @synthesize   client = _client;
 @synthesize horizMenu = _horizMenu;
 @synthesize itemImages = _itemImages;
@@ -120,6 +119,7 @@ double _ticks = 0;
     
     NSLog(@"camera model is :%@", self.cameraModel);
     self.backgroundTask = UIBackgroundTaskInvalid;
+    self.askForFWUpgradeOnce = YES;
     [self becomeActive];
 }
 
@@ -231,7 +231,6 @@ double _ticks = 0;
 {
     [self stopTimerRecoring];
     
-    //[[UIApplication sharedApplication] setStatusBarHidden:NO];
     [super viewWillDisappear:animated];
 }
 
@@ -687,6 +686,7 @@ double _ticks = 0;
 {
     if (userWantToCancel ||
         _returnFromPlayback ||
+        _isFWUpgradingInProgress ||
         [UIApplication sharedApplication].applicationState == UIApplicationStateBackground)
     {
         NSLog(@"%s View is invisible or is in background mode --> do nothing here.", __FUNCTION__);
@@ -913,13 +913,17 @@ double _ticks = 0;
             }
             else
             {
-                if ( self.selectedChannel.profile.isInLocal && (self.askForFWUpgradeOnce == YES))
+                if (self.selectedChannel.profile.isInLocal)
                 {
-                    [self performSelectorInBackground:@selector(checkIfUpgradeIsPossible) withObject:nil];
-                    self.askForFWUpgradeOnce = NO;
+                    //NSLog(@"%s _askForFWUpgradeOnce:%d", __FUNCTION__, _askForFWUpgradeOnce);
+                    
+                    if (_askForFWUpgradeOnce)
+                    {
+                        [self performSelectorInBackground:@selector(checkIfUpgradeIsPossible) withObject:nil];
+                        self.askForFWUpgradeOnce = NO;
+                    }
                 }
-                
-                if (!self.selectedChannel.profile.isInLocal)
+                else
                 {
                     NSTimeInterval diff = [[NSDate date] timeIntervalSinceDate:_timeStartingStageTwo];
                     
@@ -1004,7 +1008,14 @@ double _ticks = 0;
                 self.timerRemoteStreamKeepAlive = nil;
             }
             
+            if (_alertFWUpgrading)
+            {
+                [_alertFWUpgrading dismissWithClickedButtonIndex:0 animated:NO];
+            }
+            
     		NSLog(@"Timeout While streaming  OR server DIED - userWantToCancel: %d, returnFromPlayback: %d, forceStop: %d", userWantToCancel, _returnFromPlayback, ext1);
+
+            [self stopStream];
             
             if (userWantToCancel == TRUE) // Event comes from BackButtonItem.
             {
@@ -1022,7 +1033,6 @@ double _ticks = 0;
             }
             else
             {
-                [self stopStream];
                 self.selectedChannel.stopStreaming = TRUE;
                 
                 if (_h264StreamerIsInStopped ||
@@ -1231,6 +1241,61 @@ double _ticks = 0;
     }
 }
 
+- (void)checkIfUpgradeIsPossible
+{
+    NSString * response = [[HttpCom instance].comWithDevice sendCommandAndBlock:CHECK_FW_UPGRADE];
+    
+    /* 
+     * 1. check_fw_upgrade: -1, check_fw_upgrade: 0 --> impossible
+     * 2. check_fw_upgrade: xx.yy.zz                --> possible
+     */
+    
+    response = [response stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    NSLog(@"%s response:%@", __FUNCTION__, response);
+#if 0
+    self.fwUpgrading = @"01.13.61";
+    NSLog(@"Upgrade possible");
+    [self performSelectorOnMainThread:@selector(showFWUpgradeDialog:) withObject:_fwUpgrading waitUntilDone:NO];
+#else
+    if (response == nil ||
+        [response isEqualToString:@"check_fw_upgrade: -1"] ||
+        [response isEqualToString:@"check_fw_upgrade: 0"])
+    {
+    }
+    else
+    {
+        self.fwUpgrading = [response substringFromIndex:@"check_fw_upgrade: ".length];
+        [self performSelectorOnMainThread:@selector(showFWUpgradeDialog:) withObject:_fwUpgrading waitUntilDone:NO];
+    }
+#endif
+}
+
+-(void) showFWUpgradeDialog:(NSString *) version
+{
+    NSString *title = NSLocalizedStringWithDefaultValue(@"Camera_fw_upgrade" , nil, [NSBundle mainBundle],
+                                                         @"Camera Firmware Upgrade", nil);
+    
+    NSString *msg = NSLocalizedStringWithDefaultValue(@"fw_upgrade", nil, [NSBundle mainBundle],
+                                                       @"A camera firmware %@ is available. Press OK to upgrade now?" , nil);
+    NSString *ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
+                                                      @"OK" , nil);
+    NSString *cancel = NSLocalizedStringWithDefaultValue(@"Cancel",nil, [NSBundle mainBundle],
+                                                      @"Cancel" , nil);
+    
+	msg = [NSString stringWithFormat:msg, version];
+    
+	self.alertFWUpgrading = [[UIAlertView alloc]
+              initWithTitle:title
+              message:msg
+              delegate:self
+              cancelButtonTitle:cancel
+              otherButtonTitles:ok, nil];
+    
+	_alertFWUpgrading.tag = TAG_ALERT_FW_OTA_UPGRADE_AVAILABLE;
+	[_alertFWUpgrading show];
+	[_alertFWUpgrading release];
+}
+
 #pragma mark Delegate Timeline
 
 - (void)stopStreamToPlayback
@@ -1272,11 +1337,6 @@ double _ticks = 0;
     }
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
-#pragma mak - Delegate Melody
-- (void)setMelodyWithIndex:(NSInteger)molodyIndex
-{
 }
 
 #pragma mark - Method
@@ -1367,11 +1427,12 @@ double _ticks = 0;
 
 -(void) h264_HandleActivePushes
 {
-    NSLog(@"%s enter >>>>>>>>>>>>>>>>>> reload timeline",__FUNCTION__);
+    NSLog(@"%s enter >>>>>>>>>>>>>>>>>> reload timeline 1",__FUNCTION__);
     if (self.timelineVC != nil)
     {
         
-        [self.timelineVC loadEvents:self.selectedChannel];
+        [self.timelineVC performSelectorInBackground:@selector(getExtraEvent_bg) withObject:nil];
+
     }
     
 }
@@ -1401,7 +1462,7 @@ double _ticks = 0;
                                                      withLabel:@"Homekey"
                                                      withValue:[NSNumber numberWithDouble:userWantToCancel]];
     
-    if (userWantToCancel == TRUE || _returnFromPlayback)
+    if (userWantToCancel == TRUE || _returnFromPlayback || _isFWUpgradingInProgress)
     {
         return;
     }
@@ -1460,9 +1521,24 @@ double _ticks = 0;
     self.imageViewVideo.backgroundColor = [UIColor blackColor];
     self.imageViewStreamer.backgroundColor = [UIColor blackColor];
     
-    if (_selectedChannel.profile.isInLocal == TRUE)
+    if (_selectedChannel.profile.isInLocal)
     {
         NSLog(@"Enter Background.. Local ");
+        
+        if (_alertFWUpgrading && [_alertFWUpgrading isVisible])
+        {
+            if (_alertFWUpgrading.tag == TAG_ALERT_FW_OTA_UPGRADE_AVAILABLE)
+            {
+                NSLog(@"%s Dismiss TAG_ALERT_FW_OTA_UPGRADE_AVAILABLE & askForFWUpgradeOnce", __FUNCTION__);
+                self.askForFWUpgradeOnce = YES;
+                
+                [_alertFWUpgrading dismissWithClickedButtonIndex:0 animated:NO];
+            }
+            else
+            {
+                NSLog(@"%s alertFWUpgrading is changed tag", __FUNCTION__);
+            }
+        }
     }
     else if (_selectedChannel.profile.minuteSinceLastComm <= 5) // Remote
     {
@@ -1473,13 +1549,14 @@ double _ticks = 0;
 
 - (void)h264_HandleWillEnterForeground
 {
-    NSLog(@"%s userWantToCancel:%d, returnFromPlayback:%d, mediaProcessStatus: %d, _shouldRestartProcessing:%d, UIBackgroundTaskInvalid:%d", __FUNCTION__, userWantToCancel, _returnFromPlayback, _mediaProcessStatus, _shouldRestartProcessing, UIBackgroundTaskInvalid);
+    NSLog(@"%s userWantToCancel:%d, returnFromPlayback:%d, mediaProcessStatus: %d, _shouldRestartProcessing:%d, UIBackgroundTaskInvalid:%d, isFWUpgradingInProgress:%d",
+          __FUNCTION__, userWantToCancel, _returnFromPlayback, _mediaProcessStatus, _shouldRestartProcessing, UIBackgroundTaskInvalid, _isFWUpgradingInProgress);
     
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:@"Become Active"
                                                      withLabel:nil
                                                      withValue:[NSNumber numberWithDouble:userWantToCancel]];
-    if (userWantToCancel == TRUE || _returnFromPlayback)
+    if (userWantToCancel == TRUE || _returnFromPlayback || _isFWUpgradingInProgress)
     {
         return;
     }
@@ -1528,7 +1605,8 @@ double _ticks = 0;
         {
             NSLog(@"%s Hanle exception here!", __FUNCTION__);
             
-            if (_shouldRestartProcessing)
+            if (_shouldRestartProcessing ||
+                _selectedChannel.profile.isInLocal)
             {
                 [self scanCamera];
             }
@@ -1892,7 +1970,6 @@ double _ticks = 0;
     }
 }
 
-
 -(void) startStunStream
 {
     self.selectedChannel.communication_mode = COMM_MODE_STUN;
@@ -2126,6 +2203,11 @@ double _ticks = 0;
     {
         [_timerRemoteStreamTimeOut invalidate];
         self.timerRemoteStreamTimeOut = nil;
+    }
+    
+    if (_alertFWUpgrading)
+    {
+        [_alertFWUpgrading dismissWithClickedButtonIndex:0 animated:NO];
     }
     
     NSLog(@"%s _mediaProcessStatus: %d", __FUNCTION__, _mediaProcessStatus);
@@ -2386,7 +2468,7 @@ double _ticks = 0;
             self.timerRemoteStreamKeepAlive = nil;
         }
         
-        
+        self.mediaProcessStatus = 0;
         MediaPlayer::Instance()->setListener(NULL);
         
         delete h264StreamerListener;
@@ -2395,6 +2477,7 @@ double _ticks = 0;
         
         _isProcessRecording = FALSE;
         [self stopRecordingVideo];
+        [self stopPeriodicBeep];
         
         MediaPlayer::Instance()->suspend();
         MediaPlayer::Instance()->stop();
@@ -2676,87 +2759,6 @@ double _ticks = 0;
 {
 }
 
-#pragma mark - Melody Control
-
-- (void)getMelodyValue_bg
-{
-    NSString *responseString = @"";
-    
-    if (self.selectedChannel.profile .isInLocal == TRUE)
-    {
-        //[HttpCom instance].comWithDevice.device_ip   = self.selectedChannel.profile.ip_address;
-        //[HttpCom instance].comWithDevice.device_port = self.selectedChannel.profile.port;
-        
-        NSData *responseData = [[HttpCom instance].comWithDevice sendCommandAndBlock_raw:@"value_melody"];
-        
-        if (responseData != nil)
-        {
-            responseString = [[[NSString alloc] initWithData:responseData encoding: NSUTF8StringEncoding] autorelease];
-        }
-    }
-    else
-    {
-        if (_jsonCommBlocked == nil)
-        {
-            self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                                         Selector:nil
-                                                                     FailSelector:nil
-                                                                        ServerErr:nil];
-        }
-        
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        
-        //NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
-        NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
-        
-        NSDictionary *responseDict = [_jsonCommBlocked sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
-                                                                                 andCommand:@"action=command&command=value_melody"
-                                                                                  andApiKey:apiKey];
-        if (responseDict != nil)
-        {
-            NSInteger status = [[responseDict objectForKey:@"status"] intValue];
-            if (status == 200)
-            {
-                responseString = [[[responseDict objectForKey:@"data"] objectForKey:@"device_response"] objectForKey:@"body"];
-            }
-        }
-    }
-    
-    NSLog(@"getMelodyValue_bg: %@", responseString);
-    
-    if (![responseString isEqualToString:@""])
-    {
-        NSRange tmpRange = [responseString rangeOfString:@": "];
-        
-        if (tmpRange.location != NSNotFound)
-        {
-            NSArray *tokens = [responseString componentsSeparatedByString:@": "];
-            
-            if (tokens.count > 1 )
-            {
-                NSString *melodyIndex = [tokens lastObject];
-                
-                if (userWantToCancel == FALSE)
-                {
-                    [self performSelectorOnMainThread:@selector(setMelodyState_Fg:)
-                                           withObject:melodyIndex
-                                        waitUntilDone:NO];
-                }
-            }
-        }
-    }
-    else
-    {
-    }
-}
-
-- (void)setMelodyState_Fg: (NSString *)melodyIndex
-{
-    NSInteger melody_index  = [melodyIndex intValue] - 1;
-    
-    [self.melodyViewController updateUIMelody:melody_index];
-}
-
 #pragma mark - Temperature
 
 - (void)getCameraTemperature_bg: (id)sender
@@ -2765,7 +2767,8 @@ double _ticks = 0;
      * If back, Need not to update UI
      */
     
-    if (userWantToCancel == TRUE)
+    if (userWantToCancel ||
+        _returnFromPlayback)
     {
         return;
     }
@@ -2774,16 +2777,7 @@ double _ticks = 0;
     
     if (self.selectedChannel.profile .isInLocal == TRUE)
     {
-        //[HttpCom instance].comWithDevice.device_ip   = self.selectedChannel.profile.ip_address;
-        //[HttpCom instance].comWithDevice.device_port = self.selectedChannel.profile.port;
-        //[HttpCom instance].comWithDevice.device_port = 80;// Hack code for Focus66.
-        
-        NSData *responseData = [[HttpCom instance].comWithDevice sendCommandAndBlock_raw:@"value_temperature"];
-        
-        if (responseData != nil)
-        {
-            responseString = [[[NSString alloc] initWithData:responseData encoding: NSUTF8StringEncoding] autorelease];
-        }
+        responseString = [[HttpCom instance].comWithDevice sendCommandAndBlock:@"value_temperature"];
     }
     else
     {
@@ -2795,14 +2789,9 @@ double _ticks = 0;
                                                                         ServerErr:nil];
         }
         
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        
-        //NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
-        NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
-        
         NSDictionary *responseDict = [_jsonCommBlocked sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
                                                                                  andCommand:@"action=command&command=value_temperature"
-                                                                                  andApiKey:apiKey];
+                                                                                  andApiKey:_apiKey];
         
         if (responseDict != nil)
         {
@@ -2835,7 +2824,8 @@ double _ticks = 0;
                  * If back, Need not to update UI
                  */
                 
-                if (userWantToCancel == TRUE)
+                if (userWantToCancel ||
+                    _returnFromPlayback)
                 {
                     return;
                 }
@@ -2879,6 +2869,13 @@ double _ticks = 0;
     }
 }
 
+-(float) temperatureToFfromC: (float) degreeC
+{
+    float degreeF = ((degreeC * 9.0)/5.0) + 32;
+
+    return degreeF;
+}
+
 - (void)setTemperatureState_Fg: (NSString *)temperature
 {
     // Update UI
@@ -2886,10 +2883,10 @@ double _ticks = 0;
     [self.ib_temperature.subviews makeObjectsPerformSelector: @selector(removeFromSuperview)];
     NSString *stringTemperature = [NSString stringWithFormat:@"%d", (int)roundf([temperature floatValue])];
     _degreeCString = stringTemperature;
+  
     
-    float celsius = [_degreeCString floatValue];
-    float changeToFloat = (celsius * 9.0)/5.0;
-    NSInteger degreeF = (round(changeToFloat)) + 32;
+    int degreeF = (int) [self temperatureToFfromC:[temperature floatValue]];
+    
     _degreeFString = [NSString stringWithFormat:@"%d", degreeF];
     
     UILabel *degreeCelsius = [[UILabel alloc] init];
@@ -4231,6 +4228,9 @@ double _ticks = 0;
     for (UIView *v in viewsToRemove) {
         [v removeFromSuperview];
     }
+    // I don't know why remove it.
+    [self.melodyViewController.view removeFromSuperview];
+    self.melodyViewController = nil;
     
 	if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight)
 	{
@@ -4269,7 +4269,7 @@ double _ticks = 0;
         }
         
         self.melodyViewController.selectedChannel = self.selectedChannel;
-        self.melodyViewController.melodyVcDelegate = self;
+        //self.melodyViewController.melodyVcDelegate = self;
         //landscape mode
         //hide navigation bar
         [self.navigationController setNavigationBarHidden:YES];
@@ -4280,8 +4280,6 @@ double _ticks = 0;
             [self.horizMenu reloadData:YES];
         }
         
-        // I don't know why remove it.
-        [self.melodyViewController.view removeFromSuperview];
         
         CGFloat imageViewHeight = SCREEN_HEIGHT * 9 / 16;
         CGRect newRect = CGRectMake(0, (SCREEN_WIDTH - imageViewHeight) / 2, SCREEN_HEIGHT, imageViewHeight);
@@ -4319,7 +4317,8 @@ double _ticks = 0;
         //portrait mode
         
         self.melodyViewController.selectedChannel = self.selectedChannel;
-        self.melodyViewController.melodyVcDelegate = self;
+        //self.melodyViewController.melodyVcDelegate = self;
+        
         
         [self.navigationController setNavigationBarHidden:NO];
         [[UIApplication sharedApplication] setStatusBarHidden:NO];
@@ -4329,6 +4328,7 @@ double _ticks = 0;
         {
             [self.horizMenu reloadData:NO];
         }
+        
         
         CGFloat imageViewHeight = SCREEN_WIDTH * 9 / 16;
         
@@ -4415,8 +4415,10 @@ double _ticks = 0;
         
 	}// end of portrait
     
+    
     [self.melodyViewController.melodyTableView setNeedsLayout];
     [self.melodyViewController.melodyTableView setNeedsDisplay];
+   
     
     self.imageViewStreamer.frame = _imageViewVideo.frame;
     [self.scrollView insertSubview:_imageViewStreamer aboveSubview:_imageViewVideo];
@@ -4430,9 +4432,6 @@ double _ticks = 0;
                                            [UIImage imageNamed:@"loader_e"],
                                            [UIImage imageNamed:@"loader_f"],
                                            nil];
-    
-    
-    
     
     [self displayCustomIndicator];
     
@@ -4453,9 +4452,6 @@ double _ticks = 0;
     [self hidenAllBottomView];
     [self updateBottomView];
     
-    if(_selectedItemMenu!=-1){
-        [self.horizMenu setSelectedIndex:_selectedItemMenu-1 animated:NO];
-    }
     
     //Earlier must at bottom of land, and port
     if (_isFirstLoad || _wantToShowTimeLine || _selectedItemMenu == -1)
@@ -4465,6 +4461,12 @@ double _ticks = 0;
     else
     {
         [self hideTimelineView];
+    }
+    
+    if(_selectedItemMenu!=-1){
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self.horizMenu setSelectedIndex:_selectedItemMenu-1 animated:NO];
+        });
     }
     
     self.ib_buttonTouchToTalk.enabled = _enablePTT;
@@ -4625,13 +4627,140 @@ double _ticks = 0;
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
-    int tag = alertView.tag;
-    [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"PlayerView dismiss alert: %d with btn index: %d", tag, buttonIndex] withProperties:nil];
-    
+    //[[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"PlayerView dismiss alert: %d with btn index: %d", tag, buttonIndex] withProperties:nil];
+#if 1
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
-                                                    withAction:[NSString stringWithFormat:@"Dismiss alert: %d", tag]
+                                                    withAction:[NSString stringWithFormat:@"Dismiss alert: %d", alertView.tag]
                                                      withLabel:[NSString stringWithFormat:@"Alert %@", alertView.title]
                                                      withValue:[NSNumber numberWithInteger:buttonIndex]];
+    switch (alertView.tag)
+    {
+        case TAG_ALERT_VIEW_REMOTE_TIME_OUT:
+        {
+            switch (buttonIndex)
+            {
+                case 0: // View other camera
+                    self.view.userInteractionEnabled = NO;
+                    
+                    if ([[UIDevice currentDevice] orientation] == UIDeviceOrientationLandscapeLeft ||
+                        [[UIDevice currentDevice] orientation] == UIDeviceOrientationLandscapeRight ||
+                        [UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeLeft ||
+                        [UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeRight)
+                    {
+                        if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]) {
+                            objc_msgSend([UIDevice currentDevice], @selector(setOrientation:),   UIDeviceOrientationPortrait);
+                        }
+                    }
+                    
+                    //stop stream
+                    if (_timerStopStreamAfter30s && [_timerStopStreamAfter30s isValid])
+                    {
+                        //stop time, avoid stopStream 2 times
+                        [_timerStopStreamAfter30s invalidate];
+                        _timerStopStreamAfter30s = nil;
+                        [self stopStream];
+                    }
+                    
+                    [self goBackToCamerasRemoteStreamTimeOut];
+                    break;
+                    
+                case 1: // Continue view --> restart stream
+                    
+                    if (_timerStopStreamAfter30s == nil)
+                    {
+                        //already stop stream, call setup again.
+                        [self setupCamera];
+                    }
+                    else
+                    {
+                        if (_timerStopStreamAfter30s && [_timerStopStreamAfter30s isValid])
+                        {
+                            //stop time, avoid stopStream 2 times
+                            [_timerStopStreamAfter30s invalidate];
+                            _timerStopStreamAfter30s = nil;
+                        }
+                        //do nothing, just dissmiss because still stream.
+                        //create new timer to display info after 4m30s.
+                        [self reCreateTimoutViewCamera];
+                    }
+                    break;
+                    
+                default:
+                    break;
+            }
+        }
+            break;
+            
+        case TAG_ALERT_SENDING_LOG:
+        {
+            switch (buttonIndex)
+            {
+                case 1: // Yes
+                    if ([[alertView textFieldAtIndex:0].text isEqualToString:SENDING_CAMERA_LOG_PASSWORD])
+                    {
+                        [self performSelectorInBackground:@selector(sendRequestLogCmdToCamera) withObject:nil];
+                    }
+                    else// Like Cancel
+                    {
+                        NSLog(@"%s wrong password!", __FUNCTION__);
+                    }
+                    break;
+                case 0:
+                default:
+                    // Do nothing
+                    break;
+            }
+        }
+            break;
+            
+        case TAG_ALERT_FW_OTA_UPGRADE_AVAILABLE:
+        {
+            switch (buttonIndex)
+            {
+                case 1: // Yes
+                {
+                    NSString *response = [[HttpCom instance].comWithDevice sendCommandAndBlock:REQUEST_FW_UPGRADE];
+                    NSLog(@"%s response:%@", __FUNCTION__, response);
+                    
+                    if ([response isEqualToString:@"request_fw_upgrade: 0"])
+                    {
+                        MBProgressHUD *hub = [MBProgressHUD showHUDAddedTo:self.view animated:NO];
+                        [hub setLabelText:@"Checking Fw upgrade..."];
+                        self.isFWUpgradingInProgress = YES; // Entering bg control
+                        [self createHubbleAlertView];
+                        //[self performSelector:@selector(checkFwUpgrageStatus_bg) withObject:nil afterDelay:5];
+                        [self performSelectorInBackground:@selector(checkFwUpgrageStatus_bg)
+                                                    withObject:nil] ;
+                        [self stopStream];
+                    }
+                    else
+                    {
+                        NSLog(@"%s Cannot upgrade Fw now.", __FUNCTION__);
+                    }
+                }
+                    break;
+                    
+                case 0:
+                default:
+                    break;
+            }
+        }
+            break;
+            
+        case TAG_ALERT_FW_OTA_UPGRADE_FAILED:
+        {
+            [self prepareGoBackToCameraList:nil];
+        }
+            break;
+            
+        default:
+            break;
+    }
+    
+    alertView.delegate = nil;
+    
+#else
+    int tag = alertView.tag;
     
     if (tag == TAG_ALERT_VIEW_REMOTE_TIME_OUT)
     {
@@ -4707,6 +4836,7 @@ double _ticks = 0;
                 break;
         }
     }
+#endif
 }
 
 - (void)sendRequestLogCmdToCamera_bg
@@ -4871,6 +5001,7 @@ double _ticks = 0;
     [self.scrollView setZoomScale:newZoomScale animated:YES];
 }
 
+#pragma mark - UIScrollViewDelegate
 - (UIView*)viewForZoomingInScrollView:(UIScrollView *)scrollView {
     // Return the view that we want to zoom
     //return self.imageViewVideo;
@@ -5023,8 +5154,6 @@ double _ticks = 0;
     }
     else if ([_cameraModel isEqualToString:CP_MODEL_CONCURRENT])
     {
-        //        if (_isInLocal)
-        //        {
         switch (index)
         {
             case 0:
@@ -5084,7 +5213,7 @@ double _ticks = 0;
     [self updateBottomView];
     [self applyFont];
     
-    [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"PlayerView select item on horize menu - idx: %d", _selectedItemMenu] withProperties:nil];
+    //[[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"PlayerView select item on horize menu - idx: %d", _selectedItemMenu] withProperties:nil];
     
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:@"Select item on horize menu"
@@ -5094,15 +5223,14 @@ double _ticks = 0;
 
 - (void)updateBottomView
 {
+    [self hidenAllBottomView];
+    
     if (_wantToShowTimeLine || self.horizMenu.isAllButtonDeselected)
     {
-        [self hidenAllBottomView];
         [self showTimelineView];
     }
     else
     {
-        [self hidenAllBottomView];
-        
         if (_selectedItemMenu == INDEX_PAN_TILT)
         {
             [self.view bringSubviewToFront:_imgViewDrectionPad];
@@ -5139,7 +5267,7 @@ double _ticks = 0;
             if ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeLeft ||
                 [UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeRight)
             {
-                self.wantToShowTimeLine = YES;
+                //self.wantToShowTimeLine = YES;
             }
             
             CGRect rect;
@@ -5180,10 +5308,10 @@ double _ticks = 0;
              TODO:need get status of laluby and update on UI.
              when landscape or portrait display correctly
              */
-            [self performSelectorInBackground:@selector(getMelodyValue_bg) withObject:nil];
-            [self.melodyViewController.melodyTableView setNeedsLayout];
-            [self.melodyViewController.melodyTableView setNeedsDisplay];
-            
+            //[self performSelectorInBackground:@selector(getMelodyValue_bg) withObject:nil];
+            [_melodyViewController performSelectorInBackground:@selector(getMelodyValue_bg) withObject:nil];
+            //[self.melodyViewController.melodyTableView setNeedsLayout];
+            //[self.melodyViewController.melodyTableView setNeedsDisplay];
         }
         else if (_selectedItemMenu == INDEX_TEMP)
         {
@@ -5300,6 +5428,8 @@ double _ticks = 0;
     [_jsonCommBlocked release];
     [_viewDebugInfo release];
     [_alertViewTimoutRemote release];
+    [_melodyViewController release];
+    [_alertFWUpgrading release];
     
     NSLog(@"%s", __FUNCTION__);
     
@@ -6521,8 +6651,7 @@ double _ticks = 0;
 -(void)start_animation_with_orientation
 {
     self.customIndicator.hidden = NO;
-    [self.view addSubview:self.customIndicator];
-    [self.view  bringSubviewToFront:self.customIndicator];
+//    [self.scrollView bringSubviewToFront:self.customIndicator];
     
     self.customIndicator.animationDuration = 1.5;
     self.customIndicator.animationRepeatCount = 0;
@@ -6577,6 +6706,264 @@ double _ticks = 0;
         [self.ib_lbCameraNotAccessible setHidden:YES];
         [self.ib_lbCameraName setText:self.selectedChannel.profile.name];
     }
+}
+
+#pragma mark - Hubble alert view & delegate
+
+- (void)createHubbleAlertView
+{
+    // Here we need to pass a full frame
+    
+    CustomIOS7AlertView *alertView = [[CustomIOS7AlertView alloc] init];
+    
+    // Add some custom content to the alert view
+    [alertView setContainerView:[self createDemoView]];
+    
+    // Modify the parameters
+    [alertView setButtonTitles:[NSArray arrayWithObjects:@"View other camera", nil]];
+    
+    //[alertView setButtonTitles:NULL];
+    [alertView setDelegate:self];
+    
+    //You may use a Block, rather than a delegate.
+    [alertView setOnButtonTouchUpInside:^(CustomIOS7AlertView *alertView, int buttonIndex) {
+        NSLog(@"Block: Button at position %d is clicked on alertView %d.", buttonIndex, [alertView tag]);
+        [alertView close];
+    }];
+    
+    [alertView setUseMotionEffects:true];
+    
+    // And launch the dialog
+    //[alertView show];
+    
+    self.customeAlertView = alertView;
+}
+
+- (void)customIOS7dialogButtonTouchUpInside: (CustomIOS7AlertView *)alertView clickedButtonAtIndex: (NSInteger)buttonIndex
+{
+    NSLog(@"Delegate: Button at position %d is clicked on alertView %d.", buttonIndex, [alertView tag]);
+    alertView.delegate = nil;
+    [alertView close];
+    
+    if (buttonIndex == 0)
+    {
+        userWantToCancel = YES;
+        [self prepareGoBackToCameraList:nil];
+    }
+}
+
+- (void)closeCustomAlertView
+{
+    [self customIOS7dialogButtonTouchUpInside:_customeAlertView clickedButtonAtIndex:1];
+}
+
+- (UIView *)createDemoView
+{
+    UIView *demoView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 230, 175)];
+    
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(100, 15, 30, 30)];// autorelease];
+    [imageView setImage:[UIImage imageNamed:@"loader_a"]];
+    
+    imageView.animationImages = @[[UIImage imageNamed:@"loader_a"],
+                                  [UIImage imageNamed:@"loader_b"],
+                                  [UIImage imageNamed:@"loader_c"],
+                                  [UIImage imageNamed:@"loader_d"],
+                                  [UIImage imageNamed:@"loader_e"],
+                                  [UIImage imageNamed:@"loader_f"]];
+    imageView.animationRepeatCount = 0;
+    imageView.animationDuration = 1.5f;
+    
+    [demoView addSubview:imageView];
+    
+    [imageView startAnimating];
+    
+    NSString * msg = NSLocalizedStringWithDefaultValue(@"fw_upgrade_2",nil, [NSBundle mainBundle],
+                                                       @"Upgrading firmware, do not power off the camera. This process may take up to 3 mins..." , nil);
+    
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(20, 45, 200, 91)];// autorelease];
+    label.textAlignment = NSTextAlignmentCenter;
+    label.numberOfLines = 4;
+    label.text = msg;
+    
+    [demoView addSubview:label];
+    
+    UIProgressView *progressView = [[UIProgressView alloc] initWithFrame:CGRectMake(10, 150, 160, 20)];
+    [demoView addSubview:progressView];
+    
+    UILabel *lblProgress = [[UILabel alloc] initWithFrame:CGRectMake(170, 130, 50, 21)];
+    lblProgress.text = @"--";
+    [demoView addSubview:lblProgress];
+    self.fwUpgradedProgress = 0;
+    
+    [self performSelectorInBackground:@selector(upgradeFwProgress_bg:)
+                           withObject:[NSArray arrayWithObjects:progressView, lblProgress, nil]] ;
+    
+//    [self performSelectorInBackground:@selector(checkFwUpgrageStatus_bg)
+//                           withObject:nil] ;
+    //[self performSelector:@selector(checkFwUpgrageStatus_bg) withObject:nil afterDelay:5];
+    
+    return [demoView autorelease];
+}
+
+- (void)upgradeFwProgress_bg:(NSArray *)obj
+{
+    NSLog(@"%s userWantToCancel:%d, _fwUpgradeStatus:%d", __FUNCTION__, userWantToCancel, _fwUpgradeStatus);
+    
+    if (userWantToCancel)
+    {
+        self.isFWUpgradingInProgress = NO;
+        [self closeCustomAlertView];// PN
+        NSLog(@"%s Backout.", __FUNCTION__);
+    }
+    else
+    {
+        [self performSelectorOnMainThread:@selector(upgradeFwProgress_ui:)
+                               withObject:obj
+                            waitUntilDone:YES];
+        
+        if (_fwUpgradedProgress >= TIMEOUT_FW_OTA_UPGRADING ||
+            _fwUpgradeStatus    != FW_UPGRADE_IN_PROGRESS)
+        {
+            [self closeCustomAlertView];
+            
+            NSLog(@"%s Upgrade 100%% fwUpgradeStatus:%d", __FUNCTION__, _fwUpgradeStatus);
+            
+            if (_fwUpgradeStatus == FW_UPGRADE_SUCCEED)
+            {
+                self.isFWUpgradingInProgress = NO;
+                _isShowCustomIndicator = YES;
+                [self displayCustomIndicator];
+                
+                [self performSelectorOnMainThread:@selector(scanCamera)
+                                       withObject:nil
+                                    waitUntilDone:NO];
+            }
+            else
+            {
+                NSString *ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
+                                                                 @"OK" , nil);
+                UIAlertView *alertViewUpgradeFailed = [[UIAlertView alloc] initWithTitle:@"Upgrade firmware failed. Go back to Camera list."
+                                                                                 message:nil
+                                                                                delegate:self
+                                                                       cancelButtonTitle:nil
+                                                                       otherButtonTitles:ok, nil];
+                alertViewUpgradeFailed.tag = TAG_ALERT_FW_OTA_UPGRADE_FAILED;
+                [alertViewUpgradeFailed show];
+                [alertViewUpgradeFailed release];
+            }
+        }
+        else
+        {
+            _fwUpgradedProgress++;
+            [NSThread sleepForTimeInterval:3];
+            [self upgradeFwProgress_bg:[NSArray arrayWithObjects:obj[0], obj[1], nil]];
+        }
+    }
+}
+
+-(void) upgradeFwProgress_ui:(NSArray *) obj
+{
+    NSLog(@"%s progress:%d", __FUNCTION__, _fwUpgradedProgress);
+    
+    if (_fwUpgradedProgress == 2) //6s
+    {
+        [MBProgressHUD hideHUDForView:self.view animated:NO];
+        [_customeAlertView show];
+    }
+    
+    UIProgressView *percentageProgress = (UIProgressView *)obj[0];
+    UILabel *percentageLabel = obj[1];
+    
+	float value = (float)_fwUpgradedProgress / TIMEOUT_FW_OTA_UPGRADING;
+    
+    percentageLabel.text = [NSString stringWithFormat:@"%ld%%", lroundf(value * 100)];
+    percentageProgress.progress = value;
+}
+
+- (void)checkFwUpgrageStatus_bg
+{
+    //NSLog(@"%s userWantToCancel:%d, value:%d", __FUNCTION__, userWantToCancel, _fwUpgradedProgress);
+    
+    if (userWantToCancel)
+    {
+        NSLog(@"%s Backout.", __FUNCTION__);
+    }
+    else
+    {
+        self.fwUpgradeStatus = [self checkFwUpgrageStatus];
+        
+        if (_fwUpgradeStatus    == FW_UPGRADE_IN_PROGRESS &&
+            _fwUpgradedProgress < TIMEOUT_FW_OTA_UPGRADING)
+        {
+            [NSThread sleepForTimeInterval:2];
+            [self checkFwUpgrageStatus_bg];
+        }
+        else
+        {
+            NSLog(@"%s fwUpgradeStatus:%d, value:%d", __FUNCTION__, _fwUpgradeStatus, _fwUpgradedProgress);
+        }
+    }
+}
+
+- (NSInteger )checkFwUpgrageStatus
+{
+    if (_fwUpgradedProgress <= 2)// 6s
+    {
+        return FW_UPGRADE_IN_PROGRESS;
+    }
+    
+    NSInteger fwUpgradeStatus = FW_UPGRADE_IN_PROGRESS;
+    
+    if (_jsonCommBlocked == nil)
+    {
+        self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                     Selector:nil
+                                                                 FailSelector:nil
+                                                                    ServerErr:nil];
+    }
+    
+    NSDictionary *responseDict = [_jsonCommBlocked getDeviceBasicInfoBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
+                                                                                     andApiKey:_apiKey];
+    
+   // NSLog(@"%s response:%@", __FUNCTION__, responseDict);
+    
+    if (responseDict != nil)
+    {
+        NSInteger status = [[responseDict objectForKey:@"status"] intValue];
+        
+        if (status == 200)
+        {
+            NSDictionary *data = [responseDict objectForKey:@"data"];
+            self.selectedChannel.profile.fwStatus = [[data objectForKey:@"firmware_status"] integerValue];
+            
+            id firmwareTime = [data objectForKey:@"firmware_time"];
+            
+            self.selectedChannel.profile.fwTime   = [firmwareTime isEqual:[NSNull null]]?nil:firmwareTime;
+
+            if (![self.selectedChannel.profile isFwUpgrading:[NSDate date]])
+            {
+                NSString *firmwareVersion = [data objectForKey:@"firmware_version"];
+                
+                if (firmwareVersion != nil && ![firmwareVersion isEqual:[NSNull null]])
+                {
+                    if ([firmwareVersion isEqualToString:_fwUpgrading])
+                    {
+                        fwUpgradeStatus = FW_UPGRADE_SUCCEED;
+                    }
+                    else
+                    {
+                        fwUpgradeStatus = FW_UPGRADE_FAILED;
+                    }
+                }
+            }
+            else
+            {
+                fwUpgradeStatus = FW_UPGRADE_IN_PROGRESS;
+            }
+        }
+    }
+    
+    return fwUpgradeStatus;
 }
 
 @end

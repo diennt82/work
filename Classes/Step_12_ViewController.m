@@ -41,7 +41,7 @@
     [self.btnWatchLiveCamera setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    self.cameraName.text =  (NSString *) [userDefaults objectForKey:@"CameraName"];
+    self.cameraName.text =  (NSString *) [userDefaults objectForKey:CAMERA_NAME];
     
     NSString *stringModel = @"";
     

@@ -378,6 +378,10 @@
         else if (indexPath.section == SEC_SECTION)
         {
             if (indexPath.row == SEC_INDEX) {
+                [self.securityCell setAccessoryType:UITableViewCellAccessoryNone];
+                if (self.isOtherNetwork) {
+                    [self.securityCell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
+                }
                 return securityCell;
             }
             if (indexPath.row == PASSWORD_INDEX)
@@ -436,16 +440,16 @@
     [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow]
                              animated:NO];
     
-    if ([self.ssid isEqualToString:@"Other Network"])
-    {
-        if (indexPath.section == SEC_SECTION)
-        {
-            if (indexPath.row == SEC_INDEX)
-            {
-                [self changeSecurityType];
-            }
-        }
-    }
+//    if ([self.ssid isEqualToString:@"Other Network"])
+//    {
+//        if (indexPath.section == SEC_SECTION)
+//        {
+//            if (indexPath.row == SEC_INDEX && self.isOtherNetwork)
+//            {
+//                [self changeSecurityType];
+//            }
+//        }
+//    }
     
     if (indexPath.section == SSID_SECTION)
     {
@@ -470,7 +474,7 @@
             UITextField * txtField = (UITextField*) [confPasswordCell viewWithTag:201];
             [txtField becomeFirstResponder];
         }
-        else if (indexPath.row == SEC_INDEX)
+        else if (indexPath.row == SEC_INDEX && self.isOtherNetwork == TRUE)
         {
             [self changeSecurityType];
         }
@@ -693,7 +697,8 @@
     
     NSLog(@"set auth -set_auth_cmd: %d ", [fwVersion compare:FW_MILESTONE_F66_NEW_FLOW]);
     
-    [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Step06 - Add camera fw: %@", fwVersion] withProperties:nil];
+    //[[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Step06 - Add camera fw: %@", fwVersion] withProperties:nil];
+    [self defaultOnAllPNToCamera];
     
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:[NSString stringWithFormat:@"Send Wifi info to Camera-fw:%@", fwVersion]
@@ -781,6 +786,25 @@
     }
     
     return FALSE;
+}
+
+- (void)defaultOnAllPNToCamera
+{
+    NSString *result = @"";
+    
+    NSString *response = [[HttpCom instance].comWithDevice sendCommandAndBlock:@"set_motion_area&grid=1x1&zone=00"];
+    result = [result stringByAppendingString:response];
+    
+    response = [[HttpCom instance].comWithDevice sendCommandAndBlock:@"vox_enable"];
+    result = [result stringByAppendingFormat:@", %@", response];
+    
+    response = [[HttpCom instance].comWithDevice sendCommandAndBlock:@"set_temp_lo_enable&value=1"];
+    result = [result stringByAppendingFormat:@", %@", response];
+    
+    response = [[HttpCom instance].comWithDevice sendCommandAndBlock:@"set_temp_hi_enable&value=1"];
+    result = [result stringByAppendingFormat:@", %@", response];
+    
+    NSLog(@"%s respnse:%@", __FUNCTION__, result);
 }
 
 -(void)moveOnToCheckCameraOnlineStatus

@@ -11,6 +11,7 @@
 #import "SetupData.h"
 #import "KISSMetricsAPI.h"
 #import "EarlierNavigationController.h"
+#import "Crittercism.h"
 
 @interface MBP_iosAppDelegate()
 
@@ -76,12 +77,8 @@
     //id<GAITracker> tracker =
     [[GAI sharedInstance] trackerWithTrackingId:@"UA-51500380-2"];
 #endif
-    // !!!: Use the next line only during TEST - appstore release: need to comment this line
-    //[TestFlight setDeviceIdentifier:[[UIDevice currentDevice] uniqueIdentifier]];
-    
-    
-    //Add testflight app token - For remote login & crash reporting
-    //[TestFlight takeOff:@"4574de50-f54d-4414-a803-fc460426c915"];
+   
+    [Crittercism enableWithAppID: @"53acee52178784439a000001"];
     
     NSArray *names = [UIFont fontNamesForFamilyName:@"Proxima Nova"];
     NSLog(@"names: %@",names);
@@ -129,6 +126,7 @@
     
 #if TARGET_IPHONE_SIMULATOR == 0
     
+#if 0 //disable local handle exception - use Crittercism
     NSSetUncaughtExceptionHandler(&HandleException);
     
     struct sigaction signalAction;
@@ -138,6 +136,7 @@
     sigaction(SIGABRT, &signalAction, NULL);
     sigaction(SIGILL, &signalAction, NULL);
     sigaction(SIGBUS, &signalAction, NULL);
+#endif 
     
     NSString *cachesDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
 	NSString *logPath = [cachesDirectory stringByAppendingPathComponent:@"application.log"];
@@ -175,7 +174,7 @@ void HandleException(NSException *exception) {
 }
 
 void HandleSignal(int signal) {
-    NSLog(@"We received a signal: %d", signal);
+    NSLog(@"We received a signal: %d, software_version: %@", signal, [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]);
     checkingApplicationCrashed();
     //Save somewhere that your app has crashed.
 }

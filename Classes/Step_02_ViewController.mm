@@ -129,7 +129,7 @@
 - (void)hubbleItemAction: (id)sender
 {
     [self dismissViewControllerAnimated:YES completion:^{
-        [self.delegate sendStatus:AFTER_DEL_RELOGIN];
+        [self.delegate sendStatus:SHOW_CAMERA_LIST2];
     }];
 }
 
