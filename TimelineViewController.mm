@@ -959,6 +959,25 @@
     }
 }
 
+- (void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if ([tableView.indexPathsForVisibleRows indexOfObject:indexPath] == NSNotFound)
+    {
+        // This indeed is an indexPath no longer visible
+        // Do something to this non-visible cell...
+        
+        
+        if ( [cell isKindOfClass:[TimelineActivityCell class]])
+        {
+            TimelineActivityCell * eventCell = (TimelineActivityCell*) cell;
+           // NSLog(@"Cancel loading image for cell row: %d",indexPath.row);
+            [eventCell.snapshotImage cancelCurrentImageLoad];
+        }
+        
+    }
+}
+
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (self.isEventAlready == FALSE)
@@ -1109,75 +1128,8 @@
             
         }
         
+        cell.eventTimeLabel.text = [self formatTimeStringForEvent:eventInfo];
         
-        NSDateFormatter *dateFormater = [[NSDateFormatter alloc] init];
-        [dateFormater setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
-        [dateFormater setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
-        NSDate *eventDate = [dateFormater dateFromString:eventInfo.time_stamp]; //2013-12-31 07:38:35 +0000
-        [dateFormater release];
-        
-        NSDateFormatter* df_local = [[NSDateFormatter alloc] init] ;
-        [df_local setTimeZone:[NSTimeZone localTimeZone]];
-        
-        
-        NSDateComponents * offset= [[[NSDateComponents alloc]init] autorelease];
-        [offset setDay:-1];
-        NSDate  *yesterday = [CURRENT_CALENDAR dateByAddingComponents:offset
-                                                               toDate:[NSDate date]
-                                                              options:nil];
-        
-        BOOL isYesterday= NO;
-        if  ([self isEqualToDateIgnoringTime:[NSDate date] vsDate:eventDate]) //if it is today
-        {
-            //Show only hours/minutes
-            if (_is12hr)
-            {
-                df_local.dateFormat = @"h:mm a";
-            }
-            else
-            {
-                df_local.dateFormat = @"H:mm";
-            }
-            cell.eventTimeLabel.text = [df_local stringFromDate:eventDate];
-        }
-        else if ([self isEqualToDateIgnoringTime:yesterday vsDate:eventDate])
-        {
-            isYesterday = YES;
-            //Show only hours/minutes  with dates
-            if (_is12hr)
-            {
-                df_local.dateFormat = @"h:mm a";
-            }
-            else
-            {
-                df_local.dateFormat = @"H:mm";
-            }
-            cell.eventTimeLabel.text = [NSString stringWithFormat:@"%@ Yesterday",[df_local stringFromDate:eventDate]];
-        }
-        else
-        {
-            df_local.dateFormat = @"d";
-            NSString *strDate = [df_local stringFromDate:eventDate];
-            
-            df_local.dateFormat = @"MMM";
-            NSString *strM = [df_local stringFromDate:eventDate];
-            //Show only hours/minutes  with dates
-            if (_is12hr)
-            {
-                df_local.dateFormat = @"h:mm a EEEE";
-            }
-            else
-            {
-                df_local.dateFormat = @"H:mm EEEE";
-            }
-            NSString *strTime = [df_local stringFromDate:eventDate];
-            int m = [strDate intValue] % 10;
-            cell.eventTimeLabel.text = [NSString stringWithFormat:@"%@, %@%@ %@",strTime,strDate,[aryDatePrefix objectAtIndex:((m > 10 && m < 20) ? 0 : (m % 10))],strM];
-            //cell.eventTimeLabel.text = [df_local stringFromDate:eventDate];
-        }
-        
-        [df_local release];
-       
         
         // Motion detected
         if (eventInfo.alert == 4)
@@ -1245,6 +1197,8 @@
                                           completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType) {
                                                [cell.activityIndicatorLoading stopAnimating];
                                    }];
+
+
             }
 #endif
  
@@ -1425,6 +1379,84 @@
     }
     
 }
+
+
+-(NSString *) formatTimeStringForEvent:(EventInfo *) eventInfo
+{
+    NSString * str = nil;
+    
+    NSDateFormatter *dateFormater = [[NSDateFormatter alloc] init];
+    [dateFormater setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
+    [dateFormater setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+    NSDate *eventDate = [dateFormater dateFromString:eventInfo.time_stamp]; //2013-12-31 07:38:35 +0000
+    [dateFormater release];
+    
+    NSDateFormatter* df_local = [[NSDateFormatter alloc] init] ;
+    [df_local setTimeZone:[NSTimeZone localTimeZone]];
+    
+    
+    NSDateComponents * offset= [[[NSDateComponents alloc]init] autorelease];
+    [offset setDay:-1];
+    NSDate  *yesterday = [CURRENT_CALENDAR dateByAddingComponents:offset
+                                                           toDate:[NSDate date]
+                                                          options:nil];
+    
+    BOOL isYesterday= NO;
+    if  ([self isEqualToDateIgnoringTime:[NSDate date] vsDate:eventDate]) //if it is today
+    {
+        //Show only hours/minutes
+        if (_is12hr)
+        {
+            df_local.dateFormat = @"h:mm a";
+        }
+        else
+        {
+            df_local.dateFormat = @"H:mm";
+        }
+        str = [df_local stringFromDate:eventDate];
+    }
+    else if ([self isEqualToDateIgnoringTime:yesterday vsDate:eventDate])
+    {
+        isYesterday = YES;
+        //Show only hours/minutes  with dates
+        if (_is12hr)
+        {
+            df_local.dateFormat = @"h:mm a";
+        }
+        else
+        {
+            df_local.dateFormat = @"H:mm";
+        }
+        str  = [NSString stringWithFormat:@"%@ Yesterday",[df_local stringFromDate:eventDate]];
+    }
+    else
+    {
+        df_local.dateFormat = @"d";
+        NSString *strDate = [df_local stringFromDate:eventDate];
+        
+        df_local.dateFormat = @"MMM";
+        NSString *strM = [df_local stringFromDate:eventDate];
+        //Show only hours/minutes  with dates
+        if (_is12hr)
+        {
+            df_local.dateFormat = @"h:mm a EEEE";
+        }
+        else
+        {
+            df_local.dateFormat = @"H:mm EEEE";
+        }
+        NSString *strTime = [df_local stringFromDate:eventDate];
+        int m = [strDate intValue] % 10;
+         str = [NSString stringWithFormat:@"%@, %@%@ %@",strTime,strDate,[aryDatePrefix objectAtIndex:((m > 10 && m < 20) ? 0 : (m % 10))],strM];
+        //cell.eventTimeLabel.text = [df_local stringFromDate:eventDate];
+    }
+    
+    [df_local release];
+    
+    return str ;
+}
+
+
 
 #pragma mark - PlayBackDelegate Methods
 -(void)motioEventDeleted
