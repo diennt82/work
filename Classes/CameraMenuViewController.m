@@ -1281,7 +1281,8 @@
    
     [self dismissViewControllerAnimated:YES completion:^{
        
-        //[self openViewForSetCamera:imageSelected];
+        [self uploadImageToServer:imageSelected];
+        
         NSArray *paths = NSSearchPathForDirectoriesInDomains
         (NSDocumentDirectory, NSUserDomainMask, YES);
         NSString  *strPath = [[paths objectAtIndex:0] retain];
@@ -1446,6 +1447,60 @@
     }
     return nil;
 }
+
+//MOVE THIS IN FRAMEWORK
+-(NSString*)getUploadToken
+{
+    NSString *strURLForGetUploadToken = @"https://api.hubble.in/v1/users/upload_token.json";
+    NSMutableURLRequest *postRequestForUploadToken = [[NSMutableURLRequest alloc] init];
+    [postRequestForUploadToken setURL:[NSURL URLWithString:strURLForGetUploadToken]];
+    [postRequestForUploadToken setHTTPMethod:@"POST"];
+    
+    NSString *strPara  = [NSString stringWithFormat:@"api_key=%@",_apiKey];
+    [postRequestForUploadToken setHTTPBody:[strPara dataUsingEncoding:NSUTF8StringEncoding]];
+    
+    NSURLResponse *response1;
+    NSError *error1;
+    NSData *dataResponseToken = [NSURLConnection sendSynchronousRequest:postRequestForUploadToken returningResponse:&response1 error:&error1];
+    NSString *strToken = [[NSString alloc] initWithData:dataResponseToken encoding:NSASCIIStringEncoding];
+    NSLog(@"--- %@",strToken);
+    NSDictionary *dicResultToken  = [NSJSONSerialization JSONObjectWithData:dataResponseToken options:NSJSONReadingMutableLeaves error:nil];
+    if(dicResultToken!=nil && [[dicResultToken valueForKey:@"status"] intValue]==200)
+    {
+        return [[dicResultToken valueForKey:@"data"] valueForKey:@"upload_token"];
+    }
+    return nil;
+}
+
+
+
+-(void)uploadImageToServer:(UIImage*)image
+{
+    __block MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    [hud setLabelText:@"Uploading image ..."];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        
+        NSString *strUploadToken = [[self getUploadToken] retain];
+        NSData *dataImage = [UIImageJPEGRepresentation(image, 1.0) retain];
+        
+        BMS_JSON_Communication *jsonCommDeviceInfo = [[BMS_JSON_Communication alloc] initWithObject:self Selector:nil FailSelector:nil ServerErr:nil];
+        
+        NSDictionary *responseDictDInfo = [jsonCommDeviceInfo uploadImageWithASIFormDataRequest:dataImage registerID:[self.camChannel.profile.registrationID retain] uploadToken:strUploadToken];
+        
+        if (responseDictDInfo)
+        {
+            if ([[responseDictDInfo objectForKey:@"status"] integerValue] == 200)
+            {
+                // NSLog(@"-- %@",responseDictDInfo);
+                hud.mode = MBProgressHUDModeText;
+                [hud setLabelText:@"Upload image successfully"];
+            }
+        }
+        
+        [hud hide:YES afterDelay:2.0];
+    });
+}
+
 
 - (void)getSensitivityInfoFromServer
 {
