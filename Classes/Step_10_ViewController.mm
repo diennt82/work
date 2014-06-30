@@ -163,6 +163,15 @@
         [self registerCamera:nil];
     }
     
+    if (isiPhone4) {
+        CGRect rect = self.lblWordAddition.frame;
+        rect.origin.y -= 80;
+        self.lblWordAddition.frame = rect;
+        
+        rect = self.btnCancel.frame;
+        rect.origin.y -= 80;
+        self.btnCancel.frame = rect;
+    }
 }
 
 -(void) showProgress:(NSTimer *) exp
