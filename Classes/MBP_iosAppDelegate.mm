@@ -78,7 +78,7 @@
     [[GAI sharedInstance] trackerWithTrackingId:@"UA-51500380-2"];
 #endif
    
-    [Crittercism enableWithAppID: @"53acee52178784439a000001"];
+    [Crittercism enableWithAppID: @"53b0c76907229a470d000003"];
     
     NSArray *names = [UIFont fontNamesForFamilyName:@"Proxima Nova"];
     NSLog(@"names: %@",names);
