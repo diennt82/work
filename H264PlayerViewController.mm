@@ -4299,7 +4299,7 @@ double _ticks = 0;
         
         [self addGesturesPichInAndOut];
 	}
-	else if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
+	else
 	{
         //load new nib
         //remove pinch in, out (zoom for portrait)
@@ -4351,11 +4351,12 @@ double _ticks = 0;
                 
                 if (isiPhone4) // This condition check size of screen. Not iPhone4 or other
                 {
-                    self.timelineVC.view.frame = CGRectMake(0, alignYTimeLine, SCREEN_HEIGHT, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y + 64);
+                    self.timelineVC.view.frame = CGRectMake(0, alignYTimeLine, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y + 64);
                 }
                 else
                 {
-                    self.timelineVC.view.frame = CGRectMake(0, alignYTimeLine, SCREEN_HEIGHT, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
+                    CGRect rect = CGRectMake(0, alignYTimeLine, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
+                    self.timelineVC.view.frame = rect;
                 }
                 
                 _timelineVC.tableView.contentSize = CGSizeMake(SCREEN_WIDTH, _timelineVC.tableView.frame.size.height);
