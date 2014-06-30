@@ -251,7 +251,7 @@
     
     
     NSLog(@"MBP_iosVC - Showing cameralist?  %d", self.menuVC.isFirttime);
-    
+    [nav release];
     [validChannels release];
 }
 
@@ -354,6 +354,7 @@
                 } else {
                     [self presentViewController:nav animated:NO completion:nil];
                 }
+                [nav release];
             }
             else
             {

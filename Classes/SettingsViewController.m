@@ -540,7 +540,7 @@
 {
     UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.bounds.size.width, 0.5f)];
         [footerView setBackgroundColor:[UIColor colorWithRed:195/255.0 green:195/255.0 blue:195/255.0 alpha:1]];
-    return footerView;
+    return [footerView autorelease];
 }
 
 /*

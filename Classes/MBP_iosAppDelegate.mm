@@ -124,7 +124,9 @@
     [userDefaults synchronize];
     
     //[_window setRootViewController:viewController];
-    _window.rootViewController = [[EarlierNavigationController alloc] initWithRootViewController:viewController];
+    EarlierNavigationController *vc = [[EarlierNavigationController alloc] initWithRootViewController:viewController];
+    _window.rootViewController = vc;
+    [vc release];
     [_window makeKeyAndVisible];
     
 #if TARGET_IPHONE_SIMULATOR == 0
@@ -678,10 +680,12 @@ void checkingApplicationCrashed()
         
         if (!_jsonComm)
         {
-            self.jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                                  Selector:nil
-                                                              FailSelector:nil
-                                                                 ServerErr:nil];
+            BMS_JSON_Communication *comm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                  Selector:nil
+                                              FailSelector:nil
+                                                 ServerErr:nil];
+            self.jsonComm = comm;
+            [comm release];
         }
         
         NSDictionary *responseRegNotifn = [_jsonComm registerPushNotificationsBlockedWithAppId:appId

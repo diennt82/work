@@ -45,9 +45,9 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
-    EventInfo *info  = [[EventInfo alloc] init];
-    info.eventID     = 34;
-    info.numberVideo  = 9;
+//    EventInfo *info  = [[EventInfo alloc] init];
+//    info.eventID     = 34;
+//    info.numberVideo  = 9;
     
     //self.eventArray = [NSMutableArray arrayWithObjects:info, info1, info2, info3, info4, nil];
 }
@@ -107,6 +107,7 @@
     cell.timeLabel.font = [UIFont semiBold17Font];
     cell.timeLabel.text = [dFormater stringFromDate:dateNow];
     cell.placeEventLabel.text = [NSString stringWithFormat:@"Back Yard\n %d Videos", 0];
+    [dFormater release];
     return cell;
 #else
     static NSString *CellIdentifier = @"SavedEventCell";
