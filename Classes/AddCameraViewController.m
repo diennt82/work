@@ -63,6 +63,7 @@
     
     [self dismissViewControllerAnimated:YES completion:^{
         [_delegate sendActionCommand:TRUE];
+        self.delegate = nil;
     }];
 }
 
@@ -70,6 +71,7 @@
 {
     [self dismissViewControllerAnimated:YES completion:^{
         [_delegate sendActionCommand:FALSE];
+        self.delegate = nil;
     }];
 }
 
