@@ -1257,15 +1257,19 @@ double _ticks = 0;
     NSLog(@"Upgrade possible");
     [self performSelectorOnMainThread:@selector(showFWUpgradeDialog:) withObject:_fwUpgrading waitUntilDone:NO];
 #else
-    if (response == nil ||
+    if (response == nil                                    ||
+        [response isEqualToString:@""]                     ||
         [response isEqualToString:@"check_fw_upgrade: -1"] ||
         [response isEqualToString:@"check_fw_upgrade: 0"])
     {
     }
     else
     {
-        self.fwUpgrading = [response substringFromIndex:@"check_fw_upgrade: ".length];
-        [self performSelectorOnMainThread:@selector(showFWUpgradeDialog:) withObject:_fwUpgrading waitUntilDone:NO];
+        if ([response hasPrefix:@"check_fw_upgrade: "])
+        {
+            self.fwUpgrading = [response substringFromIndex:@"check_fw_upgrade: ".length];
+            [self performSelectorOnMainThread:@selector(showFWUpgradeDialog:) withObject:_fwUpgrading waitUntilDone:NO];
+        }
     }
 #endif
 }
