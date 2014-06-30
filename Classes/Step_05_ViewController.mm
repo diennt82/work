@@ -11,6 +11,7 @@
 #import "HttpCom.h"
 #import "Step_04_ViewController.h"
 #import "KISSMetricsAPI.h"
+#import "HoldOnCamWifi.h"
 
 #define ALERT_CONFIRM_TAG       555
 #define ALERT_RETRY_WIFI_TAG    559
@@ -86,18 +87,22 @@
     [imageView startAnimating];
     
     //Create an entry for "Other.."
-    self.otherWiFi = [[WifiEntry alloc]initWithSSID:@"\"Other Network\""];
-    _otherWiFi.bssid = @"Other";
-    _otherWiFi.auth_mode = @"None";
-    _otherWiFi.signal_level = 0;
-    _otherWiFi.noise_level = 0;
-    _otherWiFi.quality = nil;
-    _otherWiFi.encrypt_type = @"None";
+    WifiEntry *wifiEntry = [[WifiEntry alloc] initWithSSID:@"\"Other Network\""];
+    wifiEntry.bssid = @"Other";
+    wifiEntry.auth_mode = @"None";
+    wifiEntry.signal_level = 0;
+    wifiEntry.noise_level = 0;
+    wifiEntry.quality = nil;
+    wifiEntry.encrypt_type = @"None";
+    self.otherWiFi = wifiEntry;
+    [wifiEntry release];
     
     [self.view addSubview:_viewProgress];
     [self.view bringSubviewToFront:_viewProgress];
     
     [self performSelector:@selector(queryWifiList) withObject:nil afterDelay:0.001];
+    
+    [[HoldOnCamWifi shareInstance] startHolder];
 }
 
 - (void)viewDidUnload
@@ -434,6 +439,4 @@
         [self performSelectorInBackground:@selector(queryWifiList) withObject:nil];
     }
 }
-
-
 @end

@@ -121,7 +121,9 @@
 
 - (void)Step04Action:(id)sender
 {
-    [self.navigationController pushViewController:[[Step_04_ViewController alloc] init] animated:YES];
+    Step_04_ViewController *step04 = [[Step_04_ViewController alloc] init];
+    [self.navigationController pushViewController:step04 animated:YES];
+    [step04 release];
 }
 
 #pragma mark -
