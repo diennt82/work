@@ -1243,35 +1243,49 @@ double _ticks = 0;
 
 - (void)checkIfUpgradeIsPossible
 {
-    NSString * response = [[HttpCom instance].comWithDevice sendCommandAndBlock:CHECK_FW_UPGRADE];
+    NSString *currentFwVersion = _selectedChannel.profile.fw_version;
     
-    /* 
-     * 1. check_fw_upgrade: -1, check_fw_upgrade: 0 --> impossible
-     * 2. check_fw_upgrade: xx.yy.zz                --> possible
-     */
+    NSLog(@"%s currentFwVersion:%@", __FUNCTION__, currentFwVersion);
     
-    response = [response stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    NSLog(@"%s response:%@", __FUNCTION__, response);
-#if 0
-    self.fwUpgrading = @"01.13.61";
-    NSLog(@"Upgrade possible");
-    [self performSelectorOnMainThread:@selector(showFWUpgradeDialog:) withObject:_fwUpgrading waitUntilDone:NO];
-#else
-    if (response == nil                                    ||
-        [response isEqualToString:@""]                     ||
-        [response isEqualToString:@"check_fw_upgrade: -1"] ||
-        [response isEqualToString:@"check_fw_upgrade: 0"])
+    if ([currentFwVersion compare:FW_VERSION_OTA_UPGRADING_MIN] >= NSOrderedSame)
     {
-    }
-    else
-    {
-        if ([response hasPrefix:@"check_fw_upgrade: "])
+        NSString * response = [[HttpCom instance].comWithDevice sendCommandAndBlock:CHECK_FW_UPGRADE];
+        
+        /*
+         * 1. check_fw_upgrade: -1, check_fw_upgrade: 0 --> impossible
+         * 2. check_fw_upgrade: xx.yy.zz                --> possible
+         */
+        
+        response = [response stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        NSLog(@"%s response:%@", __FUNCTION__, response);
+        
+        NSError *error = NULL;
+        NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"^check_fw_upgrade: \\d{2}.\\d{2}.\\d{2}$"
+                                                                               options:NSRegularExpressionAnchorsMatchLines
+                                                                                 error:&error];
+        if (!regex)
         {
-            self.fwUpgrading = [response substringFromIndex:@"check_fw_upgrade: ".length];
-            [self performSelectorOnMainThread:@selector(showFWUpgradeDialog:) withObject:_fwUpgrading waitUntilDone:NO];
+            NSLog(@"%s error:%@", __FUNCTION__, error.description);
+        }
+        else
+        {
+            if (response)
+            {
+                //NSString *string = @"check_fw_upgrade: 01.56.78";
+                //NSString *string = nil; Exception!
+                NSUInteger numberOfMatches = [regex numberOfMatchesInString:response
+                                                                    options:0
+                                                                      range:NSMakeRange(0, [response length])];
+                NSLog(@"%s numberOfMatches:%d", __FUNCTION__, numberOfMatches);
+                
+                if (numberOfMatches == 1)
+                {
+                    self.fwUpgrading = [response substringFromIndex:@"check_fw_upgrade: ".length];
+                    [self performSelectorOnMainThread:@selector(showFWUpgradeDialog:) withObject:_fwUpgrading waitUntilDone:NO];
+                }
+            }
         }
     }
-#endif
 }
 
 -(void) showFWUpgradeDialog:(NSString *) version
@@ -1280,7 +1294,7 @@ double _ticks = 0;
                                                          @"Camera Firmware Upgrade", nil);
     
     NSString *msg = NSLocalizedStringWithDefaultValue(@"fw_upgrade", nil, [NSBundle mainBundle],
-                                                       @"A camera firmware %@ is available. Press OK to upgrade now?" , nil);
+                                                       @"A camera firmware %@ is available. Press OK to upgrade now." , nil);
     NSString *ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
                                                       @"OK" , nil);
     NSString *cancel = NSLocalizedStringWithDefaultValue(@"Cancel",nil, [NSBundle mainBundle],
@@ -6811,7 +6825,7 @@ double _ticks = 0;
 
 - (void)upgradeFwProgress_bg:(NSArray *)obj
 {
-    NSLog(@"%s userWantToCancel:%d, _fwUpgradeStatus:%d", __FUNCTION__, userWantToCancel, _fwUpgradeStatus);
+    //NSLog(@"%s userWantToCancel:%d, _fwUpgradeStatus:%d", __FUNCTION__, userWantToCancel, _fwUpgradeStatus);
     
     if (userWantToCancel)
     {
@@ -6838,6 +6852,11 @@ double _ticks = 0;
                 _isShowCustomIndicator = YES;
                 [self displayCustomIndicator];
                 
+                MBProgressHUD *hub = [MBProgressHUD showHUDAddedTo:self.view animated:NO];
+                [hub setLabelText:@"Upgrade done. Scanning camera..."];
+                
+                [hub hide:YES afterDelay:2];
+                
                 [self performSelectorOnMainThread:@selector(scanCamera)
                                        withObject:nil
                                     waitUntilDone:NO];
@@ -6846,7 +6865,7 @@ double _ticks = 0;
             {
                 NSString *ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
                                                                  @"OK" , nil);
-                UIAlertView *alertViewUpgradeFailed = [[UIAlertView alloc] initWithTitle:@"Upgrade firmware failed. Go back to Camera list."
+                UIAlertView *alertViewUpgradeFailed = [[UIAlertView alloc] initWithTitle:@"Or camera upgrade could be completed or incorrect firmware version. please manually reboot the camera."
                                                                                  message:nil
                                                                                 delegate:self
                                                                        cancelButtonTitle:nil
@@ -6867,10 +6886,11 @@ double _ticks = 0;
 
 -(void) upgradeFwProgress_ui:(NSArray *) obj
 {
-    NSLog(@"%s progress:%d", __FUNCTION__, _fwUpgradedProgress);
+    //NSLog(@"%s progress:%d", __FUNCTION__, _fwUpgradedProgress);
     
     if (_fwUpgradedProgress == 2) //6s
     {
+        NSLog(@"%s Show custom dialog.", __FUNCTION__);
         [MBProgressHUD hideHUDForView:self.view animated:NO];
         [_customeAlertView show];
     }
@@ -6952,7 +6972,14 @@ double _ticks = 0;
                 {
                     if ([firmwareVersion isEqualToString:_fwUpgrading])
                     {
-                        fwUpgradeStatus = FW_UPGRADE_SUCCEED;
+                        if ([[data objectForKey:@"is_available"] boolValue])
+                        {
+                            fwUpgradeStatus = FW_UPGRADE_SUCCEED;
+                        }
+                        else
+                        {
+                            fwUpgradeStatus = FW_UPGRADE_IN_PROGRESS; // Waiting for camera is available.
+                        }
                     }
                     else
                     {

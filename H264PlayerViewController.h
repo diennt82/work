@@ -135,7 +135,8 @@
 #define MEDIAPLAYER_SET_DATASOURCE  2
 #define MEDIAPLAYER_STARTED         3
 
-#define TIMEOUT_FW_OTA_UPGRADING    70// 70*3 --> 3.5 mins
+#define FW_VERSION_OTA_UPGRADING_MIN @"01.13.62"
+#define TIMEOUT_FW_OTA_UPGRADING    80// 80*3 --> 4 mins
 #define FW_UPGRADE_IN_PROGRESS      0
 #define FW_UPGRADE_FAILED          -1
 #define FW_UPGRADE_SUCCEED          1
