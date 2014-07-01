@@ -85,7 +85,7 @@
     //Here is show indicator
     self.activityIndicator.hidden = NO;
     [self.activityIndicator startAnimating];
-    self.ib_sliderPlayBack.userInteractionEnabled = NO; // Disable it because it's featur not done yet!
+    self.ib_sliderPlayBack.userInteractionEnabled = YES; // Disable it because it's featur not done yet!
     
     // Do any additional setup after loading the view.
 	[[NSNotificationCenter defaultCenter] addObserver: self
@@ -395,6 +395,8 @@
             break;
             
         case MEDIA_SEEK_COMPLETE:
+            NSLog(@"%s MEDIA_SEEK_COMPLETE", __FUNCTION__);
+            
             dispatch_async(dispatch_get_main_queue(), ^{
                 self.activityIndicator.hidden = YES;
                 self.ib_playPlayBack.selected = NO;
@@ -638,6 +640,8 @@
 {
     UIDeviceOrientation orietation = UIDeviceOrientationPortrait;
     
+    NSLog(@"%s [[UIDevice currentDevice] orientation]:%d", __FUNCTION__, [[UIDevice currentDevice] orientation]);
+    
     if ([[UIDevice currentDevice] orientation] == UIDeviceOrientationPortrait)
     {
         orietation = UIDeviceOrientationLandscapeRight;
@@ -715,12 +719,11 @@
 {
     NSLog(@"%s", __FUNCTION__);
     
-    if (_playbackStreamer   &&
-        !_isPause           &&
-        _playbackStreamer->isPlaying())
+    if (!_isPause           &&
+        MediaPlayer::Instance()->isPlaying())
     {
         self.isPause = YES;
-        _playbackStreamer->pause();
+        MediaPlayer::Instance()->pause();
         self.ib_playPlayBack.selected = YES;
         self.view.userInteractionEnabled = NO;
         [self.ib_myOverlay setHidden:NO];
@@ -739,14 +742,13 @@
     
     NSLog(@"%s value: %f, target: %f", __FUNCTION__, sender.value, seekTarget);//0.666,667 --> 666,667
     
-    if (_playbackStreamer   &&
-        _isPause)
+    if (_isPause)
     {
         self.activityIndicator.hidden = NO;
         self.isPause = NO;
         
         //_playbackStreamer->seekTo(seekTarget);// USE THIS
-        _playbackStreamer->seekTo(seekTarget);// USE THIS
+        MediaPlayer::Instance()->seekTo(seekTarget);// USE THIS
 
         self.view.userInteractionEnabled = YES;
         self.ib_myOverlay.userInteractionEnabled = NO;
@@ -832,6 +834,12 @@
     self.duration = MediaPlayer::Instance()->getDuration();
     self.timeStarting = MediaPlayer::Instance()->getTimeStarting();
     double timeCurrent = MediaPlayer::Instance()->getCurrentTime() - _timeStarting;
+    
+#if 1
+    NSLog(@"timeCurrent: %f, _timeStarting: %f", timeCurrent, _timeStarting);
+#endif
+    
+    self.ib_sliderPlayBack.value = timeCurrent / _duration;
     
     NSInteger currentTime = lround(timeCurrent);
     NSInteger totalTime = lround(self.duration);
