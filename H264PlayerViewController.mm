@@ -4209,6 +4209,10 @@ double _ticks = 0;
 -(void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
     [self applyFont];
+    CGRect rect = self.ib_lbCameraNotAccessible.frame;
+    rect.origin.x = (self.scrollView.frame.size.width - rect.size.width) / 2;
+    rect.origin.y = (self.scrollView.frame.size.height - rect.size.height) / 2 + 55;
+    self.ib_lbCameraNotAccessible.frame = rect;
 }
 
 -(void) checkOrientation
