@@ -409,7 +409,7 @@
 - (void)updateCameraInfo
 {
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(updateCameraInfo_delay) object:nil];
-    [self performSelector:@selector(updateCameraInfo_delay) withObject:nil afterDelay:3 ];//60];
+    [self performSelector:@selector(updateCameraInfo_delay) withObject:nil afterDelay:60];
 }
 
 - (void)updateCameraInfo_delay

@@ -202,20 +202,18 @@
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         BOOL isOffline = [userDefaults boolForKey:_OfflineMode];
         
+        
         if (!isOffline &&
             !self.camerasVC.waitingForUpdateData &&
             !_notUpdateCameras)
         {
+            self.camerasVC.waitingForUpdateData = TRUE;
             self.navigationItem.leftBarButtonItem.enabled = NO;
             [self.navigationItem.rightBarButtonItems[1] setEnabled:NO];
             //[self.navigationItem.rightBarButtonItems[1] setHidden:YES];
             
-            
             @synchronized(self.camerasVC)
             {
-                self.camerasVC.waitingForUpdateData = TRUE;
-                [self.camerasVC updateBottomButton];
-                [self.camerasVC.ibTableListCamera reloadData];
                 [self performSelectorInBackground:@selector(recreateAccount)
                                        withObject:nil];
             }
@@ -397,7 +395,7 @@
 - (void)finishStoreCameraListData:(NSMutableArray *)camProfiles success:(BOOL)success
 {
     if (self.isViewLoaded && self.view.window)
-    {
+    {        
         if ([self rebindCamerasResource] == TRUE)
         {
             [self updateCameraList];
@@ -409,7 +407,7 @@
         
         dispatch_async(dispatch_get_main_queue(), ^{
              [self.camerasVC.ibTableListCamera reloadData];
-            [self.camerasVC.ibTableListCamera layoutIfNeeded];
+            //[self.camerasVC.ibTableListCamera layoutIfNeeded];
              [self.camerasVC updateBottomButton];
         });
        
