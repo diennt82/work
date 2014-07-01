@@ -345,6 +345,7 @@
 @property (nonatomic, retain) UIAlertView *alertFWUpgrading;
 @property (nonatomic) NSInteger fwUpgradedProgress;
 @property (nonatomic) NSInteger fwUpgradeStatus;
+@property (nonatomic) BOOL hasFwVersion;
 
 
 - (void)scan_done:(NSArray *) _scan_results;

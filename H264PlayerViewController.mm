@@ -6863,10 +6863,23 @@ double _ticks = 0;
             }
             else
             {
+                NSString *msg1 = @"Fw upgrade could not be completed.";
+                
+                if (_fwUpgradeStatus == FW_UPGRADE_FAILED)
+                {
+                    msg1 = @"Incorrect Firmware version.";
+                }
+                else if(_hasFwVersion)
+                {
+                    msg1 = @"Camera offline after upgrading.";
+                }
+                
+                NSString *msg = [NSString stringWithFormat:@"%@ Please manually off and on the camera.", msg1];
+                
                 NSString *ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
                                                                  @"OK" , nil);
-                UIAlertView *alertViewUpgradeFailed = [[UIAlertView alloc] initWithTitle:@"Or camera upgrade could be completed or incorrect firmware version. please manually reboot the camera."
-                                                                                 message:nil
+                UIAlertView *alertViewUpgradeFailed = [[UIAlertView alloc] initWithTitle:@"Upgrade firmware failed"
+                                                                                 message:msg
                                                                                 delegate:self
                                                                        cancelButtonTitle:nil
                                                                        otherButtonTitles:ok, nil];
@@ -6980,6 +6993,8 @@ double _ticks = 0;
                         {
                             fwUpgradeStatus = FW_UPGRADE_IN_PROGRESS; // Waiting for camera is available.
                         }
+                        
+                        self.hasFwVersion = TRUE;
                     }
                     else
                     {
