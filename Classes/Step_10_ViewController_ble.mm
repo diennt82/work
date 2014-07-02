@@ -236,10 +236,12 @@
     
     if (_userAccount == nil)
     {
-        self.userAccount = [[UserAccount alloc] initWithUser:userEmail
-                                                    password:userPass
-                                                      apiKey:userApiKey
-                                                    listener:nil];
+        UserAccount *user = [[UserAccount alloc] initWithUser:userEmail
+                                 password:userPass
+                                   apiKey:userApiKey
+                                 listener:nil];
+        self.userAccount = user;
+        [user release];
     }
 
 #if 1
