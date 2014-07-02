@@ -4487,9 +4487,21 @@ double _ticks = 0;
     
     if(_selectedItemMenu!=-1){
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [self.horizMenu setSelectedIndex:_selectedItemMenu-1 animated:NO];
+            /*
+             * Maintain selected item in horize menu.
+             */
+            
+            int selectedItem = _selectedItemMenu;
+            
+            if ([_cameraModel isEqualToString:CP_MODEL_CONCURRENT])
+            {
+                selectedItem--;
+            }
+            
+            [self.horizMenu setSelectedIndex:selectedItem animated:NO];
         });
     }
+
     
     self.ib_buttonTouchToTalk.enabled = _enablePTT;
     self.ib_labelTouchToTalk.text = _stringStatePTT;
@@ -4990,24 +5002,24 @@ double _ticks = 0;
         [self queryToKnowSharedCamOnMacOSOrWin];
         if ([_sharedCamConnectedTo isEqualToString:@"MACOS"])
         {
-            self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_photo.png", @"video_action_temp.png", nil];
-            self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_photo_pressed.png", @"video_action_temp_pressed.png", nil];
+            self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_photo", @"video_action_temp", nil];
+            self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_photo_pressed", @"video_action_temp_pressed", nil];
         }
         else
         {
-            self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_pan.png", @"video_action_video.png", @"video_action_music.png", @"video_action_temp.png", nil];
-            self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_pan_pressed.png", @"video_action_video_pressed.png", @"video_action_music_pressed.png", @"video_action_temp_pressed.png", nil];
+            self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_pan", @"video_action_video", @"video_action_music", @"video_action_temp", nil];
+            self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_pan_pressed", @"video_action_video_pressed", @"video_action_music_pressed", @"video_action_temp_pressed", nil];
         }
     }
     else if ([_cameraModel isEqualToString:CP_MODEL_CONCURRENT])
     {
-        self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_mic.png", @"video_action_photo.png", @"video_action_music.png", @"video_action_temp.png", nil];
-        self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_mic_pressed.png", @"video_action_photo_pressed.png", @"video_action_music_pressed.png", @"video_action_temp_pressed.png", nil];
+        self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_mic", @"video_action_photo", @"video_action_music", @"video_action_temp", nil];
+        self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_mic_pressed", @"video_action_photo_pressed", @"video_action_music_pressed", @"video_action_temp_pressed", nil];
     }
     else //if ([_cameraModel isEqualToString:CP_MODEL_BLE])
     {
-        self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_pan.png", @"video_action_mic.png", @"video_action_video.png", @"video_action_music.png", @"video_action_temp.png", nil];
-        self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_pan_pressed.png", @"video_action_mic_pressed.png", @"video_action_video_pressed.png", @"video_action_music_pressed.png", @"video_action_temp_pressed.png", nil];
+        self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_pan", @"video_action_mic", @"video_action_video", @"video_action_music", @"video_action_temp", nil];
+        self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_pan_pressed", @"video_action_mic_pressed", @"video_action_video_pressed", @"video_action_music_pressed", @"video_action_temp_pressed", nil];
     }
     
     //[self.horizMenu reloadData:NO];
@@ -5204,10 +5216,11 @@ double _ticks = 0;
         {
             [self.view bringSubviewToFront:self.ib_viewRecordTTT];
             [self.ib_viewRecordTTT setHidden:NO];
-            
+#if 0 // Enable it later.
             //check if is share cam, up UI
             if ([_cameraModel isEqualToString:CP_MODEL_SHARED_CAM] ||
                 [_cameraModel isEqualToString:CP_MODEL_CONCURRENT])
+#endif
             {
                 _isRecordInterface = YES;
                 [self changeAction:nil];
@@ -6014,13 +6027,13 @@ double _ticks = 0;
         else
         {
             _syncPortraitAndLandscape = NO;
-            
-            if (![_cameraModel isEqualToString:CP_MODEL_SHARED_CAM] &&
-                ![_cameraModel isEqualToString:CP_MODEL_CONCURRENT])
+#if 0 // Enable it later.
+            if ([_cameraModel isEqualToString:CP_MODEL_008])
             {
                 [self.ib_buttonChangeAction setHidden:NO];
                 [self.view bringSubviewToFront:self.ib_buttonChangeAction];
             }
+#endif
         }
         
         if (!_syncPortraitAndLandscape)
