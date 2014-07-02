@@ -12,7 +12,7 @@ typedef enum _CAMERA_TAG {
     TAG_66 = 566,
     TAG_83 = 583,
     TAG_73 = 73,
-    TAG_85 = 584
+    TAG_85 = 585
 } CAMERA_TAG;
 
 @interface Camera : NSObject
