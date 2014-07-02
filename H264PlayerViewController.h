@@ -108,6 +108,7 @@
 #define TAG_ALERT_SENDING_LOG               569
 #define TAG_ALERT_FW_OTA_UPGRADE_AVAILABLE  579
 #define TAG_ALERT_FW_OTA_UPGRADE_FAILED     589
+#define TAG_ALERT_FW_OTA_UPGRADE_DONE       590
 
 #define _streamingSSID  @"string_Streaming_SSID"
 #define _is_Loggedin @"bool_isLoggedIn"

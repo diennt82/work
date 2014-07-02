@@ -4646,7 +4646,7 @@ double _ticks = 0;
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
     //[[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"PlayerView dismiss alert: %d with btn index: %d", tag, buttonIndex] withProperties:nil];
-#if 1
+
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:[NSString stringWithFormat:@"Dismiss alert: %d", alertView.tag]
                                                      withLabel:[NSString stringWithFormat:@"Alert %@", alertView.title]
@@ -4771,91 +4771,22 @@ double _ticks = 0;
             [self prepareGoBackToCameraList:nil];
         }
             break;
+        case TAG_ALERT_FW_OTA_UPGRADE_DONE:
+        {
             
+            [self performSelectorOnMainThread:@selector(scanCamera)
+                                   withObject:nil
+                                waitUntilDone:NO];
+            break;
+        }
         default:
             break;
     }
     
     alertView.delegate = nil;
     
-#else
-    int tag = alertView.tag;
-    
-    if (tag == TAG_ALERT_VIEW_REMOTE_TIME_OUT)
-    {
-        switch (buttonIndex)
-        {
-            case 0: // View other camera
-                self.view.userInteractionEnabled = NO;
-                
-                if ([[UIDevice currentDevice] orientation] == UIDeviceOrientationLandscapeLeft ||
-                    [[UIDevice currentDevice] orientation] == UIDeviceOrientationLandscapeRight ||
-                    [UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeLeft ||
-                    [UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeRight)
-                {
-                    if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]) {
-                        objc_msgSend([UIDevice currentDevice], @selector(setOrientation:),   UIDeviceOrientationPortrait);
-                    }
-                }
-                
-                //stop stream
-                if (_timerStopStreamAfter30s && [_timerStopStreamAfter30s isValid])
-                {
-                    //stop time, avoid stopStream 2 times
-                    [_timerStopStreamAfter30s invalidate];
-                    _timerStopStreamAfter30s = nil;
-                    [self stopStream];
-                }
-                
-                [self goBackToCamerasRemoteStreamTimeOut];
-                break;
-                
-            case 1: // Continue view --> restart stream
-                
-                if (_timerStopStreamAfter30s == nil)
-                {
-                    //already stop stream, call setup again.
-                    [self setupCamera];
-                }
-                else
-                {
-                    if (_timerStopStreamAfter30s && [_timerStopStreamAfter30s isValid])
-                    {
-                        //stop time, avoid stopStream 2 times
-                        [_timerStopStreamAfter30s invalidate];
-                        _timerStopStreamAfter30s = nil;
-                    }
-                    //do nothing, just dissmiss because still stream.
-                    //create new timer to display info after 4m30s.
-                    [self reCreateTimoutViewCamera];
-                }
-                break;
-                
-            default:
-                break;
-        }
-    }
-    else if (tag == TAG_ALERT_SENDING_LOG)
-    {
-        switch (buttonIndex)
-        {
-            case 1: // Yes
-                if ([[alertView textFieldAtIndex:0].text isEqualToString:SENDING_CAMERA_LOG_PASSWORD])
-                {
-                    [self performSelectorInBackground:@selector(sendRequestLogCmdToCamera) withObject:nil];
-                }
-                else// Like Cancel
-                {
-                    NSLog(@"%s wrong password!", __FUNCTION__);
-                }
-                break;
-            case 0:
-            default:
-                // Do nothing
-                break;
-        }
-    }
-#endif
+
+
 }
 
 - (void)sendRequestLogCmdToCamera_bg
@@ -6739,9 +6670,10 @@ double _ticks = 0;
     [alertView setContainerView:[self createDemoView]];
     
     // Modify the parameters
-    [alertView setButtonTitles:[NSArray arrayWithObjects:@"View other camera", nil]];
+    //[alertView setButtonTitles:[NSArray arrayWithObjects:@"View other camera", nil]];
+    [alertView setButtonTitles:NULL];
     
-    //[alertView setButtonTitles:NULL];
+    
     [alertView setDelegate:self];
     
     //You may use a Block, rather than a delegate.
@@ -6760,15 +6692,17 @@ double _ticks = 0;
 
 - (void)customIOS7dialogButtonTouchUpInside: (CustomIOS7AlertView *)alertView clickedButtonAtIndex: (NSInteger)buttonIndex
 {
+
     NSLog(@"Delegate: Button at position %d is clicked on alertView %d.", buttonIndex, [alertView tag]);
     alertView.delegate = nil;
     [alertView close];
-    
+#if 0
     if (buttonIndex == 0)
     {
         userWantToCancel = YES;
         [self prepareGoBackToCameraList:nil];
     }
+#endif
 }
 
 - (void)closeCustomAlertView
@@ -6850,15 +6784,19 @@ double _ticks = 0;
                 self.isFWUpgradingInProgress = NO;
                 _isShowCustomIndicator = YES;
                 [self displayCustomIndicator];
+            
                 
-                MBProgressHUD *hub = [MBProgressHUD showHUDAddedTo:self.view animated:NO];
-                [hub setLabelText:@"Upgrade done. Scanning camera..."];
-                
-                [hub hide:YES afterDelay:2];
-                
-                [self performSelectorOnMainThread:@selector(scanCamera)
-                                       withObject:nil
-                                    waitUntilDone:NO];
+                NSString *ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
+                                                                 @"OK" , nil);
+                UIAlertView *alertViewUpgradeFailed = [[UIAlertView alloc] initWithTitle:@"Firmware Upgrade Succeeded"
+                                                                                 message:nil
+                                                                                delegate:self
+                                                                       cancelButtonTitle:nil
+                                                                       otherButtonTitles:ok, nil];
+                alertViewUpgradeFailed.tag = TAG_ALERT_FW_OTA_UPGRADE_DONE;
+                [alertViewUpgradeFailed show];
+                [alertViewUpgradeFailed release];
+              
             }
             else
             {
@@ -6877,7 +6815,7 @@ double _ticks = 0;
                 
                 NSString *ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
                                                                  @"OK" , nil);
-                UIAlertView *alertViewUpgradeFailed = [[UIAlertView alloc] initWithTitle:@"Upgrade firmware failed"
+                UIAlertView *alertViewUpgradeFailed = [[UIAlertView alloc] initWithTitle:@"Firmware Upgrade Failed"
                                                                                  message:msg
                                                                                 delegate:self
                                                                        cancelButtonTitle:nil
@@ -6973,7 +6911,7 @@ double _ticks = 0;
     NSDictionary *responseDict = [_jsonCommBlocked getDeviceBasicInfoBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
                                                                                      andApiKey:_apiKey];
     
-   // NSLog(@"%s response:%@", __FUNCTION__, responseDict);
+    NSLog(@"%s response:%@", __FUNCTION__, responseDict);
     
     if (responseDict != nil)
     {
