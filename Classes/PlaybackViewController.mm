@@ -29,7 +29,7 @@
 @property (nonatomic) BOOL isPause;
 @property (nonatomic) double duration;
 @property (nonatomic) double timeStarting;
-
+@property (nonatomic, assign) NSTimer *timerWatcher;
 @end
 
 @implementation PlaybackViewController
@@ -815,26 +815,34 @@
     {
         return;
     }
-    
+    self.timerWatcher = [NSTimer scheduledTimerWithTimeInterval:0.5
+                                                         target:self
+                                                       selector:@selector(timerTickWatcher)
+                                                       userInfo:nil
+                                                        repeats:YES];
+}
+
+- (void)timerTickWatcher {
+    if (MediaPlayer::Instance() == NULL || _isPause || _userWantToBack)
+    {
+        [self.timerWatcher invalidate];
+        self.timerWatcher = nil;
+        return;
+    }
     self.duration = MediaPlayer::Instance()->getDuration();
     self.timeStarting = MediaPlayer::Instance()->getTimeStarting();
     double timeCurrent = MediaPlayer::Instance()->getCurrentTime() - _timeStarting;
     
-#if 0
-    NSLog(@"timeCurrent: %f, _timeStarting: %f", timeCurrent, _timeStarting);
-#endif
-    
-    self.ib_sliderPlayBack.value = timeCurrent / _duration;
-    
     NSInteger currentTime = lround(timeCurrent);
     NSInteger totalTime = lround(self.duration);
-    self.ib_timerPlayBack.text = [NSString stringWithFormat:@"%02d:%02d / %02d:%02d", currentTime / 60, currentTime % 60,totalTime / 60, totalTime % 60];
+    if (currentTime > totalTime){
+        [self.timerWatcher invalidate];
+        self.timerWatcher = nil;
+        return;
+    }
+    self.ib_sliderPlayBack.value = timeCurrent / _duration;
     
-    [NSTimer scheduledTimerWithTimeInterval:0.5
-                                     target:self
-                                   selector:@selector(watcher)
-                                   userInfo:nil
-                                    repeats:NO];
+    self.ib_timerPlayBack.text = [NSString stringWithFormat:@"%02d:%02d / %02d:%02d", currentTime / 60, currentTime % 60,totalTime / 60, totalTime % 60];
 }
 
 - (NSString *) timeFormat: (float) seconds {
