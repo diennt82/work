@@ -4746,7 +4746,8 @@ double _ticks = 0;
                         [hub setLabelText:@"Checking Fw upgrade..."];
                         self.isFWUpgradingInProgress = YES; // Entering bg control
                         [self createHubbleAlertView];
-                        //[self performSelector:@selector(checkFwUpgrageStatus_bg) withObject:nil afterDelay:5];
+                        
+                        NSLog(@"%s Start upgrading to %@", __FUNCTION__,_fwUpgrading );
                         [self performSelectorInBackground:@selector(checkFwUpgrageStatus_bg)
                                                     withObject:nil] ;
                         [self stopStream];
@@ -6816,9 +6817,7 @@ double _ticks = 0;
     [self performSelectorInBackground:@selector(upgradeFwProgress_bg:)
                            withObject:[NSArray arrayWithObjects:progressView, lblProgress, nil]] ;
     
-//    [self performSelectorInBackground:@selector(checkFwUpgrageStatus_bg)
-//                           withObject:nil] ;
-    //[self performSelector:@selector(checkFwUpgrageStatus_bg) withObject:nil afterDelay:5];
+
     
     return [demoView autorelease];
 }
@@ -6917,9 +6916,21 @@ double _ticks = 0;
     percentageProgress.progress = value;
 }
 
+/* 
+ 
+   INIT :  "firmware_status": 0 ------> 1 
+   UPGRADING:"firmware_status": 1 .... 1
+ 
+   DONE:  "firmware_status": 1 -----> 0
+   FAILED: - TIMEOUT 
+           - FW version no updated
+ 
+ 
+ */
 - (void)checkFwUpgrageStatus_bg
 {
     //NSLog(@"%s userWantToCancel:%d, value:%d", __FUNCTION__, userWantToCancel, _fwUpgradedProgress);
+    
     
     if (userWantToCancel)
     {
@@ -6944,7 +6955,7 @@ double _ticks = 0;
 
 - (NSInteger )checkFwUpgrageStatus
 {
-    if (_fwUpgradedProgress <= 2)// 6s
+    if (_fwUpgradedProgress <= 10)// 30s
     {
         return FW_UPGRADE_IN_PROGRESS;
     }
@@ -6979,7 +6990,8 @@ double _ticks = 0;
             self.selectedChannel.profile.fwTime   = [firmwareTime isEqual:[NSNull null]]?nil:firmwareTime;
 
             //If less than 5 mins since camera start upgrading
-            if (![self.selectedChannel.profile isFwUpgrading:[NSDate date]])
+        
+            if ([self.selectedChannel.profile isFwUpgrading:[NSDate date]] == FALSE)
             {
                 NSString *firmwareVersion = [data objectForKey:@"firmware_version"];
                 
