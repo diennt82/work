@@ -108,6 +108,7 @@
 #define TAG_ALERT_SENDING_LOG               569
 #define TAG_ALERT_FW_OTA_UPGRADE_AVAILABLE  579
 #define TAG_ALERT_FW_OTA_UPGRADE_FAILED     589
+#define TAG_ALERT_FW_OTA_UPGRADE_DONE       590
 
 #define _streamingSSID  @"string_Streaming_SSID"
 #define _is_Loggedin @"bool_isLoggedIn"
@@ -135,7 +136,8 @@
 #define MEDIAPLAYER_SET_DATASOURCE  2
 #define MEDIAPLAYER_STARTED         3
 
-#define TIMEOUT_FW_OTA_UPGRADING    70// 70*3 --> 3.5 mins
+
+#define TIMEOUT_FW_OTA_UPGRADING    80// 80*3 --> 4 mins
 #define FW_UPGRADE_IN_PROGRESS      0
 #define FW_UPGRADE_FAILED          -1
 #define FW_UPGRADE_SUCCEED          1
@@ -344,6 +346,7 @@
 @property (nonatomic, retain) UIAlertView *alertFWUpgrading;
 @property (nonatomic) NSInteger fwUpgradedProgress;
 @property (nonatomic) NSInteger fwUpgradeStatus;
+@property (nonatomic) BOOL hasFwVersion;
 
 
 - (void)scan_done:(NSArray *) _scan_results;
