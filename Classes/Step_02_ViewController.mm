@@ -59,7 +59,7 @@
     UIImageView *imageView = (UIImageView *)[self.view viewWithTag:585];
     imageView.animationImages = @[[UIImage imageNamed:@"setup_camera_led1"],
                                   [UIImage imageNamed:@"setup_camera_led2"]];
-    imageView.animationDuration = 1.f;
+    imageView.animationDuration = 2.f;
     imageView.animationRepeatCount = 0;
     
     [imageView startAnimating];
