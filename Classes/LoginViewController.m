@@ -887,7 +887,7 @@
     NSString * title = NSLocalizedStringWithDefaultValue(@"Login_Error" ,nil, [NSBundle mainBundle],
                                                          @"Login Error", nil);
 #if 1
-    NSString *msg = @"Server is unreachable or Connection is timeout";
+    NSString *msg = @"Server is unreachable or The request timed out.";
     NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok" ,nil, [NSBundle mainBundle],
                                                       @"OK", nil);
     UIAlertView *alert = [[UIAlertView alloc]
