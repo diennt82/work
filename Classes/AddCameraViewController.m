@@ -6,18 +6,23 @@
 //  Copyright (c) 2014 Smart Panda Ltd. All rights reserved.
 //
 
+#import "CameraItemView.h"
 #define MAX_CAM_ALLOWED 4
-#define CAMERA_TAG_66 566
-#define CAMERA_TAG_83 583 //83/ 836
+//#define CAMERA_TAG_66 566
+//#define CAMERA_TAG_83 583 //83/ 836
 
 #import "AddCameraViewController.h"
 #import "define.h"
 #import "PublicDefine.h"
 
-@interface AddCameraViewController ()
+#define VERTICAL_DISTANCE           15
+#define HORIGENTAL_DISTANCE         10
 
+@interface AddCameraViewController () <CameraItemViewDelegate>
+@property (nonatomic, assign) IBOutlet UILabel  *titleLabel;
+@property (nonatomic, assign) IBOutlet UILabel  *desLabel;
 @property (retain, nonatomic) IBOutlet UIButton *btnCancel;
-
+@property (nonatomic, assign) IBOutlet UIScrollView  *scrollView;
 @end
 
 @implementation AddCameraViewController
@@ -37,33 +42,34 @@
     // Do any additional setup after loading the view from its nib.
     [self.btnCancel setBackgroundImage:[UIImage imageNamed:@"cancel_btn"] forState:UIControlStateNormal];
     [self.btnCancel setBackgroundImage:[UIImage imageNamed:@"cancel_btn_pressed"] forState:UIControlEventTouchDown];
-}
-
-#pragma mark - Actions
-
-- (IBAction)btnCameraTypeTouchUpInsideAction:(UIButton *)sender
-{
-    NSInteger cameraType = WIFI_SETUP;
     
-    if (sender.tag == CAMERA_TAG_83)
-    {
-        //MBP 83/ 836
-        cameraType = BLUETOOTH_SETUP;
-    }
-    else
-    {
-        // Focus 66
-        cameraType = WIFI_SETUP;
-    }
+    NSMutableArray *array = [[NSMutableArray alloc] init];
+    Camera *cam = [[Camera alloc] initWith:TAG_66 andLable:@"Focus 66" andImage:[UIImage imageNamed:@"focus661-black.png"]];
+    [array addObject:cam];
+    [cam release];
     
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setInteger:cameraType forKey:SET_UP_CAMERA];
-    [userDefaults setBool:FALSE forKey:FIRST_TIME_SETUP];
-    [userDefaults synchronize];
+    cam = [[Camera alloc] initWith:TAG_83 andLable:@"MBP 83/836" andImage:[UIImage imageNamed:@"camera_2.png"]];
+    [array addObject:cam];
+    [cam release];
     
-    [self dismissViewControllerAnimated:YES completion:^{
-        [_delegate sendActionCommand:TRUE];
-    }];
+    cam = [[Camera alloc] initWith:TAG_83 andLable:@"Scount 73" andImage:[UIImage imageNamed:@"wifisetup_scout85.png"]];
+    [array addObject:cam];
+    [cam release];
+    
+    cam = [[Camera alloc] initWith:TAG_83 andLable:@"MBP 85/854" andImage:[UIImage imageNamed:@"blesetup_focus85.png"]];
+    [array addObject:cam];
+    [cam release];
+    
+    [self loadCameras:array];
+    [array release];
+    
+    CGRect rect = self.titleLabel.frame;
+    rect.origin.x = (self.view.frame.size.width - rect.size.width) / 2;
+    self.titleLabel.frame = rect;
+    
+    rect = self.desLabel.frame;
+    rect.origin.x = (self.view.frame.size.width - rect.size.width) / 2;
+    self.desLabel.frame = rect;
 }
 
 - (IBAction)btnCancelTouchUpInsideAction:(id)sender
@@ -101,5 +107,77 @@
 - (void)dealloc {
     [_btnCancel release];
     [super dealloc];
+}
+
+#pragma mark - CameraItemViewDelegate
+- (void)selectedItem:(CAMERA_TAG)cameraTad {
+    NSInteger cameraType = WIFI_SETUP;
+    switch (cameraTad) {
+        case TAG_83:
+            //MBP 83/ 836
+             cameraType = BLUETOOTH_SETUP;
+            break;
+        case TAG_66:
+            // Focus 66
+            cameraType = WIFI_SETUP;
+            break;
+        case TAG_73:
+            //MBP 83/ 836
+            cameraType = WIFI_SETUP;
+        case TAG_85:
+            //MBP 83/ 836
+            cameraType = BLUETOOTH_SETUP;
+        default:
+            break;
+    }
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setInteger:cameraType forKey:SET_UP_CAMERA];
+    [userDefaults setBool:FALSE forKey:FIRST_TIME_SETUP];
+    [userDefaults synchronize];
+    
+    [self dismissViewControllerAnimated:YES completion:^{
+        [_delegate sendActionCommand:TRUE];
+    }];
+}
+
+- (void)loadCameras:(NSArray *)cameras {
+    NSInteger numberOfRow = 1;
+    CGFloat scaleDistance = 1;
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        numberOfRow = 3;
+        scaleDistance = 4;
+    }
+    
+    NSInteger numberOfColumn = (self.scrollView.frame.size.width - VERTICAL_DISTANCE * scaleDistance) / (ITEM_WIDTH + VERTICAL_DISTANCE * scaleDistance);
+    NSInteger realColumn = cameras.count / numberOfRow;
+    CGFloat paddingLeft = 30;
+    if (realColumn <= numberOfColumn) {
+        realColumn = numberOfColumn;
+        paddingLeft = (self.scrollView.frame.size.width - (realColumn * ITEM_WIDTH + (realColumn - 1) * VERTICAL_DISTANCE * scaleDistance)) / 2;
+    }
+    CGFloat paddingTop = 10;//(self.frame.size.height - numberOfRow * ITEM_HEIGHT) / 2;
+    
+    CGFloat y = paddingTop;
+    for (int i = 0; i < numberOfRow; i++) {
+        CGFloat x = paddingLeft;
+        for (int j = 0; j < realColumn; j++) {
+            int index = (i * realColumn + j);
+            if (index >= cameras.count) break;
+            Camera *cam = [cameras objectAtIndex:index];
+            CameraItemView *itemView = [[CameraItemView alloc] initWithConorLeftLocation:CGPointMake(x, y)];
+            [itemView setCamera:cam];
+            itemView.delegate = self;
+            [self.scrollView addSubview:itemView];
+            [itemView release];
+            
+            if (i == 0 && j == realColumn - 1) {
+                CGSize size = CGSizeMake(x + ITEM_WIDTH + paddingLeft, self.scrollView.frame.size.height);
+                self.scrollView.contentSize = size;
+            }
+            x += ITEM_WIDTH + VERTICAL_DISTANCE * scaleDistance;
+        }
+        y += ITEM_HEIGHT + HORIGENTAL_DISTANCE * scaleDistance;
+    }
+    
 }
 @end
