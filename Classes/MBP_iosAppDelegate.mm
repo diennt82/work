@@ -78,7 +78,20 @@
     [[GAI sharedInstance] trackerWithTrackingId:@"UA-51500380-2"];
 #endif
    
-    [Crittercism enableWithAppID: @"53acee52178784439a000001"];
+    //Internal release
+    NSString * releaseAppId = @"53acee52178784439a000001";
+    
+    NSString *bundleIdentifier = [[NSBundle mainBundle] bundleIdentifier];
+    //Official release
+    if ( [bundleIdentifier isEqualToString:@"com.binatonetelecom.hubble"])
+    {
+        releaseAppId=  @"53b0c76907229a470d000003";
+    }
+    [Crittercism enableWithAppID: releaseAppId];
+    
+   
+    
+   
     
     NSArray *names = [UIFont fontNamesForFamilyName:@"Proxima Nova"];
     NSLog(@"names: %@",names);
