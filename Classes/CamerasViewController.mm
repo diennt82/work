@@ -123,7 +123,7 @@
     self.navigationController.navigationBarHidden = YES;
     self.ibTableListCamera.delegate = self;
 
-    [self updateBottomButton];
+    //[self updateBottomButton];
 }
 
 #pragma mark - Actions
@@ -160,6 +160,7 @@
             
             [tabBarController dismissViewControllerAnimated:NO completion:^{
                 [tabBarController.menuDelegate sendStatus:SETUP_CAMERA]; //initial setup
+                tabBarController.menuDelegate = nil;
             }];
             
         }
@@ -178,6 +179,7 @@
             tabBarController.navigationController.navigationBarHidden = YES;
             self.navigationItem.leftBarButtonItem.enabled = NO;
             [self presentViewController:addCameraVC animated:YES completion:^{}];
+            [addCameraVC release];
         }
     }
     [self.ibIconAddCamera setImage:[UIImage imageNamed:@"add_camera"]];
@@ -260,6 +262,7 @@
     {
         [tabBarController dismissViewControllerAnimated:NO completion:^{
             [tabBarController.menuDelegate sendStatus:SETUP_CAMERA]; //initial setup
+            tabBarController.menuDelegate = nil;
         }];
     }
     else
@@ -367,14 +370,17 @@
 {
     //#warning Incomplete method implementation.
     // Return the number of rows in the section.
+    
     if (self.camChannels.count == 0)
     {
         return 0;
     }
+    
     if (_waitingForUpdateData == TRUE)
     {
         return 1;
     }
+    
     return self.camChannels.count;
 }
 
@@ -395,30 +401,40 @@
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
-    if (scrollView.contentOffset.y < -64.0f && !_waitingForUpdateData)
+    if (scrollView.contentOffset.y < -64.0f)
     {
-        [self.parentVC refreshCameraList];
-        [self.ibTableListCamera reloadData];
+        NSLog(@"%s _waitingForUpdateData:%d", __FUNCTION__, _waitingForUpdateData);
+        
+        if (!_waitingForUpdateData)
+        {
+            //_waitingForUpdateData = YES;
+            [self.parentVC refreshCameraList];
+            //[self.ibTableListCamera reloadData];
+        }
     }
 }
 
 - (void)updateCameraInfo
 {
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(updateCameraInfo_delay) object:nil];
     [self performSelector:@selector(updateCameraInfo_delay) withObject:nil afterDelay:60];
 }
 
 - (void)updateCameraInfo_delay
 {
+    NSLog(@"%s", __FUNCTION__);
+    
     if (self.isViewLoaded && self.view.window)
     {
         [self.parentVC refreshCameraList];
-        [self.ibTableListCamera reloadData];
+        //[self.ibTableListCamera reloadData];
     }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [self updateBottomButton];
+    //[self updateBottomButton];
+    //[self performSelectorOnMainThread:@selector(updateCameraInfo) withObject:nil waitUntilDone:NO];
     
     if (_waitingForUpdateData == TRUE)
     {
@@ -543,6 +559,7 @@
 
 - (void)updateBottomButton
 {
+#if 0
     if (self.camChannels.count == 0)
     {
         [self.ibTextAddCamera setTextColor:[UIColor whiteColor]];
@@ -552,7 +569,7 @@
         _waitingForUpdateData = NO;
         return;
     }
-    
+#endif
     if (_waitingForUpdateData == TRUE)
     {
         [self.ibTextAddCamera setTextColor:[UIColor deSelectedAddCameraTextColor]];

@@ -202,19 +202,37 @@
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         BOOL isOffline = [userDefaults boolForKey:_OfflineMode];
         
+        
         if (!isOffline &&
             !self.camerasVC.waitingForUpdateData &&
             !_notUpdateCameras)
         {
+            self.camerasVC.waitingForUpdateData = TRUE;
             self.navigationItem.leftBarButtonItem.enabled = NO;
             [self.navigationItem.rightBarButtonItems[1] setEnabled:NO];
             //[self.navigationItem.rightBarButtonItems[1] setHidden:YES];
-            self.camerasVC.waitingForUpdateData = TRUE;
-            [self.camerasVC.ibTableListCamera reloadData];
-            [self performSelectorInBackground:@selector(recreateAccount)
-                                   withObject:nil];
+            
+            @synchronized(self.camerasVC)
+            {
+                [self performSelectorInBackground:@selector(recreateAccount)
+                                       withObject:nil];
+            }
         }
     }
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    NSLog(@"%s", __FUNCTION__);
+    
+    if (_camerasVC)
+    {
+        [NSObject cancelPreviousPerformRequestsWithTarget:_camerasVC
+                                                 selector:@selector(updateCameraInfo_delay)
+                                                   object:nil];
+    }
+    
+    [super viewWillDisappear:animated];
 }
 
 - (void)removeNavigationBarBottomLine
@@ -235,7 +253,7 @@
 
 - (void)menuBackAction: (id)sender
 {
-    // Back to Player view. What is camera selected? 0?
+    NSLog(@"%s cameras:%p", __FUNCTION__, _cameras);
     
     if (self.cameras != nil &&
         self.cameras.count > 0)
@@ -307,8 +325,6 @@
     {
         self.navigationItem.rightBarButtonItems = @[accountBarButton, cameraBarButton];
     }
-    
-    
 }
 
 - (void)stopStreamFinished:(CamChannel *)camChannel
@@ -335,20 +351,26 @@
     self.title = item.title;
 }
 
-
 - (void)refreshCameraList
 {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     BOOL isOffline = [userDefaults boolForKey:_OfflineMode];
-    self.camerasVC.waitingForUpdateData = FALSE;
     
-    if (!isOffline &&
-        !self.camerasVC.waitingForUpdateData &&
-        !_notUpdateCameras)
+    NSLog(@"%s isOffline:%d, waitingForUpdateData:%d, _notUpdateCameras:%d",
+          __FUNCTION__, isOffline, _camerasVC.waitingForUpdateData, _notUpdateCameras);
+   
+    @synchronized(self.camerasVC)
     {
-        self.camerasVC.waitingForUpdateData = TRUE;
-        [self performSelectorInBackground:@selector(recreateAccount)
-                               withObject:nil];
+        if (!isOffline &&
+            !_camerasVC.waitingForUpdateData &&
+            !_notUpdateCameras)
+        {
+            self.camerasVC.waitingForUpdateData = TRUE;
+            [self.camerasVC.ibTableListCamera reloadData];
+            [self.camerasVC updateBottomButton];
+            [self performSelectorInBackground:@selector(recreateAccount)
+                                   withObject:nil];
+        }
     }
 }
 #pragma mark - Update Camera list
@@ -356,8 +378,9 @@
 - (void)recreateAccount
 {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSString *username  = [userDefaults stringForKey:@"PortalUsername"];
-    NSString *apiKey    = [userDefaults stringForKey:@"PortalApiKey"];
+    NSString *username   = [userDefaults stringForKey:@"PortalUsername"];
+    NSString *apiKey     = [userDefaults stringForKey:@"PortalApiKey"];
+    
     UserAccount *account = [[UserAccount alloc] initWithUser:username
                                                     password:nil
                                                       apiKey:apiKey
@@ -372,7 +395,7 @@
 - (void)finishStoreCameraListData:(NSMutableArray *)camProfiles success:(BOOL)success
 {
     if (self.isViewLoaded && self.view.window)
-    {
+    {        
         if ([self rebindCamerasResource] == TRUE)
         {
             [self updateCameraList];
@@ -380,10 +403,15 @@
             self.camerasVC.camChannels = _cameras;
         }
         
-        [self.camerasVC updateBottomButton];
         self.camerasVC.waitingForUpdateData = NO;
-        [self.camerasVC.ibTableListCamera performSelectorInBackground:@selector(reloadData)
-                                                           withObject:nil];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+             [self.camerasVC.ibTableListCamera reloadData];
+            //[self.camerasVC.ibTableListCamera layoutIfNeeded];
+             [self.camerasVC updateBottomButton];
+        });
+       
+        NSLog(@"%s", __FUNCTION__);
         
         UIImage *image = [UIImage imageNamed:@"Hubble_logo_back"];
         CGRect frame = CGRectMake(0, 0, image.size.width, image.size.height);

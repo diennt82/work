@@ -70,12 +70,18 @@
     rect = self.desLabel.frame;
     rect.origin.x = (self.view.frame.size.width - rect.size.width) / 2;
     self.desLabel.frame = rect;
+    
+    [self dismissViewControllerAnimated:YES completion:^{
+        [_delegate sendActionCommand:TRUE];
+        self.delegate = nil;
+    }];
 }
 
 - (IBAction)btnCancelTouchUpInsideAction:(id)sender
 {
     [self dismissViewControllerAnimated:YES completion:^{
         [_delegate sendActionCommand:FALSE];
+        self.delegate = nil;
     }];
 }
 
