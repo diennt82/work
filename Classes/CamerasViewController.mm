@@ -165,7 +165,15 @@
         }
         else
         {
-            AddCameraViewController *addCameraVC = [[AddCameraViewController alloc] init];
+            AddCameraViewController *addCameraVC = nil;
+            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+            {
+                addCameraVC = [[AddCameraViewController alloc]initWithNibName:@"AddCameraViewController_iPad" bundle:nil];
+            }
+            else {
+                addCameraVC = [[AddCameraViewController alloc] initWithNibName:@"AddCameraViewController" bundle:nil];
+            }
+            [[AddCameraViewController alloc] init];
             addCameraVC.delegate = self;
             tabBarController.navigationController.navigationBarHidden = YES;
             self.navigationItem.leftBarButtonItem.enabled = NO;
