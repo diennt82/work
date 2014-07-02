@@ -82,6 +82,7 @@
     imagePickerController.sourceType = sourceType;
     imagePickerController.delegate = nil;
     
+#if 0
    /* if (sourceType == UIImagePickerControllerSourceTypeCamera)
     {
         /*
@@ -97,6 +98,7 @@
         imagePickerController.cameraOverlayView = self.overlayView;
         //self.overlayView = nil;
     }*/
+#endif
     
     self.imagePickerController = imagePickerController;
     [self presentViewController:self.imagePickerController animated:YES completion:nil];

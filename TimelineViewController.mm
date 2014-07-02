@@ -782,7 +782,7 @@
     /* Delay the updating of this is variable until the table "reloadData" has completed.
      This is to avoid the overlapping of loading data*/
     dispatch_async(dispatch_get_main_queue(), ^{
-        NSIndexPath* indexPath =
+         //NSIndexPath* indexPath =
         [NSIndexPath indexPathForRow: ([self.tableView numberOfRowsInSection:([self.tableView numberOfSections]-1)]-1)
                            inSection: ([self.tableView numberOfSections]-1)];
         self.isLoading = FALSE;
