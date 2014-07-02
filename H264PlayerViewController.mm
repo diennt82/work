@@ -6971,18 +6971,21 @@ double _ticks = 0;
         if (status == 200)
         {
             NSDictionary *data = [responseDict objectForKey:@"data"];
+            
             self.selectedChannel.profile.fwStatus = [[data objectForKey:@"firmware_status"] integerValue];
             
             id firmwareTime = [data objectForKey:@"firmware_time"];
             
             self.selectedChannel.profile.fwTime   = [firmwareTime isEqual:[NSNull null]]?nil:firmwareTime;
 
+            //If less than 5 mins since camera start upgrading
             if (![self.selectedChannel.profile isFwUpgrading:[NSDate date]])
             {
                 NSString *firmwareVersion = [data objectForKey:@"firmware_version"];
                 
                 if (firmwareVersion != nil && ![firmwareVersion isEqual:[NSNull null]])
                 {
+                    //if the version on server matches the version reported by FW earlier
                     if ([firmwareVersion isEqualToString:_fwUpgrading])
                     {
                         if ([[data objectForKey:@"is_available"] boolValue])
@@ -6996,8 +6999,9 @@ double _ticks = 0;
                         
                         self.hasFwVersion = TRUE;
                     }
-                    else
+                    else //Wrong FW  version
                     {
+                        
                         fwUpgradeStatus = FW_UPGRADE_FAILED;
                     }
                 }
