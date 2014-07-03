@@ -136,12 +136,12 @@
                     <inset key="insetFor6xAndEarlier" minX="0.0" minY="30" maxX="0.0" maxY="-30"/>
                     <color key="color" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 </activityIndicatorView>
-                <view contentMode="scaleToFill" id="WJv-oB-VFG">
-                    <rect key="frame" x="349" y="0.0" width="80" height="80"/>
+                <view autoresizesSubviews="NO" contentMode="scaleToFill" id="WJv-oB-VFG">
+                    <rect key="frame" x="349" y="0.0" width="80" height="110"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                     <subviews>
-                        <label hidden="YES" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hold to Talk" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Iqs-XW-DXM">
-                            <rect key="frame" x="-2" y="47" width="84" height="33"/>
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hold to Talk" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Iqs-XW-DXM">
+                            <rect key="frame" x="-2" y="75" width="84" height="26"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
                             <color key="textColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>

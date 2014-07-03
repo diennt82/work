@@ -284,6 +284,8 @@ double _ticks = 0;
         
         [self.ib_viewRecordTTT setFrame:CGRectMake(alignXButtonRecord, alignYButtonRecord, viewRecordSize.width, viewRecordSize.height)];
         [_imgViewDrectionPad setFrame:CGRectMake(alignXButtonDirectionPad, alignYButtonDirectionPad, directionPadSize.width, directionPadSize.height)];
+        
+        [self.ib_labelTouchToTalk setTextColor:[UIColor holdToTalkTextColor]];
     }
     else
     {
