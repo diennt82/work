@@ -222,13 +222,21 @@
     }
     
     /* Reload the table view now */
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.tableView reloadData];
-        
-        [self.tableView layoutIfNeeded];
-        
-        [self.refreshControl endRefreshing];
-    });
+    
+    if (self.isViewLoaded && self.view.window)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.tableView reloadData];
+            
+            [self.tableView layoutIfNeeded];
+            
+            [self.refreshControl endRefreshing];
+        });
+    }
+    else
+    {
+        NSLog(@"%s View is invisible.", __FUNCTION__);
+    }
 }
 
 
@@ -770,9 +778,16 @@
     
     if (shouldUpdateTableView)
     {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.tableView reloadData];
-        });
+        if (self.isViewLoaded && self.view.window)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.tableView reloadData];
+            });
+        }
+        else
+        {
+            NSLog(@"%s View is invisible.", __FUNCTION__);
+        }
     }
     else
     {
