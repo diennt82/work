@@ -174,7 +174,7 @@
             else {
                 addCameraVC = [[AddCameraViewController alloc] initWithNibName:@"AddCameraViewController" bundle:nil];
             }
-            [[AddCameraViewController alloc] init];
+
             addCameraVC.delegate = self;
             tabBarController.navigationController.navigationBarHidden = YES;
             self.navigationItem.leftBarButtonItem.enabled = NO;
@@ -182,6 +182,7 @@
             [addCameraVC release];
         }
     }
+    
     [self.ibIconAddCamera setImage:[UIImage imageNamed:@"add_camera"]];
     [self.ibTextAddCamera setTextColor:[UIColor whiteColor]];
 #else
@@ -463,6 +464,8 @@
         [cell.imageView addSubview:spinner];
         [spinner startAnimating];
         
+        shouldHighlightAtRow[indexPath.row] = NO;
+        
         return cell;
     }
     else
@@ -587,12 +590,7 @@
 #pragma mark - Table view delegate
 
 - (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (_waitingForUpdateData == TRUE)
-    {
-        return NO;
-    }
-    
+{    
     return shouldHighlightAtRow[indexPath.row];
 }
 
