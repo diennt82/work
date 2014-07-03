@@ -72,6 +72,7 @@
 
 @property (retain, nonatomic) IBOutlet UIView *vwHeaderCamDetail,*vwHeaderNotSens;
 @property (nonatomic) BOOL shouldWaitForUpdateSettings;
+@property (nonatomic) BOOL backGroundUpdateExecuting;
 @property (assign, nonatomic) SensitivityTemperatureCell *sensitivityTemperatureCell;
 
 @end
@@ -93,6 +94,7 @@
     [super viewDidLoad];
     intTableSectionStatus = 0;
     self.shouldWaitForUpdateSettings = FALSE;
+    self.backGroundUpdateExecuting = NO;
     
     self.tableViewSettings.delegate = self;
     self.tableViewSettings.dataSource = self;
@@ -185,12 +187,18 @@
     
     if (_shouldWaitForUpdateSettings)
     {
-        MBProgressHUD *showError = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-        [showError setLabelText:@"Updating..."];
+        [self showUpdatingProgressHUD];
     }
     else
     {
-        [self.navigationController popViewControllerAnimated:YES];
+        if (self.backGroundUpdateExecuting)
+        {
+            self.shouldWaitForUpdateSettings = YES;
+        }
+        else
+        {
+            [self.navigationController popViewControllerAnimated:YES];
+        }
     }
 }
 
@@ -1161,6 +1169,7 @@
 
 - (void)sendToServerTheCommand:(NSString *) command
 {
+    self.backGroundUpdateExecuting = YES;
     if (_jsonComm == nil)
     {
         BMS_JSON_Communication *comm = [[BMS_JSON_Communication alloc] initWithObject:self
@@ -1175,8 +1184,6 @@
                                                                       andCommand:command
                                                                        andApiKey:_apiKey];
     //NSLog(@"SettingsVC - sendCommand: %@, response: %@", command, responseDict);
-
-    [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
     
     NSInteger errorCode = -1;
     NSString *errorMessage = @"Update failed";
@@ -1197,12 +1204,18 @@
     
     NSLog(@"%s cmd:%@, error: %d", __func__, command, errorCode);
     
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+    });
+    
     if (errorCode == 200)
     {
         if (_shouldWaitForUpdateSettings)
         {
             self.shouldWaitForUpdateSettings = FALSE;
-            [self.navigationController popViewControllerAnimated:YES];
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                [self.navigationController popViewControllerAnimated:YES];
+            });
         }
     }
     else
@@ -1221,6 +1234,7 @@
             }
         });
     }
+    self.backGroundUpdateExecuting = NO;
 }
 
 -(void)btnChangeCameraName
