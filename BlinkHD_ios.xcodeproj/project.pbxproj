@@ -637,6 +637,10 @@
 		8BA5C47C1818DAAC006B4BB8 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A15430FC1818D08A00337EFE /* libcrypto.a */; };
 		8BA5C4801818DCC1006B4BB8 /* ZoneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BA5C47E1818DCC1006B4BB8 /* ZoneViewController.m */; };
 		8BA5C4811818DCC1006B4BB8 /* ZoneViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8BA5C47F1818DCC1006B4BB8 /* ZoneViewController.xib */; };
+		8BA5EE801964F06E00A5E128 /* CameraItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BA5EE7E1964F06E00A5E128 /* CameraItemView.m */; };
+		8BA5EE811964F06E00A5E128 /* CameraItemView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8BA5EE7F1964F06E00A5E128 /* CameraItemView.xib */; };
+		8BA5EE841964F08B00A5E128 /* Camera.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BA5EE831964F08B00A5E128 /* Camera.m */; };
+		8BA5EE871964F0A900A5E128 /* HoldOnCamWifi.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BA5EE861964F0A900A5E128 /* HoldOnCamWifi.m */; };
 		8BA7B093187FC87A00A23BD6 /* Step09ViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8BA7B08F187FC87A00A23BD6 /* Step09ViewController_iPad.xib */; };
 		8BA7B094187FC87A00A23BD6 /* Step09ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8BA7B090187FC87A00A23BD6 /* Step09ViewController.mm */; };
 		8BA7B095187FC87A00A23BD6 /* Step09ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8BA7B091187FC87A00A23BD6 /* Step09ViewController.xib */; };
@@ -1506,6 +1510,13 @@
 		8BA5C47D1818DCC1006B4BB8 /* ZoneViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZoneViewController.h; sourceTree = "<group>"; };
 		8BA5C47E1818DCC1006B4BB8 /* ZoneViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZoneViewController.m; sourceTree = "<group>"; };
 		8BA5C47F1818DCC1006B4BB8 /* ZoneViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ZoneViewController.xib; sourceTree = "<group>"; };
+		8BA5EE7D1964F06E00A5E128 /* CameraItemView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraItemView.h; sourceTree = "<group>"; };
+		8BA5EE7E1964F06E00A5E128 /* CameraItemView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraItemView.m; sourceTree = "<group>"; };
+		8BA5EE7F1964F06E00A5E128 /* CameraItemView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CameraItemView.xib; sourceTree = "<group>"; };
+		8BA5EE821964F08B00A5E128 /* Camera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Camera.h; sourceTree = "<group>"; };
+		8BA5EE831964F08B00A5E128 /* Camera.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Camera.m; sourceTree = "<group>"; };
+		8BA5EE851964F0A900A5E128 /* HoldOnCamWifi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HoldOnCamWifi.h; sourceTree = "<group>"; };
+		8BA5EE861964F0A900A5E128 /* HoldOnCamWifi.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HoldOnCamWifi.m; sourceTree = "<group>"; };
 		8BA7B08F187FC87A00A23BD6 /* Step09ViewController_iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Step09ViewController_iPad.xib; sourceTree = "<group>"; };
 		8BA7B090187FC87A00A23BD6 /* Step09ViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Step09ViewController.mm; sourceTree = "<group>"; };
 		8BA7B091187FC87A00A23BD6 /* Step09ViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Step09ViewController.xib; sourceTree = "<group>"; };
@@ -3221,6 +3232,7 @@
 		8B9CE20118C8486C00B1B7F9 /* AddCameraVC */ = {
 			isa = PBXGroup;
 			children = (
+				8BA5EE7C1964F06000A5E128 /* CameraItemView */,
 				8B9CE20218C848A000B1B7F9 /* AddCameraViewController.h */,
 				8B9CE20318C848A000B1B7F9 /* AddCameraViewController.m */,
 				8B9CE20418C848A000B1B7F9 /* AddCameraViewController.xib */,
@@ -3266,6 +3278,20 @@
 				1D3623250D0F684500981E51 /* MBP_iosAppDelegate.mm */,
 			);
 			name = AppDelegate;
+			sourceTree = "<group>";
+		};
+		8BA5EE7C1964F06000A5E128 /* CameraItemView */ = {
+			isa = PBXGroup;
+			children = (
+				8BA5EE851964F0A900A5E128 /* HoldOnCamWifi.h */,
+				8BA5EE861964F0A900A5E128 /* HoldOnCamWifi.m */,
+				8BA5EE821964F08B00A5E128 /* Camera.h */,
+				8BA5EE831964F08B00A5E128 /* Camera.m */,
+				8BA5EE7D1964F06E00A5E128 /* CameraItemView.h */,
+				8BA5EE7E1964F06E00A5E128 /* CameraItemView.m */,
+				8BA5EE7F1964F06E00A5E128 /* CameraItemView.xib */,
+			);
+			name = CameraItemView;
 			sourceTree = "<group>";
 		};
 		8BA7F2771851703E00BE0145 /* Step_06 */ = {
@@ -3990,6 +4016,7 @@
 				8B299F5B18AF500900D36BE5 /* alert_learn_pressed.png in Resources */,
 				8B29A05118AF500A00D36BE5 /* settings_hr_24.png in Resources */,
 				8B299F8018AF500900D36BE5 /* camera_action_pan_knob_shadow_land@2x.png in Resources */,
+				8BA5EE811964F06E00A5E128 /* CameraItemView.xib in Resources */,
 				8B299FED18AF500900D36BE5 /* hubble_logo@2x.png in Resources */,
 				8B29A07E18AF500A00D36BE5 /* video_overlay_share@2x.png in Resources */,
 				8B299FAA18AF500900D36BE5 /* camera_action_pan_knob_shadow@2x.png in Resources */,
@@ -4260,6 +4287,7 @@
 				A1ABF1C2187538550014FCB4 /* EditCamera_VController.mm in Sources */,
 				84A66260195C0C2500EF7DB5 /* UIImageView+WebCache.m in Sources */,
 				97C49AB0154784F4008B7D03 /* SetupData.m in Sources */,
+				8BA5EE801964F06E00A5E128 /* CameraItemView.m in Sources */,
 				8B9384881856E940009C4771 /* CameraSettingsCell.m in Sources */,
 				8B92A08B1863E5DF005923D2 /* TimelineViewController.mm in Sources */,
 				8B92A0B51864197E005923D2 /* EventInfo.m in Sources */,
@@ -4274,6 +4302,7 @@
 				8B92A0B818643212005923D2 /* TimelineButtonCell.m in Sources */,
 				A1A98E8F180BF5AA00C8EBD3 /* client_main.c in Sources */,
 				8B9384841856E613009C4771 /* CameraSettingsViewController.m in Sources */,
+				8BA5EE841964F08B00A5E128 /* Camera.m in Sources */,
 				8B95144718C03A9600C1D06A /* Step05Cell.m in Sources */,
 				A14631C6185C133D00E96969 /* ScrollHorizontalMenu.m in Sources */,
 				8B94979B18B5E67C004FBDE1 /* SensitivityInfo.m in Sources */,
@@ -4314,6 +4343,7 @@
 				3803A85E15FDF15600B4DD97 /* CameraAlert.m in Sources */,
 				8B1D5453186587CB008857F0 /* CellImageView.m in Sources */,
 				38A13AF316363147000138EA /* UnderlinedUILabel.m in Sources */,
+				8BA5EE871964F0A900A5E128 /* HoldOnCamWifi.m in Sources */,
 				8B1D544D186581B8008857F0 /* SchedulerCell.m in Sources */,
 				97DA238416425FA100EE2528 /* ToUViewController.mm in Sources */,
 				A1ABF1BA187538280014FCB4 /* CreateBLEConnection_VController.mm in Sources */,

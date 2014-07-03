@@ -367,13 +367,21 @@
 }
 
 - (IBAction)handleCameraButton:(id)sender {
+    
+      UIButton * buttonView = (UIButton *) sender;
+    
     UILabel *labelCrazy = [[UILabel alloc] init];
     CGRect rect;
-    if ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationPortrait) {
-        rect = CGRectMake(SCREEN_WIDTH/2 - 200/2, SCREEN_HEIGHT - 120, 200, 50);
-    } else {
-        rect = CGRectMake(SCREEN_HEIGHT/2 - 200/2, SCREEN_WIDTH - 120, 200, 50);
+    
+    if ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationPortrait)
+    {
+        rect = CGRectMake(SCREEN_WIDTH/2 - 200/2,  buttonView.frame.size.height, 200, 50);
     }
+    else
+    {
+        rect = CGRectMake(SCREEN_HEIGHT/2 - 200/2,  buttonView.frame.size.height, 200, 50);
+    }
+    
     labelCrazy.frame = rect;
     labelCrazy.backgroundColor = [UIColor grayColor];
     labelCrazy.textColor = [UIColor whiteColor];

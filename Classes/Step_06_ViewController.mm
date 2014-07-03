@@ -359,6 +359,22 @@
 #define PASSWORD_INDEX 1
 #define CONFPASSWORD_INDEX 2
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        if (indexPath.section == SEC_SECTION)
+        {
+            if (indexPath.row == PASSWORD_INDEX)
+            {
+                return 50;
+            }
+        }
+    }
+    
+    return 44;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     int tag = tableView.tag;
