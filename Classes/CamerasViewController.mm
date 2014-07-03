@@ -174,7 +174,7 @@
             else {
                 addCameraVC = [[AddCameraViewController alloc] initWithNibName:@"AddCameraViewController" bundle:nil];
             }
-            [[AddCameraViewController alloc] init];
+
             addCameraVC.delegate = self;
             tabBarController.navigationController.navigationBarHidden = YES;
             self.navigationItem.leftBarButtonItem.enabled = NO;
@@ -182,6 +182,7 @@
             [addCameraVC release];
         }
     }
+    
     [self.ibIconAddCamera setImage:[UIImage imageNamed:@"add_camera"]];
     [self.ibTextAddCamera setTextColor:[UIColor whiteColor]];
 #else

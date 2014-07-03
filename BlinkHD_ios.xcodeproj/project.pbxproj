@@ -653,6 +653,11 @@
 		8BC0A0461844B31700A5FD52 /* mbp_icon57x57.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BC0A0421844B31700A5FD52 /* mbp_icon57x57.png */; };
 		8BC0A0491844B31700A5FD52 /* mbp_icon144x144.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BC0A0451844B31700A5FD52 /* mbp_icon144x144.png */; };
 		8BE896B31845CB3B00674E01 /* bb_motion_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BE896B21845CB3B00674E01 /* bb_motion_icon.png */; };
+		8BE9D32019653D0C00D3DE8D /* AddCameraViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8BE9D31F19653D0C00D3DE8D /* AddCameraViewController_iPad.xib */; };
+		8BE9D32319653F3E00D3DE8D /* wifisetup_scout85.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BE9D32119653F3E00D3DE8D /* wifisetup_scout85.png */; };
+		8BE9D32419653F3E00D3DE8D /* wifisetup_scout85@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BE9D32219653F3E00D3DE8D /* wifisetup_scout85@2x.png */; };
+		8BE9D32719653F6500D3DE8D /* blesetup_focus85.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BE9D32519653F6500D3DE8D /* blesetup_focus85.png */; };
+		8BE9D32819653F6500D3DE8D /* blesetup_focus85@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BE9D32619653F6500D3DE8D /* blesetup_focus85@2x.png */; };
 		8BFA669F18F3A50C00492866 /* H264PlayerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 979BC68A17D990F400B3B373 /* H264PlayerViewController.xib */; };
 		972E2B8715A4234300E60A96 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 972E2B8515A4234300E60A96 /* NSData+Base64.m */; };
 		974ACB59168055F9005AE4C6 /* ToUViewController_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 974ACB58168055F8005AE4C6 /* ToUViewController_ipad.xib */; };
@@ -1530,6 +1535,11 @@
 		8BC0A0421844B31700A5FD52 /* mbp_icon57x57.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mbp_icon57x57.png; sourceTree = "<group>"; };
 		8BC0A0451844B31700A5FD52 /* mbp_icon144x144.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mbp_icon144x144.png; sourceTree = "<group>"; };
 		8BE896B21845CB3B00674E01 /* bb_motion_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bb_motion_icon.png; sourceTree = "<group>"; };
+		8BE9D31F19653D0C00D3DE8D /* AddCameraViewController_iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AddCameraViewController_iPad.xib; sourceTree = "<group>"; };
+		8BE9D32119653F3E00D3DE8D /* wifisetup_scout85.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wifisetup_scout85.png; sourceTree = "<group>"; };
+		8BE9D32219653F3E00D3DE8D /* wifisetup_scout85@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wifisetup_scout85@2x.png"; sourceTree = "<group>"; };
+		8BE9D32519653F6500D3DE8D /* blesetup_focus85.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blesetup_focus85.png; sourceTree = "<group>"; };
+		8BE9D32619653F6500D3DE8D /* blesetup_focus85@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "blesetup_focus85@2x.png"; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* BlinkHD_ios-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "BlinkHD_ios-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
 		9704F37E14B76202000B4AA5 /* Entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Entitlements.plist; sourceTree = "<group>"; };
 		972E2B8515A4234300E60A96 /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Base64.m"; sourceTree = "<group>"; };
@@ -2858,6 +2868,8 @@
 		8B95072F18C9960D006D4945 /* BLE */ = {
 			isa = PBXGroup;
 			children = (
+				8BE9D32519653F6500D3DE8D /* blesetup_focus85.png */,
+				8BE9D32619653F6500D3DE8D /* blesetup_focus85@2x.png */,
 				5EB6400B1954390600B280A1 /* focus661-black@2x.png */,
 				8B95073018C9960D006D4945 /* BLE_camera_search@2x.png */,
 				8B95073118C9960D006D4945 /* BLE_camera_small@2x.png */,
@@ -2882,6 +2894,8 @@
 		8B95073C18C9960D006D4945 /* wifi */ = {
 			isa = PBXGroup;
 			children = (
+				8BE9D32119653F3E00D3DE8D /* wifisetup_scout85.png */,
+				8BE9D32219653F3E00D3DE8D /* wifisetup_scout85@2x.png */,
 				8B95073D18C9960D006D4945 /* animation */,
 				8B95074618C9960D006D4945 /* blue_btn.png */,
 				8B95074718C9960D006D4945 /* blue_btn@2x.png */,
@@ -3236,6 +3250,7 @@
 				8B9CE20218C848A000B1B7F9 /* AddCameraViewController.h */,
 				8B9CE20318C848A000B1B7F9 /* AddCameraViewController.m */,
 				8B9CE20418C848A000B1B7F9 /* AddCameraViewController.xib */,
+				8BE9D31F19653D0C00D3DE8D /* AddCameraViewController_iPad.xib */,
 			);
 			name = AddCameraVC;
 			sourceTree = "<group>";
@@ -3833,6 +3848,7 @@
 				8B299FB318AF500900D36BE5 /* camera_action_play.png in Resources */,
 				8B299F8B18AF500900D36BE5 /* camera_action_play_land.png in Resources */,
 				5EBA458919405BEA00695155 /* Account_ViewController_ipad.xib in Resources */,
+				8BE9D32419653F3E00D3DE8D /* wifisetup_scout85@2x.png in Resources */,
 				8B29A05F18AF500A00D36BE5 /* settings_temp_f.png in Resources */,
 				8B299FA218AF500900D36BE5 /* camera_action_mic_pressed@2x.png in Resources */,
 				8B299FD918AF500900D36BE5 /* photo_grey@5.png in Resources */,
@@ -3851,6 +3867,7 @@
 				8BA7B095187FC87A00A23BD6 /* Step09ViewController.xib in Resources */,
 				8B29A06918AF500A00D36BE5 /* temp_plus.png in Resources */,
 				8B299F9118AF500900D36BE5 /* camera_action_video_pressed_land.png in Resources */,
+				8BE9D32319653F3E00D3DE8D /* wifisetup_scout85.png in Resources */,
 				8B9507B118C9960D006D4945 /* setup_camera_led1@2x.png in Resources */,
 				8B299F7218AF500900D36BE5 /* alert_upgrade_pressed@5.png in Resources */,
 				8B29A02418AF500900D36BE5 /* loader_f.png in Resources */,
@@ -3862,6 +3879,7 @@
 				8BC0A0491844B31700A5FD52 /* mbp_icon144x144.png in Resources */,
 				38AC741515D9199E00618188 /* account_icon.png in Resources */,
 				A1B1E7CF18E9135800F076B6 /* back@2x.png in Resources */,
+				8BE9D32019653D0C00D3DE8D /* AddCameraViewController_iPad.xib in Resources */,
 				8B29A01E18AF500900D36BE5 /* loader_c.png in Resources */,
 				38AC741815D91A2400618188 /* scan_camera_icon.png in Resources */,
 				8B99DB8818B872C30009612A /* iTunesArtwork in Resources */,
@@ -3981,6 +3999,7 @@
 				8B29A01418AF500900D36BE5 /* enter.png in Resources */,
 				8B933EDA19111EBC00A97F12 /* video_action_photo.png in Resources */,
 				5E769B0519345B0E008D9CA7 /* loader_big_b@2x.png in Resources */,
+				8BE9D32819653F6500D3DE8D /* blesetup_focus85@2x.png in Resources */,
 				8B9112D218602898004301C5 /* SensitivityCell.xib in Resources */,
 				5E769B0819345B0E008D9CA7 /* loader_big_e@2x.png in Resources */,
 				8B299F8F18AF500900D36BE5 /* camera_action_video_land.png in Resources */,
@@ -4021,6 +4040,7 @@
 				8B29A07E18AF500A00D36BE5 /* video_overlay_share@2x.png in Resources */,
 				8B299FAA18AF500900D36BE5 /* camera_action_pan_knob_shadow@2x.png in Resources */,
 				8B29A01D18AF500900D36BE5 /* loader_b@2x.png in Resources */,
+				8BE9D32719653F6500D3DE8D /* blesetup_focus85.png in Resources */,
 				8B95077C18C9960D006D4945 /* BLE_camera_search@2x.png in Resources */,
 				5EBA45A719405BEA00695155 /* Step_12_ViewController_ipad.xib in Resources */,
 				8B29A05918AF500A00D36BE5 /* settings_switch_on.png in Resources */,
