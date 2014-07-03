@@ -1043,12 +1043,16 @@
     }
 }
 
-
+- (void)showUpdatingProgressHUD {
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    [hud setLabelText:@"Updating..."];
+}
 
 #pragma mark - Sensitivity deletate
 
 - (void)reportSwitchValue:(BOOL)value andRowIndex:(NSInteger)rowIndex
 {
+    [self showUpdatingProgressHUD];
     //valueSwitchs[rowIndex] = value;
     
     NSString *cmd = @"action=command&command=";
@@ -1085,6 +1089,7 @@
 
 - (void)reportChangedSettingsValue:(NSInteger)value atRow:(NSInteger)rowIndx
 {
+    [self showUpdatingProgressHUD];
     //valueSettings[rowIndx] = value;
     NSString *cmd = @"action=command&command=";
     
@@ -1111,6 +1116,7 @@
 
 - (void)valueChangedTypeTemperaure:(BOOL)isFahrenheit // NOT need to receive
 {
+    [self showUpdatingProgressHUD];
     self.sensitivityInfo.tempIsFahrenheit = isFahrenheit;
 }
 
@@ -1126,6 +1132,7 @@
 
 - (void)valueChangedTempLowOn:(BOOL)isOn
 {
+    [self showUpdatingProgressHUD];
     self.sensitivityInfo.tempLowOn = isOn;
     NSString *cmd = [NSString stringWithFormat:@"action=command&command=set_temp_lo_enable&value=%d", isOn];
     
@@ -1143,6 +1150,7 @@
 
 - (void)valueChangedTempHighOn:(BOOL)isOn
 {
+    [self showUpdatingProgressHUD];
     self.sensitivityInfo.tempHighOn = isOn;
     NSString *cmd = [NSString stringWithFormat:@"action=command&command=set_temp_hi_enable&value=%d", isOn];
     
@@ -1167,7 +1175,7 @@
                                                                       andCommand:command
                                                                        andApiKey:_apiKey];
     //NSLog(@"SettingsVC - sendCommand: %@, response: %@", command, responseDict);
-    
+
     [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
     
     NSInteger errorCode = -1;
