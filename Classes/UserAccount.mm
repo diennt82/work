@@ -8,6 +8,7 @@
 
 #import "UserAccount.h"
 #import "MBP_iosAppDelegate.h"
+#import "GAI.h"
 
 @interface UserAccount()
 
@@ -331,7 +332,9 @@
     }
     else
     {
-        [self getCamListFailure:responseDict];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self getCamListFailure:responseDict];
+        });
     }
 }
 
@@ -364,32 +367,19 @@
         [_delegate finishStoreCameraListData:[NSMutableArray arrayWithObjects:status, message, nil]
                                      success:FALSE];
     }
+    
+    [[GAI sharedInstance].defaultTracker sendEventWithCategory:@"User Account"
+                                                    withAction:message
+                                                     withLabel:nil
+                                                     withValue:nil];
 }
 
 - (void)getCamListServerUnreachable
 {
-	/*
-     NSLog(@"UserAccount - getCamListServerUnreachable");
-    NSString * msg = NSLocalizedStringWithDefaultValue(@"Get_Camera_list_Error",nil, [NSBundle mainBundle],
-                                                       @"Get Camera list Error", nil);
-    
-    NSString * msg1 = NSLocalizedStringWithDefaultValue(@"Get_Camera_list_Error_msg1",nil, [NSBundle mainBundle],
-                                                        @"Server unreachable", nil);
-    
-    NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
-                                                      @"Ok", nil);
-
-	
-	//ERROR condition
-	UIAlertView *alert = [[UIAlertView alloc]
-						  initWithTitle:msg
-						  message:msg1
-						  delegate:nil
-						  cancelButtonTitle:ok
-						  otherButtonTitles:nil];
-	[alert show];
-	[alert release];
-     */
+    [[GAI sharedInstance].defaultTracker sendEventWithCategory:@"User Account"
+                                                    withAction:@"Get camera list error Server is unrachable"
+                                                     withLabel:nil
+                                                     withValue:nil];
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 	BOOL isOffline = [userDefaults boolForKey:_OfflineMode];
