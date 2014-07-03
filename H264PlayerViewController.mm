@@ -1278,7 +1278,9 @@ double _ticks = 0;
                                                                       range:NSMakeRange(0, [response length])];
                 NSLog(@"%s numberOfMatches:%d", __FUNCTION__, numberOfMatches);
                 
-                if (numberOfMatches == 1)
+                if (numberOfMatches == 1 &&
+                    !userWantToCancel    &&
+                    !_returnFromPlayback)
                 {
                     self.fwUpgrading = [response substringFromIndex:@"check_fw_upgrade: ".length];
                     [self performSelectorOnMainThread:@selector(showFWUpgradeDialog:) withObject:_fwUpgrading waitUntilDone:NO];

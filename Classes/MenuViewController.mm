@@ -208,8 +208,8 @@
             !_notUpdateCameras)
         {
             self.camerasVC.waitingForUpdateData = TRUE;
-            self.navigationItem.leftBarButtonItem.enabled = NO;
-            [self.navigationItem.rightBarButtonItems[1] setEnabled:NO];
+            //self.navigationItem.leftBarButtonItem.enabled = NO;
+            //[self.navigationItem.rightBarButtonItems[1] setEnabled:NO];
             //[self.navigationItem.rightBarButtonItems[1] setHidden:YES];
             
             @synchronized(self.camerasVC)
@@ -366,6 +366,8 @@
             !_notUpdateCameras)
         {
             self.camerasVC.waitingForUpdateData = TRUE;
+            self.navigationItem.leftBarButtonItem.enabled = NO;
+            [self.navigationItem.rightBarButtonItems[1] setEnabled:NO];
             [self.camerasVC.ibTableListCamera reloadData];
             [self.camerasVC updateBottomButton];
             [self performSelectorInBackground:@selector(recreateAccount)

@@ -463,6 +463,8 @@
         [cell.imageView addSubview:spinner];
         [spinner startAnimating];
         
+        shouldHighlightAtRow[indexPath.row] = NO;
+        
         return cell;
     }
     else
@@ -587,12 +589,7 @@
 #pragma mark - Table view delegate
 
 - (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (_waitingForUpdateData == TRUE)
-    {
-        return NO;
-    }
-    
+{    
     return shouldHighlightAtRow[indexPath.row];
 }
 
