@@ -140,6 +140,7 @@
     [self.navigationItem setLeftBarButtonItem:barButtonItem];
     self.navigationItem.leftBarButtonItem.enabled = YES;
     [self.navigationItem setHidesBackButton:YES];
+    [barButtonItem release];
     
     //Snapshot View
     vwSnapshot.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -357,7 +358,7 @@
             {
                 if (![newName isEqualToString:self.camChannel.profile.name])
                 {
-                    _cameraNewName = [newName retain];
+                    _cameraNewName = [newName copy];
                     self.isChangingName = TRUE;
                     [self.tableViewSettings reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:0
                                                                                                                inSection:0]]
@@ -680,15 +681,15 @@
 }
  */
 
--(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if(indexPath.section==0)//General Setting
+    if(indexPath.section == 0)//General Setting
     {
         static NSString *cellIdentifier = @"CameraDetailCell";
         CameraDetailCell *camDetCell = (CameraDetailCell*)[tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-        if(camDetCell==nil)
+        if(camDetCell == nil)
         {
-            camDetCell = [[CameraDetailCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+            camDetCell = [[[CameraDetailCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier] autorelease];
             [camDetCell.btnChangeImage addTarget:self action:@selector(btnChangeCameraIcon) forControlEvents:UIControlEventTouchUpInside];
             [camDetCell.btnChangeName addTarget:self action:@selector(btnChangeCameraName) forControlEvents:UIControlEventTouchUpInside];
             
@@ -1154,10 +1155,12 @@
 {
     if (_jsonComm == nil)
     {
-        self.jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                              Selector:nil
-                                                          FailSelector:nil
-                                                             ServerErr:nil];
+        BMS_JSON_Communication *comm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                              Selector:nil
+                                          FailSelector:nil
+                                             ServerErr:nil];
+        self.jsonComm = comm;
+        [comm release];
     }
     
     NSDictionary *responseDict = [_jsonComm sendCommandBlockedWithRegistrationId:self.camChannel.profile.registrationID
@@ -1277,7 +1280,7 @@
 #pragma mark - UIImagePicker Delegate
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
-    imageSelected = [[info valueForKey:UIImagePickerControllerOriginalImage] retain];
+    imageSelected = [[info valueForKey:UIImagePickerControllerOriginalImage] copy];
    
     [self dismissViewControllerAnimated:YES completion:^{
        
@@ -1285,7 +1288,7 @@
         
         NSArray *paths = NSSearchPathForDirectoriesInDomains
         (NSDocumentDirectory, NSUserDomainMask, YES);
-        NSString  *strPath = [[paths objectAtIndex:0] retain];
+        NSString  *strPath = [paths objectAtIndex:0];
         
         strPath = [strPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.jpg",self.camChannel.profile.registrationID]];
         
@@ -1327,7 +1330,7 @@
             //self.camChannel.profile.registrationID
             NSArray *paths = NSSearchPathForDirectoriesInDomains
             (NSDocumentDirectory, NSUserDomainMask, YES);
-            NSString  *strPath = [[paths objectAtIndex:0] retain];
+            NSString  *strPath = [paths objectAtIndex:0];
             
             strPath = [strPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.jpg",self.camChannel.profile.registrationID]];
             
@@ -1396,7 +1399,7 @@
     {
         NSArray *paths = NSSearchPathForDirectoriesInDomains
         (NSDocumentDirectory, NSUserDomainMask, YES);
-        NSString  *strPath = [[paths objectAtIndex:0] retain];
+        NSString  *strPath = [paths objectAtIndex:0];
         
         strPath = [strPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.jpg",self.camChannel.profile.registrationID]];
         
@@ -1431,13 +1434,14 @@
     return nil;
 }
 
--(NSString *)getSnapImageUrlFromServer
+- (NSString *)getSnapImageUrlFromServer
 {
     BMS_JSON_Communication *jsonCommDeviceInfo = [[BMS_JSON_Communication alloc] initWithObject:self
                                                                                        Selector:nil
                                                                                    FailSelector:nil
                                                                                       ServerErr:nil];
     NSDictionary *responseDictDInfo = [jsonCommDeviceInfo getDeviceBasicInfoBlockedWithRegistrationId:self.camChannel.profile.registrationID andApiKey:_apiKey];
+    [jsonCommDeviceInfo release];
     if (responseDictDInfo)
     {
         if ([[responseDictDInfo objectForKey:@"status"] integerValue] == 200)
@@ -1508,15 +1512,19 @@
     //NSString *apiKey = [[NSUserDefaults standardUserDefaults] stringForKey:@"PortalApiKey"];
     
     if(self.sensitivityInfo==nil){
-        self.sensitivityInfo = [[SensitivityInfo alloc] init];
+        SensitivityInfo *senInfo = [[SensitivityInfo alloc] init];
+        self.sensitivityInfo = senInfo;
+        [senInfo release];
     }
     
     if (_jsonComm == nil)
     {
-        self.jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                              Selector:nil
-                                                          FailSelector:nil
-                                                             ServerErr:nil];
+        BMS_JSON_Communication *comm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                              Selector:nil
+                                          FailSelector:nil
+                                             ServerErr:nil];
+        self.jsonComm = comm;
+        [comm release];
     }
     
     NSDictionary *responseDict = [_jsonComm sendCommandBlockedWithRegistrationId:self.camChannel.profile.registrationID

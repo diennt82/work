@@ -104,7 +104,7 @@
     
     NSArray *paths = NSSearchPathForDirectoriesInDomains
     (NSDocumentDirectory, NSUserDomainMask, YES);
-    strDocDirPath = [[paths objectAtIndex:0] retain];
+    strDocDirPath = [[paths objectAtIndex:0] copy];
         
     [self.ibTableListCamera setContentSize:CGSizeMake(SCREEN_WIDTH, SCREEN_HEIGHT - 69 - 45)];
     [self.ibViewAddCamera setFrame:CGRectMake(0, SCREEN_HEIGHT - 45, 160, 45)];
@@ -463,6 +463,7 @@
         cell.imageView.image = resizedSpacer;
         [cell.imageView addSubview:spinner];
         [spinner startAnimating];
+        [spinner release];
         
         shouldHighlightAtRow[indexPath.row] = NO;
         
