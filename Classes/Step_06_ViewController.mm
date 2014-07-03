@@ -10,6 +10,7 @@
 #import "HttpCom.h"
 #import "Step_10_ViewController.h"
 #import "KISSMetricsAPI.h"
+#import "HoldOnCamWifi.h"
 
 #define TIME_INPUT_PASSWORD_AGAIN   60.0
 #define RETRY_SETUP_WIFI_TIMES      5
@@ -358,6 +359,22 @@
 #define PASSWORD_INDEX 1
 #define CONFPASSWORD_INDEX 2
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        if (indexPath.section == SEC_SECTION)
+        {
+            if (indexPath.row == PASSWORD_INDEX)
+            {
+                return 50;
+            }
+        }
+    }
+    
+    return 44;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     int tag = tableView.tag;
@@ -516,6 +533,8 @@
 
 -(void) handleNextButton:(id) sender
 {
+    [[HoldOnCamWifi shareInstance] stopHolder];
+    
     [[KISSMetricsAPI sharedAPI] recordEvent:@"Step06 - next button" withProperties:nil];
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:@"Touch Next button"
@@ -693,6 +712,7 @@
     [formatter setDateFormat:@"ZZZ"];
     
     NSMutableString *stringFromDate = [NSMutableString stringWithString:[formatter stringFromDate:now]];
+    [formatter release];
     [stringFromDate insertString:@"." atIndex:3];
     
     NSLog(@"set auth -set_auth_cmd: %d ", [fwVersion compare:FW_MILESTONE_F66_NEW_FLOW]);

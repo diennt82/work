@@ -261,7 +261,7 @@
             //4 44334C31A004 20130914055827490 2013-09-14T05:59:05+00:00 Camera-31a004
             
             // work
-            NSMutableArray *events = [[responseDict objectForKey:@"data"] objectForKey:@"events"];
+            //NSMutableArray *events = [[responseDict objectForKey:@"data"] objectForKey:@"events"];
         }
         else
         {
@@ -272,6 +272,16 @@
     {
         NSLog(@"responseDict is nil");
     }
+}
+
+#pragma mark - Encoding URL string
+
+-(NSString *)urlEncodeUsingEncoding:(NSStringEncoding)encoding forString: (NSString *)aString {
+	return (NSString *)CFURLCreateStringByAddingPercentEscapes(NULL,
+                                                               (CFStringRef)aString,
+                                                               NULL,
+                                                               (CFStringRef)@"!*'\"();:@=+$,?%#[]% ",
+                                                               CFStringConvertNSStringEncodingToEncoding(encoding));
 }
 
 @end

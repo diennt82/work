@@ -163,6 +163,15 @@
         [self registerCamera:nil];
     }
     
+    if (isiPhone4) {
+        CGRect rect = self.lblWordAddition.frame;
+        rect.origin.y -= 80;
+        self.lblWordAddition.frame = rect;
+        
+        rect = self.btnCancel.frame;
+        rect.origin.y -= 80;
+        self.btnCancel.frame = rect;
+    }
 }
 
 -(void) showProgress:(NSTimer *) exp
@@ -327,10 +336,12 @@
     
     if (_jsonCommBlocked == nil)
     {
-        self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                                     Selector:nil
-                                                                 FailSelector:nil
-                                                                    ServerErr:nil];
+        BMS_JSON_Communication *comm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                              Selector:nil
+                                          FailSelector:nil
+                                             ServerErr:nil];
+        self.jsonCommBlocked = comm;
+        [comm release];
     }
     
     NSString *camName = (NSString *) [userDefaults objectForKey:CAMERA_NAME];
@@ -373,10 +384,12 @@
     
     if (_jsonCommBlocked == nil)
     {
-        self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                                     Selector:nil
-                                                                 FailSelector:nil
-                                                                    ServerErr:nil];
+        BMS_JSON_Communication *comm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                              Selector:nil
+                                          FailSelector:nil
+                                             ServerErr:nil];
+        self.jsonCommBlocked = comm;
+        [comm release];
     }
     
     NSDictionary *responseDict = [_jsonCommBlocked checkStatusBlockedWithRegistrationId:udid apiKey:apiKey];
@@ -466,10 +479,12 @@
 {
     if (_jsonCommBlocked == nil)
     {
-        self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                                     Selector:nil
-                                                                 FailSelector:nil
-                                                                    ServerErr:nil];
+        BMS_JSON_Communication *comm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                             Selector:nil
+                                                                         FailSelector:nil
+                                                                            ServerErr:nil];
+        self.jsonCommBlocked = comm;
+        [comm release];
     }
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -746,10 +761,12 @@
     
     if (_userAccount == nil)
     {
-        self.userAccount = [[UserAccount alloc] initWithUser:userEmail
-                                                    password:userPass
-                                                      apiKey:userApiKey
-                                                    listener:nil];
+        UserAccount *user = [[UserAccount alloc] initWithUser:userEmail
+                                 password:userPass
+                                   apiKey:userApiKey
+                                 listener:nil];
+        self.userAccount = user;
+        [user release];
     }
     
     NSInteger cameraStatus = [_userAccount checkAvailableAndFWUpgradingWithCamera:self.cameraMac];
@@ -797,10 +814,12 @@
     
     if (_userAccount == nil)
     {
-        self.userAccount = [[UserAccount alloc] initWithUser:userEmail
-                                                    password:userPass
-                                                      apiKey:userApiKey
-                                                    listener:nil];
+        UserAccount *user = [[UserAccount alloc] initWithUser:userEmail
+                                 password:userPass
+                                   apiKey:userApiKey
+                                 listener:nil];
+        self.userAccount = user;
+        [user release];
     }
     
     if ([_userAccount checkCameraIsAvailable:self.cameraMac])
@@ -829,10 +848,12 @@
     
     if (_userAccount == nil)
     {
-        self.userAccount = [[UserAccount alloc] initWithUser:userEmail
-                                                    password:userPass
-                                                      apiKey:userApiKey
-                                                    listener:nil];
+        UserAccount *user = [[UserAccount alloc] initWithUser:userEmail
+                                 password:userPass
+                                   apiKey:userApiKey
+                                 listener:nil];
+        self.userAccount = user;
+        [user release];
     }
 #if 1
     if ([_userAccount checkCameraIsAvailable:self.cameraMac])

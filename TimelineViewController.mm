@@ -90,7 +90,7 @@
     self.events  = [[NSMutableArray alloc]initWithCapacity:0];
     
     
-
+    
     UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
     [refreshControl addTarget:self
                        action:@selector(refreshEvents:)
@@ -203,7 +203,7 @@
     {
         
         [self updateIntelligentMessage];
-    
+        
         if ([self.camChannel.profile isNotAvailable])
         {
             self.stringIntelligentMessage = @"Monitor is offline";
@@ -446,7 +446,7 @@
                                                                           offset:nil
                                                                             size:nil
                                                                           apiKey:apiKey];
-
+    
     
     NSMutableArray * extra_events = [[NSMutableArray alloc]initWithCapacity:10];
     
@@ -471,7 +471,7 @@
                     eventInfo.time_stamp = [event objectForKey:@"time_stamp"];
                     eventInfo.alert      = [[event objectForKey:@"alert"] integerValue];
                     eventInfo.eventID    = [[event objectForKey:@"id"] integerValue];
-
+                    
                     NSArray *clipsInEvent = [event objectForKey:@"data"];
                     
                     if (![clipsInEvent isEqual:[NSNull null]])
@@ -493,27 +493,42 @@
                 NSLog(@"trying to insert to events ");
                 @synchronized (self.events)
                 {
-                    EventInfo * latestEvent = ( EventInfo *)[self.events objectAtIndex:0];
-                    int start_index = 0;
-                    for (EventInfo * event in extra_events)
+                    
+                    if (self.events.count >0)
                     {
-                        if (event.eventID > latestEvent.eventID)
+                        EventInfo * latestEvent = ( EventInfo *)[self.events objectAtIndex:0];
+                        int start_index = 0;
+                        for (EventInfo * event in extra_events)
+                        {
+                            if (event.eventID > latestEvent.eventID)
+                            {
+                                //insert
+                                [self.events insertObject:event atIndex:start_index];
+                                start_index ++;
+                                
+                            }
+                            else  // <= latestEvent.eventID
+                            {
+                                break;
+                            }
+                        }
+                    }
+                    else //Empty events , insert all
+                    {
+                        int start_index = 0;
+                        for (EventInfo * event in extra_events)
                         {
                             //insert
                             [self.events insertObject:event atIndex:start_index];
                             start_index ++;
                             
                         }
-                        else  // <= latestEvent.eventID
-                        {
-                            break;
-                        }
                     }
                 }
                 //....
                 NSLog(@"trying to insert to events DONE!");
                 
-
+                
                 dispatch_async(dispatch_get_main_queue(), ^{
                     
                     self.isEventAlready = TRUE;
@@ -526,12 +541,12 @@
                 
                 /*
                  * If reponse from Server ok --> update table view
-                
-                [self.tableView performSelectorOnMainThread:@selector(reloadData)
-                                                 withObject:nil
-                                              waitUntilDone:YES];
-
-                  */
+                 
+                 [self.tableView performSelectorOnMainThread:@selector(reloadData)
+                 withObject:nil
+                 waitUntilDone:YES];
+                 
+                 */
                 
             }
             else
@@ -584,7 +599,7 @@
     NSLog(@"%@, %@", dateInStringFormated, _stringCurrentDate);
     
     [dateFormatter release];
-
+    
     
     //Secondly, counting number of vox/movement event
     @synchronized (self.events)
@@ -764,10 +779,10 @@
         self.eventPage--;
     }
     
-    /* Delay the updating of this is variable until the table "reloadData" has completed. 
-       This is to avoid the overlapping of loading data*/
+    /* Delay the updating of this is variable until the table "reloadData" has completed.
+     This is to avoid the overlapping of loading data*/
     dispatch_async(dispatch_get_main_queue(), ^{
-         NSIndexPath* indexPath =
+         //NSIndexPath* indexPath =
         [NSIndexPath indexPathForRow: ([self.tableView numberOfRowsInSection:([self.tableView numberOfSections]-1)]-1)
                            inSection: ([self.tableView numberOfSections]-1)];
         self.isLoading = FALSE;
@@ -970,7 +985,7 @@
         if ( [cell isKindOfClass:[TimelineActivityCell class]])
         {
             TimelineActivityCell * eventCell = (TimelineActivityCell*) cell;
-           // NSLog(@"Cancel loading image for cell row: %d",indexPath.row);
+            // NSLog(@"Cancel loading image for cell row: %d",indexPath.row);
             [eventCell.snapshotImage cancelCurrentImageLoad];
         }
         
@@ -1080,7 +1095,7 @@
                 break;
             }
         }
-
+        
 #else
         
         if (cell == nil)
@@ -1134,17 +1149,17 @@
         // Motion detected
         if (eventInfo.alert == 4)
         {
-            //* incase we are reusing 
-           // [cell.snapshotImage cancelCurrentImageLoad];
+            //* incase we are reusing
+            // [cell.snapshotImage cancelCurrentImageLoad];
             //cell.snapshotImage =  nil;
             
             [cell.feedImageVideo setHidden:NO];
             cell.snapshotImage.hidden = NO;
             
-          
+            
 #if 0
-
-             cell.snapshotImage.image = [UIImage imageNamed:@"no_img_available"];
+            
+            cell.snapshotImage.image = [UIImage imageNamed:@"no_img_available"];
             
             if (eventInfo.clipInfo.imgSnapshot == nil &&
                 (eventInfo.clipInfo.urlImage != nil))// && (![eventInfo.clipInfo.urlImage isEqualToString:@""]))
@@ -1195,13 +1210,13 @@
                 [cell.snapshotImage setImageWithURL:[NSURL URLWithString:eventInfo.clipInfo.urlImage]
                                    placeholderImage:[UIImage imageNamed:@"no_img_available"]
                                           completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType) {
-                                               [cell.activityIndicatorLoading stopAnimating];
-                                   }];
-
-
+                                              [cell.activityIndicatorLoading stopAnimating];
+                                          }];
+                
+                
             }
 #endif
- 
+            
         }
         // Sound, Temperature, & another detected
         else
@@ -1447,7 +1462,7 @@
         }
         NSString *strTime = [df_local stringFromDate:eventDate];
         int m = [strDate intValue] % 10;
-         str = [NSString stringWithFormat:@"%@, %@%@ %@",strTime,strDate,[aryDatePrefix objectAtIndex:((m > 10 && m < 20) ? 0 : (m % 10))],strM];
+        str = [NSString stringWithFormat:@"%@, %@%@ %@",strTime,strDate,[aryDatePrefix objectAtIndex:((m > 10 && m < 20) ? 0 : (m % 10))],strM];
         //cell.eventTimeLabel.text = [df_local stringFromDate:eventDate];
     }
     

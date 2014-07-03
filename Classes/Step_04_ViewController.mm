@@ -9,6 +9,7 @@
 #import "Step_04_ViewController.h"
 #import "define.h"
 #import "HttpCom.h"
+#import "HoldOnCamWifi.h"
 
 @interface Step_04_ViewController () <UITextFieldDelegate, UIAlertViewDelegate>
 
@@ -42,6 +43,7 @@
     [barBtnHubble setTintColor:[UIColor colorWithPatternImage:hubbleLogoBack]];
     
     self.navigationItem.leftBarButtonItem = barBtnHubble;
+    [barBtnHubble release];
     
     [self.btnContinue setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
     [self.btnContinue setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
@@ -60,6 +62,7 @@
 
 - (void)hubbleItemAction:(id)sender
 {
+    [[HoldOnCamWifi shareInstance] stopHolder];
     [self.navigationController popViewControllerAnimated:YES];
 }
 

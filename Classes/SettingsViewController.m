@@ -30,7 +30,7 @@
 #import <MonitorCommunication/MonitorCommunication.h>
 #import <CameraScanner/CameraScanner.h>
 
-@interface SettingsViewController () <SensitivityCellDelegate, SchedulerCellDelegate, GeneralCellDelegate, SensitivityTemperaureCellDelegate>
+@interface SettingsViewController () <SchedulerCellDelegate, GeneralCellDelegate>
 {
     NSInteger numOfRows[4];
     BOOL valueGeneralSettings[2];
@@ -442,6 +442,19 @@
     }
 }
 */
+
+#pragma mark - Scheduler delegate
+
+- (void)reportByDaySwitchState:(BOOL)state atRow:(NSInteger)rowIdx
+{
+    //TODO:Enable scheduling settings.
+}
+
+- (void)reportSchedulerSwitchState:(BOOL)state atRow:(NSInteger)rowIdx
+{
+    //TODO:Enable scheduling settings.
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
