@@ -602,34 +602,39 @@
     
     [dateFormatter release];
     
-    
-    //Secondly, counting number of vox/movement event
-    @synchronized (self.events)
+    if (_events && _events.count > 0)
     {
-        for (EventInfo *eventInfo in self.events)
+        //Secondly, counting number of vox/movement event
+        @synchronized (_events)
         {
-            NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-            [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
-            [dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
-            NSDate *eventDate = [dateFormatter dateFromString:eventInfo.time_stamp]; //2013-12-31 07:38:35 +0000
-            [dateFormatter release];
-            
-            NSTimeInterval diff = [self.currentDate timeIntervalSinceDate:eventDate];
-            
-            if (diff / 60 <= 20)
+            for (EventInfo *eventInfo in _events)
             {
-                if (eventInfo.alert == 4)
+                NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+                [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
+                [dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+                NSDate *eventDate = [dateFormatter dateFromString:eventInfo.time_stamp]; //2013-12-31 07:38:35 +0000
+                [dateFormatter release];
+                
+                NSTimeInterval diff = [self.currentDate timeIntervalSinceDate:eventDate];
+                
+                if (diff / 60 <= 20)
                 {
-                    numberOfMovement++;
-                }
-                else if (eventInfo.alert == 1)
-                {
-                    numberOfVOX++;
+                    if (eventInfo.alert == 4)
+                    {
+                        numberOfMovement++;
+                    }
+                    else if (eventInfo.alert == 1)
+                    {
+                        numberOfVOX++;
+                    }
                 }
             }
         }
     }
-    
+    else
+    {
+        NSLog(@"%s Wanna update timeline title but forcing DEFAULT!", __FUNCTION__);
+    }
     
     if (numberOfVOX >= 4)
     {
@@ -751,7 +756,7 @@
                     }
                     else
                     {
-                        NSLog(@"Event has no data");
+                        //NSLog(@"Event has no data");
                     }
                     
                     
@@ -795,13 +800,13 @@
         [NSIndexPath indexPathForRow: ([self.tableView numberOfRowsInSection:([self.tableView numberOfSections]-1)]-1)
                            inSection: ([self.tableView numberOfSections]-1)];
         self.isLoading = FALSE;
-        NSLog(@"%s: set loading FALSE:%d ", __FUNCTION__,self.isLoading );
+        NSLog(@"%s parent:%@, set loading FALSE:%d ", __FUNCTION__, self.parentVC, self.isLoading );
         
     });
     
     
     
-    NSLog(@"%s:loadMoreEvent_bg: -eventPage: %d, - shouldUpdateTableview: %d, shouldLoadMore: %d", __FUNCTION__, _eventPage, shouldUpdateTableView, _shouldLoadMore);
+    NSLog(@"%s -eventPage: %d, -shouldUpdateTableview: %d, shouldLoadMore: %d", __FUNCTION__, _eventPage, shouldUpdateTableView, _shouldLoadMore);
 }
 
 - (void)cancelAllLoadingImageTask
@@ -985,21 +990,26 @@
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ((indexPath.section == 1) && (indexPath.row == _events.count - 1) && !self.isLoading && _shouldLoadMore) {
-        
-        //NSLog(@"%s load more", __FUNCTION__);
-        if (self.isLoading == FALSE)
-        {
-            NSLog(@"User scrolled to the end of list...start fetching more items.");
-            self.isLoading = TRUE;
-            [self performSelectorInBackground:@selector(loadMoreEvent_bg) withObject:self.camChannel];
+    if (_events && _events.count > 0)
+    {
+        if ((indexPath.section == 1) && (indexPath.row == _events.count - 1) && _shouldLoadMore) {
+            
+            //NSLog(@"%s load more", __FUNCTION__);
+            if (_isLoading == FALSE)
+            {
+                NSLog(@"User scrolled to the end of list...start fetching more items.");
+                self.isLoading = TRUE;
+                [self performSelectorInBackground:@selector(loadMoreEvent_bg) withObject:self.camChannel];
+            }
+            else
+            {
+                NSLog(@"User scrolled to the end of list...we are loading more.. so don't do anything here");
+            }
         }
-        else
-        {
-            NSLog(@"User scrolled to the end of list...we are loading more.. so don't do anything here");
-        }
-        
-        
+    }
+    else
+    {
+        NSLog(@"%s Wanna load more but forcing WAIT!", __FUNCTION__);
     }
 }
 
