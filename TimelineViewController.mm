@@ -39,7 +39,6 @@
 
 @property (nonatomic) BOOL isEventAlready;
 @property (nonatomic) BOOL isLoading;
-@property (nonatomic, retain) NSTimer *timerRefreshData;
 @property (nonatomic) BOOL is12hr;
 
 @property (nonatomic) BOOL hasUpdate;
@@ -97,8 +96,6 @@
              forControlEvents:UIControlEventValueChanged];
     self.refreshControl = refreshControl;
     [refreshControl release];
-    
-    
 }
 
 
@@ -110,15 +107,18 @@
 
 - (void)dealloc
 {
-    [_events release];
+    NSLog(@"%s", __FUNCTION__);
+    
+    if (_events) {
+        [_events removeAllObjects];
+        [_events release];
+    }
+    
+    [activityCell release];
     [_clipsInEachEvent release];
     [_playlists release];
-    if (_timerRefreshData != nil)
-    {
-        [_timerRefreshData invalidate];
-    }
-    _timerRefreshData = nil;
     [_jsonComm release];
+    
     [super dealloc];
 }
 
@@ -155,12 +155,6 @@
     
     if (self.isLoading == FALSE)
     {
-        if (self.timerRefreshData != nil)
-        {
-            [self.timerRefreshData invalidate];
-            self.timerRefreshData = nil;
-        }
-        
         self.isLoading = TRUE;
         self.isEventAlready = FALSE;
         self.events = nil;
@@ -191,7 +185,7 @@
     
     NSLog(@"There are %d in databases ", self.events.count );
     
-    if (self.events.count == 0 )
+    if (_events && self.events.count == 0 )
     {
         
         self.isEventAlready = TRUE;
@@ -221,14 +215,22 @@
         
     }
     
-    /* Reload the table view now */
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.tableView reloadData];
-        
-        [self.tableView layoutIfNeeded];
-        
-        [self.refreshControl endRefreshing];
-    });
+    if (self.isViewLoaded && self.view.window)
+    {
+        /* Reload the table view now */
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.tableView reloadData];
+            
+            [self.tableView layoutIfNeeded];
+            
+            [self.refreshControl endRefreshing];
+        });
+    }
+    else
+    {
+        NSLog(@"%s View is invisible.", __FUNCTION__);
+    }
+    
 }
 
 
@@ -770,9 +772,16 @@
     
     if (shouldUpdateTableView)
     {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.tableView reloadData];
-        });
+        if (self.isViewLoaded && self.view.window)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.tableView reloadData];
+            });
+        }
+        else
+        {
+            NSLog(@"%s View is invisble.", __FUNCTION__);
+        }
     }
     else
     {
@@ -795,9 +804,29 @@
     NSLog(@"%s:loadMoreEvent_bg: -eventPage: %d, - shouldUpdateTableview: %d, shouldLoadMore: %d", __FUNCTION__, _eventPage, shouldUpdateTableView, _shouldLoadMore);
 }
 
-#pragma mark - Scroll view delegate
-
-
+- (void)cancelAllLoadingImageTask
+{
+    NSInteger tempSectionsCount = self.tableView.numberOfSections - 1;
+    NSInteger tempRowsCount = [self.tableView numberOfRowsInSection:tempSectionsCount];
+    NSInteger numberOfImageIsCanceled = 0;
+    
+    for (int i = 0; i < tempRowsCount; ++i)
+    {
+        NSIndexPath* indexPath =
+        [NSIndexPath indexPathForRow:i
+                           inSection:tempSectionsCount];
+        
+        id cell = [self.tableView cellForRowAtIndexPath:indexPath];
+        
+        if ( [cell isKindOfClass:[TimelineActivityCell class]])
+        {
+            numberOfImageIsCanceled++;
+            [((TimelineActivityCell*) cell).snapshotImage cancelCurrentImageLoad];
+        }
+    }
+    
+    NSLog(@"%s tempSectionsCount:%d, tempRowsCount:%d, numberOfImageIsCanceled:%d", __FUNCTION__, tempSectionsCount, tempRowsCount, numberOfImageIsCanceled);
+}
 
 #pragma mark - Table view data source
 
@@ -1416,7 +1445,7 @@
                                                            toDate:[NSDate date]
                                                           options:nil];
     
-    BOOL isYesterday= NO;
+    //BOOL isYesterday= NO;
     if  ([self isEqualToDateIgnoringTime:[NSDate date] vsDate:eventDate]) //if it is today
     {
         //Show only hours/minutes
@@ -1432,7 +1461,7 @@
     }
     else if ([self isEqualToDateIgnoringTime:yesterday vsDate:eventDate])
     {
-        isYesterday = YES;
+        //isYesterday = YES;
         //Show only hours/minutes  with dates
         if (_is12hr)
         {

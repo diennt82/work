@@ -2234,12 +2234,16 @@ double _ticks = 0;
     
     if (_earlierVC)
     {
+        NSLog(@"%s _earlierVC:%d", __FUNCTION__, _earlierVC.retainCount);
+        [_earlierVC removeSubviews];
         [_earlierVC release];
     }
     
     if (_timelineVC)
     {
         _timelineVC.timelineVCDelegate = nil;
+        [_timelineVC cancelAllLoadingImageTask];
+        NSLog(@"%s timelineVC:%d", __FUNCTION__, _timelineVC.retainCount);
     }
     
     if (_jsonCommBlocked)

@@ -38,5 +38,6 @@
 
 - (void)loadEvents: (CamChannel *)camChannel;
 -(void)getExtraEvent_bg;
+- (void)cancelAllLoadingImageTask;
 
 @end
