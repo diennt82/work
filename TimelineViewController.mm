@@ -103,6 +103,9 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+    NSLog(@"%s", __FUNCTION__);
+    
+    [self cancelAllLoadingImageTask];
 }
 
 - (void)dealloc
@@ -382,7 +385,7 @@
         NSLog(@"Error- responseDict is nil");
     }
     
-    self.isLoading = FALSE;
+    //self.isLoading = FALSE;
     
     if ( self.hasUpdate == YES)
     {
@@ -392,6 +395,10 @@
             [self performSelectorInBackground:@selector(getEventFromDb:) withObject:camChannel];
             
         });
+    }
+    else
+    {
+        self.isLoading = FALSE;
     }
     
     /*
@@ -633,6 +640,7 @@
     }
     else
     {
+        // Effect when refreshing event.
         NSLog(@"%s Wanna update timeline title but forcing DEFAULT!", __FUNCTION__);
     }
     
