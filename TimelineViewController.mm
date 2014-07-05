@@ -142,15 +142,10 @@
 {
     self.camChannel = camChannel;
     
-    
-    [self performSelectorInBackground:@selector(getEventFromDb:) withObject:camChannel];
+    [self performSelectorInBackground:@selector(getEventFromDbFirstTime:) withObject:camChannel];
     
     [self performSelectorInBackground:@selector(getEventsList_bg2:) withObject:camChannel];
-    
 }
-
-
-
 
 - (void)refreshEvents:(NSTimer *)timer
 {
@@ -163,42 +158,33 @@
         self.events = nil;
         self.stringIntelligentMessage = @"Loading...";
         
-        
         self.eventPage = 1;
         self.shouldLoadMore = YES;
-        
-        //[self.tableView reloadData];
-        
+
         [self loadEvents:self.camChannel];
     }
-    
 }
 
+/*
+ * getEventFromDbFirstTime
+ * 1. Just update isEventAlready property.
+ * 2. Donnot update shouldLoadMore & isLoading property
+ * - See getEventFromDb
+ */
 
-
-
-- (void)getEventFromDb:(CamChannel *) camChannel
+- (void)getEventFromDbFirstTime:(CamChannel *)camChannel
 {
-    
-    self.shouldLoadMore = TRUE;
-    
-    self.hasUpdate = NO;
-    
     self.events =[[TimelineDatabase getSharedInstance] getEventsForCamera:camChannel.profile.registrationID];
     
     NSLog(@"There are %d in databases ", self.events.count );
     
     if (_events && self.events.count == 0 )
     {
-        
-        self.isEventAlready = TRUE;
         self.stringIntelligentMessage = @"There is currently no new event";
         self.stringCurrentDate = @"";
-        
     }
     else
     {
-        
         [self updateIntelligentMessage];
         
         if ([self.camChannel.profile isNotAvailable])
@@ -206,17 +192,9 @@
             self.stringIntelligentMessage = @"Monitor is offline";
             self.stringCurrentDate = @"";
         }
-        
-        self.isEventAlready = TRUE;
-        self.isLoading = FALSE;
-        
-        if (self.events.count < 10)
-        {
-            self.shouldLoadMore = FALSE;
-        }
-        
-        
     }
+    
+    self.isEventAlready = TRUE;
     
     if (self.isViewLoaded && self.view.window)
     {
@@ -233,15 +211,69 @@
     {
         NSLog(@"%s View is invisible.", __FUNCTION__);
     }
-    
 }
 
+/*
+ * getEventFromDb
+ * 1. Updating shouldLoadMore & isLoading property
+ * - See getEventFromDbFirstTime
+ */
 
+- (void)getEventFromDb:(CamChannel *) camChannel
+{
+    self.shouldLoadMore = TRUE;
+    self.hasUpdate = NO;
+    
+    self.events =[[TimelineDatabase getSharedInstance] getEventsForCamera:camChannel.profile.registrationID];
+    
+    NSLog(@"There are %d in databases ", self.events.count );
+    
+    if (_events && self.events.count == 0 )
+    {
+        self.stringIntelligentMessage = @"There is currently no new event";
+        self.stringCurrentDate = @"";
+    }
+    else
+    {
+        [self updateIntelligentMessage];
+        
+        if ([self.camChannel.profile isNotAvailable])
+        {
+            self.stringIntelligentMessage = @"Monitor is offline";
+            self.stringCurrentDate = @"";
+        }
+        
+        if (self.events.count < 10)
+        {
+            self.shouldLoadMore = FALSE;
+        }
+    }
+    
+    self.isEventAlready = TRUE;
+    self.isLoading = FALSE;
+    
+    if (self.isViewLoaded && self.view.window)
+    {
+        /* Reload the table view now */
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.tableView reloadData];
+            
+            [self.tableView layoutIfNeeded];
+            
+            [self.refreshControl endRefreshing];
+        });
+    }
+    else
+    {
+        NSLog(@"%s View is invisible.", __FUNCTION__);
+    }
+}
 
 - (void)getEventsList_bg2: (CamChannel *)camChannel
 {
+    self.isLoading = TRUE;
     
-    NSLog(@"getEventsList_bg2 enter ");
+    NSLog(@"%s", __FUNCTION__);
     
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -342,13 +374,9 @@
                                                   event_data:data_str1
                                                  camera_udid:camChannel.profile.registrationID
                                                     owner_id:userName];
-                    if ( status == 0) //Successfully inserted at least 1 record, -> need reload
+                    if ( status != 0) //Successfully inserted at least 1 record, -> need reload
                     {
-                        //Toggle this flag to true to signal ui to reload
-                        self.hasUpdate = YES;
-                        
-                        
-                        //NSLog(@"has inserted new record %@ : %@",eventInfo.time_stamp , eventInfo.alert_name);
+                        NSLog(@"%s Inserting a record error:%d", __FUNCTION__, status);
                     }
                     
                     [eventInfo release];
@@ -356,14 +384,6 @@
             }
             else
             {
-                /*
-                 * If load more has no event, need not to load more anymore.
-                 */
-                if (_eventPage > 1)
-                {
-                    self.shouldLoadMore = FALSE;
-                }
-                
                 NSLog(@"Camera as no event before date: %@", dateInStringFormated);
             }
             
@@ -385,13 +405,12 @@
         NSLog(@"Error- responseDict is nil");
     }
     
-    //self.isLoading = FALSE;
-    
     if ( self.hasUpdate == YES)
     {
-        NSLog(@"has inserted new record, trigger update ui now");
+        //[NSThread sleepForTimeInterval:5];
+        
+        NSLog(@"%s has inserted new record, trigger update ui now.", __FUNCTION__);
         dispatch_async(dispatch_get_main_queue(), ^{
-            
             [self performSelectorInBackground:@selector(getEventFromDb:) withObject:camChannel];
             
         });
@@ -399,15 +418,6 @@
     else
     {
         self.isLoading = FALSE;
-    }
-    
-    /*
-     * If this is load more & failed, need to reset event page.
-     */
-    
-    if (_eventPage > 1 && shouldResetEventPage)
-    {
-        self.eventPage--;
     }
 }
 
@@ -787,9 +797,9 @@
     {
         if (self.isViewLoaded && self.view.window)
         {
-            dispatch_async(dispatch_get_main_queue(), ^{
+            //dispatch_async(dispatch_get_main_queue(), ^{
                 [self.tableView reloadData];
-            });
+            //});
         }
         else
         {
@@ -1007,6 +1017,8 @@
             {
                 NSLog(@"User scrolled to the end of list...start fetching more items.");
                 self.isLoading = TRUE;
+                
+                
                 [self performSelectorInBackground:@selector(loadMoreEvent_bg) withObject:self.camChannel];
             }
             else
@@ -1042,7 +1054,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (self.isEventAlready == FALSE)
+    if (_isEventAlready == FALSE)
     {
         static NSString *CellIdentifier = @"Cell";
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -1163,6 +1175,8 @@
         }
         
         EventInfo *eventInfo = (EventInfo *)[_events objectAtIndex:indexPath.row];
+        
+        //EventInfo *eventInfo = (EventInfo *)[_events objectAtIndex:indexPath.row+1];
         
         //Make the string first-letter-capitalized
         NSString *text = eventInfo.alert_name;
