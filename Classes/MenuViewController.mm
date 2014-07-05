@@ -86,10 +86,11 @@
     
     //finally, create your UIBarButtonItem using that button
     UIBarButtonItem* barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:button];
+    [button release];
     
     self.navigationItem.leftBarButtonItem = barButtonItem;
 
-    
+    [barButtonItem release];
     
     
     
@@ -408,44 +409,45 @@
         self.camerasVC.waitingForUpdateData = NO;
         
         dispatch_async(dispatch_get_main_queue(), ^{
-             [self.camerasVC.ibTableListCamera reloadData];
-            //[self.camerasVC.ibTableListCamera layoutIfNeeded];
-             [self.camerasVC updateBottomButton];
+            [self.camerasVC.ibTableListCamera reloadData];
+            [self.camerasVC updateBottomButton];
+            //});
+            
+            NSLog(@"%s", __FUNCTION__);
+#if 0
+            UIImage *image = [UIImage imageNamed:@"Hubble_logo_back"];
+            CGRect frame = CGRectMake(0, 0, image.size.width, image.size.height);
+            
+            //init a normal UIButton using that image
+            UIButton* button = [[UIButton alloc] initWithFrame:frame];
+            [button setBackgroundImage:image forState:UIControlStateNormal];
+            [button setShowsTouchWhenHighlighted:YES];
+            
+            //set the button to handle clicks - this one calls a method called 'downloadClicked'
+            [button addTarget:self action:@selector(menuBackAction:) forControlEvents:UIControlEventTouchUpInside];
+            
+            //finally, create your UIBarButtonItem using that button
+            UIBarButtonItem* barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:button];
+            [button release];
+            
+            //then set it.  phew.
+            [self.navigationItem setLeftBarButtonItem:barButtonItem];
+            
+            [barButtonItem release];
+#endif
+            if (self.cameras != nil &&
+                self.cameras.count > 0)
+            {
+                [self.navigationItem.rightBarButtonItems[1] setEnabled:YES];
+                //[self.navigationItem.rightBarButtonItems[1] setHidden:NO];
+                self.navigationItem.rightBarButtonItems = @[accountBarButton, settingsBarButton, cameraBarButton];
+                self.navigationItem.leftBarButtonItem.enabled = YES;
+            }
+            else
+            {
+                self.navigationItem.rightBarButtonItems = @[accountBarButton, cameraBarButton];
+            }
         });
-       
-        NSLog(@"%s", __FUNCTION__);
-        
-        UIImage *image = [UIImage imageNamed:@"Hubble_logo_back"];
-        CGRect frame = CGRectMake(0, 0, image.size.width, image.size.height);
-        
-        //init a normal UIButton using that image
-        UIButton* button = [[UIButton alloc] initWithFrame:frame];
-        [button setBackgroundImage:image forState:UIControlStateNormal];
-        [button setShowsTouchWhenHighlighted:YES];
-        
-        //set the button to handle clicks - this one calls a method called 'downloadClicked'
-        [button addTarget:self action:@selector(menuBackAction:) forControlEvents:UIControlEventTouchUpInside];
-        
-        //finally, create your UIBarButtonItem using that button
-        UIBarButtonItem* barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:button];
-        
-        //then set it.  phew.
-        [self.navigationItem setLeftBarButtonItem:barButtonItem];
-        
-        [barButtonItem release];
-        
-        if (self.cameras != nil &&
-            self.cameras.count > 0)
-        {
-            [self.navigationItem.rightBarButtonItems[1] setEnabled:YES];
-            //[self.navigationItem.rightBarButtonItems[1] setHidden:NO];
-            self.navigationItem.rightBarButtonItems = @[accountBarButton, settingsBarButton, cameraBarButton];
-            self.navigationItem.leftBarButtonItem.enabled = YES;
-        }
-        else
-        {
-            self.navigationItem.rightBarButtonItems = @[accountBarButton, cameraBarButton];
-        }
     }
     else
     {
