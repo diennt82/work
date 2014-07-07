@@ -26,5 +26,6 @@
 @property (assign, nonatomic) CamChannel *selectedChannel;
 
 - (void)getMelodyValue_bg;
-
+- (void)resetMelodyStatus;
+- (BOOL)isPlaying;
 @end
