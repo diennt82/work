@@ -6802,51 +6802,22 @@ double _ticks = 0;
             
             NSLog(@"%s Upgrade 100%% fwUpgradeStatus:%d", __FUNCTION__, _fwUpgradeStatus);
             
+            NSNumber *upgradedStatus = [NSNumber numberWithInteger:TAG_ALERT_FW_OTA_UPGRADE_DONE];
+            
             if (_fwUpgradeStatus == FW_UPGRADE_SUCCEED)
             {
                 self.isFWUpgradingInProgress = NO;
                 _isShowCustomIndicator = YES;
                 [self displayCustomIndicator];
-            
-                
-                NSString *ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
-                                                                 @"OK" , nil);
-                UIAlertView *alertViewUpgradeFailed = [[UIAlertView alloc] initWithTitle:@"Firmware Upgrade Succeeded"
-                                                                                 message:nil
-                                                                                delegate:self
-                                                                       cancelButtonTitle:nil
-                                                                       otherButtonTitles:ok, nil];
-                alertViewUpgradeFailed.tag = TAG_ALERT_FW_OTA_UPGRADE_DONE;
-                [alertViewUpgradeFailed show];
-                [alertViewUpgradeFailed release];
-              
             }
             else
             {
-                NSString *msg1 = @"Fw upgrade could not be completed.";
-                
-                if (_fwUpgradeStatus == FW_UPGRADE_FAILED)
-                {
-                    msg1 = @"Incorrect Firmware version.";
-                }
-                else if(_hasFwVersion)
-                {
-                    msg1 = @"Camera offline after upgrading.";
-                }
-                
-                NSString *msg = [NSString stringWithFormat:@"%@ Please manually off and on the camera.", msg1];
-                
-                NSString *ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
-                                                                 @"OK" , nil);
-                UIAlertView *alertViewUpgradeFailed = [[UIAlertView alloc] initWithTitle:@"Firmware Upgrade Failed"
-                                                                                 message:msg
-                                                                                delegate:self
-                                                                       cancelButtonTitle:nil
-                                                                       otherButtonTitles:ok, nil];
-                alertViewUpgradeFailed.tag = TAG_ALERT_FW_OTA_UPGRADE_FAILED;
-                [alertViewUpgradeFailed show];
-                [alertViewUpgradeFailed release];
+                upgradedStatus = [NSNumber numberWithInteger:TAG_ALERT_FW_OTA_UPGRADE_FAILED];
             }
+            
+            [self performSelectorOnMainThread:@selector(popupAlertFwUpgradingStatus:)
+                                   withObject:upgradedStatus
+                                waitUntilDone:NO];
         }
         else
         {
@@ -6855,6 +6826,43 @@ double _ticks = 0;
             [self upgradeFwProgress_bg:[NSArray arrayWithObjects:obj[0], obj[1], nil]];
         }
     }
+}
+
+- (void)popupAlertFwUpgradingStatus:(NSNumber *)status
+{
+    NSLog(@"%s status:%@", __FUNCTION__, status);
+    
+    NSString *msg = nil;
+    NSString *title = @"Firmware Upgrade Succeeded";
+    NSString *ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
+                                                     @"OK" , nil);
+    
+    if ([status integerValue] == TAG_ALERT_FW_OTA_UPGRADE_FAILED)
+    {
+        title = @"Firmware Upgrade Failed";
+        
+        NSString *msg1 = @"Firmware upgrade could not be completed.";
+        
+        if (_fwUpgradeStatus == FW_UPGRADE_FAILED)
+        {
+            msg1 = @"Incorrect Firmware version.";
+        }
+        else if(_hasFwVersion)
+        {
+            msg1 = @"Camera offline after upgrading.";
+        }
+        
+        msg = [NSString stringWithFormat:@"%@ Please manually off and on the camera.", msg1];
+    }
+    
+    UIAlertView *alertViewUpgradeStatus = [[UIAlertView alloc] initWithTitle:title
+                                                                     message:msg
+                                                                    delegate:self
+                                                           cancelButtonTitle:nil
+                                                           otherButtonTitles:ok, nil];
+    alertViewUpgradeStatus.tag = [status integerValue];
+    [alertViewUpgradeStatus show];
+    [alertViewUpgradeStatus release];
 }
 
 -(void) upgradeFwProgress_ui:(NSArray *) obj
@@ -6934,7 +6942,7 @@ double _ticks = 0;
     NSDictionary *responseDict = [_jsonCommBlocked getDeviceBasicInfoBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
                                                                                      andApiKey:_apiKey];
     
-    NSLog(@"%s response:%@", __FUNCTION__, responseDict);
+    //NSLog(@"%s response:%@", __FUNCTION__, responseDict);
     
     if (responseDict != nil)
     {
@@ -6949,6 +6957,8 @@ double _ticks = 0;
             id firmwareTime = [data objectForKey:@"firmware_time"];
             
             self.selectedChannel.profile.fwTime   = [firmwareTime isEqual:[NSNull null]]?nil:firmwareTime;
+            
+            NSLog(@"\n firmware_status:%d, \n firmware_time:%@, \n is_available:%@, \n firmware_version:%@", _selectedChannel.profile.fwStatus, firmwareTime, [data objectForKey:@"is_available"], [data objectForKey:@"firmware_version"]);
 
             //If less than 5 mins since camera start upgrading
         
@@ -6984,6 +6994,14 @@ double _ticks = 0;
                 fwUpgradeStatus = FW_UPGRADE_IN_PROGRESS;
             }
         }
+        else
+        {
+            NSLog(@"%s response status:%d", __FUNCTION__, status);
+        }
+    }
+    else
+    {
+        NSLog(@"%s response is nil", __FUNCTION__);
     }
     
     return fwUpgradeStatus;
