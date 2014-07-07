@@ -44,19 +44,19 @@
     [self.btnCancel setBackgroundImage:[UIImage imageNamed:@"cancel_btn_pressed"] forState:UIControlEventTouchDown];
     
     NSMutableArray *array = [[NSMutableArray alloc] init];
-    Camera *cam = [[Camera alloc] initWith:TAG_66 andLable:@"Focus 66" andImage:[UIImage imageNamed:@"focus661-black.png"]];
+    Camera *cam = [[Camera alloc] initWith:FORCUS_66_TAG andLable:@"Focus 66" andImage:[UIImage imageNamed:@"focus661-black.png"]];
     [array addObject:cam];
     [cam release];
     
-    cam = [[Camera alloc] initWith:TAG_83 andLable:@"MBP 83/836" andImage:[UIImage imageNamed:@"camera_2.png"]];
+    cam = [[Camera alloc] initWith:MBP_83_TAG andLable:@"MBP 83/836" andImage:[UIImage imageNamed:@"camera_2.png"]];
     [array addObject:cam];
     [cam release];
     
-    cam = [[Camera alloc] initWith:TAG_83 andLable:@"Scout 73" andImage:[UIImage imageNamed:@"camera_scout85.png"]];
+    cam = [[Camera alloc] initWith:SCOUT_73_TAG andLable:@"Scout 73" andImage:[UIImage imageNamed:@"camera_scout85.png"]];
     [array addObject:cam];
     [cam release];
     
-    cam = [[Camera alloc] initWith:TAG_83 andLable:@"MBP 85/854" andImage:[UIImage imageNamed:@"blesetup_focus85.png"]];
+    cam = [[Camera alloc] initWith:MBP_85_TAG andLable:@"MBP 85/854" andImage:[UIImage imageNamed:@"blesetup_focus85.png"]];
     [array addObject:cam];
     [cam release];
     
@@ -119,25 +119,24 @@
 - (void)selectedItem:(CAMERA_TAG)cameraTad {
     NSInteger cameraType = WIFI_SETUP;
     switch (cameraTad) {
-        case TAG_83:
-            //MBP 83/ 836
+        case MBP_83_TAG:
              cameraType = BLUETOOTH_SETUP;
             break;
-        case TAG_66:
-            // Focus 66
+        case FORCUS_66_TAG:
             cameraType = WIFI_SETUP;
             break;
-        case TAG_73:
-            //MBP 83/ 836
+        case SCOUT_73_TAG:
             cameraType = WIFI_SETUP;
-        case TAG_85:
-            //MBP 83/ 836
+            break;
+        case MBP_85_TAG:
             cameraType = BLUETOOTH_SETUP;
+            break;
         default:
             break;
     }
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setInteger:cameraType forKey:SET_UP_CAMERA];
+    [userDefaults setObject:@(cameraTad) forKey:SET_UP_CAMERA_TAG];
     [userDefaults setBool:FALSE forKey:FIRST_TIME_SETUP];
     [userDefaults synchronize];
     

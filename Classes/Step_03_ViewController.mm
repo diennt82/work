@@ -12,6 +12,7 @@
 #import "UIBarButtonItem+Custom.h"
 #import "KISSMetricsAPI.h"
 #import "UIFont+Hubble.h"
+#import "Camera.h"
 
 #define GAI_CATEGORY    @"Step 03 view"
 
@@ -75,6 +76,10 @@
     
     [self.view addSubview:self.inProgress];
     self.inProgress.hidden = YES;
+    
+    CAMERA_TAG tag = (CAMERA_TAG)[[userDefaults objectForKey:SET_UP_CAMERA_TAG] intValue];
+    UIImage *iconImage = [self convertToCamaraImage:tag];
+    [self.cameraButton setBackgroundImage:iconImage forState:UIControlStateNormal];
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -395,5 +400,17 @@
     [labelCrazy performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:3];
     
     [labelCrazy release];
+}
+
+- (UIImage *)convertToCamaraImage:(CAMERA_TAG)cameraTad {
+    switch (cameraTad) {
+        case FORCUS_66_TAG:
+            return [UIImage imageNamed:@"camera_ble3.png"];
+        case SCOUT_73_TAG:
+            return [UIImage imageNamed:@"wifisetup_scout85.png"];
+        default:
+            break;
+    }
+    return nil;
 }
 @end

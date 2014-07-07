@@ -42,7 +42,7 @@
 @property (nonatomic, retain) NSString *cameraName;
 
 @property (retain, nonatomic) IBOutlet UILabel *ib_lableStage;
-
+@property (assign, nonatomic) IBOutlet UIImageView *cameraIcon;
 
 
 @property (nonatomic, retain) UIView * inProgress;
