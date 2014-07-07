@@ -220,20 +220,20 @@ double _ticks = 0;
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         [userDefaults setObject:_selectedChannel.profile.mac_address forKey:CAM_IN_VEW];
         [userDefaults synchronize];
-    }
-    
-    
-    
-    
+    }  
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
+    NSLog(@"%s ********************************************************************************", __FUNCTION__);
+    
     [self stopTimerRecoring];
+    [MBProgressHUD hideAllHUDsForView:self.view animated:NO];
     
     [super viewWillDisappear:animated];
 }
 
+#if 0 // NS_DEPRECATED!
 - (void)viewDidUnload {
     NSLog(@"%s", __FUNCTION__);
     [self setImageViewVideo:nil];
@@ -246,6 +246,7 @@ double _ticks = 0;
     
     [super viewDidUnload];
 }
+#endif
 
 - (void)applyFont
 {
@@ -2198,10 +2199,7 @@ double _ticks = 0;
                                                     withAction:@"Go back"
                                                      withLabel:@"Hubble back button item"
                                                      withValue:[NSNumber numberWithDouble:_currentMediaStatus]];
-    
-    self.activityStopStreamingProgress.hidden = NO;
-    [self.view bringSubviewToFront:_activityStopStreamingProgress];
-    
+    [MBProgressHUD showHUDAddedTo:self.view animated:NO];
     _isShowCustomIndicator = NO;
     
     self.view.userInteractionEnabled = NO;
@@ -2306,9 +2304,7 @@ double _ticks = 0;
 
 - (void)goBackToCamerasRemoteStreamTimeOut
 {
-    self.activityStopStreamingProgress.hidden = NO;
-    [self.view bringSubviewToFront:_activityStopStreamingProgress];
-    
+    [MBProgressHUD showHUDAddedTo:self.view animated:NO];
     
     NSLog(@"self.currentMediaStatus: %d", self.currentMediaStatus);
     
@@ -2333,9 +2329,7 @@ double _ticks = 0;
     // Release the instance here - since we are going to camera list
     MediaPlayer::release();
     
-    self.activityStopStreamingProgress.hidden = NO;
-    [self.view bringSubviewToFront:_activityStopStreamingProgress];
-    
+    [MBProgressHUD showHUDAddedTo:self.view animated:NO];
     
     NSLog(@"self.currentMediaStatus: %d", self.currentMediaStatus);
     
