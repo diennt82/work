@@ -180,7 +180,7 @@
 {
     self.events =[[TimelineDatabase getSharedInstance] getEventsForCamera:camChannel.profile.registrationID];
     
-    NSLog(@"There are %d in databases ", self.events.count );
+    NSLog(@"%s There are %d in databases ", __FUNCTION__, self.events.count );
     
     if (_events && self.events.count == 0 )
     {
@@ -230,7 +230,7 @@
     
     self.events =[[TimelineDatabase getSharedInstance] getEventsForCamera:camChannel.profile.registrationID];
     
-    NSLog(@"There are %d in databases ", self.events.count );
+    NSLog(@"%s There are %d in databases ", __FUNCTION__, self.events.count );
     
     if (_events && self.events.count == 0 )
     {
@@ -416,8 +416,15 @@
         
         NSLog(@"%s has inserted new record, trigger update ui now.", __FUNCTION__);
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self performSelectorInBackground:@selector(getEventFromDb:) withObject:camChannel];
             
+            if (self.isViewLoaded && self.view.window)
+            {
+                [self performSelectorInBackground:@selector(getEventFromDb:) withObject:camChannel];
+            }
+            else
+            {
+                NSLog(@"%s View is invisble. Ignoring.", __FUNCTION__);
+            }
         });
     }
     else

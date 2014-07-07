@@ -386,7 +386,8 @@
             {
                 NSLog(@"%s call goBackToPlayList", __FUNCTION__);
                 
-                [self goBackToPlayList];
+                //[self goBackToPlayList];
+                [self performSelectorOnMainThread:@selector(goBackToPlayList) withObject:nil waitUntilDone:NO];
             }
             else
             {

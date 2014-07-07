@@ -317,7 +317,7 @@
             H264PlayerViewController *h264PlayerViewController = [[H264PlayerViewController alloc] init];
             
             h264PlayerViewController.selectedChannel = camChannel;
-            h264PlayerViewController.h264PlayerVCDelegate = self;
+            //h264PlayerViewController.h264PlayerVCDelegate = self;
 
     
             [self.navigationController pushViewController:h264PlayerViewController animated:NO];
@@ -559,6 +559,7 @@
 
 - (void)dealloc
 {
+    [_cameras release];
     [_accountVC release];
     [_settingsVC release];
     [_camerasVC release];

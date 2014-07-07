@@ -464,9 +464,9 @@ double _ticks = 0;
     //init a normal UIButton using that image
     UIButton* button = [[UIButton alloc] initWithFrame:frame];
     [button setBackgroundImage:image forState:UIControlStateNormal];
-    [button setBackgroundImage:image forState:UIControlStateHighlighted];
-    [button setBackgroundImage:image forState:UIControlStateSelected];
-    [button setBackgroundImage:image forState:UIControlStateDisabled];
+    //[button setBackgroundImage:image forState:UIControlStateHighlighted];
+    //[button setBackgroundImage:image forState:UIControlStateSelected];
+    //[button setBackgroundImage:image forState:UIControlStateDisabled];
     
     //[button setShowsTouchWhenHighlighted:YES];
     
@@ -475,12 +475,14 @@ double _ticks = 0;
     
     //finally, create your UIBarButtonItem using that button
     UIBarButtonItem* barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:button];
+    [button release];
     
     //then set it.  phew.
     [self.navigationItem setLeftBarButtonItem:barButtonItem];
     
     [barButtonItem release];
 }
+
 - (void) updateNavigationBarAndToolBar
 {
     if (![self.selectedChannel.profile isSharedCam]) // SharedCam
@@ -2248,7 +2250,7 @@ double _ticks = 0;
     
     self.selectedChannel.profile.isSelected = FALSE;
     
-    [self.navigationController popToRootViewControllerAnimated:NO];
+    [self.navigationController popToRootViewControllerAnimated:YES];
     NSLog(@"release manually");
     [self release];
 }
@@ -5323,7 +5325,7 @@ double _ticks = 0;
     [_imageViewVideo release];
     [_imageViewStreamer release];
     [_progressView release];
-    [_selectedChannel release];
+    //[_selectedChannel release];
     [_imgViewDrectionPad release];
     [send_UD_dir_req_timer invalidate];
     [send_LR_dir_req_timer invalidate];
