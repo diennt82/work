@@ -252,9 +252,10 @@
     self.isEventAlready = TRUE;
     self.isLoading = FALSE;
     
+    /* Reload the table view now */
+    
     if (self.isViewLoaded && self.view.window)
     {
-        /* Reload the table view now */
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.tableView reloadData];
             
@@ -797,9 +798,7 @@
     {
         if (self.isViewLoaded && self.view.window)
         {
-            //dispatch_async(dispatch_get_main_queue(), ^{
                 [self.tableView reloadData];
-            //});
         }
         else
         {

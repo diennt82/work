@@ -314,6 +314,7 @@
 @property (nonatomic) BOOL isInLocal;
 @property (nonatomic) BOOL isAlreadyHorizeMenu;
 @property (nonatomic, retain) BMS_JSON_Communication *jsonCommBlocked;
+@property (nonatomic, retain) BMS_JSON_Communication *jsonComm;
 @property (nonatomic, assign) EarlierNavigationController *earlierNavi;
 @property (nonatomic) BOOL wantToShowTimeLine;
 @property (nonatomic, retain) NSTimer *timerIncreaseBitRate;
@@ -321,6 +322,7 @@
 @property (nonatomic, retain) NSString *messageStreamingState;
 @property (nonatomic, retain) NSTimer *timerBufferingTimeout;
 @property (nonatomic, retain) UIAlertView *alertViewTimoutRemote;
+@property (nonatomic, retain) NSDate *timeStartingStageOne;
 @property (nonatomic, retain) NSDate *timeStartingStageTwo;
 @property (nonatomic) NSTimeInterval timeStageTwoTotal;
 @property (nonatomic, retain) NSDate *timeStartPlayerView;
