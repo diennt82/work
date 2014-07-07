@@ -116,6 +116,7 @@ double _ticks = 0;
     
     
     self.customIndicator.image = [UIImage imageNamed:@"loader_a"];
+    self.customIndicator.hidden = YES;
     
     NSLog(@"camera model is :%@", self.cameraModel);
     self.backgroundTask = UIBackgroundTaskInvalid;
@@ -152,7 +153,7 @@ double _ticks = 0;
                                                object: nil];
     
     
-#if 1
+
     [[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(h264_HandleDidEnterBackground)
                                                  name: UIApplicationDidEnterBackgroundNotification
@@ -167,23 +168,6 @@ double _ticks = 0;
 
     
     
-#else
-    // Do any additional setup after loading the view.
-	[[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(h264_HandleEnteredBackground)
-                                                 name: UIApplicationDidEnterBackgroundNotification
-                                               object: nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(h264_HandleAppInactive)
-                                                 name: UIApplicationWillResignActiveNotification
-                                               object: nil];
-    
-	[[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(h264_HandleBecomeActive)
-                                                 name: UIApplicationDidBecomeActiveNotification
-                                               object: nil];
-#endif
     //alway show custom indicator, when view appear
     _isShowCustomIndicator = YES;
     self.currentMediaStatus = 0;
@@ -731,6 +715,12 @@ double _ticks = 0;
     {
         case MEDIA_INFO_GET_AUDIO_PACKET:
             //NSLog(@"%s Got audio packet", __FUNCTION__);
+            if ( userWantToCancel == TRUE)
+            {
+                NSLog(@"%s MEDIA_INFO_GET_AUDIO_PACKET after streaming stopped", __FUNCTION__);
+                return;
+                
+            }
             
             if (_timerBufferingTimeout)
             {
@@ -747,6 +737,13 @@ double _ticks = 0;
             break;
         case MEDIA_INFO_START_BUFFERING:
             
+            if ( userWantToCancel == TRUE)
+            {
+                NSLog(@"%s MEDIA_INFO_GET_AUDIO_PACKET after streaming stopped", __FUNCTION__);
+                return;
+                
+            }
+
             NSLog(@"%s MEDIA_INFO_START_BUFFERING", __FUNCTION__);
             
             if (_timerBufferingTimeout)
@@ -1800,7 +1797,12 @@ double _ticks = 0;
     }
     
     self.selectedChannel.stopStreaming = NO;
-    [self displayCustomIndicator];
+    
+    //TODO: Don't call it here.. too many calls to this
+    //[self displayCustomIndicator];
+
+    
+
     [self scanCamera];
     
     [self hideControlMenu];
@@ -2224,6 +2226,13 @@ double _ticks = 0;
         [_timerRemoteStreamTimeOut invalidate];
         self.timerRemoteStreamTimeOut = nil;
     }
+    if (_timerHideMenu != nil && [_timerHideMenu isValid])
+    {
+        [self.timerHideMenu invalidate];
+        self.timerHideMenu = nil;
+    }
+    
+    [self stopPeriodicBeep];
     
     if (_alertFWUpgrading)
     {
@@ -2244,6 +2253,10 @@ double _ticks = 0;
         _timelineVC.timelineVCDelegate = nil;
         [_timelineVC cancelAllLoadingImageTask];
         NSLog(@"%s timelineVC:%d", __FUNCTION__, _timelineVC.retainCount);
+        
+        NSLog(@"%s release timelineVC",__FUNCTION__ );
+        [_timelineVC release];
+        _timelineVC = nil;
     }
     
     if (_jsonCommBlocked)
@@ -2336,7 +2349,7 @@ double _ticks = 0;
     [self.view bringSubviewToFront:_activityStopStreamingProgress];
     
     
-    NSLog(@"self.currentMediaStatus: %d", self.currentMediaStatus);
+    NSLog(@" %s self.currentMediaStatus: %d retaintCount:%d ",__FUNCTION__, self.currentMediaStatus, self.retainCount);
     
     userWantToCancel = TRUE;
     self.selectedChannel.stopStreaming = TRUE;
@@ -2350,7 +2363,9 @@ double _ticks = 0;
     
     self.selectedChannel.profile.isSelected = FALSE;
     
-    [self.navigationController popToRootViewControllerAnimated:YES];
+    [self.navigationController popToRootViewControllerAnimated:NO];
+    NSLog(@"release manually");
+    [self release];
 }
 
 -(void) cleanUpDirectionTimers
@@ -4267,7 +4282,7 @@ double _ticks = 0;
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
             
-            
+             [self release];
             [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController_land_iPad"
                                           owner:self
                                         options:nil];
@@ -4279,6 +4294,7 @@ double _ticks = 0;
         }
         else
         {
+            [self release];
             [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController_land"
                                           owner:self
                                         options:nil];
@@ -4329,6 +4345,7 @@ double _ticks = 0;
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
+             [self release];
             [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController_ipad"
                                           owner:self
                                         options:nil];
@@ -4337,7 +4354,9 @@ double _ticks = 0;
         }
         else
         {
-            [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController"
+            [self release];
+            
+           [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController"
                                           owner:self
                                         options:nil];
             self.melodyViewController = [[[MelodyViewController alloc] initWithNibName:@"MelodyViewController" bundle:nil] autorelease];
@@ -4460,7 +4479,9 @@ double _ticks = 0;
                                            [UIImage imageNamed:@"loader_e"],
                                            [UIImage imageNamed:@"loader_f"],
                                            nil];
-    
+
+
+    self.customIndicator.hidden = YES;
     [self displayCustomIndicator];
     
     //trigger re-cal of videosize
@@ -5028,8 +5049,11 @@ double _ticks = 0;
         self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_pan_pressed", @"video_action_mic_pressed", @"video_action_video_pressed", @"video_action_music_pressed", @"video_action_temp_pressed", nil];
     }
     
-    //[self.horizMenu reloadData:NO];
-    [self performSelectorOnMainThread:@selector(horizMenuReloadData) withObject:nil waitUntilDone:NO];
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self horizMenuReloadData];
+    });
+
 }
 
 - (void)horizMenuReloadData
@@ -6624,8 +6648,7 @@ double _ticks = 0;
 -(void)start_animation_with_orientation
 {
     self.customIndicator.hidden = NO;
-//    [self.scrollView bringSubviewToFront:self.customIndicator];
-    
+
     self.customIndicator.animationDuration = 1.5;
     self.customIndicator.animationRepeatCount = 0;
     [self.customIndicator startAnimating];

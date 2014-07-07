@@ -96,6 +96,10 @@
              forControlEvents:UIControlEventValueChanged];
     self.refreshControl = refreshControl;
     [refreshControl release];
+    
+    
+    //Clear away image cache
+    [SDWebImageManager.sharedManager.imageCache clearMemory];
 }
 
 
@@ -143,9 +147,14 @@
     self.camChannel = camChannel;
     
     
-    [self performSelectorInBackground:@selector(getEventFromDb:) withObject:camChannel];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0),
+                   ^{
+        
+        [self getEventFromDb:camChannel];
+        [self getEventsList_bg2:camChannel];
+        
+    });
     
-    [self performSelectorInBackground:@selector(getEventsList_bg2:) withObject:camChannel];
     
 }
 
@@ -822,21 +831,26 @@
     NSInteger tempSectionsCount = self.tableView.numberOfSections - 1;
     NSInteger tempRowsCount = [self.tableView numberOfRowsInSection:tempSectionsCount];
     NSInteger numberOfImageIsCanceled = 0;
+
     
-    for (int i = 0; i < tempRowsCount; ++i)
-    {
-        NSIndexPath* indexPath =
-        [NSIndexPath indexPathForRow:i
-                           inSection:tempSectionsCount];
-        
-        id cell = [self.tableView cellForRowAtIndexPath:indexPath];
-        
-        if ( [cell isKindOfClass:[TimelineActivityCell class]])
-        {
-            numberOfImageIsCanceled++;
-            [((TimelineActivityCell*) cell).snapshotImage cancelCurrentImageLoad];
-        }
-    }
+    NSLog(@"Cancell all downloading images");
+    [SDWebImageManager.sharedManager cancelAll];
+    [SDWebImageManager.sharedManager.imageCache clearMemory];
+    
+//    for (int i = 0; i < tempRowsCount; ++i)
+//    {
+//        NSIndexPath* indexPath =
+//        [NSIndexPath indexPathForRow:i
+//                           inSection:tempSectionsCount];
+//        
+//        id cell = [self.tableView cellForRowAtIndexPath:indexPath];
+//        
+//        if ( [cell isKindOfClass:[TimelineActivityCell class]])
+//        {
+//            numberOfImageIsCanceled++;
+//            [((TimelineActivityCell*) cell).snapshotImage cancelCurrentImageLoad];
+//        }
+//    }
     
     NSLog(@"%s tempSectionsCount:%d, tempRowsCount:%d, numberOfImageIsCanceled:%d", __FUNCTION__, tempSectionsCount, tempRowsCount, numberOfImageIsCanceled);
 }
@@ -1152,6 +1166,11 @@
             cell =  self.activityCell;
             self.activityCell = nil;
         }
+        else
+        {
+            NSLog(@"%s reuse:  cell: %p",__FUNCTION__,  cell.snapshotImage  );
+            
+        }
 #endif
         
         if(!cell.lblToHideLine.isHidden){
@@ -1163,6 +1182,9 @@
         }
         
         EventInfo *eventInfo = (EventInfo *)[_events objectAtIndex:indexPath.row];
+        
+        NSLog(@"eventInfo %d loaded",indexPath.row);
+        
         
         //Make the string first-letter-capitalized
         NSString *text = eventInfo.alert_name;
@@ -1192,6 +1214,8 @@
         
         cell.eventTimeLabel.text = [self formatTimeStringForEvent:eventInfo];
         
+        
+        cell.snapshotImage.image = nil;
         
         // Motion detected
         if (eventInfo.alert == 4)
