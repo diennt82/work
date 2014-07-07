@@ -802,7 +802,7 @@
     {
         if (self.isViewLoaded && self.view.window)
         {
-                [self.tableView reloadData];
+            [self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
         }
         else
         {
@@ -818,11 +818,17 @@
      This is to avoid the overlapping of loading data*/
     dispatch_async(dispatch_get_main_queue(), ^{
          //NSIndexPath* indexPath =
-        [NSIndexPath indexPathForRow: ([self.tableView numberOfRowsInSection:([self.tableView numberOfSections]-1)]-1)
-                           inSection: ([self.tableView numberOfSections]-1)];
-        self.isLoading = FALSE;
-        NSLog(@"%s parent:%@, set loading FALSE:%d ", __FUNCTION__, self.parentVC, self.isLoading );
-        
+        if (self.isViewLoaded && self.view.window)
+        {
+            [NSIndexPath indexPathForRow: ([self.tableView numberOfRowsInSection:([self.tableView numberOfSections]-1)]-1)
+                               inSection: ([self.tableView numberOfSections]-1)];
+            self.isLoading = FALSE;
+            NSLog(@"%s parent:%@, set loading FALSE:%d ", __FUNCTION__, self.parentVC, self.isLoading );
+        }
+        else
+        {
+            NSLog(@"%s View is invisble.", __FUNCTION__);
+        }
     });
     
     
