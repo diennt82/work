@@ -2134,6 +2134,7 @@ double _ticks = 0;
         NSLog(@"%s _earlierVC:%d", __FUNCTION__, _earlierVC.retainCount);
         [_earlierVC removeSubviews];
         [_earlierVC release];
+        _earlierVC = nil;
     }
     
     if (_timelineVC)
@@ -2980,11 +2981,11 @@ double _ticks = 0;
     
     self.timeStartingStageOne = [NSDate date];
     
-    if (_jsonComm != nil)
-    {
-        [_jsonComm release];
-        self.jsonComm = nil;
-    }
+//    if (_jsonComm != nil)
+//    {
+//        [_jsonComm release];
+//        self.jsonComm = nil;
+//    }
     
     self.jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
                                                           Selector:@selector(createSessionSuccessWithResponse:)
