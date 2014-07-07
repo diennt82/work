@@ -861,6 +861,7 @@ double _ticks = 0;
         case MEDIA_INFO_HAS_FIRST_IMAGE:
         {
             _isShowCustomIndicator = NO;
+            self.shouldBeep = TRUE;
             [self displayCustomIndicator];
             
             NSLog(@"[MEDIA_PLAYER_HAS_FIRST_IMAGE]");
@@ -4897,6 +4898,8 @@ double _ticks = 0;
 }
 -(void) playSound
 {
+    NSLog(@"%s", __FUNCTION__);
+    
 	//Play beep
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
@@ -6644,7 +6647,7 @@ double _ticks = 0;
         }
         else
         {
-            if (_disconnectAlert == YES)
+            if (_disconnectAlert == YES && _shouldBeep)
             {
                 self.alertTimer = [NSTimer scheduledTimerWithTimeInterval:15.0
                                                                    target:self

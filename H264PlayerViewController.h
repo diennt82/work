@@ -347,6 +347,7 @@
 @property (nonatomic) NSInteger fwUpgradedProgress;
 @property (nonatomic) NSInteger fwUpgradeStatus;
 @property (nonatomic) BOOL hasFwVersion;
+@property (nonatomic) BOOL shouldBeep;
 
 
 - (void)scan_done:(NSArray *) _scan_results;
