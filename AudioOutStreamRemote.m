@@ -192,7 +192,7 @@
 - (void)onSocket:(AsyncSocket *)sock didWriteDataWithTag:(long)tag
 {
     // Waiting for get handshake response
-    NSLog(@"didWriteDataWithTag");
+   // NSLog(@"didWriteDataWithTag");
 }
 
 - (void)onSocket:(AsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag
