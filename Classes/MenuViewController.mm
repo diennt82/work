@@ -195,7 +195,10 @@
     {
         self.isFirttime = TRUE;
         
-        [self menuBackAction:nil];
+        dispatch_async(dispatch_get_main_queue(), ^{
+             [self menuBackAction:nil];
+        });
+       
         [self removeNavigationBarBottomLine];
     }
     else
@@ -315,10 +318,9 @@
             
             h264PlayerViewController.selectedChannel = camChannel;
             h264PlayerViewController.h264PlayerVCDelegate = self;
-            
-            NSLog(@"%@, %@", self.parentViewController.description, self.parentViewController.parentViewController);
-            
-            [self.navigationController pushViewController:h264PlayerViewController animated:YES];
+
+    
+            [self.navigationController pushViewController:h264PlayerViewController animated:NO];
             [h264PlayerViewController release];
         }
     }
