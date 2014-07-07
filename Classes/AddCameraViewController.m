@@ -52,7 +52,7 @@
     [array addObject:cam];
     [cam release];
     
-    cam = [[Camera alloc] initWith:TAG_83 andLable:@"Scout 73" andImage:[UIImage imageNamed:@"wifisetup_scout85.png"]];
+    cam = [[Camera alloc] initWith:TAG_83 andLable:@"Scout 73" andImage:[UIImage imageNamed:@"camera_scout85.png"]];
     [array addObject:cam];
     [cam release];
     
