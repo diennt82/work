@@ -39,7 +39,6 @@
 
 @property (nonatomic) BOOL isEventAlready;
 @property (nonatomic) BOOL isLoading;
-@property (nonatomic, retain) NSTimer *timerRefreshData;
 @property (nonatomic) BOOL is12hr;
 
 @property (nonatomic) BOOL hasUpdate;
@@ -97,8 +96,6 @@
              forControlEvents:UIControlEventValueChanged];
     self.refreshControl = refreshControl;
     [refreshControl release];
-    
-    
 }
 
 
@@ -106,19 +103,25 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+    NSLog(@"%s", __FUNCTION__);
+    
+    [self cancelAllLoadingImageTask];
 }
 
 - (void)dealloc
 {
-    [_events release];
+    NSLog(@"%s", __FUNCTION__);
+    
+    if (_events) {
+        [_events removeAllObjects];
+        [_events release];
+    }
+    
+    [activityCell release];
     [_clipsInEachEvent release];
     [_playlists release];
-    if (_timerRefreshData != nil)
-    {
-        [_timerRefreshData invalidate];
-    }
-    _timerRefreshData = nil;
     [_jsonComm release];
+    
     [super dealloc];
 }
 
@@ -139,15 +142,10 @@
 {
     self.camChannel = camChannel;
     
-    
-    [self performSelectorInBackground:@selector(getEventFromDb:) withObject:camChannel];
+    [self performSelectorInBackground:@selector(getEventFromDbFirstTime:) withObject:camChannel];
     
     [self performSelectorInBackground:@selector(getEventsList_bg2:) withObject:camChannel];
-    
 }
-
-
-
 
 - (void)refreshEvents:(NSTimer *)timer
 {
@@ -155,53 +153,88 @@
     
     if (self.isLoading == FALSE)
     {
-        if (self.timerRefreshData != nil)
-        {
-            [self.timerRefreshData invalidate];
-            self.timerRefreshData = nil;
-        }
-        
         self.isLoading = TRUE;
         self.isEventAlready = FALSE;
         self.events = nil;
         self.stringIntelligentMessage = @"Loading...";
         
-        
         self.eventPage = 1;
         self.shouldLoadMore = YES;
-        
-        //[self.tableView reloadData];
-        
+
         [self loadEvents:self.camChannel];
     }
-    
 }
 
+/*
+ * getEventFromDbFirstTime
+ * 1. Just update isEventAlready property.
+ * 2. Donnot update shouldLoadMore & isLoading property
+ * - See getEventFromDb
+ */
 
+- (void)getEventFromDbFirstTime:(CamChannel *)camChannel
+{
+    self.events =[[TimelineDatabase getSharedInstance] getEventsForCamera:camChannel.profile.registrationID];
+    
+    NSLog(@"There are %d in databases ", self.events.count );
+    
+    if (_events && self.events.count == 0 )
+    {
+        self.stringIntelligentMessage = @"There is currently no new event";
+        self.stringCurrentDate = @"";
+    }
+    else
+    {
+        [self updateIntelligentMessage];
+        
+        if ([self.camChannel.profile isNotAvailable])
+        {
+            self.stringIntelligentMessage = @"Monitor is offline";
+            self.stringCurrentDate = @"";
+        }
+    }
+    
+    self.isEventAlready = TRUE;
+    
+    if (self.isViewLoaded && self.view.window)
+    {
+        /* Reload the table view now */
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.tableView reloadData];
+            
+            [self.tableView layoutIfNeeded];
+            
+            [self.refreshControl endRefreshing];
+        });
+    }
+    else
+    {
+        NSLog(@"%s View is invisible.", __FUNCTION__);
+    }
+}
 
+/*
+ * getEventFromDb
+ * 1. Updating shouldLoadMore & isLoading property
+ * - See getEventFromDbFirstTime
+ */
 
 - (void)getEventFromDb:(CamChannel *) camChannel
 {
-    
     self.shouldLoadMore = TRUE;
-    
     self.hasUpdate = NO;
     
     self.events =[[TimelineDatabase getSharedInstance] getEventsForCamera:camChannel.profile.registrationID];
     
     NSLog(@"There are %d in databases ", self.events.count );
     
-    if (self.events.count == 0 )
+    if (_events && self.events.count == 0 )
     {
-        
-        self.isEventAlready = TRUE;
         self.stringIntelligentMessage = @"There is currently no new event";
         self.stringCurrentDate = @"";
-        
     }
     else
     {
-        
         [self updateIntelligentMessage];
         
         if ([self.camChannel.profile isNotAvailable])
@@ -210,33 +243,37 @@
             self.stringCurrentDate = @"";
         }
         
-        self.isEventAlready = TRUE;
-        self.isLoading = FALSE;
-        
         if (self.events.count < 10)
         {
             self.shouldLoadMore = FALSE;
         }
-        
-        
     }
     
-    /* Reload the table view now */
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.tableView reloadData];
-        
-        [self.tableView layoutIfNeeded];
-        
-        [self.refreshControl endRefreshing];
-    });
+    self.isEventAlready = TRUE;
+    self.isLoading = FALSE;
+    
+    if (self.isViewLoaded && self.view.window)
+    {
+        /* Reload the table view now */
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.tableView reloadData];
+            
+            [self.tableView layoutIfNeeded];
+            
+            [self.refreshControl endRefreshing];
+        });
+    }
+    else
+    {
+        NSLog(@"%s View is invisible.", __FUNCTION__);
+    }
 }
-
-
 
 - (void)getEventsList_bg2: (CamChannel *)camChannel
 {
+    self.isLoading = TRUE;
     
-    NSLog(@"getEventsList_bg2 enter ");
+    NSLog(@"%s", __FUNCTION__);
     
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -337,13 +374,9 @@
                                                   event_data:data_str1
                                                  camera_udid:camChannel.profile.registrationID
                                                     owner_id:userName];
-                    if ( status == 0) //Successfully inserted at least 1 record, -> need reload
+                    if ( status != 0) //Successfully inserted at least 1 record, -> need reload
                     {
-                        //Toggle this flag to true to signal ui to reload
-                        self.hasUpdate = YES;
-                        
-                        
-                        //NSLog(@"has inserted new record %@ : %@",eventInfo.time_stamp , eventInfo.alert_name);
+                        NSLog(@"%s Inserting a record error:%d", __FUNCTION__, status);
                     }
                     
                     [eventInfo release];
@@ -351,14 +384,6 @@
             }
             else
             {
-                /*
-                 * If load more has no event, need not to load more anymore.
-                 */
-                if (_eventPage > 1)
-                {
-                    self.shouldLoadMore = FALSE;
-                }
-                
                 NSLog(@"Camera as no event before date: %@", dateInStringFormated);
             }
             
@@ -380,25 +405,19 @@
         NSLog(@"Error- responseDict is nil");
     }
     
-    self.isLoading = FALSE;
-    
     if ( self.hasUpdate == YES)
     {
-        NSLog(@"has inserted new record, trigger update ui now");
+        //[NSThread sleepForTimeInterval:5];
+        
+        NSLog(@"%s has inserted new record, trigger update ui now.", __FUNCTION__);
         dispatch_async(dispatch_get_main_queue(), ^{
-            
             [self performSelectorInBackground:@selector(getEventFromDb:) withObject:camChannel];
             
         });
     }
-    
-    /*
-     * If this is load more & failed, need to reset event page.
-     */
-    
-    if (_eventPage > 1 && shouldResetEventPage)
+    else
     {
-        self.eventPage--;
+        self.isLoading = FALSE;
     }
 }
 
@@ -600,34 +619,40 @@
     
     [dateFormatter release];
     
-    
-    //Secondly, counting number of vox/movement event
-    @synchronized (self.events)
+    if (_events && _events.count > 0)
     {
-        for (EventInfo *eventInfo in self.events)
+        //Secondly, counting number of vox/movement event
+        @synchronized (_events)
         {
-            NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-            [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
-            [dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
-            NSDate *eventDate = [dateFormatter dateFromString:eventInfo.time_stamp]; //2013-12-31 07:38:35 +0000
-            [dateFormatter release];
-            
-            NSTimeInterval diff = [self.currentDate timeIntervalSinceDate:eventDate];
-            
-            if (diff / 60 <= 20)
+            for (EventInfo *eventInfo in _events)
             {
-                if (eventInfo.alert == 4)
+                NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+                [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
+                [dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+                NSDate *eventDate = [dateFormatter dateFromString:eventInfo.time_stamp]; //2013-12-31 07:38:35 +0000
+                [dateFormatter release];
+                
+                NSTimeInterval diff = [self.currentDate timeIntervalSinceDate:eventDate];
+                
+                if (diff / 60 <= 20)
                 {
-                    numberOfMovement++;
-                }
-                else if (eventInfo.alert == 1)
-                {
-                    numberOfVOX++;
+                    if (eventInfo.alert == 4)
+                    {
+                        numberOfMovement++;
+                    }
+                    else if (eventInfo.alert == 1)
+                    {
+                        numberOfVOX++;
+                    }
                 }
             }
         }
     }
-    
+    else
+    {
+        // Effect when refreshing event.
+        NSLog(@"%s Wanna update timeline title but forcing DEFAULT!", __FUNCTION__);
+    }
     
     if (numberOfVOX >= 4)
     {
@@ -749,7 +774,7 @@
                     }
                     else
                     {
-                        NSLog(@"Event has no data");
+                        //NSLog(@"Event has no data");
                     }
                     
                     
@@ -770,9 +795,16 @@
     
     if (shouldUpdateTableView)
     {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.tableView reloadData];
-        });
+        if (self.isViewLoaded && self.view.window)
+        {
+            //dispatch_async(dispatch_get_main_queue(), ^{
+                [self.tableView reloadData];
+            //});
+        }
+        else
+        {
+            NSLog(@"%s View is invisble.", __FUNCTION__);
+        }
     }
     else
     {
@@ -786,18 +818,38 @@
         [NSIndexPath indexPathForRow: ([self.tableView numberOfRowsInSection:([self.tableView numberOfSections]-1)]-1)
                            inSection: ([self.tableView numberOfSections]-1)];
         self.isLoading = FALSE;
-        NSLog(@"%s: set loading FALSE:%d ", __FUNCTION__,self.isLoading );
+        NSLog(@"%s parent:%@, set loading FALSE:%d ", __FUNCTION__, self.parentVC, self.isLoading );
         
     });
     
     
     
-    NSLog(@"%s:loadMoreEvent_bg: -eventPage: %d, - shouldUpdateTableview: %d, shouldLoadMore: %d", __FUNCTION__, _eventPage, shouldUpdateTableView, _shouldLoadMore);
+    NSLog(@"%s -eventPage: %d, -shouldUpdateTableview: %d, shouldLoadMore: %d", __FUNCTION__, _eventPage, shouldUpdateTableView, _shouldLoadMore);
 }
 
-#pragma mark - Scroll view delegate
-
-
+- (void)cancelAllLoadingImageTask
+{
+    NSInteger tempSectionsCount = self.tableView.numberOfSections - 1;
+    NSInteger tempRowsCount = [self.tableView numberOfRowsInSection:tempSectionsCount];
+    NSInteger numberOfImageIsCanceled = 0;
+    
+    for (int i = 0; i < tempRowsCount; ++i)
+    {
+        NSIndexPath* indexPath =
+        [NSIndexPath indexPathForRow:i
+                           inSection:tempSectionsCount];
+        
+        id cell = [self.tableView cellForRowAtIndexPath:indexPath];
+        
+        if ( [cell isKindOfClass:[TimelineActivityCell class]])
+        {
+            numberOfImageIsCanceled++;
+            [((TimelineActivityCell*) cell).snapshotImage cancelCurrentImageLoad];
+        }
+    }
+    
+    NSLog(@"%s tempSectionsCount:%d, tempRowsCount:%d, numberOfImageIsCanceled:%d", __FUNCTION__, tempSectionsCount, tempRowsCount, numberOfImageIsCanceled);
+}
 
 #pragma mark - Table view data source
 
@@ -956,21 +1008,28 @@
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ((indexPath.section == 1) && (indexPath.row == _events.count - 1) && !self.isLoading && _shouldLoadMore) {
-        
-        //NSLog(@"%s load more", __FUNCTION__);
-        if (self.isLoading == FALSE)
-        {
-            NSLog(@"User scrolled to the end of list...start fetching more items.");
-            self.isLoading = TRUE;
-            [self performSelectorInBackground:@selector(loadMoreEvent_bg) withObject:self.camChannel];
+    if (_events && _events.count > 0)
+    {
+        if ((indexPath.section == 1) && (indexPath.row == _events.count - 1) && _shouldLoadMore) {
+            
+            //NSLog(@"%s load more", __FUNCTION__);
+            if (_isLoading == FALSE)
+            {
+                NSLog(@"User scrolled to the end of list...start fetching more items.");
+                self.isLoading = TRUE;
+                
+                
+                [self performSelectorInBackground:@selector(loadMoreEvent_bg) withObject:self.camChannel];
+            }
+            else
+            {
+                NSLog(@"User scrolled to the end of list...we are loading more.. so don't do anything here");
+            }
         }
-        else
-        {
-            NSLog(@"User scrolled to the end of list...we are loading more.. so don't do anything here");
-        }
-        
-        
+    }
+    else
+    {
+        NSLog(@"%s Wanna load more but forcing WAIT!", __FUNCTION__);
     }
 }
 
@@ -995,7 +1054,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (self.isEventAlready == FALSE)
+    if (_isEventAlready == FALSE)
     {
         static NSString *CellIdentifier = @"Cell";
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -1116,6 +1175,8 @@
         }
         
         EventInfo *eventInfo = (EventInfo *)[_events objectAtIndex:indexPath.row];
+        
+        //EventInfo *eventInfo = (EventInfo *)[_events objectAtIndex:indexPath.row+1];
         
         //Make the string first-letter-capitalized
         NSString *text = eventInfo.alert_name;
@@ -1416,7 +1477,7 @@
                                                            toDate:[NSDate date]
                                                           options:nil];
     
-    BOOL isYesterday= NO;
+    //BOOL isYesterday= NO;
     if  ([self isEqualToDateIgnoringTime:[NSDate date] vsDate:eventDate]) //if it is today
     {
         //Show only hours/minutes
@@ -1432,7 +1493,7 @@
     }
     else if ([self isEqualToDateIgnoringTime:yesterday vsDate:eventDate])
     {
-        isYesterday = YES;
+        //isYesterday = YES;
         //Show only hours/minutes  with dates
         if (_is12hr)
         {
