@@ -10,6 +10,7 @@
 #import <MonitorCommunication/MonitorCommunication.h>
 #import "define.h"
 #import "HttpCom.h"
+#import "MBProgressHUD/MBProgressHUD.h"
 
 #define NUM_MELODY 6
 #define GAI_CATEGORY    @"Melody view"
@@ -58,11 +59,15 @@
         NSString * mel6 = NSLocalizedStringWithDefaultValue(@"melody_VI", nil, [NSBundle mainBundle],
                                                             @"All Melodies", nil);
         //All Melodies
-        self.melodies = [[NSArray alloc] initWithObjects:mel1, mel2, mel3, mel4, mel5, mel6,nil];
+        NSArray *arr = [[NSArray alloc] initWithObjects:mel1, mel2, mel3, mel4, mel5, mel6,nil];
+        self.melodies = arr;
+        [arr release];
     }
     else // Expect CameraHD
     {
-        self.melodies = [[NSArray alloc] initWithObjects:mel1, mel2, mel3, mel4, mel5,nil];
+        NSArray *arr = [[NSArray alloc] initWithObjects:mel1, mel2, mel3, mel4, mel5,nil];
+        self.melodies = arr;
+        [arr release];
     }
     
     self.melodyTableView.delegate = self;
@@ -118,10 +123,12 @@
     {
         if (_jsonCommBlock == nil)
         {
-            self.jsonCommBlock = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                                         Selector:nil
-                                                                     FailSelector:nil
-                                                                        ServerErr:nil];
+            BMS_JSON_Communication *comm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                  Selector:nil
+                                              FailSelector:nil
+                                                 ServerErr:nil];
+            self.jsonCommBlock = comm;
+            [comm release];
         }
         
         NSDictionary *responseDict = [_jsonCommBlock sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
@@ -162,13 +169,15 @@
                     valueMelodiesMap[melodyIndex]  = YES;
                 }
                 
-                [_melodyTableView reloadData];
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                    [_melodyTableView reloadData];
+                });
             }
         }
     }
 }
 
-- (void)setMelodyStatus_fg: (NSNumber *)melodyIndex
+- (void)setMelodyStatus_bg: (NSNumber *)melodyIndex
 {
     NSInteger melodyIdx = [melodyIndex integerValue];
     
@@ -190,17 +199,26 @@
     {
         if (!_jsonCommBlock)
         {
-            self.jsonCommBlock = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                                       Selector:nil
-                                                                   FailSelector:nil
-                                                                      ServerErr:nil];
+            BMS_JSON_Communication *comm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                  Selector:nil
+                                              FailSelector:nil
+                                                 ServerErr:nil];
+            self.jsonCommBlock = comm;
+            [comm release];
         }
         
         [_jsonCommBlock sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
                                                      andCommand:[NSString stringWithFormat:@"action=command&command=%@", command]
                                                       andApiKey:[[NSUserDefaults standardUserDefaults] objectForKey:@"PortalApiKey"]];
     }
-    
+    [self progressHDUDisplay:NO];
+}
+
+- (void)resetMelodyStatus {
+    for (int i = 0; i < _melodies.count; i++)
+    {
+        valueMelodiesMap[i] = FALSE;
+    }
     [_melodyTableView reloadData];
 }
 
@@ -330,7 +348,7 @@
 - (void)tableView: (UITableView *)tableView didSelectRowAtIndexPath: (NSIndexPath *)indexPath
 {
     //[[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"MelodyVC select row: %d", indexPath.row] withProperties:nil];
-    
+    [self progressHDUDisplay:YES];
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:@"Selected melody"
                                                      withLabel:@"Row"
@@ -357,9 +375,29 @@
         _melodyIndex = -1;
     }
     
-	[self performSelector:@selector(setMelodyStatus_fg:)
-               withObject:[NSNumber numberWithInt:(_melodyIndex + 1)]
-               afterDelay:0.1];
+    [_melodyTableView reloadData];
+    [self performSelectorInBackground:@selector(setMelodyStatus_bg:) withObject:[NSNumber numberWithInt:(_melodyIndex + 1)]];
 }
 
+- (void)progressHDUDisplay:(BOOL)display {
+    UIView *sv = [self.view superview];
+    if (sv) {
+        if (display) {
+            MBProgressHUD *showProgress = [MBProgressHUD showHUDAddedTo:sv animated:YES];
+            [showProgress setLabelText:@"Processing..."];
+        } else {
+            [MBProgressHUD hideAllHUDsForView:sv animated:YES];
+        }
+    }
+}
+
+- (BOOL)isPlaying {
+    for (int i = 0; i < _melodies.count; i++)
+    {
+        if (valueMelodiesMap[i] == YES) {
+            return YES;
+        }
+    }
+    return NO;
+}
 @end

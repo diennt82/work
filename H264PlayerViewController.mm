@@ -5452,35 +5452,39 @@ double _ticks = 0;
     {
         // Stop talkback if it is enabled
         
-        UILabel *labelCrazy = [[UILabel alloc] init];
-        
-        CGRect rect;
-        
-        if ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationPortrait)
-        {
-            rect = CGRectMake(SCREEN_WIDTH/2 - 115/2, SCREEN_HEIGHT - 35, 115, 30);
-        }
-        else
-        {
-            rect = CGRectMake(SCREEN_HEIGHT/2 - 115/2, SCREEN_WIDTH - 35, 115, 30);
-        }
-        
-        labelCrazy.frame = rect;
-        labelCrazy.backgroundColor = [UIColor grayColor];
-        labelCrazy.textColor = [UIColor whiteColor];
-        labelCrazy.font = [UIFont applyHubbleFontName:PN_SEMIBOLD_FONT withSize:13];
-        labelCrazy.textAlignment = NSTextAlignmentCenter;
-        labelCrazy.text = @"Talkback disabled";
-        [self.view addSubview:labelCrazy];
-        [self.view bringSubviewToFront:labelCrazy];
-        
-        [labelCrazy performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:3];
-        
-        [labelCrazy release];
+        [self showToat:NSLocalizedString(@"stop_talking_toat", @"")];
         
         //self.walkieTalkieEnabled = !_walkieTalkieEnabled;
         [self ib_buttonTouchToTalkTouchUpInside];
     }
+}
+
+- (void)showToat:(NSString *)text {
+    UILabel *labelCrazy = [[UILabel alloc] init];
+    
+    CGRect rect;
+    
+    if ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationPortrait)
+    {
+        rect = CGRectMake(SCREEN_WIDTH/2 - 115/2, SCREEN_HEIGHT - 35, 115, 30);
+    }
+    else
+    {
+        rect = CGRectMake(SCREEN_HEIGHT/2 - 115/2, SCREEN_WIDTH - 35, 115, 30);
+    }
+    
+    labelCrazy.frame = rect;
+    labelCrazy.backgroundColor = [UIColor grayColor];
+    labelCrazy.textColor = [UIColor whiteColor];
+    labelCrazy.font = [UIFont applyHubbleFontName:PN_SEMIBOLD_FONT withSize:13];
+    labelCrazy.textAlignment = NSTextAlignmentCenter;
+    labelCrazy.text = text;
+    [self.view addSubview:labelCrazy];
+    [self.view bringSubviewToFront:labelCrazy];
+    
+    [labelCrazy performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:3];
+    
+    [labelCrazy release];
 }
 
 - (void)enableLocalPTT:(BOOL)walkieTalkieEnable
@@ -5586,8 +5590,17 @@ double _ticks = 0;
         
         [[HttpCom instance].comWithDevice sendCommandAndBlock:command];
         
-        self.ib_buttonTouchToTalk.enabled = YES;
-        self.enablePTT = YES;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.ib_buttonTouchToTalk.enabled = YES;
+            self.enablePTT = YES;
+            
+            if (self.melodyViewController) {
+                if ([self.melodyViewController isPlaying]) {
+                    [self showToat:NSLocalizedString(@"stop_melody_toat", @"")];
+                    [self.melodyViewController resetMelodyStatus];
+                }
+            }
+        });
     }
 }
 
