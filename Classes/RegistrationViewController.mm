@@ -436,6 +436,11 @@
     [self.navigationController pushViewController:tcVC animated:YES];
     [tcVC release];
      */
+    [_tfUsername resignFirstResponder];
+    [_tfEmail resignFirstResponder];
+    [_tfPassword resignFirstResponder];
+    [_tfConfirmPassword resignFirstResponder];
+    
     ToUViewController *vc;
     
     if (isiPhone5 || isiPhone4){
