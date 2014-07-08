@@ -107,7 +107,7 @@
 
 - (IBAction)btnCheckboxTouchUpInsideAction:(UIButton *)sender
 {
-    [sender setSelected:!sender.selected];
+    [self.btnCheckbox setSelected:!self.btnCheckbox.selected];
     [self validateAllFieldsAndEnableSignUp];
 }
 
