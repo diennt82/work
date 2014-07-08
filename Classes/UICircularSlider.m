@@ -400,13 +400,15 @@ int finalAngle;
             if (!isReachLimit)
             {
                 
-                if (previousSweepAngle > 350 && storeAngle < 10)
+//                if (previousSweepAngle > 350 && storeAngle < 10)
+                if (previousSweepAngle - storeAngle > 180)
                 {
                     finalAngle = 360;
                     isReachLimit = true;
                     //NSLog(@"reach to limit 360");
                 }
-                else if (previousSweepAngle < 10 && storeAngle > 180)
+//                else if (previousSweepAngle < 10 && storeAngle > 180)
+                else if (storeAngle - previousSweepAngle > 180)
                 {
                     finalAngle = 0;
                     //NSLog(@"reach to limit zero");
