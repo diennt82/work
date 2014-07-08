@@ -74,6 +74,7 @@
                                                 } forState:UIControlStateNormal];
         earlierBarBtn.enabled = NO;
         self.navigationItem.rightBarButtonItem = earlierBarBtn;
+        [earlierBarBtn release];
         [self addHubbleLogo_Back];
     }
     else
@@ -81,9 +82,10 @@
         self.navigationController.navigationBarHidden = YES;
     }
     
-    self.timelineVC = [[TimelineViewController alloc] init];
+    self.timelineVC = [[[TimelineViewController alloc] init] autorelease];
     [_timelineVC setTitle:@"Timeline"];
     
+#if 0
     NSArray *viewControllers;
     
     if (CUE_RELEASE_FLAG)
@@ -96,11 +98,11 @@
         [savedViewController setTitle:@"Saved"];
         viewControllers = @[_timelineVC, savedViewController];
     }
-    
+#endif
     _tabBarController = [[MHTabBarController alloc] init];
     
 	_tabBarController.delegate = self;
-	_tabBarController.viewControllers = viewControllers;
+	_tabBarController.viewControllers = @[_timelineVC];
     
     [self.view addSubview:_tabBarController.view];
     
@@ -123,6 +125,8 @@
         
         self.timelineVC.tableView.contentInset = UIEdgeInsetsMake(5, 0, 64, 0);
     }
+    
+    NSLog(@"%s timelineVC:%d", __func__, _timelineVC.retainCount);
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -133,7 +137,7 @@
 
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
-        self.timelineVC.view.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT - 64);
+         self.timelineVC.view.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT - 64);
     }
     
     NSLog(@"EarlierVC - view: %@, timeline: %@, timelineContentSize: %@", NSStringFromCGRect(self.view.frame), NSStringFromCGRect(self.timelineVC.view.frame), NSStringFromUIEdgeInsets(self.timelineVC.tableView.contentInset));
@@ -156,6 +160,7 @@
     
     //finally, create your UIBarButtonItem using that button
     UIBarButtonItem* barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:button];
+    [button release];
     
     //then set it.  phew.
     [self.navigationItem setLeftBarButtonItem:barButtonItem];
@@ -169,18 +174,35 @@
     
     if (_tabBarController)
     {
+        [_tabBarController.view removeFromSuperview];
         _tabBarController.delegate = nil;
     }
     
     if (_timelineVC)
     {
         _timelineVC.timelineVCDelegate = nil;
+        [_timelineVC cancelAllLoadingImageTask];
     }
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults removeObjectForKey:CAM_IN_VEW];
     [userDefaults synchronize];
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)removeSubviews
+{
+    if (_timelineVC)
+    {
+        [_timelineVC cancelAllLoadingImageTask];
+        _timelineVC.timelineVCDelegate = nil;
+    }
+    
+    if (_tabBarController)
+    {
+        _tabBarController.delegate = nil;
+        [_tabBarController.view removeFromSuperview];
+    }
 }
 
 - (BOOL)shouldAutorotate
@@ -196,7 +218,8 @@
 
 - (void)dealloc
 {
-    NSLog(@"%s retain:%d", __FUNCTION__, self.retainCount);
+    NSLog(@"%s", __FUNCTION__);
+    
     [_timelineVC release];
     [_tabBarController release];
     [super dealloc];

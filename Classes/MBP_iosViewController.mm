@@ -1796,8 +1796,9 @@
         
         self.app_stage = APP_STAGE_LOGGING_IN;
         
-        LoginViewController *loginVC = [[LoginViewController alloc] initWithNibName:@"LoginViewController"   bundle:Nil   delegate:self];
+        LoginViewController *loginVC = [[LoginViewController alloc] initWithDelegate:self];
         [self.navigationController pushViewController:loginVC animated:NO];
+        [loginVC release];
     }
 }
 

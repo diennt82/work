@@ -100,7 +100,7 @@
 
 - (void)dealloc {
     [_melodyTableView release];
-    [_selectedChannel release];
+    //[_selectedChannel release];
     [_jsonCommBlock release];
     
     [super dealloc];
@@ -162,7 +162,15 @@
                     valueMelodiesMap[melodyIndex]  = YES;
                 }
                 
-                [_melodyTableView reloadData];
+                if (self.isViewLoaded && self.view.window) {
+                    [_melodyTableView performSelectorOnMainThread:@selector(reloadData)
+                                                       withObject:nil
+                                                    waitUntilDone:NO];
+                }
+                else
+                {
+                    NSLog(@"%s View is invisible. Ignoring.", __FUNCTION__);
+                }
             }
         }
     }

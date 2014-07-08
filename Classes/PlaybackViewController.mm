@@ -74,6 +74,7 @@
     singleTap.numberOfTapsRequired = 1;
     singleTap.numberOfTouchesRequired = 1;
     [self.view addGestureRecognizer:singleTap];
+    [singleTap release];
     self.duration = 1;
     self.timeStarting = 0;
 }
@@ -92,7 +93,6 @@
                                              selector: @selector(playbackEnteredBackground)
                                                  name: UIApplicationDidEnterBackgroundNotification
                                                object: nil];
-#if 1
     [[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(playbackWillEnterForeground)
                                                  name: UIApplicationWillEnterForegroundNotification
@@ -101,17 +101,6 @@
                                              selector: @selector(playbackInactivePushes)
                                                  name: PUSH_NOTIFY_BROADCAST_WHILE_APP_INACTIVE
                                                object: nil];
-#else
-    [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(playbackBecomeInActive)
-                                                 name: UIApplicationWillResignActiveNotification
-                                               object: nil];
-    
-	[[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(playbackBecomeActive)
-                                                 name: UIApplicationDidBecomeActiveNotification
-                                               object: nil];
-#endif
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -134,7 +123,6 @@
 
 - (void)playbackEnteredBackground
 {
-#if 1
     NSLog(@"%s isPause:%d", __FUNCTION__, _isPause);
     
     if(MediaPlayer::Instance()->isPlaying())
@@ -147,40 +135,8 @@
     {
         NSLog(@"%s Already pause.", __FUNCTION__);
     }
-#else
-    NSLog(@"%s mediaCurrentState:%d", __FUNCTION__, _mediaCurrentState);
-
-    if (self.mediaCurrentState == MEDIA_PLAYER_STARTED)
-    {
-        NSLog(@"Playback - playbackEnteredBackground - IF()");
-        
-        if (_isPause)
-        {
-            self.isPause = NO;
-            MediaPlayer::Instance()->resume();
-            self.ib_playPlayBack.selected = NO;
-        }
-        
-        [self stopStream:nil];
-    }
-    else if(_mediaCurrentState == 0) // Start set data sourece
-    {
-        NSLog(@"Playback - playbackEnteredBackground - else if()");
-        MediaPlayer::Instance()->sendInterrupt();
-    }
-    else
-    {
-        NSLog(@"Playback - playbackEnteredBackground - else{}");
-    }
-    
-    if (self.list_refresher != nil)
-    {
-        [self.list_refresher invalidate];
-    }
-#endif
 }
 
-#if 1
 - (void)playbackWillEnterForeground
 {
     NSLog(@"%s ", __FUNCTION__);
@@ -197,28 +153,6 @@
     
     [MBProgressHUD hideAllHUDsForView:self.view animated:NO];
 }
-#else
--(void) playbackBecomeInActive
-{
-    _shouldRestartProcess = NO;
-}
-
-- (void)playbackBecomeActive
-{
-    NSLog(@"%s _shouldRestartProcess:%d", __FUNCTION__, _shouldRestartProcess);
-    
-    if (_shouldRestartProcess)
-    {
-        self.activityIndicator.hidden = NO;
-        [self.activityIndicator startAnimating];
-        
-        self.view.userInteractionEnabled = NO;
-        self.ib_myOverlay.hidden = YES;
-        
-        [self becomeActive];
-    }
-}
-#endif
 
 #pragma mark - PLAY VIDEO
 - (void)becomeActive
@@ -269,9 +203,7 @@
         self.urlVideo = self.clip_info.urlFile;
     }
 #endif
-//    [self performSelector:@selector(startStream)
-//               withObject:nil
-//               afterDelay:0.1];
+    
     [self startStream];
 }
 
@@ -386,7 +318,8 @@
             {
                 NSLog(@"%s call goBackToPlayList", __FUNCTION__);
                 
-                [self goBackToPlayList];
+                //[self goBackToPlayList];
+                [self performSelectorOnMainThread:@selector(goBackToPlayList) withObject:nil waitUntilDone:NO];
             }
             else
             {
@@ -428,13 +361,7 @@
     else // set Data source failed!
     {
         NSLog(@"%s has not played yet", __FUNCTION__);
-#if 1
         MediaPlayer::Instance()->sendInterrupt();
-#else
-        MediaPlayer::Instance()->setListener(nil);
-        MediaPlayer::Instance()->suspend();
-        MediaPlayer::Instance()->stop();
-#endif
     }
 
     NSLog(@"Stop stream end");
@@ -808,6 +735,7 @@
 
 
 #pragma mark Display Time
+
 -(void)watcher
 {
     //NSLog(@"%s", __FUNCTION__);

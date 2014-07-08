@@ -281,8 +281,8 @@
 @property (retain, nonatomic) IBOutlet UIImageView *imageViewKnob;
 @property (retain, nonatomic) IBOutlet UIView *viewDebugInfo;
 
-@property (retain, nonatomic) EarlierViewController *earlierVC;
-@property (retain, nonatomic) TimelineViewController *timelineVC;
+@property (assign, nonatomic) EarlierViewController *earlierVC;
+@property (assign, nonatomic) TimelineViewController *timelineVC;
 @property (retain, nonatomic) UIImageView *imageViewStreamer;
 @property (nonatomic) BOOL isHorizeShow;
 @property (nonatomic, retain) NSTimer *timerHideMenu;
@@ -314,6 +314,7 @@
 @property (nonatomic) BOOL isInLocal;
 @property (nonatomic) BOOL isAlreadyHorizeMenu;
 @property (nonatomic, retain) BMS_JSON_Communication *jsonCommBlocked;
+@property (nonatomic, retain) BMS_JSON_Communication *jsonComm;
 @property (nonatomic, assign) EarlierNavigationController *earlierNavi;
 @property (nonatomic) BOOL wantToShowTimeLine;
 @property (nonatomic, retain) NSTimer *timerIncreaseBitRate;
@@ -321,6 +322,7 @@
 @property (nonatomic, retain) NSString *messageStreamingState;
 @property (nonatomic, retain) NSTimer *timerBufferingTimeout;
 @property (nonatomic, retain) UIAlertView *alertViewTimoutRemote;
+@property (nonatomic, retain) NSDate *timeStartingStageOne;
 @property (nonatomic, retain) NSDate *timeStartingStageTwo;
 @property (nonatomic) NSTimeInterval timeStageTwoTotal;
 @property (nonatomic, retain) NSDate *timeStartPlayerView;
@@ -347,6 +349,7 @@
 @property (nonatomic) NSInteger fwUpgradedProgress;
 @property (nonatomic) NSInteger fwUpgradeStatus;
 @property (nonatomic) BOOL hasFwVersion;
+@property (nonatomic) BOOL shouldBeep;
 
 
 - (void)scan_done:(NSArray *) _scan_results;

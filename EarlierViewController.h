@@ -13,14 +13,16 @@
 
 @interface EarlierViewController : UIViewController<MHTabBarControllerDelegate>
 {
-    MHTabBarController *_tabBarController;
+    //MHTabBarController *_tabBarController;
 }
 
-@property (nonatomic, retain) TimelineViewController *timelineVC;
+@property (nonatomic, assign) MHTabBarController *tabBarController;
+@property (nonatomic, assign) TimelineViewController *timelineVC;
 @property (nonatomic, assign) CamChannel *camChannel;
 @property (nonatomic, assign) UINavigationController *nav;
 
 - (id)initWithCamChannel: (CamChannel *)camChannel;
 - (id)initWithParentVC: (id)parentVC camChannel: (CamChannel *)camChannel;
+- (void)removeSubviews;
 
 @end

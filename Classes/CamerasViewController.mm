@@ -633,7 +633,7 @@
         H264PlayerViewController *h264PlayerViewController = [[H264PlayerViewController alloc] init];
         
         h264PlayerViewController.selectedChannel = ch;
-        h264PlayerViewController.h264PlayerVCDelegate = self;
+        //h264PlayerViewController.h264PlayerVCDelegate = self;
         
         //MenuViewController *tabBarController = (MenuViewController *)self.parentViewController;
         [((MenuViewController *)self.parentVC).navigationController pushViewController:h264PlayerViewController animated:YES];
