@@ -5466,11 +5466,11 @@ double _ticks = 0;
     
     if ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationPortrait)
     {
-        rect = CGRectMake(SCREEN_WIDTH/2 - 115/2, SCREEN_HEIGHT - 35, 115, 30);
+        rect = CGRectMake((SCREEN_WIDTH - 150) / 2, SCREEN_HEIGHT - 35, 150, 30);
     }
     else
     {
-        rect = CGRectMake(SCREEN_HEIGHT/2 - 115/2, SCREEN_WIDTH - 35, 115, 30);
+        rect = CGRectMake((SCREEN_HEIGHT - 150) / 2, SCREEN_WIDTH - 35, 150, 30);
     }
     
     labelCrazy.frame = rect;
