@@ -41,11 +41,9 @@
 - (void)stopHolder {
     [timer invalidate];
     timer = nil;
-    NSLog(@"stopHolder");
 }
 
 - (void)onTimer:(NSTimer *)timer {
-    NSString *s = [[HttpCom instance].comWithDevice sendCommandAndBlock:GET_VERSION];
-    NSLog(@"onTimer GET_VERSION %@", s);
+    [[HttpCom instance].comWithDevice sendCommandAndBlock:GET_VERSION];
 }
 @end
