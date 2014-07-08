@@ -71,7 +71,6 @@
     self.tfPassword.delegate = self;
     self.tfConfirmPassword.delegate =self;
     
-    [self.agreeButton.titleLabel setTextColor:[UIColor blueColor]];
     NSMutableAttributedString *commentString = [[NSMutableAttributedString alloc] initWithString:self.agreeButton.titleLabel.text];
     [commentString addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInteger:NSUnderlineStyleSingle] range:NSMakeRange(0, [commentString length])];
     [self.agreeButton.titleLabel setAttributedText:commentString];
