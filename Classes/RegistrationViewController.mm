@@ -25,6 +25,7 @@
 @property (retain, nonatomic) IBOutlet UIButton *btnCheckbox;
 @property (retain, nonatomic) IBOutlet UIButton *btnCreate;
 @property (retain, nonatomic) IBOutlet UIView *viewProgress;
+@property (nonatomic, assign) IBOutlet UIButton     *agreeButton;
 
 @property (retain, nonatomic) NSString *stringUsername;
 @property (retain, nonatomic) NSString *stringPassword;
@@ -69,6 +70,12 @@
     self.tfEmail.delegate = self;
     self.tfPassword.delegate = self;
     self.tfConfirmPassword.delegate =self;
+    
+    [self.agreeButton.titleLabel setTextColor:[UIColor blueColor]];
+    NSMutableAttributedString *commentString = [[NSMutableAttributedString alloc] initWithString:self.agreeButton.titleLabel.text];
+    [commentString addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInteger:NSUnderlineStyleSingle] range:NSMakeRange(0, [commentString length])];
+    [self.agreeButton.titleLabel setAttributedText:commentString];
+    [commentString release];
 }
 
 - (void)viewWillAppear:(BOOL)animated

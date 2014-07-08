@@ -7,6 +7,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="RegistrationViewController">
             <connections>
+                <outlet property="agreeButton" destination="8sh-Kn-psI" id="bUs-YV-06A"/>
                 <outlet property="btnCheckbox" destination="TRe-Gz-ApL" id="jWN-L7-BHi"/>
                 <outlet property="btnCreate" destination="NfN-ak-lqf" id="e5h-xV-M8N"/>
                 <outlet property="tfConfirmPassword" destination="4J6-DP-Q0d" id="Ult-eZ-a4I"/>
