@@ -61,6 +61,18 @@
     return self;
 }
 
+- (id)initWithDelegate: (id<ConnectionMethodDelegate>) d
+{
+    self = [super init];
+    
+    if (self) {
+        // Custom initialization
+        self.delegate = d;
+    }
+    
+    return self;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];

@@ -13,10 +13,7 @@
 #import "CameraMenuViewController.h"
 #import "MenuViewController.h"
 
-@interface NotifViewController : UIViewController{
-
-    BMS_JSON_Communication *jsonComm;
-}
+@interface NotifViewController : UIViewController
 
 @property(nonatomic, retain) id <ConnectionMethodDelegate> notifDelegate;
 

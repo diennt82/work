@@ -361,13 +361,16 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    if (indexPath.section == SEC_SECTION)
     {
-        if (indexPath.section == SEC_SECTION)
+        if (indexPath.row == PASSWORD_INDEX)
         {
-            if (indexPath.row == PASSWORD_INDEX)
+            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
             {
-                return 50;
+                return 75;
+            }
+            else {
+                return 65;
             }
         }
     }
@@ -403,6 +406,13 @@
             }
             if (indexPath.row == PASSWORD_INDEX)
             {
+                if ([[self.passwordCell viewWithTag:501] isKindOfClass:[UIButton class]]) {
+                    UIButton *button = (UIButton *) [self.passwordCell viewWithTag:501];
+                    [button setImage:[UIImage imageNamed:@"checkbox"] forState:UIControlStateNormal];
+                    [button setImage:[UIImage imageNamed:@"checkbox_active"] forState:UIControlStateSelected];
+                    [button setImage:[UIImage imageNamed:@"checkbox_active"] forState:UIControlStateHighlighted];
+                    [button addTarget:self action:@selector(handlerShowPasswordButon:) forControlEvents:UIControlEventTouchUpInside];
+                }
                 return passwordCell;
             }
             if (indexPath.row == CONFPASSWORD_INDEX)
@@ -1164,6 +1174,10 @@
 }
 
 
-
+- (void)handlerShowPasswordButon:(id)sender {
+    UIButton *button = sender;
+    [button setSelected:!button.selected];
+    [self.tfPassword setSecureTextEntry:!self.tfPassword.secureTextEntry];
+}
 
 @end

@@ -30,6 +30,7 @@
 
 
 #define SET_UP_CAMERA @"SET_UP_CAMERA"
+#define SET_UP_CAMERA_TAG @"SET_UP_CAMERA_TAG"
 #define BLUETOOTH_SETUP  1
 #define WIFI_SETUP      2
 

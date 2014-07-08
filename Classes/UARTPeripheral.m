@@ -91,7 +91,7 @@
         [_timeOutCommand invalidate];
         _timeOutCommand = nil;
     }
-
+    
     self.isDisconnected = YES;
     
     NSLog(@"UART PERI: didDisconnect, stop timer ");
@@ -113,7 +113,7 @@
     
     [data appendBytes:(const void *)null_char length:1];
     NSLog(@"data is: %@", data);
-
+    
     
     if ( [data length] > 20)
     {
@@ -232,7 +232,7 @@
 
 - (void) send_hello:(NSTimer *) exp
 {
-
+    
     
     self.hello_timer = nil ;
     
@@ -240,7 +240,7 @@
     if (self.isBusy == TRUE)
     {
         
-    
+        
     }
     else
     {
@@ -342,7 +342,7 @@
 
 -(void) receiveDataTimeOut:(NSTimer *) timer
 {
-
+    
     
     /* when timeout - just simply resend */
 #if 1
@@ -364,7 +364,7 @@
             
             //commandToCamera = @"get_version";
             
-              NSLog(@"retrying with timeout :%@", commandToCamera);
+            NSLog(@"retrying with timeout :%@", commandToCamera);
             [self retryOldCommand:commandToCamera];
         }
         else
@@ -381,21 +381,21 @@
             [self retryOldCommand:commandToCamera];
         }
     }
-  //  else
+    //  else
 #endif
-//    {
-//        //tired --- disconnect now
-//        _timeOutCommand = nil;
-//        self.isBusy = FALSE;
-//        retry_count = -1;
-//        if (self.delegate)
-//        {
-//            [self.delegate onReceiveDataError:READ_TIME_OUT forCommand:commandToCamera];
-//        }
-//    }
+    //    {
+    //        //tired --- disconnect now
+    //        _timeOutCommand = nil;
+    //        self.isBusy = FALSE;
+    //        retry_count = -1;
+    //        if (self.delegate)
+    //        {
+    //            [self.delegate onReceiveDataError:READ_TIME_OUT forCommand:commandToCamera];
+    //        }
+    //    }
     
     
-
+    
 }
 - (void) writeRawData:(NSData *) data
 {
@@ -576,7 +576,7 @@
 {
     int last_index = -1;
     
-
+    
     
     //find the 1 00
     int i;
@@ -591,7 +591,7 @@
         {
             break;
         }
-
+        
     }
     
     
@@ -615,9 +615,9 @@
     for ( i=0 ; i < [data_buff length]-3; i++)
     {
         if ( data_ptr[i] ==0xff &&
-             data_ptr[i+1] == 0xff &&
-             data_ptr[i+2]  ==  0x00 &&
-             data_ptr[i+3]  == 0x57)
+            data_ptr[i+1] == 0xff &&
+            data_ptr[i+2]  ==  0x00 &&
+            data_ptr[i+3]  == 0x57)
         {
             last_index = i;
             break;
@@ -665,7 +665,7 @@
             if (rcv_data[i] == 0x03 && rcv_data[i+1] == 0x00)
             {
                 endblock_index = i;
-                 NSLog(@"0x03 0x00 at  %d" ,  i);
+                NSLog(@"0x03 0x00 at  %d" ,  i);
                 break;
             }
             
@@ -679,7 +679,7 @@
             NSLog(@"after 0x03 0x00 there is  %d" ,  [characteristic value].length -1 -2 - endblock_index);
             [rx_buff appendBytes:[[characteristic value] bytes]+endblock_index+2 length:(  [characteristic value].length -1 -2 - endblock_index )];
         }
-
+        
         int garbage_seq_index = [self checkBufferForSpecialSequence:rx_buff];
         if (garbage_seq_index != -1)
         {
@@ -691,7 +691,7 @@
             [rx_buff replaceBytesInRange:range1
                                withBytes:NULL
                                   length:0];
-#else 
+#else
             // Force disconnect BLE
             NSLog(@">>> found some garbage code.. Disconnect BLE!!");
             [self receiveDataTimeOut:nil];
@@ -699,33 +699,76 @@
             return;
 #endif
         }
-
         
-
+        
+        
         /* Find the end 0x01 char */
         
         int sequence_index = [self checkBufferForNullChar:rx_buff];
-        
-#if 0
-        //For Step debug
-        sequence_index = rx_buff.length-1;
-#endif
+
         if (sequence_index  != -1)
         {
             int padding_index =[self checkBufferFor02char:rx_buff] ;
+            
+            
+#if 0 //DEBUG BLE wrong string
+            if (padding_index > 3)
+            {
+                sequence_index = padding_index -2;
+            }
+#endif
+            
+            bool foundNewEndIndex = true;
+            NSString *  string = nil;
+            // if the end is not very far from the beginning --> Error
+            while ( sequence_index <= (padding_index +1))
+            {
+                NSLog(@">>> found  end before start ... cut it");
+                //cut this string away
+                NSRange range = NSMakeRange(0, sequence_index+1);
+                [rx_buff replaceBytesInRange:range
+                                   withBytes:NULL
+                                      length:0];
+                
+                 NSLog(@">>> find new end  index ");
+                sequence_index = [self checkBufferForNullChar:rx_buff];
+                
+                //Not found
+                if (sequence_index ==-1)
+                {
+                    NSLog(@"Not enough data  yet.. returning");
+                    foundNewEndIndex = false;
+                    break;
+                }
+                
+            }
+            
+            
+            if (foundNewEndIndex ==false)
+            {
+
+                NSLog(@"Do nothing here.. util timeout");
+                return;
+            }
+            
+            
+            
             //take the sub range starting from the latest index of 0x02 -
             NSRange range = NSMakeRange(padding_index+1, sequence_index-(padding_index+1));
-
+            
             NSData *result_str = [rx_buff subdataWithRange:range];
             
             NSLog(@"Got enough data : %d, - commandToCamera: %@",[result_str length], commandToCamera);
             
-            /*
-             * Try to fix: Uncaught exception: *** +[NSString stringWithUTF8String:]: NULL cString
-             */
+            string = result_str ? [NSString stringWithUTF8String:[result_str bytes]] : nil;
             
-            NSString *string = result_str ? [NSString stringWithUTF8String:[result_str bytes]] : nil;
-            //invalidate time out
+            //cut this string away
+            range = NSMakeRange(0, sequence_index+1);
+            [rx_buff replaceBytesInRange:range
+                               withBytes:NULL
+                                  length:0];
+            
+            
             if (_timeOutCommand && [_timeOutCommand isValid])
             {
                 [_timeOutCommand invalidate];
@@ -744,12 +787,8 @@
                 [self.delegate didReceiveData:string];
             }
             
-            //cut this string away
-            range = NSMakeRange(0, sequence_index+1);
-            [rx_buff replaceBytesInRange:range
-                               withBytes:NULL
-                                  length:0];
-
+          
+            
             read_error = READ_SUCCESS;
 #if 1
             NSLog(@"start hello timer");
@@ -761,12 +800,12 @@
             }
             
             self.hello_timer  =  [NSTimer scheduledTimerWithTimeInterval:7.0
-                                                             target:self
-                                                           selector:@selector(send_hello:)
-                                                           userInfo:nil
-                                                            repeats:NO];
+                                                                  target:self
+                                                                selector:@selector(send_hello:)
+                                                                userInfo:nil
+                                                                 repeats:NO];
 #endif
-
+            
         }
         else
         {

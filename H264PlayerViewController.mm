@@ -116,6 +116,7 @@ double _ticks = 0;
     
     
     self.customIndicator.image = [UIImage imageNamed:@"loader_a"];
+    self.customIndicator.hidden = YES;
     
     NSLog(@"camera model is :%@", self.cameraModel);
     self.backgroundTask = UIBackgroundTaskInvalid;
@@ -152,7 +153,7 @@ double _ticks = 0;
                                                object: nil];
     
     
-#if 1
+
     [[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(h264_HandleDidEnterBackground)
                                                  name: UIApplicationDidEnterBackgroundNotification
@@ -167,23 +168,6 @@ double _ticks = 0;
 
     
     
-#else
-    // Do any additional setup after loading the view.
-	[[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(h264_HandleEnteredBackground)
-                                                 name: UIApplicationDidEnterBackgroundNotification
-                                               object: nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(h264_HandleAppInactive)
-                                                 name: UIApplicationWillResignActiveNotification
-                                               object: nil];
-    
-	[[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(h264_HandleBecomeActive)
-                                                 name: UIApplicationDidBecomeActiveNotification
-                                               object: nil];
-#endif
     //alway show custom indicator, when view appear
     _isShowCustomIndicator = YES;
     self.currentMediaStatus = 0;
@@ -220,20 +204,20 @@ double _ticks = 0;
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         [userDefaults setObject:_selectedChannel.profile.mac_address forKey:CAM_IN_VEW];
         [userDefaults synchronize];
-    }
-    
-    
-    
-    
+    }  
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
+    NSLog(@"%s ********************************************************************************", __FUNCTION__);
+    
     [self stopTimerRecoring];
+    [MBProgressHUD hideAllHUDsForView:self.view animated:NO];
     
     [super viewWillDisappear:animated];
 }
 
+#if 0 // NS_DEPRECATED!
 - (void)viewDidUnload {
     NSLog(@"%s", __FUNCTION__);
     [self setImageViewVideo:nil];
@@ -246,6 +230,7 @@ double _ticks = 0;
     
     [super viewDidUnload];
 }
+#endif
 
 - (void)applyFont
 {
@@ -479,9 +464,9 @@ double _ticks = 0;
     //init a normal UIButton using that image
     UIButton* button = [[UIButton alloc] initWithFrame:frame];
     [button setBackgroundImage:image forState:UIControlStateNormal];
-    [button setBackgroundImage:image forState:UIControlStateHighlighted];
-    [button setBackgroundImage:image forState:UIControlStateSelected];
-    [button setBackgroundImage:image forState:UIControlStateDisabled];
+    //[button setBackgroundImage:image forState:UIControlStateHighlighted];
+    //[button setBackgroundImage:image forState:UIControlStateSelected];
+    //[button setBackgroundImage:image forState:UIControlStateDisabled];
     
     //[button setShowsTouchWhenHighlighted:YES];
     
@@ -490,12 +475,14 @@ double _ticks = 0;
     
     //finally, create your UIBarButtonItem using that button
     UIBarButtonItem* barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:button];
+    [button release];
     
     //then set it.  phew.
     [self.navigationItem setLeftBarButtonItem:barButtonItem];
     
     [barButtonItem release];
 }
+
 - (void) updateNavigationBarAndToolBar
 {
     if (![self.selectedChannel.profile isSharedCam]) // SharedCam
@@ -731,6 +718,12 @@ double _ticks = 0;
     {
         case MEDIA_INFO_GET_AUDIO_PACKET:
             //NSLog(@"%s Got audio packet", __FUNCTION__);
+            if ( userWantToCancel == TRUE)
+            {
+                NSLog(@"%s MEDIA_INFO_GET_AUDIO_PACKET after streaming stopped", __FUNCTION__);
+                return;
+                
+            }
             
             if (_timerBufferingTimeout)
             {
@@ -747,6 +740,13 @@ double _ticks = 0;
             break;
         case MEDIA_INFO_START_BUFFERING:
             
+            if ( userWantToCancel == TRUE)
+            {
+                NSLog(@"%s MEDIA_INFO_GET_AUDIO_PACKET after streaming stopped", __FUNCTION__);
+                return;
+                
+            }
+
             NSLog(@"%s MEDIA_INFO_START_BUFFERING", __FUNCTION__);
             
             if (_timerBufferingTimeout)
@@ -861,6 +861,7 @@ double _ticks = 0;
         case MEDIA_INFO_HAS_FIRST_IMAGE:
         {
             _isShowCustomIndicator = NO;
+            self.shouldBeep = TRUE;
             [self displayCustomIndicator];
             
             NSLog(@"[MEDIA_PLAYER_HAS_FIRST_IMAGE]");
@@ -1327,6 +1328,13 @@ double _ticks = 0;
     [self stopPeriodicBeep];
     [self stopPeriodicPopup];
     
+    if (_jsonComm)
+    {
+        [_jsonComm cancel];
+        [_jsonComm release];
+        self.jsonComm = nil;
+    }
+    
     if (_audioOutStreamRemote)
     {
         [_audioOutStreamRemote disconnectFromAudioSocketRemote];
@@ -1468,11 +1476,6 @@ double _ticks = 0;
     [self prepareGoBackToCameraList:nil];
 }
 
-
-
-#if 1
-
-
 - (void)h264_HandleDidEnterBackground
 {
     NSLog(@"%s userWantToCancel:%d, returnFromPlayback:%d, mediaProcessStatus: %d, _timerBufferingTimeout:%p", __FUNCTION__, userWantToCancel, _returnFromPlayback, _mediaProcessStatus, _timerBufferingTimeout);
@@ -1508,6 +1511,13 @@ double _ticks = 0;
         [_audioOutStreamRemote disconnectFromAudioSocketRemote];
     }
     
+    if (_jsonComm)
+    {
+        [_jsonComm cancel];
+        [_jsonComm release];
+        self.jsonComm = nil;
+    }
+    
     if (_mediaProcessStatus == MEDIAPLAYER_NOT_INIT)
     {
         
@@ -1533,7 +1543,6 @@ double _ticks = 0;
     }
     else //MEDIAPLAYER_STARTED
     {
-        //MediaPlayer::Instance()->setFFmpegInterrupt(true);
         [self stopStream];
     }
     
@@ -1569,8 +1578,8 @@ double _ticks = 0;
 
 - (void)h264_HandleWillEnterForeground
 {
-    NSLog(@"%s userWantToCancel:%d, returnFromPlayback:%d, mediaProcessStatus: %d, _shouldRestartProcessing:%d, UIBackgroundTaskInvalid:%d, isFWUpgradingInProgress:%d",
-          __FUNCTION__, userWantToCancel, _returnFromPlayback, _mediaProcessStatus, _shouldRestartProcessing, UIBackgroundTaskInvalid, _isFWUpgradingInProgress);
+    NSLog(@"%s userWantToCancel:%d, returnFromPlayback:%d, mediaProcessStatus: %d, UIBackgroundTaskInvalid:%d, isFWUpgradingInProgress:%d",
+          __FUNCTION__, userWantToCancel, _returnFromPlayback, _mediaProcessStatus, UIBackgroundTaskInvalid, _isFWUpgradingInProgress);
     
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:@"Become Active"
@@ -1591,18 +1600,9 @@ double _ticks = 0;
     self.currentMediaStatus = 0;
     self.wantToShowTimeLine = YES;
     
-    if (!self.earlierNavi.isEarlierView)
+    if (!_earlierNavi.isEarlierView)
     {
         [self showTimelineView];
-    }
-    
-    if(_selectedChannel.profile.isInLocal == TRUE)
-    {
-        NSLog(@"Become ACTIVE _  .. Local");
-    }
-    else if ( _selectedChannel.profile.minuteSinceLastComm <= 5) // Remote
-    {
-        NSLog(@"Become ACTIVE _  .. REMOTE");
     }
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -1619,6 +1619,17 @@ double _ticks = 0;
     }
     
     //this func gets call even after app enter inactive state -> we don't stop player then..thus do not restart player here
+#if 1
+    if (self.backgroundTask != UIBackgroundTaskInvalid)
+    {
+        NSLog(@"%s Waiting for stop streaming process.", __FUNCTION__);
+        MediaPlayer::Instance()->sendInterrupt();
+    }
+    else
+    {
+        [self scanCamera];
+    }
+#else
     if ( _selectedChannel.stopStreaming == TRUE)
     {
         if (_mediaProcessStatus == MEDIAPLAYER_NOT_INIT)
@@ -1648,136 +1659,9 @@ double _ticks = 0;
                 [self scanCamera];
             }
         }
-
     }
-}
-#else
-- (void)h264_HandleBecomeActive
-{
-    NSLog(@"%s wants to cancel: %d, rtn frm Playback: %d", __FUNCTION__, userWantToCancel, _returnFromPlayback);
-    [[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView Become active" withProperties:nil];
-    [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
-                                                    withAction:@"Become Active"
-                                                     withLabel:nil
-                                                     withValue:[NSNumber numberWithDouble:userWantToCancel]];
-    if (userWantToCancel == TRUE || _returnFromPlayback)
-    {
-        return;
-    }
-    
-    
-    
-    self.h264StreamerIsInStopped = FALSE;
-    self.currentMediaStatus = 0;
-    self.wantToShowTimeLine = YES;
-    
-    if (!self.earlierNavi.isEarlierView)
-    {
-        [self showTimelineView];
-    }
-    
-    if(_selectedChannel.profile.isInLocal == TRUE)
-    {
-        NSLog(@"Become ACTIVE _  .. Local");
-    }
-    else if ( _selectedChannel.profile.minuteSinceLastComm <= 5) // Remote
-    {
-        NSLog(@"Become ACTIVE _  .. REMOTE");
-    }
-    
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    BOOL cancelBecauseOfPn = [userDefaults boolForKey:HANDLE_PN];
-    if (cancelBecauseOfPn == TRUE)
-    {
-        NSLog(@"set user = true");
-        userWantToCancel = TRUE;
-        return;
-    }
-    
-    //this func gets call even after app enter inactive state -> we don't stop player then..thus do not restart player here
-    if ( _selectedChannel.stopStreaming == TRUE)
-    {
-        
-        [self checkOrientation];
-        
-        [self scanCamera];
-    }
-}
-
-
--(void) h264_HandleAppInactive
-{
-    NSLog(@"App will resign active..  do nothing here");
-    
-}
-
-- (void)h264_HandleEnteredBackground
-{
-    NSLog(@"%s wants to cancel: %d, rtn frm Playback: %d, nav: %@", __FUNCTION__, userWantToCancel, _returnFromPlayback, self.navigationController.visibleViewController.description);
-    
-    [[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView Enter background" withProperties:nil];
-    [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
-                                                    withAction:@"Enter background"
-                                                     withLabel:@"Homekey"
-                                                     withValue:[NSNumber numberWithDouble:userWantToCancel]];
-    
-    if (userWantToCancel == TRUE || _returnFromPlayback)
-    {
-        return;
-    }
-    
-    _selectedChannel.stopStreaming = TRUE;
-    
-    [self stopPeriodicBeep];
-    [self stopPeriodicPopup];
-    
-    if (_alertViewTimoutRemote)
-    {
-        [_alertViewTimoutRemote dismissWithClickedButtonIndex:-1 animated:NO];
-    }
-    
-    if (_audioOutStreamRemote)
-    {
-        [_audioOutStreamRemote disconnectFromAudioSocketRemote];
-    }
-    
-    
-    if (_mediaProcessStatus == MEDIAPLAYER_NOT_INIT)
-    {
-        
-    }
-    else if(_mediaProcessStatus == MEDIAPLAYER_SET_LISTENER)
-    {
-        MediaPlayer::Instance()->sendInterrupt();
-        [self stopStream];
-        
-    }
-    else if (_mediaProcessStatus == MEDIAPLAYER_SET_DATASOURCE)
-    {
-        MediaPlayer::Instance()->sendInterrupt();
-    }
-    else //MEDIAPLAYER_STARTED
-    {
-        MediaPlayer::Instance()->sendInterrupt();
-        [self stopStream];
-    }
-    
-    
-    self.h264StreamerIsInStopped = TRUE;
-    self.imageViewVideo.backgroundColor = [UIColor blackColor];
-    self.imageViewStreamer.backgroundColor = [UIColor blackColor];
-    
-    if (_selectedChannel.profile.isInLocal == TRUE)
-    {
-        NSLog(@"Enter Background.. Local ");
-    }
-    else if (_selectedChannel.profile.minuteSinceLastComm <= 5) // Remote
-    {
-        //NSLog(@"abort remote timer ");
-        [_selectedChannel abortViewTimer];
-    }
-}
 #endif
+}
 
 - (BOOL)hidesBottomBarWhenPushed
 {
@@ -1800,7 +1684,12 @@ double _ticks = 0;
     }
     
     self.selectedChannel.stopStreaming = NO;
-    [self displayCustomIndicator];
+    
+    //TODO: Don't call it here.. too many calls to this
+    //[self displayCustomIndicator];
+
+    
+
     [self scanCamera];
     
     [self hideControlMenu];
@@ -2197,10 +2086,7 @@ double _ticks = 0;
                                                     withAction:@"Go back"
                                                      withLabel:@"Hubble back button item"
                                                      withValue:[NSNumber numberWithDouble:_currentMediaStatus]];
-    
-    self.activityStopStreamingProgress.hidden = NO;
-    [self.view bringSubviewToFront:_activityStopStreamingProgress];
-    
+    [MBProgressHUD showHUDAddedTo:self.view animated:NO];
     _isShowCustomIndicator = NO;
     
     self.view.userInteractionEnabled = NO;
@@ -2210,6 +2096,12 @@ double _ticks = 0;
     
     userWantToCancel = TRUE;
     self.selectedChannel.stopStreaming = TRUE;
+    
+    if (_jsonComm)
+    {
+        [_jsonComm cancel];
+        [_jsonComm release];
+    }
     
     if (_audioOutStreamRemote)
     {
@@ -2224,6 +2116,13 @@ double _ticks = 0;
         [_timerRemoteStreamTimeOut invalidate];
         self.timerRemoteStreamTimeOut = nil;
     }
+    if (_timerHideMenu != nil && [_timerHideMenu isValid])
+    {
+        [self.timerHideMenu invalidate];
+        self.timerHideMenu = nil;
+    }
+    
+    [self stopPeriodicBeep];
     
     if (_alertFWUpgrading)
     {
@@ -2234,12 +2133,21 @@ double _ticks = 0;
     
     if (_earlierVC)
     {
+        NSLog(@"%s _earlierVC:%d", __FUNCTION__, _earlierVC.retainCount);
+        [_earlierVC removeSubviews];
         [_earlierVC release];
+        _earlierVC = nil;
     }
     
     if (_timelineVC)
     {
         _timelineVC.timelineVCDelegate = nil;
+        [_timelineVC cancelAllLoadingImageTask];
+        NSLog(@"%s timelineVC:%d", __FUNCTION__, _timelineVC.retainCount);
+        
+        NSLog(@"%s release timelineVC",__FUNCTION__ );
+        [_timelineVC release];
+        _timelineVC = nil;
     }
     
     if (_jsonCommBlocked)
@@ -2301,9 +2209,7 @@ double _ticks = 0;
 
 - (void)goBackToCamerasRemoteStreamTimeOut
 {
-    self.activityStopStreamingProgress.hidden = NO;
-    [self.view bringSubviewToFront:_activityStopStreamingProgress];
-    
+    [MBProgressHUD showHUDAddedTo:self.view animated:NO];
     
     NSLog(@"self.currentMediaStatus: %d", self.currentMediaStatus);
     
@@ -2328,11 +2234,9 @@ double _ticks = 0;
     // Release the instance here - since we are going to camera list
     MediaPlayer::release();
     
-    self.activityStopStreamingProgress.hidden = NO;
-    [self.view bringSubviewToFront:_activityStopStreamingProgress];
+    [MBProgressHUD showHUDAddedTo:self.view animated:NO];
     
-    
-    NSLog(@"self.currentMediaStatus: %d", self.currentMediaStatus);
+    NSLog(@" %s self.currentMediaStatus: %d retaintCount:%d ",__FUNCTION__, self.currentMediaStatus, self.retainCount);
     
     userWantToCancel = TRUE;
     self.selectedChannel.stopStreaming = TRUE;
@@ -2347,6 +2251,8 @@ double _ticks = 0;
     self.selectedChannel.profile.isSelected = FALSE;
     
     [self.navigationController popToRootViewControllerAnimated:YES];
+    NSLog(@"release manually");
+    [self release];
 }
 
 -(void) cleanUpDirectionTimers
@@ -3016,7 +2922,7 @@ double _ticks = 0;
         
         CGFloat widthString = stringBoundingBox.width;
         CGFloat heightString = stringBoundingBox.height;
-        CGFloat alignX = (SCREEN_WIDTH + widthString)/2 - degreeCelBoundingBox.width/2 + 8;
+        CGFloat alignX = (SCREEN_WIDTH + widthString)/2 - degreeCelBoundingBox.width/2 + 15;
         CGFloat alignYCel = (SCREEN_HEIGHT - positionYOfBottomView)/2 - heightString/2 + 10;
         [degreeCelsius setFrame:CGRectMake(alignX, alignYCel, degreeCelBoundingBox.width, degreeCelBoundingBox.height)];
         [self.ib_temperature addSubview:degreeCelsius];
@@ -3060,6 +2966,50 @@ double _ticks = 0;
 
 #pragma mark -
 #pragma mark - Stun client delegate
+
+#if 1
+- (void)symmetric_check_result:(BOOL )isBehindSymmetricNat
+{
+    NSInteger result = (isBehindSymmetricNat == TRUE)?TYPE_SYMMETRIC_NAT:TYPE_NON_SYMMETRIC_NAT;
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    
+    if ([userDefaults boolForKey:@"enable_stun"] == TRUE)
+    {
+        [userDefaults setInteger:result forKey:APP_IS_ON_SYMMETRIC_NAT];
+        [userDefaults synchronize];
+    }
+    
+    NSString *stringUDID = self.selectedChannel.profile.registrationID;
+    
+    self.timeStartingStageOne = [NSDate date];
+    
+//    if (_jsonComm != nil)
+//    {
+//        [_jsonComm release];
+//        self.jsonComm = nil;
+//    }
+    
+    self.jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                          Selector:@selector(createSessionSuccessWithResponse:)
+                                                      FailSelector:@selector(createSessionFailedWithResponse:)
+                                                         ServerErr:@selector(createSessionFailedServerUnreachable)];
+    
+    if (isBehindSymmetricNat == TRUE) // USE RELAY
+    {
+#ifdef SHOW_DEBUG_INFO
+        _viewVideoIn = @"R";
+#endif
+        [_jsonComm createSessionWithRegistrationId:stringUDID
+                                     andClientType:@"BROWSER"
+                                         andApiKey:_apiKey];
+        // --> call back.
+    }
+    else
+    {
+        //TODO: Using STUN mode, will be handled later.
+    }
+}
+#else
 
 -(void)symmetric_check_result: (BOOL) isBehindSymmetricNat
 {
@@ -3456,6 +3406,7 @@ double _ticks = 0;
     } //if (isBehindSymmetricNat != TRUE)
 }
 
+#endif
 - (void)remoteConnectingViaSymmectric
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0),
@@ -4263,7 +4214,7 @@ double _ticks = 0;
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
             
-            
+             [self release];
             [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController_land_iPad"
                                           owner:self
                                         options:nil];
@@ -4275,6 +4226,7 @@ double _ticks = 0;
         }
         else
         {
+            [self release];
             [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController_land"
                                           owner:self
                                         options:nil];
@@ -4325,6 +4277,7 @@ double _ticks = 0;
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
+             [self release];
             [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController_ipad"
                                           owner:self
                                         options:nil];
@@ -4333,7 +4286,9 @@ double _ticks = 0;
         }
         else
         {
-            [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController"
+            [self release];
+            
+           [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController"
                                           owner:self
                                         options:nil];
             self.melodyViewController = [[[MelodyViewController alloc] initWithNibName:@"MelodyViewController" bundle:nil] autorelease];
@@ -4456,7 +4411,9 @@ double _ticks = 0;
                                            [UIImage imageNamed:@"loader_e"],
                                            [UIImage imageNamed:@"loader_f"],
                                            nil];
-    
+
+
+    self.customIndicator.hidden = YES;
     [self displayCustomIndicator];
     
     //trigger re-cal of videosize
@@ -4893,6 +4850,8 @@ double _ticks = 0;
 }
 -(void) playSound
 {
+    NSLog(@"%s", __FUNCTION__);
+    
 	//Play beep
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
@@ -5024,8 +4983,11 @@ double _ticks = 0;
         self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_pan_pressed", @"video_action_mic_pressed", @"video_action_video_pressed", @"video_action_music_pressed", @"video_action_temp_pressed", nil];
     }
     
-    //[self.horizMenu reloadData:NO];
-    [self performSelectorOnMainThread:@selector(horizMenuReloadData) withObject:nil waitUntilDone:NO];
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self horizMenuReloadData];
+    });
+
 }
 
 - (void)horizMenuReloadData
@@ -5363,7 +5325,7 @@ double _ticks = 0;
     [_imageViewVideo release];
     [_imageViewStreamer release];
     [_progressView release];
-    [_selectedChannel release];
+    //[_selectedChannel release];
     [_imgViewDrectionPad release];
     [send_UD_dir_req_timer invalidate];
     [send_LR_dir_req_timer invalidate];
@@ -6620,8 +6582,7 @@ double _ticks = 0;
 -(void)start_animation_with_orientation
 {
     self.customIndicator.hidden = NO;
-//    [self.scrollView bringSubviewToFront:self.customIndicator];
-    
+
     self.customIndicator.animationDuration = 1.5;
     self.customIndicator.animationRepeatCount = 0;
     [self.customIndicator startAnimating];
@@ -6640,7 +6601,7 @@ double _ticks = 0;
         }
         else
         {
-            if (_disconnectAlert == YES)
+            if (_disconnectAlert == YES && _shouldBeep)
             {
                 self.alertTimer = [NSTimer scheduledTimerWithTimeInterval:15.0
                                                                    target:self
@@ -6798,51 +6759,22 @@ double _ticks = 0;
             
             NSLog(@"%s Upgrade 100%% fwUpgradeStatus:%d", __FUNCTION__, _fwUpgradeStatus);
             
+            NSNumber *upgradedStatus = [NSNumber numberWithInteger:TAG_ALERT_FW_OTA_UPGRADE_DONE];
+            
             if (_fwUpgradeStatus == FW_UPGRADE_SUCCEED)
             {
                 self.isFWUpgradingInProgress = NO;
                 _isShowCustomIndicator = YES;
                 [self displayCustomIndicator];
-            
-                
-                NSString *ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
-                                                                 @"OK" , nil);
-                UIAlertView *alertViewUpgradeFailed = [[UIAlertView alloc] initWithTitle:@"Firmware Upgrade Succeeded"
-                                                                                 message:nil
-                                                                                delegate:self
-                                                                       cancelButtonTitle:nil
-                                                                       otherButtonTitles:ok, nil];
-                alertViewUpgradeFailed.tag = TAG_ALERT_FW_OTA_UPGRADE_DONE;
-                [alertViewUpgradeFailed show];
-                [alertViewUpgradeFailed release];
-              
             }
             else
             {
-                NSString *msg1 = @"Fw upgrade could not be completed.";
-                
-                if (_fwUpgradeStatus == FW_UPGRADE_FAILED)
-                {
-                    msg1 = @"Incorrect Firmware version.";
-                }
-                else if(_hasFwVersion)
-                {
-                    msg1 = @"Camera offline after upgrading.";
-                }
-                
-                NSString *msg = [NSString stringWithFormat:@"%@ Please manually off and on the camera.", msg1];
-                
-                NSString *ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
-                                                                 @"OK" , nil);
-                UIAlertView *alertViewUpgradeFailed = [[UIAlertView alloc] initWithTitle:@"Firmware Upgrade Failed"
-                                                                                 message:msg
-                                                                                delegate:self
-                                                                       cancelButtonTitle:nil
-                                                                       otherButtonTitles:ok, nil];
-                alertViewUpgradeFailed.tag = TAG_ALERT_FW_OTA_UPGRADE_FAILED;
-                [alertViewUpgradeFailed show];
-                [alertViewUpgradeFailed release];
+                upgradedStatus = [NSNumber numberWithInteger:TAG_ALERT_FW_OTA_UPGRADE_FAILED];
             }
+            
+            [self performSelectorOnMainThread:@selector(popupAlertFwUpgradingStatus:)
+                                   withObject:upgradedStatus
+                                waitUntilDone:NO];
         }
         else
         {
@@ -6851,6 +6783,43 @@ double _ticks = 0;
             [self upgradeFwProgress_bg:[NSArray arrayWithObjects:obj[0], obj[1], nil]];
         }
     }
+}
+
+- (void)popupAlertFwUpgradingStatus:(NSNumber *)status
+{
+    NSLog(@"%s status:%@", __FUNCTION__, status);
+    
+    NSString *msg = nil;
+    NSString *title = @"Firmware Upgrade Succeeded";
+    NSString *ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
+                                                     @"OK" , nil);
+    
+    if ([status integerValue] == TAG_ALERT_FW_OTA_UPGRADE_FAILED)
+    {
+        title = @"Firmware Upgrade Failed";
+        
+        NSString *msg1 = @"Firmware upgrade could not be completed.";
+        
+        if (_fwUpgradeStatus == FW_UPGRADE_FAILED)
+        {
+            msg1 = @"Incorrect Firmware version.";
+        }
+        else if(_hasFwVersion)
+        {
+            msg1 = @"Camera offline after upgrading.";
+        }
+        
+        msg = [NSString stringWithFormat:@"%@ Please manually off and on the camera.", msg1];
+    }
+    
+    UIAlertView *alertViewUpgradeStatus = [[UIAlertView alloc] initWithTitle:title
+                                                                     message:msg
+                                                                    delegate:self
+                                                           cancelButtonTitle:nil
+                                                           otherButtonTitles:ok, nil];
+    alertViewUpgradeStatus.tag = [status integerValue];
+    [alertViewUpgradeStatus show];
+    [alertViewUpgradeStatus release];
 }
 
 -(void) upgradeFwProgress_ui:(NSArray *) obj
@@ -6930,7 +6899,7 @@ double _ticks = 0;
     NSDictionary *responseDict = [_jsonCommBlocked getDeviceBasicInfoBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
                                                                                      andApiKey:_apiKey];
     
-    NSLog(@"%s response:%@", __FUNCTION__, responseDict);
+    //NSLog(@"%s response:%@", __FUNCTION__, responseDict);
     
     if (responseDict != nil)
     {
@@ -6945,6 +6914,8 @@ double _ticks = 0;
             id firmwareTime = [data objectForKey:@"firmware_time"];
             
             self.selectedChannel.profile.fwTime   = [firmwareTime isEqual:[NSNull null]]?nil:firmwareTime;
+            
+            NSLog(@"\n firmware_status:%d, \n firmware_time:%@, \n is_available:%@, \n firmware_version:%@", _selectedChannel.profile.fwStatus, firmwareTime, [data objectForKey:@"is_available"], [data objectForKey:@"firmware_version"]);
 
             //If less than 5 mins since camera start upgrading
         
@@ -6980,9 +6951,125 @@ double _ticks = 0;
                 fwUpgradeStatus = FW_UPGRADE_IN_PROGRESS;
             }
         }
+        else
+        {
+            NSLog(@"%s response status:%d", __FUNCTION__, status);
+        }
+    }
+    else
+    {
+        NSLog(@"%s response is nil", __FUNCTION__);
     }
     
     return fwUpgradeStatus;
+}
+
+#pragma mark - Json communication call back
+
+- (void)createSessionSuccessWithResponse:(NSDictionary *)responseDict
+{
+    [self logDebugInfo:nil];
+    
+    if (!userWantToCancel &&
+        !_returnFromPlayback &&
+        [UIApplication sharedApplication].applicationState == UIApplicationStateActive)
+    {
+        if ([[responseDict objectForKey:@"status"] intValue] == 200)
+        {
+            NSString *urlResponse = [[responseDict objectForKey:@"data"] objectForKey:@"url"];
+            self.selectedChannel.stream_url = urlResponse;
+            self.selectedChannel.communication_mode = COMM_MODE_STUN_RELAY2;
+            
+            NSLog(@"%s Start stage 2", __FUNCTION__);
+            
+            [self performSelectorOnMainThread:@selector(startStream)
+                                   withObject:nil
+                                waitUntilDone:NO];
+            
+            self.messageStreamingState = @"Low data bandwidth detected. Trying to connect...";
+        }
+        else
+        {
+            //handle Bad response
+            NSLog(@"%s ERROR: %@", __FUNCTION__, [responseDict objectForKey:@"message"]);
+            self.messageStreamingState = @"Camera is not accessible";
+            _isShowTextCameraIsNotAccesible = YES;
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.ib_lbCameraNotAccessible setHidden:NO];
+            });
+            
+            [self symmetric_check_result:TRUE];
+        }
+    }
+    else
+    {
+        NSLog(@"%s View is invisible OR in background mode. Do nothing!", __FUNCTION__);
+    }
+}
+
+- (void)createSessionFailedWithResponse:(NSDictionary *)responseDict
+{
+    [self logDebugInfo:responseDict];
+    
+    if (!userWantToCancel &&
+        !_returnFromPlayback &&
+        [UIApplication sharedApplication].applicationState != UIApplicationStateBackground) // Testing this to decide using it or not
+    {
+        //handle Bad response
+        NSLog(@"%s ERROR: %@", __FUNCTION__, [responseDict objectForKey:@"message"]);
+        self.messageStreamingState = @"Camera is not accessible";
+        _isShowTextCameraIsNotAccesible = YES;
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.ib_lbCameraNotAccessible setHidden:NO];
+        });
+        
+        [self symmetric_check_result:TRUE];
+    }
+    else
+    {
+        NSLog(@"%s View is invisible OR in background mode. Do nothing!", __FUNCTION__);
+    }
+}
+
+- (void)createSessionFailedServerUnreachable
+{
+    [self logDebugInfo:nil];
+    
+    if (!userWantToCancel &&
+        !_returnFromPlayback &&
+        [UIApplication sharedApplication].applicationState != UIApplicationStateBackground) // Testing this to decide using it or not
+    {
+        NSLog(@"SERVER unreachable (timeout) ");
+        self.messageStreamingState = @"Camera is not accessible";
+        _isShowTextCameraIsNotAccesible = YES;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.ib_lbCameraNotAccessible setHidden:NO];
+            [self performSelector:@selector(setupCamera) withObject:nil afterDelay:10];
+        });
+    }
+    else
+    {
+        NSLog(@"%s View is invisible OR in background mode. Do nothing!", __FUNCTION__);
+    }
+}
+
+- (void)logDebugInfo:(NSDictionary *)responseDict
+{
+    NSLog(@"USE RELAY TO VIEW- userWantsToCancel:%d, returnFromPlayback:%d, responsed: %@", userWantToCancel, _returnFromPlayback, responseDict);
+    
+    NSTimeInterval diff = [[NSDate date] timeIntervalSinceDate:_timeStartingStageOne];
+    self.timeStartingStageOne = 0;
+    NSString *gaiActionTime = GAI_ACTION(1, diff);
+
+    [[GAI sharedInstance].defaultTracker sendTimingWithCategory:GAI_CATEGORY
+                                                      withValue:diff
+                                                       withName:@"Stage 1"
+                                                      withLabel:nil];
+    
+    NSLog(@"%s stage 1 takes %f seconds \n Start stage 2 \n %@", __FUNCTION__, diff, gaiActionTime);
+    self.timeStartingStageTwo = [NSDate date];
 }
 
 @end

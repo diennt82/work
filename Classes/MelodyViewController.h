@@ -23,7 +23,7 @@
 
 @property (retain, nonatomic) IBOutlet UITableView *melodyTableView;
 @property (nonatomic) NSInteger melodyIndex;
-@property (retain, nonatomic) CamChannel *selectedChannel;
+@property (assign, nonatomic) CamChannel *selectedChannel;
 
 - (void)getMelodyValue_bg;
 

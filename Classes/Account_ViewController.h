@@ -10,13 +10,6 @@
 #import "CameraAlert.h"
 
 @interface Account_ViewController : UIViewController
-{
-    IBOutlet UITableViewCell * userEmailCell,
-          * versionCell;
-    IBOutlet UITableView * accountInfo;
-    
-    IBOutlet UIActivityIndicatorView * progress;
-}
 
 @property (nonatomic, assign) id parentVC;
 

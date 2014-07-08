@@ -33,6 +33,7 @@
 @property (nonatomic) BOOL isFreeUser;
 @property (nonatomic) BOOL isReturnFrmPlayback;
 @property (nonatomic) BOOL isBackgroundTaskRunning;
+@property (nonatomic, retain) BMS_JSON_Communication *jsonComm;
 
 @end
 
@@ -89,7 +90,7 @@
     [_playEnventBtn setEnabled:NO];
     _isReturnFrmPlayback = FALSE;
     
-    jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+    self.jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
                                                      Selector:nil
                                                  FailSelector:nil
                                                     ServerErr:nil];
@@ -139,6 +140,8 @@
         //hubView.dimBackground = YES;
     }
 }
+
+
 
 - (void)layoutImageAndTextForButton: (UIButton *)button
 {
@@ -323,7 +326,7 @@
     alertsString = [self urlEncodeUsingEncoding:NSUTF8StringEncoding forString:alertsString];
     
     NSString *event_timecode = [NSString stringWithFormat:@"%@_0%@_%@", self.cameraMacNoColon, self.alertType, self.alertVal];
-    NSDictionary *responseDict = [jsonComm getListOfEventsBlockedWithRegisterId:_registrationID
+    NSDictionary *responseDict = [_jsonComm getListOfEventsBlockedWithRegisterId:_registrationID
                                                                 beforeStartTime:nil//@"2013-12-28 20:10:18"
                                                                       eventCode:event_timecode//event_code // temp
                                                                          alerts:nil
@@ -404,7 +407,7 @@
         NSLog(@"responseDict is nil");
     }
     
-    [self.activityIndicatorViewLoading stopAnimating];
+    [self.activityIndicatorViewLoading performSelectorOnMainThread:@selector(stopAnimating) withObject:nil waitUntilDone:NO];
     
     if (_imageViewSnapshot.image == nil) // No snapshot image from server
     {
@@ -445,6 +448,8 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+    [self cancelTaskDoInBackground];
+    NSLog(@"%s", __FUNCTION__);
 }
 
 - (void)dealloc {
@@ -460,7 +465,7 @@
     [_activityIndicatorViewLoading release];
     [_viewFront release];
     [_viewBehide release];
-    [jsonComm release];
+    [_jsonComm release];
     [super dealloc];
 }
 @end

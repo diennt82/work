@@ -98,10 +98,10 @@
             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
         </tableViewCell>
         <tableViewCell tag="3" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="42" id="36">
-            <rect key="frame" x="0.0" y="0.0" width="324" height="42"/>
+            <rect key="frame" x="0.0" y="0.0" width="320" height="65"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="36" id="U9H-F3-K2W">
-                <rect key="frame" x="0.0" y="0.0" width="324" height="41"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Router Password" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="10" id="39">
@@ -122,6 +122,24 @@
                             <outlet property="delegate" destination="-1" id="50"/>
                         </connections>
                     </textField>
+                    <textField opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="202" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Show Password" minimumFontSize="17" id="eox-6i-uzn">
+                        <rect key="frame" x="133" y="42" width="116" height="19"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <textInputTraits key="textInputTraits"/>
+                        <connections>
+                            <outlet property="delegate" destination="-1" id="89N-fA-jZr"/>
+                        </connections>
+                    </textField>
+                    <button opaque="NO" tag="501" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="1XA-Ig-J3F">
+                        <rect key="frame" x="104" y="33" width="38" height="33"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <state key="normal" image="checkbox.png">
+                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                        </state>
+                    </button>
                 </subviews>
             </tableViewCellContentView>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -142,7 +160,7 @@
                         <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </label>
                     <textField opaque="NO" clipsSubviews="YES" tag="201" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Confirm password" minimumFontSize="17" id="42">
-                        <rect key="frame" x="97" y="5" width="212" height="31"/>
+                        <rect key="frame" x="110" y="5" width="212" height="31"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -312,6 +330,7 @@
         </view>
     </objects>
     <resources>
+        <image name="checkbox.png" width="25" height="23"/>
         <image name="detect_camera_1.png" width="275" height="170"/>
         <image name="detect_camera_2.png" width="275" height="170"/>
         <image name="detect_camera_3.png" width="275" height="170"/>

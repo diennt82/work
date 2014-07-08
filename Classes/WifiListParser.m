@@ -289,10 +289,16 @@ NSString * WIFI_ENTRY_CHANNEL = @"channel";
             {
                 currentEntry.auth_mode = @"open";
             }
+            
+            else if ([currentStringValue hasPrefix:@"WPA2"])
+            {
+                currentEntry.auth_mode = @"wpa2";
+            }
             else if ([currentStringValue hasPrefix:@"WPA"])
             {
                 currentEntry.auth_mode = @"wpa";
             }
+            
             else if ([currentStringValue hasPrefix:@"WEP"])
             {
                 currentEntry.auth_mode = @"wep";
@@ -300,6 +306,9 @@ NSString * WIFI_ENTRY_CHANNEL = @"channel";
             else if ([currentStringValue isEqualToString:@"SHARED"])
             {
                 currentEntry.auth_mode = @"shared";
+            }
+            else if ([currentStringValue isEqualToString:@"MIX"]) {
+                currentEntry.auth_mode = @"mix";
             }
         }
     }
