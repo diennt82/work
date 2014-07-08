@@ -1495,6 +1495,11 @@
                 hud.mode = MBProgressHUDModeText;
                 [hud setLabelText:@"Upload image successfully"];
             }
+            else
+            {
+                hud.mode = MBProgressHUDModeText;
+                [hud setLabelText:[responseDictDInfo objectForKey:@"message"]];
+            }
         }
         
         [hud hide:YES afterDelay:2.0];

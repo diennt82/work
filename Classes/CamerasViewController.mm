@@ -490,7 +490,21 @@
         
         CamChannel *ch = (CamChannel *)[_camChannels objectAtIndex:indexPath.row];
         
-        NSString *strPath = [strDocDirPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.jpg",ch.profile.registrationID]];
+        UIImage *imgCamera;
+        NSString *strModel = [ch.profile getModel];
+        if([strModel isEqualToString:@"0083"]){
+            imgCamera = [UIImage imageNamed:@"camera_mbp_83"];
+        }else{
+            imgCamera = [UIImage imageNamed:@"camera_focus_66"];
+        }
+        
+        NSLog(@"-- %@",ch.profile.snapUrl);
+        if(ch.profile.snapUrl!=nil)
+        {
+            [cell.snapshotImage setImageWithURL:[NSURL URLWithString:ch.profile.snapUrl] placeholderImage:imgCamera];
+        }
+        
+       /* NSString *strPath = [strDocDirPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.jpg",ch.profile.registrationID]];
         UIImage *img = [UIImage imageWithContentsOfFile:strPath];
         if(img){
             cell.snapshotImage.image = img;
@@ -501,7 +515,8 @@
             }else{
                 cell.snapshotImage.image = [UIImage imageNamed:@"camera_focus_66"];
             }
-        }       
+        } */
+        
         cell.ibCameraNameLabel.text = ch.profile.name;
         NSString *boundCameraName = ch.profile.name;
         CGSize size = [boundCameraName sizeWithAttributes:@{NSFontAttributeName:[UIFont fontWithName:PN_SEMIBOLD_FONT size:18]}];
