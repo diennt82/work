@@ -72,6 +72,7 @@
 
 @property (retain, nonatomic) IBOutlet UIView *vwHeaderCamDetail,*vwHeaderNotSens;
 @property (nonatomic) BOOL shouldWaitForUpdateSettings;
+@property (nonatomic) BOOL backGroundUpdateExecuting;
 @property (assign, nonatomic) SensitivityTemperatureCell *sensitivityTemperatureCell;
 
 @end
@@ -93,6 +94,7 @@
     [super viewDidLoad];
     intTableSectionStatus = 0;
     self.shouldWaitForUpdateSettings = FALSE;
+    self.backGroundUpdateExecuting = NO;
     
     self.tableViewSettings.delegate = self;
     self.tableViewSettings.dataSource = self;
@@ -140,6 +142,7 @@
     [self.navigationItem setLeftBarButtonItem:barButtonItem];
     self.navigationItem.leftBarButtonItem.enabled = YES;
     [self.navigationItem setHidesBackButton:YES];
+    [barButtonItem release];
     
     //Snapshot View
     vwSnapshot.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -184,12 +187,18 @@
     
     if (_shouldWaitForUpdateSettings)
     {
-        MBProgressHUD *showError = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-        [showError setLabelText:@"Updating..."];
+        [self showUpdatingProgressHUD];
     }
     else
     {
-        [self.navigationController popViewControllerAnimated:YES];
+        if (self.backGroundUpdateExecuting)
+        {
+            self.shouldWaitForUpdateSettings = YES;
+        }
+        else
+        {
+            [self.navigationController popViewControllerAnimated:YES];
+        }
     }
 }
 
@@ -357,7 +366,7 @@
             {
                 if (![newName isEqualToString:self.camChannel.profile.name])
                 {
-                    _cameraNewName = [newName retain];
+                    _cameraNewName = [newName copy];
                     self.isChangingName = TRUE;
                     [self.tableViewSettings reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:0
                                                                                                                inSection:0]]
@@ -680,15 +689,15 @@
 }
  */
 
--(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if(indexPath.section==0)//General Setting
+    if(indexPath.section == 0)//General Setting
     {
         static NSString *cellIdentifier = @"CameraDetailCell";
         CameraDetailCell *camDetCell = (CameraDetailCell*)[tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-        if(camDetCell==nil)
+        if(camDetCell == nil)
         {
-            camDetCell = [[CameraDetailCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+            camDetCell = [[[CameraDetailCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier] autorelease];
             [camDetCell.btnChangeImage addTarget:self action:@selector(btnChangeCameraIcon) forControlEvents:UIControlEventTouchUpInside];
             [camDetCell.btnChangeName addTarget:self action:@selector(btnChangeCameraName) forControlEvents:UIControlEventTouchUpInside];
             
@@ -1042,12 +1051,16 @@
     }
 }
 
-
+- (void)showUpdatingProgressHUD {
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    [hud setLabelText:@"Updating..."];
+}
 
 #pragma mark - Sensitivity deletate
 
 - (void)reportSwitchValue:(BOOL)value andRowIndex:(NSInteger)rowIndex
 {
+    [self showUpdatingProgressHUD];
     //valueSwitchs[rowIndex] = value;
     
     NSString *cmd = @"action=command&command=";
@@ -1084,6 +1097,7 @@
 
 - (void)reportChangedSettingsValue:(NSInteger)value atRow:(NSInteger)rowIndx
 {
+    [self showUpdatingProgressHUD];
     //valueSettings[rowIndx] = value;
     NSString *cmd = @"action=command&command=";
     
@@ -1110,6 +1124,7 @@
 
 - (void)valueChangedTypeTemperaure:(BOOL)isFahrenheit // NOT need to receive
 {
+    [self showUpdatingProgressHUD];
     self.sensitivityInfo.tempIsFahrenheit = isFahrenheit;
 }
 
@@ -1125,6 +1140,7 @@
 
 - (void)valueChangedTempLowOn:(BOOL)isOn
 {
+    [self showUpdatingProgressHUD];
     self.sensitivityInfo.tempLowOn = isOn;
     NSString *cmd = [NSString stringWithFormat:@"action=command&command=set_temp_lo_enable&value=%d", isOn];
     
@@ -1142,6 +1158,7 @@
 
 - (void)valueChangedTempHighOn:(BOOL)isOn
 {
+    [self showUpdatingProgressHUD];
     self.sensitivityInfo.tempHighOn = isOn;
     NSString *cmd = [NSString stringWithFormat:@"action=command&command=set_temp_hi_enable&value=%d", isOn];
     
@@ -1152,20 +1169,21 @@
 
 - (void)sendToServerTheCommand:(NSString *) command
 {
+    self.backGroundUpdateExecuting = YES;
     if (_jsonComm == nil)
     {
-        self.jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                              Selector:nil
-                                                          FailSelector:nil
-                                                             ServerErr:nil];
+        BMS_JSON_Communication *comm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                              Selector:nil
+                                          FailSelector:nil
+                                             ServerErr:nil];
+        self.jsonComm = comm;
+        [comm release];
     }
     
     NSDictionary *responseDict = [_jsonComm sendCommandBlockedWithRegistrationId:self.camChannel.profile.registrationID
                                                                       andCommand:command
                                                                        andApiKey:_apiKey];
     //NSLog(@"SettingsVC - sendCommand: %@, response: %@", command, responseDict);
-    
-    [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
     
     NSInteger errorCode = -1;
     NSString *errorMessage = @"Update failed";
@@ -1186,12 +1204,18 @@
     
     NSLog(@"%s cmd:%@, error: %d", __func__, command, errorCode);
     
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+    });
+    
     if (errorCode == 200)
     {
         if (_shouldWaitForUpdateSettings)
         {
             self.shouldWaitForUpdateSettings = FALSE;
-            [self.navigationController popViewControllerAnimated:YES];
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                [self.navigationController popViewControllerAnimated:YES];
+            });
         }
     }
     else
@@ -1210,6 +1234,7 @@
             }
         });
     }
+    self.backGroundUpdateExecuting = NO;
 }
 
 -(void)btnChangeCameraName
@@ -1277,7 +1302,7 @@
 #pragma mark - UIImagePicker Delegate
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
-    imageSelected = [[info valueForKey:UIImagePickerControllerOriginalImage] retain];
+    imageSelected = [[info valueForKey:UIImagePickerControllerOriginalImage] copy];
    
     [self dismissViewControllerAnimated:YES completion:^{
        
@@ -1285,7 +1310,7 @@
         
         NSArray *paths = NSSearchPathForDirectoriesInDomains
         (NSDocumentDirectory, NSUserDomainMask, YES);
-        NSString  *strPath = [[paths objectAtIndex:0] retain];
+        NSString  *strPath = [paths objectAtIndex:0];
         
         strPath = [strPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.jpg",self.camChannel.profile.registrationID]];
         
@@ -1327,7 +1352,7 @@
             //self.camChannel.profile.registrationID
             NSArray *paths = NSSearchPathForDirectoriesInDomains
             (NSDocumentDirectory, NSUserDomainMask, YES);
-            NSString  *strPath = [[paths objectAtIndex:0] retain];
+            NSString  *strPath = [paths objectAtIndex:0];
             
             strPath = [strPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.jpg",self.camChannel.profile.registrationID]];
             
@@ -1396,7 +1421,7 @@
     {
         NSArray *paths = NSSearchPathForDirectoriesInDomains
         (NSDocumentDirectory, NSUserDomainMask, YES);
-        NSString  *strPath = [[paths objectAtIndex:0] retain];
+        NSString  *strPath = [paths objectAtIndex:0];
         
         strPath = [strPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.jpg",self.camChannel.profile.registrationID]];
         
@@ -1431,13 +1456,14 @@
     return nil;
 }
 
--(NSString *)getSnapImageUrlFromServer
+- (NSString *)getSnapImageUrlFromServer
 {
     BMS_JSON_Communication *jsonCommDeviceInfo = [[BMS_JSON_Communication alloc] initWithObject:self
                                                                                        Selector:nil
                                                                                    FailSelector:nil
                                                                                       ServerErr:nil];
     NSDictionary *responseDictDInfo = [jsonCommDeviceInfo getDeviceBasicInfoBlockedWithRegistrationId:self.camChannel.profile.registrationID andApiKey:_apiKey];
+    [jsonCommDeviceInfo release];
     if (responseDictDInfo)
     {
         if ([[responseDictDInfo objectForKey:@"status"] integerValue] == 200)
@@ -1508,15 +1534,19 @@
     //NSString *apiKey = [[NSUserDefaults standardUserDefaults] stringForKey:@"PortalApiKey"];
     
     if(self.sensitivityInfo==nil){
-        self.sensitivityInfo = [[SensitivityInfo alloc] init];
+        SensitivityInfo *senInfo = [[SensitivityInfo alloc] init];
+        self.sensitivityInfo = senInfo;
+        [senInfo release];
     }
     
     if (_jsonComm == nil)
     {
-        self.jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                              Selector:nil
-                                                          FailSelector:nil
-                                                             ServerErr:nil];
+        BMS_JSON_Communication *comm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                              Selector:nil
+                                          FailSelector:nil
+                                             ServerErr:nil];
+        self.jsonComm = comm;
+        [comm release];
     }
     
     NSDictionary *responseDict = [_jsonComm sendCommandBlockedWithRegistrationId:self.camChannel.profile.registrationID
