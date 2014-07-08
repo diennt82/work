@@ -21,7 +21,7 @@
     UIBarButtonItem *accountBarButton;
 }
 
-@property (retain, nonatomic) Account_ViewController *accountVC;
+@property (assign, nonatomic) Account_ViewController *accountVC;
 
 @property (nonatomic, retain) NSMutableArray *restoredProfiles;
 @property (nonatomic, retain) NSMutableArray *arrayChannel;

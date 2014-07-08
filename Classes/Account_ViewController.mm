@@ -18,6 +18,10 @@
 
 @interface Account_ViewController () <MFMailComposeViewControllerDelegate, UIAlertViewDelegate>
 
+@property (retain, nonatomic) IBOutlet UITableViewCell * userEmailCell;
+@property (retain, nonatomic) IBOutlet UITableViewCell * versionCell;
+@property (retain, nonatomic) IBOutlet UITableView * accountInfo;
+@property (retain, nonatomic) IBOutlet UIActivityIndicatorView * progress;
 @property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellChangePassword;
 
 @property (nonatomic) NSInteger screenWidth;
@@ -91,7 +95,7 @@
 	//can be user email or user name here --
 	NSString * user_email = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
     
-    UITextField * _user  =  (UITextField *) [userEmailCell viewWithTag:1];
+    UITextField * _user  =  (UITextField *) [_userEmailCell viewWithTag:1];
     _user.text = user_email;
 }
 
@@ -106,8 +110,8 @@
     
     MenuViewController *tabBarController = (MenuViewController *)self.parentVC;
     
-    accountInfo.hidden = YES;
-    progress.hidden = NO;
+    _accountInfo.hidden = YES;
+    _progress.hidden = NO;
     [CameraAlert clearAllAlerts];
     
     [tabBarController dismissViewControllerAnimated:NO completion:^
@@ -280,7 +284,7 @@
     {
         if (indexPath.row == USEREMAIL_INDEX)
         {
-            return userEmailCell;
+            return _userEmailCell;
         }
         
         if (indexPath.row == CHANGE_PASS_INDEX)
