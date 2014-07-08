@@ -109,6 +109,10 @@
 		8412C990195D26F7000FEA1C /* dsym_upload.sh in Resources */ = {isa = PBXBuildFile; fileRef = 8412C98E195D26F7000FEA1C /* dsym_upload.sh */; };
 		8412C991195D26F7000FEA1C /* libCrittercism_v4_3_4.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8412C98F195D26F7000FEA1C /* libCrittercism_v4_3_4.a */; };
 		841D567B1834C1E600ACE7A7 /* streamqvga.sdp in Resources */ = {isa = PBXBuildFile; fileRef = 841D567A1834C1E600ACE7A7 /* streamqvga.sdp */; };
+		8425087B196B9C42009CE927 /* camera_scout85.png in Resources */ = {isa = PBXBuildFile; fileRef = 84250879196B9C42009CE927 /* camera_scout85.png */; };
+		8425087C196B9C42009CE927 /* camera_scout85@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8425087A196B9C42009CE927 /* camera_scout85@2x.png */; };
+		8425087F196BB3AA009CE927 /* mbp85.png in Resources */ = {isa = PBXBuildFile; fileRef = 8425087D196BB3AA009CE927 /* mbp85.png */; };
+		84250880196BB3AA009CE927 /* mbp85@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8425087E196BB3AA009CE927 /* mbp85@2x.png */; };
 		8429C574193325EF00F5FCF8 /* TermsCondController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8429C572193325EF00F5FCF8 /* TermsCondController.m */; };
 		8429C575193325EF00F5FCF8 /* TermsCondController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8429C573193325EF00F5FCF8 /* TermsCondController.xib */; };
 		844359ED1908F64D00148436 /* TimelineDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 844359EC1908F64D00148436 /* TimelineDatabase.m */; };
@@ -508,8 +512,6 @@
 		8B95077D18C9960D006D4945 /* BLE_camera_small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B95073118C9960D006D4945 /* BLE_camera_small@2x.png */; };
 		8B95077E18C9960D006D4945 /* BLE_pair.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B95073218C9960D006D4945 /* BLE_pair.png */; };
 		8B95077F18C9960D006D4945 /* BLE_pair@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B95073318C9960D006D4945 /* BLE_pair@2x.png */; };
-		8B95078018C9960D006D4945 /* camera_1.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B95073418C9960D006D4945 /* camera_1.png */; };
-		8B95078118C9960D006D4945 /* camera_1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B95073518C9960D006D4945 /* camera_1@2x.png */; };
 		8B95078218C9960D006D4945 /* camera_2.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B95073618C9960D006D4945 /* camera_2.png */; };
 		8B95078318C9960D006D4945 /* camera_2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B95073718C9960D006D4945 /* camera_2@2x.png */; };
 		8B95078418C9960D006D4945 /* cancel_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B95073818C9960D006D4945 /* cancel_btn.png */; };
@@ -917,6 +919,10 @@
 		8412C98E195D26F7000FEA1C /* dsym_upload.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = dsym_upload.sh; sourceTree = "<group>"; };
 		8412C98F195D26F7000FEA1C /* libCrittercism_v4_3_4.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libCrittercism_v4_3_4.a; sourceTree = "<group>"; };
 		841D567A1834C1E600ACE7A7 /* streamqvga.sdp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = streamqvga.sdp; sourceTree = "<group>"; };
+		84250879196B9C42009CE927 /* camera_scout85.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_scout85.png; sourceTree = "<group>"; };
+		8425087A196B9C42009CE927 /* camera_scout85@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera_scout85@2x.png"; sourceTree = "<group>"; };
+		8425087D196BB3AA009CE927 /* mbp85.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mbp85.png; sourceTree = "<group>"; };
+		8425087E196BB3AA009CE927 /* mbp85@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mbp85@2x.png"; sourceTree = "<group>"; };
 		8429C571193325EF00F5FCF8 /* TermsCondController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TermsCondController.h; sourceTree = "<group>"; };
 		8429C572193325EF00F5FCF8 /* TermsCondController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TermsCondController.m; sourceTree = "<group>"; };
 		8429C573193325EF00F5FCF8 /* TermsCondController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TermsCondController.xib; sourceTree = "<group>"; };
@@ -1369,8 +1375,6 @@
 		8B95073118C9960D006D4945 /* BLE_camera_small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "BLE_camera_small@2x.png"; sourceTree = "<group>"; };
 		8B95073218C9960D006D4945 /* BLE_pair.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BLE_pair.png; sourceTree = "<group>"; };
 		8B95073318C9960D006D4945 /* BLE_pair@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "BLE_pair@2x.png"; sourceTree = "<group>"; };
-		8B95073418C9960D006D4945 /* camera_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_1.png; sourceTree = "<group>"; };
-		8B95073518C9960D006D4945 /* camera_1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera_1@2x.png"; sourceTree = "<group>"; };
 		8B95073618C9960D006D4945 /* camera_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_2.png; sourceTree = "<group>"; };
 		8B95073718C9960D006D4945 /* camera_2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera_2@2x.png"; sourceTree = "<group>"; };
 		8B95073818C9960D006D4945 /* cancel_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cancel_btn.png; sourceTree = "<group>"; };
@@ -2868,6 +2872,8 @@
 		8B95072F18C9960D006D4945 /* BLE */ = {
 			isa = PBXGroup;
 			children = (
+				8425087D196BB3AA009CE927 /* mbp85.png */,
+				8425087E196BB3AA009CE927 /* mbp85@2x.png */,
 				8BE9D32519653F6500D3DE8D /* blesetup_focus85.png */,
 				8BE9D32619653F6500D3DE8D /* blesetup_focus85@2x.png */,
 				5EB6400B1954390600B280A1 /* focus661-black@2x.png */,
@@ -2875,8 +2881,6 @@
 				8B95073118C9960D006D4945 /* BLE_camera_small@2x.png */,
 				8B95073218C9960D006D4945 /* BLE_pair.png */,
 				8B95073318C9960D006D4945 /* BLE_pair@2x.png */,
-				8B95073418C9960D006D4945 /* camera_1.png */,
-				8B95073518C9960D006D4945 /* camera_1@2x.png */,
 				8B95073618C9960D006D4945 /* camera_2.png */,
 				8B95073718C9960D006D4945 /* camera_2@2x.png */,
 				8B95073818C9960D006D4945 /* cancel_btn.png */,
@@ -2894,6 +2898,8 @@
 		8B95073C18C9960D006D4945 /* wifi */ = {
 			isa = PBXGroup;
 			children = (
+				84250879196B9C42009CE927 /* camera_scout85.png */,
+				8425087A196B9C42009CE927 /* camera_scout85@2x.png */,
 				8BE9D32119653F3E00D3DE8D /* wifisetup_scout85.png */,
 				8BE9D32219653F3E00D3DE8D /* wifisetup_scout85@2x.png */,
 				8B95073D18C9960D006D4945 /* animation */,
@@ -3642,6 +3648,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				844359EF19090AA200148436 /* t_history_v1.sqlite in Resources */,
+				8425087B196B9C42009CE927 /* camera_scout85.png in Resources */,
 				38362C1D15FDEE400077E188 /* alert_history.sqlite in Resources */,
 				28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */,
 				8B933EDB19111EBC00A97F12 /* video_action_photo_pressed.png in Resources */,
@@ -3743,7 +3750,6 @@
 				8B299FEC18AF500900D36BE5 /* hubble_logo2@2x.png in Resources */,
 				8B299FAE18AF500900D36BE5 /* camera_action_pause_pressed@2x.png in Resources */,
 				8B299FC218AF500900D36BE5 /* photo_grey_pressed@2x.png in Resources */,
-				8B95078118C9960D006D4945 /* camera_1@2x.png in Resources */,
 				A1B1E7E818E9135800F076B6 /* offline.png in Resources */,
 				8B299FF618AF500900D36BE5 /* timeline_line.png in Resources */,
 				3812F83B15C8C49000DADFA6 /* bb_line.png in Resources */,
@@ -3773,6 +3779,7 @@
 				8B95078218C9960D006D4945 /* camera_2.png in Resources */,
 				8B29A02218AF500900D36BE5 /* loader_e.png in Resources */,
 				8B9507C418C9960D006D4945 /* setup_wifi_grey.png in Resources */,
+				8425087C196B9C42009CE927 /* camera_scout85@2x.png in Resources */,
 				8B9C7E1B185F26D40038B3A8 /* CamerasCell.xib in Resources */,
 				38A62E9315CA12C000DEA520 /* bb_camera_slider_icon.png in Resources */,
 				8B299F9318AF500900D36BE5 /* camera_action_video_stop_land.png in Resources */,
@@ -3956,6 +3963,7 @@
 				8B299F6618AF500900D36BE5 /* alert_upgrade@2x.png in Resources */,
 				8B299FC518AF500900D36BE5 /* video_grey_pressed.png in Resources */,
 				8B299FD518AF500900D36BE5 /* camera_action_video@5.png in Resources */,
+				8425087F196BB3AA009CE927 /* mbp85.png in Resources */,
 				8B299FB018AF500900D36BE5 /* camera_action_photo@2x.png in Resources */,
 				8B9507A818C9960D006D4945 /* setup_camera_account.png in Resources */,
 				8B29A02818AF500900D36BE5 /* login_line.png in Resources */,
@@ -4140,6 +4148,7 @@
 				8B9507BE18C9960D006D4945 /* setup_progress_blue.png in Resources */,
 				8B29A06F18AF500A00D36BE5 /* vertcal_video_close_pressed.png in Resources */,
 				A1B1E7E918E9135800F076B6 /* offline@2x.png in Resources */,
+				84250880196BB3AA009CE927 /* mbp85@2x.png in Resources */,
 				8B29A00318AF500900D36BE5 /* video_action_music_pressed@2x.png in Resources */,
 				5E769B0A19345C1E008D9CA7 /* Logo_220@2x.png in Resources */,
 				8B29A06118AF500A00D36BE5 /* settings_temp_switch_bg.png in Resources */,
@@ -4220,7 +4229,6 @@
 				8B92A0A21863F655005923D2 /* SavedEventViewController.xib in Resources */,
 				979BC69B17D9B97700B3B373 /* PlaybackViewController.xib in Resources */,
 				5E712D9D192B7DDA000858F1 /* settings_circle_disable@2x.png in Resources */,
-				8B95078018C9960D006D4945 /* camera_1.png in Resources */,
 				8B299F5918AF500900D36BE5 /* alert_learn.png in Resources */,
 				5EBA459819405BEA00695155 /* Step_05_ViewController_ipad.xib in Resources */,
 				8B29A08118AF500A00D36BE5 /* video_play.png in Resources */,
@@ -4473,7 +4481,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = HubbleHome;
-				PROVISIONING_PROFILE = "54D85B7B-22FE-4352-8DE7-B8EB505BCF8A";
+				PROVISIONING_PROFILE = "6005205D-B6D0-404C-8272-0A61B5418CCB";
 				SDKROOT = iphoneos7.0;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
 				VALID_ARCHS = "armv6 armv7";
@@ -4523,7 +4531,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = HubbleHome;
-				PROVISIONING_PROFILE = "54D85B7B-22FE-4352-8DE7-B8EB505BCF8A";
+				PROVISIONING_PROFILE = "6005205D-B6D0-404C-8272-0A61B5418CCB";
 				SDKROOT = iphoneos7.0;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
 				VALIDATE_PRODUCT = YES;
@@ -4596,7 +4604,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = HubbleHome;
-				PROVISIONING_PROFILE = "54D85B7B-22FE-4352-8DE7-B8EB505BCF8A";
+				PROVISIONING_PROFILE = "6005205D-B6D0-404C-8272-0A61B5418CCB";
 				RAMEWORK_SEARCH_PATHS = "$(inherited) \"$(SRCROOT)\"";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";

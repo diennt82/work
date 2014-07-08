@@ -9,10 +9,10 @@
 #import <Foundation/Foundation.h>
 
 typedef enum _CAMERA_TAG {
-    TAG_66 = 566,
-    TAG_83 = 583,
-    TAG_73 = 73,
-    TAG_85 = 585
+    FORCUS_66_TAG = 566,
+    MBP_83_TAG = 583,
+    SCOUT_73_TAG = 73,
+    MBP_85_TAG = 585
 } CAMERA_TAG;
 
 @interface Camera : NSObject

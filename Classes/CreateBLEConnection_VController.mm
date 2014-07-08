@@ -10,6 +10,7 @@
 #import "PublicDefine.h"
 #import "BLEConnectionCell.h"
 #import "CustomIOS7AlertView.h"
+#import "Camera.h"
 
 #define BTN_CONTINUE_TAG 599
 #define BLE_TIMEOUT_PROCESS 1*60
@@ -116,6 +117,10 @@
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setObject:self.homeWifiSSID forKey:HOME_SSID];
     [userDefaults synchronize];
+    
+    CAMERA_TAG tag = (CAMERA_TAG)[[userDefaults objectForKey:SET_UP_CAMERA_TAG] intValue];
+    UIImage *iconImage = [self convertToCamaraImage:tag];
+    [self.cameraIcon setImage:iconImage];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -857,4 +862,15 @@
     }
 }
 
+- (UIImage *)convertToCamaraImage:(CAMERA_TAG)cameraTad {
+    switch (cameraTad) {
+        case MBP_83_TAG:
+            return [UIImage imageNamed:@"camera_ble2.png"];
+        case MBP_85_TAG:
+            return [UIImage imageNamed:@"blesetup_focus85.png"];
+        default:
+            break;
+    }
+    return nil;
+}
 @end
