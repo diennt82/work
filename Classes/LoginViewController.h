@@ -13,5 +13,6 @@
 @interface LoginViewController : GAITrackedViewController
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil delegate: (id<ConnectionMethodDelegate>) d;
+- (id)initWithDelegate: (id<ConnectionMethodDelegate>) d;
 
 @end
