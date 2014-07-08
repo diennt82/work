@@ -3016,7 +3016,7 @@ double _ticks = 0;
         
         CGFloat widthString = stringBoundingBox.width;
         CGFloat heightString = stringBoundingBox.height;
-        CGFloat alignX = (SCREEN_WIDTH + widthString)/2 - degreeCelBoundingBox.width/2 + 8;
+        CGFloat alignX = (SCREEN_WIDTH + widthString)/2 - degreeCelBoundingBox.width/2 + 15;
         CGFloat alignYCel = (SCREEN_HEIGHT - positionYOfBottomView)/2 - heightString/2 + 10;
         [degreeCelsius setFrame:CGRectMake(alignX, alignYCel, degreeCelBoundingBox.width, degreeCelBoundingBox.height)];
         [self.ib_temperature addSubview:degreeCelsius];
