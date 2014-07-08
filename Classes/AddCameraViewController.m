@@ -56,7 +56,7 @@
     [array addObject:cam];
     [cam release];
     
-    cam = [[Camera alloc] initWith:MBP_85_TAG andLable:@"MBP 85/854" andImage:[UIImage imageNamed:@"blesetup_focus85.png"]];
+    cam = [[Camera alloc] initWith:MBP_85_TAG andLable:@"MBP 85/854" andImage:[UIImage imageNamed:@"mbp85.png"]];
     [array addObject:cam];
     [cam release];
     
