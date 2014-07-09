@@ -281,8 +281,8 @@
 @property (retain, nonatomic) IBOutlet UIImageView *imageViewKnob;
 @property (retain, nonatomic) IBOutlet UIView *viewDebugInfo;
 
-@property (assign, nonatomic) EarlierViewController *earlierVC;
-@property (assign, nonatomic) TimelineViewController *timelineVC;
+@property (retain, nonatomic) EarlierViewController *earlierVC;
+@property (retain, nonatomic) TimelineViewController *timelineVC;
 @property (retain, nonatomic) UIImageView *imageViewStreamer;
 @property (nonatomic) BOOL isHorizeShow;
 @property (nonatomic, retain) NSTimer *timerHideMenu;

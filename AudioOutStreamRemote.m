@@ -59,7 +59,9 @@
         {
             NSLog(@"Start recording!!!.******");
             /* Start the player to playback & record */
-            self.pcmPlayer = [[PCMPlayer alloc] init];
+            PCMPlayer *player = [[PCMPlayer alloc] init];
+            self.pcmPlayer = player;
+            [player release];
             _pcm_data = [[NSMutableData alloc] init];
             
             [self.pcmPlayer Play:TRUE];//initialize
@@ -90,7 +92,6 @@
             [_sendingSocket disconnect];
         }
         
-        [_sendingSocket release];
         _sendingSocket = nil;
     }
     
@@ -257,10 +258,8 @@
     
     if (self.bufferLength == 0)
     {
-        [self.pcmPlayer release];
-        self.pcmPlayer = nil;
-        
         [self.pcmPlayer.recorder.inMemoryAudioFile flush];
+        self.pcmPlayer = nil;
         
         if (_timerVoiceData != nil)
         {
@@ -275,12 +274,10 @@
                 [_sendingSocket setDelegate:nil];
                 [_sendingSocket disconnect];
             }
-            [_sendingSocket release];
             _sendingSocket = nil;
         }
         
         if(_pcm_data != nil) {
-            [_pcm_data release];
             _pcm_data = nil;
         }
         
@@ -318,10 +315,8 @@
     {
         [timer invalidate];
         
-        [self.pcmPlayer release];
-        self.pcmPlayer = nil;
-        
         [self.pcmPlayer.recorder.inMemoryAudioFile flush];
+        self.pcmPlayer = nil;
         
         if (_timerVoiceData != nil)
         {
@@ -337,14 +332,10 @@
                 [_sendingSocket disconnect];
             }
             
-            [_sendingSocket release];
             _sendingSocket = nil;
         }
         
-        if(_pcm_data != nil) {
-            [_pcm_data release];
-            _pcm_data = nil;
-        }
+        _pcm_data = nil;
         
         if (_fileHandle != nil)
         {
