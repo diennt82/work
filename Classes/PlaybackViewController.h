@@ -30,8 +30,7 @@
     IBOutlet UIToolbar *topToolbar;
     IBOutlet UIBarButtonItem *backBarBtnItem;
     IBOutlet UIView *progressView;
-    
-    MediaPlayer *_playbackStreamer;
+
     PlaybackListener * listener; 
     
     NSMutableArray * _clips;
@@ -43,6 +42,7 @@
     BOOL _isSwitchingWhenPress;
     BOOL _isClickedOnZooming;
 }
+
 @property (nonatomic, assign) id<PlaybackDelegate> plabackVCDelegate;
 @property (nonatomic, retain) NSMutableArray *clips;
 @property (retain, nonatomic) IBOutlet UIImageView *imageVideo;

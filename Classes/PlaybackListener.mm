@@ -55,15 +55,13 @@ int PlaybackListener::getNextClip(char** url_cstr)
     }
     
     
-    if (current_clip_index >= [mClips count])
+    if (current_clip_index >= mClips.count - 1)
     {
         return MEDIA_PLAYBACK_STATUS_IN_PROGRESS;
     }
     else
     {
-        current_clip_index ++;
-
-        NSString * current_clip = [mClips objectAtIndex:current_clip_index];
+        NSString * current_clip = [mClips objectAtIndex:++current_clip_index];
         
         *url_cstr = (char *) malloc( [current_clip length] * sizeof(char));
         strcpy(*url_cstr, (char *) [current_clip UTF8String]);
