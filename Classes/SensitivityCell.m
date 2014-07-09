@@ -34,7 +34,7 @@
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {
     [super setSelected:selected animated:animated];
-
+    
     // Configure the view for the selected state
 }
 
@@ -88,7 +88,7 @@
         }else{
             imageView.image = [UIImage imageNamed:@"settings_circle.png"];
         }
-
+        
     }
     
     self.imageViewCircleWhite.center = ((UIImageView *)_imageViewCircleArray[_settingsValue]).center;
@@ -96,6 +96,9 @@
 
 - (void)singleTap: (UITapGestureRecognizer *)recognizer
 {
+    if ([self.sensitivityCellDelegate respondsToSelector:@selector(reportSwitchValue:andRowIndex:)]) {
+        [self.sensitivityCellDelegate shouldSendServerTheCommandOnBackground];
+    }
     NSInteger tempValue = recognizer.view.tag % 500;
     
     if (_settingsValue != tempValue)
@@ -108,6 +111,9 @@
 }
 - (IBAction)btnSwitchTouchUpInsideAction:(UIButton *)sender
 {
+    if ([self.sensitivityCellDelegate respondsToSelector:@selector(reportSwitchValue:andRowIndex:)]) {
+        [self.sensitivityCellDelegate shouldSendServerTheCommandOnBackground];
+    }
     self.switchValue = !_switchValue;
     sender.selected = _switchValue;
     

@@ -10,6 +10,7 @@
 
 @protocol SensitivityCellDelegate <NSObject>
 
+- (void)shouldSendServerTheCommandOnBackground;
 - (void)reportSwitchValue: (BOOL)value andRowIndex: (NSInteger) rowIndex;
 - (void)reportChangedSettingsValue: (NSInteger )value atRow: (NSInteger )rowIndx;
 

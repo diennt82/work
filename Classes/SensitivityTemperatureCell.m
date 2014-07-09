@@ -53,7 +53,7 @@
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {
     [super setSelected:selected animated:animated];
-
+    
     // Configure the view for the selected state
 }
 
@@ -75,8 +75,8 @@
     }
     else
     {
-//        self.tempValueLeft = (_tempValueLeft - 32) * 5/9.f;
-//        self.tempValueRight = (_tempValueRight - 32) * 5/9.f;
+        //        self.tempValueLeft = (_tempValueLeft - 32) * 5/9.f;
+        //        self.tempValueRight = (_tempValueRight - 32) * 5/9.f;
         
         self.lblTypeTempLeft.text = @"°C";
         self.lblTypeTempRight.text = @"°C";
@@ -124,8 +124,8 @@
         [self.imgViewRight setBackgroundColor:COLOR_RGB(255.0,(33-tempValueInCel)*20,(33-tempValueInCel)*10)];
     }else{
         [self.imgViewRight setBackgroundColor:[UIColor lightGrayColor]];
-    }    
-
+    }
+    
 }
 
 - (IBAction)btnTypeTempTouchUpInsideAction:(UIButton *)sender
@@ -160,6 +160,9 @@
 
 - (IBAction)btnMinusLeftTouchUpInsideAction:(id)sender
 {
+    if ([self.sensitivityTempCellDelegate respondsToSelector:@selector(shouldSendServerTheCommandOnBackground)]) {
+        [self.sensitivityTempCellDelegate shouldSendServerTheCommandOnBackground];
+    }
     NSInteger tempLowMin = TEMP_LOW_MIN;
     NSInteger tempValueInCel = _tempValueLeft;
     
@@ -179,7 +182,7 @@
     {
         NSLog(@"SensivityTemperature too low, LOW is not supported!");
     }
-
+    
     if (_timerTempLowValueChanged != nil)
     {
         [_timerTempLowValueChanged invalidate];
@@ -197,6 +200,10 @@
 
 - (IBAction)btnPlusLeftTouchUpInsideAction:(id)sender
 {
+    if ([self.sensitivityTempCellDelegate respondsToSelector:@selector(shouldSendServerTheCommandOnBackground)]) {
+        [self.sensitivityTempCellDelegate shouldSendServerTheCommandOnBackground];
+    }
+    
     NSInteger tempHighMax = TEMP_LOW_MAX;
     NSInteger tempValueInCel = _tempValueLeft;
     
@@ -210,7 +217,7 @@
     {
         self.tempValueLeft++;
         self.lblTempValueLeft.text = [NSString stringWithFormat:@"%ld", lroundf(_tempValueLeft)];
-         [self.imgViewLeft setBackgroundColor:COLOR_RGB((tempValueInCel-9)*15,(tempValueInCel-9)*15,255-((tempValueInCel-9)*20))];
+        [self.imgViewLeft setBackgroundColor:COLOR_RGB((tempValueInCel-9)*15,(tempValueInCel-9)*15,255-((tempValueInCel-9)*20))];
     }
     else
     {
@@ -244,6 +251,9 @@
 
 - (IBAction)btnMinusRightTouchUpInsideAction:(id)sender
 {
+    if ([self.sensitivityTempCellDelegate respondsToSelector:@selector(shouldSendServerTheCommandOnBackground)]) {
+        [self.sensitivityTempCellDelegate shouldSendServerTheCommandOnBackground];
+    }
     NSInteger temHighMin = TEMP_HIGH_MIN;
     NSInteger tempValueInCel = _tempValueRight;
     
@@ -279,6 +289,9 @@
 
 - (IBAction)btnPlusRightTouchUpInsideAction:(id)sender
 {
+    if ([self.sensitivityTempCellDelegate respondsToSelector:@selector(shouldSendServerTheCommandOnBackground)]) {
+        [self.sensitivityTempCellDelegate shouldSendServerTheCommandOnBackground];
+    }
     NSInteger temHighMax = TEMP_HIGH_MAX;
     NSInteger tempValueInCel = _tempValueRight;
     
@@ -326,6 +339,9 @@
 
 - (IBAction)btnSwtichLeftTouchUpInsideAction:(UIButton *)sender
 {
+    if ([self.sensitivityTempCellDelegate respondsToSelector:@selector(shouldSendServerTheCommandOnBackground)]) {
+        [self.sensitivityTempCellDelegate shouldSendServerTheCommandOnBackground];
+    }
     self.isSwitchOnLeft = !_isSwitchOnLeft;
     
     sender.selected = _isSwitchOnLeft;
@@ -351,10 +367,10 @@
     }
     
     self.timerTempLowSwitch = [NSTimer scheduledTimerWithTimeInterval:1
-                                                                      target:self
-                                                                    selector:@selector(reportTempLowSwitch:)
-                                                                    userInfo:nil
-                                                                     repeats:NO];
+                                                               target:self
+                                                             selector:@selector(reportTempLowSwitch:)
+                                                             userInfo:nil
+                                                              repeats:NO];
     
     //[_sensitivityTempCellDelegate valueChangedTempLowOn:_isSwitchOnLeft];
 }
@@ -373,6 +389,9 @@
 
 - (IBAction)btnSwitchRightTouchUpInsideAction:(UIButton *)sender
 {
+    if ([self.sensitivityTempCellDelegate respondsToSelector:@selector(shouldSendServerTheCommandOnBackground)]) {
+        [self.sensitivityTempCellDelegate shouldSendServerTheCommandOnBackground];
+    }
     self.isSwitchOnRight = !_isSwitchOnRight;
     sender.selected = _isSwitchOnRight;
     self.btnMinusRight.enabled = _isSwitchOnRight;
@@ -389,7 +408,7 @@
     }else{
         [self.imgViewRight setBackgroundColor:[UIColor lightGrayColor]];
     }
- 
+    
     if (_timerTempHighSwitch != nil)
     {
         [_timerTempHighSwitch invalidate];
@@ -397,10 +416,10 @@
     }
     
     self.timerTempHighSwitch = [NSTimer scheduledTimerWithTimeInterval:1
-                                                               target:self
-                                                             selector:@selector(reportTempHighSwitch:)
-                                                             userInfo:nil
-                                                              repeats:NO];
+                                                                target:self
+                                                              selector:@selector(reportTempHighSwitch:)
+                                                              userInfo:nil
+                                                               repeats:NO];
     
     //[_sensitivityTempCellDelegate valueChangedTempHighOn:_isSwitchOnRight];
 }
