@@ -241,7 +241,7 @@
     //assert(nav != nil);
     
     if (self.presentedViewController) {
-        [self dismissViewControllerAnimated:YES completion:^{
+        [self dismissViewControllerAnimated:NO completion:^{
             [self presentViewController:nav animated:NO completion:nil];
         }];
     } else {
@@ -347,11 +347,11 @@
                 [step02ViewController release];
                 
                 if (self.presentedViewController) {
-                    [self dismissViewControllerAnimated:YES completion:^{
-                        [self presentViewController:nav animated:NO completion:nil];
+                    [self dismissViewControllerAnimated:NO completion:^{
+                        [self presentViewController:nav animated:YES completion:nil];
                     }];
                 } else {
-                    [self presentViewController:nav animated:NO completion:nil];
+                    [self presentViewController:nav animated:YES completion:nil];
                 }
             }
             else

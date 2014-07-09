@@ -140,7 +140,7 @@
     [userDefaults setBool:FALSE forKey:FIRST_TIME_SETUP];
     [userDefaults synchronize];
     
-    [self dismissViewControllerAnimated:YES completion:^{
+    [self dismissViewControllerAnimated:NO completion:^{
         [_delegate sendActionCommand:TRUE];
     }];
 }
