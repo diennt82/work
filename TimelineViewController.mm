@@ -42,8 +42,7 @@
 @property (nonatomic) BOOL is12hr;
 
 @property (nonatomic) BOOL hasUpdate;
-
-
+@property (nonatomic, retain) NSIndexPath *selectedIndexPath;
 
 @end
 
@@ -716,7 +715,7 @@
         }
     }
     
-    self.stringIntelligentMessage = [NSString stringWithFormat:@"%@ at %@",self.stringIntelligentMessage,self.camChannel.profile.name];
+    self.stringIntelligentMessage = [NSString stringWithFormat:@"%@ at %@", self.stringIntelligentMessage, self.camChannel.profile.name];
 }
 
 
@@ -767,6 +766,7 @@
                 for (NSDictionary *event in events)
                 {
                     EventInfo *eventInfo = [[EventInfo alloc] init];
+                    eventInfo.eventID    = [[event objectForKey:@"id"] integerValue];
                     eventInfo.alert_name = [event objectForKey:@"alert_name"];
                     eventInfo.value      = [event objectForKey:@"value"];
                     eventInfo.time_stamp = [event objectForKey:@"time_stamp"];
@@ -778,8 +778,8 @@
                     if (![clipsInEvent isEqual:[NSNull null]])
                     {
                         ClipInfo *clipInfo = [[ClipInfo alloc] init];
-                        clipInfo.urlImage = [[clipsInEvent objectAtIndex:0] objectForKey:@"image"];
-                        clipInfo.urlFile = [[clipsInEvent objectAtIndex:0] objectForKey:@"file"];
+                        clipInfo.urlImage  = [[clipsInEvent objectAtIndex:0] objectForKey:@"image"];
+                        clipInfo.urlFile   = [[clipsInEvent objectAtIndex:0] objectForKey:@"file"];
                         
                         eventInfo.clipInfo = clipInfo;
                         [clipInfo release];
@@ -1380,17 +1380,18 @@
 
 /*
  // Override to support editing the table view.
- - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
- {
- if (editingStyle == UITableViewCellEditingStyleDelete) {
- // Delete the row from the data source
- [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        // Delete the row from the data source
+        [_events removeObjectAtIndex:indexPath.row];
+        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+    }
+    else if (editingStyle == UITableViewCellEditingStyleInsert) {
+        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+    }
  }
- else if (editingStyle == UITableViewCellEditingStyleInsert) {
- // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
- }
- }
- */
+*/
 
 /*
  // Override to support rearranging the table view.
@@ -1432,6 +1433,7 @@
     {
         
         EventInfo * event = [self.events objectAtIndex:indexPath.row];
+        
         if (event.alert !=  4)
         {
             //NOt motion..
@@ -1467,6 +1469,7 @@
             [clipInfo release];
             
             NSLog(@"Push the view controller of navVC.- %@", self.navVC);
+            self.selectedIndexPath = indexPath;
             
             [self.navVC pushViewController:playbackViewController animated:YES];
             
@@ -1548,6 +1551,7 @@
         {
             df_local.dateFormat = @"H:mm EEEE";
         }
+        
         NSString *strTime = [df_local stringFromDate:eventDate];
         int m = [strDate intValue] % 10;
         str = [NSString stringWithFormat:@"%@, %@%@ %@",strTime,strDate,[aryDatePrefix objectAtIndex:((m > 10 && m < 20) ? 0 : (m % 10))],strM];
@@ -1562,9 +1566,14 @@
 
 
 #pragma mark - PlayBackDelegate Methods
+
 -(void)motioEventDeleted
 {
-    [self getEventFromDb:self.camChannel];
+    //[self getEventFromDb:self.camChannel];
+    [self.tableView beginUpdates];
+    [_events removeObjectAtIndex:_selectedIndexPath.row];
+    [self.tableView deleteRowsAtIndexPaths:@[_selectedIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+    [self.tableView endUpdates];
 }
 
 -(float) temperatureToFfromC: (float) degreeC
