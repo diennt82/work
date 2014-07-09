@@ -354,7 +354,9 @@
         
         if (_audioOutStreamRemoteDelegate)
         {
-            [_audioOutStreamRemoteDelegate didDisconnecteSocket];
+            if ([_audioOutStreamRemoteDelegate respondsToSelector:@selector(didDisconnecteSocket)]) {
+                [_audioOutStreamRemoteDelegate didDisconnecteSocket];
+            }
         }
         else
         {
