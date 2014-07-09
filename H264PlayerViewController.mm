@@ -2232,6 +2232,16 @@ double _ticks = 0;
 
 - (void)goBack
 {
+    self.walkieTalkieEnabled = NO;
+    self.enablePTT = NO;
+    if (self.selectedChannel.profile.isInLocal)
+    {
+        [self enableLocalPTT:_walkieTalkieEnabled];
+    }
+    else
+    {
+        [self enableRemotePTT:[NSNumber numberWithBool:self.walkieTalkieEnabled]];
+    }
     
     // Release the instance here - since we are going to camera list
     MediaPlayer::release();
@@ -2253,8 +2263,6 @@ double _ticks = 0;
     self.selectedChannel.profile.isSelected = FALSE;
     
     [self.navigationController popToRootViewControllerAnimated:YES];
-    NSLog(@"release manually");
-    [self release];
 }
 
 -(void) cleanUpDirectionTimers
