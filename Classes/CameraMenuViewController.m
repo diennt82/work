@@ -105,15 +105,15 @@
                                    forState:UIControlEventTouchDown];
     
     self.stringFW_Version = NSLocalizedStringWithDefaultValue(@"firmware_version", nil, [NSBundle mainBundle],
-                                                   @"Firmware version", nil);
+                                                              @"Firmware version", nil);
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     self.apiKey = [userDefaults stringForKey:@"PortalApiKey"];
     
-//    if (![self.camChannel.profile isNotAvailable])
-//    {
-//        self.isLoading = TRUE;
-//        [self performSelectorInBackground:@selector(updateFWVersion_bg) withObject:nil];
-//    }
+    //    if (![self.camChannel.profile isNotAvailable])
+    //    {
+    //        self.isLoading = TRUE;
+    //        [self performSelectorInBackground:@selector(updateFWVersion_bg) withObject:nil];
+    //    }
     
     self.tableViewSettings.backgroundColor = [UIColor colorWithRed:249/255.0 green:249/255.0 blue:249/255.0 alpha:1];
     
@@ -185,7 +185,7 @@
         self.shouldWaitForUpdateSettings = [_sensitivityTemperatureCell shouldWaitForUpdateSettings];
     }
     
-    if (_shouldWaitForUpdateSettings)
+    if (self.shouldWaitForUpdateSettings)
     {
         [self showUpdatingProgressHUD];
     }
@@ -428,27 +428,27 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-/*    //#warning Incomplete method implementation.
-    // Return the number of rows in the section.
-#if ENABLE_CHANGE_IMAGE
-    return 3;
-#else
-    return 2;
-#endif
- */
-   
+    /*    //#warning Incomplete method implementation.
+     // Return the number of rows in the section.
+     #if ENABLE_CHANGE_IMAGE
+     return 3;
+     #else
+     return 2;
+     #endif
+     */
+    
     /*if(intTableSectionStatus==0)
-    {
-        return 0;
-    }
-    else{
-        if(section==0 && intTableSectionStatus==1){
-            return 1;
-        }
-        else if(section==1 && intTableSectionStatus==2){
-            return 3;
-        }
-    }*/
+     {
+     return 0;
+     }
+     else{
+     if(section==0 && intTableSectionStatus==1){
+     return 1;
+     }
+     else if(section==1 && intTableSectionStatus==2){
+     return 3;
+     }
+     }*/
     
     if(section==0){
         return 1;
@@ -480,13 +480,13 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-   /* if (self.camChannel.profile.name.length > 10 &&
-        indexPath.row == 0)
-    {
-        return 66;
-    }
-    
-    return 45;*/
+    /* if (self.camChannel.profile.name.length > 10 &&
+     indexPath.row == 0)
+     {
+     return 66;
+     }
+     
+     return 45;*/
     
     if(intTableSectionStatus==0)
     {
@@ -506,187 +506,187 @@
             }
         }
     }
-
+    
     return 0;
 }
 
 /*- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    cell.backgroundColor = [UIColor colorWithRed:249/255.0 green:249/255.0 blue:249/255.0 alpha:1];
-}*/
+ {
+ cell.backgroundColor = [UIColor colorWithRed:249/255.0 green:249/255.0 blue:249/255.0 alpha:1];
+ }*/
 
 /*
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-#if ENABLE_CHANGE_IMAGE
-    if (indexPath.row == 0 ||
-        indexPath.row == 2)
-    {
-        static NSString *CellIdentifier = @"CameraSettingsCell";
-        CameraSettingsCell *cell = [self.tableViewSettings dequeueReusableCellWithIdentifier:CellIdentifier];
-        
-        NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"CameraSettingsCell" owner:nil options:nil];
-        
-        for (id curObj in objects)
-        {
-            
-            if([curObj isKindOfClass:[UITableViewCell class]])
-            {
-                cell = (CameraSettingsCell *)curObj;
-                break;
-            }
-        }
-        
-        if (indexPath.row == 0)
-        {
-            if (self.camChannel.profile.name.length > 10)
-            {
-                cell.valueLabel.frame = CGRectMake(cell.valueLabel.frame.origin.x, cell.valueLabel.frame.origin.y, cell.valueLabel.frame.size.width, cell.valueLabel.frame.size.height * 2);
-                cell.nameLabel.frame = CGRectMake(cell.nameLabel.frame.origin.x, cell.valueLabel.center.y - cell.nameLabel.frame.size.height / 2, cell.nameLabel.frame.size.width, cell.nameLabel.frame.size.height);
-            }
-            
-            cell.nameLabel.text = @"Name";
-            cell.valueLabel.text = self.camChannel.profile.name;
-        }
-        else
-        {
-            cell.nameLabel.text = _stringFW_Version;
-            cell.valueLabel.text = self.camChannel.profile.fw_version;
-        }
-        
-        return cell;
-    }
-    else // indexPath.row == 1
-    {
-        static NSString *CellIdentifier = @"Cell";
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        if (cell == nil) {
-            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-        }
-        
-        // Configure the cell...
-        cell.textLabel.text = @"Change Image";
-        cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:17];
-        cell.textLabel.textColor = [UIColor colorWithRed:128/255.0 green:128/255.0 blue:128/255.0 alpha:1];
-        
-        return cell;
-    }
-#else
-    if (indexPath.row == 0 ||
-        indexPath.row == 1)
-    {
-        static NSString *CellIdentifier = @"CameraSettingsCell";
-        CameraSettingsCell *cell = [self.tableViewSettings dequeueReusableCellWithIdentifier:CellIdentifier];
-        
-        NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"CameraSettingsCell" owner:nil options:nil];
-        
-        for (id curObj in objects)
-        {
-            
-            if([curObj isKindOfClass:[UITableViewCell class]])
-            {
-                cell = (CameraSettingsCell *)curObj;
-                break;
-            }
-        }
-        
-        if (indexPath.row == 0)
-        {
-            if (_isChangingName)
-            {
-                static NSString *CellIdentifier = @"Cell";
-                UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-                if (cell == nil) {
-                    cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-                }
-                
-                // Configure the cell...
-                cell.textLabel.text = @"Name";
-                
-                UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc]
-                                                    initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-                // Spacer is a 1x1 transparent png
-                UIImage *spacer = [UIImage imageNamed:@"spacer"];
-                
-                UIGraphicsBeginImageContext(spinner.frame.size);
-                
-                [spacer drawInRect:CGRectMake(0, 0, spinner.frame.size.width, spinner.frame.size.height)];
-                UIImage* resizedSpacer = UIGraphicsGetImageFromCurrentImageContext();
-                
-                UIGraphicsEndImageContext();
-                cell.imageView.image = resizedSpacer;
-                spinner.frame = CGRectMake(UIScreen.mainScreen.bounds.size.width - spinner.frame.size.width - 30, 0, spinner.frame.size.width, spinner.frame.size.height);
-                [cell.imageView addSubview:spinner];
-                [spinner startAnimating];
-                
-                return cell;
-            }
-            else
-            {
-                if (self.camChannel.profile.name.length > 10)
-                {
-                    cell.valueLabel.frame = CGRectMake(cell.valueLabel.frame.origin.x, cell.valueLabel.frame.origin.y, cell.valueLabel.frame.size.width, cell.valueLabel.frame.size.height * 2);
-                    cell.nameLabel.frame = CGRectMake(cell.nameLabel.frame.origin.x, cell.valueLabel.center.y - cell.nameLabel.frame.size.height / 2, cell.nameLabel.frame.size.width, cell.nameLabel.frame.size.height);
-                }
-                
-                cell.nameLabel.text = @"Name";
-                cell.valueLabel.text = self.camChannel.profile.name;
-            }
-        }
-        else
-        {
-            if (_isLoading)
-            {
-                static NSString *CellIdentifier = @"Cell";
-                UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-                if (cell == nil) {
-                    cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-                }
-                
-                // Configure the cell...
-                cell.textLabel.text = _stringFW_Version;
-                
-                UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc]
-                                                    initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-                // Spacer is a 1x1 transparent png
-                UIImage *spacer = [UIImage imageNamed:@"spacer"];
-                
-                UIGraphicsBeginImageContext(spinner.frame.size);
-                
-                [spacer drawInRect:CGRectMake(0, 0, spinner.frame.size.width, spinner.frame.size.height)];
-                UIImage* resizedSpacer = UIGraphicsGetImageFromCurrentImageContext();
-                
-                UIGraphicsEndImageContext();
-                cell.imageView.image = resizedSpacer;
-                spinner.frame = CGRectMake(UIScreen.mainScreen.bounds.size.width - spinner.frame.size.width - 30, 0, spinner.frame.size.width, spinner.frame.size.height);
-                [cell.imageView addSubview:spinner];
-                [spinner startAnimating];
-                
-                return cell;
-            }
-            else
-            {
-                cell.nameLabel.text = _stringFW_Version;
-                cell.valueLabel.text = self.camChannel.profile.fw_version;
-            }
-        }
-        
-        return cell;
-    }
-    else
-    {
-        static NSString *CellIdentifier = @"Cell";
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        if (cell == nil) {
-            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-        }
-        
-        // Configure the cell...
-        
-        return cell;
-    }
-#endif
-}
+ - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+ {
+ #if ENABLE_CHANGE_IMAGE
+ if (indexPath.row == 0 ||
+ indexPath.row == 2)
+ {
+ static NSString *CellIdentifier = @"CameraSettingsCell";
+ CameraSettingsCell *cell = [self.tableViewSettings dequeueReusableCellWithIdentifier:CellIdentifier];
+ 
+ NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"CameraSettingsCell" owner:nil options:nil];
+ 
+ for (id curObj in objects)
+ {
+ 
+ if([curObj isKindOfClass:[UITableViewCell class]])
+ {
+ cell = (CameraSettingsCell *)curObj;
+ break;
+ }
+ }
+ 
+ if (indexPath.row == 0)
+ {
+ if (self.camChannel.profile.name.length > 10)
+ {
+ cell.valueLabel.frame = CGRectMake(cell.valueLabel.frame.origin.x, cell.valueLabel.frame.origin.y, cell.valueLabel.frame.size.width, cell.valueLabel.frame.size.height * 2);
+ cell.nameLabel.frame = CGRectMake(cell.nameLabel.frame.origin.x, cell.valueLabel.center.y - cell.nameLabel.frame.size.height / 2, cell.nameLabel.frame.size.width, cell.nameLabel.frame.size.height);
+ }
+ 
+ cell.nameLabel.text = @"Name";
+ cell.valueLabel.text = self.camChannel.profile.name;
+ }
+ else
+ {
+ cell.nameLabel.text = _stringFW_Version;
+ cell.valueLabel.text = self.camChannel.profile.fw_version;
+ }
+ 
+ return cell;
+ }
+ else // indexPath.row == 1
+ {
+ static NSString *CellIdentifier = @"Cell";
+ UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+ if (cell == nil) {
+ cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+ }
+ 
+ // Configure the cell...
+ cell.textLabel.text = @"Change Image";
+ cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:17];
+ cell.textLabel.textColor = [UIColor colorWithRed:128/255.0 green:128/255.0 blue:128/255.0 alpha:1];
+ 
+ return cell;
+ }
+ #else
+ if (indexPath.row == 0 ||
+ indexPath.row == 1)
+ {
+ static NSString *CellIdentifier = @"CameraSettingsCell";
+ CameraSettingsCell *cell = [self.tableViewSettings dequeueReusableCellWithIdentifier:CellIdentifier];
+ 
+ NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"CameraSettingsCell" owner:nil options:nil];
+ 
+ for (id curObj in objects)
+ {
+ 
+ if([curObj isKindOfClass:[UITableViewCell class]])
+ {
+ cell = (CameraSettingsCell *)curObj;
+ break;
+ }
+ }
+ 
+ if (indexPath.row == 0)
+ {
+ if (_isChangingName)
+ {
+ static NSString *CellIdentifier = @"Cell";
+ UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+ if (cell == nil) {
+ cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+ }
+ 
+ // Configure the cell...
+ cell.textLabel.text = @"Name";
+ 
+ UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc]
+ initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+ // Spacer is a 1x1 transparent png
+ UIImage *spacer = [UIImage imageNamed:@"spacer"];
+ 
+ UIGraphicsBeginImageContext(spinner.frame.size);
+ 
+ [spacer drawInRect:CGRectMake(0, 0, spinner.frame.size.width, spinner.frame.size.height)];
+ UIImage* resizedSpacer = UIGraphicsGetImageFromCurrentImageContext();
+ 
+ UIGraphicsEndImageContext();
+ cell.imageView.image = resizedSpacer;
+ spinner.frame = CGRectMake(UIScreen.mainScreen.bounds.size.width - spinner.frame.size.width - 30, 0, spinner.frame.size.width, spinner.frame.size.height);
+ [cell.imageView addSubview:spinner];
+ [spinner startAnimating];
+ 
+ return cell;
+ }
+ else
+ {
+ if (self.camChannel.profile.name.length > 10)
+ {
+ cell.valueLabel.frame = CGRectMake(cell.valueLabel.frame.origin.x, cell.valueLabel.frame.origin.y, cell.valueLabel.frame.size.width, cell.valueLabel.frame.size.height * 2);
+ cell.nameLabel.frame = CGRectMake(cell.nameLabel.frame.origin.x, cell.valueLabel.center.y - cell.nameLabel.frame.size.height / 2, cell.nameLabel.frame.size.width, cell.nameLabel.frame.size.height);
+ }
+ 
+ cell.nameLabel.text = @"Name";
+ cell.valueLabel.text = self.camChannel.profile.name;
+ }
+ }
+ else
+ {
+ if (_isLoading)
+ {
+ static NSString *CellIdentifier = @"Cell";
+ UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+ if (cell == nil) {
+ cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+ }
+ 
+ // Configure the cell...
+ cell.textLabel.text = _stringFW_Version;
+ 
+ UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc]
+ initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+ // Spacer is a 1x1 transparent png
+ UIImage *spacer = [UIImage imageNamed:@"spacer"];
+ 
+ UIGraphicsBeginImageContext(spinner.frame.size);
+ 
+ [spacer drawInRect:CGRectMake(0, 0, spinner.frame.size.width, spinner.frame.size.height)];
+ UIImage* resizedSpacer = UIGraphicsGetImageFromCurrentImageContext();
+ 
+ UIGraphicsEndImageContext();
+ cell.imageView.image = resizedSpacer;
+ spinner.frame = CGRectMake(UIScreen.mainScreen.bounds.size.width - spinner.frame.size.width - 30, 0, spinner.frame.size.width, spinner.frame.size.height);
+ [cell.imageView addSubview:spinner];
+ [spinner startAnimating];
+ 
+ return cell;
+ }
+ else
+ {
+ cell.nameLabel.text = _stringFW_Version;
+ cell.valueLabel.text = self.camChannel.profile.fw_version;
+ }
+ }
+ 
+ return cell;
+ }
+ else
+ {
+ static NSString *CellIdentifier = @"Cell";
+ UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+ if (cell == nil) {
+ cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+ }
+ 
+ // Configure the cell...
+ 
+ return cell;
+ }
+ #endif
+ }
  */
 
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -707,7 +707,7 @@
         camDetCell.lblCameraName.text = self.camChannel.profile.name;
         camDetCell.lblCamVer.text = self.camChannel.profile.fw_version;
         return camDetCell;
-
+        
     }
     else //Sensitive Setting
     {
@@ -737,7 +737,7 @@
                 cell.nameLabel.text = @"Motion";
                 cell.switchValue   = _sensitivityInfo.motionOn;
                 cell.settingsValue = _sensitivityInfo.motionValue;
-
+                
             }
             else
             {
@@ -747,7 +747,7 @@
             }
             
             return cell;
-
+            
         }
         else
         { //if(indexPath.row==2) Tempreture Cell
@@ -788,42 +788,42 @@
     // Navigation logic may go here, for example:
     // Create the next view controller.
     
-   /* if (indexPath.row == 0)
-    {
-        _cameraName = self.camChannel.profile.name;
-        
-        if (_alertViewRename == nil)
-        {
-            self.alertViewRename = [[UIAlertView alloc] initWithTitle:@"Enter the new Camera name"
-                                                              message:nil
-                                                             delegate:self
-                                                    cancelButtonTitle:@"Cancel"
-                                                    otherButtonTitles:@"Ok", nil];
-            self.alertViewRename.alertViewStyle = UIAlertViewStylePlainTextInput;
-            UITextField *textField = [_alertViewRename textFieldAtIndex:0];
-            [textField setText:_cameraName];
-            self.alertViewRename.tag = ALERT_RENAME_CAMERA;
-        }
-        
-        [_alertViewRename show];
-    }
-#if ENABLE_CHANGE_IMAGE
-    else if (indexPath.row == 1)
-    {
-        //change Image
-        ChangeImageViewController *changeImageVC = [[ChangeImageViewController alloc] initWithNibName:@"ChangeImageViewController" bundle:nil];
-        [UIView transitionWithView:self.view
-                          duration:1.0
-                           options:UIViewAnimationOptionTransitionFlipFromBottom
-                        animations:^{
-                            [self.view addSubview:changeImageVC.view];
-                        }
-                        completion:NULL];
-        
-        
-    }
-#endif
-    */
+    /* if (indexPath.row == 0)
+     {
+     _cameraName = self.camChannel.profile.name;
+     
+     if (_alertViewRename == nil)
+     {
+     self.alertViewRename = [[UIAlertView alloc] initWithTitle:@"Enter the new Camera name"
+     message:nil
+     delegate:self
+     cancelButtonTitle:@"Cancel"
+     otherButtonTitles:@"Ok", nil];
+     self.alertViewRename.alertViewStyle = UIAlertViewStylePlainTextInput;
+     UITextField *textField = [_alertViewRename textFieldAtIndex:0];
+     [textField setText:_cameraName];
+     self.alertViewRename.tag = ALERT_RENAME_CAMERA;
+     }
+     
+     [_alertViewRename show];
+     }
+     #if ENABLE_CHANGE_IMAGE
+     else if (indexPath.row == 1)
+     {
+     //change Image
+     ChangeImageViewController *changeImageVC = [[ChangeImageViewController alloc] initWithNibName:@"ChangeImageViewController" bundle:nil];
+     [UIView transitionWithView:self.view
+     duration:1.0
+     options:UIViewAnimationOptionTransitionFlipFromBottom
+     animations:^{
+     [self.view addSubview:changeImageVC.view];
+     }
+     completion:NULL];
+     
+     
+     }
+     #endif
+     */
 }
 
 #pragma mark - Server methods
@@ -913,7 +913,7 @@
 {
     self.navigationItem.rightBarButtonItem.enabled = NO;
     //self.navigationItem.hidesBackButton = YES;
-
+    
     //[self.viewPorgress setHidden:NO];
     //[self.view addSubview:_viewPorgress];
     //[self.view bringSubviewToFront:_viewPorgress];
@@ -1023,13 +1023,13 @@
     [self.tableViewSettings endUpdates];
     
     
-
+    
 }
 
 -(IBAction)btnNotiSenPressed:(id)sender
 {
     if([self.camChannel.profile isNotAvailable]){
-
+        
         return;
     }
     
@@ -1040,9 +1040,9 @@
     }
     
     //[self.tableViewSettings reloadData];
-     [self.tableViewSettings beginUpdates];
+    [self.tableViewSettings beginUpdates];
     [self.tableViewSettings reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, 1)] withRowAnimation:UITableViewRowAnimationAutomatic];
-     [self.tableViewSettings endUpdates];
+    [self.tableViewSettings endUpdates];
     
     if(intTableSectionStatus==2){
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
@@ -1121,11 +1121,14 @@
 }
 
 #pragma  mark - Sensitivity temperature cell delegate
-
 - (void)valueChangedTypeTemperaure:(BOOL)isFahrenheit // NOT need to receive
 {
     [self showUpdatingProgressHUD];
     self.sensitivityInfo.tempIsFahrenheit = isFahrenheit;
+}
+
+- (void)shouldSendServerTheCommandOnBackground {
+    self.backGroundUpdateExecuting = YES;
 }
 
 - (void)valueChangedTempLowValue:(NSInteger)tempValue
@@ -1169,13 +1172,12 @@
 
 - (void)sendToServerTheCommand:(NSString *) command
 {
-    self.backGroundUpdateExecuting = YES;
     if (_jsonComm == nil)
     {
         BMS_JSON_Communication *comm = [[BMS_JSON_Communication alloc] initWithObject:self
-                                              Selector:nil
-                                          FailSelector:nil
-                                             ServerErr:nil];
+                                                                             Selector:nil
+                                                                         FailSelector:nil
+                                                                            ServerErr:nil];
         self.jsonComm = comm;
         [comm release];
     }
@@ -1266,46 +1268,46 @@
        destructiveButtonTitle:nil
             otherButtonTitles:@[@"Select image from gallery", @"Take a photo from Camera",@"Take a snapshot now"]
                      tapBlock:^(UIActionSheet *actionSheet, NSInteger buttonIndex)
-    {
-        if(actionSheet.cancelButtonIndex == buttonIndex)
-        {
-            return ;
-        }
-        
-        if(buttonIndex==1 && ![UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypeCamera])
-        {
-            Alert(nil, @"You iOS device have not camera.")
-            return;
-        }
-        
-        UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-        picker.delegate = self;
-        //picker.allowsEditing = YES;
-        if(buttonIndex==0)//Gallery
-        {
-            picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-        }
-        else if(buttonIndex==1)//Camera
-        {
-            picker.sourceType = UIImagePickerControllerSourceTypeCamera;
-        }
-        else if(buttonIndex==2)//Snapshot
-        {
-            [self performSelector:@selector(openViewForSetCameraFromURL) withObject:nil afterDelay:0.1];
-            return;
-        }
-        [self presentViewController:picker animated:YES completion:NULL];
-        
-    }];
+     {
+         if(actionSheet.cancelButtonIndex == buttonIndex)
+         {
+             return ;
+         }
+         
+         if(buttonIndex==1 && ![UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypeCamera])
+         {
+             Alert(nil, @"You iOS device have not camera.")
+             return;
+         }
+         
+         UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+         picker.delegate = self;
+         //picker.allowsEditing = YES;
+         if(buttonIndex==0)//Gallery
+         {
+             picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+         }
+         else if(buttonIndex==1)//Camera
+         {
+             picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+         }
+         else if(buttonIndex==2)//Snapshot
+         {
+             [self performSelector:@selector(openViewForSetCameraFromURL) withObject:nil afterDelay:0.1];
+             return;
+         }
+         [self presentViewController:picker animated:YES completion:NULL];
+         
+     }];
 }
 
 #pragma mark - UIImagePicker Delegate
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
     imageSelected = [[info valueForKey:UIImagePickerControllerOriginalImage] copy];
-   
+    
     [self dismissViewControllerAnimated:YES completion:^{
-       
+        
         [self uploadImageToServer:imageSelected];
         
         NSArray *paths = NSSearchPathForDirectoriesInDomains
@@ -1319,7 +1321,7 @@
             [[NSFileManager defaultManager] removeItemAtPath:strPath error:nil];
         }
         [UIImageJPEGRepresentation(imageSelected, 0.5) writeToFile:strPath atomically:YES];
-
+        
     }];
 }
 
@@ -1383,12 +1385,12 @@
     if(!imgVSnapshot.isAnimating)
     {
         imgVSnapshot.animationImages =[NSArray arrayWithObjects:
-                                   [UIImage imageNamed:@"loader_big_a"],
-                                   [UIImage imageNamed:@"loader_big_b"],
-                                   [UIImage imageNamed:@"loader_big_c"],
-                                   [UIImage imageNamed:@"loader_big_d"],
-                                   [UIImage imageNamed:@"loader_big_e"],
-                                   nil];
+                                       [UIImage imageNamed:@"loader_big_a"],
+                                       [UIImage imageNamed:@"loader_big_b"],
+                                       [UIImage imageNamed:@"loader_big_c"],
+                                       [UIImage imageNamed:@"loader_big_d"],
+                                       [UIImage imageNamed:@"loader_big_e"],
+                                       nil];
         imgVSnapshot.animationDuration = 1.5;
         [imgVSnapshot startAnimating];
     }
@@ -1467,7 +1469,7 @@
     if (responseDictDInfo)
     {
         if ([[responseDictDInfo objectForKey:@"status"] integerValue] == 200)
-        {            
+        {
             return [[responseDictDInfo valueForKey:@"data"] valueForKey:@"snaps_url"];
         }
     }
@@ -1542,9 +1544,9 @@
     if (_jsonComm == nil)
     {
         BMS_JSON_Communication *comm = [[BMS_JSON_Communication alloc] initWithObject:self
-                                              Selector:nil
-                                          FailSelector:nil
-                                             ServerErr:nil];
+                                                                             Selector:nil
+                                                                         FailSelector:nil
+                                                                            ServerErr:nil];
         self.jsonComm = comm;
         [comm release];
     }
@@ -1586,7 +1588,7 @@
                     self.sensitivityInfo.motionOn      = [settingsArray[0] integerValue];
                     
                     self.sensitivityInfo.motionValue = SENSITIVITY_MOTION_VALUE([settingsArray[1] integerValue]);
-
+                    
                     self.sensitivityInfo.soundOn       = [settingsArray[2] boolValue];
                     
                     self.sensitivityInfo.soundValue = SENSITIVITY_SOUND_VALUE([settingsArray[3] integerValue]);
@@ -1619,7 +1621,7 @@
     }
     else
     {
-       // numOfRows[indexPath.section] = 2;
+        // numOfRows[indexPath.section] = 2;
         intTableSectionStatus=0;
         self.sensitivityMessage = @"Error -Load Sensitivity Settings error!";
     }
@@ -1635,7 +1637,7 @@
         
         dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 5 * NSEC_PER_SEC);
         dispatch_after(popTime, dispatch_get_main_queue(), ^{
-           
+            
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         });
     }

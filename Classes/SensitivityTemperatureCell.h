@@ -10,6 +10,7 @@
 
 @protocol SensitivityTemperaureCellDelegate <NSObject>
 
+- (void)shouldSendServerTheCommandOnBackground;
 - (void)valueChangedTypeTemperaure: (BOOL) isFahrenheit;
 - (void)valueChangedTempLowValue: (NSInteger) tempValue;
 - (void)valueChangedTempHighValue: (NSInteger) tempValue;
