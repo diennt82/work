@@ -220,14 +220,6 @@
     [self progressHDUDisplay:NO];
 }
 
-- (void)resetMelodyStatus {
-    for (int i = 0; i < _melodies.count; i++)
-    {
-        valueMelodiesMap[i] = FALSE;
-    }
-    [_melodyTableView reloadData];
-}
-
 #pragma mark TableView delegate
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -256,7 +248,7 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
+    if(indexPath.row == 0) NSLog(@"duy reload table, hihi");
 
     UITableViewCell *cell = nil;
     if (isPhoneLandscapeMode)
