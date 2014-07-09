@@ -513,7 +513,6 @@
             [self changeSecurityType];
         }
     }
-    [self.tableView endEditing:YES];
 }
 
 #pragma  mark -
