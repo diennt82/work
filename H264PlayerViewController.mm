@@ -5555,20 +5555,13 @@ double _ticks = 0;
         self.enablePTT = YES;
         dispatch_async(dispatch_get_main_queue(), ^{
             self.ib_buttonTouchToTalk.enabled = YES;
-        });
-        [self resetMelodyStatus];
-    }
-}
-
-- (void)resetMelodyStatus {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (self.melodyViewController) {
-            if ([self.melodyViewController isPlaying]) {
-                [self showToat:NSLocalizedString(@"stop_melody_toat", @"")];
-                [self.melodyViewController resetMelodyStatus];
+            if (self.melodyViewController) {
+                if ([self.melodyViewController isPlaying]) {
+                    [self showToat:NSLocalizedString(@"stop_melody_toat", @"")];
+                }
             }
-        }
-    });
+        });
+    }
 }
 
 - (void)touchUpInsideHoldToTalk {
@@ -5704,7 +5697,13 @@ double _ticks = 0;
         {
             // STEP 3 -- Reconnect to Relay-server
             [_audioOutStreamRemote performSelectorOnMainThread:@selector(connectToAudioSocketRemote) withObject:nil waitUntilDone:NO];
-            [self resetMelodyStatus];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (self.melodyViewController) {
+                    if ([self.melodyViewController isPlaying]) {
+                        [self showToat:NSLocalizedString(@"stop_melody_toat", @"")];
+                    }
+                }
+            });
         }
         else
         {
