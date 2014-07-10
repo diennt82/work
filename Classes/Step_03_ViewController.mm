@@ -7,6 +7,7 @@
 //
 
 #define TAG_IMAGE_ANIMATION 599
+#define TIME_OUT            180
 
 #import "Step_03_ViewController.h"
 #import "UIBarButtonItem+Custom.h"
@@ -227,7 +228,7 @@
         return;
     }
     if (self.timerTimeOut == nil) {
-        self.timerTimeOut = [NSTimer scheduledTimerWithTimeInterval:5
+        self.timerTimeOut = [NSTimer scheduledTimerWithTimeInterval:TIME_OUT
                                                              target:self
                                                            selector:@selector(conectionToCameraDidTimeOut:)
                                                            userInfo:nil
