@@ -101,7 +101,6 @@
 
     
     UIAlertView * pushAlert;
-    CameraAlert * latestCamAlert;
     
     DashBoard_ViewController * dashBoard;
     
@@ -122,6 +121,7 @@
 @property (nonatomic, retain) IBOutlet UIView * progressView;
 @property (nonatomic, retain) IBOutlet UIImageView * splashScreen;
 @property (nonatomic, assign) id<BonjourDelegate> bonjourDelegate;
+@property (nonatomic, retain) CameraAlert * latestCamAlert;
 //@property (nonatomic,retain) IBOutlet MBP_MainMenuView * mainMenuView;
 
 //@property (nonatomic,retain) HttpCommunication *comm;
