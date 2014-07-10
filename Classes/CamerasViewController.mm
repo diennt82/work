@@ -120,6 +120,9 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    NSLog(@"%s", __FUNCTION__);
+    
     self.navigationController.navigationBarHidden = YES;
     self.ibTableListCamera.delegate = self;
 
@@ -371,11 +374,6 @@
 {
     //#warning Incomplete method implementation.
     // Return the number of rows in the section.
-    
-    if (self.camChannels.count == 0)
-    {
-        return 0;
-    }
     
     if (_waitingForUpdateData == TRUE)
     {

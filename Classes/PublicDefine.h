@@ -149,6 +149,7 @@
 #define HOST_SSID   @"host_ssid"
 #define HOST_ROUTER @"host_router"
 #define CAMERA_NAME @"CameraName"
+#define CAMERA_REMOVE_SUCCESS @"Remove_camera_success"
 
 #define _OfflineMode @"offlineMode"
 #define _AutoLogin @"shouldAutoLoginIfPossible"

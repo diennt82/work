@@ -75,9 +75,6 @@
     //init a normal UIButton using that image
     UIButton* button = [[UIButton alloc] initWithFrame:frame];
     [button setBackgroundImage:image forState:UIControlStateNormal];
-    [button setBackgroundImage:image forState:UIControlStateHighlighted];
-    [button setBackgroundImage:image forState:UIControlStateSelected];
-    [button setBackgroundImage:image forState:UIControlStateDisabled];
     
     [button setShowsTouchWhenHighlighted:NO];
     
@@ -190,6 +187,7 @@
     
     //UIImage *hubbleBack = [UIImage imageNamed:@"Hubble_logo_back"];
     //[self.navigationItem.leftBarButtonItem setTintColor:[UIColor colorWithPatternImage:hubbleBack]];
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 
     if (!_isFirttime) //revert
     {
@@ -203,26 +201,29 @@
     }
     else
     {
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        BOOL isOffline = [userDefaults boolForKey:_OfflineMode];
-        
-        
-        if (!isOffline &&
-            !self.camerasVC.waitingForUpdateData &&
+        if (![userDefaults boolForKey:_OfflineMode] &&
             !_notUpdateCameras)
         {
-            self.camerasVC.waitingForUpdateData = TRUE;
-            //self.navigationItem.leftBarButtonItem.enabled = NO;
-            //[self.navigationItem.rightBarButtonItems[1] setEnabled:NO];
-            //[self.navigationItem.rightBarButtonItems[1] setHidden:YES];
-            
-            @synchronized(self.camerasVC)
+            if (!self.camerasVC.waitingForUpdateData)
             {
-                [self performSelectorInBackground:@selector(recreateAccount)
-                                       withObject:nil];
+                self.camerasVC.waitingForUpdateData = TRUE;
+                
+                @synchronized(self.camerasVC)
+                {
+                    [self performSelectorInBackground:@selector(recreateAccount)
+                                           withObject:nil];
+                }
+            }
+         
+            if ([userDefaults boolForKey:CAMERA_REMOVE_SUCCESS])
+            {
+                [self.camerasVC.ibTableListCamera reloadData];
             }
         }
     }
+    
+    [userDefaults setBool:NO forKey:CAMERA_REMOVE_SUCCESS];
+    [userDefaults synchronize];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -370,7 +371,16 @@
         {
             self.camerasVC.waitingForUpdateData = TRUE;
             self.navigationItem.leftBarButtonItem.enabled = NO;
-            [self.navigationItem.rightBarButtonItems[1] setEnabled:NO];
+            
+            /*
+             * Disable Setting tab if existing.
+             */
+            
+            if (self.navigationItem.rightBarButtonItems.count == 3)
+            {
+                [self.navigationItem.rightBarButtonItems[1] setEnabled:NO];
+            }
+            
             [self.camerasVC.ibTableListCamera reloadData];
             [self.camerasVC updateBottomButton];
             [self performSelectorInBackground:@selector(recreateAccount)
@@ -416,38 +426,20 @@
             //});
             
             NSLog(@"%s", __FUNCTION__);
-#if 0
-            UIImage *image = [UIImage imageNamed:@"Hubble_logo_back"];
-            CGRect frame = CGRectMake(0, 0, image.size.width, image.size.height);
-            
-            //init a normal UIButton using that image
-            UIButton* button = [[UIButton alloc] initWithFrame:frame];
-            [button setBackgroundImage:image forState:UIControlStateNormal];
-            [button setShowsTouchWhenHighlighted:YES];
-            
-            //set the button to handle clicks - this one calls a method called 'downloadClicked'
-            [button addTarget:self action:@selector(menuBackAction:) forControlEvents:UIControlEventTouchUpInside];
-            
-            //finally, create your UIBarButtonItem using that button
-            UIBarButtonItem* barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:button];
-            [button release];
-            
-            //then set it.  phew.
-            [self.navigationItem setLeftBarButtonItem:barButtonItem];
-            
-            [barButtonItem release];
-#endif
+
             if (self.cameras != nil &&
                 self.cameras.count > 0)
             {
-                [self.navigationItem.rightBarButtonItems[1] setEnabled:YES];
                 //[self.navigationItem.rightBarButtonItems[1] setHidden:NO];
                 self.navigationItem.rightBarButtonItems = @[accountBarButton, settingsBarButton, cameraBarButton];
+                [self.navigationItem.rightBarButtonItems[1] setEnabled:YES];
                 self.navigationItem.leftBarButtonItem.enabled = YES;
             }
             else
             {
                 self.navigationItem.rightBarButtonItems = @[accountBarButton, cameraBarButton];
+                [self.navigationItem.rightBarButtonItems[0] setEnabled:YES];
+                [self.navigationItem.rightBarButtonItems[1] setEnabled:YES];
             }
         });
     }
