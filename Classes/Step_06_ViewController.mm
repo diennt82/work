@@ -126,7 +126,9 @@
     
     self.tfSSID = (UITextField *)[self.ssidCell viewWithTag:202];
     
-    if (self.tfSSID.text.length > 0 && ([self.security isEqualToString:@"None"] || [self.security isEqualToString:@"open"]))
+    if (self.tfSSID.text.length > 0 &&
+        ([[self.security lowercaseString] isEqualToString:@"none"] ||
+         [[self.security lowercaseString] isEqualToString:@"open"]))
     {
         self.navigationItem.rightBarButtonItem .enabled = YES;
         self.navigationItem.rightBarButtonItem.tintColor = [UIColor blueColor];
@@ -154,7 +156,8 @@
         NSLog(@"Step_06_ViewController - viewDidLoad - deviceConf.ssid: %@, - self.ssid: %@, - self.security: %@", self.deviceConf.ssid, self.ssid, self.security);
         
         if ([self.deviceConf.ssid isEqualToString:self.ssid] &&
-            ([self.security isEqualToString:@"wep"] || [self.security isEqualToString:@"wpa"]))
+            (!([[self.security lowercaseString] isEqualToString:@"none"] ||
+               [[self.security lowercaseString] isEqualToString:@"open"])))
         {
             self.navigationItem.rightBarButtonItem.enabled = YES;
             self.navigationItem.rightBarButtonItem.tintColor = [UIColor blueColor];
