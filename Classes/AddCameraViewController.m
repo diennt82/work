@@ -129,7 +129,7 @@
             cameraType = WIFI_SETUP;
             break;
         case SCOUT_73_TAG:
-            cameraType = WIFI_SETUP;
+            cameraType = SETUP_CAMERA_FOCUS73;
             break;
         case MBP_85_TAG:
             cameraType = BLUETOOTH_SETUP;
@@ -137,6 +137,7 @@
         default:
             break;
     }
+    
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setInteger:cameraType forKey:SET_UP_CAMERA];
     [userDefaults setObject:@(cameraTad) forKey:SET_UP_CAMERA_TAG];
