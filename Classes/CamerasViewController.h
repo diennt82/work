@@ -18,11 +18,13 @@
 
 @interface CamerasViewController : UIViewController<UITableViewDataSource, UITableViewDelegate>
 
+@property (retain, nonatomic) IBOutlet UITableView *ibTableListCamera;
+
 @property (assign, nonatomic) id<CamerasVCDelegate> camerasVCDelegate;
 @property (assign, nonatomic) id parentVC;
 @property (nonatomic) BOOL waitingForUpdateData;
+
 @property (retain, nonatomic) NSMutableArray *camChannels;
-@property (retain, nonatomic) IBOutlet UITableView *ibTableListCamera;
 
 - (id)initWithStyle:(UITableViewStyle)style
            delegate:(id<ConnectionMethodDelegate> )delegate

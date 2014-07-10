@@ -7036,23 +7036,22 @@ double _ticks = 0;
 - (void)createSessionFailedServerUnreachable
 {
     [self logDebugInfo:nil];
-    
-    if (!userWantToCancel &&
-        !_returnFromPlayback &&
-        [UIApplication sharedApplication].applicationState != UIApplicationStateBackground) // Testing this to decide using it or not
-    {
-        NSLog(@"SERVER unreachable (timeout) ");
-        self.messageStreamingState = @"Camera is not accessible";
-        _isShowTextCameraIsNotAccesible = YES;
-        dispatch_async(dispatch_get_main_queue(), ^{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (!userWantToCancel &&
+            !_returnFromPlayback &&
+            [UIApplication sharedApplication].applicationState != UIApplicationStateBackground) // Testing this to decide using it or not
+        {
+            NSLog(@"SERVER unreachable (timeout) ");
+            self.messageStreamingState = @"Camera is not accessible";
+            _isShowTextCameraIsNotAccesible = YES;
             [self.ib_lbCameraNotAccessible setHidden:NO];
             [self performSelector:@selector(setupCamera) withObject:nil afterDelay:10];
-        });
-    }
-    else
-    {
-        NSLog(@"%s View is invisible OR in background mode. Do nothing!", __FUNCTION__);
-    }
+        }
+        else
+        {
+            NSLog(@"%s View is invisible OR in background mode. Do nothing!", __FUNCTION__);
+        }
+    });
 }
 
 - (void)logDebugInfo:(NSDictionary *)responseDict

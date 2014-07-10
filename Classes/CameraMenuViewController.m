@@ -940,8 +940,6 @@
 	NSLog(@"CameraMenuVC- removeCam success-- fatality");
     self.navigationController.view.userInteractionEnabled = YES;
     [MBProgressHUD hideHUDForView:self.view animated:NO];
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:CAMERA_REMOVE_SUCCESS];
-    [[NSUserDefaults standardUserDefaults]synchronize];
     
     [self.navigationController popViewControllerAnimated:YES];
 }
