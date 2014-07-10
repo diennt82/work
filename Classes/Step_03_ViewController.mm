@@ -431,6 +431,7 @@
 }
 
 - (IBAction)handlePairNo:(id)sender {
+    [self.navigationController popViewControllerAnimated:NO];
     if ([self.delegate respondsToSelector:@selector(goBackCameralist)]) {
         [self.delegate goBackCameralist];
     }
