@@ -134,7 +134,9 @@
     [userDefaults synchronize];
     
     //[_window setRootViewController:viewController];
-    _window.rootViewController = [[EarlierNavigationController alloc] initWithRootViewController:viewController];
+    EarlierNavigationController *nav = [[EarlierNavigationController alloc] initWithRootViewController:viewController];
+    _window.rootViewController = nav;
+    [nav release];
     [_window makeKeyAndVisible];
     
 #if TARGET_IPHONE_SIMULATOR == 0
@@ -318,10 +320,10 @@ void checkingApplicationCrashed()
             
             
         }
-        else if ([str2 isEqualToString:@"1"] ||
-                 [str2 isEqualToString:@"2"]  ||
-                 [str2 isEqualToString:@"3"] ||
-                 [str2 isEqualToString:@"4"])
+        else if ([str2 isEqualToString:ALERT_TYPE_SOUND] ||
+                 [str2 isEqualToString:ALERT_TYPE_TEMP_HI]  ||
+                 [str2 isEqualToString:ALERT_TYPE_TEMP_LO] ||
+                 [str2 isEqualToString:ALERT_TYPE_MOTION])
         {
             
             
@@ -392,8 +394,14 @@ void checkingApplicationCrashed()
                                                       otherButtonTitles:nil];
                 [alert show];
             }
+            [camAlert release];
         }
-        //[camAlert release]; camAlert leak memory but I can't release it.
+        else if ([str2 isEqualToString:ALERT_TYPE_RESET_PASS]) {
+            
+        }
+        else if ([str2 isEqualToString:ALERT_TYPE_REMOVED_CAM]) {
+            
+        }
     }
     
 }
@@ -690,10 +698,12 @@ void checkingApplicationCrashed()
         
         if (!_jsonComm)
         {
-            self.jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                                  Selector:nil
-                                                              FailSelector:nil
-                                                                 ServerErr:nil];
+            BMS_JSON_Communication *comm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                  Selector:nil
+                                              FailSelector:nil
+                                                 ServerErr:nil];
+            self.jsonComm = comm;
+            [comm release];
         }
         
         NSDictionary *responseRegNotifn = [_jsonComm registerPushNotificationsBlockedWithAppId:appId
@@ -730,5 +740,4 @@ void checkingApplicationCrashed()
         [_jsonComm cancel];
     }
 }
-
 @end

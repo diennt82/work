@@ -164,11 +164,14 @@
 }
 - (void)selectSettings
 {
-    [_settingsVC.view removeFromSuperview];
-    [self resetFontTextNormalBarButton];
-    [settingsBarButton setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont bold18Font], NSFontAttributeName,  [UIColor blackColor], NSForegroundColorAttributeName,nil] forState:UIControlStateNormal];
-    _settingsVC.parentVC = self;
-    [self.view addSubview:_settingsVC.view];
+//    [_settingsVC.view removeFromSuperview];
+//    [self resetFontTextNormalBarButton];
+//    [settingsBarButton setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont bold18Font], NSFontAttributeName,  [UIColor blackColor], NSForegroundColorAttributeName,nil] forState:UIControlStateNormal];
+//    _settingsVC.parentVC = self;
+//    [self.view addSubview:_settingsVC.view];
+    
+    MBP_iosAppDelegate *appDelegate = (MBP_iosAppDelegate *)[UIApplication sharedApplication].delegate;
+    [appDelegate test];
 }
 - (void)selectAccountSetting
 {

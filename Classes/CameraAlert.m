@@ -26,35 +26,32 @@ static sqlite3_stmt *init_statement = nil;
 -(id) initWithTimeStamp:(NSInteger) timeStamp database:(sqlite3 *) db
 {
     self = [super init]; 
-    
-    
-    rcvTimeStamp = timeStamp;
-    database = db; 
-    if (init_statement == nil)
-    {
-        const char * sql_stmt = "SELECT cameraMacNoColon FROM history WHERE rcvTimeStamp=?";
-        
-        if (sqlite3_prepare_v2(database, sql_stmt, -1, &init_statement, NULL) != SQLITE_OK)
+    if (self) {
+        rcvTimeStamp = timeStamp;
+        database = db;
+        if (init_statement == nil)
         {
-            NSAssert1(0,@"Error failed to prepare statment with message:%s", sqlite3_errmsg(database)); 
+            const char * sql_stmt = "SELECT cameraMacNoColon FROM history WHERE rcvTimeStamp=?";
+            
+            if (sqlite3_prepare_v2(database, sql_stmt, -1, &init_statement, NULL) != SQLITE_OK)
+            {
+                NSAssert1(0,@"Error failed to prepare statment with message:%s", sqlite3_errmsg(database));
+            }
+            sqlite3_bind_int(init_statement, 1, rcvTimeStamp);
+            if (sqlite3_step(init_statement))
+            {
+                char * text = (char *)sqlite3_column_text(init_statement, 1);
+                self.cameraMacNoColon = [NSString stringWithUTF8String:text];
+            }
+            else
+            {
+                self.cameraMacNoColon = @"112233445566";
+            }
+            
+            sqlite3_finalize(init_statement);
+            
         }
-        sqlite3_bind_int(init_statement, 1, rcvTimeStamp);
-        if (sqlite3_step(init_statement))
-        {
-            char * text = (char *)sqlite3_column_text(init_statement, 1);
-            self.cameraMacNoColon = [NSString stringWithUTF8String:text];
-        }
-        else 
-        {
-            self.cameraMacNoColon = @"112233445566";
-        }
-        
-        sqlite3_finalize(init_statement);
-        
     }
-    
-    
-    
     return self;
     
 }
@@ -62,15 +59,13 @@ static sqlite3_stmt *init_statement = nil;
 -(id) initWithTimeStamp1:(NSInteger) timeStamp 
 {
     self = [super init]; 
-    
-    
-    rcvTimeStamp = timeStamp;
-    database = nil; 
-    server_url = nil;
-    
-    
+    if (self)
+    {
+        rcvTimeStamp = timeStamp;
+        database = nil;
+        server_url = nil;
+    }
     return self;
-    
 }
 
 

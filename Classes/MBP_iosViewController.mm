@@ -206,15 +206,12 @@
 
 -(void) startShowingCameraList:(NSNumber *) option
 {
-    if (_menuVC)
-    {
-        [_menuVC release];
-        self.menuVC = nil;
-    }
-    
-    self.menuVC = [[MenuViewController alloc] initWithNibName:@"MenuViewController"
-                                                       bundle:nil
-                                             withConnDelegate:self];
+    self.menuVC = nil;
+    MenuViewController *menu = [[MenuViewController alloc] initWithNibName:@"MenuViewController"
+                                         bundle:nil
+                               withConnDelegate:self];
+    self.menuVC = menu;
+    [menu release];
     
 	NSMutableArray * validChannels = [[NSMutableArray alloc]init ];
     
@@ -237,8 +234,6 @@
     self.menuVC.camerasVC.camChannels = validChannels;
     
     EarlierNavigationController *nav = [[EarlierNavigationController alloc] initWithRootViewController:self.menuVC];
-    [_menuVC release];
-    //assert(nav != nil);
     
     if (self.presentedViewController) {
         [self dismissViewControllerAnimated:YES completion:^{
@@ -250,7 +245,7 @@
     
     
     NSLog(@"MBP_iosVC - Showing cameralist?  %d", self.menuVC.isFirttime);
-    
+    [nav release];
     [validChannels release];
 }
 
@@ -302,7 +297,8 @@
 	[restored_profiles release];
     
     [bonjourThread release];
-    
+    [_menuVC release];
+    [_latestCamAlert release];
 	[super dealloc];
 }
 
@@ -353,6 +349,7 @@
                 } else {
                     [self presentViewController:nav animated:NO completion:nil];
                 }
+                [nav release];
             }
             else
             {
@@ -702,10 +699,10 @@
     
     [CameraAlert insertAlertForCamera:camAlert];
     
-    NSLog(@"latestCamAlert is: %@", latestCamAlert);
+    NSLog(@"latestCamAlert is: %@", self.latestCamAlert);
     
-    if (latestCamAlert != nil &&
-        [latestCamAlert.cameraMacNoColon  isEqualToString:camAlert.cameraMacNoColon])
+    if (self.latestCamAlert != nil &&
+        [self.latestCamAlert.cameraMacNoColon  isEqualToString:camAlert.cameraMacNoColon])
     {
         NSLog(@"Same cam alert is currenlty shown.");
         
@@ -755,18 +752,7 @@
                 NSLog(@"already shown the aggregation message");
             }
             
-            @synchronized(self)
-            {
-                
-                //keep the reference here
-                if (latestCamAlert != nil)
-                {
-                    [latestCamAlert release];
-                    latestCamAlert = nil;
-                }
-                latestCamAlert = camAlert;
-                
-            }
+            self.latestCamAlert = camAlert;
             
             return FALSE;
         }
@@ -842,19 +828,8 @@
         pushAlert.tag = ALERT_PUSH_RECVED_RESCAN_AFTER;
     }
     
+    self.latestCamAlert = camAlert;
     
-    @synchronized(self)
-    {
-        
-        //keep the reference here
-        if (latestCamAlert != nil)
-        {
-            [latestCamAlert release];
-            latestCamAlert = nil;
-        }
-        latestCamAlert = camAlert;
-        
-    }
     NSLog(@"play sound");
     [self playSound];
     
@@ -951,13 +926,12 @@
                 [self dismissNotificationViewController];
                 
                 NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-                [userDefaults setObject:latestCamAlert.registrationID forKey:REG_ID];
+                [userDefaults setObject:self.latestCamAlert.registrationID forKey:REG_ID];
                 [userDefaults synchronize];
                 
                 
                 [self sendStatus:SHOW_CAMERA_LIST];
-                [latestCamAlert release];
-                latestCamAlert = nil;
+                self.latestCamAlert = nil;
                 
                 [pushAlert release];
                 pushAlert = nil;
@@ -970,9 +944,9 @@
                 
                 
 		}
-        if (latestCamAlert != nil)
+        if (self.latestCamAlert != nil)
         {
-            [CameraAlert clearAllAlertForCamera:latestCamAlert.cameraMacNoColon];
+            [CameraAlert clearAllAlertForCamera:self.latestCamAlert.cameraMacNoColon];
         }
     }
     
@@ -992,9 +966,8 @@
                 
                 [self dismissMenuHubbleView];
                 [self dismissNotificationViewController];
-                [self showNotifViewController:latestCamAlert];
-                [latestCamAlert release];
-                latestCamAlert = nil;
+                [self showNotifViewController:self.latestCamAlert];
+                self.latestCamAlert = nil;
                 
                 [pushAlert release];
                 pushAlert = nil;
@@ -1027,9 +1000,9 @@
                 
 		}
   
-        if (latestCamAlert != nil)
+        if (self.latestCamAlert != nil)
         {
-            [CameraAlert clearAllAlertForCamera:latestCamAlert.cameraMacNoColon];
+            [CameraAlert clearAllAlertForCamera:self.latestCamAlert.cameraMacNoColon];
         }
 	}
     else if (tag == ALERT_PUSH_SERVER_ANNOUNCEMENT)
