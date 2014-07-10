@@ -25,6 +25,8 @@
 @property (nonatomic, assign) NSTimer           *timerTimeOut;
 
 - (IBAction)handleCameraButton:(id)sender;
+- (IBAction)handlePairYes:(id)sender;
+- (IBAction)handlePairNo:(id)sender;
 @end
 
 @implementation Step_03_ViewController
@@ -225,7 +227,7 @@
         return;
     }
     if (self.timerTimeOut == nil) {
-        self.timerTimeOut = [NSTimer scheduledTimerWithTimeInterval:60
+        self.timerTimeOut = [NSTimer scheduledTimerWithTimeInterval:5
                                                              target:self
                                                            selector:@selector(conectionToCameraDidTimeOut:)
                                                            userInfo:nil
@@ -422,6 +424,16 @@
     [labelCrazy performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:3];
     
     [labelCrazy release];
+}
+
+- (IBAction)handlePairYes:(id)sender {
+    [self hubbleItemAction:nil];
+}
+
+- (IBAction)handlePairNo:(id)sender {
+    if ([self.delegate respondsToSelector:@selector(goBackCameralist)]) {
+        [self.delegate goBackCameralist];
+    }
 }
 
 - (UIImage *)convertToCamaraImage:(CAMERA_TAG)cameraTad {

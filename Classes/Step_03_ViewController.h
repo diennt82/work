@@ -19,6 +19,10 @@
 
 #define VERSION_18_037 @"get_version: 18_037"
 
+@protocol Step_03Delegate <NSObject>
+- (void)goBackCameralist;
+@end
+
 @interface Step_03_ViewController : GAITrackedViewController
 {
     BOOL task_cancelled;
@@ -33,6 +37,7 @@
 }
 
 @property (nonatomic, retain) NSString * cameraMac, * cameraName, * homeWifiSSID;
+@property (nonatomic, assign) id<Step_03Delegate> delegate;
 
 - (IBAction)handleButtonPress:(id)sender;
 - (void) hideProgess;
