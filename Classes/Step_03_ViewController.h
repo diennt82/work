@@ -22,6 +22,7 @@
 @interface Step_03_ViewController : GAITrackedViewController
 {
     BOOL task_cancelled;
+    BOOL task_timeOut;
     NSString * homeWifiSSID; 
 	NSString * cameraMac; 
 	NSString * cameraName;
