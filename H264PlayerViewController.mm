@@ -17,6 +17,7 @@
 #import <SystemConfiguration/CaptiveNetwork.h>
 #import <objc/message.h>
 
+#define TEST_ENC_STREAM 1
 
 
 @implementation H264PlayerViewController
@@ -2025,15 +2026,15 @@ double _ticks = 0;
                     self.messageStreamingState = @"Camera is not accessible";
                 }
                 
-//                if (self.backgroundTask != UIBackgroundTaskInvalid)
-//                {
-//                    [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTask];
-//                    self.backgroundTask = UIBackgroundTaskInvalid;
-//                }
-                
                 break;
             }
-            //self.mediaProcessStatus = 3;
+            
+#if TEST_ENC_STREAM
+            //Enable encryption
+            MediaPlayer::Instance()->setPlayOption(MEDIA_HAS_ENC_VIDEO);
+            MediaPlayer::Instance()->setEncryptionKey("");
+            MediaPlayer::Instance()->setEncryptionIv("");
+#endif
             
             MediaPlayer::Instance()->setVideoSurface(_imageViewStreamer);
             
