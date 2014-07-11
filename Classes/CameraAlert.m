@@ -439,6 +439,15 @@ static sqlite3_stmt *init_statement = nil;
     return ;
 }
 
-
+- (void)dealloc {
+    [cameraMacNoColon release];
+    [cameraName release];
+    [alertType release];
+    [alertVal release];
+    [alertTime release];
+    [server_url release];
+    [_registrationID release];
+    [super dealloc];
+}
 
 @end

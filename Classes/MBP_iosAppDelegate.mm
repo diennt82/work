@@ -323,7 +323,9 @@ void checkingApplicationCrashed()
         else if ([str2 isEqualToString:ALERT_TYPE_SOUND] ||
                  [str2 isEqualToString:ALERT_TYPE_TEMP_HI]  ||
                  [str2 isEqualToString:ALERT_TYPE_TEMP_LO] ||
-                 [str2 isEqualToString:ALERT_TYPE_MOTION])
+                 [str2 isEqualToString:ALERT_TYPE_MOTION] ||
+                 [str2 isEqualToString:ALERT_TYPE_PASSWORD_CHANGED] ||
+                 [str2 isEqualToString:ALERT_TYPE_REMOVED_CAM])
         {
             
             
@@ -349,7 +351,12 @@ void checkingApplicationCrashed()
             int rcvTimeStamp = [[NSDate date] timeIntervalSince1970];
             CameraAlert * camAlert = [[CameraAlert alloc]initWithTimeStamp1:rcvTimeStamp];// autorelease];
             //set other values
-            camAlert.cameraMacNoColon = [str3 substringWithRange:NSMakeRange(6, 12)];
+            if (str3.length >= 12) {
+                camAlert.cameraMacNoColon = [str3 substringWithRange:NSMakeRange(6, 12)];
+            }
+            if ([str6 isEqualToString:@"N/A"]) {
+                str6 = @"";
+            }
             
             camAlert.cameraName = str6;
             camAlert.alertType = str2;
@@ -395,12 +402,6 @@ void checkingApplicationCrashed()
                 [alert show];
             }
             [camAlert release];
-        }
-        else if ([str2 isEqualToString:ALERT_TYPE_RESET_PASS]) {
-            
-        }
-        else if ([str2 isEqualToString:ALERT_TYPE_REMOVED_CAM]) {
-            
         }
     }
     
