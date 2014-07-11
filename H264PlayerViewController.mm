@@ -17,7 +17,7 @@
 #import <SystemConfiguration/CaptiveNetwork.h>
 #import <objc/message.h>
 
-#define TEST_ENC_STREAM 1
+#define TEST_ENC_STREAM 0
 
 
 @implementation H264PlayerViewController
@@ -1798,6 +1798,88 @@ double _ticks = 0;
     }
 }
 
+#pragma mark - Get Model ID
+
+//Run  this in Background thread
+
+-(NSString *) getCameraKey:(CamChannel *) channel
+{
+    NSString *bodyKey = nil;
+    NSString *device_model = nil;
+    
+    if (channel.profile.isInLocal )
+	{
+        
+        NSData *responseData = [[HttpCom instance].comWithDevice sendCommandAndBlock_raw:@"get_model"];
+        
+        if (responseData != nil)
+        {
+            bodyKey = [[[NSString alloc] initWithData:responseData encoding: NSUTF8StringEncoding] autorelease];
+            
+            NSLog(@"getCameraKey: get_model :response string: %@", bodyKey);
+        }
+	}
+	else if(channel.profile.minuteSinceLastComm <= 5) // Remote
+	{
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        
+        //NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
+        NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
+       
+		if (_jsonCommBlocked == nil)
+        {
+            self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                         Selector:nil
+                                                                     FailSelector:nil
+                                                                        ServerErr:nil];
+        }
+        
+        NSDictionary *responseDict = [_jsonCommBlocked sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
+                                                                                 andCommand:[NSString stringWithFormat:@"action=command&command=get_model"]
+                                                                                  andApiKey:apiKey];
+        if (responseDict != nil)
+        {
+            
+            NSInteger status = [[responseDict objectForKey:@"status"] intValue];
+            if (status == 200)
+            {
+                bodyKey = [[[responseDict objectForKey:@"data"] objectForKey:@"device_response"] objectForKey:@"body"];
+            }
+        }
+        
+        NSLog(@"get_model responseDict = %@", responseDict);
+	}
+    
+    if (![bodyKey isEqualToString:@""])
+    {
+        NSArray * tokens = [bodyKey componentsSeparatedByString:@": "];
+        if ([tokens count] >=2 )
+        {
+            device_model = [tokens objectAtIndex:1];
+            
+        }
+    }
+    NSAssert((device_model != nil), @"Device Model is nil");
+    
+    
+    NSString * cameraKey = [NSString stringWithFormat:@"%@%@",device_model,
+                            [Util strip_colon_fr_mac:channel.profile.mac_address] ];
+     NSLog(@"cameraKey= %@", cameraKey);
+    
+    const char * key = [cameraKey UTF8String];
+    
+    NSString * testStr  = @"";
+    for (int i = 0  ; i <cameraKey.length; i++ )
+    {
+        testStr = [testStr stringByAppendingFormat:@"%02x",key[i]];
+    }
+    
+    NSLog(@"Test string is: %@ & key : %s",testStr, key);
+    
+    return testStr;
+}
+
+
 #pragma mark - Setup camera
 
 - (void)setupCamera
@@ -2030,24 +2112,8 @@ double _ticks = 0;
             }
             
 #if TEST_ENC_STREAM
-            //Enable encryption
-            //char  key [] = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16};
-            //char  iv [] = {21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36};
-#if 1
-            // TEST - 006644334C577B6F
-            char * key = [self  stringToHex:@"006644334C577B6F"];
-            char * iv  = key;
-            
-            NSString * testStr  = @"";
-            for (int i = 0  ; i <@"006644334C577B6F".length; i++ )
-            {
-                testStr = [testStr stringByAppendingFormat:@"%02x",key[i]];
-            }
-            
-            NSLog(@"Test string is: %@ & key : %s",testStr, key);
-          
-#endif
-            
+         
+            NSString * testStr = [self getCameraKey:self.selectedChannel];
             
             MediaPlayer::Instance()->setPlayOption(MEDIA_HAS_ENC_VIDEO);
             MediaPlayer::Instance()->setEncryptionKey([testStr UTF8String]);
