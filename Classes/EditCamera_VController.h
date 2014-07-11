@@ -17,9 +17,13 @@
 #import "BLEConnectionManager.h"
 
 #define CONF_CAM_BTN_TAG 1002
+#if 1
+#define SENDING_SERVER_AUTH      1
+#define SENDING_SERVER_AUTH_DONE 2
+#else
 #define SENDING_MASTER_KEY 1
 #define SENDING_MASTER_KEY_DONE 2
-
+#endif
 
 #define ALERT_ASK_FOR_RETRY_BLE 4
 
