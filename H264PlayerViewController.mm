@@ -5592,7 +5592,8 @@ double _ticks = 0;
         dispatch_async(dispatch_get_main_queue(), ^{
             self.ib_buttonTouchToTalk.enabled = YES;
             if (self.melodyViewController) {
-                if ([self.melodyViewController isPlaying]) {
+                if (self.melodyViewController.playing) {
+                    self.melodyViewController.playing = NO;
                     [self showToat:NSLocalizedString(@"stop_melody_toat", @"")];
                 }
             }
@@ -5739,7 +5740,8 @@ double _ticks = 0;
             [_audioOutStreamRemote performSelectorOnMainThread:@selector(connectToAudioSocketRemote) withObject:nil waitUntilDone:NO];
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (self.melodyViewController) {
-                    if ([self.melodyViewController isPlaying]) {
+                    if (self.melodyViewController.playing) {
+                        self.melodyViewController.playing = NO;
                         [self showToat:NSLocalizedString(@"stop_melody_toat", @"")];
                     }
                 }

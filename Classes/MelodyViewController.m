@@ -367,6 +367,7 @@
                 valueMelodiesMap[i] = FALSE;
             }
         }
+        self.playing = YES;
     }
     else
     {
@@ -387,15 +388,5 @@
             [MBProgressHUD hideAllHUDsForView:sv animated:YES];
         }
     }
-}
-
-- (BOOL)isPlaying {
-    for (int i = 0; i < _melodies.count; i++)
-    {
-        if (valueMelodiesMap[i] == YES) {
-            return YES;
-        }
-    }
-    return NO;
 }
 @end
