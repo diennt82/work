@@ -2031,9 +2031,27 @@ double _ticks = 0;
             
 #if TEST_ENC_STREAM
             //Enable encryption
+            //char  key [] = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16};
+            //char  iv [] = {21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36};
+#if 1
+            // TEST - 006644334C577B6F
+            char * key = [self  stringToHex:@"006644334C577B6F"];
+            char * iv  = key;
+            
+            NSString * testStr  = @"";
+            for (int i = 0  ; i <@"006644334C577B6F".length; i++ )
+            {
+                testStr = [testStr stringByAppendingFormat:@"%02x",key[i]];
+            }
+            
+            NSLog(@"Test string is: %@ & key : %s",testStr, key);
+          
+#endif
+            
+            
             MediaPlayer::Instance()->setPlayOption(MEDIA_HAS_ENC_VIDEO);
-            MediaPlayer::Instance()->setEncryptionKey("");
-            MediaPlayer::Instance()->setEncryptionIv("");
+            MediaPlayer::Instance()->setEncryptionKey([testStr UTF8String]);
+            MediaPlayer::Instance()->setEncryptionIv([testStr UTF8String]);
 #endif
             
             MediaPlayer::Instance()->setVideoSurface(_imageViewStreamer);
@@ -7072,5 +7090,25 @@ double _ticks = 0;
     NSLog(@"%s stage 1 takes %f seconds \n Start stage 2 \n %@", __FUNCTION__, diff, gaiActionTime);
     self.timeStartingStageTwo = [NSDate date];
 }
+
+
+- (char  *) stringToHex:(NSString *)str
+{
+    NSUInteger len = [str length];
+    char * chars =  (char *) malloc(len);
+    
+    [str       getBytes:chars
+              maxLength:len
+             usedLength:NULL
+               encoding:NSUTF8StringEncoding
+                options:0
+                  range:NSMakeRange(0, len )
+         remainingRange:NULL];
+    
+    
+    return chars;
+    
+}
+
 
 @end
