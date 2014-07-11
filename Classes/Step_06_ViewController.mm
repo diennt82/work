@@ -745,8 +745,8 @@
                                                      withLabel:nil
                                                      withValue:nil];
      // >12.82 we can move on with new flow
-    if  ([fwVersion compare:FW_MILESTONE_F66_NEW_FLOW] >= NSOrderedSame) //||
-         //([fwVersion compare:FW_MILESTONE_F66_NEW_FLOW] == NSOrderedAscending) )
+    if  (([fwVersion compare:FW_MILESTONE_F66_NEW_FLOW] >= NSOrderedSame) ||
+         ([userDefaults integerForKey:SET_UP_CAMERA] == SETUP_CAMERA_FOCUS73))
     {
          /** SEND auth data over first */
         NSString * set_auth_cmd = [NSString stringWithFormat:@"%@%@%@%@%@",

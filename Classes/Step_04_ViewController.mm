@@ -10,16 +10,24 @@
 #import "define.h"
 #import "HttpCom.h"
 #import "HoldOnCamWifi.h"
+#import "Step_05_ViewController.h"
+#import "MBProgressHUD.h"
+#import "Step_10_ViewController.h"
+#import "CustomIOS7AlertView.h"
 
-@interface Step_04_ViewController () <UITextFieldDelegate, UIAlertViewDelegate>
+@interface Step_04_ViewController () <UITextFieldDelegate, UIAlertViewDelegate, CustomIOS7AlertViewDelegate>
 
 @property (retain, nonatomic) IBOutlet UITextField *tfCamName;
 @property (retain, nonatomic) IBOutlet UIButton *btnContinue;
+@property (retain, nonatomic) IBOutlet UIButton *btnSkipWIFISetup;
+
+@property (retain, nonatomic) CustomIOS7AlertView *alertView;
+
 @end
 
 @implementation Step_04_ViewController
 
-@synthesize cameraMac, cameraName;
+@synthesize cameraName;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -49,6 +57,16 @@
     [self.btnContinue setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
     
     self.tfCamName.delegate = self;
+    
+    if (_camProfile) // Focus73
+    {
+        self.cameraName = _camProfile.name;
+        self.btnSkipWIFISetup.hidden = NO;
+        
+        [[HttpCom instance].comWithDevice setDevice_ip:_camProfile.ip_address];
+        [[HttpCom instance].comWithDevice setDevice_port:_camProfile.port];
+    }
+    
     self.tfCamName.text = self.cameraName;
 }
 
@@ -90,6 +108,123 @@
     [step05ViewController release];
     
     self.btnContinue.enabled = YES;
+}
+
+- (void)configureCameraAndMoveToFinalStep
+{
+    [self configureCamera];
+    
+    [[NSUserDefaults standardUserDefaults] setObject:[CameraPassword fetchSSIDInfo] forKey:HOST_SSID];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    [self performSelectorOnMainThread:@selector(moveToFinalStep) withObject:nil waitUntilDone:NO];
+}
+
+- (void)moveToFinalStep
+{
+    //[MBProgressHUD hideHUDForView:self.view animated:NO];
+    [self customIOS7dialogButtonTouchUpInside:_alertView clickedButtonAtIndex:0];
+    
+    Step_10_ViewController *step10ViewController = nil;
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        
+        
+        step10ViewController = [[Step_10_ViewController alloc]
+                                initWithNibName:@"Step_10_ViewController_ipad" bundle:nil];
+    }
+    else
+    {
+        
+        step10ViewController = [[Step_10_ViewController alloc]
+                                initWithNibName:@"Step_10_ViewController" bundle:nil];
+    }
+    
+    [self.navigationController pushViewController:step10ViewController animated:NO];
+    [step10ViewController release];
+}
+
+- (void)configureCamera
+{
+    /*
+     * 1. Set Auth.
+     * 2. Default on all of PN.
+     * 3. Get UDID
+     * 4. Restart systems.
+     */
+    
+    // 1.
+    NSDate *now = [NSDate date];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"ZZZ"];
+    
+    NSMutableString *stringFromDate = [NSMutableString stringWithString:[formatter stringFromDate:now]];
+    [formatter release];
+    [stringFromDate insertString:@"." atIndex:3];
+    
+    NSString * set_auth_cmd = [NSString stringWithFormat:@"%@%@%@%@%@",
+                               SET_SERVER_AUTH,
+                               SET_SERVER_AUTH_PARAM1, [[NSUserDefaults standardUserDefaults] stringForKey:@"PortalApiKey"],
+                               SET_SERVER_AUTH_PARAM2, stringFromDate];
+    
+    NSString *response = [[HttpCom instance].comWithDevice sendCommandAndBlock:set_auth_cmd
+                                                                   withTimeout:10.0];
+    NSLog(@"set auth -set_auth_cmd: %@, -response: %@ ", set_auth_cmd, response);
+    
+    // 2.
+    [self defaultOnAllPNToCamera];
+    
+    // 3.
+    NSString *stringUDID = @"";
+    
+    stringUDID = [[HttpCom instance].comWithDevice sendCommandAndBlock:GET_UDID
+                                                           withTimeout:5.0];
+    NSLog(@"%s stringUDID:%@", __FUNCTION__, stringUDID);
+    
+    //get_udid: 01008344334C32B0A0VFFRBSVA
+    NSRange range = [stringUDID rangeOfString:@": "];
+    
+    if (range.location != NSNotFound)
+    {
+        //01008344334C32B0A0VFFRBSVA
+        stringUDID = [stringUDID substringFromIndex:range.location + 2];
+    }
+    else
+    {
+        NSLog(@"Error - Received UDID wrong format - UDID: %@", stringUDID);
+    }
+    
+    //save mac address for used later
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setObject:_camProfile.mac_address forKey:@"CameraMacWithQuote"];
+    [userDefaults setObject:stringUDID forKey:CAMERA_UDID];
+    [userDefaults synchronize];
+    
+    // 4.
+    response = [[HttpCom instance].comWithDevice sendCommandAndBlock:RESTART_HTTP_CMD];
+    
+    NSLog(@"%s RESTART_HTTP_CMD: %@", __FUNCTION__, response);
+}
+
+- (void)defaultOnAllPNToCamera
+{
+    NSString *result = @"";
+    
+    NSString *response = [[HttpCom instance].comWithDevice sendCommandAndBlock:@"set_motion_area&grid=1x1&zone=00"];
+    result = [result stringByAppendingString:response];
+    
+    response = [[HttpCom instance].comWithDevice sendCommandAndBlock:@"vox_enable"];
+    result = [result stringByAppendingFormat:@", %@", response];
+    
+    response = [[HttpCom instance].comWithDevice sendCommandAndBlock:@"set_temp_lo_enable&value=1"];
+    result = [result stringByAppendingFormat:@", %@", response];
+    
+    response = [[HttpCom instance].comWithDevice sendCommandAndBlock:@"set_temp_hi_enable&value=1"];
+    result = [result stringByAppendingFormat:@", %@", response];
+    
+    NSLog(@"%s respnse:%@", __FUNCTION__, result);
 }
 
 #pragma mark - Text field delegate
@@ -150,10 +285,10 @@
 {
 
     [cameraName release];
-   [cameraMac release];
     [_progressView release];
     [_btnContinue release];
     [_tfCamName release];
+    [_btnSkipWIFISetup release];
     [super dealloc];
 }
 
@@ -240,10 +375,89 @@
         self.btnContinue.enabled = NO;
         [self moveToNextStep];
     }
+    else if (tag == TAG_BTN_SKIP)
+    {
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        [userDefaults setObject:cameraName_text forKey:CAMERA_NAME];
+        [userDefaults synchronize];
+        
+        //MBProgressHUD *hub = [MBProgressHUD showHUDAddedTo:self.view animated:NO];
+        //hub.labelText = @"Waiting for configure camera...";
+        [self createHubbleAlertView];
+        
+        [self performSelectorInBackground:@selector(configureCameraAndMoveToFinalStep) withObject:NO];
+    }
+}
+
+#pragma mark - Hubble alert view & delegate
+
+- (void)createHubbleAlertView
+{
+    // Here we need to pass a full frame
+    
+    if (_alertView == nil)
+    {
+        self.alertView = [[CustomIOS7AlertView alloc] init];
+        // Add some custom content to the alert view
+        [_alertView setContainerView:[self createDemoView]];
+        
+        // Modify the parameters
+        //[alertView setButtonTitles:[NSMutableArray arrayWithObjects:@"Close1", @"Close2", @"Close3", nil]];
+        [_alertView setButtonTitles:NULL];
+        [_alertView setDelegate:self];
+        
+        // You may use a Block, rather than a delegate.
+        [_alertView setOnButtonTouchUpInside:^(CustomIOS7AlertView *alertView, int buttonIndex) {
+            NSLog(@"Block: Button at position %d is clicked on alertView %d.", buttonIndex, [alertView tag]);
+            [alertView close];
+        }];
+        
+        [_alertView setUseMotionEffects:true];
+    }
+    
+    // And launch the dialog
+    [_alertView show];
+}
+
+- (void)customIOS7dialogButtonTouchUpInside: (CustomIOS7AlertView *)alertView clickedButtonAtIndex: (NSInteger)buttonIndex
+{
+    NSLog(@"Delegate: Button at position %d is clicked on alertView %d.", buttonIndex, [alertView tag]);
+    [alertView close];
+}
+
+- (UIView *)createDemoView
+{
+    UIView *demoView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 230, 140)] autorelease];
+    
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(100, 35, 30, 30)];// autorelease];
+    [imageView setImage:[UIImage imageNamed:@"loader_a"]];
+    
+    imageView.animationImages = @[[UIImage imageNamed:@"loader_a"],
+                                  [UIImage imageNamed:@"loader_b"],
+                                  [UIImage imageNamed:@"loader_c"],
+                                  [UIImage imageNamed:@"loader_d"],
+                                  [UIImage imageNamed:@"loader_e"],
+                                  [UIImage imageNamed:@"loader_f"]];
+    imageView.animationRepeatCount = 0;
+    imageView.animationDuration = 1.5f;
+    [imageView startAnimating];
+    
+    [demoView addSubview:imageView];
+    
+    [imageView release];
+    
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(20, 85, 200, 41)];// autorelease];
+    label.textAlignment = NSTextAlignmentCenter;
+    label.numberOfLines = 2;
+    label.text = @"Waiting for configure camera...";
+    [demoView addSubview:label];
+    [label release];
+    
+    return demoView;
 }
 
 #if 0
-
+{
 -(void) queryWifiList
 {
     NSData * router_list_raw;
@@ -422,7 +636,7 @@
     
     [step05ViewController release];
 }
-
+}
 #endif
 
 

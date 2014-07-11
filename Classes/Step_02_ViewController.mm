@@ -14,6 +14,7 @@
 #import "CreateBLEConnection_VController.h"
 #import "BLEConnectionManager.h"
 #import "KISSMetricsAPI.h"
+#import "Focus73TableViewController.h"
 
 #define GAI_CATEGORY    @"Step 02 view"
 
@@ -59,7 +60,10 @@
     
     if (_cameraType == SETUP_CAMERA_FOCUS73)
     {
-        self.viewInstructionFocus73.hidden = NO;
+        /*
+         * TODO: UI for focus73 here. Implementing when it is required!
+         */
+        //self.viewInstructionFocus73.hidden = NO;
     }
     else
     {
@@ -165,6 +169,9 @@
     else if (_cameraType == SETUP_CAMERA_FOCUS73)
     {
         // Show Focus73 list.
+        Focus73TableViewController *focus73 = [[Focus73TableViewController alloc] init];
+        [self.navigationController pushViewController:focus73 animated:YES];
+        [focus73 release];
     }
     else
     {
