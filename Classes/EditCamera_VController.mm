@@ -143,18 +143,37 @@
     }
     else
     {
-        
-        
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         [userDefaults setObject:cameraName_text forKey:CAMERA_NAME];
         [userDefaults synchronize];
-        
-        
-        
-        //
+
         [self.view addSubview:_viewProgress];
         [self.view bringSubviewToFront:_viewProgress];
+        
+#if 1
+        //NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        NSString *apiKey    = [userDefaults objectForKey:@"PortalApiKey"];
+        //NSString *fwVersion = [userDefaults stringForKey:FW_VERSION];
+        
+        
+        NSDate *now = [NSDate date];
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        [formatter setDateFormat:@"ZZZ"];
+        
+        NSMutableString *stringFromDate = [NSMutableString stringWithString:[formatter stringFromDate:now]];
+        [formatter release];
+        [stringFromDate insertString:@"." atIndex:3];
+        
+        NSString * set_auth_cmd = [NSString stringWithFormat:@"%@%@%@%@%@",
+                                   SET_SERVER_AUTH,
+                                   SET_SERVER_AUTH_PARAM1, apiKey,
+                                   SET_SERVER_AUTH_PARAM2, stringFromDate];
+        self.authToken = set_auth_cmd;
+        
+        [self setMasterKeyOnCamera];
+#else
         [self registerCamera:nil];
+#endif
     }
 }
 
@@ -268,6 +287,7 @@
 }
 
 #if 0
+{
 - (IBAction)handleButtonPress:(id)sender
 {
     NSString * cameraName_text = _tfCamName.text;
@@ -327,6 +347,7 @@
         
     }
 }
+}
 #endif
 
 - (void)showScreenGetWifiList
@@ -366,6 +387,39 @@
      - send auto_token to camera
      */
     //first get mac address of camera
+#if 1
+    stage = SENDING_SERVER_AUTH;
+    
+    do
+    {
+        [self sendCommandAuth_TokenToCamera];
+        
+        if (shouldCancel == TRUE)
+        {
+            NSLog(@"Cancelling 2 ");
+            break ;
+        }
+        
+        
+    }
+    while ( stage == SENDING_SERVER_AUTH);
+    
+    
+    if (stage == SENDING_SERVER_AUTH_DONE)
+    {
+        if (timerTimeoutConnectBLE != nil && [timerTimeoutConnectBLE isValid])
+        {
+            [timerTimeoutConnectBLE invalidate];
+            timerTimeoutConnectBLE = nil;
+        }
+        
+        dispatch_async(dispatch_get_main_queue(),
+                       ^{
+                           [_viewProgress removeFromSuperview];
+                           [self showScreenGetWifiList];
+                       });
+    }
+#else
     stage =  SENDING_MASTER_KEY;
     
     do
@@ -397,6 +451,7 @@
                            [self showScreenGetWifiList];
                        });
     }
+#endif
     else
     {
         //ERROR handling: TODO:
@@ -429,8 +484,10 @@
 
 - (void)sendCommandAuth_TokenToCamera
 {
+#if 0
     NSString * set_mkey = SET_MASTER_KEY;
     set_mkey =[set_mkey stringByAppendingString:_authToken];
+#endif
     NSDate * date;
     
     BOOL debugLog = TRUE;
@@ -459,8 +516,12 @@
     
     
     [BLEConnectionManager getInstanceBLE].delegate = self;
+#if 1
+    [[BLEConnectionManager getInstanceBLE].uartPeripheral writeString:_authToken
+                                                          withTimeOut:SHORT_TIME_OUT_SEND_COMMAND];
+#else
     [[BLEConnectionManager getInstanceBLE].uartPeripheral writeString:set_mkey withTimeOut:SHORT_TIME_OUT_SEND_COMMAND];
-    
+#endif
     
     while ([BLEConnectionManager getInstanceBLE].uartPeripheral.isBusy)
     {
@@ -485,6 +546,7 @@
     self.authToken = [[responseData objectForKey:@"data"] objectForKey:@"auth_token"];
     [self setMasterKeyOnCamera];
 }
+
 - (void) addCamFailedWithError:(NSDictionary *) error_response
 {
     [_viewProgress removeFromSuperview];
@@ -601,6 +663,22 @@
     }
     else
     {
+#if 1
+        //set_server_auth: 0
+        if ([string hasPrefix:@"set_server_auth: 0"])
+        {
+            ///done
+            NSLog(@"sending server auth done, move on..");
+            stage = SENDING_SERVER_AUTH_DONE;
+            
+            
+        }
+        else if ([string hasPrefix:@"set_server_auth: -1"])
+        {
+            // dont do anything.. we'll retry in main thread.
+            NSLog(@"can't send server auth, set_server_auth: -1");
+        }
+#else
         if ([string hasPrefix:@"set_master_key: 0"])
         {
             ///done
@@ -614,6 +692,7 @@
             // dont do anything.. we'll retry in main thread.
             NSLog(@"can't send master key, set_master_key: -1");
         }
+#endif
     }
     
     

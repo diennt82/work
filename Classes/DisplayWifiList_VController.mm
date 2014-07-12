@@ -246,7 +246,7 @@
 {
     NSLog(@"Load step 6: Input network info");
     //Load the next xib
-    NetworkInfoToCamera_VController *netWorkInfoViewController = [[NetworkInfoToCamera_VController alloc] initWithNibName:@"NetworkInfoToCamera_VController" bundle:nil];
+    NetworkInfoToCamera_VController *netWorkInfoViewController = [[NetworkInfoToCamera_VController alloc] init];
     
     NSRange noQoute = NSMakeRange(1, _selectedWifiEntry.ssid_w_quote.length - 2);
     
@@ -582,36 +582,33 @@
 
 - (void) didReceiveData:(NSString *)string
 {
-    NSLog(@"Data Receiving router list is %@", string);
+    //NSLog(@"Data Receiving router list is %@", string);
+    //processing data receive wifi list
+    
+    if (string !=nil && [string length] > 0)
     {
-        //processing data receive wifi list
+        NSData *router_list_raw = [string dataUsingEncoding:NSUTF8StringEncoding];
         
-        if (string !=nil && [string length] > 0)
+        if (router_list_raw != nil)
         {
-            NSData *router_list_raw = [string dataUsingEncoding:NSUTF8StringEncoding];
+            WifiListParser * routerListParser = nil;
+            routerListParser = [[WifiListParser alloc] initWithNewCmdFlag:_newCmdFlag];
             
-            if (router_list_raw != nil)
-            {
-                WifiListParser * routerListParser = nil;
-                routerListParser = [[WifiListParser alloc] initWithNewCmdFlag:_newCmdFlag];
-                
-                [routerListParser parseData:router_list_raw
-                               whenDoneCall:@selector(setWifiResult:)
-                              whenErrorCall:@selector(errorCallback:)
-                                     target:self];
-            }
-            else
-            {
-                NSLog(@"GOT NULL wifi list from camera");
-                [self queryWifiList];
-            }
+            [routerListParser parseData:router_list_raw
+                           whenDoneCall:@selector(setWifiResult:)
+                          whenErrorCall:@selector(errorCallback:)
+                                 target:self];
         }
         else
         {
-            //string received is nil
+            NSLog(@"GOT NULL wifi list from camera");
             [self queryWifiList];
         }
-        
+    }
+    else
+    {
+        NSLog(@"%s GOT NULL response string.", __FUNCTION__);
+        [self queryWifiList];
     }
 }
 
