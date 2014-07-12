@@ -758,7 +758,14 @@
             
             NSData *result_str = [rx_buff subdataWithRange:range];
             
-            NSLog(@"Got enough data : %d, - commandToCamera: %@",[result_str length], commandToCamera);
+            //Phung: dont' show full command
+            NSRange logrange= NSMakeRange(commandToCamera.length/2, commandToCamera.length/2);
+    
+            
+            NSLog(@"Got enough data : %d, - commandToCamera: %@",
+                  [result_str length],
+                  [commandToCamera stringByReplacingCharactersInRange:logrange withString:@"****..."]);
+            
             
             string = result_str ? [NSString stringWithUTF8String:[result_str bytes]] : nil;
             
