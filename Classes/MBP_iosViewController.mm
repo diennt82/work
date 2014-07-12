@@ -223,6 +223,7 @@
 		CamChannel * ch = [channel_array objectAtIndex:i];
         if (ch.profile != nil)
         {
+            ch.profile.hasUpdateLocalStatus = YES;
 			[validChannels addObject:[channel_array objectAtIndex:i]];
         }
         

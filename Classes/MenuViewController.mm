@@ -75,9 +75,6 @@
     //init a normal UIButton using that image
     UIButton* button = [[UIButton alloc] initWithFrame:frame];
     [button setBackgroundImage:image forState:UIControlStateNormal];
-    [button setBackgroundImage:image forState:UIControlStateHighlighted];
-    [button setBackgroundImage:image forState:UIControlStateSelected];
-    [button setBackgroundImage:image forState:UIControlStateDisabled];
     
     [button setShowsTouchWhenHighlighted:NO];
     
@@ -142,7 +139,7 @@
     accountBarButton = [[UIBarButtonItem alloc] initWithTitle:@"Account" style:UIBarButtonItemStylePlain target:self action:@selector(selectAccountSetting)];
     
     //NSArray *actionButtonItems = @[accountBarButton, settingsBarButton, cameraBarButton];
-    //self.navigationItem.rightBarButtonItems = @[accountBarButton, settingsBarButton, cameraBarButton];
+    self.navigationItem.rightBarButtonItems = @[accountBarButton, settingsBarButton, cameraBarButton];
     //[self.navigationItem.rightBarButtonItems[1] setEnabled:NO];
     
     self.navigationItem.leftBarButtonItem.enabled = YES;
@@ -187,9 +184,6 @@
     
 //    self.camerasVC.tableView.frame = CGRectMake(0, 30, self.view.frame.size.width, self.view.frame.size.height - 30);
     self.camerasVC.ibTableListCamera.contentInset = UIEdgeInsetsMake(30, 0, 64, 0);
-    
-    //UIImage *hubbleBack = [UIImage imageNamed:@"Hubble_logo_back"];
-    //[self.navigationItem.leftBarButtonItem setTintColor:[UIColor colorWithPatternImage:hubbleBack]];
 
     if (!_isFirttime) //revert
     {
@@ -203,24 +197,29 @@
     }
     else
     {
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        BOOL isOffline = [userDefaults boolForKey:_OfflineMode];
-        
-        
-        if (!isOffline &&
-            !self.camerasVC.waitingForUpdateData &&
+        if (![[NSUserDefaults standardUserDefaults] boolForKey:_OfflineMode] &&
             !_notUpdateCameras)
         {
-            self.camerasVC.waitingForUpdateData = TRUE;
-            //self.navigationItem.leftBarButtonItem.enabled = NO;
-            //[self.navigationItem.rightBarButtonItems[1] setEnabled:NO];
-            //[self.navigationItem.rightBarButtonItems[1] setHidden:YES];
-            
-            @synchronized(self.camerasVC)
+            if (!_camerasVC.waitingForUpdateData)
             {
-                [self performSelectorInBackground:@selector(recreateAccount)
-                                       withObject:nil];
+                self.camerasVC.waitingForUpdateData = TRUE;
+                
+                for (CamChannel *ch in _camerasVC.camChannels) {
+                    ch.profile.hasUpdateLocalStatus = NO;
+                }
+                
+                @synchronized(self.camerasVC)
+                {
+                    [self performSelectorInBackground:@selector(recreateAccount)
+                                           withObject:nil];
+                }
             }
+            else
+            {
+                NSLog(@"%s Loading is going on...", __FUNCTION__);
+            }
+            
+            [self.camerasVC.ibTableListCamera reloadData];
         }
     }
 }
@@ -262,7 +261,7 @@
     if (self.cameras != nil &&
         self.cameras.count > 0)
     {
-        self.navigationItem.rightBarButtonItems = @[accountBarButton, settingsBarButton, cameraBarButton];
+        //self.navigationItem.rightBarButtonItems = @[accountBarButton, settingsBarButton, cameraBarButton];
         
         CamChannel *camChannel = nil;
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -283,9 +282,10 @@
             [userDefaults setObject:camChannel.profile.registrationID forKey:REG_ID];
         }
         
-        if ([camChannel.profile isFwUpgrading:[NSDate date]])
+        if ([camChannel.profile isFwUpgrading:[NSDate date]] ||
+            !camChannel.profile.hasUpdateLocalStatus)
         {
-            NSLog(@"%s FW is upgrading...", __FUNCTION__);
+            NSLog(@"%s FW is upgrading... or updating:%d", __FUNCTION__, !camChannel.profile.hasUpdateLocalStatus);
             return;
         }
         
@@ -326,7 +326,7 @@
     }
     else
     {
-        self.navigationItem.rightBarButtonItems = @[accountBarButton, cameraBarButton];
+        //self.navigationItem.rightBarButtonItems = @[accountBarButton, cameraBarButton];
     }
 }
 
@@ -365,16 +365,26 @@
     @synchronized(self.camerasVC)
     {
         if (!isOffline &&
-            !_camerasVC.waitingForUpdateData &&
             !_notUpdateCameras)
         {
-            self.camerasVC.waitingForUpdateData = TRUE;
-            self.navigationItem.leftBarButtonItem.enabled = NO;
-            [self.navigationItem.rightBarButtonItems[1] setEnabled:NO];
-            [self.camerasVC.ibTableListCamera reloadData];
-            [self.camerasVC updateBottomButton];
-            [self performSelectorInBackground:@selector(recreateAccount)
-                                   withObject:nil];
+            if (!_camerasVC.waitingForUpdateData)
+            {
+                self.camerasVC.waitingForUpdateData = TRUE;
+                self.navigationItem.leftBarButtonItem.enabled = NO;
+                
+                for (CamChannel *ch in _camerasVC.camChannels) {
+                    ch.profile.hasUpdateLocalStatus = NO;
+                }
+                
+                [self.camerasVC.ibTableListCamera reloadData];
+                [self.camerasVC updateBottomButton];
+                [self performSelectorInBackground:@selector(recreateAccount)
+                                       withObject:nil];
+            }
+            else
+            {
+                NSLog(@"%s Loading is going on...", __FUNCTION__);
+            }
         }
     }
 }
@@ -400,59 +410,44 @@
 - (void)finishStoreCameraListData:(NSMutableArray *)camProfiles success:(BOOL)success
 {
     if (self.isViewLoaded && self.view.window)
-    {        
-        if ([self rebindCamerasResource] == TRUE)
+    {
+        if (success)
         {
-            [self updateCameraList];
-            
-            self.camerasVC.camChannels = _cameras;
-        }
-        
-        self.camerasVC.waitingForUpdateData = NO;
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.camerasVC.ibTableListCamera reloadData];
-            [self.camerasVC updateBottomButton];
-            //});
-            
-            NSLog(@"%s", __FUNCTION__);
-#if 0
-            UIImage *image = [UIImage imageNamed:@"Hubble_logo_back"];
-            CGRect frame = CGRectMake(0, 0, image.size.width, image.size.height);
-            
-            //init a normal UIButton using that image
-            UIButton* button = [[UIButton alloc] initWithFrame:frame];
-            [button setBackgroundImage:image forState:UIControlStateNormal];
-            [button setShowsTouchWhenHighlighted:YES];
-            
-            //set the button to handle clicks - this one calls a method called 'downloadClicked'
-            [button addTarget:self action:@selector(menuBackAction:) forControlEvents:UIControlEventTouchUpInside];
-            
-            //finally, create your UIBarButtonItem using that button
-            UIBarButtonItem* barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:button];
-            [button release];
-            
-            //then set it.  phew.
-            [self.navigationItem setLeftBarButtonItem:barButtonItem];
-            
-            [barButtonItem release];
-#endif
-            if (self.cameras != nil &&
-                self.cameras.count > 0)
+            if ([self rebindCamerasResource] == TRUE)
             {
-                [self.navigationItem.rightBarButtonItems[1] setEnabled:YES];
-                //[self.navigationItem.rightBarButtonItems[1] setHidden:NO];
-                self.navigationItem.rightBarButtonItems = @[accountBarButton, settingsBarButton, cameraBarButton];
-                self.navigationItem.leftBarButtonItem.enabled = YES;
+                [self updateCameraList];
+                
+                self.camerasVC.camChannels = _cameras;
+            }
+            
+            self.camerasVC.waitingForUpdateData = NO;
+            self.navigationItem.leftBarButtonItem.enabled = YES;
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.camerasVC.ibTableListCamera reloadData];
+                [self.camerasVC updateBottomButton];
+                
+                NSLog(@"%s", __FUNCTION__);
+            });
+        }
+        else
+        {
+            self.camerasVC.waitingForUpdateData = NO;
+            
+            if (!camProfiles)
+            {
+                // Forcing refresh here!
+                [self performSelectorOnMainThread:@selector(refreshCameraList) withObject:nil waitUntilDone:NO];
             }
             else
             {
-                self.navigationItem.rightBarButtonItems = @[accountBarButton, cameraBarButton];
+                NSLog(@"%s Error:%@", __FUNCTION__, camProfiles);
             }
-        });
+        }
     }
     else
     {
+        //self.camerasVC.waitingForUpdateData = NO;
         NSLog(@"%s view is invisible. Do nothing!", __FUNCTION__);
     }
 }
@@ -467,6 +462,7 @@
 		
         if (ch.profile != nil)
         {
+            ch.profile.hasUpdateLocalStatus = YES;
 			[validChannels addObject:[_arrayChannel objectAtIndex:i]];
         }
 	}
