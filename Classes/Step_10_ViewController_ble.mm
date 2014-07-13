@@ -362,8 +362,11 @@
     
     [self updatesBasicInfoForCamera];
     
+    //Check once more to update the SSID.
+    [self checkItOnline];
+    
     //Load step 12
-    NSLog(@"Load step 12");
+    NSLog(@"Load step 12- + dboule check");
     
     //Load the next xib
     Step_12_ViewController *step12ViewController = [[Step_12_ViewController alloc]
