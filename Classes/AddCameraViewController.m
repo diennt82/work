@@ -40,6 +40,9 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    CGRect rect = self.btnCancel.frame;
+    rect.origin.y = [UIScreen mainScreen].bounds.size.height - rect.size.height - 15;
+    self.btnCancel.frame = rect;
     [self.btnCancel setBackgroundImage:[UIImage imageNamed:@"cancel_btn"] forState:UIControlStateNormal];
     [self.btnCancel setBackgroundImage:[UIImage imageNamed:@"cancel_btn_pressed"] forState:UIControlEventTouchDown];
     
@@ -63,7 +66,7 @@
     [self loadCameras:array];
     [array release];
     
-    CGRect rect = self.titleLabel.frame;
+    rect = self.titleLabel.frame;
     rect.origin.x = (self.view.frame.size.width - rect.size.width) / 2;
     self.titleLabel.frame = rect;
     
