@@ -10,6 +10,7 @@
                 <outlet property="cameraButton" destination="TtY-CA-Rh0" id="XVq-Fx-zlV"/>
                 <outlet property="inProgress" destination="4" id="LXj-bv-fT0"/>
                 <outlet property="scrollViewGuide" destination="f13-Cw-xaa" id="Du7-u5-P2W"/>
+                <outlet property="timoutView" destination="pDZ-aA-PY4" id="zfw-yU-1ZM"/>
                 <outlet property="view" destination="3" id="54"/>
             </connections>
         </placeholder>
@@ -187,6 +188,52 @@
             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
         </view>
+        <view contentMode="scaleToFill" id="pDZ-aA-PY4">
+            <rect key="frame" x="0.0" y="0.0" width="768" height="1004"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <progressView opaque="NO" tag="501" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.25" progressImage="setup_progress_blue.png" trackImage="setup_progress_grey.png" id="Pau-KU-vKK" customClass="HubbleProgressView">
+                    <rect key="frame" x="-1" y="67" width="770" height="2"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                </progressView>
+                <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="setup_camera_b2.png" id="qg1-cB-J4U">
+                    <rect key="frame" x="272" y="195" width="240" height="128"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                </imageView>
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hubble can't connect to camera wifi, do you want to pair with camera again?" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="NPt-Cs-biy">
+                    <rect key="frame" x="209" y="322" width="351" height="106"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="19"/>
+                    <color key="textColor" red="0.062745098040000002" green="0.062745098040000002" blue="0.062745098040000002" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button opaque="NO" tag="100" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="mwC-yh-DzD">
+                    <rect key="frame" x="232" y="477" width="135" height="50"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <inset key="insetFor6xAndEarlier" minX="0.0" minY="65" maxX="0.0" maxY="-65"/>
+                    <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="20"/>
+                    <state key="normal" title="Yes" backgroundImage="green_btn.png">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="handlePairYes:" destination="-1" eventType="touchUpInside" id="T0q-Hy-Uf0"/>
+                    </connections>
+                </button>
+                <button opaque="NO" tag="100" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="KhC-jb-Oz7">
+                    <rect key="frame" x="397" y="477" width="135" height="50"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <inset key="insetFor6xAndEarlier" minX="0.0" minY="65" maxX="0.0" maxY="-65"/>
+                    <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="20"/>
+                    <state key="normal" title="No" backgroundImage="green_btn.png">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="handlePairNo:" destination="-1" eventType="touchUpInside" id="yXx-6C-oMs"/>
+                    </connections>
+                </button>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+        </view>
     </objects>
     <resources>
         <image name="Setup_iphone.png" width="42" height="85"/>
@@ -197,6 +244,7 @@
         <image name="detect_camera_4.png" width="275" height="170"/>
         <image name="green_btn.png" width="295" height="50"/>
         <image name="setup_camera_b1.png" width="100" height="110"/>
+        <image name="setup_camera_b2.png" width="100" height="110"/>
         <image name="setup_progress_blue.png" width="8" height="8"/>
         <image name="setup_progress_grey.png" width="8" height="8"/>
     </resources>

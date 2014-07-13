@@ -7,6 +7,7 @@
 //
 
 #define TAG_IMAGE_ANIMATION 599
+#define TIME_OUT            180
 
 #import "Step_03_ViewController.h"
 #import "UIBarButtonItem+Custom.h"
@@ -20,9 +21,13 @@
 
 @property (retain, nonatomic) IBOutlet UIScrollView *scrollViewGuide;
 @property (retain, nonatomic) IBOutlet UIView *inProgress;
+@property (retain, nonatomic) IBOutlet UIView *timoutView;
 @property (nonatomic, retain) IBOutlet UIButton *cameraButton;
+@property (nonatomic, assign) NSTimer           *timerTimeOut;
 
 - (IBAction)handleCameraButton:(id)sender;
+- (IBAction)handlePairYes:(id)sender;
+- (IBAction)handlePairNo:(id)sender;
 @end
 
 @implementation Step_03_ViewController
@@ -80,6 +85,8 @@
     CAMERA_TAG tag = (CAMERA_TAG)[[userDefaults objectForKey:SET_UP_CAMERA_TAG] intValue];
     UIImage *iconImage = [self convertToCamaraImage:tag];
     [self.cameraButton setBackgroundImage:iconImage forState:UIControlStateNormal];
+    
+    task_timeOut = NO;
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -143,6 +150,7 @@
     [_scrollViewGuide release];
     [_inProgress release];
     [_cameraButton release];
+    [_timerTimeOut release];
     [super dealloc];
 }
 
@@ -172,6 +180,9 @@
 
 -(void) becomeActive
 {
+    if (task_timeOut) {
+        return;
+    }
     [[KISSMetricsAPI sharedAPI] recordEvent:@"Step03 - Enter fore ground" withProperties:nil];
     
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
@@ -189,7 +200,7 @@
     
     //if (![Step_09_ViewController isWifiConnectionAvailable])
     {
-        if (self.inProgress != nil)
+        if (self.inProgress != nil && task_timeOut == NO)
         {
             NSLog(@"show progress 01 ");
             self.inProgress.hidden = NO;
@@ -211,7 +222,19 @@
 
 - (void) checkConnectionToCamera:(NSTimer *) expired
 {
-	
+    if (task_timeOut) {
+        [self hideProgess];
+        [self.view addSubview:self.timoutView];
+        return;
+    }
+    if (self.timerTimeOut == nil) {
+        self.timerTimeOut = [NSTimer scheduledTimerWithTimeInterval:TIME_OUT
+                                                             target:self
+                                                           selector:@selector(conectionToCameraDidTimeOut:)
+                                                           userInfo:nil
+                                                            repeats:NO];
+    }
+    
 #if TARGET_IPHONE_SIMULATOR != 1
     
     NSLog(@"checkConnectionToCamera");
@@ -285,13 +308,8 @@
 		}
 	}
 	
-	if (task_cancelled == YES)
+	if (task_cancelled == NO)
 	{
-		//Don't do any thing here
-		
-	}
-	else {
-        
 		//check back later..
 		[NSTimer scheduledTimerWithTimeInterval: 3//
 										 target:self
@@ -299,6 +317,13 @@
 									   userInfo:nil
 										repeats:NO];
 	}
+}
+
+- (void)conectionToCameraDidTimeOut:(NSTimer *)timer {
+    [self.timerTimeOut invalidate];
+    self.timerTimeOut = nil;
+    task_timeOut = YES;
+    task_cancelled = YES;
 }
 
 -(void) moveToNextStep
@@ -400,6 +425,17 @@
     [labelCrazy performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:3];
     
     [labelCrazy release];
+}
+
+- (IBAction)handlePairYes:(id)sender {
+    [self hubbleItemAction:nil];
+}
+
+- (IBAction)handlePairNo:(id)sender {
+    [self.navigationController popViewControllerAnimated:NO];
+    if ([self.delegate respondsToSelector:@selector(goBackCameralist)]) {
+        [self.delegate goBackCameralist];
+    }
 }
 
 - (UIImage *)convertToCamaraImage:(CAMERA_TAG)cameraTad {
