@@ -16,6 +16,7 @@
                 <outlet property="scrollViewGuide" destination="TAS-Pm-oKE" id="syz-cr-Byu"/>
                 <outlet property="securityCell" destination="5" id="20"/>
                 <outlet property="ssidCell" destination="6" id="22"/>
+                <outlet property="tableView" destination="9" id="f3Z-bh-Vqd"/>
                 <outlet property="view" destination="7" id="21"/>
             </connections>
         </placeholder>
@@ -107,8 +108,8 @@
                         <color key="textColor" red="0.1760115592" green="0.40581968839999999" blue="0.66364397320000001" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </label>
-                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="left" text="None" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="12">
-                        <rect key="frame" x="110" y="0.0" width="362" height="52"/>
+                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="left" text="None" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="12">
+                        <rect key="frame" x="304" y="0.0" width="143" height="52"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="20"/>
                         <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>

@@ -21,6 +21,7 @@
 @property (retain, nonatomic) UITextField *tfSSID;
 @property (retain, nonatomic) UITextField *tfPassword;
 @property (retain, nonatomic) UITextField *tfConfirmPass;
+@property (assign, nonatomic) IBOutlet UITableView *tableView;
 
 @end
 
@@ -171,6 +172,12 @@
     [self.infoSelectCameView setHidden:YES];
     
     [self.scrollViewGuide setContentSize:CGSizeMake(320, 1181)];
+    
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
+                                   initWithTarget:self
+                                   action:@selector(didTapTableView:)];
+    [self.tableView addGestureRecognizer:tap];
+    [tap release];
 }
 
 - (void)viewDidUnload
@@ -1183,4 +1190,19 @@
     [self.tfPassword setSecureTextEntry:!self.tfPassword.secureTextEntry];
 }
 
+- (void)didTapTableView:(UITapGestureRecognizer *)tap {
+    [self.tfSSID resignFirstResponder];
+    [self.tfPassword resignFirstResponder];
+    [self.tfConfirmPass resignFirstResponder];
+    
+    CGPoint point = [tap locationInView:tap.view];
+    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:point];
+    if (indexPath.section == SEC_SECTION) {
+        if (indexPath.row == SEC_INDEX) {
+            if (self.isOtherNetwork == TRUE) {
+                [self changeSecurityType];
+            }
+        }
+    }
+}
 @end
