@@ -18,7 +18,6 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         //Create the Circular Slider
-
     }
     return self;
 }
@@ -32,6 +31,15 @@
 - (void)drawRect:(CGRect)rect
 {
     //get and set Enable do not disturb
+    if (isiPhone4) {
+        CGRect rect = self.ib_circleSliderCustom.frame;
+        rect.origin.y -= 25;
+        self.ib_circleSliderCustom.frame = rect;
+        
+        rect = self.descLabel.frame;
+        rect.origin.y -= 25;
+        self.descLabel.frame = rect;
+    }
     
     self.backgroundColor = [UIColor colorWithRed:43/255.f green:50/255.f blue:56/255.f alpha:1];
         
