@@ -738,12 +738,6 @@
             tag = ALERT_PUSH_RECVED_NON_MOTION;
             autoDissmisAlertIndex = -1;
         }
-        
-        NSDateFormatter* df_local = [[NSDateFormatter alloc] init];
-        [df_local setTimeZone:[NSTimeZone localTimeZone]];
-        df_local.dateFormat = @"hh:mm a, dd-MM-yyyy";
-        alertMess = [NSString stringWithFormat:@"%@ at %@", alertMess, [df_local stringFromDate:eventDate]];
-        [df_local release];
     }
     
     if ([self isStayingSelectedCamaraPage]) {
