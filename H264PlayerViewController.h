@@ -188,7 +188,6 @@
     
     //processing for hold to talk
     BOOL ptt_enabled;
-    AudioOutStreamer * _audioOut;
     
     //processing for recording
     int iMaxRecordSize;
@@ -350,6 +349,7 @@
 @property (nonatomic) NSInteger fwUpgradeStatus;
 @property (nonatomic) BOOL hasFwVersion;
 @property (nonatomic) BOOL shouldBeep;
+@property (nonatomic, retain) AudioOutStreamer * audioOut;
 
 
 - (void)scan_done:(NSArray *) _scan_results;

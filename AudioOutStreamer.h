@@ -18,11 +18,8 @@
 @end
 
 @interface AudioOutStreamer : NSObject  {
-	AsyncSocket * sendingSocket; 
-	NSMutableData * _pcm_data;
-	PCMPlayer * pcmPlayer; 
+	AsyncSocket * sendingSocket;
 	NSTimer * voice_data_timer; 
-	
 	NSString * device_ip;
 	int device_port;
     BOOL hasStartRecordingSound; 

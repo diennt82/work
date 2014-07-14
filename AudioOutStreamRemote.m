@@ -24,7 +24,7 @@
 @implementation AudioOutStreamRemote
 
 @synthesize pcmPlayer;
-@synthesize pcm_data = _pcm_data;
+@synthesize pcm_data;
 
 - (id)initWithRemoteMode
 {
@@ -45,6 +45,7 @@
 -(void) dealloc
 {
     [pcmPlayer release];
+    [pcm_data release];
     [_fileManager release];
     [_fileHandle release];
     [_sendingSocket release];
@@ -62,7 +63,7 @@
             PCMPlayer *player = [[PCMPlayer alloc] init];
             self.pcmPlayer = player;
             [player release];
-            _pcm_data = [[NSMutableData alloc] init];
+            pcm_data = [[NSMutableData alloc] init];
             
             [self.pcmPlayer Play:TRUE];//initialize
             NSLog(@"Check self.pcmPlayer is %@", self.pcmPlayer);
@@ -92,7 +93,7 @@
             [_sendingSocket disconnect];
         }
         
-        _sendingSocket = nil;
+        self.sendingSocket = nil;
     }
     
     self.sendingSocket = [[AsyncSocket alloc] initWithDelegate:self];
@@ -111,10 +112,10 @@
 {
 	
 	// read 4kb everytime
-	self.bufferLength = [self.pcmPlayer.recorder.inMemoryAudioFile readBytesPCM:_pcm_data
+	self.bufferLength = [self.pcmPlayer.recorder.inMemoryAudioFile readBytesPCM:pcm_data
                                                                      withLength:4*1024]; //2*1024
 
-    [_sendingSocket writeData:_pcm_data withTimeout:2 tag:SENDING_SOCKET_TAG];
+    [_sendingSocket writeData:pcm_data withTimeout:2 tag:SENDING_SOCKET_TAG];
 	
     //NSLog(@"AudioOutStreamer - sendAudioPacket: %@", _pcm_data);
 
@@ -143,7 +144,7 @@
     
     [_fileHandle seekToEndOfFile];
     
-    [_fileHandle writeData:_pcm_data];
+    [_fileHandle writeData:pcm_data];
 }
 
 
@@ -277,8 +278,8 @@
             _sendingSocket = nil;
         }
         
-        if(_pcm_data != nil) {
-            _pcm_data = nil;
+        if(pcm_data != nil) {
+            self.pcm_data = nil;
         }
         
         [timer invalidate];
@@ -335,7 +336,7 @@
             _sendingSocket = nil;
         }
         
-        _pcm_data = nil;
+        self.pcm_data = nil;
         
         if (_fileHandle != nil)
         {

@@ -1514,15 +1514,21 @@ double _ticks = 0;
         [_alertViewTimoutRemote dismissWithClickedButtonIndex:-1 animated:NO];
     }
     
+    // turnoff audio recode in remote state
     if (_audioOutStreamRemote)
     {
         [_audioOutStreamRemote disconnectFromAudioSocketRemote];
+    }
+    // turnoff audio recode in local state
+    if (_audioOut != nil)
+    {
+        [_audioOut disconnectFromAudioSocket];
+        self.audioOut = nil;
     }
     
     if (_jsonComm)
     {
         [_jsonComm cancel];
-        [_jsonComm release];
         self.jsonComm = nil;
     }
     
@@ -5399,6 +5405,7 @@ double _ticks = 0;
     [_alertViewTimoutRemote release];
     [_melodyViewController release];
     [_alertFWUpgrading release];
+    [_audioOut release];
     
     NSLog(@"%s", __FUNCTION__);
     
@@ -5414,8 +5421,7 @@ double _ticks = 0;
     [self performSelectorInBackground:@selector(set_Walkie_Talkie_bg:)
                            withObject:@"0"];
     
-    [_audioOut release];
-    _audioOut = nil;
+    self.audioOut = nil;
     
     //self.walkieTalkieEnabled = NO;
 }
@@ -5523,7 +5529,6 @@ double _ticks = 0;
         // Init connectivity to Camera via socket & prevent loss of audio data
         _audioOut = [[AudioOutStreamer alloc] initWithDeviceIp:[HttpCom instance].comWithDevice.device_ip
                                                     andPTTport:self.selectedChannel.profile.ptt_port];  //IRABOT_AUDIO_RECORDING_PORT
-        [_audioOut retain];
         [_audioOut startRecordingSound];
         
         [self performSelectorInBackground:@selector(set_Walkie_Talkie_bg:)
@@ -5548,8 +5553,7 @@ double _ticks = 0;
         if (_audioOut != nil)
         {
             [_audioOut disconnectFromAudioSocket];
-            [_audioOut release];
-            _audioOut = nil;
+            self.audioOut = nil;
         }
         else
         {
