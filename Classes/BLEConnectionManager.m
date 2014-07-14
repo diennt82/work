@@ -139,7 +139,7 @@
 
 -(void) disconnect
 {
-    if ([_uartPeripheral.peripheral isConnected])
+    if (_uartPeripheral.peripheral.state == CBPeripheralStateConnected)
     {
         [[BLEConnectionManager getInstanceBLE].cm cancelPeripheralConnection:_uartPeripheral.peripheral];
     }
@@ -206,6 +206,8 @@
 
 -(void) readyToTxRx
 {
+    NSLog(@"%s, stop scanning", __FUNCTION__);
+    [self stopScanBLE];
     //Ready or connected
     self.state = CONNECTED;
     
@@ -223,13 +225,11 @@
 {
     if (central.state == CBCentralManagerStatePoweredOn) {
         // In a real app, you'd deal with all the states correctly
-        NSLog(@"BLE IS ON ");
         self.isOnBLE = YES;
         [self scan];
     }
     else
     {
-        NSLog(@"BLE not power on");
         self.isOnBLE = NO;
     }
 }
