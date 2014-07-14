@@ -122,7 +122,7 @@
     UITextField * _sec = (UITextField *) [self.securityCell viewWithTag:1];
     if (_sec != nil)
     {
-        _sec.text = self.security;
+        _sec.text = [self.security uppercaseString];
     }
     
     self.tfSSID = (UITextField *)[self.ssidCell viewWithTag:202];
@@ -195,7 +195,7 @@
     UITextField * _sec = (UITextField *) [self.securityCell viewWithTag:1];
     if (_sec != nil)
     {
-        _sec.text = self.security;
+        _sec.text = [self.security uppercaseString];
     }
     
     _isUserMakeConnect = NO;
