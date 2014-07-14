@@ -371,14 +371,11 @@ void checkingApplicationCrashed()
                 NSLog(@"motion url is :%@", camAlert.server_url);
             }
             
-            BOOL shouldStoreAlert = TRUE;
-            
-            
             //Next few lines: ORDER MATTERS
             if ( [application applicationState] == UIApplicationStateActive)
             {
                 //App is running now -> show a dialog popup
-                shouldStoreAlert = [viewController pushNotificationRcvedInForeground: camAlert];
+                [viewController pushNotificationRcvedInForeground: camAlert];
             }
             else if ( [application applicationState] == UIApplicationStateInactive)
             {
@@ -427,10 +424,15 @@ void checkingApplicationCrashed()
 
 - (void)activateNotificationViewController: (CameraAlert *)camAlert
 {
-
-    //send a broadcast to all active listeners to take care of all necessary actions.
-    [[NSNotificationCenter defaultCenter] postNotificationName:PUSH_NOTIFY_BROADCAST_WHILE_APP_INACTIVE
-                                                        object:nil];
+    if ([camAlert.alertType isEqualToString:ALERT_TYPE_SOUND] ||
+        [camAlert.alertType isEqualToString:ALERT_TYPE_TEMP_HI]  ||
+        [camAlert.alertType isEqualToString:ALERT_TYPE_TEMP_LO] ||
+        [camAlert.alertType isEqualToString:ALERT_TYPE_MOTION])
+    {
+        //send a broadcast to all active listeners to take care of all necessary actions.
+        [[NSNotificationCenter defaultCenter] postNotificationName:PUSH_NOTIFY_BROADCAST_WHILE_APP_INACTIVE
+                                                            object:nil];
+    }
     viewController.camAlert = camAlert;
     [NSTimer scheduledTimerWithTimeInterval:0.01
                                      target:viewController
@@ -519,11 +521,10 @@ void checkingApplicationCrashed()
     {
         if (_jsonComm)
         {
-            [_jsonComm release];
             self.jsonComm = nil;
         }
         
-        self.jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+        _jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
                                                               Selector:@selector(registerAppSuccessWithResponse:)
                                                           FailSelector:@selector(registerAppFailedWithResponse:)
                                                              ServerErr:@selector(registerAppFailedServerUnreachable)];
@@ -741,4 +742,5 @@ void checkingApplicationCrashed()
         [_jsonComm cancel];
     }
 }
+
 @end
