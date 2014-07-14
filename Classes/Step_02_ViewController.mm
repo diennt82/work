@@ -17,7 +17,7 @@
 
 #define GAI_CATEGORY    @"Step 02 view"
 
-@interface Step_02_ViewController ()
+@interface Step_02_ViewController () <Step_03Delegate>
 
 @property (retain, nonatomic) IBOutlet UIButton *btnContinue;
 
@@ -165,11 +165,9 @@
         }
         else
         {
-            step03ViewController =
-            [[Step_03_ViewController alloc] initWithNibName:@"Step_03_ViewController"
-                                                     bundle:nil];
+            step03ViewController = [[Step_03_ViewController alloc] initWithNibName:@"Step_03_ViewController" bundle:nil];
         }
-        
+        step03ViewController.delegate = self;
         [self.navigationController pushViewController:step03ViewController animated:YES];
         
         [step03ViewController release];
@@ -288,5 +286,10 @@
 - (void)dealloc {
     [_btnContinue release];
     [super dealloc];
+}
+
+#pragma mark - Step_03Delegate
+- (void)goBackCameralist {
+    [self hubbleItemAction:nil];
 }
 @end

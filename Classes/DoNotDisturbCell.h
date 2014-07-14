@@ -17,6 +17,7 @@
 @property (retain, nonatomic) IBOutlet UIButton *ib_enableDoNotDisturb;
 @property (unsafe_unretained, nonatomic) IBOutlet UICircularSlider *ib_circleSliderCustom;
 @property (retain, nonatomic) IBOutlet UIImageView *imgViewEnableDisable;
+@property (assign, nonatomic) IBOutlet  UILabel *descLabel;
 - (IBAction)didEnableDisturb:(id)sender;
 
 @end

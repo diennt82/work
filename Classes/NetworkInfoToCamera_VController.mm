@@ -129,7 +129,10 @@
     
     self.tfSSID = (UITextField *)[self.ssidCell viewWithTag:202];
     
-    if (self.tfSSID.text.length > 0 && ([self.security isEqualToString:@"None"] || [self.security isEqualToString:@"open"]))
+    if (self.tfSSID.text.length > 0 &&
+        ([[self.security lowercaseString] isEqualToString:@"none"] ||
+         [[self.security lowercaseString] isEqualToString:@"open"]  )
+        )
     {
         self.navigationItem.rightBarButtonItem .enabled = YES;
         self.navigationItem.rightBarButtonItem.tintColor = [UIColor blueColor];
@@ -160,8 +163,11 @@
         NSLog(@"%s - deviceConf.ssid: %@, - self.ssid: %@, - self.security: %@", __FUNCTION__, self.deviceConf.ssid, self.ssid, self.security);
         
         if ([self.deviceConf.ssid isEqualToString:self.ssid] &&
-            ([self.security isEqualToString:@"wep"] || [self.security isEqualToString:@"wpa"]))
+            (  ![[self.security lowercaseString] isEqualToString:@"none"] &&
+               ![[self.security lowercaseString] isEqualToString:@"open"] )
+            )
         {
+            
             self.navigationItem.rightBarButtonItem.enabled = YES;
             self.navigationItem.rightBarButtonItem.tintColor = [UIColor blueColor];
             
@@ -829,13 +835,7 @@
 {
     NSLog(@"NetworkInfoToCameraVC - didReceiveData: %@", string);
     
-    if ([string hasPrefix:@"set_time_zone"]) // set_time_zone: 0 -> success
-    {
-        stage = SENT_TIME_ZONE;
-        
-        NSLog(@"NetworkInfo - Set time done");
-    }
-    else if ([string hasPrefix:@"setup_wireless_save"])
+    if ([string hasPrefix:@"setup_wireless_save"])
     {
         stage = SENT_WIFI;
     
@@ -980,66 +980,6 @@
     return TRUE;
 }
 
-- (BOOL)sendCommandSetTimeZone
-{
-    NSLog(@"NetworkInfo - sendCommandSetTimeZone");
-    NSDate * date;
-    
-    BOOL debugLog = TRUE;
-    
-    while( ([BLEConnectionManager getInstanceBLE].state != CONNECTED) &&
-          ( self.shouldTimeoutProcessing == FALSE ) )
-    {
-        if (debugLog)
-        {
-            NSLog(@"NetworkInfo - sendCommandSetTimeZone:  BLE disconnected - stage: %d, sleep 2s...", stage);
-            debugLog = FALSE;
-        }
-        
-        date = [NSDate dateWithTimeInterval:2.0 sinceDate:[NSDate date]];
-        [[NSRunLoop currentRunLoop] runUntilDate:date];
-        
-    }
-    
-    if ( self.shouldTimeoutProcessing == TRUE)
-    {
-        NSLog(@"NetworkInfo - sendCommandSetTimeZone: TIMEOUT -- return");
-        return FALSE;
-    }
-    
-    NSDate *now = [NSDate date];
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"ZZZ"];
-    
-    NSMutableString *stringFromDate = [NSMutableString stringWithString:[formatter stringFromDate:now]];
-    
-    [stringFromDate insertString:@"." atIndex:3];
-    
-    NSLog(@"%@", stringFromDate);
-    
-    NSString *cmd = [NSString stringWithFormat:SET_TIME_ZONE, stringFromDate];
-    
-    //send cmd to Device
-    [BLEConnectionManager getInstanceBLE].delegate = self;
-    [[BLEConnectionManager getInstanceBLE].uartPeripheral writeString:cmd withTimeOut:SHORT_TIME_OUT_SEND_COMMAND];
-    
-    while ([BLEConnectionManager getInstanceBLE].uartPeripheral.isBusy)
-    {
-        date = [NSDate dateWithTimeInterval:1.5 sinceDate:[NSDate date]];
-        
-        [[NSRunLoop currentRunLoop] runUntilDate:date];
-    }
-    
-    NSLog(@"After sending Set Time Zone wait for 3sec, after that - return TRUE");
-    date = [NSDate dateWithTimeInterval:3 sinceDate:[NSDate date]];
-    [[NSRunLoop currentRunLoop] runUntilDate:date];
-    
-    
-    return TRUE;
-}
-
-
-
 -(void)sendWifiInfoToCamera
 {
     [self.view endEditing:YES];
@@ -1065,56 +1005,47 @@
 
     [BLEConnectionManager getInstanceBLE].delegate = self;
     
-    if ([self sendCommandSetTimeZone])
+    if ([self sendCommandHTTPSetup])
     {
-        while (stage != SENT_TIME_ZONE && !_shouldTimeoutProcessing);
+        while (stage != SENT_WIFI && !_shouldTimeoutProcessing);
         
-        if ([self sendCommandHTTPSetup])
+        int count = 20;
+        NSDate * exp_reading_status = [[NSDate date] dateByAddingTimeInterval:3*60];
+        
+        do
         {
-            while (stage != SENT_WIFI && !_shouldTimeoutProcessing);
+            [self readWifiStatusOfCamera:nil];
             
-            int count = 20;
-            NSDate * exp_reading_status = [[NSDate date] dateByAddingTimeInterval:3*60];
+            if ([exp_reading_status compare:[NSDate date]] == NSOrderedAscending )
+            {
+                NSLog(@"wifi pass check failed -- 3 min passed");
+                break;
+            }
             
-            do
-            {
-                [self readWifiStatusOfCamera:nil];
-                
-                if ([exp_reading_status compare:[NSDate date]] == NSOrderedAscending )
-                {
-                    NSLog(@"wifi pass check failed -- 3 min passed");
-                    break;
-                }
-                
-            }
-            while (stage !=  CHECKING_WIFI_PASSED && count -- >0 && !_shouldTimeoutProcessing);
-            
-            if (stage == CHECKING_WIFI)
-            {
-                //Failed!!
-                if (_timerTimeoutConnectBLE != nil)
-                {
-                    [self.timerTimeoutConnectBLE invalidate];
-                    self.timerTimeoutConnectBLE = nil;
-                }
-                
-                [self timeoutBLESetupProcessing:nil];
-                NSLog(@"wifi pass check failed!!! call timeout");
-            }
-            else if (stage == CHECKING_WIFI_PASSED)
-            {
-                //CONNECTED... Move on now..
-                [self sendCommandRestartSystem];
-                
-                [self showNextScreen];
-                [self.view setUserInteractionEnabled:YES];
-                [self.navigationController.navigationBar setUserInteractionEnabled:YES];
-            }
         }
-    }
-    else
-    {
-        NSLog(@"NetworkInfo - sendWifiInfoToCamera - SetTimeZone failed!");
+        while (stage !=  CHECKING_WIFI_PASSED && count -- >0 && !_shouldTimeoutProcessing);
+        
+        if (stage == CHECKING_WIFI)
+        {
+            //Failed!!
+            if (_timerTimeoutConnectBLE != nil)
+            {
+                [self.timerTimeoutConnectBLE invalidate];
+                self.timerTimeoutConnectBLE = nil;
+            }
+            
+            [self timeoutBLESetupProcessing:nil];
+            NSLog(@"wifi pass check failed!!! call timeout");
+        }
+        else if (stage == CHECKING_WIFI_PASSED)
+        {
+            //CONNECTED... Move on now..
+            [self sendCommandRestartSystem];
+            
+            [self showNextScreen];
+            [self.view setUserInteractionEnabled:YES];
+            [self.navigationController.navigationBar setUserInteractionEnabled:YES];
+        }
     }
 }
 

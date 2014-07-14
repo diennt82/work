@@ -28,6 +28,18 @@
     // Configure the view for the selected state
 }
 
+- (void)drawRect:(CGRect)rect
+{
+    if (_settingsButton.hidden)
+    {
+        [_activityIndicationUpdating startAnimating];
+    }
+    else
+    {
+        [_activityIndicationUpdating stopAnimating];
+    }
+}
+
 - (IBAction)settingsButtonTouchAction:(id)sender
 {
     [_camerasCellDelegate sendTouchSettingsActionWithRowIndex:_rowIndex];
@@ -41,6 +53,7 @@
     [_ibIconStatusCamera release];
     [_ibTextStatusCamera release];
     [_ibBGColorCameraSelected release];
+    [_activityIndicationUpdating release];
     [super dealloc];
 }
 @end

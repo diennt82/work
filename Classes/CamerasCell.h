@@ -24,6 +24,7 @@
 @property (retain, nonatomic) IBOutlet UIImageView *photoItemImage;
 @property (retain, nonatomic) IBOutlet UILabel *ibCameraNameLabel;
 @property (retain, nonatomic) IBOutlet UIButton *settingsButton;
+@property (retain, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicationUpdating;
 
 @property (nonatomic, assign) id<CamerasCellDelegate> camerasCellDelegate;
 

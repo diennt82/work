@@ -16,6 +16,7 @@
                 <outlet property="scrollViewGuide" destination="fUx-oY-EgV" id="p8G-bG-ikx"/>
                 <outlet property="securityCell" destination="28" id="47"/>
                 <outlet property="ssidCell" destination="27" id="48"/>
+                <outlet property="tableView" destination="26" id="VFA-Wj-jJI"/>
                 <outlet property="view" destination="3" id="44"/>
             </connections>
         </placeholder>
@@ -87,8 +88,8 @@
                         <color key="textColor" red="0.1760115592" green="0.40581968839999999" blue="0.66364397320000001" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </label>
-                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="left" text="None" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="32">
-                        <rect key="frame" x="223" y="11" width="42" height="21"/>
+                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="left" text="None" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="32">
+                        <rect key="frame" x="186" y="11" width="79" height="21"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>

@@ -120,6 +120,9 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    NSLog(@"%s", __FUNCTION__);
+    
     self.navigationController.navigationBarHidden = YES;
     self.ibTableListCamera.delegate = self;
 
@@ -371,17 +374,12 @@
 {
     //#warning Incomplete method implementation.
     // Return the number of rows in the section.
-    
-    if (self.camChannels.count == 0)
-    {
-        return 0;
-    }
-    
+#if 0
     if (_waitingForUpdateData == TRUE)
     {
         return 1;
     }
-    
+#endif
     return self.camChannels.count;
 }
 
@@ -392,10 +390,12 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+#if 0
     if (_waitingForUpdateData == TRUE)
     {
         return 40; // your dynamic height...
     }
+#endif
     
     return 108;
 }
@@ -436,7 +436,7 @@
 {
     //[self updateBottomButton];
     //[self performSelectorOnMainThread:@selector(updateCameraInfo) withObject:nil waitUntilDone:NO];
-    
+#if 0
     if (_waitingForUpdateData == TRUE)
     {
         static NSString *CellIdentifier = @"Cell";
@@ -470,6 +470,7 @@
         return cell;
     }
     else
+#endif
     {
         static NSString *CellIdentifier = @"CamerasCell";
         CamerasCell *cell = [self.ibTableListCamera dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -520,11 +521,21 @@
             [cell.ibCameraNameLabel setNumberOfLines:1];
         }
         
-        if ([ch.profile isFwUpgrading:[NSDate date]])
+        if (!ch.profile.hasUpdateLocalStatus)
+        {
+            shouldHighlightAtRow[indexPath.row] = NO;
+            [cell.ibIconStatusCamera setImage:[UIImage imageNamed:@"offline"]];
+            [cell.ibTextStatusCamera setText:@"Updating..."];
+            cell.settingsButton.hidden = YES;
+            
+            NSLog(@"%s Updating...", __FUNCTION__);
+        }
+        else if ([ch.profile isFwUpgrading:[NSDate date]])
         {
             shouldHighlightAtRow[indexPath.row] = NO;
             [cell.ibIconStatusCamera setImage:[UIImage imageNamed:@"online"]];
             [cell.ibTextStatusCamera setText:@"FW is upgrading..."];
+            cell.settingsButton.hidden = NO;
             
             NSLog(@"%s Fw is upgrading...", __FUNCTION__);
             
@@ -535,12 +546,14 @@
             shouldHighlightAtRow[indexPath.row] = YES;
             [cell.ibIconStatusCamera setImage:[UIImage imageNamed:@"offline"]];
             [cell.ibTextStatusCamera setText:@"Offline"];
+            cell.settingsButton.hidden = NO;
         }
         else
         {
             shouldHighlightAtRow[indexPath.row] = YES;
             [cell.ibIconStatusCamera setImage:[UIImage imageNamed:@"online"]];
             [cell.ibTextStatusCamera setText:@"Online"];
+            cell.settingsButton.hidden = NO;
             
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
             NSString *regID = [userDefaults stringForKey:REG_ID];
@@ -573,7 +586,7 @@
         _waitingForUpdateData = NO;
         return;
     }
-#endif
+
     if (_waitingForUpdateData == TRUE)
     {
         [self.ibTextAddCamera setTextColor:[UIColor deSelectedAddCameraTextColor]];
@@ -581,6 +594,7 @@
         [self.ibIconAddCamera setImage:[UIImage imageNamed:@"add_camera_pressed"]];
     }
     else
+#endif
     {
         [self.ibTextAddCamera setTextColor:[UIColor whiteColor]];
         [self.ibAddCameraButton setEnabled:YES];

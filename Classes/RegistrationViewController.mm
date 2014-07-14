@@ -25,6 +25,7 @@
 @property (retain, nonatomic) IBOutlet UIButton *btnCheckbox;
 @property (retain, nonatomic) IBOutlet UIButton *btnCreate;
 @property (retain, nonatomic) IBOutlet UIView *viewProgress;
+@property (nonatomic, assign) IBOutlet UIButton     *agreeButton;
 
 @property (retain, nonatomic) NSString *stringUsername;
 @property (retain, nonatomic) NSString *stringPassword;
@@ -69,6 +70,11 @@
     self.tfEmail.delegate = self;
     self.tfPassword.delegate = self;
     self.tfConfirmPassword.delegate =self;
+    
+    NSMutableAttributedString *commentString = [[NSMutableAttributedString alloc] initWithString:self.agreeButton.titleLabel.text];
+    [commentString addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInteger:NSUnderlineStyleSingle] range:NSMakeRange(0, [commentString length])];
+    [self.agreeButton.titleLabel setAttributedText:commentString];
+    [commentString release];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -101,7 +107,7 @@
 
 - (IBAction)btnCheckboxTouchUpInsideAction:(UIButton *)sender
 {
-    [sender setSelected:!sender.selected];
+    [self.btnCheckbox setSelected:!self.btnCheckbox.selected];
     [self validateAllFieldsAndEnableSignUp];
 }
 
@@ -430,6 +436,11 @@
     [self.navigationController pushViewController:tcVC animated:YES];
     [tcVC release];
      */
+    [_tfUsername resignFirstResponder];
+    [_tfEmail resignFirstResponder];
+    [_tfPassword resignFirstResponder];
+    [_tfConfirmPassword resignFirstResponder];
+    
     ToUViewController *vc;
     
     if (isiPhone5 || isiPhone4){

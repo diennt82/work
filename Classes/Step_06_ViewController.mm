@@ -21,6 +21,7 @@
 @property (retain, nonatomic) UITextField *tfSSID;
 @property (retain, nonatomic) UITextField *tfPassword;
 @property (retain, nonatomic) UITextField *tfConfirmPass;
+@property (assign, nonatomic) IBOutlet UITableView *tableView;
 
 @end
 
@@ -126,7 +127,9 @@
     
     self.tfSSID = (UITextField *)[self.ssidCell viewWithTag:202];
     
-    if (self.tfSSID.text.length > 0 && ([self.security isEqualToString:@"None"] || [self.security isEqualToString:@"open"]))
+    if (self.tfSSID.text.length > 0 &&
+        ([[self.security lowercaseString] isEqualToString:@"none"] ||
+         [[self.security lowercaseString] isEqualToString:@"open"]))
     {
         self.navigationItem.rightBarButtonItem .enabled = YES;
         self.navigationItem.rightBarButtonItem.tintColor = [UIColor blueColor];
@@ -154,7 +157,8 @@
         NSLog(@"Step_06_ViewController - viewDidLoad - deviceConf.ssid: %@, - self.ssid: %@, - self.security: %@", self.deviceConf.ssid, self.ssid, self.security);
         
         if ([self.deviceConf.ssid isEqualToString:self.ssid] &&
-            ([self.security isEqualToString:@"wep"] || [self.security isEqualToString:@"wpa"]))
+            (!([[self.security lowercaseString] isEqualToString:@"none"] ||
+               [[self.security lowercaseString] isEqualToString:@"open"])))
         {
             self.navigationItem.rightBarButtonItem.enabled = YES;
             self.navigationItem.rightBarButtonItem.tintColor = [UIColor blueColor];
@@ -168,6 +172,12 @@
     [self.infoSelectCameView setHidden:YES];
     
     [self.scrollViewGuide setContentSize:CGSizeMake(320, 1181)];
+    
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
+                                   initWithTarget:self
+                                   action:@selector(didTapTableView:)];
+    [self.tableView addGestureRecognizer:tap];
+    [tap release];
 }
 
 - (void)viewDidUnload
@@ -1180,4 +1190,19 @@
     [self.tfPassword setSecureTextEntry:!self.tfPassword.secureTextEntry];
 }
 
+- (void)didTapTableView:(UITapGestureRecognizer *)tap {
+    [self.tfSSID resignFirstResponder];
+    [self.tfPassword resignFirstResponder];
+    [self.tfConfirmPass resignFirstResponder];
+    
+    CGPoint point = [tap locationInView:tap.view];
+    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:point];
+    if (indexPath.section == SEC_SECTION) {
+        if (indexPath.row == SEC_INDEX) {
+            if (self.isOtherNetwork == TRUE) {
+                [self changeSecurityType];
+            }
+        }
+    }
+}
 @end

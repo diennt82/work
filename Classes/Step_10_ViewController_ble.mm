@@ -17,6 +17,7 @@
 @interface Step_10_ViewController_ble ()
 
 @property (nonatomic, retain) UserAccount *userAccount;
+@property (nonatomic, retain) BMS_JSON_Communication *jsonCommBlocked;
 
 @end
 
@@ -46,7 +47,7 @@
     
     //[userNameLabel release];
     //[userEmailLabel release];
-    //[progressView release];
+    [_jsonCommBlocked release];
     [cameraMac release];
     [master_key release];
     
@@ -267,26 +268,28 @@
 
 - (void)updatesBasicInfoForCamera
 {
-        BMS_JSON_Communication *jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
+    if (!_jsonCommBlocked)
+    {
+        self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
                                                                      Selector:nil
                                                                  FailSelector:nil
                                                                     ServerErr:nil];
+    }
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
-    NSString *apiKey    = [userDefaults objectForKey:@"PortalApiKey"];
-    NSString *udid      = [userDefaults objectForKey:CAMERA_UDID];
-    NSString *hostSSID  = [userDefaults objectForKey:HOST_SSID];
+    NSString *apiKey     = [userDefaults objectForKey:@"PortalApiKey"];
+    NSString *hostSSID   = [userDefaults objectForKey:HOST_SSID];
+    NSString *deviceName = [userDefaults objectForKey:CAMERA_NAME];
     
-    NSDictionary *responseDict = [jsonCommBlocked updateDeviceBasicInfoBlockedWithRegistrationId:udid
-                                                                                       deviceName:nil
+    NSDictionary *responseDict = [_jsonCommBlocked updateDeviceBasicInfoBlockedWithRegistrationId:_stringUDID
+                                                                                       deviceName:deviceName
                                                                                          timeZone:nil
                                                                                              mode:nil
                                                                                   firmwareVersion:nil
                                                                                          hostSSID:hostSSID
                                                                                        hostRouter:nil
                                                                                         andApiKey:apiKey];
-    [jsonCommBlocked release];
     BOOL updateFailed = TRUE;
     
     if (responseDict)
@@ -315,28 +318,59 @@
     }
 }
 
+- (void)sendToServerTheCommand:(NSString *) command
+{
+    if (!_jsonCommBlocked)
+    {
+        self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                             Selector:nil
+                                                                         FailSelector:nil
+                                                                            ServerErr:nil];
+    }
+    
+    NSDictionary *responseDict = [_jsonCommBlocked sendCommandBlockedWithRegistrationId:_stringUDID
+                                                                             andCommand:command
+                                                                              andApiKey:[[NSUserDefaults standardUserDefaults] objectForKey:@"PortalApiKey"]];
+    
+    NSInteger errorCode = -1;
+    NSString *errorMessage = @"Update failed";
+    
+    if (responseDict)
+    {
+        errorCode = [[responseDict objectForKey:@"status"] integerValue];
+        
+        if (errorCode == 200)
+        {
+            errorCode = [[[[responseDict objectForKey:@"data"] objectForKey:@"device_response"] objectForKey:@"device_response_code"] integerValue];
+        }
+        else
+        {
+            errorMessage = [responseDict objectForKey:@"message"];
+        }
+    }
+    
+    NSLog(@"%s cmd:%@, error: %d", __func__, command, errorCode);
+}
+
 - (void) setupCompleted
 {
     // Try to update host ssid to server
+    [self sendToServerTheCommand:@"set_motion_area&grid=1x1&zone=00"];
+    [self sendToServerTheCommand:@"vox_enable"];
+    [self sendToServerTheCommand:@"set_temp_lo_enable&value=1"];
+    [self sendToServerTheCommand:@"set_temp_hi_enable&value=1"];
+    
     [self updatesBasicInfoForCamera];
     
+    //Check once more to update the SSID.
+    [self checkItOnline];
+    
     //Load step 12
-    NSLog(@"Load step 12");
+    NSLog(@"Load step 12- + dboule check");
     
     //Load the next xib
-    Step_12_ViewController *step12ViewController = nil;
-    
-    //    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-    //    {
-    //
-    //        step12ViewController = [[Step_12_ViewController alloc]
-    //                                initWithNibName:@"Step_12_ViewController_ipad" bundle:nil];
-    //    }
-    //    else
-    {
-        step12ViewController = [[Step_12_ViewController alloc]
-                                initWithNibName:@"Step_12_ViewController" bundle:nil];
-    }
+    Step_12_ViewController *step12ViewController = [[Step_12_ViewController alloc]
+                                init];
     
     [self.navigationController pushViewController:step12ViewController animated:NO];
     
@@ -345,10 +379,12 @@
 
 - (void)  setupFailed
 {
+    NSLog(@"%s", __FUNCTION__);
+#if 0
  	NSLog(@"Setup has failed - remove cam on server");
 	// send a command to remove camera
 	//NSString *mac = [Util strip_colon_fr_mac:self.cameraMac];
-	
+
     BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
                                                                               Selector:@selector(removeCamSuccessWithResponse:)
                                                                           FailSelector:@selector(removeCamFailedWithError:)
@@ -357,7 +393,7 @@
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [jsonComm deleteDeviceWithRegistrationId:_stringUDID
                                    andApiKey:[userDefaults objectForKey:@"PortalApiKey"]];
-    
+#endif
     //Load step 11
     NSLog(@"Load step 11");
     
