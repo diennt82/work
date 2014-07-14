@@ -5250,12 +5250,12 @@ double _ticks = 0;
             [ib_switchDegree setHidden:NO];
             [self.view bringSubviewToFront:ib_switchDegree];
             
+            [self setTemperatureState_Fg:_stringTemperature];
             if (_existTimerTemperature == FALSE)
             {
                 self.existTimerTemperature = TRUE;
                 NSLog(@"Log - Create Timer to get Temperature");
                 //should call it first and then update later
-                [self setTemperatureState_Fg:_stringTemperature];
                 [NSTimer scheduledTimerWithTimeInterval:10
                                                  target:self
                                                selector:@selector(getCameraTemperature_bg:)
