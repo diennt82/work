@@ -77,7 +77,12 @@
     //id<GAITracker> tracker =
     [[GAI sharedInstance] trackerWithTrackingId:@"UA-51500380-2"];
 #endif
-   
+    
+    
+#ifndef DEBUG
+    NSLog(@"%s, enable crittercism",__FUNCTION__);
+
+    
     //Internal release
     NSString * releaseAppId = @"53acee52178784439a000001";
     
@@ -89,12 +94,12 @@
     }
     [Crittercism enableWithAppID: releaseAppId];
     
-   
+#endif
     
-   
+    
     
     NSArray *names = [UIFont fontNamesForFamilyName:@"Proxima Nova"];
-    NSLog(@"names: %@",names);
+    //NSLog(@"names: %@",names);
     
     //[[UINavigationBar appearance] setTintColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"back"]]];
     [[UINavigationBar appearance] setTintColor:[UIColor colorWithRed:252/255.f green:0 blue:7/255.f alpha:1]];
@@ -149,7 +154,7 @@
     sigaction(SIGABRT, &signalAction, NULL);
     sigaction(SIGILL, &signalAction, NULL);
     sigaction(SIGBUS, &signalAction, NULL);
-#endif 
+#endif
     
     NSString *cachesDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
 	NSString *logPath = [cachesDirectory stringByAppendingPathComponent:@"application.log"];
@@ -381,7 +386,7 @@ void checkingApplicationCrashed()
                 [self performSelectorOnMainThread:@selector(activateNotificationViewController:)
                                        withObject:camAlert
                                     waitUntilDone:YES];
-
+                
             }
             else
             {
@@ -418,7 +423,7 @@ void checkingApplicationCrashed()
 
 - (void)activateNotificationViewController: (CameraAlert *)camAlert
 {
-
+    
     //send a broadcast to all active listeners to take care of all necessary actions.
     [[NSNotificationCenter defaultCenter] postNotificationName:PUSH_NOTIFY_BROADCAST_WHILE_APP_INACTIVE
                                                         object:nil];
@@ -659,7 +664,7 @@ void checkingApplicationCrashed()
     [viewController release];
     [_window release];
     [_jsonComm release];
-
+    
     [super dealloc];
 }
 
