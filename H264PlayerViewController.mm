@@ -5919,9 +5919,9 @@ double _ticks = 0;
     
     _isDegreeFDisplay = !_isDegreeFDisplay;
     
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setBool:_isDegreeFDisplay forKey:IS_FAHRENHEIT];
-    [userDefaults synchronize];
+    //NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    //[userDefaults setBool:_isDegreeFDisplay forKey:IS_FAHRENHEIT];
+    //[userDefaults synchronize];
     
     [self setTemperatureState_Fg:_stringTemperature];
 }
