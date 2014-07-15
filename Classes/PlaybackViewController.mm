@@ -613,16 +613,19 @@
         [jsonComm release];
         
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        
         if (responseDict)
         {
             if ([[responseDict objectForKey:@"status"] integerValue] == 200)
             {
                 [[TimelineDatabase getSharedInstance]  deleteEventWithID:strEventID];
+                
                 if([self.plabackVCDelegate respondsToSelector:@selector(motioEventDeleted)])
                 {
                     [self.plabackVCDelegate motioEventDeleted];
                 }
-                [self closePlayBack:nil];
+                
+                [self closePlayBack:_ib_closePlayBack];
             }
             else if([responseDict objectForKey:@"message"])
             {
