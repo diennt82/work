@@ -26,6 +26,7 @@
 //#define USE_H264PLAYER 0
 @interface PlaybackViewController()
 
+@property (nonatomic, retain) BMS_JSON_Communication *jsonComm;
 @property (nonatomic) BOOL isPause;
 @property (nonatomic) double duration;
 @property (nonatomic) double timeStarting;
@@ -204,21 +205,31 @@
     }
 #endif
     
-    [self startStream];
+    [self startStream:[NSNumber numberWithInt:0]];
 }
 
--(void) startStream
+- (void)enableOverlayView
 {
-    NSLog(@"%s", __FUNCTION__);
+    self.view.userInteractionEnabled = YES;
+    self.ib_myOverlay.hidden = NO;
+}
+
+-(void) startStream:(NSNumber *)count
+{
+    NSInteger iCount = [count integerValue];
+    NSLog(@"%s iCount:%d", __FUNCTION__, iCount);
     
     if (_userWantToBack)
     {
         return;
     }
     
-    if (MediaPlayer::Instance()->isShouldWait())
+    if (MediaPlayer::Instance()->isShouldWait() &&
+        iCount < 6) // Waiting for 3s after that starting streaming anyhow.
     {
-        [self performSelector:@selector(startStream) withObject:nil afterDelay:0.5f];
+        [self performSelector:@selector(startStream:)
+                   withObject:[NSNumber numberWithInt:++iCount]
+                   afterDelay:0.5f];
     }
     else
     {
@@ -254,8 +265,9 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.imageVideo setAlpha:1];
         [self.activityIndicator setHidden:YES];
-        self.view.userInteractionEnabled = YES;
-        self.ib_myOverlay.hidden = NO;
+        //self.view.userInteractionEnabled = YES;
+        //self.ib_myOverlay.hidden = NO;
+        [self enableOverlayView];
         [self.ib_sliderPlayBack setMinimumTrackTintColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"video_progress_green"]]];
         [self.ib_sliderPlayBack setValue:0];
         [self watcher];
@@ -416,6 +428,7 @@
     [_ib_viewControlPlayer release];
     [_ib_myOverlay release];
     [_ib_bg_top_player release];
+    [_jsonComm release];
     
     [super dealloc];
 }
@@ -565,7 +578,8 @@
 {
     UIDeviceOrientation orietation = UIDeviceOrientationPortrait;
     
-    if ([[UIDevice currentDevice] orientation] == UIDeviceOrientationPortrait)
+    if ([UIDevice currentDevice].orientation == UIDeviceOrientationPortrait ||
+        [UIDevice currentDevice].orientation == UIDeviceOrientationFaceUp)
     {
         orietation = UIDeviceOrientationLandscapeRight;
     }
@@ -581,6 +595,7 @@
     {
         return;
     }
+    
     [self hideControlMenu];
     
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
@@ -598,16 +613,19 @@
         [jsonComm release];
         
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        
         if (responseDict)
         {
             if ([[responseDict objectForKey:@"status"] integerValue] == 200)
             {
                 [[TimelineDatabase getSharedInstance]  deleteEventWithID:strEventID];
+                
                 if([self.plabackVCDelegate respondsToSelector:@selector(motioEventDeleted)])
                 {
                     [self.plabackVCDelegate motioEventDeleted];
                 }
-                [self closePlayBack:nil];
+                
+                [self closePlayBack:_ib_closePlayBack];
             }
             else if([responseDict objectForKey:@"message"])
             {
@@ -642,12 +660,11 @@
 {
     NSLog(@"%s", __FUNCTION__);
     
-    if (_playbackStreamer   &&
-        !_isPause           &&
-        _playbackStreamer->isPlaying())
+    if (_isPause &&
+        MediaPlayer::Instance()->isPlaying())
     {
         self.isPause = YES;
-        _playbackStreamer->pause();
+        MediaPlayer::Instance()->pause();
         self.ib_playPlayBack.selected = YES;
         self.view.userInteractionEnabled = NO;
         [self.ib_myOverlay setHidden:NO];
@@ -666,14 +683,12 @@
     
     NSLog(@"%s value: %f, target: %f", __FUNCTION__, sender.value, seekTarget);//0.666,667 --> 666,667
     
-    if (_playbackStreamer   &&
-        _isPause)
+    if (_isPause)
     {
         self.activityIndicator.hidden = NO;
         self.isPause = NO;
-        
-        //_playbackStreamer->seekTo(seekTarget);// USE THIS
-        _playbackStreamer->seekTo(seekTarget);// USE THIS
+
+        MediaPlayer::Instance()->seekTo(seekTarget);// USE THIS
 
         self.view.userInteractionEnabled = YES;
         self.ib_myOverlay.userInteractionEnabled = NO;
@@ -770,7 +785,7 @@
     }
     self.ib_sliderPlayBack.value = timeCurrent / _duration;
     
-    self.ib_timerPlayBack.text = [NSString stringWithFormat:@"%02d:%02d / %02d:%02d", currentTime / 60, currentTime % 60,totalTime / 60, totalTime % 60];
+    self.ib_timerPlayBack.text = [NSString stringWithFormat:@"%02d:%02d / %02d:%02d", currentTime / 60, currentTime % 60, totalTime / 60, totalTime % 60];
 }
 
 - (NSString *) timeFormat: (float) seconds {
@@ -792,11 +807,14 @@
 {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
-    BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                                             Selector:nil
-                                                                         FailSelector:nil
-                                                                            ServerErr:nil];
-    
+    if (!_jsonComm)
+    {
+        self.jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                              Selector:nil
+                                                          FailSelector:nil
+                                                             ServerErr:nil];
+    }
+
     NSString *mac = clip_info.mac_addr;
     
     NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
@@ -804,7 +822,7 @@
     NSString * event_timecode = [NSString stringWithFormat:@"%@_0%@_%@", mac,clip_info.alertType, clip_info.alertVal];
     
     
-    NSDictionary * responseDic = [jsonComm getListOfEventsBlockedWithRegisterId:clip_info.registrationID
+    NSDictionary * responseDic = [_jsonComm getListOfEventsBlockedWithRegisterId:clip_info.registrationID
                                                                 beforeStartTime:nil//@"2013-12-28 20:10:18"
                                                                       eventCode:event_timecode//event_code // temp
                                                                          alerts:nil
@@ -812,7 +830,6 @@
                                                                          offset:nil
                                                                            size:nil
                                                                          apiKey:apiKey];
-    [jsonComm release];
     
     [self getPlaylistSuccessWithResponse:responseDic];
 }
@@ -833,6 +850,7 @@
             if (![eventArr isEqual:[NSNull null]] &&
                 eventArr.count > 0)
             {
+                NSInteger numberOfCurrentClips = _clips.count;
                 NSArray *clipInEvents = [[eventArr objectAtIndex:0] objectForKey:@"data"];
                 
                 for (NSDictionary *clipInfo in clipInEvents) {
@@ -874,6 +892,16 @@
                 }
                 
                 NSLog(@"there is %d in playlist", [_clips count]);
+                
+                /*
+                 * Forcing case got last clip if receiving no more new clip from response.
+                 */
+                
+                if (numberOfCurrentClips == _clips.count)
+                {
+                    NSLog(@"%s Forcing case got last clip.", __FUNCTION__);
+                    got_last_clip = TRUE;
+                }
             }
             else
             {

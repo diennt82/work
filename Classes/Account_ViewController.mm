@@ -131,6 +131,7 @@
         NSString *logAppPath = [cachesDirectory stringByAppendingPathComponent:@"application.log"];
         NSString *logPath0 = [cachesDirectory stringByAppendingPathComponent:@"application0.log"];
         
+
         NSData *dataLog = [NSData dataWithContentsOfFile:logAppPath];
         NSData *dataLog0 = nil;
         
@@ -145,8 +146,9 @@
         {
             length += dataLog0.length;
         }
-        
-        NSMutableData *dataZip = [NSMutableData dataWithLength:length];
+
+
+        NSMutableData *dataZip = [[[NSMutableData alloc]initWithCapacity:0] autorelease];
         
         if (dataLog0)
         {
@@ -154,10 +156,11 @@
         }
         
         [dataZip appendData:dataLog];
+       
+       
+        NSData * dataZip1 = [NSData gzipData:dataZip];
         
-        dataZip = [NSData gzipData:dataZip];
-        
-        [picker addAttachmentData:[dataZip AES128EncryptWithKey:CES128_ENCRYPTION_PASSWORD] mimeType:@"text/plain" fileName:@"application.log"];
+        [picker addAttachmentData:[dataZip1 AES128EncryptWithKey:CES128_ENCRYPTION_PASSWORD] mimeType:@"text/plain" fileName:@"application.log"];
         
         //[picker addAttachmentData:dataZip  mimeType:@"text/plain" fileName:@"application.log"];
         

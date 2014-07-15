@@ -69,7 +69,9 @@ double _ticks = 0;
     [self updateNavigationBarAndToolBar];
     [self addHubbleLogo_Back];
     
-    self.imageViewStreamer = [[UIImageView alloc] initWithFrame:_imageViewVideo.frame];
+    UIImageView *imv = [[UIImageView alloc] initWithFrame:_imageViewVideo.frame];
+    self.imageViewStreamer = imv;
+    [imv release];
     //[self.imageViewStreamer setContentMode:UIViewContentModeScaleAspectFit];
     [self.imageViewStreamer setBackgroundColor:[UIColor blackColor]];
     
@@ -269,6 +271,8 @@ double _ticks = 0;
         
         [self.ib_viewRecordTTT setFrame:CGRectMake(alignXButtonRecord, alignYButtonRecord, viewRecordSize.width, viewRecordSize.height)];
         [_imgViewDrectionPad setFrame:CGRectMake(alignXButtonDirectionPad, alignYButtonDirectionPad, directionPadSize.width, directionPadSize.height)];
+        
+        [self.ib_labelTouchToTalk setTextColor:[UIColor holdToTalkTextColor]];
     }
     else
     {
@@ -591,7 +595,9 @@ double _ticks = 0;
     
     if (_earlierVC == nil)
     {
-        self.earlierVC = [[EarlierViewController alloc] initWithParentVC:self camChannel:self.selectedChannel];
+        EarlierViewController *vc = [[EarlierViewController alloc] initWithParentVC:self camChannel:self.selectedChannel];
+        self.earlierVC = vc;
+        [vc release];
         self.earlierVC.nav = self.navigationController;
         _earlierVC.view.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     }
@@ -1023,13 +1029,8 @@ double _ticks = 0;
                 NSLog(@"*[MEDIA_ERROR_TIMEOUT_WHILE_STREAMING] *** USER want to cancel **.. cancel after .1 sec...");
                 self.selectedChannel.stopStreaming = TRUE;
                 
-#if 1
                 [self goBack];
-#else
-                [self performSelector:@selector(goBackToCameraList)
-                           withObject:nil
-                           afterDelay:0.1];
-#endif
+
                 return;
             }
             else
@@ -1180,10 +1181,12 @@ double _ticks = 0;
     
     if (_jsonCommBlocked == nil)
     {
-        self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                                     Selector:nil
-                                                                 FailSelector:nil
-                                                                    ServerErr:nil];
+        BMS_JSON_Communication *comm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                              Selector:nil
+                                          FailSelector:nil
+                                             ServerErr:nil];
+        self.jsonCommBlocked = comm;
+        [comm release];
     }
     
     NSDictionary *responseDict = [_jsonCommBlocked createSessionBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
@@ -1506,15 +1509,21 @@ double _ticks = 0;
         [_alertViewTimoutRemote dismissWithClickedButtonIndex:-1 animated:NO];
     }
     
+    // turnoff audio recode in remote state
     if (_audioOutStreamRemote)
     {
         [_audioOutStreamRemote disconnectFromAudioSocketRemote];
+    }
+    // turnoff audio recode in local state
+    if (_audioOut != nil)
+    {
+        [_audioOut disconnectFromAudioSocket];
+        self.audioOut = nil;
     }
     
     if (_jsonComm)
     {
         [_jsonComm cancel];
-        [_jsonComm release];
         self.jsonComm = nil;
     }
     
@@ -1673,7 +1682,9 @@ double _ticks = 0;
 {
     if (![_cameraModel isEqualToString:CP_MODEL_SHARED_CAM]) // CameraHD
     {
-        self.timelineVC = [[TimelineViewController alloc] init];
+        TimelineViewController *vc = [[TimelineViewController alloc] init];
+        self.timelineVC = vc;
+        [vc release];
         [self.view addSubview:_timelineVC.view];
         self.timelineVC.timelineVCDelegate = self;
         self.timelineVC.camChannel = self.selectedChannel;
@@ -1731,10 +1742,12 @@ double _ticks = 0;
         
         if (_jsonCommBlocked == nil)
         {
-            self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                                         Selector:nil
-                                                                     FailSelector:nil
-                                                                        ServerErr:nil];
+            BMS_JSON_Communication *comm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                  Selector:nil
+                                              FailSelector:nil
+                                                 ServerErr:nil];
+            self.jsonCommBlocked = comm;
+            [comm release];
         }
         
         NSDictionary *responseDict = [_jsonCommBlocked sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
@@ -1953,11 +1966,20 @@ double _ticks = 0;
     NSLog(@"%s mediaProcessStatus: %d", __FUNCTION__, _mediaProcessStatus);
     
     
-    h264StreamerListener = new H264PlayerListener(self);
-    MediaPlayer::Instance()->setListener(h264StreamerListener);
-    MediaPlayer::Instance()->setPlaybackAndSharedCam(false, [_cameraModel isEqualToString:CP_MODEL_SHARED_CAM]);
-    //self.mediaProcessStatus = 2;
-    [self performSelectorInBackground:@selector(startStream_bg) withObject:nil];
+    
+//    if (MediaPlayer::Instance()->isShouldWait())
+//    {
+//        [self performSelector:@selector(startStream) withObject:nil afterDelay:0.5f];
+//    }
+//    else
+    {
+        
+        h264StreamerListener = new H264PlayerListener(self);
+        MediaPlayer::Instance()->setListener(h264StreamerListener);
+        MediaPlayer::Instance()->setPlaybackAndSharedCam(false, [_cameraModel isEqualToString:CP_MODEL_SHARED_CAM]);
+        //self.mediaProcessStatus = 2;
+        [self performSelectorInBackground:@selector(startStream_bg) withObject:nil];
+    }
     
 }
 
@@ -2079,7 +2101,7 @@ double _ticks = 0;
         }
     }
 }
-
+/* Within 1 sec MUST exit the player - this is a MUST** */
 - (void)prepareGoBackToCameraList:(id)sender
 {
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
@@ -2163,7 +2185,6 @@ double _ticks = 0;
     }
     else if(_mediaProcessStatus == MEDIAPLAYER_SET_LISTENER)
     {
-        //MediaPlayer::Instance()->setFFmpegInterrupt(true);
         MediaPlayer::Instance()->sendInterrupt();
         [self stopStream];
         [self goBack];
@@ -2171,7 +2192,6 @@ double _ticks = 0;
     else if (_mediaProcessStatus == MEDIAPLAYER_SET_DATASOURCE)
     {
         NSLog(@"%s Waiting for response from Media lib.", __FUNCTION__);
-        //MediaPlayer::Instance()->setFFmpegInterrupt(true);
         MediaPlayer::Instance()->sendInterrupt();
     }
     else //MEDIAPLAYER_STARTED
@@ -2230,6 +2250,16 @@ double _ticks = 0;
 
 - (void)goBack
 {
+    self.walkieTalkieEnabled = NO;
+    self.enablePTT = NO;
+    if (self.selectedChannel.profile.isInLocal)
+    {
+        [self enableLocalPTT:_walkieTalkieEnabled];
+    }
+    else
+    {
+        [self enableRemotePTT:[NSNumber numberWithBool:self.walkieTalkieEnabled]];
+    }
     
     // Release the instance here - since we are going to camera list
     MediaPlayer::release();
@@ -2251,8 +2281,6 @@ double _ticks = 0;
     self.selectedChannel.profile.isSelected = FALSE;
     
     [self.navigationController popToRootViewControllerAnimated:YES];
-    NSLog(@"release manually");
-    [self release];
 }
 
 -(void) cleanUpDirectionTimers
@@ -2341,10 +2369,12 @@ double _ticks = 0;
     
     if (_jsonCommBlocked == nil)
     {
-        self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                                     Selector:nil
-                                                                 FailSelector:nil
-                                                                    ServerErr:nil];
+        BMS_JSON_Communication *comm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                              Selector:nil
+                                          FailSelector:nil
+                                             ServerErr:nil];
+        self.jsonCommBlocked = comm;
+        [comm release];
     }
     
     NSString * cmd_string = @"action=command&command=close_p2p_rtsp_stun";
@@ -2498,10 +2528,12 @@ double _ticks = 0;
         
 		if (_jsonCommBlocked == nil)
         {
-            self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                                         Selector:nil
-                                                                     FailSelector:nil
-                                                                        ServerErr:nil];
+            BMS_JSON_Communication *comm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                  Selector:nil
+                                              FailSelector:nil
+                                                 ServerErr:nil];
+            self.jsonCommBlocked = comm;
+            [comm release];
         }
         
         NSDictionary *responseDict = [_jsonCommBlocked sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
@@ -2562,10 +2594,12 @@ double _ticks = 0;
     {
         if (_jsonCommBlocked == nil)
         {
-            self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                                         Selector:nil
-                                                                     FailSelector:nil
-                                                                        ServerErr:nil];
+            BMS_JSON_Communication *comm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                  Selector:nil
+                                              FailSelector:nil
+                                                 ServerErr:nil];
+            self.jsonCommBlocked = comm;
+            [comm release];
         }
         
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -2633,10 +2667,12 @@ double _ticks = 0;
     {
         if (_jsonCommBlocked == nil)
         {
-            self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                                         Selector:nil
-                                                                     FailSelector:nil
-                                                                        ServerErr:nil];
+            BMS_JSON_Communication *comm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                  Selector:nil
+                                              FailSelector:nil
+                                                 ServerErr:nil];
+            self.jsonCommBlocked = comm;
+            [comm release];
         }
         
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -2709,10 +2745,12 @@ double _ticks = 0;
     {
         if (_jsonCommBlocked == nil)
         {
-            self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                                         Selector:nil
-                                                                     FailSelector:nil
-                                                                        ServerErr:nil];
+            BMS_JSON_Communication *comm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                  Selector:nil
+                                              FailSelector:nil
+                                                 ServerErr:nil];
+            self.jsonCommBlocked = comm;
+            [comm release];
         }
         
         NSDictionary *responseDict = [_jsonCommBlocked sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
@@ -3418,10 +3456,12 @@ double _ticks = 0;
                        
                        if (_jsonCommBlocked == nil)
                        {
-                           self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                                                        Selector:nil
-                                                                                    FailSelector:nil
-                                                                                       ServerErr:nil];
+                           BMS_JSON_Communication *comm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                 Selector:nil
+                                                             FailSelector:nil
+                                                                ServerErr:nil];
+                           self.jsonCommBlocked = comm;
+                           [comm release];
                        }
                        
                        NSDictionary *responseDict = [_jsonCommBlocked createSessionBlockedWithRegistrationId:stringUDID
@@ -3669,10 +3709,12 @@ double _ticks = 0;
             
             if (_jsonCommBlocked == nil)
             {
-                self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                                             Selector:nil
-                                                                         FailSelector:nil
-                                                                            ServerErr:nil];
+                BMS_JSON_Communication *comm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                      Selector:nil
+                                                  FailSelector:nil
+                                                     ServerErr:nil];
+                self.jsonCommBlocked = comm;
+                [comm release];
             }
             
             NSDictionary *responseDict = [_jsonCommBlocked sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
@@ -3757,10 +3799,12 @@ double _ticks = 0;
             
             if (_jsonCommBlocked == nil)
             {
-                self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                                             Selector:nil
-                                                                         FailSelector:nil
-                                                                            ServerErr:nil];
+                BMS_JSON_Communication *comm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                      Selector:nil
+                                                  FailSelector:nil
+                                                     ServerErr:nil];
+                self.jsonCommBlocked = comm;
+                [comm release];
             }
             
             NSDictionary *responseDict = [_jsonCommBlocked sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
@@ -4773,10 +4817,12 @@ double _ticks = 0;
 {
     if (_jsonCommBlocked == nil)
     {
-        self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                                     Selector:nil
-                                                                 FailSelector:nil
-                                                                    ServerErr:nil];
+        BMS_JSON_Communication *comm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                              Selector:nil
+                                          FailSelector:nil
+                                             ServerErr:nil];
+        self.jsonCommBlocked = comm;
+        [comm release];
     }
     
     BOOL sendFailed = TRUE;
@@ -5361,6 +5407,7 @@ double _ticks = 0;
     [_alertViewTimoutRemote release];
     [_melodyViewController release];
     [_alertFWUpgrading release];
+    [_audioOut release];
     
     NSLog(@"%s", __FUNCTION__);
     
@@ -5376,8 +5423,7 @@ double _ticks = 0;
     [self performSelectorInBackground:@selector(set_Walkie_Talkie_bg:)
                            withObject:@"0"];
     
-    [_audioOut release];
-    _audioOut = nil;
+    self.audioOut = nil;
     
     //self.walkieTalkieEnabled = NO;
 }
@@ -5412,35 +5458,39 @@ double _ticks = 0;
     {
         // Stop talkback if it is enabled
         
-        UILabel *labelCrazy = [[UILabel alloc] init];
-        
-        CGRect rect;
-        
-        if ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationPortrait)
-        {
-            rect = CGRectMake(SCREEN_WIDTH/2 - 115/2, SCREEN_HEIGHT - 35, 115, 30);
-        }
-        else
-        {
-            rect = CGRectMake(SCREEN_HEIGHT/2 - 115/2, SCREEN_WIDTH - 35, 115, 30);
-        }
-        
-        labelCrazy.frame = rect;
-        labelCrazy.backgroundColor = [UIColor grayColor];
-        labelCrazy.textColor = [UIColor whiteColor];
-        labelCrazy.font = [UIFont applyHubbleFontName:PN_SEMIBOLD_FONT withSize:13];
-        labelCrazy.textAlignment = NSTextAlignmentCenter;
-        labelCrazy.text = @"Talkback disabled";
-        [self.view addSubview:labelCrazy];
-        [self.view bringSubviewToFront:labelCrazy];
-        
-        [labelCrazy performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:3];
-        
-        [labelCrazy release];
+        [self showToat:NSLocalizedString(@"stop_talking_toat", @"")];
         
         //self.walkieTalkieEnabled = !_walkieTalkieEnabled;
         [self ib_buttonTouchToTalkTouchUpInside];
     }
+}
+
+- (void)showToat:(NSString *)text {
+    UILabel *labelCrazy = [[UILabel alloc] init];
+    
+    CGRect rect;
+    
+    if ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationPortrait)
+    {
+        rect = CGRectMake((SCREEN_WIDTH - 150) / 2, SCREEN_HEIGHT - 35, 150, 30);
+    }
+    else
+    {
+        rect = CGRectMake((SCREEN_HEIGHT - 150) / 2, SCREEN_WIDTH - 35, 150, 30);
+    }
+    
+    labelCrazy.frame = rect;
+    labelCrazy.backgroundColor = [UIColor grayColor];
+    labelCrazy.textColor = [UIColor whiteColor];
+    labelCrazy.font = [UIFont applyHubbleFontName:PN_SEMIBOLD_FONT withSize:13];
+    labelCrazy.textAlignment = NSTextAlignmentCenter;
+    labelCrazy.text = text;
+    [self.view addSubview:labelCrazy];
+    [self.view bringSubviewToFront:labelCrazy];
+    
+    [labelCrazy performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:3];
+    
+    [labelCrazy release];
 }
 
 - (void)enableLocalPTT:(BOOL)walkieTalkieEnable
@@ -5481,7 +5531,6 @@ double _ticks = 0;
         // Init connectivity to Camera via socket & prevent loss of audio data
         _audioOut = [[AudioOutStreamer alloc] initWithDeviceIp:[HttpCom instance].comWithDevice.device_ip
                                                     andPTTport:self.selectedChannel.profile.ptt_port];  //IRABOT_AUDIO_RECORDING_PORT
-        [_audioOut retain];
         [_audioOut startRecordingSound];
         
         [self performSelectorInBackground:@selector(set_Walkie_Talkie_bg:)
@@ -5506,8 +5555,7 @@ double _ticks = 0;
         if (_audioOut != nil)
         {
             [_audioOut disconnectFromAudioSocket];
-            [_audioOut release];
-            _audioOut = nil;
+            self.audioOut = nil;
         }
         else
         {
@@ -5546,8 +5594,16 @@ double _ticks = 0;
         
         [[HttpCom instance].comWithDevice sendCommandAndBlock:command];
         
-        self.ib_buttonTouchToTalk.enabled = YES;
         self.enablePTT = YES;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.ib_buttonTouchToTalk.enabled = YES;
+            if (self.melodyViewController) {
+                if (self.melodyViewController.playing) {
+                    self.melodyViewController.playing = NO;
+                    [self showToat:NSLocalizedString(@"stop_melody_toat", @"")];
+                }
+            }
+        });
     }
 }
 
@@ -5580,10 +5636,12 @@ double _ticks = 0;
     //[BMS_JSON_Communication setServerInput:@"https://dev-api.hubble.in:443/v1"];
     if (_jsonCommBlocked == nil)
     {
-        self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                                     Selector:nil
-                                                                 FailSelector:nil
-                                                                    ServerErr:nil];
+        BMS_JSON_Communication *comm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                              Selector:nil
+                                          FailSelector:nil
+                                             ServerErr:nil];
+        self.jsonCommBlocked = comm;
+        [comm release];
     }
     
     NSString *regID = self.selectedChannel.profile.registrationID;
@@ -5635,7 +5693,9 @@ double _ticks = 0;
 {
     if (_audioOutStreamRemote == nil)
     {
-        self.audioOutStreamRemote = [[AudioOutStreamRemote alloc] initWithRemoteMode];
+        AudioOutStreamRemote *audio = [[AudioOutStreamRemote alloc] initWithRemoteMode];
+        self.audioOutStreamRemote = audio;
+        [audio release];
         
         [_audioOutStreamRemote retain];
         //Start buffering sound from user at the moment they press down the button
@@ -5684,6 +5744,14 @@ double _ticks = 0;
         {
             // STEP 3 -- Reconnect to Relay-server
             [_audioOutStreamRemote performSelectorOnMainThread:@selector(connectToAudioSocketRemote) withObject:nil waitUntilDone:NO];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (self.melodyViewController) {
+                    if (self.melodyViewController.playing) {
+                        self.melodyViewController.playing = NO;
+                        [self showToat:NSLocalizedString(@"stop_melody_toat", @"")];
+                    }
+                }
+            });
         }
         else
         {
@@ -6235,10 +6303,12 @@ double _ticks = 0;
 {
     if (_jsonCommBlocked == nil)
     {
-        self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                                     Selector:nil
-                                                                 FailSelector:nil
-                                                                    ServerErr:nil];
+        BMS_JSON_Communication *comm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                              Selector:nil
+                                          FailSelector:nil
+                                             ServerErr:nil];
+        self.jsonCommBlocked = comm;
+        [comm release];
     }
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -6375,10 +6445,12 @@ double _ticks = 0;
     
     if (_jsonCommBlocked == nil)
     {
-        self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                                     Selector:nil
-                                                                 FailSelector:nil
-                                                                    ServerErr:nil];
+        BMS_JSON_Communication *comm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                              Selector:nil
+                                          FailSelector:nil
+                                             ServerErr:nil];
+        self.jsonCommBlocked = comm;
+        [comm release];
     }
     
     NSString * cmd_str = [NSString stringWithFormat:@"action=command&command=set_video_bitrate&value=%@",bitrate_str];
@@ -6705,34 +6777,36 @@ double _ticks = 0;
                                   [UIImage imageNamed:@"loader_f"]];
     imageView.animationRepeatCount = 0;
     imageView.animationDuration = 1.5f;
-    
     [demoView addSubview:imageView];
-    
     [imageView startAnimating];
     
     NSString * msg = NSLocalizedStringWithDefaultValue(@"fw_upgrade_2",nil, [NSBundle mainBundle],
-                                                       @"Upgrading firmware, do not power off the camera. This process may take up to 3 mins..." , nil);
+                                                       @"Upgrading firmware, do not power off the camera. This process may take up to 5 mins..." , nil);
     
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(20, 45, 200, 91)];// autorelease];
     label.textAlignment = NSTextAlignmentCenter;
     label.numberOfLines = 4;
     label.text = msg;
-    
     [demoView addSubview:label];
-    
+
     UIProgressView *progressView = [[UIProgressView alloc] initWithFrame:CGRectMake(10, 150, 160, 20)];
     [demoView addSubview:progressView];
     
     UILabel *lblProgress = [[UILabel alloc] initWithFrame:CGRectMake(170, 130, 50, 21)];
     lblProgress.text = @"--";
     [demoView addSubview:lblProgress];
+    
     self.fwUpgradedProgress = 0;
     
+    NSArray *arr = [NSArray arrayWithObjects:progressView, lblProgress, nil];
     [self performSelectorInBackground:@selector(upgradeFwProgress_bg:)
-                           withObject:[NSArray arrayWithObjects:progressView, lblProgress, nil]] ;
+                           withObject:arr];
     
 
-    
+    [imageView release];
+    [label release];
+    [progressView release];
+    [lblProgress release];
     return [demoView autorelease];
 }
 
@@ -6890,10 +6964,12 @@ double _ticks = 0;
     
     if (_jsonCommBlocked == nil)
     {
-        self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                                     Selector:nil
-                                                                 FailSelector:nil
-                                                                    ServerErr:nil];
+        BMS_JSON_Communication *comm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                              Selector:nil
+                                          FailSelector:nil
+                                             ServerErr:nil];
+        self.jsonCommBlocked = comm;
+        [comm release];
     }
     
     NSDictionary *responseDict = [_jsonCommBlocked getDeviceBasicInfoBlockedWithRegistrationId:self.selectedChannel.profile.registrationID

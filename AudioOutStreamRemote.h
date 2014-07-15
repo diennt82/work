@@ -23,15 +23,12 @@
 @interface AudioOutStreamRemote : NSObject
 {
 	//AsyncSocket * sendingSocket;
-	NSMutableData * _pcm_data;
-	PCMPlayer * pcmPlayer;
-	
     BOOL hasStartRecordingSound;
 }
 
 @property (nonatomic, retain) NSString * relayServerIP;
 @property (nonatomic) NSInteger relayServerPort;
-@property (nonatomic, strong) NSMutableData *pcm_data;
+@property (nonatomic, retain) NSMutableData *pcm_data;
 @property (nonatomic, retain) PCMPlayer * pcmPlayer;
 @property (nonatomic) NSInteger bufferLength;
 @property (nonatomic, assign) id<AudioOutStreamRemoteDelegate> audioOutStreamRemoteDelegate;

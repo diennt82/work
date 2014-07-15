@@ -137,7 +137,7 @@
 #define MEDIAPLAYER_STARTED         3
 
 
-#define TIMEOUT_FW_OTA_UPGRADING    80// 80*3 --> 4 mins
+#define TIMEOUT_FW_OTA_UPGRADING    100// 100*3 --> 5 mins
 #define FW_UPGRADE_IN_PROGRESS      0
 #define FW_UPGRADE_FAILED          -1
 #define FW_UPGRADE_SUCCEED          1
@@ -157,7 +157,6 @@
     int _selectedItemMenu;
     NSMutableArray *_itemImages;
     NSMutableArray *_itemSelectedImages;
-    MediaPlayer* h264Streamer;
     
     H264PlayerListener * h264StreamerListener;
     
@@ -188,7 +187,6 @@
     
     //processing for hold to talk
     BOOL ptt_enabled;
-    AudioOutStreamer * _audioOut;
     
     //processing for recording
     int iMaxRecordSize;
@@ -281,8 +279,8 @@
 @property (retain, nonatomic) IBOutlet UIImageView *imageViewKnob;
 @property (retain, nonatomic) IBOutlet UIView *viewDebugInfo;
 
-@property (assign, nonatomic) EarlierViewController *earlierVC;
-@property (assign, nonatomic) TimelineViewController *timelineVC;
+@property (retain, nonatomic) EarlierViewController *earlierVC;
+@property (retain, nonatomic) TimelineViewController *timelineVC;
 @property (retain, nonatomic) UIImageView *imageViewStreamer;
 @property (nonatomic) BOOL isHorizeShow;
 @property (nonatomic, retain) NSTimer *timerHideMenu;
@@ -350,6 +348,7 @@
 @property (nonatomic) NSInteger fwUpgradeStatus;
 @property (nonatomic) BOOL hasFwVersion;
 @property (nonatomic) BOOL shouldBeep;
+@property (nonatomic, retain) AudioOutStreamer * audioOut;
 
 
 - (void)scan_done:(NSArray *) _scan_results;
