@@ -4473,16 +4473,18 @@
 					"-DPJ_IS_BIG_ENDIAN=0",
 					"-DPJ_IS_LITTLE_ENDIAN=1",
 					"-DPJ_BUILT_WITH_XCODE=1",
+					"-DDEBUG=1",
 				);
 				OTHER_CPLUSPLUSFLAGS = (
 					"-DPJ_IS_BIG_ENDIAN=0",
 					"-DPJ_IS_LITTLE_ENDIAN=1",
 					"-DPJ_BUILT_WITH_XCODE=1",
+					"-DDEBUG=1",
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = HubbleHome;
-				PROVISIONING_PROFILE = "BA6C3279-B01E-4434-A0D9-E0B53545C9C6";
-				SDKROOT = iphoneos7.0;
+				PROVISIONING_PROFILE = "8821D41A-DC34-49AE-86CF-93C16E99264B";
+				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
 				VALID_ARCHS = "armv6 armv7";
 			};
@@ -4531,8 +4533,8 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = HubbleHome;
-				PROVISIONING_PROFILE = "BA6C3279-B01E-4434-A0D9-E0B53545C9C6";
-				SDKROOT = iphoneos7.0;
+				PROVISIONING_PROFILE = "8821D41A-DC34-49AE-86CF-93C16E99264B";
+				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
 				VALIDATE_PRODUCT = YES;
 				VALID_ARCHS = "armv6 armv7";
@@ -4604,7 +4606,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = HubbleHome;
-				PROVISIONING_PROFILE = "BA6C3279-B01E-4434-A0D9-E0B53545C9C6";
+				PROVISIONING_PROFILE = "8821D41A-DC34-49AE-86CF-93C16E99264B";
 				RAMEWORK_SEARCH_PATHS = "$(inherited) \"$(SRCROOT)\"";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
