@@ -178,7 +178,7 @@
     }
     
     [BMS_JSON_Communication setServerInput:serverName];
-    [NSTimer scheduledTimerWithTimeInterval:25 target:self selector:@selector(timerTick:) userInfo:nil repeats:YES];
+    
     return YES;
 }
 
@@ -743,73 +743,4 @@ void checkingApplicationCrashed()
     }
 }
 
-- (void)test {
-//    NSMutableDictionary *userInfo = [[NSMutableDictionary alloc] init];
-//    [userInfo setObject:@"7" forKey:@"alert"];
-//    NSMutableDictionary *aps = [[NSMutableDictionary alloc] init];
-//    [aps setObject:@"Reset password on HubbleHome platform" forKey:@"alert"];
-//    [userInfo setObject:aps forKey:@"aps"];
-//    [aps release];
-//    [userInfo setObject:@"N/A" forKey:@"cameraname"];
-//    [userInfo setObject:@"N/A" forKey:@"mac"];
-//    [userInfo setObject:@"2014-07-10T06:56:37+00:00" forKey:@"time"];
-//    [userInfo setObject:@"HubbleHome" forKey:@"val"];
-//    
-//    NSMutableDictionary *userInfo = [[NSMutableDictionary alloc] init];
-//    [userInfo setObject:@"8" forKey:@"alert"];
-//    NSMutableDictionary *aps = [[NSMutableDictionary alloc] init];
-//    [aps setObject:@"Removed CameraHD-0083000001 device from account" forKey:@"alert"];
-//    [userInfo setObject:aps forKey:@"aps"];
-//    [aps release];
-//    [userInfo setObject:@"CameraHD-0083000001" forKey:@"cameraname"];
-//    [userInfo setObject:@"01008344334C32B065YFFRBSVK" forKey:@"mac"];
-//    [userInfo setObject:@"2014-07-08T08:22:12+00:00" forKey:@"time"];
-//    [userInfo setObject:@"HubbleHome" forKey:@"val"];
-//    
-//    NSMutableDictionary *userInfo = [[NSMutableDictionary alloc] init];
-//    [userInfo setObject:@"8" forKey:@"alert"];
-//    NSMutableDictionary *aps = [[NSMutableDictionary alloc] init];
-//    [aps setObject:@"Removed CameraHD-0083000001 device from account" forKey:@"alert"];
-//    [userInfo setObject:aps forKey:@"aps"];
-//    [aps release];
-//    [userInfo setObject:@"CameraHD-00665FF063" forKey:@"cameraname"];
-//    [userInfo setObject:@"01006644334C5FF063KPIRBEXA" forKey:@"mac"];
-//    [userInfo setObject:@"2014-07-08T08:22:12+00:00" forKey:@"time"];
-//    [userInfo setObject:@"HubbleHome" forKey:@"val"];
-    
-    NSMutableDictionary *userInfo = [[NSMutableDictionary alloc] init];
-    [userInfo setObject:@"1" forKey:@"alert"];
-    NSMutableDictionary *aps = [[NSMutableDictionary alloc] init];
-    [aps setObject:@"Sound detected from CameraHD-00665FF063" forKey:@"alert"];
-    [userInfo setObject:aps forKey:@"aps"];
-    [aps release];
-    [userInfo setObject:@"CameraHD-00665FF063" forKey:@"cameraname"];
-    [userInfo setObject:@"01006644334C5FF063KPIRBEXA" forKey:@"mac"];
-    [userInfo setObject:@"2014-07-10T06:56:40+00:00" forKey:@"time"];
-    [userInfo setObject:@"1" forKey:@"val"];
-
-//    NSMutableDictionary *userInfo = [[NSMutableDictionary alloc] init];
-//    [userInfo setObject:@"4" forKey:@"alert"];
-//    NSMutableDictionary *aps = [[NSMutableDictionary alloc] init];
-//    [aps setObject:@"Motion detected from CameraHD-00665ff063" forKey:@"alert"];
-//    [userInfo setObject:aps forKey:@"aps"];
-//    [aps release];
-//    [userInfo setObject:@"CameraHD-00665FF063" forKey:@"cameraname"];
-//    [userInfo setObject:@"01006644334C5FF063KPIRBEXA" forKey:@"mac"];
-//    [userInfo setObject:@"2014-07-10T06:56:40+00:00" forKey:@"time"];
-//    [userInfo setObject:@"1" forKey:@"val"];
-    
-    [self application:[UIApplication sharedApplication] didReceiveRemoteNotification:userInfo];
-    [userInfo release];
-}
-
-- (void)timerTick:(NSTimer *)timer {
-    NSLog(@"timerTick");
-    [self test];
-    [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(timerTick2:) userInfo:nil repeats:NO];
-}
-
-- (void)timerTick2:(NSTimer *)timer {
-    [self test];
-}
 @end
