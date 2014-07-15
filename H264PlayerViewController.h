@@ -157,7 +157,6 @@
     int _selectedItemMenu;
     NSMutableArray *_itemImages;
     NSMutableArray *_itemSelectedImages;
-    MediaPlayer* h264Streamer;
     
     H264PlayerListener * h264StreamerListener;
     
