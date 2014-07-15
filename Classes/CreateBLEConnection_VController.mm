@@ -141,7 +141,10 @@
 
 - (void)viewWillDisappear:(BOOL)animated
 {
+    NSLog(@"%s", __FUNCTION__);
+    
     NSArray *viewControllers = self.navigationController.viewControllers;
+    
 	if ([viewControllers indexOfObject:self] == NSNotFound) {
 		// View is disappearing because it was popped from the stack
 		NSLog(@"View controller was popped --- We are closing down..task_cancelled = YES");
@@ -159,15 +162,15 @@
 
 - (IBAction)btnConnectTouchUpInsideAction:(id)sender
 {
-    [[BLEConnectionManager getInstanceBLE].cm stopScan];
+    [[BLEConnectionManager getInstanceBLE] stopScanBLE];
     
     if ([BLEConnectionManager getInstanceBLE].state == CONNECTING )
     {
-        NSLog(@"BLE is connecting... return.");
+        NSLog(@"%s BLE is connecting... return.", __FUNCTION__);
         return;
     }
     
-    NSLog(@"CreateBLE VC - btnConnectTouchUpInsideAction: %@", self.selectedPeripheral);
+    NSLog(@"%s %@", __FUNCTION__, self.selectedPeripheral);
     
     [[BLEConnectionManager getInstanceBLE] connectToBLEWithPeripheral:_selectedPeripheral];
     
@@ -187,6 +190,7 @@
     _isBackPress = YES;
     ConnectionState stateConnectBLE = [BLEConnectionManager getInstanceBLE].state;
     NSLog(@"CreateBLE VC - hubbleItemAction - stateConnectBLE: %d", stateConnectBLE);
+    
     if ( stateConnectBLE != CONNECTED)
     {
         //in state : SCANNING OR IDLE
@@ -224,11 +228,15 @@
 
 - (IBAction)refreshCamBLE:(id)sender
 {
+    NSLog(@"%s", __FUNCTION__);
+    
     [self createBLEConnectionRescan:TRUE];
 }
 
 - (void)timeoutBLESetupProcessing:(NSTimer *)timer
 {
+    NSLog(@"%s", __FUNCTION__);
+    
     self.shouldTimeoutProcessing = TRUE;
     
     if (_timerScanCameraBLEDone)
@@ -236,6 +244,8 @@
         [self.timerScanCameraBLEDone invalidate];
         self.timerScanCameraBLEDone = nil;
     }
+    
+    [[BLEConnectionManager getInstanceBLE] stopScanBLE];
     
     [self.viewProgress removeFromSuperview];
     [self.viewPairNDetecting removeFromSuperview];
@@ -315,7 +325,7 @@
 
 - (void)createBLEConnectionRescan: (BOOL)rescanFlag
 {
-    NSLog(@"CreateBLE VC - createBLEConnectionRescan: %d", rescanFlag);
+    NSLog(@"%s rescanFlag %d", __FUNCTION__, rescanFlag);
     
     if (rescanFlag)
     {
@@ -341,6 +351,7 @@
     
     [BLEConnectionManager getInstanceBLE].delegate = self;
     [BLEConnectionManager getInstanceBLE].needReconnect = YES;
+    
     if (rescanFlag)
     {
         [[BLEConnectionManager getInstanceBLE] reScan];
@@ -382,9 +393,9 @@
 
 - (void)scanCameraBLEDone
 {
-    NSLog(@"CreateBLEConnection_VC - scanCameraBLEDone - task_cancelled: %d, - _currentBLEList count: %d, - shouldTimeoutProcessing: %d", task_cancelled, _currentBLEList.count, _shouldTimeoutProcessing);
+    NSLog(@"%s - task_cancelled: %d, - _currentBLEList count: %d, - shouldTimeoutProcessing: %d", __FUNCTION__, task_cancelled, _currentBLEList.count, _shouldTimeoutProcessing);
     
-    if (task_cancelled == TRUE)
+    if (task_cancelled == TRUE || _shouldTimeoutProcessing)
     {
         return;
     }
@@ -408,9 +419,9 @@
         
         self.rescanFlag = TRUE;
         
-        [[BLEConnectionManager getInstanceBLE].cm stopScan];
+        [[BLEConnectionManager getInstanceBLE] stopScanBLE];
         
-        if ([_currentBLEList count] ==1) //connect directly
+        if ([_currentBLEList count] == 1) //connect directly
         {
             //Update UI
             [self.viewProgress removeFromSuperview];
@@ -449,12 +460,6 @@
         [_timerTimeoutConnectBLE invalidate];
         [self setTimerTimeoutConnectBLE:nil];
     }
-#if 1
-    //[self.viewProgress removeFromSuperview];
-#else
-    [self.ib_Indicator setHidden:YES];
-    [self.ib_lableStage setText:@"Can't connect to BLE, please press refresh button"];
-#endif
 }
 
 
@@ -475,19 +480,12 @@
     }
 }
 
-- (void)viewDidUnload
-{
-    //    [self setIb_tableListBLE:nil];
-    //    [self setIb_Indicator:nil];
-    //    [self setIb_RefreshBLE:nil];
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-}
-
 #pragma mark -
 
 -(void) dealloc
 {
+    NSLog(@"%s", __FUNCTION__);
+    
     [homeWifiSSID release];
     [_ib_tableListBLE release];
     [_btnConnect release];
@@ -577,7 +575,13 @@
 
 - (void) didConnectToBle:(CBUUID*) service_id
 {
-    NSLog(@"BLE device connected - performSelector now");
+    NSLog(@"%s - performSelector now", __FUNCTION__);
+    
+    if (_timerScanCameraBLEDone)
+    {
+        [_timerScanCameraBLEDone invalidate];
+        self.timerScanCameraBLEDone = nil;
+    }
     
     [self performSelectorOnMainThread:@selector(updateUIConnection:) withObject:nil
                         waitUntilDone:NO  ];
@@ -738,6 +742,7 @@
 {
     if ([BLEConnectionManager getInstanceBLE].state != CONNECTED)
     {
+        NSLog(@"%s state != CONNECTED", __FUNCTION__);
         return;
     }
     
@@ -747,11 +752,18 @@
     [[BLEConnectionManager getInstanceBLE].uartPeripheral writeString:GET_VERSION withTimeOut:SHORT_TIME_OUT_SEND_COMMAND];
     
     NSDate * date;
+    BOOL debug = TRUE;
+    
     while ([BLEConnectionManager getInstanceBLE].uartPeripheral.isBusy)
     {
         date = [NSDate dateWithTimeInterval:0.5 sinceDate:[NSDate date]];
         
         [[NSRunLoop currentRunLoop] runUntilDate:date];
+        
+        if (debug) {
+            debug = FALSE;
+            NSLog(@"%s Peripheral is busy. Maybe wait forever...", __FUNCTION__);
+        }
     }
 }
 
@@ -779,7 +791,7 @@
     {
         if (debugLog)
         {
-            NSLog(@"sendCommandGetUDID:  wait for result...");
+            NSLog(@"%s Peripheral is busy. Waiting for result...", __FUNCTION__);
             debugLog = FALSE;
         }
         
@@ -794,7 +806,7 @@
 - (void)clearDataBLEConnection
 {
     [[BLEConnectionManager getInstanceBLE].listBLEs removeAllObjects];
-    [[BLEConnectionManager getInstanceBLE].cm stopScan];
+    [[BLEConnectionManager getInstanceBLE] stopScanBLE];
     [BLEConnectionManager getInstanceBLE].state = IDLE;
 }
 
