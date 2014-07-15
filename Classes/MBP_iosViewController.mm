@@ -956,7 +956,21 @@
                 [userDefaults synchronize];
                 
                 
-                [self sendStatus:SHOW_CAMERA_LIST];
+                
+                // Put a slight wait of 1sec here - to alow Previous H264Player (if any) to clean up
+                dispatch_queue_t qt = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+                
+                dispatch_async(qt,^{
+                    [NSThread sleepForTimeInterval:1.0];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        NSLog(@"%s sendstatus: SHOW_CAMERA_LIST", __FUNCTION__); 
+                        [self sendStatus:SHOW_CAMERA_LIST];
+                    });
+                    
+                });
+                               
+                
+                
                 [latestCamAlert release];
                 latestCamAlert = nil;
                 
@@ -1187,6 +1201,8 @@
             {
                 H264PlayerViewController * h264PlayerViewController = (H264PlayerViewController *) obj;
                 [h264PlayerViewController prepareGoBackToCameraList:nil];
+    
+                
             }
             else if([obj isKindOfClass:[EarlierViewController class]]) // Camera is offline
             {

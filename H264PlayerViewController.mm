@@ -1023,13 +1023,8 @@ double _ticks = 0;
                 NSLog(@"*[MEDIA_ERROR_TIMEOUT_WHILE_STREAMING] *** USER want to cancel **.. cancel after .1 sec...");
                 self.selectedChannel.stopStreaming = TRUE;
                 
-#if 1
                 [self goBack];
-#else
-                [self performSelector:@selector(goBackToCameraList)
-                           withObject:nil
-                           afterDelay:0.1];
-#endif
+
                 return;
             }
             else
@@ -1953,11 +1948,20 @@ double _ticks = 0;
     NSLog(@"%s mediaProcessStatus: %d", __FUNCTION__, _mediaProcessStatus);
     
     
-    h264StreamerListener = new H264PlayerListener(self);
-    MediaPlayer::Instance()->setListener(h264StreamerListener);
-    MediaPlayer::Instance()->setPlaybackAndSharedCam(false, [_cameraModel isEqualToString:CP_MODEL_SHARED_CAM]);
-    //self.mediaProcessStatus = 2;
-    [self performSelectorInBackground:@selector(startStream_bg) withObject:nil];
+    
+//    if (MediaPlayer::Instance()->isShouldWait())
+//    {
+//        [self performSelector:@selector(startStream) withObject:nil afterDelay:0.5f];
+//    }
+//    else
+    {
+        
+        h264StreamerListener = new H264PlayerListener(self);
+        MediaPlayer::Instance()->setListener(h264StreamerListener);
+        MediaPlayer::Instance()->setPlaybackAndSharedCam(false, [_cameraModel isEqualToString:CP_MODEL_SHARED_CAM]);
+        //self.mediaProcessStatus = 2;
+        [self performSelectorInBackground:@selector(startStream_bg) withObject:nil];
+    }
     
 }
 
@@ -2079,7 +2083,7 @@ double _ticks = 0;
         }
     }
 }
-
+/* Within 1 sec MUST exit the player - this is a MUST** */
 - (void)prepareGoBackToCameraList:(id)sender
 {
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
@@ -2163,7 +2167,6 @@ double _ticks = 0;
     }
     else if(_mediaProcessStatus == MEDIAPLAYER_SET_LISTENER)
     {
-        //MediaPlayer::Instance()->setFFmpegInterrupt(true);
         MediaPlayer::Instance()->sendInterrupt();
         [self stopStream];
         [self goBack];
@@ -2171,7 +2174,6 @@ double _ticks = 0;
     else if (_mediaProcessStatus == MEDIAPLAYER_SET_DATASOURCE)
     {
         NSLog(@"%s Waiting for response from Media lib.", __FUNCTION__);
-        //MediaPlayer::Instance()->setFFmpegInterrupt(true);
         MediaPlayer::Instance()->sendInterrupt();
     }
     else //MEDIAPLAYER_STARTED
