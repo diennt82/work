@@ -691,23 +691,7 @@
         autoDissmisAlertIndex = -1;
     }
     else {
-        // check if push notification has camara mac address not exist any user account's camaras list
-        BOOL allowPushNoti = NO;
-        for (int i = channel_array.count - 1; i >= 0; i--)
-        {
-            CamChannel *ch = [channel_array objectAtIndex:i];
-            if (ch.profile != nil)
-            {
-                NSString *cachedCamMac = ch.profile.mac_address;
-                if ([[Util strip_colon_fr_mac:cachedCamMac] isEqualToString:camAlert.cameraMacNoColon])
-                {
-                    allowPushNoti = YES;
-                    break;
-                }
-            }
-        }
-        if (!allowPushNoti) return FALSE;
-        //////////
+        if ([self checkPushNotification:camAlert.cameraMacNoColon] == NO) return FALSE;
         
         alertTitle = camAlert.cameraName;
         alertLeftButtonText = NSLocalizedStringWithDefaultValue(@"Cancel",nil, [NSBundle mainBundle],
@@ -1844,6 +1828,8 @@
         return;
     }
     
+    if ([self checkPushNotification:self.camAlert.cameraMacNoColon] == NO) return;
+    
     if ([self.camAlert.alertType isEqualToString:ALERT_TYPE_REMOVED_CAM])
     {
         if ([self isStayingCamerasListPage]) {
@@ -2002,5 +1988,24 @@
 
 - (BOOL)isStayingLoginPage {
     return self.app_stage == APP_STAGE_LOGGING_IN;
+}
+
+- (BOOL)checkPushNotification:(NSString *)camMacNoColon {
+    // check if push notification has camara mac address not exist any user account's camaras list
+    BOOL allowPushNoti = NO;
+    for (int i = channel_array.count - 1; i >= 0; i--)
+    {
+        CamChannel *ch = [channel_array objectAtIndex:i];
+        if (ch.profile != nil)
+        {
+            NSString *cachedCamMac = ch.profile.mac_address;
+            if ([[Util strip_colon_fr_mac:cachedCamMac] isEqualToString:camMacNoColon])
+            {
+                allowPushNoti = YES;
+                break;
+            }
+        }
+    }
+    return allowPushNoti;
 }
 @end
