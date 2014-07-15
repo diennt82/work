@@ -1399,7 +1399,7 @@
 {
     if (!_jsonCommBlock)
     {
-        [[BMS_JSON_Communication alloc] initWithObject:self
+       self.jsonCommBlock = [[BMS_JSON_Communication alloc] initWithObject:self
                                               Selector:nil
                                           FailSelector:nil
                                              ServerErr:nil];
@@ -1494,6 +1494,11 @@
                 // NSLog(@"-- %@",responseDictDInfo);
                 hud.mode = MBProgressHUDModeText;
                 [hud setLabelText:@"Upload image successfully"];
+            }
+            else
+            {
+                hud.mode = MBProgressHUDModeText;
+                [hud setLabelText:[responseDictDInfo objectForKey:@"message"]];
             }
         }
         

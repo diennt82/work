@@ -423,6 +423,7 @@
         NSString *camName        = [camEntry objectForKey:@"name"];
         NSString *registrationID = [camEntry objectForKey:@"registration_id"];
         NSString *camMac         = [camEntry objectForKey:@"mac_address"];
+        NSString *snaps_url      = [camEntry objectForKey:@"snaps_url"];
         //NSInteger modelID        = [[camEntry objectForKey:@"device_model_id"] integerValue];
         
         if ([camMac length] != 12 )
@@ -495,7 +496,7 @@
         {
             cp.hostSSID = hostSSID;
         }
-
+        cp.snapUrl = snaps_url;
         [camList addObject:cp];
         
         NSLog(@"Log - fwStatus: %d, camMac: %@, Fw: %@, local_ip: %@, reg: %@, Avail: %@, host_ssid: %@", fwStatus, camMac, fwVersion, localIp, registrationID, isAvailable, hostSSID);
