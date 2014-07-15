@@ -631,7 +631,6 @@
 		8B9CE20618C848A000B1B7F9 /* AddCameraViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9CE20418C848A000B1B7F9 /* AddCameraViewController.xib */; };
 		8B9DC60A190B7ED7005B4210 /* KISSMetricsAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9DC609190B7ED7005B4210 /* KISSMetricsAPI.m */; };
 		8BA17EFA18B7399100129FE7 /* LoginViewController_35.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8BA17EF918B7399100129FE7 /* LoginViewController_35.xib */; };
-		8BA17EFC18B73E2400129FE7 /* RegistrationViewController_35.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8BA17EFB18B73E2400129FE7 /* RegistrationViewController_35.xib */; };
 		8BA18CB0184879720097D1AF /* DeviceSettingsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BA18CAF184879720097D1AF /* DeviceSettingsCell.m */; };
 		8BA18CB2184879A10097D1AF /* DeviceSettingsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8BA18CB1184879A10097D1AF /* DeviceSettingsCell.xib */; };
 		8BA23841182CBC130022581A /* CameraScanner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BA23838182C8E130022581A /* CameraScanner.framework */; };
@@ -650,6 +649,7 @@
 		8BA7F2821851C57200BE0145 /* blink11hd480p.sdp in Resources */ = {isa = PBXBuildFile; fileRef = 8BA7F27F1851C57100BE0145 /* blink11hd480p.sdp */; };
 		8BA7F2831851C57200BE0145 /* blink11hd720p.sdp in Resources */ = {isa = PBXBuildFile; fileRef = 8BA7F2801851C57100BE0145 /* blink11hd720p.sdp */; };
 		8BA8AE881821F3E900DC9E9F /* stream720p_10_926.sdp in Resources */ = {isa = PBXBuildFile; fileRef = 8BA8AE871821F3E900DC9E9F /* stream720p_10_926.sdp */; };
+		8BAF6D5A1974C873008C723B /* RegistrationViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8BAF6D591974C873008C723B /* RegistrationViewController_iPad.xib */; };
 		8BB53A83194826050078B58E /* NotifViewController~iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8BB53A82194826050078B58E /* NotifViewController~iPad.xib */; };
 		8BC0A02F1844A87700A5FD52 /* temp_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BC0A02E1844A87700A5FD52 /* temp_bg.png */; };
 		8BC0A0461844B31700A5FD52 /* mbp_icon57x57.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BC0A0421844B31700A5FD52 /* mbp_icon57x57.png */; };
@@ -1510,7 +1510,6 @@
 		8B9DC608190B7ED7005B4210 /* KISSMetricsAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KISSMetricsAPI.h; sourceTree = "<group>"; };
 		8B9DC609190B7ED7005B4210 /* KISSMetricsAPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KISSMetricsAPI.m; sourceTree = "<group>"; };
 		8BA17EF918B7399100129FE7 /* LoginViewController_35.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoginViewController_35.xib; sourceTree = "<group>"; };
-		8BA17EFB18B73E2400129FE7 /* RegistrationViewController_35.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RegistrationViewController_35.xib; sourceTree = "<group>"; };
 		8BA18CAE184879720097D1AF /* DeviceSettingsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceSettingsCell.h; sourceTree = "<group>"; };
 		8BA18CAF184879720097D1AF /* DeviceSettingsCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceSettingsCell.m; sourceTree = "<group>"; };
 		8BA18CB1184879A10097D1AF /* DeviceSettingsCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DeviceSettingsCell.xib; sourceTree = "<group>"; };
@@ -1534,6 +1533,7 @@
 		8BA7F27F1851C57100BE0145 /* blink11hd480p.sdp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = blink11hd480p.sdp; sourceTree = "<group>"; };
 		8BA7F2801851C57100BE0145 /* blink11hd720p.sdp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = blink11hd720p.sdp; sourceTree = "<group>"; };
 		8BA8AE871821F3E900DC9E9F /* stream720p_10_926.sdp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stream720p_10_926.sdp; sourceTree = "<group>"; };
+		8BAF6D591974C873008C723B /* RegistrationViewController_iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RegistrationViewController_iPad.xib; sourceTree = "<group>"; };
 		8BB53A82194826050078B58E /* NotifViewController~iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "NotifViewController~iPad.xib"; sourceTree = "<group>"; };
 		8BC0A02E1844A87700A5FD52 /* temp_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = temp_bg.png; sourceTree = "<group>"; };
 		8BC0A0421844B31700A5FD52 /* mbp_icon57x57.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mbp_icon57x57.png; sourceTree = "<group>"; };
@@ -3093,7 +3093,7 @@
 				8B9ABB6718A9FDEC0079F4A3 /* RegistrationViewController.h */,
 				8B9ABB6818A9FDEC0079F4A3 /* RegistrationViewController.mm */,
 				8B9ABB6918A9FDEC0079F4A3 /* RegistrationViewController.xib */,
-				8BA17EFB18B73E2400129FE7 /* RegistrationViewController_35.xib */,
+				8BAF6D591974C873008C723B /* RegistrationViewController_iPad.xib */,
 			);
 			name = RegistrationVC;
 			sourceTree = "<group>";
@@ -3904,7 +3904,6 @@
 				8B9899AE1859771800AC3852 /* CameraNameViewController.xib in Resources */,
 				8B29A00D18AF500900D36BE5 /* video_action_video@2x.png in Resources */,
 				8B9507BB18C9960D006D4945 /* setup_clock@2x.png in Resources */,
-				8BA17EFC18B73E2400129FE7 /* RegistrationViewController_35.xib in Resources */,
 				8B29A04B18AF500A00D36BE5 /* settings_circle.png in Resources */,
 				8B299FA918AF500900D36BE5 /* camera_action_pan_knob_shadow.png in Resources */,
 				8B29A01F18AF500900D36BE5 /* loader_c@2x.png in Resources */,
@@ -4184,6 +4183,7 @@
 				8B29A07D18AF500A00D36BE5 /* video_overlay_share.png in Resources */,
 				380EB15416FC41D8005BAC7F /* Voicemail.aif in Resources */,
 				8B29A05718AF500A00D36BE5 /* settings_switch_off.png in Resources */,
+				8BAF6D5A1974C873008C723B /* RegistrationViewController_iPad.xib in Resources */,
 				5EBA45A319405BEA00695155 /* Step_10_ViewController_ipad.xib in Resources */,
 				8B9CCBA4183EF8B2007C0F65 /* MelodyViewController.xib in Resources */,
 				8B299FE818AF500900D36BE5 /* home_video_overlay.png in Resources */,
@@ -4481,7 +4481,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = HubbleHome;
-				PROVISIONING_PROFILE = "BA6C3279-B01E-4434-A0D9-E0B53545C9C6";
+				PROVISIONING_PROFILE = "6005205D-B6D0-404C-8272-0A61B5418CCB";
 				SDKROOT = iphoneos7.0;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
 				VALID_ARCHS = "armv6 armv7";
@@ -4531,7 +4531,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = HubbleHome;
-				PROVISIONING_PROFILE = "BA6C3279-B01E-4434-A0D9-E0B53545C9C6";
+				PROVISIONING_PROFILE = "6005205D-B6D0-404C-8272-0A61B5418CCB";
 				SDKROOT = iphoneos7.0;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
 				VALIDATE_PRODUCT = YES;
@@ -4604,7 +4604,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = HubbleHome;
-				PROVISIONING_PROFILE = "BA6C3279-B01E-4434-A0D9-E0B53545C9C6";
+				PROVISIONING_PROFILE = "6005205D-B6D0-404C-8272-0A61B5418CCB";
 				RAMEWORK_SEARCH_PATHS = "$(inherited) \"$(SRCROOT)\"";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";

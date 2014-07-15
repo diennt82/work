@@ -49,9 +49,13 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
-    if (UIScreen.mainScreen.bounds.size.height < 568)
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
-        [[NSBundle mainBundle] loadNibNamed:@"RegistrationViewController_35"
+        [[NSBundle mainBundle] loadNibNamed:@"RegistrationViewController_iPad"
+                                      owner:self
+                                    options:nil];
+    } else {
+        [[NSBundle mainBundle] loadNibNamed:@"RegistrationViewController"
                                       owner:self
                                     options:nil];
     }
