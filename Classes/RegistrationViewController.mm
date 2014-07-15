@@ -369,7 +369,7 @@
     
     if (_delegate)
     {
-        [_delegate sendStatus:SHOW_CAMERA_LIST];
+        [_delegate sendStatus:SHOW_CAMARA_TIMELINE];
     }
 }
 

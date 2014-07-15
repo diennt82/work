@@ -129,7 +129,7 @@
 - (void)hubbleItemAction: (id)sender
 {
     [self dismissViewControllerAnimated:YES completion:^{
-        [self.delegate sendStatus:SHOW_CAMERA_LIST2];
+        [self.delegate sendStatus:SHOW_CAMERA_LIST];
     }];
 }
 
@@ -184,7 +184,7 @@
 {
     [self dismissViewControllerAnimated:NO completion:^{
         // New flow: Show Camera list after Add a new Camera
-        [self.delegate sendStatus:SHOW_CAMERA_LIST];
+        [self.delegate sendStatus:SHOW_CAMARA_TIMELINE];
     }];
 }
 

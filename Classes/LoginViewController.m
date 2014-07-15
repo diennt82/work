@@ -280,7 +280,7 @@
         
         if (_delegate)
         {
-            [_delegate sendStatus:SHOW_CAMERA_LIST];
+            [_delegate sendStatus:SHOW_CAMARA_TIMELINE];
         }
     }
     else
@@ -659,7 +659,7 @@
                 
                 if (_delegate)
                 {
-                    [_delegate sendStatus:SHOW_CAMERA_LIST];
+                    [_delegate sendStatus:SHOW_CAMARA_TIMELINE];
                 }
             }
                 break;

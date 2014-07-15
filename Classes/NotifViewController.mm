@@ -241,7 +241,7 @@
 
         
         [self.navigationController popToRootViewControllerAnimated:YES];
-        [_notifDelegate sendStatus:SHOW_CAMERA_LIST];
+        [_notifDelegate sendStatus:SHOW_CAMARA_TIMELINE];
 
     }
 }
@@ -289,7 +289,7 @@
     }
     
     [self.navigationController popToRootViewControllerAnimated:NO];
-    [_notifDelegate sendStatus:SHOW_CAMERA_LIST2];
+    [_notifDelegate sendStatus:SHOW_CAMERA_LIST];
     
     
     //clear this to avoid affecting the flow.

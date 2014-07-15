@@ -316,15 +316,39 @@ void checkingApplicationCrashed()
                 //App is running now
                 [viewController pushNotificationRcvedServerAnnouncement:str3 andUrl:str7];
             }
+        }
+        else if ([str2 isEqualToString:ALERT_TYPE_PASSWORD_CHANGED])
+        {
+/**         alert = 7;
+            aps =     {
+                alert = "Reset password on HubbleHome platform";
+            };
+            cameraname = "N/A";
+            mac = "N/A";
+            time = "2014-07-08T08:36:30+00:00";
+            val = HubbleHome;
+            if (str2 == nil)
+            {
+                NSLog(@"NIL info.. silencely return");
+                return;
+            }
+ */
+            NSString * str4 = (NSString *) [userInfo objectForKey:@"val"];
+            NSString * str5 = (NSString *) [userInfo objectForKey:@"time"];
+            int rcvTimeStamp = [[NSDate date] timeIntervalSince1970];
+            CameraAlert * camAlert = [[CameraAlert alloc]initWithTimeStamp1:rcvTimeStamp];
+            camAlert.cameraName = @"";
+            camAlert.alertType = str2;
+            camAlert.alertTime =str5;
+            camAlert.alertVal = str4;
+            camAlert.registrationID = @"";
             
-            
-            
+            [self openAlertPushNotification:camAlert andApplicationState:[application applicationState]];
         }
         else if ([str2 isEqualToString:ALERT_TYPE_SOUND] ||
                  [str2 isEqualToString:ALERT_TYPE_TEMP_HI]  ||
                  [str2 isEqualToString:ALERT_TYPE_TEMP_LO] ||
                  [str2 isEqualToString:ALERT_TYPE_MOTION] ||
-                 [str2 isEqualToString:ALERT_TYPE_PASSWORD_CHANGED] ||
                  [str2 isEqualToString:ALERT_TYPE_REMOVED_CAM])
         {
             
@@ -349,13 +373,10 @@ void checkingApplicationCrashed()
             }
             
             int rcvTimeStamp = [[NSDate date] timeIntervalSince1970];
-            CameraAlert * camAlert = [[CameraAlert alloc]initWithTimeStamp1:rcvTimeStamp];// autorelease];
+            CameraAlert * camAlert = [[CameraAlert alloc]initWithTimeStamp1:rcvTimeStamp];
             //set other values
             if (str3.length >= 12) {
                 camAlert.cameraMacNoColon = [str3 substringWithRange:NSMakeRange(6, 12)];
-            }
-            if ([str6 isEqualToString:@"N/A"]) {
-                str6 = @"";
             }
             
             camAlert.cameraName = str6;
@@ -371,37 +392,41 @@ void checkingApplicationCrashed()
                 NSLog(@"motion url is :%@", camAlert.server_url);
             }
             
-            //Next few lines: ORDER MATTERS
-            if ( [application applicationState] == UIApplicationStateActive)
-            {
-                //App is running now -> show a dialog popup
-                [viewController pushNotificationRcvedInForeground: camAlert];
-            }
-            else if ( [application applicationState] == UIApplicationStateInactive)
-            {
-                // App inactive in following cases:
-                //    - Launching -> switch directly to the camera/Motion view
-                //    - User pull down/up the menu , & click -> dont' do anything
-                NSLog(@"UIApplicationStateInactive - going to be active same thing");
-                
-                [self performSelectorOnMainThread:@selector(activateNotificationViewController:)
-                                       withObject:camAlert
-                                    waitUntilDone:YES];
-
-            }
-            else
-            {
-                //  handle exception
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:str6
-                                                                message:str2
-                                                               delegate:self cancelButtonTitle:@"OK"
-                                                      otherButtonTitles:nil];
-                [alert show];
-            }
+            [self openAlertPushNotification:camAlert andApplicationState:[application applicationState]];
             [camAlert release];
         }
     }
-    
+}
+
+- (void)openAlertPushNotification:(CameraAlert *)camAlert andApplicationState:(UIApplicationState)state
+{
+    //Next few lines: ORDER MATTERS
+    if (state == UIApplicationStateActive)
+    {
+        //App is running now -> show a dialog popup
+        [viewController pushNotificationRcvedInForeground:camAlert];
+    }
+    else if (state == UIApplicationStateInactive)
+    {
+        // App inactive in following cases:
+        //    - Launching -> switch directly to the camera/Motion view
+        //    - User pull down/up the menu , & click -> dont' do anything
+        NSLog(@"UIApplicationStateInactive - going to be active same thing");
+        
+        [self performSelectorOnMainThread:@selector(activateNotificationViewController:)
+                               withObject:camAlert
+                            waitUntilDone:YES];
+        
+    }
+    else
+    {
+        //  handle exception
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:camAlert.cameraName
+                                                        message:camAlert.alertType
+                                                       delegate:self cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+        [alert show];
+    }
 }
 
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
@@ -742,5 +767,4 @@ void checkingApplicationCrashed()
         [_jsonComm cancel];
     }
 }
-
 @end
