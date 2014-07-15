@@ -286,6 +286,7 @@
     [[BLEConnectionManager getInstanceBLE].uartPeripheral didDisconnect];
     [BLEConnectionManager getInstanceBLE].delegate = nil;
     
+#if 0
     BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
                                                                               Selector:@selector(removeCamSuccessWithResponse:)
                                                                           FailSelector:@selector(removeCamFailedWithError:)
@@ -300,6 +301,7 @@
     
     [jsonComm deleteBlockedDeviceWithRegistrationId:stringUDID
                                           andApiKey:apiKey];
+#endif
     
     [self.viewProgress removeFromSuperview];
     [self.view addSubview:_viewError];
@@ -685,6 +687,8 @@
     [self askForRetry];
 }
 
+#if 0
+
 #pragma mark - JSON_Comm call back
 
 -(void) removeCamSuccessWithResponse:(NSDictionary *)responseData
@@ -701,6 +705,6 @@
 {
 	NSLog(@"server unreachable");
 }
-
+#endif
 
 @end

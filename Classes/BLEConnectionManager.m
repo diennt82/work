@@ -271,7 +271,16 @@
         NSLog(@"Connect again!!");
         
         //called if found that service id?
-        [self connectToBLEWithPeripheral:peripheral];
+        
+        if ([peripheral.identifier isEqual:_uartPeripheral.peripheral.identifier])
+        {
+            [self stopScanBLE];
+            [self connectToBLEWithPeripheral:peripheral];
+        }
+        else
+        {
+            NSLog(@"%s Found another device. Ignoring.", __FUNCTION__);
+        }
     }
     else
     {
