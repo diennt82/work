@@ -662,15 +662,6 @@
 	
     NSLog(@"camAlert.cameraMacNoColon:%@, alert time: %@", camAlert.cameraMacNoColon,camAlert.alertTime);
     
-    NSDateFormatter *dateFormater = [[NSDateFormatter alloc] init];
-    [dateFormater setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssXXXXX"];
-    [dateFormater setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
-    NSError *error;
-    NSDate *eventDate ;
-    [dateFormater getObjectValue:&eventDate forString:camAlert.alertTime range:nil error:&error];
-    [dateFormater release];
-    
-    NSLog(@"eventDate: %@ & insert to database & clear obsolete history ", eventDate);
     [CameraAlert clearObsoleteAlerts];
     
     if ([self isStayingLoginPage]) {
@@ -711,19 +702,22 @@
         if ([camAlert.alertType isEqualToString:ALERT_TYPE_SOUND]) {
             alertMess = NSLocalizedStringWithDefaultValue(@"Sound_detected",nil, [NSBundle mainBundle],
                                                     @"Sound detected", nil);
-            
+            alertMess = [self formatDetectedDate:camAlert.alertTime andAlertMess:alertMess];
         }
         else if ([camAlert.alertType isEqualToString:ALERT_TYPE_TEMP_HI]) {
             alertMess = NSLocalizedStringWithDefaultValue( @"Temperature_too_high",nil, [NSBundle mainBundle],
                                                     @"Temperature too high", nil);
+            alertMess = [self formatDetectedDate:camAlert.alertTime andAlertMess:alertMess];
         }
         else if ([camAlert.alertType isEqualToString:ALERT_TYPE_TEMP_LO]) {
             alertMess = NSLocalizedStringWithDefaultValue( @"Temperature_too_low",nil, [NSBundle mainBundle],
                                                     @"Temperature too low", nil);
+            alertMess = [self formatDetectedDate:camAlert.alertTime andAlertMess:alertMess];
         }
         else if ([camAlert.alertType isEqualToString:ALERT_TYPE_MOTION]) {
             alertMess = NSLocalizedStringWithDefaultValue( @"Motion Detected",nil, [NSBundle mainBundle],
                                                     @"Motion Detected", nil);
+            alertMess = [self formatDetectedDate:camAlert.alertTime andAlertMess:alertMess];
             alertOtherButtonText = NSLocalizedStringWithDefaultValue(@"View_snapshot",nil, [NSBundle mainBundle],
                                                                 @"View Snapshot", nil);
             tag = ALERT_PUSH_RECVED_RESCAN_AFTER;
@@ -829,6 +823,24 @@
 	return TRUE;
 }
 
+- (NSString *)formatDetectedDate:(NSString *)alertTime andAlertMess:(NSString *)alertMess {
+    NSDateFormatter *dateFormater = [[NSDateFormatter alloc] init];
+    [dateFormater setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssXXXXX"];
+    [dateFormater setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+    NSError *error;
+    NSDate *eventDate ;
+    [dateFormater getObjectValue:&eventDate forString:alertTime range:nil error:&error];
+    [dateFormater release];
+    NSLog(@"eventDate: %@ & insert to database & clear obsolete history ", eventDate);
+    
+    NSDateFormatter* df_local = [[NSDateFormatter alloc] init];
+    [df_local setTimeZone:[NSTimeZone localTimeZone]];
+    df_local.dateFormat = @"hh:mm a, dd-MM-yyyy";
+    NSString *aNewAlertMess = [NSString stringWithFormat:@"%@ at %@", alertMess, [df_local stringFromDate:eventDate]];
+    [df_local release];
+    return  aNewAlertMess;
+}
+
 -(void) playSound
 {
     
@@ -898,7 +910,8 @@
 {
 	int tag = alertView.tag ;
     
-    if (tag == ALERT_PUSH_RECVED_NON_MOTION || tag == ALERT_PUSH_RECVED_MULTIPLE)
+    if (tag == ALERT_PUSH_RECVED_NON_MOTION ||
+        (tag == ALERT_PUSH_RECVED_MULTIPLE && ![self.latestCamAlert.alertType isEqualToString:ALERT_TYPE_MOTION]))
     {
         NSLog(@"%s alert ALERT_PUSH_RECVED_NON_MOTION", __FUNCTION__);
         
@@ -929,7 +942,8 @@
         }
     }
     
-	else if (tag == ALERT_PUSH_RECVED_RESCAN_AFTER)
+	else if (tag == ALERT_PUSH_RECVED_RESCAN_AFTER ||
+             (tag == ALERT_PUSH_RECVED_MULTIPLE && [self.latestCamAlert.alertType isEqualToString:ALERT_TYPE_MOTION]))
 	{
         NSLog(@"%s alert: ALERT_PUSH_RECVED_RESCAN_AFTER", __FUNCTION__);
         
