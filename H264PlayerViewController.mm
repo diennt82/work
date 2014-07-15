@@ -6779,7 +6779,8 @@ double _ticks = 0;
     [imageView startAnimating];
     
     NSString * msg = NSLocalizedStringWithDefaultValue(@"fw_upgrade_2",nil, [NSBundle mainBundle],
-                                                       @"Upgrading firmware, do not power off the camera. This process may take up to 3 mins..." , nil);
+                                                       @"Upgrading firmware, do not power off the camera. This process may take up to 5 mins..." , nil);
+    
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(20, 45, 200, 91)];// autorelease];
     label.textAlignment = NSTextAlignmentCenter;
     label.numberOfLines = 4;
