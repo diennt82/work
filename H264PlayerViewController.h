@@ -188,7 +188,6 @@
     
     //processing for hold to talk
     BOOL ptt_enabled;
-    AudioOutStreamer * _audioOut;
     
     //processing for recording
     int iMaxRecordSize;
@@ -281,8 +280,8 @@
 @property (retain, nonatomic) IBOutlet UIImageView *imageViewKnob;
 @property (retain, nonatomic) IBOutlet UIView *viewDebugInfo;
 
-@property (assign, nonatomic) EarlierViewController *earlierVC;
-@property (assign, nonatomic) TimelineViewController *timelineVC;
+@property (retain, nonatomic) EarlierViewController *earlierVC;
+@property (retain, nonatomic) TimelineViewController *timelineVC;
 @property (retain, nonatomic) UIImageView *imageViewStreamer;
 @property (nonatomic) BOOL isHorizeShow;
 @property (nonatomic, retain) NSTimer *timerHideMenu;
@@ -350,6 +349,7 @@
 @property (nonatomic) NSInteger fwUpgradeStatus;
 @property (nonatomic) BOOL hasFwVersion;
 @property (nonatomic) BOOL shouldBeep;
+@property (nonatomic, retain) AudioOutStreamer * audioOut;
 
 
 - (void)scan_done:(NSArray *) _scan_results;
