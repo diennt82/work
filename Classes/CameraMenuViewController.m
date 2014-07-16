@@ -115,7 +115,7 @@
 //        [self performSelectorInBackground:@selector(updateFWVersion_bg) withObject:nil];
 //    }
     
-    self.tableViewSettings.backgroundColor = [UIColor colorWithRed:249/255.0 green:249/255.0 blue:249/255.0 alpha:1];
+//    self.tableViewSettings.backgroundColor = [UIColor colorWithRed:249/255.0 green:249/255.0 blue:249/255.0 alpha:1];
     
     UIImageView *imgView = (UIImageView*)[self.vwHeaderNotSens viewWithTag:500];
     if([self.camChannel.profile isNotAvailable]){
