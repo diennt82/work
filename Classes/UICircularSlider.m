@@ -121,6 +121,16 @@
 	[self setup];
 }
 
+- (void)dealloc {
+    [_textField release];
+    [_minuteTField release];
+    [_minimumTrackTintColor release];
+    [_maximumTrackTintColor release];
+    [_thumbTintColor release];
+    [_timer release];
+    [super dealloc];
+}
+
 - (void)setup {
 	self.value = 0.0;
 	self.minimumValue = 0.0;
@@ -174,8 +184,8 @@
     /**
      * This tapGesture isn't used yet but will allow to jump to a specific location in the circle
      */
-	UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGestureHappened:)];
-	[self addGestureRecognizer:tapGestureRecognizer];
+//	UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGestureHappened:)];
+//	[self addGestureRecognizer:tapGestureRecognizer];
 	
 	UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureHappened:)];
 	panGestureRecognizer.maximumNumberOfTouches = panGestureRecognizer.minimumNumberOfTouches;
@@ -486,6 +496,9 @@ int finalAngle;
                                             userInfo:nil
                                              repeats:YES ];
 }
+- (void)setEnableView:(BOOL)isEnable {
+    
+}
 - (void)cancelAllLocalNotification
 {
     [[UIApplication sharedApplication] cancelAllLocalNotifications];
@@ -521,27 +534,27 @@ int finalAngle;
 //    [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadData" object:self];
     [localNotification release];
 }
-- (void)tapGestureHappened:(UITapGestureRecognizer *)tapGestureRecognizer {
-	if (tapGestureRecognizer.state == UIGestureRecognizerStateEnded) {
-		CGPoint tapLocation = [tapGestureRecognizer locationInView:self];
-		if ([self isPointInThumb:tapLocation]) {
-		}
-		else {
-		}
-	}
-}
+//- (void)tapGestureHappened:(UITapGestureRecognizer *)tapGestureRecognizer {
+//	if (tapGestureRecognizer.state == UIGestureRecognizerStateEnded) {
+//		CGPoint tapLocation = [tapGestureRecognizer locationInView:self];
+//		if ([self isPointInThumb:tapLocation]) {
+//		}
+//		else {
+//		}
+//	}
+//}
 
 /** @name Touches Methods */
 #pragma mark - Touches Methods
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    [super touchesBegan:touches withEvent:event];
-    
-    UITouch *touch = [touches anyObject];
-    CGPoint touchLocation = [touch locationInView:self];
-    if ([self isPointInThumb:touchLocation]) {
-        [self sendActionsForControlEvents:UIControlEventTouchDown];
-    }
-}
+//- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+//    [super touchesBegan:touches withEvent:event];
+//    
+//    UITouch *touch = [touches anyObject];
+//    CGPoint touchLocation = [touch locationInView:self];
+//    if ([self isPointInThumb:touchLocation]) {
+//        [self sendActionsForControlEvents:UIControlEventTouchDown];
+//    }
+//}
 
 @end
 
