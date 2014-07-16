@@ -10,7 +10,6 @@
 #import "Step05Cell.h"
 #import "define.h"
 #import "WifiListParser.h"
-#import <MonitorCommunication/MonitorCommunication.h>
 
 #define BLE_TIMEOUT_PROCESS 1*60
 
@@ -285,23 +284,6 @@
     
     [[BLEConnectionManager getInstanceBLE].uartPeripheral didDisconnect];
     [BLEConnectionManager getInstanceBLE].delegate = nil;
-    
-#if 0
-    BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
-                                                                              Selector:@selector(removeCamSuccessWithResponse:)
-                                                                          FailSelector:@selector(removeCamFailedWithError:)
-                                                                             ServerErr:@selector(removeCamFailedServerUnreachable)] autorelease];
-    
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSString *stringUDID = [userDefaults stringForKey:CAMERA_UDID];
-    NSString *apiKey     = [userDefaults objectForKey:@"PortalApiKey"];
-    
-    
-    NSLog(@"DisplayWifiListVC - timeoutBLESetupProcessing - try to remove camera");
-    
-    [jsonComm deleteBlockedDeviceWithRegistrationId:stringUDID
-                                          andApiKey:apiKey];
-#endif
     
     [self.viewProgress removeFromSuperview];
     [self.view addSubview:_viewError];
@@ -686,25 +668,5 @@
 {
     [self askForRetry];
 }
-
-#if 0
-
-#pragma mark - JSON_Comm call back
-
--(void) removeCamSuccessWithResponse:(NSDictionary *)responseData
-{
-	NSLog(@"removeCam success");
-}
-
--(void) removeCamFailedWithError:(NSDictionary *)error_response
-{
-	NSLog(@"removeCam failed Server error: %@", [error_response objectForKey:@"message"]);
-}
-
--(void) removeCamFailedServerUnreachable
-{
-	NSLog(@"server unreachable");
-}
-#endif
 
 @end

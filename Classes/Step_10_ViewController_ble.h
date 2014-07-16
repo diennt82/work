@@ -52,8 +52,6 @@
     BOOL should_retry_silently ;
     
     BOOL shouldStopScanning;
-    NSTimer * timeOut;
-    
 }
 
 @property (nonatomic,assign) IBOutlet UILabel * homeSSID;
@@ -63,7 +61,6 @@
 //@property (nonatomic, assign) IBOutlet UIView * setupFailView, *setupCompleteView;
 
 @property (nonatomic, retain) NSString *cameraMac,  *master_key; 
-@property (nonatomic, retain) NSTimer * timeOut;
 @property (nonatomic) BOOL shouldStopScanning;
 @property (nonatomic, assign) NSString * errorCode;
 @property (nonatomic, retain) NSString *stringUDID;
@@ -73,4 +70,5 @@
 - (void) wait_for_camera_to_reboot:(NSTimer *)exp;
 - (void) setupCompleted;
 - (void)  setupFailed;
+
 @end

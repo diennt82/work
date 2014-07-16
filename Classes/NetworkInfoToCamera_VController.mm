@@ -42,6 +42,7 @@
     }
     return self;
 }
+
 -(void) dealloc
 {
     [_tfSSID release];
@@ -661,12 +662,7 @@
             /* Blocking call, after this return the camera should be either added or failed setup already */
             [self sendWifiInfoToCamera ];
         }
-    }
-    
-    
-    
-    
-    
+    }   
 }
 
 - (void)timeoutBLESetupProcessing:(NSTimer *)timer
@@ -684,21 +680,6 @@
     }
     else
     {
-        BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
-                                                                                  Selector:@selector(removeCamSuccessWithResponse:)
-                                                                              FailSelector:@selector(removeCamFailedWithError:)
-                                                                                 ServerErr:@selector(removeCamFailedServerUnreachable)] autorelease];
-        
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        NSString *stringUDID = [userDefaults stringForKey:CAMERA_UDID];
-        NSString *apiKey     = [userDefaults objectForKey:@"PortalApiKey"];
-        
-        
-        NSLog(@"NetworkInfo - timeoutBLESetupProcessing - try to remove camera");
-        
-        [jsonComm deleteBlockedDeviceWithRegistrationId:stringUDID
-                                              andApiKey:apiKey];
-        
         [self.viewProgress removeFromSuperview];
         
         [self.view addSubview:_viewError];
@@ -788,6 +769,7 @@
     [BLEConnectionManager getInstanceBLE].delegate = self;
     [[BLEConnectionManager getInstanceBLE] disconnect];
 }
+
 - (void)rescanToConnectToBLE
 {
     NSLog(@"NetworkInfo - rescanToConnectToBLE - Reconnect after 2s");
@@ -808,22 +790,6 @@
 - (void) didConnectToBle:(CBUUID*) service_id
 {
     NSLog(@"BLE device connected - now, latest stage: %d", stage);
-   
-#if 0
-    switch (stage)
-    {
-        case SENT_WIFI:
-        case CHECKING_WIFI:
-            NSLog(@"checking wifi status ... do nothing here");
-           // [self readWifiStatusOfCamera:nil];
-            break;
-            
-        case INIT:
-            NSLog(@"start over!!");
-            //[self sendWifiInfoToCamera];
-            break;
-    }
-#endif
 }
 
 - (void) onReceiveDataError:(int)error_code forCommand:(NSString *)commandToCamera
@@ -875,21 +841,6 @@
     else
     {
         NSLog(@"Receive un-expected data, Try to findout what to do next??? ");
-#if 0
-        switch (stage)
-        {
-            case SENT_WIFI:
-            case CHECKING_WIFI:
-                NSLog(@"checking wifi status");
-                [self readWifiStatusOfCamera:nil];
-                break;
-                
-            case INIT:
-                NSLog(@"start over!!");
-                [self sendWifiInfoToCamera];
-                break;
-        }
-#endif
     }
 }
 
@@ -1098,6 +1049,12 @@
         self.timerTimeoutConnectBLE = nil;
     }
     
+    NSLog(@"%s Killing BLE.", __FUNCTION__);
+    [BLEConnectionManager getInstanceBLE].delegate = nil;
+    [[BLEConnectionManager getInstanceBLE] stopScanBLE];
+    [BLEConnectionManager getInstanceBLE].needReconnect = NO;
+    [[BLEConnectionManager getInstanceBLE].uartPeripheral didDisconnect];
+    
     DeviceConfiguration * sent_conf = [[DeviceConfiguration alloc] init];
     
     [sent_conf restoreConfigurationData:[Util readDeviceConfiguration]];
@@ -1139,21 +1096,5 @@
 	return FALSE;
 }
 
-#pragma mark - JSON_Comm call back
-
--(void) removeCamSuccessWithResponse:(NSDictionary *)responseData
-{
-	NSLog(@"removeCam success");
-}
-
--(void) removeCamFailedWithError:(NSDictionary *)error_response
-{
-	NSLog(@"removeCam failed Server error: %@", [error_response objectForKey:@"message"]);
-}
-
--(void) removeCamFailedServerUnreachable
-{
-	NSLog(@"server unreachable");
-}
 
 @end
