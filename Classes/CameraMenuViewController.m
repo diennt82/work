@@ -73,7 +73,7 @@
 @property (retain, nonatomic) IBOutlet UIView *vwHeaderCamDetail,*vwHeaderNotSens;
 @property (nonatomic) BOOL shouldWaitForUpdateSettings;
 @property (nonatomic) BOOL backGroundUpdateExecuting;
-@property (assign, nonatomic) SensitivityTemperatureCell *sensitivityTemperatureCell;
+@property (retain, nonatomic) SensitivityTemperatureCell *sensitivityTemperatureCell;
 
 @end
 
@@ -171,6 +171,7 @@
     [_viewPorgress release];
     [_alertViewRename release];
     [_jsonCommBlock release];
+    [_sensitivityTemperatureCell release];
     
     [super dealloc];
 }
