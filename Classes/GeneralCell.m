@@ -46,14 +46,20 @@
 {
     self.is12hr = !_is12hr;
     sender.selected = _is12hr;
-    [_generalCellDelegate clockValueChanged:_is12hr];
+    if ([self.generalCellDelegate respondsToSelector:@selector(clockValueChanged:)])
+    {
+        [_generalCellDelegate clockValueChanged:_is12hr];
+    }
 }
 
 - (IBAction)btnTemperatureTouchUpInsideAction:(UIButton *)sender
 {
     self.isFahrenheit = !_isFahrenheit;
     sender.selected = _isFahrenheit;
-    [_generalCellDelegate temperatureValueChanged:_isFahrenheit];
+    if ([self.generalCellDelegate respondsToSelector:@selector(temperatureValueChanged:)])
+    {
+        [_generalCellDelegate temperatureValueChanged:_isFahrenheit];
+    }
 }
 
 - (void)dealloc {

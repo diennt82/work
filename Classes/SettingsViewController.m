@@ -620,6 +620,7 @@
                     cell.textLabel.text = @"General Settings";
                     cell.imageView.image = [UIImage imageNamed:@"general"];
                     cell.backgroundColor = [UIColor whiteColor];
+                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
                     
                     return cell;
                 }
@@ -644,7 +645,8 @@
                     cell.is12hr = valueGeneralSettings[0];
                     cell.isFahrenheit = valueGeneralSettings[1];
                     cell.generalCellDelegate = self;
-
+                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                    
                     return cell;
                 }
                     break;
@@ -656,7 +658,7 @@
                     if (cell == nil) {
                         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
                     }
-                    
+                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
                     // Configure the cell...
                     
                     return cell;
@@ -825,6 +827,7 @@
                     cell.textLabel.text = @"Do Not Disturb";
                     cell.imageView.image = [UIImage imageNamed:@"do_not_disturb"];
                     cell.backgroundColor = [UIColor whiteColor];
+                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
                     
                     return cell;
                 }
@@ -855,6 +858,7 @@
                             }
                         }
                     }
+                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
                     return cell;
                 }
                     break;
@@ -878,6 +882,7 @@
                     cell.textLabel.text = @"Notification Scheduler";
                     cell.imageView.image = [UIImage imageNamed:@"scheduler"];
                     cell.backgroundColor = [UIColor whiteColor];
+                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
                     
                     return cell;
                 }
@@ -907,6 +912,7 @@
                     
                     cell.backgroundColor = [UIColor blackColor];
                     cell.schedulerCellDelegate = self;
+                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
                     
                     return cell;
                 }
@@ -924,6 +930,7 @@
                     //[cell.contentView addSubview:_schedulerVC.view];
                     [cell.contentView addSubview:_schedulingVC.view];
                     cell.backgroundColor = [UIColor blackColor];
+                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
                     
                     return cell;
                 }
@@ -936,7 +943,7 @@
                     if (cell == nil) {
                         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
                     }
-                    
+                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
                     // Configure the cell...
                     
                     return cell;
@@ -953,7 +960,7 @@
             if (cell == nil) {
                 cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
             }
-            
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
             // Configure the cell...
             
             return cell;
@@ -966,7 +973,7 @@
     if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
-    
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     // Configure the cell...
     
     return cell;
