@@ -500,10 +500,21 @@
             imgCamera = [UIImage imageNamed:@"camera_focus_66"];
         }
         
-        NSLog(@"-- %@",ch.profile.snapUrl);
-        if(ch.profile.snapUrl!=nil)
+        ///Phung:commented due to incomplete fixes
+//        NSLog(@"-- %@",ch.profile.snapUrl);
+//        if( (ch.profile.snapUrl != nil) &&
+//            [ch.profile.snapUrl rangeOfString:@"hubble.png"].location == NSNotFound  )
+//        {
+//            [cell.snapshotImage setImageWithURL:[NSURL URLWithString:ch.profile.snapUrl]
+//                                      completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType)
+//            {
+//                NSLog(@"--Downloading image done w cache type: %d",cacheType);
+//            } ];
+//            
+//        }
+//        else
         {
-            [cell.snapshotImage setImageWithURL:[NSURL URLWithString:ch.profile.snapUrl] placeholderImage:imgCamera];
+            cell.snapshotImage.image = imgCamera;
         }
 
         
