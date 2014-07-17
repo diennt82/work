@@ -2960,6 +2960,7 @@ double _ticks = 0;
         [self.ib_temperature setFont:temperatureFont];
         [self.ib_temperature setTextColor:[UIColor whiteColor]];
         [self.ib_temperature setText:stringTemperature];
+        [self.ib_temperature setHidden:NO];
         
         stringBoundingBox = [stringTemperature sizeWithAttributes:@{NSFontAttributeName: temperatureFont}];
         degreeCelBoundingBox = [degreeCel sizeWithAttributes:@{NSFontAttributeName: degreeFont}];
@@ -3003,6 +3004,8 @@ double _ticks = 0;
         
         //need update text for C or F
         [self.ib_temperature setText:stringTemperature];
+        [self.ib_temperature setHidden:NO];
+        
         //CGSize stringBoundingBox = [stringTemperature sizeWithFont:temperatureFont];
         CGSize stringBoundingBox = [stringTemperature sizeWithAttributes:@{NSFontAttributeName: temperatureFont}];
         //CGSize degreeCelBoundingBox = [degreeCel sizeWithFont:degreeFont];
@@ -5393,7 +5396,6 @@ double _ticks = 0;
         }
         else if (_selectedItemMenu == INDEX_TEMP)
         {
-            [self.ib_temperature setHidden:NO];
             [ib_switchDegree setHidden:NO];
             [self.view bringSubviewToFront:ib_switchDegree];
             
