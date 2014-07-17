@@ -160,6 +160,7 @@
 #define FW_MILESTONE_F66_NEW_FLOW @"01.12.82"
 //Min version supports ota via app
 #define FW_VERSION_OTA_UPGRADING_MIN @"01.13.62"
+#define FW_VERSION_OTA_REMOTE_UPGRADE_ENABLE @"01.15.11"
 
 #define FW_VERSION  @"firmware_version"
 #define CAMERA_SSID @"camera_ssid"

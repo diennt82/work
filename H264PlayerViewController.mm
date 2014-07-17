@@ -922,13 +922,12 @@ double _ticks = 0;
             {
                 if (self.selectedChannel.profile.isInLocal)
                 {
-                    //NSLog(@"%s _askForFWUpgradeOnce:%d", __FUNCTION__, _askForFWUpgradeOnce);
-                    
-                    if (_askForFWUpgradeOnce)
-                    {
-                        [self performSelectorInBackground:@selector(checkIfUpgradeIsPossible) withObject:nil];
-                        self.askForFWUpgradeOnce = NO;
-                    }
+// 20140716: Moved to [ setupCamera]
+//                    if (_askForFWUpgradeOnce)
+//                    {
+//                        [self performSelectorInBackground:@selector(checkIfUpgradeIsPossible) withObject:nil];
+//                        self.askForFWUpgradeOnce = NO;
+//                    }
                 }
                 else
                 {
@@ -1253,7 +1252,40 @@ double _ticks = 0;
     
     if ([currentFwVersion compare:FW_VERSION_OTA_UPGRADING_MIN] >= NSOrderedSame)
     {
-        NSString * response = [[HttpCom instance].comWithDevice sendCommandAndBlock:CHECK_FW_UPGRADE];
+        NSString * response = nil ;
+        
+        BMS_JSON_Communication * jsoncomm = [[BMS_JSON_Communication alloc]initWithObject:self
+                                                                                 Selector:nil
+                                                                             FailSelector:nil
+                                                                                ServerErr:nil];
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        
+        NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
+
+        
+        if (self.selectedChannel.profile.isInLocal == TRUE)
+        {
+            response = [[HttpCom instance].comWithDevice sendCommandAndBlock:CHECK_FW_UPGRADE];
+        }
+        // ONLY START TO DO REMOTE UPDATE  IF VERSION IS 01.15.11
+        else if ([currentFwVersion compare:FW_VERSION_OTA_REMOTE_UPGRADE_ENABLE] == NSOrderedSame)
+        {
+            NSLog(@"%s DO REMOTE FW upgrade", __FUNCTION__);
+            
+            NSDictionary * responseDict = [jsoncomm sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
+                                                           andCommand:[NSString stringWithFormat:@"action=command&command=%@",CHECK_FW_UPGRADE]
+                                                            andApiKey:apiKey];
+            
+            if (responseDict != nil)
+            {
+                NSInteger status = [[responseDict objectForKey:@"status"] intValue];
+                if (status == 200)
+                {
+                    response = [[[responseDict objectForKey:@"data"] objectForKey:@"device_response"] objectForKey:@"body"];
+                }
+            }
+
+        }
         
         /*
          * 1. check_fw_upgrade: -1, check_fw_upgrade: 0 --> impossible
@@ -1828,6 +1860,16 @@ double _ticks = 0;
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
     NSLog(@"H264VC - setupCamera -device_ip: %@, -device_port: %d, -{remote_only: %d}", self.selectedChannel.profile.ip_address, self.selectedChannel.profile.port, [userDefaults boolForKey:@"remote_only"]);
+    
+    NSLog(@"%s LOCAL _askForFWUpgradeOnce:%d", __FUNCTION__, _askForFWUpgradeOnce);
+    if (_askForFWUpgradeOnce)
+    {
+        [self performSelectorInBackground:@selector(checkIfUpgradeIsPossible) withObject:nil];
+        self.askForFWUpgradeOnce = NO;
+    }
+    
+    
+    
     //Support remote UPNP video as well
     if (self.selectedChannel.profile.isInLocal == TRUE)
     {
@@ -1844,6 +1886,12 @@ double _ticks = 0;
 #endif
         self.ib_labelTouchToTalk.text = @"Touch to Talk";
         self.stringStatePTT = @"Touch to Talk";
+        
+        
+        
+       
+
+        
     }
     else if (self.selectedChannel.profile.minuteSinceLastComm <= 5)
     {
@@ -4756,26 +4804,72 @@ double _ticks = 0;
             {
                 case 1: // Yes
                 {
-                    NSString *response = [[HttpCom instance].comWithDevice sendCommandAndBlock:REQUEST_FW_UPGRADE];
-                    NSLog(@"%s response:%@", __FUNCTION__, response);
-                    
-                    if ([response isEqualToString:@"request_fw_upgrade: 0"])
-                    {
-                        MBProgressHUD *hub = [MBProgressHUD showHUDAddedTo:self.view animated:NO];
-                        [hub setLabelText:@"Checking Fw upgrade..."];
-                        self.isFWUpgradingInProgress = YES; // Entering bg control
-                        [self createHubbleAlertView];
+                    dispatch_queue_t qt = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+                    dispatch_async(qt,^{
                         
-                        NSLog(@"%s Start upgrading to %@", __FUNCTION__,_fwUpgrading );
-                        [self performSelectorInBackground:@selector(checkFwUpgrageStatus_bg)
-                                                    withObject:nil] ;
-                        [self stopStream];
-                    }
-                    else
-                    {
-                        NSLog(@"%s Cannot upgrade Fw now.", __FUNCTION__);
-                    }
+                        NSString *response = nil;
+                        
+                        
+                        BMS_JSON_Communication * jsoncomm = [[[BMS_JSON_Communication alloc]initWithObject:self
+                                                                                                 Selector:nil
+                                                                                             FailSelector:nil
+                                                                                                ServerErr:nil]autorelease];
+                        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+                        
+                        NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
+                        
+                        
+                        if (self.selectedChannel.profile.isInLocal == TRUE)
+                        {
+                            response = [[HttpCom instance].comWithDevice sendCommandAndBlock: REQUEST_FW_UPGRADE];
+                        }
+                        else
+                        {
+                            NSDictionary * responseDict = [jsoncomm sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
+                                                                                              andCommand:[NSString stringWithFormat:@"action=command&command=%@",REQUEST_FW_UPGRADE]
+                                                                                               andApiKey:apiKey];
+                            
+                            if (responseDict != nil)
+                            {
+                                NSInteger status = [[responseDict objectForKey:@"status"] intValue];
+                                if (status == 200)
+                                {
+                                    response = [[[responseDict objectForKey:@"data"] objectForKey:@"device_response"] objectForKey:@"body"];
+                                }
+                            }
+                            
+                        }
+                        
+                        
+                        
+                        NSLog(@"%s response:%@", __FUNCTION__, response);
+                        
+                        if ([response isEqualToString:@"request_fw_upgrade: 0"])
+                        {
+                            
+                            dispatch_async(dispatch_get_main_queue(),^{
+                                MBProgressHUD *hub = [MBProgressHUD showHUDAddedTo:self.view animated:NO];
+                                [hub setLabelText:@"Checking Fw upgrade..."];
+                                self.isFWUpgradingInProgress = YES; // Entering bg control
+                                [self createHubbleAlertView];
+                                
+                                NSLog(@"%s Start upgrading to %@", __FUNCTION__,_fwUpgrading );
+                                [self performSelectorInBackground:@selector(checkFwUpgrageStatus_bg)
+                                                       withObject:nil] ;
+                                [self stopStream];
+
+                            }); //dispatch_async
+                            
+                        }
+                        else
+                        {
+                            NSLog(@"%s Cannot upgrade Fw now.", __FUNCTION__);
+                        }
+                    }); // dispatch_async
                 }
+                    
+                                   
+                    
                     break;
                     
                 case 0:
