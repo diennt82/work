@@ -89,15 +89,15 @@
     task_timeOut = NO;
     
     [self.scrollViewGuide setContentSize:CGSizeMake(320, 1370)];
-    if(isiPhone4 || isiPhone5)
+    
+    if(isiPhone4)
     {
-        if(isiPhone4){
         [_scrollViewGuide setContentOffset:CGPointMake(0, _scrollViewGuide.contentSize.height-(_scrollViewGuide.frame.size.height-88))];
-        }else{
-            [_scrollViewGuide setContentOffset:CGPointMake(0, _scrollViewGuide.contentSize.height-_scrollViewGuide.frame.size.height)];
-        }
-        [_scrollViewGuide setShowsVerticalScrollIndicator:YES];
+    }else{
+        [_scrollViewGuide setContentOffset:CGPointMake(0, _scrollViewGuide.contentSize.height-_scrollViewGuide.frame.size.height)];        
     }
+    [_scrollViewGuide setShowsVerticalScrollIndicator:YES];
+    
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -135,11 +135,10 @@
 {
     [super viewDidAppear:animated];
     
-    if(isiPhone4 || isiPhone5){
-        [UIView animateWithDuration:1.0 animations:^{
-            [_scrollViewGuide setContentOffset:CGPointMake(0,0)];
-        }];
-    }
+    
+    [UIView animateWithDuration:1.0 animations:^{
+        [_scrollViewGuide setContentOffset:CGPointMake(0,0)];
+    }];
 }
 
 - (void)viewDidUnload
