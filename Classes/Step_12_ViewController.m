@@ -28,14 +28,6 @@
     [super viewDidLoad];
     self.navigationItem.hidesBackButton = YES;
     self.trackedViewName = GAI_CATEGORY;
-    UIImage *hubbleLogoBack = [UIImage imageNamed:@"Hubble_back_text"];
-    UIBarButtonItem *barBtnHubble = [[UIBarButtonItem alloc] initWithImage:hubbleLogoBack
-                                                                     style:UIBarButtonItemStyleBordered
-                                                                    target:self
-                                                                    action:@selector(hubbleItemAction:)];
-    [barBtnHubble setTintColor:[UIColor colorWithPatternImage:hubbleLogoBack]];
-    
-    self.navigationItem.leftBarButtonItem = barBtnHubble;
     
     [self.btnWatchLiveCamera setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
     [self.btnWatchLiveCamera setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
@@ -63,7 +55,7 @@
                           fwVersion,     @"FW",
                           nil];
     
-    [[KISSMetricsAPI sharedAPI] recordEvent:@"Add camera success" withProperties:info];
+    //[[KISSMetricsAPI sharedAPI] recordEvent:@"Add camera success" withProperties:info];
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:@"viewDidLoad"
                                                      withLabel:nil
@@ -81,7 +73,7 @@
 
 -(IBAction)startMonitor:(id)sender
 {
-    [[KISSMetricsAPI sharedAPI] recordEvent:@"Step11 - Touch up inside View Live Camera btn" withProperties:nil];
+    //[[KISSMetricsAPI sharedAPI] recordEvent:@"Step11 - Touch up inside View Live Camera btn" withProperties:nil];
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:@"Touch up inside"
                                                      withLabel:@"View Live Camera"
