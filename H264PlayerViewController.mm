@@ -677,8 +677,8 @@ double _ticks = 0;
 
 - (void)forceRestartStream:(NSTimer *)timer
 {
-    if (userWantToCancel ||
-        _returnFromPlayback ||
+    if (userWantToCancel         ||
+        _returnFromPlayback      ||
         _isFWUpgradingInProgress ||
         [UIApplication sharedApplication].applicationState == UIApplicationStateBackground)
     {
@@ -849,9 +849,10 @@ double _ticks = 0;
         {
             
 #ifdef SHOW_DEBUG_INFO
-            if (userWantToCancel ||
+            if (userWantToCancel         ||
                 _h264StreamerIsInStopped ||
-                _returnFromPlayback ||
+                _returnFromPlayback      ||
+                _isFWUpgradingInProgress ||
                 [UIApplication sharedApplication].applicationState != UIApplicationStateActive)
             {
                 NSLog(@"MEDIA_INFO_BITRATE_BPS:%d View is invisible or inactive mode", ext1);
@@ -910,9 +911,10 @@ double _ticks = 0;
             
             [self stopPeriodicPopup];
 
-            if (userWantToCancel ||
+            if (userWantToCancel         ||
                 _h264StreamerIsInStopped ||
-                _returnFromPlayback ||
+                _returnFromPlayback      ||
+                _isFWUpgradingInProgress ||
                 [UIApplication sharedApplication].applicationState == UIApplicationStateBackground)
             {
                 NSLog(@"*[MEDIA_PLAYER_HAS_FIRST_IMAGE] *** USER want to cancel **.. cancel after .1 sec...");
@@ -922,13 +924,12 @@ double _ticks = 0;
             {
                 if (self.selectedChannel.profile.isInLocal)
                 {
-                    //NSLog(@"%s _askForFWUpgradeOnce:%d", __FUNCTION__, _askForFWUpgradeOnce);
-                    
-                    if (_askForFWUpgradeOnce)
-                    {
-                        [self performSelectorInBackground:@selector(checkIfUpgradeIsPossible) withObject:nil];
-                        self.askForFWUpgradeOnce = NO;
-                    }
+// 20140716: Moved to [ setupCamera]
+//                    if (_askForFWUpgradeOnce)
+//                    {
+//                        [self performSelectorInBackground:@selector(checkIfUpgradeIsPossible) withObject:nil];
+//                        self.askForFWUpgradeOnce = NO;
+//                    }
                 }
                 else
                 {
@@ -1038,7 +1039,8 @@ double _ticks = 0;
                 self.selectedChannel.stopStreaming = TRUE;
                 
                 if (_h264StreamerIsInStopped ||
-                    _returnFromPlayback ||
+                    _returnFromPlayback      ||
+                    _isFWUpgradingInProgress ||
                     [UIApplication sharedApplication].applicationState == UIApplicationStateBackground)
                 {
                     return;
@@ -1253,7 +1255,40 @@ double _ticks = 0;
     
     if ([currentFwVersion compare:FW_VERSION_OTA_UPGRADING_MIN] >= NSOrderedSame)
     {
-        NSString * response = [[HttpCom instance].comWithDevice sendCommandAndBlock:CHECK_FW_UPGRADE];
+        NSString * response = nil ;
+        
+        BMS_JSON_Communication * jsoncomm = [[BMS_JSON_Communication alloc]initWithObject:self
+                                                                                 Selector:nil
+                                                                             FailSelector:nil
+                                                                                ServerErr:nil];
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        
+        NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
+
+        
+        if (self.selectedChannel.profile.isInLocal == TRUE)
+        {
+            response = [[HttpCom instance].comWithDevice sendCommandAndBlock:CHECK_FW_UPGRADE];
+        }
+        // ONLY START TO DO REMOTE UPDATE  IF VERSION IS 01.15.11
+        else if ([currentFwVersion compare:FW_VERSION_OTA_REMOTE_UPGRADE_ENABLE] == NSOrderedSame)
+        {
+            NSLog(@"%s DO REMOTE FW upgrade", __FUNCTION__);
+            
+            NSDictionary * responseDict = [jsoncomm sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
+                                                           andCommand:[NSString stringWithFormat:@"action=command&command=%@",CHECK_FW_UPGRADE]
+                                                            andApiKey:apiKey];
+            
+            if (responseDict != nil)
+            {
+                NSInteger status = [[responseDict objectForKey:@"status"] intValue];
+                if (status == 200)
+                {
+                    response = [[[responseDict objectForKey:@"data"] objectForKey:@"device_response"] objectForKey:@"body"];
+                }
+            }
+
+        }
         
         /*
          * 1. check_fw_upgrade: -1, check_fw_upgrade: 0 --> impossible
@@ -1342,7 +1377,9 @@ double _ticks = 0;
     {
         [_audioOutStreamRemote disconnectFromAudioSocketRemote];
     }
-    
+#if 1
+    [self stopMediaProcessGoBack:NO backgroundMode:NO];
+#else
     if (_mediaProcessStatus == MEDIAPLAYER_NOT_INIT)
     {
         //MediaPlayer::Instance()->shouldWait = FALSE;
@@ -1366,6 +1403,7 @@ double _ticks = 0;
         //MediaPlayer::Instance()->setFFmpegInterrupt(true);
         [self stopStream];
     }
+#endif
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
@@ -1527,6 +1565,9 @@ double _ticks = 0;
         self.jsonComm = nil;
     }
     
+#if 1
+    [self stopMediaProcessGoBack:NO backgroundMode:YES];
+#else
     if (_mediaProcessStatus == MEDIAPLAYER_NOT_INIT)
     {
         
@@ -1554,6 +1595,7 @@ double _ticks = 0;
     {
         [self stopStream];
     }
+#endif
     
     self.h264StreamerIsInStopped = TRUE;
     self.imageViewVideo.backgroundColor = [UIColor blackColor];
@@ -1562,26 +1604,26 @@ double _ticks = 0;
     if (_selectedChannel.profile.isInLocal)
     {
         NSLog(@"Enter Background.. Local ");
-        
-        if (_alertFWUpgrading && [_alertFWUpgrading isVisible])
-        {
-            if (_alertFWUpgrading.tag == TAG_ALERT_FW_OTA_UPGRADE_AVAILABLE)
-            {
-                NSLog(@"%s Dismiss TAG_ALERT_FW_OTA_UPGRADE_AVAILABLE & askForFWUpgradeOnce", __FUNCTION__);
-                self.askForFWUpgradeOnce = YES;
-                
-                [_alertFWUpgrading dismissWithClickedButtonIndex:0 animated:NO];
-            }
-            else
-            {
-                NSLog(@"%s alertFWUpgrading is changed tag", __FUNCTION__);
-            }
-        }
     }
     else if (_selectedChannel.profile.minuteSinceLastComm <= 5) // Remote
     {
         //NSLog(@"abort remote timer ");
         [_selectedChannel abortViewTimer];
+    }
+    
+    if (_alertFWUpgrading && [_alertFWUpgrading isVisible])
+    {
+        if (_alertFWUpgrading.tag == TAG_ALERT_FW_OTA_UPGRADE_AVAILABLE)
+        {
+            NSLog(@"%s Dismiss TAG_ALERT_FW_OTA_UPGRADE_AVAILABLE & askForFWUpgradeOnce", __FUNCTION__);
+            self.askForFWUpgradeOnce = YES;
+            
+            [_alertFWUpgrading dismissWithClickedButtonIndex:0 animated:NO];
+        }
+        else
+        {
+            NSLog(@"%s alertFWUpgrading is changed tag", __FUNCTION__);
+        }
     }
 }
 
@@ -1628,7 +1670,6 @@ double _ticks = 0;
     }
     
     //this func gets call even after app enter inactive state -> we don't stop player then..thus do not restart player here
-#if 1
     if (self.backgroundTask != UIBackgroundTaskInvalid)
     {
         NSLog(@"%s Waiting for stop streaming process.", __FUNCTION__);
@@ -1638,38 +1679,6 @@ double _ticks = 0;
     {
         [self scanCamera];
     }
-#else
-    if ( _selectedChannel.stopStreaming == TRUE)
-    {
-        if (_mediaProcessStatus == MEDIAPLAYER_NOT_INIT)
-        {
-            NSLog(@"%s Hanle exception here!", __FUNCTION__);
-            
-            if (_shouldRestartProcessing ||
-                _selectedChannel.profile.isInLocal)
-            {
-                [self scanCamera];
-            }
-            else
-            {
-                NSLog(@"%s Do not restart processing", __FUNCTION__);
-            }
-        }
-        else
-        {
-            if (self.backgroundTask != UIBackgroundTaskInvalid)
-            {
-                ///MediaPlayer::Instance()->setFFmpegInterrupt(true);
-                NSLog(@"%s Waiting for stop streaming process.", __FUNCTION__);
-                MediaPlayer::Instance()->sendInterrupt();
-            }
-            else
-            {
-                [self scanCamera];
-            }
-        }
-    }
-#endif
 }
 
 - (BOOL)hidesBottomBarWhenPushed
@@ -1828,6 +1837,16 @@ double _ticks = 0;
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
     NSLog(@"H264VC - setupCamera -device_ip: %@, -device_port: %d, -{remote_only: %d}", self.selectedChannel.profile.ip_address, self.selectedChannel.profile.port, [userDefaults boolForKey:@"remote_only"]);
+    
+    NSLog(@"%s LOCAL _askForFWUpgradeOnce:%d", __FUNCTION__, _askForFWUpgradeOnce);
+    if (_askForFWUpgradeOnce)
+    {
+        [self performSelectorInBackground:@selector(checkIfUpgradeIsPossible) withObject:nil];
+        self.askForFWUpgradeOnce = NO;
+    }
+    
+    
+    
     //Support remote UPNP video as well
     if (self.selectedChannel.profile.isInLocal == TRUE)
     {
@@ -1844,6 +1863,12 @@ double _ticks = 0;
 #endif
         self.ib_labelTouchToTalk.text = @"Touch to Talk";
         self.stringStatePTT = @"Touch to Talk";
+        
+        
+        
+       
+
+        
     }
     else if (self.selectedChannel.profile.minuteSinceLastComm <= 5)
     {
@@ -1956,9 +1981,10 @@ double _ticks = 0;
         return;
     }
     
-    if (_returnFromPlayback)
+    if (_returnFromPlayback ||
+        _isFWUpgradingInProgress)
     {
-        NSLog(@"H264VC - startStream --> break to Playback");
+        NSLog(@"%s returnFromPlayback:%d, isFWUpgradingInProgress:%d", __FUNCTION__, _returnFromPlayback, _isFWUpgradingInProgress);
         return;
     }
     
@@ -2018,8 +2044,9 @@ double _ticks = 0;
     NSString * url = self.selectedChannel.stream_url;
     NSLog(@"%s url: %@", __FUNCTION__, url);
     
-    if (userWantToCancel ||
-        _returnFromPlayback ||
+    if (userWantToCancel         ||
+        _returnFromPlayback      ||
+        _isFWUpgradingInProgress ||
         [UIApplication sharedApplication].applicationState == UIApplicationStateBackground)
     {
         NSLog(@"%s View is invisible or is in background mode. Ignoring.", __FUNCTION__);
@@ -2176,7 +2203,9 @@ double _ticks = 0;
     {
         [_jsonCommBlocked release];
     }
-    
+#if 1
+    [self stopMediaProcessGoBack:YES backgroundMode:NO];
+#else
     MediaPlayer::Instance()->setShouldWait(FALSE);
     
     if (_mediaProcessStatus == MEDIAPLAYER_NOT_INIT)
@@ -2199,33 +2228,8 @@ double _ticks = 0;
         [self stopStream];
         [self goBack];
     }
-}
-
-#if 0
-- (void)goBackToCameraList
-{
-    [self stopPeriodicBeep];
-    if (self.timerRemoteStreamTimeOut && [_timerRemoteStreamTimeOut isValid])
-    {
-        [_timerRemoteStreamTimeOut invalidate];
-        _timerRemoteStreamTimeOut = nil;
-    }
-    //_isShowCustomIndicator = NO;
-    //no need call stopStream in offline mode
-    [self stopStream];
-    
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults removeObjectForKey:CAM_IN_VEW];
-    [userDefaults synchronize];
-    
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [UIApplication sharedApplication].idleTimerDisabled = NO;
-    
-    self.selectedChannel.profile.isSelected = FALSE;
-    
-    [self.navigationController popToRootViewControllerAnimated:YES];
-}
 #endif
+}
 
 - (void)goBackToCamerasRemoteStreamTimeOut
 {
@@ -2472,6 +2476,52 @@ double _ticks = 0;
         //[self  stopStunStream];
         
         
+    }
+}
+
+- (void)stopMediaProcessGoBack:(BOOL )isGoBack backgroundMode:(BOOL )isBgMode
+{
+    NSLog(@"%s isGoBack:%d, isBgMode:%d", __FUNCTION__, isGoBack, isBgMode);
+    
+    if (_mediaProcessStatus == MEDIAPLAYER_NOT_INIT)
+    {
+    }
+    else if(_mediaProcessStatus == MEDIAPLAYER_SET_LISTENER)
+    {
+        MediaPlayer::Instance()->sendInterrupt();
+        [self stopStream];
+    }
+    else if (_mediaProcessStatus == MEDIAPLAYER_SET_DATASOURCE)
+    {
+        NSLog(@"%s Waiting for response from Media lib.", __FUNCTION__);
+        MediaPlayer::Instance()->sendInterrupt();
+        
+        if (isBgMode)
+        {
+            self.backgroundTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+                NSLog(@"Background handler called. Not running background tasks anymore.");
+                [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTask];
+                self.backgroundTask = UIBackgroundTaskInvalid;
+            }];
+            
+            NSLog(@"%s Waiting for call back from MediaPlayer lib. backgroundTask:%d", __FUNCTION__, _backgroundTask);
+        }
+        
+        if (isGoBack)
+        {
+             MediaPlayer::Instance()->setShouldWait(FALSE);
+            isGoBack = FALSE;
+        }
+    }
+    else //MEDIAPLAYER_STARTED
+    {
+        [self stopStream];
+    }
+    
+    if (isGoBack)
+    {
+        MediaPlayer::Instance()->setShouldWait(FALSE);
+        [self goBack];
     }
 }
 
@@ -2729,8 +2779,9 @@ double _ticks = 0;
      * If back, Need not to update UI
      */
     
-    if (userWantToCancel ||
-        _returnFromPlayback)
+    if (userWantToCancel    ||
+        _returnFromPlayback ||
+        _isFWUpgradingInProgress)
     {
         return;
     }
@@ -4756,26 +4807,76 @@ double _ticks = 0;
             {
                 case 1: // Yes
                 {
-                    NSString *response = [[HttpCom instance].comWithDevice sendCommandAndBlock:REQUEST_FW_UPGRADE];
-                    NSLog(@"%s response:%@", __FUNCTION__, response);
-                    
-                    if ([response isEqualToString:@"request_fw_upgrade: 0"])
-                    {
-                        MBProgressHUD *hub = [MBProgressHUD showHUDAddedTo:self.view animated:NO];
-                        [hub setLabelText:@"Checking Fw upgrade..."];
-                        self.isFWUpgradingInProgress = YES; // Entering bg control
-                        [self createHubbleAlertView];
+                    dispatch_queue_t qt = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+                    dispatch_async(qt,^{
                         
-                        NSLog(@"%s Start upgrading to %@", __FUNCTION__,_fwUpgrading );
-                        [self performSelectorInBackground:@selector(checkFwUpgrageStatus_bg)
-                                                    withObject:nil] ;
-                        [self stopStream];
-                    }
-                    else
-                    {
-                        NSLog(@"%s Cannot upgrade Fw now.", __FUNCTION__);
-                    }
+                        NSString *response = nil;
+                        
+                        
+                        BMS_JSON_Communication * jsoncomm = [[[BMS_JSON_Communication alloc]initWithObject:self
+                                                                                                 Selector:nil
+                                                                                             FailSelector:nil
+                                                                                                ServerErr:nil]autorelease];
+                        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+                        
+                        NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
+                        
+                        
+                        if (self.selectedChannel.profile.isInLocal == TRUE)
+                        {
+                            response = [[HttpCom instance].comWithDevice sendCommandAndBlock: REQUEST_FW_UPGRADE];
+                        }
+                        else
+                        {
+                            NSDictionary * responseDict = [jsoncomm sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
+                                                                                              andCommand:[NSString stringWithFormat:@"action=command&command=%@",REQUEST_FW_UPGRADE]
+                                                                                               andApiKey:apiKey];
+                            
+                            if (responseDict != nil)
+                            {
+                                NSInteger status = [[responseDict objectForKey:@"status"] intValue];
+                                if (status == 200)
+                                {
+                                    response = [[[responseDict objectForKey:@"data"] objectForKey:@"device_response"] objectForKey:@"body"];
+                                }
+                            }
+                            
+                        }
+                        
+                        
+                        
+                        NSLog(@"%s response:%@", __FUNCTION__, response);
+                        
+                        if ([response isEqualToString:@"request_fw_upgrade: 0"])
+                        {
+                            
+                            dispatch_async(dispatch_get_main_queue(),^{
+                                MBProgressHUD *hub = [MBProgressHUD showHUDAddedTo:self.view animated:NO];
+                                [hub setLabelText:@"Checking Fw upgrade..."];
+                                self.isFWUpgradingInProgress = YES; // Entering bg control
+                                [self createHubbleAlertView];
+                                
+                                NSLog(@"%s Start upgrading to %@", __FUNCTION__,_fwUpgrading );
+                                [self performSelectorInBackground:@selector(checkFwUpgrageStatus_bg)
+                                                       withObject:nil] ;
+#if 1
+                                [self stopMediaProcessGoBack:NO backgroundMode:NO];
+#else
+                                [self stopStream];
+#endif
+
+                            }); //dispatch_async
+                            
+                        }
+                        else
+                        {
+                            NSLog(@"%s Cannot upgrade Fw now.", __FUNCTION__);
+                        }
+                    }); // dispatch_async
                 }
+                    
+                                   
+                    
                     break;
                     
                 case 0:
@@ -6817,7 +6918,7 @@ double _ticks = 0;
     if (userWantToCancel)
     {
         self.isFWUpgradingInProgress = NO;
-        [self closeCustomAlertView];// PN
+        [self performSelectorOnMainThread:@selector(closeCustomAlertView) withObject:nil waitUntilDone:NO];// PN
         NSLog(@"%s Backout.", __FUNCTION__);
     }
     else
@@ -6829,7 +6930,7 @@ double _ticks = 0;
         if (_fwUpgradedProgress >= TIMEOUT_FW_OTA_UPGRADING ||
             _fwUpgradeStatus    != FW_UPGRADE_IN_PROGRESS)
         {
-            [self closeCustomAlertView];
+            //[self closeCustomAlertView];
             
             NSLog(@"%s Upgrade 100%% fwUpgradeStatus:%d", __FUNCTION__, _fwUpgradeStatus);
             
@@ -6839,7 +6940,7 @@ double _ticks = 0;
             {
                 self.isFWUpgradingInProgress = NO;
                 _isShowCustomIndicator = YES;
-                [self displayCustomIndicator];
+                //[self displayCustomIndicator];
             }
             else
             {
@@ -6862,6 +6963,9 @@ double _ticks = 0;
 - (void)popupAlertFwUpgradingStatus:(NSNumber *)status
 {
     NSLog(@"%s status:%@", __FUNCTION__, status);
+    
+    [self closeCustomAlertView];
+    [self displayCustomIndicator];
     
     NSString *msg = nil;
     NSString *title = @"Firmware Upgrade Succeeded";
@@ -7046,8 +7150,9 @@ double _ticks = 0;
 {
     [self logDebugInfo:nil];
     
-    if (!userWantToCancel &&
-        !_returnFromPlayback &&
+    if (!userWantToCancel         &&
+        !_returnFromPlayback      &&
+        !_isFWUpgradingInProgress &&
         [UIApplication sharedApplication].applicationState == UIApplicationStateActive)
     {
         if ([[responseDict objectForKey:@"status"] intValue] == 200)
@@ -7088,8 +7193,9 @@ double _ticks = 0;
 {
     [self logDebugInfo:responseDict];
     
-    if (!userWantToCancel &&
-        !_returnFromPlayback &&
+    if (!userWantToCancel         &&
+        !_returnFromPlayback      &&
+        !_isFWUpgradingInProgress &&
         [UIApplication sharedApplication].applicationState != UIApplicationStateBackground) // Testing this to decide using it or not
     {
         //handle Bad response
@@ -7113,8 +7219,9 @@ double _ticks = 0;
 {
     [self logDebugInfo:nil];
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!userWantToCancel &&
-            !_returnFromPlayback &&
+        if (!userWantToCancel         &&
+            !_returnFromPlayback      &&
+            !_isFWUpgradingInProgress &&
             [UIApplication sharedApplication].applicationState != UIApplicationStateBackground) // Testing this to decide using it or not
         {
             NSLog(@"SERVER unreachable (timeout) ");
@@ -7132,7 +7239,7 @@ double _ticks = 0;
 
 - (void)logDebugInfo:(NSDictionary *)responseDict
 {
-    NSLog(@"USE RELAY TO VIEW- userWantsToCancel:%d, returnFromPlayback:%d, responsed: %@", userWantToCancel, _returnFromPlayback, responseDict);
+    NSLog(@"USE RELAY TO VIEW- userWantsToCancel:%d, returnFromPlayback:%d, isFWUpgradeInProgress:%d, responsed: %@", userWantToCancel, _returnFromPlayback, _isFWUpgradingInProgress, responseDict);
     
     NSTimeInterval diff = [[NSDate date] timeIntervalSinceDate:_timeStartingStageOne];
     self.timeStartingStageOne = 0;

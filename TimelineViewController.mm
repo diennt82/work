@@ -43,6 +43,7 @@
 
 @property (nonatomic) BOOL hasUpdate;
 @property (nonatomic, retain) NSIndexPath *selectedIndexPath;
+@property (nonatomic) BOOL taskCancelled;
 
 @end
 
@@ -101,7 +102,6 @@
     [SDWebImageManager.sharedManager.imageCache clearMemory];
 }
 
-
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -109,6 +109,7 @@
     NSLog(@"%s", __FUNCTION__);
     
     [self cancelAllLoadingImageTask];
+    self.taskCancelled = FALSE;
 }
 
 - (void)dealloc
@@ -199,7 +200,10 @@
     
     self.isEventAlready = TRUE;
     
-    if (self.isViewLoaded && self.view.window)
+    NSLog(@"%s taskCancelled: %d", __FUNCTION__, _taskCancelled);
+    
+    //if (self.isViewLoaded && self.view.window)
+    if(!_taskCancelled)
     {
         /* Reload the table view now */
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -209,10 +213,6 @@
             
             [self.refreshControl endRefreshing];
         });
-    }
-    else
-    {
-        NSLog(@"%s View is invisible.", __FUNCTION__);
     }
 }
 
@@ -257,7 +257,10 @@
     
     /* Reload the table view now */
     
-    if (self.isViewLoaded && self.view.window)
+    NSLog(@"%s taskCancelled: %d", __FUNCTION__, _taskCancelled);
+    
+    //if (self.isViewLoaded && self.view.window)
+    if(!_taskCancelled)
     {
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.tableView reloadData];
@@ -266,10 +269,6 @@
             
             [self.refreshControl endRefreshing];
         });
-    }
-    else
-    {
-        NSLog(@"%s View is invisible.", __FUNCTION__);
     }
 }
 
@@ -411,18 +410,15 @@
     
     if ( self.hasUpdate == YES)
     {
-        //[NSThread sleepForTimeInterval:5];
+        //[NSThread sleepForTimeInterval:55];
         
-        NSLog(@"%s has inserted new record, trigger update ui now.", __FUNCTION__);
         dispatch_async(dispatch_get_main_queue(), ^{
+            NSLog(@"%s Has inserted new record, trigger update ui now, taskCancelled: %d", __FUNCTION__, _taskCancelled);
             
-            if (self.isViewLoaded && self.view.window)
+            //if (self.isViewLoaded && self.view.window)
+            if(!_taskCancelled)
             {
                 [self performSelectorInBackground:@selector(getEventFromDb:) withObject:camChannel];
-            }
-            else
-            {
-                NSLog(@"%s View is invisble. Ignoring.", __FUNCTION__);
             }
         });
     }
@@ -805,15 +801,15 @@
         }
     }
     
+    //[NSThread sleepForTimeInterval:35];
+    
     if (shouldUpdateTableView)
     {
-        if (self.isViewLoaded && self.view.window)
+        NSLog(@"%s taskCancelled: %d", __FUNCTION__, _taskCancelled);
+        //if (self.isViewLoaded && self.view.window)
+        if (!_taskCancelled)
         {
             [self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
-        }
-        else
-        {
-            NSLog(@"%s View is invisble.", __FUNCTION__);
         }
     }
     else
@@ -824,21 +820,18 @@
     /* Delay the updating of this is variable until the table "reloadData" has completed.
      This is to avoid the overlapping of loading data*/
     dispatch_async(dispatch_get_main_queue(), ^{
-         //NSIndexPath* indexPath =
-        if (self.isViewLoaded && self.view.window)
+         NSLog(@"%s taskCancelled: %d", __FUNCTION__, _taskCancelled);
+        //if (self.isViewLoaded && self.view.window)
+        if(!_taskCancelled)
         {
             [NSIndexPath indexPathForRow: ([self.tableView numberOfRowsInSection:([self.tableView numberOfSections]-1)]-1)
                                inSection: ([self.tableView numberOfSections]-1)];
-            self.isLoading = FALSE;
+            
             NSLog(@"%s parent:%@, set loading FALSE:%d ", __FUNCTION__, self.parentVC, self.isLoading );
         }
-        else
-        {
-            NSLog(@"%s View is invisble.", __FUNCTION__);
-        }
+        
+        self.isLoading = FALSE;
     });
-    
-    
     
     NSLog(@"%s -eventPage: %d, -shouldUpdateTableview: %d, shouldLoadMore: %d", __FUNCTION__, _eventPage, shouldUpdateTableView, _shouldLoadMore);
 }
@@ -853,6 +846,12 @@
     NSLog(@"Cancell all downloading images");
     [SDWebImageManager.sharedManager cancelAll];
     [SDWebImageManager.sharedManager.imageCache clearMemory];
+    
+    /*
+     * -- Set taskCanncelled = TRUE --> Meaning do NOT update tableview UI.
+     */
+    
+    self.taskCancelled = TRUE;
     
 //    for (int i = 0; i < tempRowsCount; ++i)
 //    {
@@ -941,43 +940,38 @@
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (indexPath.section == 0)
     {
-        if (indexPath.section == 0)
-        {
-            return 77;
-        }
-        
-        if (indexPath.section == 1)
-        {
-            if (_events != nil &&
-                _events.count > 0)
-            {
-                EventInfo *eventInfo = (EventInfo *)[_events objectAtIndex:indexPath.row];
-                
-                /*
-                 * 1: Sound             -> 77
-                 * 2: hi-temperature    -> 77
-                 * 3: low-temperature   -> 77
-                 * 4: Motion            -> 212
-                 */
-                if (eventInfo.alert == 4)
-                {
-                    return 212;
-                }
-                else
-                {
-                    return 77;
-                }
-            }
-            
-            return 44;
-        }
-        
-        
-        
-        return 60;
+        return 77;
     }
     
+    if (indexPath.section == 1)
+    {
+        if (_events != nil &&
+            _events.count > 0)
+        {
+            EventInfo *eventInfo = (EventInfo *)[_events objectAtIndex:indexPath.row];
+            
+            /*
+             * 1: Sound             -> 77
+             * 2: hi-temperature    -> 77
+             * 3: low-temperature   -> 77
+             * 4: Motion            -> 212
+             */
+            if (eventInfo.alert == 4)
+            {
+                return 212;
+            }
+            else
+            {
+                return 77;
+            }
+        }
+        
+        return 44;
+    }
+    
+    return 60;
 }
 
 - (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath
@@ -1563,20 +1557,32 @@
     return str ;
 }
 
-
-
 #pragma mark - PlayBackDelegate Methods
 
--(void)motioEventDeleted
+- (void)motioEventDeleted
 {
-    //[self getEventFromDb:self.camChannel];
-    [self.tableView beginUpdates];
-    [_events removeObjectAtIndex:_selectedIndexPath.row];
-    [self.tableView deleteRowsAtIndexPaths:@[_selectedIndexPath] withRowAnimation:UITableViewRowAnimationFade];
-    [self.tableView endUpdates];
+    NSLog(@"%s row:%d, _events: %d, [self.tableView numberOfRowsInSection:1]:%d", __FUNCTION__, _selectedIndexPath.row, _events.count, [self.tableView numberOfRowsInSection:1]);
+    
+    if (_selectedIndexPath.row < _events.count)
+    {
+        [_events removeObjectAtIndex:_selectedIndexPath.row];
+        
+        if([self.tableView numberOfRowsInSection:1] - 1 == _events.count &&
+           _events.count > 0)
+        {
+            [self.tableView beginUpdates];
+            [self.tableView deleteRowsAtIndexPaths:@[_selectedIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+            [self.tableView endUpdates];
+        }
+        else
+        {
+            // Tableview will be loaded somewhere.
+            //[self.tableView reloadData];
+        }
+    }
 }
 
--(float) temperatureToFfromC: (float) degreeC
+- (float) temperatureToFfromC: (float) degreeC
 {
     float degreeF = ((degreeC * 9.0)/5.0) + 32;
     
