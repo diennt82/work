@@ -12,6 +12,7 @@
 #import "KISSMetricsAPI.h"
 #import "EarlierNavigationController.h"
 #import "Crittercism.h"
+#import "SDWebImageManager.h"
 
 @interface MBP_iosAppDelegate()
 
@@ -38,7 +39,10 @@
      - Add Google Analytics Delegates to this project.
      */
     
-    
+    [[SDWebImageManager sharedManager] setCacheKeyFilter:^(NSURL *url) {
+        url = [[NSURL alloc] initWithScheme:url.scheme host:url.host path:url.path];
+        return [url absoluteString];
+    }];
     
     // Handle launching from a notification
     UILocalNotification *locationNotification = [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
