@@ -29,7 +29,6 @@
 
 @synthesize  homeSSID;
 @synthesize  shouldStopScanning;
-@synthesize  timeOut;
 
 
 
@@ -60,11 +59,10 @@
 {
     [super viewDidLoad];
     
+#if 1
     //Disconnect BLE
-    NSLog(@"Disconnect BLE ");
-    [BLEConnectionManager getInstanceBLE].needReconnect = NO;
-    [[BLEConnectionManager getInstanceBLE].uartPeripheral didDisconnect];
-    [BLEConnectionManager getInstanceBLE].delegate = nil;
+    NSLog(@"%s BLE deletgate:%@", __FUNCTION__, [BLEConnectionManager getInstanceBLE].delegate);
+#endif
     
     //Keep screen on
     [UIApplication sharedApplication].idleTimerDisabled = YES;
@@ -118,18 +116,22 @@
                                    userInfo:nil
                                     repeats:NO];
     
-    // 2 of 3. no need to schedule timer here
+    // Trying to enable all PN.
+    [self sendToServerTheCommand:@"set_motion_area&grid=1x1&zone=00"];
+    [self sendToServerTheCommand:@"vox_enable"];
+    [self sendToServerTheCommand:@"set_temp_lo_enable&value=1"];
+    [self sendToServerTheCommand:@"set_temp_hi_enable&value=1"];
+    
+    // Trying to update host ssid to server.
+    [self updatesBasicInfoForCamera];
+    
+    // 2 of 3. no need to schedule timer here.
     [self wait_for_camera_to_reboot:nil];
-}
-
-- (void)viewDidUnload
-{
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
 }
 
 - (void)hubbleItemAction: (id)sender
 {
+    [self setStopScanning:nil];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -354,16 +356,8 @@
 
 - (void) setupCompleted
 {
-    // Try to update host ssid to server
-    [self sendToServerTheCommand:@"set_motion_area&grid=1x1&zone=00"];
-    [self sendToServerTheCommand:@"vox_enable"];
-    [self sendToServerTheCommand:@"set_temp_lo_enable&value=1"];
-    [self sendToServerTheCommand:@"set_temp_hi_enable&value=1"];
-    
-    [self updatesBasicInfoForCamera];
-    
     //Check once more to update the SSID.
-    [self checkItOnline];
+    //[self checkItOnline];
     
     //Load step 12
     NSLog(@"Load step 12- + dboule check");
@@ -379,23 +373,8 @@
 
 - (void)  setupFailed
 {
-    NSLog(@"%s", __FUNCTION__);
-#if 0
- 	NSLog(@"Setup has failed - remove cam on server");
-	// send a command to remove camera
-	//NSString *mac = [Util strip_colon_fr_mac:self.cameraMac];
-
-    BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
-                                                                              Selector:@selector(removeCamSuccessWithResponse:)
-                                                                          FailSelector:@selector(removeCamFailedWithError:)
-                                                                             ServerErr:@selector(removeCamFailedServerUnreachable)] autorelease];
-    
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [jsonComm deleteDeviceWithRegistrationId:_stringUDID
-                                   andApiKey:[userDefaults objectForKey:@"PortalApiKey"]];
-#endif
+    NSLog(@"%s Load step 11.", __FUNCTION__);
     //Load step 11
-    NSLog(@"Load step 11");
     
     //Load the next xib
     Step_11_ViewController *step11ViewController = nil;
@@ -419,23 +398,7 @@
 
 
 
--(void) removeCamSuccessWithResponse:(NSDictionary *)responseData
-{
-	NSLog(@"removeCam success");
-	
-	//[delegate sendStatus:5 ];
-	
-}
 
--(void) removeCamFailedWithError:(NSDictionary *)error_response
-{
-	NSLog(@"removeCam failed Server error: %@", [error_response objectForKey:@"message"]);
-}
-
--(void) removeCamFailedServerUnreachable
-{
-	NSLog(@"server unreachable");
-}
 
 
 

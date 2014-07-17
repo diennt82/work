@@ -36,11 +36,10 @@
 	NSString * cameraName;
 
     UIAlertView *_alertView;
-    BOOL _isShowingProcess, shouldCancel;
+    BOOL _isShowingProcess;
     int stage;
-    NSTimer *timerTimeoutConnectBLE;
-    
 }
+
 @property (retain, nonatomic) NSTimer *timerTimeoutConnectBLE;
 
 @property (nonatomic, retain) UIAlertView *alertView;

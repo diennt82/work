@@ -16,14 +16,16 @@
 @property (retain, nonatomic) IBOutlet UIButton *btnContinue;
 @property (retain, nonatomic) IBOutlet UIView *viewProgress;
 
+@property (nonatomic) BOOL shouldCancel;
 @property (retain, nonatomic) NSString *authToken;
+@property (nonatomic) BOOL isBack;
+
 @end
 
 
 
 @implementation EditCamera_VController
 
-@synthesize  timerTimeoutConnectBLE;
 @synthesize cameraMac, cameraName;
 @synthesize alertView = _alertView;
 
@@ -181,6 +183,15 @@
 
 - (void)hubbleItemAction:(id)sender
 {
+    if (_timerTimeoutConnectBLE != nil)
+    {
+        [_timerTimeoutConnectBLE invalidate];
+        self.timerTimeoutConnectBLE = nil;
+    }
+    
+    self.shouldCancel = TRUE;
+    self.isBack = TRUE;
+    
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -256,6 +267,7 @@
 
 -(void) dealloc
 {
+    NSLog(@"%s", __FUNCTION__);
     
     [cameraName release];
     [cameraMac release];
@@ -286,70 +298,6 @@
     
 }
 
-#if 0
-{
-- (IBAction)handleButtonPress:(id)sender
-{
-    NSString * cameraName_text = _tfCamName.text;
-    
-    if ([cameraName_text length] < MIN_LENGTH_CAMERA_NAME || [cameraName_text length] > MAX_LENGTH_CAMERA_NAME )
-    {
-        NSString * title = NSLocalizedStringWithDefaultValue(@"Invalid_Camera_Name", nil, [NSBundle mainBundle],
-                                                             @"Invalid Camera Name", nil);
-        
-        NSString * msg = NSLocalizedStringWithDefaultValue(@"Invalid_Camera_Name_msg", nil, [NSBundle mainBundle],
-                                                           @"Camera Name has to be between 5-30 characters", nil);
-        
-        NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
-                                                          @"Ok", nil);
-        
-        
-        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:title
-                                                         message:msg
-                                                        delegate:self
-                                               cancelButtonTitle:ok
-                                               otherButtonTitles:nil];
-        
-        [alert show];
-        [alert release];
-    }
-    else if (![self isCameraNameValidated:cameraName_text])
-    {
-        NSString * title = NSLocalizedStringWithDefaultValue(@"Invalid_Camera_Name", nil, [NSBundle mainBundle],
-                                                             @"Invalid Camera Name", nil);
-        
-        NSString * msg = NSLocalizedStringWithDefaultValue(@"Invalid_Camera_Name_msg2", nil, [NSBundle mainBundle],
-                                                           @"Camera name is invalid. Please enter [0-9],[a-Z], space, dot, hyphen, underscore & single quote only.", nil);
-        
-        NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
-                                                          @"Ok", nil);
-        
-        
-        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:title
-                                                         message:msg
-                                                        delegate:self
-                                               cancelButtonTitle:ok
-                                               otherButtonTitles:nil];
-        
-        [alert show];
-        [alert release];
-    }
-    else
-    {
-        
-        
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        [userDefaults setObject:cameraName_text forKey:CAMERA_NAME];
-        [userDefaults synchronize];
-        
-        //
-        [self registerCamera:nil];
-        
-    }
-}
-}
-#endif
-
 - (void)showScreenGetWifiList
 {
     NSLog(@"Load screen display wifi list");
@@ -361,22 +309,27 @@
     
     [wifiListVController release];
 }
+
 #pragma mark -
 #pragma mark  Timer
 
 -(void)timeOutSendingMkey:(NSTimer * )exp
 {
     // 60sec has passed since we started, no matter what happen, kill it off now.
-    shouldCancel = TRUE;
-    
+    self.shouldCancel = TRUE;
 }
-
 
 -(void) setMasterKeyOnCamera
 {
-    shouldCancel = FALSE;
+    self.shouldCancel = FALSE;
     
-    timerTimeoutConnectBLE = [NSTimer scheduledTimerWithTimeInterval:60.0
+    if (_timerTimeoutConnectBLE)
+    {
+        [_timerTimeoutConnectBLE invalidate];
+        self.timerTimeoutConnectBLE = nil;
+    }
+    
+    self.timerTimeoutConnectBLE = [NSTimer scheduledTimerWithTimeInterval:60.0
                                                               target:self
                                                             selector:@selector(timeOutSendingMkey:)
                                                             userInfo:nil
@@ -387,30 +340,33 @@
      - send auto_token to camera
      */
     //first get mac address of camera
-#if 1
+
     stage = SENDING_SERVER_AUTH;
     
     do
     {
         [self sendCommandAuth_TokenToCamera];
         
-        if (shouldCancel == TRUE)
+        if (_isBack)
         {
-            NSLog(@"Cancelling 2 ");
-            break ;
+            NSLog(@"Canceling 3!. Going back.");
+            return;
         }
         
-        
+        if (_shouldCancel == TRUE)
+        {
+            NSLog(@"Cancelling 2 ");
+            break;
+        }
     }
-    while ( stage == SENDING_SERVER_AUTH);
-    
+    while (stage == SENDING_SERVER_AUTH);
     
     if (stage == SENDING_SERVER_AUTH_DONE)
     {
-        if (timerTimeoutConnectBLE != nil && [timerTimeoutConnectBLE isValid])
+        if (_timerTimeoutConnectBLE != nil)
         {
-            [timerTimeoutConnectBLE invalidate];
-            timerTimeoutConnectBLE = nil;
+            [_timerTimeoutConnectBLE invalidate];
+            self.timerTimeoutConnectBLE = nil;
         }
         
         dispatch_async(dispatch_get_main_queue(),
@@ -419,39 +375,6 @@
                            [self showScreenGetWifiList];
                        });
     }
-#else
-    stage =  SENDING_MASTER_KEY;
-    
-    do
-    {
-        [self sendCommandAuth_TokenToCamera];
-        
-        if (shouldCancel == TRUE)
-        {
-            NSLog(@"Cancelling 2 ");
-            break ;
-        }
-
-        
-    }
-    while ( stage == SENDING_MASTER_KEY);
-    
-    
-    if (stage == SENDING_MASTER_KEY_DONE)
-    {
-        if (timerTimeoutConnectBLE != nil && [timerTimeoutConnectBLE isValid])
-        {
-            [timerTimeoutConnectBLE invalidate];
-            timerTimeoutConnectBLE = nil;
-        }
-        
-        dispatch_async(dispatch_get_main_queue(),
-                       ^{
-                           [_viewProgress removeFromSuperview];
-                           [self showScreenGetWifiList];
-                       });
-    }
-#endif
     else
     {
         //ERROR handling: TODO:
@@ -475,25 +398,17 @@
         
         [alert show];
         [alert release];
-        
-        
     }
-    
-    
 }
 
 - (void)sendCommandAuth_TokenToCamera
 {
-#if 0
-    NSString * set_mkey = SET_MASTER_KEY;
-    set_mkey =[set_mkey stringByAppendingString:_authToken];
-#endif
     NSDate * date;
     
     BOOL debugLog = TRUE;
     
     while( ([BLEConnectionManager getInstanceBLE].state != CONNECTED) &&
-          (shouldCancel == FALSE))
+          (_shouldCancel == FALSE))
     {
         if (debugLog)
         {
@@ -506,7 +421,7 @@
         
     }
     
-    if (shouldCancel == TRUE)
+    if (_shouldCancel == TRUE)
     {
         NSLog(@"Cancelling ... now");
         return;
@@ -516,12 +431,8 @@
     
     
     [BLEConnectionManager getInstanceBLE].delegate = self;
-#if 1
     [[BLEConnectionManager getInstanceBLE].uartPeripheral writeString:_authToken
                                                           withTimeOut:SHORT_TIME_OUT_SEND_COMMAND];
-#else
-    [[BLEConnectionManager getInstanceBLE].uartPeripheral writeString:set_mkey withTimeOut:SHORT_TIME_OUT_SEND_COMMAND];
-#endif
     
     while ([BLEConnectionManager getInstanceBLE].uartPeripheral.isBusy)
     {
@@ -663,41 +574,20 @@
     }
     else
     {
-#if 1
         //set_server_auth: 0
         if ([string hasPrefix:@"set_server_auth: 0"])
         {
             ///done
             NSLog(@"sending server auth done, move on..");
             stage = SENDING_SERVER_AUTH_DONE;
-            
-            
         }
         else if ([string hasPrefix:@"set_server_auth: -1"])
         {
             // dont do anything.. we'll retry in main thread.
             NSLog(@"can't send server auth, set_server_auth: -1");
         }
-#else
-        if ([string hasPrefix:@"set_master_key: 0"])
-        {
-            ///done
-            NSLog(@"sending master key done, move on..");
-            stage = SENDING_MASTER_KEY_DONE;
-            
-            
-        }
-        else if ([string hasPrefix:@"set_master_key: -1"])
-        {
-            // dont do anything.. we'll retry in main thread.
-            NSLog(@"can't send master key, set_master_key: -1");
-        }
-#endif
     }
-    
-    
 }
-
 
 - (void) onReceiveDataError:(int)error_code forCommand:(NSString *)commandToCamera
 {
@@ -721,15 +611,14 @@
     
     [BLEConnectionManager getInstanceBLE].delegate = self;
     [[BLEConnectionManager getInstanceBLE] reScanForPeripheral:[UARTPeripheral uartServiceUUID]];
-    
 }
+
 #pragma mark - Alert view delegate
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex  // after animation
 {
     if (alertView.tag == ALERT_ASK_FOR_RETRY_BLE)
     {
-        
         if (buttonIndex == 1) //Retry
         {
             [self setMasterKeyOnCamera];
@@ -739,14 +628,12 @@
             // return to the beginning
             NSLog(@"EDITCAM : return to the beginning.Disconnect BLE ");
             [BLEConnectionManager getInstanceBLE].delegate =  nil;
+            [[BLEConnectionManager getInstanceBLE] stopScanBLE];
             [BLEConnectionManager getInstanceBLE].needReconnect = NO;
             [[BLEConnectionManager getInstanceBLE] disconnect];
 
             [self.navigationController popToRootViewControllerAnimated:YES];
         }
-        
-        
-        
     }
 }
 
