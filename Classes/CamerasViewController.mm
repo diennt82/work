@@ -500,10 +500,12 @@
             imgCamera = [UIImage imageNamed:@"camera_focus_66"];
         }
         
-        NSLog(@"-- %@",ch.profile.snapUrl);
+        //NSLog(@"-- %@",ch.profile.snapUrl);
         if(ch.profile.snapUrl!=nil)
         {
-            [cell.snapshotImage setImageWithURL:[NSURL URLWithString:ch.profile.snapUrl] placeholderImage:imgCamera];
+            //[cell.snapshotImage setImageWithURL:[NSURL URLWithString:ch.profile.snapUrl] placeholderImage:imgCamera];
+            
+            [cell.snapshotImage setImageWithURL:[NSURL URLWithString:ch.profile.snapUrl] placeholderImage:imgCamera options:SDWebImageRefreshCached];
         }
 
         
