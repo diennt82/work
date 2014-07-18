@@ -109,8 +109,7 @@
         NSString * msg = NSLocalizedStringWithDefaultValue(@"Invalid_Camera_Name_msg", nil, [NSBundle mainBundle],
                                                            @"Camera Name has to be between 5-30 characters", nil);
         
-        NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
-                                                          @"Ok", nil);
+        NSString * ok = NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil);
         
         
         UIAlertView * alert = [[UIAlertView alloc] initWithTitle:title
@@ -130,8 +129,7 @@
         NSString * msg = NSLocalizedStringWithDefaultValue(@"Invalid_Camera_Name_msg2", nil, [NSBundle mainBundle],
                                                            @"Camera name is invalid. Please enter [0-9],[a-Z], space, dot, hyphen, underscore & single quote only.", nil);
         
-        NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
-                                                          @"Ok", nil);
+        NSString * ok = NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil);
         
         
         UIAlertView * alert = [[UIAlertView alloc] initWithTitle:title
@@ -298,6 +296,66 @@
     
 }
 
+#if 0
+- (IBAction)handleButtonPress:(id)sender
+{
+    NSString * cameraName_text = _tfCamName.text;
+    
+    if ([cameraName_text length] < MIN_LENGTH_CAMERA_NAME || [cameraName_text length] > MAX_LENGTH_CAMERA_NAME )
+    {
+        NSString * title = NSLocalizedStringWithDefaultValue(@"Invalid_Camera_Name", nil, [NSBundle mainBundle],
+                                                             @"Invalid Camera Name", nil);
+        
+        NSString * msg = NSLocalizedStringWithDefaultValue(@"Invalid_Camera_Name_msg", nil, [NSBundle mainBundle],
+                                                           @"Camera Name has to be between 5-30 characters", nil);
+        
+        NSString * ok = NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil);
+        
+        
+        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:title
+                                                         message:msg
+                                                        delegate:self
+                                               cancelButtonTitle:ok
+                                               otherButtonTitles:nil];
+        
+        [alert show];
+        [alert release];
+    }
+    else if (![self isCameraNameValidated:cameraName_text])
+    {
+        NSString * title = NSLocalizedStringWithDefaultValue(@"Invalid_Camera_Name", nil, [NSBundle mainBundle],
+                                                             @"Invalid Camera Name", nil);
+        
+        NSString * msg = NSLocalizedStringWithDefaultValue(@"Invalid_Camera_Name_msg2", nil, [NSBundle mainBundle],
+                                                           @"Camera name is invalid. Please enter [0-9],[a-Z], space, dot, hyphen, underscore & single quote only.", nil);
+        
+        NSString * ok = NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil);
+        
+        
+        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:title
+                                                         message:msg
+                                                        delegate:self
+                                               cancelButtonTitle:ok
+                                               otherButtonTitles:nil];
+        
+        [alert show];
+        [alert release];
+    }
+    else
+    {
+        
+        
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        [userDefaults setObject:cameraName_text forKey:CAMERA_NAME];
+        [userDefaults synchronize];
+        
+        //
+        [self registerCamera:nil];
+        
+    }
+}
+#endif
+
 - (void)showScreenGetWifiList
 {
     NSLog(@"Load screen display wifi list");
@@ -380,8 +438,7 @@
         //ERROR handling: TODO:
         NSString * msg = NSLocalizedStringWithDefaultValue(@"addcam_error_2" ,nil, [NSBundle mainBundle],
                                                            @"Failed to connect to camera. Please make sure you stay close to the camera and retry", nil);
-        NSString * cancel = NSLocalizedStringWithDefaultValue(@"Cancel",nil, [NSBundle mainBundle],
-                                                              @"Cancel", nil);
+        NSString * cancel = NSLocalizedStringWithDefaultValue(@"cancel", nil, [NSBundle mainBundle], @"Cancel", nil);
         
         NSString * retry = NSLocalizedStringWithDefaultValue(@"Retry",nil, [NSBundle mainBundle],
                                                              @"Retry", nil);
@@ -469,8 +526,7 @@
     
     //    NSString * msg = NSLocalizedStringWithDefaultValue(@"Server_error_" ,nil, [NSBundle mainBundle],
     //                                                       @"Server error: %@" , nil);
-    NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
-                                                      @"Ok", nil);
+    NSString * ok = NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil);
     
 	//ERROR condition
     
@@ -497,8 +553,7 @@
     
     NSString * msg = NSLocalizedStringWithDefaultValue(@"addcam_error_1" ,nil, [NSBundle mainBundle],
                                                        @"The device is not able to connect to the server. Please check the WIFI and the internet. Go to WIFI setting to confirm device is connected to intended router", nil);
-    NSString * cancel = NSLocalizedStringWithDefaultValue(@"Cancel",nil, [NSBundle mainBundle],
-                                                          @"Cancel", nil);
+    NSString * cancel = NSLocalizedStringWithDefaultValue(@"cancel", nil, [NSBundle mainBundle], @"Cancel", nil);
     
     NSString * retry = NSLocalizedStringWithDefaultValue(@"Retry",nil, [NSBundle mainBundle],
                                                          @"Retry", nil);

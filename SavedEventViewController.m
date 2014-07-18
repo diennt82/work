@@ -37,7 +37,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = @"Saved";
+    self.title = NSLocalizedStringWithDefaultValue(@"saved", nil, [NSBundle mainBundle], @"Saved", nil);
 
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -106,7 +106,7 @@
     dFormater.dateFormat = @"MMM dd'th' yyyy";
     cell.timeLabel.font = [UIFont semiBold17Font];
     cell.timeLabel.text = [dFormater stringFromDate:dateNow];
-    cell.placeEventLabel.text = [NSString stringWithFormat:@"Back Yard\n %d Videos", 0];
+    cell.placeEventLabel.text = [NSString stringWithFormat:NSLocalizedStringWithDefaultValue(@"back_yard_videos", nil, [NSBundle mainBundle], @"Back Yard\n %d Videos", nil), 0];
     return cell;
 #else
     static NSString *CellIdentifier = @"SavedEventCell";
@@ -136,7 +136,7 @@
     dFormater.dateFormat = @"MMM dd'th' yyyy";
     cell.timeLabel.font = [UIFont regular14Font];
     cell.timeLabel.text = [dFormater stringFromDate:date];
-    cell.placeEventLabel.text = [NSString stringWithFormat:@"Back Yard\n %d Videos", info.numberVideo];
+    cell.placeEventLabel.text = [NSString stringWithFormat:NSLocalizedStringWithDefaultValue(@"back_yard_videos", nil, [NSBundle mainBundle], @"Back Yard\n %d Videos", nil), info.numberVideo];
     cell.snapshotImage.image = info.clipInfo.imgSnapshot;
     
     return cell;

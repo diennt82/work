@@ -106,7 +106,9 @@
     df_local.dateFormat = @"hh:mm a, dd-MM-yyyy";
     
     self.timeLabel.text = [df_local stringFromDate:eventDate];
-    self.messageLabel.text = [NSString stringWithFormat:@"There was some movement at %@.",self.cameraName];
+    self.messageLabel.text = [NSString stringWithFormat:@"%@ %@.",
+                              NSLocalizedStringWithDefaultValue(@"some_movement_at_camera", nil, [NSBundle mainBundle], @"There was some movement at", nil),
+                              self.cameraName];
     
     NSLog(@"notif view timelable is %@",self.timeLabel.text); 
     
@@ -163,12 +165,12 @@
 
 - (void)showDialogToConfirm
 {
-    NSString * msg = [NSString stringWithFormat:@"Video clip is not ready, please try again later."];
+    NSString * msg = [NSString stringWithFormat:NSLocalizedStringWithDefaultValue(@"alert_mes_video_clip_is_not_ready", nil, [NSBundle mainBundle], @"Video clip is not ready, please try again later.", nil)];
     
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Notice"
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"notice", nil, [NSBundle mainBundle], @"Notice", nil)
                                                         message:msg
                                                        delegate:self
-                                              cancelButtonTitle:@"Cancel"
+                                              cancelButtonTitle:NSLocalizedStringWithDefaultValue(@"cancel", nil, [NSBundle mainBundle], @"Cancel", nil)
                                               otherButtonTitles:nil, nil];
     [alertView show];
     [alertView release];
@@ -221,7 +223,7 @@
     }
     else
     {
-        self.messageLabel.text = @"You do not have motion detected recording enabled. Please choose an option below";
+        self.messageLabel.text = NSLocalizedStringWithDefaultValue(@"you_do_not_have_motion_detected_recording_enabled", nil, [NSBundle mainBundle], @"You do not have motion detected recording enabled. Please choose an option below", nil);
         self.viewFront.hidden = YES;
         
         self.viewBehide.hidden = NO;

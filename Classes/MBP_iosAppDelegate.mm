@@ -393,7 +393,8 @@ void checkingApplicationCrashed()
                 //  handle exception
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:str6
                                                                 message:str2
-                                                               delegate:self cancelButtonTitle:@"OK"
+                                                               delegate:self
+                                                      cancelButtonTitle:NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil)
                                                       otherButtonTitles:nil];
                 [alert show];
             }
