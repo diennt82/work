@@ -362,7 +362,7 @@
                                 initWithNibName:@"Step_04_ViewController" bundle:nil];
     }
     
-    step04ViewController.cameraMac =  self.cameraMac;
+    //step04ViewController.cameraMac =  self.cameraMac;
     step04ViewController.cameraName  =self.cameraName;
     
     [self.navigationController pushViewController:step04ViewController animated:NO];

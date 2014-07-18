@@ -152,9 +152,13 @@
     NSString *fwVersion = [userDefaults stringForKey:FW_VERSION];
 
     // >12.82 we can move on with new flow
-    if ([fwVersion compare:FW_MILESTONE_F66_NEW_FLOW] >= NSOrderedSame)
+    if ([fwVersion compare:FW_MILESTONE_F66_NEW_FLOW] >= NSOrderedSame ||
+        [userDefaults integerForKey:SET_UP_CAMERA] == SETUP_CAMERA_FOCUS73)
     {
-        [self waitingCameraRebootAndForceToWifiHome];
+        //[self waitingCameraRebootAndForceToWifiHome];
+        [self performSelectorOnMainThread:@selector(waitingCameraRebootAndForceToWifiHome)
+                               withObject:nil
+                            waitUntilDone:NO];
     }
     else
     {
