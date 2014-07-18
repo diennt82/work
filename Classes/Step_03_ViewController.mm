@@ -418,7 +418,7 @@
     labelCrazy.numberOfLines = 0;
     labelCrazy.font = [UIFont applyHubbleFontName:PN_SEMIBOLD_FONT withSize:13];
     labelCrazy.textAlignment = NSTextAlignmentCenter;
-    labelCrazy.text = @"Please press the button located on the camera.";
+    labelCrazy.text = NSLocalizedStringWithDefaultValue(@"press_located_on_the_camera", nil, [NSBundle mainBundle], @"Please press the button located on the camera.", nil);
     [self.view addSubview:labelCrazy];
     [self.view bringSubviewToFront:labelCrazy];
     

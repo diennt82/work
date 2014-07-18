@@ -150,7 +150,7 @@
      One solution to avoid memory constraints is to save each taken photo to disk rather than keeping all of them in memory.
      In low memory situations sometimes our "didReceiveMemoryWarning" method will be called in which case we can recover some memory and keep the app running.
      */
-    self.startStopButton.title = NSLocalizedString(@"Stop", @"Title for overlay view controller start/stop button");
+    self.startStopButton.title = NSLocalizedStringWithDefaultValue(@"controller_start_stop", nil, [NSBundle mainBundle], @"Title for overlay view controller start/stop button", nil);
     [self.startStopButton setAction:@selector(stopTakingPicturesAtIntervals:)];
     
     self.doneButton.enabled = NO;

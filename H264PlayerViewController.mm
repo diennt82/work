@@ -55,8 +55,8 @@ double _ticks = 0;
     _selectedItemMenu = INDEX_NO_SELECT;
     [self.ib_buttonChangeAction setHidden:NO];
     [self.view bringSubviewToFront:self.ib_buttonChangeAction];
-    [self.ib_labelRecordVideo setText:@"Record Video"];
-    [self.ib_labelTouchToTalk setText:@"Touch to Talk"];
+    [self.ib_labelRecordVideo setText:NSLocalizedStringWithDefaultValue(@"record_video", nil, [NSBundle mainBundle], @"Record Video", nil)];
+    [self.ib_labelTouchToTalk setText:NSLocalizedStringWithDefaultValue(@"touch_to_talk", nil, [NSBundle mainBundle], @"Touch to Talk", nil)];
     //setup Font
     [self applyFont];
     
@@ -113,7 +113,7 @@ double _ticks = 0;
     
     self.enablePTT = YES;
     self.currentBitRate = @"128";
-    self.messageStreamingState = @"Camera is not accessible";
+    self.messageStreamingState = NSLocalizedStringWithDefaultValue(@"camera_is_not_accessible", nil, [NSBundle mainBundle], @"Camera is not accessible", nil);
     self.timeStartingStageTwo = 0;
     
     
@@ -491,7 +491,7 @@ double _ticks = 0;
 {
     if (![self.selectedChannel.profile isSharedCam]) // SharedCam
     {
-        nowButton = [[UIBarButtonItem alloc] initWithTitle:@"Now"
+        nowButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"now", nil, [NSBundle mainBundle], @"Now", nil)
                                                      style:UIBarButtonItemStylePlain
                                                     target:self
                                                     action:@selector(nowButtonAciton:)];
@@ -500,7 +500,7 @@ double _ticks = 0;
                                             NSForegroundColorAttributeName:[UIColor barItemSelectedColor]
                                             } forState:UIControlStateNormal];
         
-        earlierButton = [[UIBarButtonItem alloc] initWithTitle:@"Earlier"
+        earlierButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"earlier", nil, [NSBundle mainBundle], @"Earlier", nil)
                                                          style:UIBarButtonItemStylePlain
                                                         target:self
                                                         action:@selector(earlierButtonAction:)];
@@ -660,15 +660,15 @@ double _ticks = 0;
 
 - (IBAction)btnSendingLogTouchUpInside:(id)sender
 {
-    UIAlertView *alertViewSendingLog = [[UIAlertView alloc] initWithTitle:@"Request Camera log?"
+    UIAlertView *alertViewSendingLog = [[UIAlertView alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"alert_title_request_camera_log", nil, [NSBundle mainBundle], @"Request Camera log?", nil)
                                                                   message:nil
                                                                  delegate:self
                                                         cancelButtonTitle:@"NO"
-                                                        otherButtonTitles:@"YES", nil];
+                                                        otherButtonTitles:NSLocalizedStringWithDefaultValue(@"yes", nil, [NSBundle mainBundle], @"YES", nil), nil];
     alertViewSendingLog.tag = TAG_ALERT_SENDING_LOG;
     alertViewSendingLog.alertViewStyle = UIAlertViewStyleSecureTextInput;
     [alertViewSendingLog textFieldAtIndex:0].keyboardType = UIKeyboardTypeNumberPad;
-    [alertViewSendingLog textFieldAtIndex:0].placeholder = @"Password";
+    [alertViewSendingLog textFieldAtIndex:0].placeholder = NSLocalizedStringWithDefaultValue(@"password", nil, [NSBundle mainBundle], @"Password", nil);
     [alertViewSendingLog show];
     [alertViewSendingLog release];
 }
@@ -689,7 +689,7 @@ double _ticks = 0;
         NSLog(@"%s ", __FUNCTION__);
         
         [self handleMessage:MEDIA_ERROR_SERVER_DIED ext1:-99 ext2:-1];
-        self.messageStreamingState = @"Low data bandwidth detected. Trying to connect...";
+        self.messageStreamingState = NSLocalizedStringWithDefaultValue(@"low_data_bandwidth_detected", nil, [NSBundle mainBundle], @"Low data bandwidth detected. Trying to connect...", nil);
     }
 }
 
@@ -1301,10 +1301,8 @@ double _ticks = 0;
     
     NSString *msg = NSLocalizedStringWithDefaultValue(@"fw_upgrade", nil, [NSBundle mainBundle],
                                                        @"A camera firmware %@ is available. Press OK to upgrade now." , nil);
-    NSString *ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
-                                                      @"OK" , nil);
-    NSString *cancel = NSLocalizedStringWithDefaultValue(@"Cancel",nil, [NSBundle mainBundle],
-                                                      @"Cancel" , nil);
+    NSString *ok = NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil);
+    NSString *cancel = NSLocalizedStringWithDefaultValue(@"cancel", nil, [NSBundle mainBundle], @"Cancel", nil);
     
 	msg = [NSString stringWithFormat:msg, version];
     
@@ -2487,11 +2485,11 @@ double _ticks = 0;
     }
     else
     {
-        self.alertViewTimoutRemote = [[UIAlertView alloc] initWithTitle:@"Remote Stream"
-                                                                message:@"The Camera has been viewed for about 5 minutes. Do you want to continue?"
+        self.alertViewTimoutRemote = [[UIAlertView alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"alert_title_remote_stream", nil, [NSBundle mainBundle], @"Remote Stream", nil)
+                                                                message:NSLocalizedStringWithDefaultValue(@"alert_mes_camera_has_been_viewed_for_about_5_minutes", nil, [NSBundle mainBundle], @"The Camera has been viewed for about 5 minutes. Do you want to continue?", nil)
                                                                delegate:self
-                                                      cancelButtonTitle:@"View other camera"
-                                                      otherButtonTitles:@"Yes", nil];
+                                                      cancelButtonTitle:NSLocalizedStringWithDefaultValue(@"view_other_camera", nil, [NSBundle mainBundle], @"View other camera", nil)
+                                                      otherButtonTitles:NSLocalizedStringWithDefaultValue(@"yes", nil, [NSBundle mainBundle], @"YES", nil), nil];
         _alertViewTimoutRemote.tag = TAG_ALERT_VIEW_REMOTE_TIME_OUT;
         
         [_alertViewTimoutRemote show];
@@ -4762,7 +4760,7 @@ double _ticks = 0;
                     if ([response isEqualToString:@"request_fw_upgrade: 0"])
                     {
                         MBProgressHUD *hub = [MBProgressHUD showHUDAddedTo:self.view animated:NO];
-                        [hub setLabelText:@"Checking Fw upgrade..."];
+                        [hub setLabelText:NSLocalizedStringWithDefaultValue(@"hud_checking_FW_upgrade", nil, [NSBundle mainBundle], @"Checking Fw upgrade...", nil)];
                         self.isFWUpgradingInProgress = YES; // Entering bg control
                         [self createHubbleAlertView];
                         
@@ -5439,7 +5437,7 @@ double _ticks = 0;
     self.enablePTT = NO;
     _ib_buttonTouchToTalk.enabled = NO;
     self.stringStatePTT = @"Processing...";
-    _ib_labelTouchToTalk.text = @"Processing...";
+    _ib_labelTouchToTalk.text = NSLocalizedStringWithDefaultValue(@"text_processing", nil, [NSBundle mainBundle], @"Processing...", nil);
     
     if (self.selectedChannel.profile.isInLocal)
     {
@@ -5458,7 +5456,7 @@ double _ticks = 0;
     {
         // Stop talkback if it is enabled
         
-        [self showToat:NSLocalizedString(@"stop_talking_toat", @"")];
+        [self showToat:NSLocalizedStringWithDefaultValue(@"stop_talking_toat", nil, [NSBundle mainBundle], @"Talkback disabled", nil)];
         
         //self.walkieTalkieEnabled = !_walkieTalkieEnabled;
         [self ib_buttonTouchToTalkTouchUpInside];
@@ -5519,7 +5517,7 @@ double _ticks = 0;
         
         
         self.disableAutorotateFlag = TRUE;
-        [self.ib_labelTouchToTalk setText:@"Please Speak"];
+        [self.ib_labelTouchToTalk setText:NSLocalizedStringWithDefaultValue(@"text_please_speak", nil, [NSBundle mainBundle], @"Please Speak", nil)];
         self.stringStatePTT = @"Speaking";
         
         //Mute audio to MediaPlayer lib
@@ -5600,7 +5598,7 @@ double _ticks = 0;
             if (self.melodyViewController) {
                 if (self.melodyViewController.playing) {
                     self.melodyViewController.playing = NO;
-                    [self showToat:NSLocalizedString(@"stop_melody_toat", @"")];
+                    [self showToat:NSLocalizedStringWithDefaultValue(@"stop_melody_toat", nil, [NSBundle mainBundle], @"Melody will be stopped", nil)];
                 }
             }
         });
@@ -5615,13 +5613,13 @@ double _ticks = 0;
     
     if (self.selectedChannel.profile.isInLocal)
     {
-        [self.ib_labelTouchToTalk setText:@"Touch to Talk"];
+        [self.ib_labelTouchToTalk setText:NSLocalizedStringWithDefaultValue(@"text_touch_to_talk", nil, [NSBundle mainBundle], @"Touch to Talk", nil)];
     }
     else
     {
         _ib_buttonTouchToTalk.enabled = YES;
         self.enablePTT = YES;
-        [_ib_labelTouchToTalk setText:@"Touch to Talk"];
+        [_ib_labelTouchToTalk setText:NSLocalizedStringWithDefaultValue(@"text_touch_to_talk", nil, [NSBundle mainBundle], @"Touch to Talk", nil)];
         self.stringStatePTT = @"Touch to Talk";
     }
     
@@ -5674,7 +5672,7 @@ double _ticks = 0;
             if ([[responseDict objectForKey:@"status"] integerValue] == 404)
             {
                 self.ib_buttonTouchToTalk.enabled = NO;
-                self.ib_labelTouchToTalk.text = @"Not support!";
+                self.ib_labelTouchToTalk.text = NSLocalizedStringWithDefaultValue(@"text_not_support", nil, [NSBundle mainBundle], @"Not support!", nil);
                 self.stringStatePTT = @"Not support!";
                 
                 return 404;
@@ -5748,7 +5746,7 @@ double _ticks = 0;
                 if (self.melodyViewController) {
                     if (self.melodyViewController.playing) {
                         self.melodyViewController.playing = NO;
-                        [self showToat:NSLocalizedString(@"stop_melody_toat", @"")];
+                        [self showToat:NSLocalizedStringWithDefaultValue(@"stop_melody_toat", nil, [NSBundle mainBundle], @"Melody will be stopped", nil)];
                     }
                 }
             });
@@ -5954,12 +5952,12 @@ double _ticks = 0;
     if (isFailed)
     {
         NSLog(@"Report handshake failed! Retry...");
-        self.ib_labelTouchToTalk.text = @"Retry...";
+        self.ib_labelTouchToTalk.text = NSLocalizedStringWithDefaultValue(@"text_retry", nil, [NSBundle mainBundle], @"Retry...", nil);
         [self retryTalkbackRemote];
     }
     else
     {
-        self.ib_labelTouchToTalk.text = @"Please Speak";
+        self.ib_labelTouchToTalk.text = NSLocalizedStringWithDefaultValue(@"text_please_speak", nil, [NSBundle mainBundle], @"Please Speak", nil);
     }
 }
 
@@ -6046,7 +6044,7 @@ double _ticks = 0;
     else
     {
         //now is for take pictures
-        [self.ib_labelRecordVideo setText:@"Take Picture"];
+        [self.ib_labelRecordVideo setText:NSLocalizedStringWithDefaultValue(@"text_take_picture", nil, [NSBundle mainBundle], @"Take Picture", nil)];
         [self.ib_processRecordOrTakePicture setBackgroundImage:[UIImage imageTakePhoto] forState:UIControlStateNormal];
         [self.ib_processRecordOrTakePicture setBackgroundImage:[UIImage imageTakePhoto] forState:UIControlEventTouchUpInside];
         [self.ib_processRecordOrTakePicture setBackgroundImage:[UIImage imageTakePhotoPressed] forState:UIControlEventTouchDown];
@@ -6085,7 +6083,7 @@ double _ticks = 0;
     [self.ib_processRecordOrTakePicture setBackgroundImage:[UIImage imageRecordVideo] forState:UIControlEventTouchUpInside];
     //stop timer display
     [self stopTimerRecoring];
-    [self.ib_labelRecordVideo setText:@"Record Video"];
+    [self.ib_labelRecordVideo setText:NSLocalizedStringWithDefaultValue(@"text_record_video", nil, [NSBundle mainBundle], @"Record Video", nil)];
     _syncPortraitAndLandscape = NO;
     
     // DUMMY for now..
@@ -6127,7 +6125,7 @@ double _ticks = 0;
             [self.ib_processRecordOrTakePicture setBackgroundImage:[UIImage imageRecordVideo] forState:UIControlStateNormal];
             [self.ib_processRecordOrTakePicture setBackgroundImage:[UIImage imageRecordVideoPressed] forState:UIControlEventTouchDown];
             [self.ib_processRecordOrTakePicture setBackgroundImage:[UIImage imageRecordVideo] forState:UIControlEventTouchUpInside];
-            [self.ib_labelRecordVideo setText:@"Record Video"];
+            [self.ib_labelRecordVideo setText:NSLocalizedStringWithDefaultValue(@"text_record_video", nil, [NSBundle mainBundle], @"Record Video", nil)];
             _syncPortraitAndLandscape = NO;
         }
     }
@@ -6145,7 +6143,7 @@ double _ticks = 0;
             [self.ib_buttonChangeAction setHidden:YES];
             [self.ib_changeToMainRecording setHidden:NO];
             [self.view bringSubviewToFront:self.ib_changeToMainRecording];
-            [self.ib_labelRecordVideo setText:@"Take Picture"];
+            [self.ib_labelRecordVideo setText:NSLocalizedStringWithDefaultValue(@"text_take_picture", nil, [NSBundle mainBundle], @"Take Picture", nil)];
         }
         else
         {
@@ -6155,7 +6153,7 @@ double _ticks = 0;
             [self.view bringSubviewToFront:self.ib_buttonChangeAction];
             [self.ib_buttonChangeAction setBackgroundImage:[UIImage imageVideoGrey] forState:UIControlStateNormal];
             [self.ib_buttonChangeAction setBackgroundImage:[UIImage imageVideoGreyPressed] forState:UIControlStateSelected];
-            [self.ib_labelRecordVideo setText:@"Take Picture"];
+            [self.ib_labelRecordVideo setText:NSLocalizedStringWithDefaultValue(@"text_take_picture", nil, [NSBundle mainBundle], @"Take Picture", nil)];
             _syncPortraitAndLandscape = NO;
         }
         
@@ -6181,7 +6179,7 @@ double _ticks = 0;
     }
     else
     {
-        self.ib_labelRecordVideo.text = @"Take Picture";
+        self.ib_labelRecordVideo.text = NSLocalizedStringWithDefaultValue(@"text_take_picture", nil, [NSBundle mainBundle], @"Take Picture", nil);
         //now is interface take picture
         if (_isProcessRecording)
         {
@@ -6249,15 +6247,15 @@ double _ticks = 0;
 	NSString *title;
 	if (!error)
 	{
-		title = @"Snapshot";
-		message = @"Saved to Photo Album";
+		title = NSLocalizedStringWithDefaultValue(@"alert_title_snapshot", nil, [NSBundle mainBundle], @"Snapshot", nil);
+		message = NSLocalizedStringWithDefaultValue(@"alert_mes_saved_to_photo_album", nil, [NSBundle mainBundle], @"Saved to Photo Album", nil);
         
 	}
 	else
 	{
-		title = @"Error";
+		title = NSLocalizedStringWithDefaultValue(@"error", nil, [NSBundle mainBundle], @"Error", nil);
 		//message = [error description];
-        message = @"Please allow permission to save media in gallery.  iPhone Settings > Privacy > Photos > Hubble Home :- Turn switch on.";
+        message = NSLocalizedStringWithDefaultValue(@"alert_mes_permission_to_save_media_in_gallery", nil, [NSBundle mainBundle], @"Please allow permission to save media in gallery.  iPhone Settings > Privacy > Photos > Hubble Home :- Turn switch on.", nil);
 		NSLog(@"Error when writing file to image library: %@", [error localizedDescription]);
 		NSLog(@"Error code %d", [error code]);
         
@@ -6266,7 +6264,7 @@ double _ticks = 0;
                                initWithTitle:title
                                message:message
                                delegate:self
-                               cancelButtonTitle:@"OK"
+                               cancelButtonTitle:NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil)
                                otherButtonTitles:nil];
 	[_alertInfo show];
 	[_alertInfo release];
@@ -6865,8 +6863,7 @@ double _ticks = 0;
     
     NSString *msg = nil;
     NSString *title = @"Firmware Upgrade Succeeded";
-    NSString *ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
-                                                     @"OK" , nil);
+    NSString *ok = NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil);
     
     if ([status integerValue] == TAG_ALERT_FW_OTA_UPGRADE_FAILED)
     {
@@ -7062,13 +7059,13 @@ double _ticks = 0;
                                    withObject:nil
                                 waitUntilDone:NO];
             
-            self.messageStreamingState = @"Low data bandwidth detected. Trying to connect...";
+            self.messageStreamingState = NSLocalizedStringWithDefaultValue(@"low_data_bandwidth_detected", nil, [NSBundle mainBundle], @"Low data bandwidth detected. Trying to connect...", nil);
         }
         else
         {
             //handle Bad response
             NSLog(@"%s ERROR: %@", __FUNCTION__, [responseDict objectForKey:@"message"]);
-            self.messageStreamingState = @"Camera is not accessible";
+            self.messageStreamingState = NSLocalizedStringWithDefaultValue(@"camera_is_not_accessible", nil, [NSBundle mainBundle], @"Camera is not accessible", nil);
             _isShowTextCameraIsNotAccesible = YES;
             
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -7094,7 +7091,7 @@ double _ticks = 0;
     {
         //handle Bad response
         NSLog(@"%s ERROR: %@", __FUNCTION__, [responseDict objectForKey:@"message"]);
-        self.messageStreamingState = @"Camera is not accessible";
+        self.messageStreamingState = NSLocalizedStringWithDefaultValue(@"camera_is_not_accessible", nil, [NSBundle mainBundle], @"Camera is not accessible", nil);
         _isShowTextCameraIsNotAccesible = YES;
         
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -7118,7 +7115,7 @@ double _ticks = 0;
             [UIApplication sharedApplication].applicationState != UIApplicationStateBackground) // Testing this to decide using it or not
         {
             NSLog(@"SERVER unreachable (timeout) ");
-            self.messageStreamingState = @"Camera is not accessible";
+            self.messageStreamingState = NSLocalizedStringWithDefaultValue(@"camera_is_not_accessible", nil, [NSBundle mainBundle], @"Camera is not accessible", nil);
             _isShowTextCameraIsNotAccesible = YES;
             [self.ib_lbCameraNotAccessible setHidden:NO];
             [self performSelector:@selector(setupCamera) withObject:nil afterDelay:10];

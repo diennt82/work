@@ -45,7 +45,16 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
     self.imageCellWidth = UIScreen.mainScreen.bounds.size.width / 8;
-    self.dayArray = [NSArray arrayWithObjects:@"Hours", @"Mon", @"Tue", @"Wed", @"Thur", @"Fri", @"Sat", @"Sun", nil];
+    self.dayArray = [NSArray arrayWithObjects:
+                     NSLocalizedStringWithDefaultValue(@"hours", nil, [NSBundle mainBundle], @"Hours", nil),
+                     NSLocalizedStringWithDefaultValue(@"mon", nil, [NSBundle mainBundle], @"Mon", nil),
+                     NSLocalizedStringWithDefaultValue(@"tue", nil, [NSBundle mainBundle], @"Tue", nil),
+                     NSLocalizedStringWithDefaultValue(@"wed", nil, [NSBundle mainBundle], @"Wed", nil),
+                     NSLocalizedStringWithDefaultValue(@"thur", nil, [NSBundle mainBundle], @"Thur", nil),
+                     NSLocalizedStringWithDefaultValue(@"fri", nil, [NSBundle mainBundle], @"Fri", nil),
+                     NSLocalizedStringWithDefaultValue(@"sat", nil, [NSBundle mainBundle], @"Sat", nil),
+                     NSLocalizedStringWithDefaultValue(@"sun", nil, [NSBundle mainBundle], @"Sun", nil),
+                     nil];
 }
 
 - (void)didReceiveMemoryWarning
@@ -184,7 +193,7 @@
             [dayLabel setBackgroundColor:[UIColor colorWithPatternImage:image]];
             if (indexPath.row == 0)
             {
-                dayLabel.text = @"Midnight";
+                dayLabel.text = NSLocalizedStringWithDefaultValue(@"midnight", nil, [NSBundle mainBundle], @"Midnight", nil);
             }
             else
             {
@@ -194,7 +203,7 @@
                 }
                 else if(indexPath.row == 12)
                 {
-                    dayLabel.text = @"Noon";
+                    dayLabel.text = NSLocalizedStringWithDefaultValue(@"noon", nil, [NSBundle mainBundle], @"Noon", nil);
                 }
                 else
                 {

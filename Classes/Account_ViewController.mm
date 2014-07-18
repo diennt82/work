@@ -37,7 +37,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
-        NSString * msgAccount = NSLocalizedStringWithDefaultValue(@"Account_",nil, [NSBundle mainBundle],
+        NSString * msgAccount = NSLocalizedStringWithDefaultValue(@"account",nil, [NSBundle mainBundle],
                                                                   @"Account", nil);
         self.title = msgAccount;
     }
@@ -223,15 +223,15 @@
 {
     if (section == 0)
     {
-        return @"Profile";
+        return NSLocalizedStringWithDefaultValue(@"profile", nil, [NSBundle mainBundle], @"Profile", nil);
     }
     else if(section == 1)
     {
-        return @"Plan";
+        return NSLocalizedStringWithDefaultValue(@"plan", nil, [NSBundle mainBundle], @"Plan", nil);
     }
     else
     {
-        return @"Report";
+        return NSLocalizedStringWithDefaultValue(@"report", nil, [NSBundle mainBundle], @"Report", nil);
     }
 }
 
@@ -304,7 +304,7 @@
             
             // Configure the cell...
             
-            cell.textLabel.text = @"Logout";
+            cell.textLabel.text = NSLocalizedStringWithDefaultValue(@"cell_logout", nil, [NSBundle mainBundle], @"Logout", nil);
             
             return cell;
         }
@@ -327,8 +327,8 @@
         
         if (indexPath.row == 0)
         {
-            cell.nameLabel.text = @"Current Plan";
-            cell.valueLabel.text = @"Free";
+            cell.nameLabel.text = NSLocalizedStringWithDefaultValue(@"cell_current_plan", nil, [NSBundle mainBundle], @"Current Plan", nil);
+            cell.valueLabel.text = NSLocalizedStringWithDefaultValue(@"cell_free", nil, [NSBundle mainBundle], @"Free", nil);
             cell.valueLabel.hidden = NO;
             
             return cell;
@@ -339,7 +339,7 @@
             //cell.valueLabel.text = nil;
             //cell.valueLabel.hidden = YES;
             
-            cell.nameLabel.text = @"App Version";
+            cell.nameLabel.text = NSLocalizedStringWithDefaultValue(@"cell_app_version", nil, [NSBundle mainBundle], @"App Version", nil);
             NSDictionary* infoDict = [[NSBundle mainBundle] infoDictionary];
             cell.valueLabel.text = [infoDict objectForKey:@"CFBundleShortVersionString"];
             cell.valueLabel.hidden = NO;
@@ -397,12 +397,12 @@
     UITextField *tfConfPass = [[UITextField alloc] initWithFrame:CGRectMake(10, 110, 280, 30)];
     
     UILabel *lblTitle = [[UILabel alloc] initWithFrame:CGRectMake(5, 5, 280, 25)];
-    [lblTitle setText:@"Change Password"];
+    [lblTitle setText:NSLocalizedStringWithDefaultValue(@"change_password", nil, [NSBundle mainBundle], @"Change Password", nil)];
     [lblTitle setTextAlignment:NSTextAlignmentCenter];
     
-    tfOldPass.placeholder = @"Old Password";
-    tfNewPass.placeholder = @"New Password";
-    tfConfPass.placeholder = @"Confirm Password";
+    tfOldPass.placeholder = NSLocalizedStringWithDefaultValue(@"old_password", nil, [NSBundle mainBundle], @"Old Password", nil);
+    tfNewPass.placeholder = NSLocalizedStringWithDefaultValue(@"new_password", nil, [NSBundle mainBundle], @"New Password", nil);
+    tfConfPass.placeholder = NSLocalizedStringWithDefaultValue(@"confirm_password", nil, [NSBundle mainBundle], @"Confirm Password", nil);
     
     [tfOldPass setSecureTextEntry:YES];
     [tfNewPass setSecureTextEntry:YES];
@@ -419,7 +419,9 @@
     
     [alert setContainerView:alertContenerView];
     
-    [alert setButtonTitles:[NSMutableArray arrayWithObjects:@"Cancel", @"OK", nil]];
+    [alert setButtonTitles:[NSMutableArray arrayWithObjects:
+                            NSLocalizedStringWithDefaultValue(@"cancel", nil, [NSBundle mainBundle], @"Cancel", nil),
+                            NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil), nil]];
     
     [alert setOnButtonTouchUpInside:^(CustomIOS7AlertView *alertView, int buttonIndex)
     {
@@ -447,12 +449,14 @@
             {
                 if(tfOldPass.text.length == 0)
                 {
-                    NSDictionary *dictError = [NSDictionary dictionaryWithObjectsAndKeys:@"Please enter correct  old password", @"message", nil];
+                    NSDictionary *dictError = [NSDictionary dictionaryWithObjectsAndKeys:
+                                               NSLocalizedStringWithDefaultValue(@"alert_mes_please_enter_correct_old_password", nil, [NSBundle mainBundle], @"Please enter correct old password", nil), @"message", nil];
                     [self changePasswordFialedWithError:dictError];
                 }
                 else
                 {
-                    NSDictionary *dictError = [NSDictionary dictionaryWithObjectsAndKeys:@"Validation failed: Password is not match or empty", @"message", nil];
+                    NSDictionary *dictError = [NSDictionary dictionaryWithObjectsAndKeys:
+                                               NSLocalizedStringWithDefaultValue(@"alert_mes_password_is_not_match_or_empty", nil, [NSBundle mainBundle], @"Validation failed: Password is not match or empty", nil), @"message", nil];
                     [self changePasswordFialedWithError:dictError];
                 }
             }
@@ -470,7 +474,7 @@
 -(void)checkOldPass:(NSString *)strOldPass NewPass:(NSString *)strNewPass
 {
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    [hud setLabelText:@"Please wait ..."];
+    [hud setLabelText:NSLocalizedStringWithDefaultValue(@"hud_please_wait", nil, [NSBundle mainBundle], @"Please wait ...", nil)];
     
     BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
                                                                               Selector:@selector(loginSuccessWithResponse:)
@@ -501,11 +505,11 @@
         {
             NSLog(@"Invalid response: %@", responseDict);
             
-            [[[[UIAlertView alloc] initWithTitle:@"Change Password Failed"
-                                         message:@"Enter correct old password."
+            [[[[UIAlertView alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"alert_title_change_password_failed", nil, [NSBundle mainBundle], @"Change Password Failed", nil)
+                                         message:NSLocalizedStringWithDefaultValue(@"alert_mes_enter_correct_old_password", nil, [NSBundle mainBundle], @"Enter correct old password.", nil)
                                         delegate:nil
                                cancelButtonTitle:nil
-                               otherButtonTitles:@"OK", nil] autorelease] show];
+                               otherButtonTitles:NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil), nil] autorelease] show];
          
             [MBProgressHUD hideAllHUDsForView:self.view animated:NO];
         }
@@ -520,21 +524,21 @@
 - (void) loginFailedWithError:(NSDictionary *) responseError
 {
     [MBProgressHUD hideAllHUDsForView:self.view animated:NO];
-    [[[[UIAlertView alloc] initWithTitle:@"Change Password Failed"
-                                 message:@"Enter correct old password."
+    [[[[UIAlertView alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"alert_title_change_password_failed", nil, [NSBundle mainBundle], @"Change Password Failed", nil)
+                                 message:NSLocalizedStringWithDefaultValue(@"alert_mes_enter_correct_old_password", nil, [NSBundle mainBundle], @"Enter correct old password.", nil)
                                 delegate:nil
                        cancelButtonTitle:nil
-                       otherButtonTitles:@"OK", nil] autorelease] show];
+                       otherButtonTitles:NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil), nil] autorelease] show];
 }
 
 - (void)loginFailedServerUnreachable
 {
     [MBProgressHUD hideAllHUDsForView:self.view animated:NO];
-    [[[[UIAlertView alloc] initWithTitle:@"Failed: Server is unreachable"
+    [[[[UIAlertView alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"alert_title_server_is_unreachable", nil, [NSBundle mainBundle], @"Failed: Server is unreachable", nil)
                                  message:nil
                                 delegate:nil
                        cancelButtonTitle:nil
-                       otherButtonTitles:@"OK", nil] autorelease] show];
+                       otherButtonTitles:NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil), nil] autorelease] show];
     
 }
 
@@ -565,21 +569,21 @@
 - (void)changePasswordFialedWithError:(NSDictionary *)error_response
 {
     [MBProgressHUD hideAllHUDsForView:self.view animated:NO];
-    [[[[UIAlertView alloc] initWithTitle:@"Change Password Failed"
+    [[[[UIAlertView alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"alert_title_change_password_failed", nil, [NSBundle mainBundle], @"Change Password Failed", nil)
                                  message:[error_response objectForKey:@"message"]
                                 delegate:nil
                        cancelButtonTitle:nil
-                       otherButtonTitles:@"OK", nil] autorelease] show];
+                       otherButtonTitles:NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil), nil] autorelease] show];
 }
 
 - (void)changePasswordFailedServerUnreachable
 {
     [MBProgressHUD hideAllHUDsForView:self.view animated:NO];
-    [[[[UIAlertView alloc] initWithTitle:@"Failed: Server is unreachable"
+    [[[[UIAlertView alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"alert_title_server_is_unreachable", nil, [NSBundle mainBundle], @"Failed: Server is unreachable", nil)
                                  message:nil
                                 delegate:nil
                        cancelButtonTitle:nil
-                       otherButtonTitles:@"OK", nil] autorelease] show];
+                       otherButtonTitles:NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil), nil] autorelease] show];
 }
 #pragma mark - Verify new password
 
@@ -610,22 +614,22 @@
             [[NSUserDefaults standardUserDefaults] synchronize];
 
             [MBProgressHUD hideAllHUDsForView:self.view animated:NO];
-            [[[[UIAlertView alloc] initWithTitle:@"Change Password"
-                                         message:@"Successful"
+            [[[[UIAlertView alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"alert_title_change_password", nil, [NSBundle mainBundle], @"Change Password", nil)
+                                         message:NSLocalizedStringWithDefaultValue(@"alert_mes_successful", nil, [NSBundle mainBundle], @"Successful", nil)
                                         delegate:nil
                                cancelButtonTitle:nil
-                               otherButtonTitles:@"OK", nil] autorelease] show];
+                               otherButtonTitles:NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil), nil] autorelease] show];
 
         }
         else
         {
             NSLog(@"Invalid response: %@", responseDict);
             [MBProgressHUD hideAllHUDsForView:self.view animated:NO];
-            [[[[UIAlertView alloc] initWithTitle:@"Change Password Failed"
-                                         message:@"Enter correct old password."
+            [[[[UIAlertView alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"alert_title_change_password_failed", nil, [NSBundle mainBundle], @"Change Password Failed", nil)
+                                         message:NSLocalizedStringWithDefaultValue(@"alert_mes_enter_correct_old_password", nil, [NSBundle mainBundle], @"Enter correct old password.", nil)
                                         delegate:nil
                                cancelButtonTitle:nil
-                               otherButtonTitles:@"OK", nil] autorelease] show];
+                               otherButtonTitles:NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil), nil] autorelease] show];
         }
     }
     else
@@ -638,21 +642,21 @@
 - (void) reloginFailedWithError:(NSDictionary *) responseError
 {
     [MBProgressHUD hideAllHUDsForView:self.view animated:NO];
-    [[[[UIAlertView alloc] initWithTitle:@"Change Password Failed"
-                                 message:@"Enter correct old password."
+    [[[[UIAlertView alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"alert_title_change_password_failed", nil, [NSBundle mainBundle], @"Change Password Failed", nil)
+                                 message:NSLocalizedStringWithDefaultValue(@"alert_mes_enter_correct_old_password", nil, [NSBundle mainBundle], @"Enter correct old password.", nil)
                                 delegate:nil
                        cancelButtonTitle:nil
-                       otherButtonTitles:@"OK", nil] autorelease] show];
+                       otherButtonTitles:NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil), nil] autorelease] show];
 }
 
 - (void)reloginFailedServerUnreachable
 {
     [MBProgressHUD hideAllHUDsForView:self.view animated:NO];
-    [[[[UIAlertView alloc] initWithTitle:@"Failed: Server is unreachable"
+    [[[[UIAlertView alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"alert_title_server_is_unreachable", nil, [NSBundle mainBundle], @"Failed: Server is unreachable", nil)
                                  message:nil
                                 delegate:nil
                        cancelButtonTitle:nil
-                       otherButtonTitles:@"OK", nil] autorelease] show];
+                       otherButtonTitles:NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil), nil] autorelease] show];
     
 }
 

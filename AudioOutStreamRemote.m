@@ -174,10 +174,10 @@
 		  [err code], err);
     
     UIAlertView *_alert = [[UIAlertView alloc]
-                           initWithTitle:@"Initializing Push-to-talk failed"
+                           initWithTitle:NSLocalizedStringWithDefaultValue(@"alert_title_push_to_talk_failed", nil, [NSBundle mainBundle], @"Initializing Push-to-talk failed", nil)
                            message:err.localizedDescription
                            delegate:self
-                           cancelButtonTitle:@"OK"
+                           cancelButtonTitle:NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil)
                            otherButtonTitles:nil];
     [_alert show];
     [_alert release];
@@ -233,7 +233,7 @@
                                initWithTitle:@"Handshake"
                                message:@"Handshake failed!"
                                delegate:nil
-                               cancelButtonTitle:@"OK"
+                               cancelButtonTitle:NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil)
                                otherButtonTitles:nil];
         [_alert show];
         [_alert release];

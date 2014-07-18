@@ -1410,12 +1410,12 @@
  */
 - (void)showDialogToConfirm
 {
-    NSString * msg = [NSString stringWithFormat:@"Video clip is not ready, please try again later."];
+    NSString * msg = [NSString stringWithFormat:NSLocalizedStringWithDefaultValue(@"alert_mes_video_clip_is_not_ready", nil, [NSBundle mainBundle], @"Video clip is not ready, please try again later.", nil)];
     
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Notice"
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"notice", nil, [NSBundle mainBundle], @"Notice", nil)
                                                         message:msg
                                                        delegate:self
-                                              cancelButtonTitle:@"Cancel"
+                                              cancelButtonTitle:NSLocalizedStringWithDefaultValue(@"cancel", nil, [NSBundle mainBundle], @"Cancel", nil)
                                               otherButtonTitles:nil, nil];
     [alertView show];
     [alertView release];

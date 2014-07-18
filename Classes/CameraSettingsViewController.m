@@ -26,7 +26,7 @@
     self = [super initWithStyle:style];
     if (self) {
         // Custom initialization
-        self.title = @"Camera Settings";
+        self.title = NSLocalizedStringWithDefaultValue(@"camera_settings", nil, [NSBundle mainBundle], @"Camera Settings", nil);
     }
     return self;
 }
@@ -91,13 +91,13 @@
     switch (section)
     {
         case 0:
-            return @"Volume";
+            return NSLocalizedStringWithDefaultValue(@"volume", nil, [NSBundle mainBundle], @"Volume", nil);
             
         case 1:
-            return @"Brightness";
+            return NSLocalizedStringWithDefaultValue(@"brightness", nil, [NSBundle mainBundle], @"Brightness", nil);
             
         case 2:
-            return @"Sound Sensitivity";
+            return NSLocalizedStringWithDefaultValue(@"sound_sensitivity", nil, [NSBundle mainBundle], @"Sound Sensitivity", nil);
             
         default:
             break;
@@ -185,7 +185,7 @@
             switch (indexPath.row)
            {
                 case 0:
-                   cell.nameLabel.text = @"Temperature Unit";
+                   cell.nameLabel.text = NSLocalizedStringWithDefaultValue(@"temperature_unit", nil, [NSBundle mainBundle], @"Temperature Unit", nil);
                    if (self.temperatureType == 0)
                    {
                        cell.valueLabel.text = @"˚F";
@@ -197,14 +197,14 @@
                     break;
                    
                case 1:
-                   cell.nameLabel.text = @"Video Quality";
+                   cell.nameLabel.text = NSLocalizedStringWithDefaultValue(@"video_quality", nil, [NSBundle mainBundle], @"Video Quality", nil);
                    if (self.qualityType == 0)
                    {
-                       cell.valueLabel.text = @"Normal Quality";
+                       cell.valueLabel.text = NSLocalizedStringWithDefaultValue(@"normal_quality", nil, [NSBundle mainBundle], @"Normal Quality", nil);
                    }
                    else
                    {
-                       cell.valueLabel.text = @"High Quality";
+                       cell.valueLabel.text = NSLocalizedStringWithDefaultValue(@"high_quality", nil, [NSBundle mainBundle], @"High Quality", nil);
                    }
                    
                    break;
@@ -226,7 +226,7 @@
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
     
-    cell.textLabel.text = @"Default";
+    cell.textLabel.text = NSLocalizedStringWithDefaultValue(@"default", nil, [NSBundle mainBundle], @"Default", nil);
     
     return cell;
 }
@@ -301,14 +301,20 @@
         {
             case 0:
             {
-                valuesViewController.valueArray = [NSArray arrayWithObjects:@"Fahrenheit", @"Celsius", nil];
+                valuesViewController.valueArray = [NSArray arrayWithObjects:
+                                                   NSLocalizedStringWithDefaultValue(@"fahrenheit", nil, [NSBundle mainBundle], @"Fahrenheit", nil),
+                                                   NSLocalizedStringWithDefaultValue(@"celsius", nil, [NSBundle mainBundle], @"Celsius", nil),
+                                                   nil];
                 valuesViewController.selectedValue = self.temperatureType;
             }
                 break;
                 
             case 1:
             {
-                valuesViewController.valueArray = [NSArray arrayWithObjects:@"Normal Quality", @"High Quality", nil];
+                valuesViewController.valueArray = [NSArray arrayWithObjects:
+                                                   NSLocalizedStringWithDefaultValue(@"normal_quality", nil, [NSBundle mainBundle], @"Normal Quality", nil),
+                                                   NSLocalizedStringWithDefaultValue(@"high_quality", nil, [NSBundle mainBundle], @"High Quality", nil),
+                                                   nil];
                 valuesViewController.selectedValue = self.qualityType;
             }
                 break;

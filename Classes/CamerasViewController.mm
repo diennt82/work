@@ -284,8 +284,7 @@
 
 - (void) cameraShowDialog:(int) dialogType
 {
-    NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
-                                                      @"Ok", nil);
+    NSString * ok = NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil);
     
 	switch (dialogType)
     {
@@ -446,7 +445,7 @@
         }
         
         // Configure the cell...
-        cell.textLabel.text = @"Loading...";
+        cell.textLabel.text = NSLocalizedStringWithDefaultValue(@"loading", nil, [NSBundle mainBundle], @"Loading...", nil);
         
         UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc]
                                             initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
@@ -540,7 +539,7 @@
         {
             shouldHighlightAtRow[indexPath.row] = NO;
             [cell.ibIconStatusCamera setImage:[UIImage imageNamed:@"offline"]];
-            [cell.ibTextStatusCamera setText:@"Updating..."];
+            [cell.ibTextStatusCamera setText:NSLocalizedStringWithDefaultValue(@"updating", nil, [NSBundle mainBundle], @"Updating...", nil)];
             cell.settingsButton.hidden = YES;
             
             NSLog(@"%s Updating...", __FUNCTION__);
@@ -549,7 +548,7 @@
         {
             shouldHighlightAtRow[indexPath.row] = NO;
             [cell.ibIconStatusCamera setImage:[UIImage imageNamed:@"online"]];
-            [cell.ibTextStatusCamera setText:@"FW is upgrading..."];
+            [cell.ibTextStatusCamera setText:NSLocalizedStringWithDefaultValue(@"FW_is_updating", nil, [NSBundle mainBundle], @"FW is upgrading...", nil)];
             cell.settingsButton.hidden = NO;
             
             NSLog(@"%s Fw is upgrading...", __FUNCTION__);
@@ -560,14 +559,14 @@
         {
             shouldHighlightAtRow[indexPath.row] = YES;
             [cell.ibIconStatusCamera setImage:[UIImage imageNamed:@"offline"]];
-            [cell.ibTextStatusCamera setText:@"Offline"];
+            [cell.ibTextStatusCamera setText:NSLocalizedStringWithDefaultValue(@"offline", nil, [NSBundle mainBundle], @"Offline", nil)];
             cell.settingsButton.hidden = NO;
         }
         else
         {
             shouldHighlightAtRow[indexPath.row] = YES;
             [cell.ibIconStatusCamera setImage:[UIImage imageNamed:@"online"]];
-            [cell.ibTextStatusCamera setText:@"Online"];
+            [cell.ibTextStatusCamera setText:NSLocalizedStringWithDefaultValue(@"online", nil, [NSBundle mainBundle], @"Online", nil)];
             cell.settingsButton.hidden = NO;
             
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];

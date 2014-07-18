@@ -151,11 +151,11 @@
     
     if ([_selectedWifiEntry.auth_mode isEqualToString:@"open"])
     {
-        [[[[UIAlertView alloc] initWithTitle:@"SSID without password is not supported due to security concern. Please add password to your router."
+        [[[[UIAlertView alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"alert_inform_add_password_to_your_router", nil, [NSBundle mainBundle], @"SSID without password is not supported due to security concern. Please add password to your router.", nil)
                                    message:nil
                                   delegate:nil
                          cancelButtonTitle:nil
-                           otherButtonTitles:@"OK", nil]
+                           otherButtonTitles:NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil), nil]
           autorelease]
          show];
     }
@@ -219,11 +219,11 @@
 {
     NSString * msg = [NSString stringWithFormat:@"You have selected wifi %@ which is not the same as your Home wifi, %@. If you choose to continue, there will more steps to setup your camera. Do you want to proceed?", selectedWifi, homeWifi];
     
-    UIAlertView *alertViewNotice = [[UIAlertView alloc] initWithTitle:@"Notice"
+    UIAlertView *alertViewNotice = [[UIAlertView alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"notice", nil, [NSBundle mainBundle],  @"Notice", nil)
                                                         message:msg
                                                        delegate:self
-                                              cancelButtonTitle:@"Cancel"
-                                              otherButtonTitles:@"Continue", nil];
+                                              cancelButtonTitle:NSLocalizedStringWithDefaultValue(@"cancel", nil, [NSBundle mainBundle], @"Cancel", nil)
+                                              otherButtonTitles:NSLocalizedStringWithDefaultValue(@"continue", nil, [NSBundle mainBundle], @"Continue", nil), nil];
     alertViewNotice.tag = ALERT_CONFIRM_TAG;
     [alertViewNotice show];
     [alertViewNotice release];
@@ -278,8 +278,7 @@
     NSString * msg = NSLocalizedStringWithDefaultValue(@"Fail_to_communicate_with_camera",nil, [NSBundle mainBundle],
                                                        @"Fail to communicate with camera. Retry?", nil);
     
-    NSString * cancel = NSLocalizedStringWithDefaultValue(@"Cancel",nil, [NSBundle mainBundle],
-                                                          @"Cancel", nil);
+    NSString * cancel = NSLocalizedStringWithDefaultValue(@"cancel", nil, [NSBundle mainBundle], @"Cancel", nil);
     NSString * retry = NSLocalizedStringWithDefaultValue(@"Retry",nil, [NSBundle mainBundle],
                                                          @"Retry", nil);
     UIAlertView *myAlert = [[UIAlertView alloc] initWithTitle:msg

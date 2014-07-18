@@ -314,7 +314,7 @@
     
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(20, 85, 200, 21)];// autorelease];
     label.textAlignment = NSTextAlignmentCenter;
-    label.text = @"Connecting to Camera";
+    label.text = NSLocalizedStringWithDefaultValue(@"connecting_to_amera", nil, [NSBundle mainBundle], @"Connecting to Camera", nil);
     [demoView addSubview:label];
     [label release];
     
@@ -426,7 +426,7 @@
             //Update UI
             [self.viewProgress removeFromSuperview];
             [self.viewPairNDetecting removeFromSuperview];
-            [self.ib_lableStage setText:@"Select a device to connect"];
+            [self.ib_lableStage setText:NSLocalizedStringWithDefaultValue(@"select_a_device_to_connect", nil, [NSBundle mainBundle], @"Select a device to connect", nil)];
             [self.ib_tableListBLE reloadData];
             
             self.btnConnect.enabled = YES;
@@ -445,7 +445,7 @@
             [self.viewProgress removeFromSuperview];
             [self.viewPairNDetecting removeFromSuperview];
             
-            [self.ib_lableStage setText:@"Select a device to connect"];
+            [self.ib_lableStage setText:NSLocalizedStringWithDefaultValue(@"select_a_device_to_connect", nil, [NSBundle mainBundle], @"Select a device to connect", nil)];
             
             [self.ib_tableListBLE reloadData];
             self.btnConnect.enabled = YES;

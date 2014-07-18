@@ -248,8 +248,6 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if(indexPath.row == 0) NSLog(@"duy reload table, hihi");
-
     UITableViewCell *cell = nil;
     if (isPhoneLandscapeMode)
     {
@@ -383,7 +381,7 @@
     if (sv) {
         if (display) {
             MBProgressHUD *showProgress = [MBProgressHUD showHUDAddedTo:sv animated:YES];
-            [showProgress setLabelText:@"Processing..."];
+            [showProgress setLabelText:NSLocalizedStringWithDefaultValue(@"hud_processing", nil, [NSBundle mainBundle], @"Processing...", nil)];
         } else {
             [MBProgressHUD hideAllHUDsForView:sv animated:YES];
         }
