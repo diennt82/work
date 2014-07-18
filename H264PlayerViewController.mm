@@ -1016,11 +1016,6 @@ double _ticks = 0;
                 self.timerRemoteStreamKeepAlive = nil;
             }
             
-            if (_alertFWUpgrading)
-            {
-                [_alertFWUpgrading dismissWithClickedButtonIndex:0 animated:NO];
-            }
-            
     		NSLog(@"Timeout While streaming  OR server DIED - userWantToCancel: %d, returnFromPlayback: %d, forceStop: %d", userWantToCancel, _returnFromPlayback, ext1);
 
             [self stopStream];
