@@ -413,7 +413,7 @@
                                 initWithNibName:@"Step_10_ViewController" bundle:nil];
         
     }
-    step10ViewController.delegate = self.delegate;
+    //step10ViewController.delegate = self.delegate;
     [self.navigationController pushViewController:step10ViewController animated:NO];
     [step10ViewController release];
 }

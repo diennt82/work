@@ -14,6 +14,7 @@
 
 @property (nonatomic, retain) BMS_JSON_Communication *jsonComm;
 @property (nonatomic, assign) id<UserAccountDelegate> delegate;
+@property (nonatomic, retain) BMS_JSON_Communication *jsonCommBlocked;
 
 @end
 
@@ -55,6 +56,7 @@
 -(void) dealloc
 {
     [_jsonComm release];
+    [_jsonCommBlocked release];
     [userName release];
     [userPass release];
     [_apiKey release];
@@ -604,6 +606,89 @@
 	}
 	
 	[offline_data save_session_data];
+}
+
+- (NSInteger )checkFwUpgrageStatusWithRegistrationId:(NSString *)regId currentFwVersion:(NSString *)currentFw
+{
+    NSInteger fwUpgradeStatus = FIRMWARE_UPGRADE_IN_PROGRESS;
+    
+    if (_jsonCommBlocked == nil)
+    {
+        self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                     Selector:nil
+                                                                 FailSelector:nil
+                                                                    ServerErr:nil];
+    }
+    
+    NSDictionary *responseDict = [_jsonCommBlocked getDeviceBasicInfoBlockedWithRegistrationId:regId
+                                                                                     andApiKey:_apiKey];
+    
+    //NSLog(@"%s response:%@", __FUNCTION__, responseDict);
+    
+    if (responseDict != nil)
+    {
+        NSInteger status = [[responseDict objectForKey:@"status"] intValue];
+        
+        if (status == 200)
+        {
+            NSDictionary *data = [responseDict objectForKey:@"data"];
+            
+            NSString *cameraMac = [regId substringWithRange:NSMakeRange(6, 12)];
+            
+            CamProfile *cp = [[CamProfile alloc] initWithMacAddr:[Util add_colon_to_mac:cameraMac]];
+            
+            cp.fwStatus = [[data objectForKey:@"firmware_status"] integerValue];
+            
+            id firmwareTime = [data objectForKey:@"firmware_time"];
+            
+            cp.fwTime   = [firmwareTime isEqual:[NSNull null]]?nil:firmwareTime;
+            
+            NSLog(@"\n firmware_status:%d, \n firmware_time:%@, \n is_available:%@, \n firmware_version:%@", cp.fwStatus, firmwareTime, [data objectForKey:@"is_available"], [data objectForKey:@"firmware_version"]);
+            
+            //If less than 5 mins since camera start upgrading
+            
+            if ([cp isFwUpgrading:[NSDate date]] == FALSE)
+            {
+                NSString *firmwareVersion = [data objectForKey:@"firmware_version"];
+                
+                if (firmwareVersion != nil && ![firmwareVersion isEqual:[NSNull null]])
+                {
+                    //if the version on server matches the version reported by FW earlier
+                    //if ([firmwareVersion compare:currentFw] == NSOrderedDescending)
+                    if ([firmwareVersion compare:currentFw] == NSOrderedSame)
+                    {
+//                        if ([[data objectForKey:@"is_available"] boolValue])
+//                        {
+//                            fwUpgradeStatus = FIRMWARE_UPGRADE_SUCCEED;
+//                        }
+//                        else
+                        {
+                            fwUpgradeStatus = FIRMWARE_UPGRADE_REBOOT; // Waiting for camera is available.
+                        }
+                    }
+                    else //Wrong FW  version
+                    {
+                        
+                        fwUpgradeStatus = FIRMWARE_UPGRADE_FAILED;
+                    }
+                }
+            }
+            else
+            {
+                fwUpgradeStatus = FIRMWARE_UPGRADE_IN_PROGRESS;
+            }
+        }
+        else
+        {
+            NSLog(@"%s response status:%d", __FUNCTION__, status);
+        }
+    }
+    else
+    {
+        NSLog(@"%s response is nil", __FUNCTION__);
+    }
+    
+    return fwUpgradeStatus;
 }
 
 @end

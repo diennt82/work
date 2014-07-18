@@ -94,7 +94,7 @@
     [self.navigationController popToRootViewControllerAnimated:NO];
     
     //[initSetupController startMonitorCallBack];
-    [delegate startMonitorCallBack];
+    [delegate startMonitorCallBack:TRUE];
 }
 
 - (void)dealloc {
