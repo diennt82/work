@@ -67,7 +67,7 @@
                                                                   @"Enter Network Information" , nil);
     
     self.navigationItem.backBarButtonItem =
-    [[[UIBarButtonItem alloc] initWithTitle: NSLocalizedStringWithDefaultValue(@"Back",nil, [NSBundle mainBundle],
+    [[[UIBarButtonItem alloc] initWithTitle: NSLocalizedStringWithDefaultValue(@"back",nil, [NSBundle mainBundle],
                                                                                @"Back" , nil)
                                       style:UIBarButtonItemStyleBordered
                                      target:nil
@@ -118,8 +118,8 @@
     
     
     UIBarButtonItem *nextButton =
-    [[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"Next",nil, [NSBundle mainBundle],
-                                                                             @"Next" , nil)
+    [[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"next",nil, [NSBundle mainBundle],
+                                                                             @"Next", nil)
      
                                      style:UIBarButtonItemStylePlain
                                     target:self
@@ -585,10 +585,10 @@
             //error
             //ERROR condition
             UIAlertView *_alert = [[UIAlertView alloc]
-                                   initWithTitle:@"SSID cannot be empty"
-                                   message:@"Please fill the SSID name and try again"
+                                   initWithTitle:NSLocalizedStringWithDefaultValue(@"alert_title_ssid_cannot_be_empty", nil, [NSBundle mainBundle], @"SSID cannot be empty", nil)
+                                   message:NSLocalizedStringWithDefaultValue(@"alert_mes_fill_the_ssid_try_again", nil, [NSBundle mainBundle], @"Please fill the SSID name and try again", nil)
                                    delegate:self
-                                   cancelButtonTitle:@"OK"
+                                   cancelButtonTitle:NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil)
                                    otherButtonTitles:nil];
             [_alert show];
             [_alert release];
@@ -632,10 +632,10 @@
             
             //ERROR condition
             UIAlertView *_alert = [[UIAlertView alloc]
-                                   initWithTitle:@"Password Failed"
-                                   message:@"Enter Password"
+                                   initWithTitle:NSLocalizedStringWithDefaultValue(@"alert_title_password_failed", nil, [NSBundle mainBundle], @"Password Failed", nil)
+                                   message:NSLocalizedStringWithDefaultValue(@"alert_title_edter_password", nil, [NSBundle mainBundle], @"Enter Password", nil)
                                    delegate:self
-                                   cancelButtonTitle:@"OK"
+                                   cancelButtonTitle:NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil)
                                    otherButtonTitles:nil];
             [_alert show];
             [_alert release];

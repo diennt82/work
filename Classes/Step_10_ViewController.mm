@@ -421,11 +421,11 @@
                 {
                     if (deviceStatus == DEV_STATUS_NOT_IN_MASTER)
                     {
-                        self.statusMessage = @"Device is NOT present in device master";
+                        self.statusMessage = NSLocalizedStringWithDefaultValue(@"device_is_not_present", nil, [NSBundle mainBundle], @"Device is NOT present in device master", nil);
                     }
                     else
                     {
-                        self.statusMessage = @"Device is registered with other User";
+                        self.statusMessage = NSLocalizedStringWithDefaultValue(@"device_is_registered", nil, [NSBundle mainBundle], @"Device is registered with other User", nil);
                     }
                     
                     shouldCheckAgain = FALSE;
@@ -986,8 +986,7 @@
         case ALERT_ADD_CAM_FAILED:
         case ALERT_CHECK_STATUS:
         {
-            NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
-                                                              @"Ok", nil);
+            NSString * ok = NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil);
             
             //ERROR condition
             UIAlertView *alert = [[UIAlertView alloc]
@@ -1012,8 +1011,7 @@
             
             NSString * message = NSLocalizedStringWithDefaultValue(@"addcam_error_1" ,nil, [NSBundle mainBundle],
                                                                @"The device is not able to connect to the server. Please check the WIFI and the internet. Go to WIFI setting to confirm device is connected to intended router", nil);
-            NSString * cancel = NSLocalizedStringWithDefaultValue(@"Cancel",nil, [NSBundle mainBundle],
-                                                                  @"Cancel", nil);
+            NSString * cancel = NSLocalizedStringWithDefaultValue(@"cancel", nil, [NSBundle mainBundle], @"Cancel", nil);
             
             NSString * retry = NSLocalizedStringWithDefaultValue(@"Retry",nil, [NSBundle mainBundle],
                                                                  @"Retry", nil);

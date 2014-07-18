@@ -46,7 +46,7 @@
     self.navigationItem.hidesBackButton = YES;    self.navigationItem.backBarButtonItem =
     
 
-    [[[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"Back",nil, [NSBundle mainBundle],
+    [[[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"back",nil, [NSBundle mainBundle],
                                                                               @"Back" , nil)
                                       style:UIBarButtonItemStyleBordered
                                      target:nil

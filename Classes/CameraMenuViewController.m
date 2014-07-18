@@ -222,10 +222,8 @@
 - (void) showDialog:(int) dialogType
 {
     NSString * title = @"Camera";
-    NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok", nil, [NSBundle mainBundle],
-                                                      @"Ok", nil);
-    NSString * cancel = NSLocalizedStringWithDefaultValue(@"Cancel", nil, [NSBundle mainBundle],
-                                                          @"Cancel", nil);
+    NSString * ok = NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil);
+    NSString * cancel = NSLocalizedStringWithDefaultValue(@"cancel", nil, [NSBundle mainBundle], @"Cancel", nil);
     NSString * msg = @"Message";
     id alertDelegate = self;
     
@@ -337,7 +335,7 @@
                     
                     dispatch_async(dispatch_get_main_queue(), ^{
                         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-                        [hud setLabelText:@"Updating..."];
+                        [hud setLabelText:NSLocalizedStringWithDefaultValue(@"hud_updating", nil, [NSBundle mainBundle], @"Updating...", nil)];
                         [self changeCameraName];
                     });
                 }
@@ -353,7 +351,7 @@
         if (buttonIndex == 1)
         {
             MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-            [hud setLabelText:@"Removing..."];
+            [hud setLabelText:NSLocalizedStringWithDefaultValue(@"hud_removing", nil, [NSBundle mainBundle], @"Removing...", nil)];
             self.navigationController.view.userInteractionEnabled = NO;
             [self removeRemoteCamera];
         }
@@ -685,14 +683,14 @@
             
             if (indexPath.row == 0)
             {
-                cell.nameLabel.text = @"Motion";
+                cell.nameLabel.text = NSLocalizedStringWithDefaultValue(@"motion", nil, [NSBundle mainBundle], @"Motion", nil);
                 cell.switchValue   = _sensitivityInfo.motionOn;
                 cell.settingsValue = _sensitivityInfo.motionValue;
 
             }
             else
             {
-                cell.nameLabel.text = @"Sound";
+                cell.nameLabel.text = NSLocalizedStringWithDefaultValue(@"sound", nil, [NSBundle mainBundle], @"Sound", nil);
                 cell.switchValue   = _sensitivityInfo.soundOn;
                 cell.settingsValue = _sensitivityInfo.soundValue;
             }
@@ -748,8 +746,8 @@
             self.alertViewRename = [[UIAlertView alloc] initWithTitle:@"Enter the new Camera name"
                                                               message:nil
                                                              delegate:self
-                                                    cancelButtonTitle:@"Cancel"
-                                                    otherButtonTitles:@"Ok", nil];
+                                                    cancelButtonTitle:NSLocalizedStringWithDefaultValue(@"cancel", nil, [NSBundle mainBundle], @"Cancel", nil)
+                                                    otherButtonTitles:NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil), nil];
             self.alertViewRename.alertViewStyle = UIAlertViewStylePlainTextInput;
             UITextField *textField = [_alertViewRename textFieldAtIndex:0];
             [textField setText:_cameraName];
@@ -898,22 +896,22 @@
         {
             NSLog(@"CameraNameVC - Change cameraname failed!");
             
-            [[[[UIAlertView alloc] initWithTitle:@"Change Camera Name"
+            [[[[UIAlertView alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"alert_title_change_camera_name", nil, [NSBundle mainBundle], @"Change Camera Name", nil)
                                          message:[responseDict objectForKey:@"message"]
                                         delegate:nil
                                cancelButtonTitle:nil
-                               otherButtonTitles:@"OK", nil] autorelease] show];
+                               otherButtonTitles:NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil), nil] autorelease] show];
         }
     }
     else
     {
         NSLog(@"CameraNameVC - doneAction - responseDict == nil");
         
-        [[[[UIAlertView alloc] initWithTitle:@"Change Camera Name"
+        [[[[UIAlertView alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"alert_title_change_camera_name", nil, [NSBundle mainBundle], @"Change Camera Name", nil)
                                      message:@"Server Error"
                                     delegate:nil
                            cancelButtonTitle:nil
-                           otherButtonTitles:@"OK", nil] autorelease] show];
+                           otherButtonTitles:NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil), nil] autorelease] show];
     }
     
     //self.navigationItem.hidesBackButton = NO;
@@ -955,7 +953,7 @@
                                  message:[errorResponse objectForKey:@"message"]
                                 delegate:nil
                        cancelButtonTitle:nil
-                       otherButtonTitles:@"OK",
+                       otherButtonTitles:NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil),
        nil] autorelease] show];
     
 }
@@ -970,7 +968,7 @@
                                  message:@"Server is unreachable"
                                 delegate:nil
                        cancelButtonTitle:nil
-                       otherButtonTitles:@"OK",
+                       otherButtonTitles:NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil),
        nil] autorelease] show];
 }
 
@@ -1208,8 +1206,8 @@
         self.alertViewRename = [[UIAlertView alloc] initWithTitle:@"Change Camera Name"
                                                           message:@"Enter the new camera name."
                                                          delegate:self
-                                                cancelButtonTitle:@"Cancel"
-                                                otherButtonTitles:@"OK", nil];
+                                                cancelButtonTitle:NSLocalizedStringWithDefaultValue(@"cancel", nil, [NSBundle mainBundle], @"Cancel", nil)
+                                                otherButtonTitles:NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil), nil];
         self.alertViewRename.alertViewStyle = UIAlertViewStylePlainTextInput;
         UITextField *textField = [_alertViewRename textFieldAtIndex:0];
         [textField setText:_cameraName];
@@ -1224,7 +1222,7 @@
 {
     [UIActionSheet showInView:self.view
                     withTitle:@"Change Image"
-            cancelButtonTitle:@"Cancel"
+            cancelButtonTitle:NSLocalizedStringWithDefaultValue(@"cancel", nil, [NSBundle mainBundle], @"Cancel", nil)
        destructiveButtonTitle:nil
             otherButtonTitles:@[@"Select image from gallery", @"Take a photo from Camera",@"Take a snapshot now"]
                      tapBlock:^(UIActionSheet *actionSheet, NSInteger buttonIndex)
@@ -1294,7 +1292,7 @@
 {
     UIActionSheet *as = [[UIActionSheet alloc] initWithTitle:@"Select Picture"
                                                     delegate:nil
-                                           cancelButtonTitle:@"Cancel"
+                                           cancelButtonTitle:NSLocalizedStringWithDefaultValue(@"cancel", nil, [NSBundle mainBundle], @"Cancel", nil)
                                       destructiveButtonTitle:nil
                                            otherButtonTitles:@"Set Picture", nil];
     as.actionSheetStyle = UIActionSheetStyleBlackTranslucent;

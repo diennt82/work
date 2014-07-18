@@ -24,7 +24,7 @@
     self = [super initWithStyle:style];
     if (self) {
         // Custom initialization
-        self.title = @"Name";
+        self.title = NSLocalizedStringWithDefaultValue(@"name", nil, [NSBundle mainBundle], @"Name", nil);
     }
     return self;
 }
@@ -86,22 +86,22 @@
         {
             NSLog(@"CameraNameVC - Change cameraname failed!");
             
-            [[[[UIAlertView alloc] initWithTitle:@"Change Camera Name"
+            [[[[UIAlertView alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"alert_title_change_camera_name", nil, [NSBundle mainBundle], @"Change Camera Name", nil)
                                        message:[responseDict objectForKey:@"message"]
                                       delegate:self
                              cancelButtonTitle:nil
-                               otherButtonTitles:@"OK", nil] autorelease] show];
+                               otherButtonTitles:NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil), nil] autorelease] show];
         }
     }
     else
     {
         NSLog(@"CameraNameVC - doneAction - responseDict == nil");
         
-        [[[[UIAlertView alloc] initWithTitle:@"Change Camera Name"
+        [[[[UIAlertView alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"alert_title_change_camera_name", nil, [NSBundle mainBundle], @"Change Camera Name", nil)
                                      message:@"Server Error"
                                     delegate:self
                            cancelButtonTitle:nil
-                           otherButtonTitles:@"OK", nil] autorelease] show];
+                           otherButtonTitles:NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil), nil] autorelease] show];
     }
 }
 

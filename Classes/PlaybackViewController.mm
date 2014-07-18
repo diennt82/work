@@ -146,7 +146,7 @@
 - (void)playbackInactivePushes
 {
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    [hud setLabelText:@"Stop playback..."];
+    [hud setLabelText:NSLocalizedStringWithDefaultValue(@"hud_stop_playback", nil, [NSBundle mainBundle], @"Stop playback...", nil)];
     
     NSLog(@"%s excuting closePlayback function", __FUNCTION__);
     
@@ -599,7 +599,7 @@
     [self hideControlMenu];
     
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    [hud setLabelText:@"Deleting Video..."];
+    [hud setLabelText:NSLocalizedStringWithDefaultValue(@"hud_deleting_video", nil, [NSBundle mainBundle], @"Deleting Video...", nil)];
     
     dispatch_time_t startTime = dispatch_time(DISPATCH_TIME_NOW, 0.1 * NSEC_PER_SEC);
     dispatch_after(startTime, dispatch_get_main_queue(), ^{
@@ -633,12 +633,13 @@
             }
             else
             {
-                Alert(nil, @"Error occured. Please try again.");
+                Alert(nil, NSLocalizedStringWithDefaultValue(@"alert_mes_error_occured", nil, [NSBundle mainBundle], @"Error occured. Please try again.", nil));
             }
         }
         else
         {
-            Alert(@"Failed: Server is unreachable", @"Please check your network connection");
+            Alert(NSLocalizedStringWithDefaultValue(@"alert_title_server_is_unreachable", nil, [NSBundle mainBundle], @"Failed: Server is unreachable", nil),
+                  NSLocalizedStringWithDefaultValue(@"alert_mes_check_your_network", nil, [NSBundle mainBundle], @"Please check your network connection", nil));
         }
     });
     

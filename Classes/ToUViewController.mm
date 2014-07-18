@@ -28,7 +28,7 @@
     [super viewDidLoad];
     
     self.navigationController.navigationBarHidden = NO;
-    [self.navigationItem setTitle:@"Terms of Services"];
+    [self.navigationItem setTitle:NSLocalizedStringWithDefaultValue(@"terms_of_services", nil, [NSBundle mainBundle], @"Terms of Services", nil)];
     
     UIImage *hubbleLogoBack = [UIImage imageNamed:@"Hubble_logo_back"];
     UIBarButtonItem *barBtnHubble = [[UIBarButtonItem alloc] initWithImage:hubbleLogoBack

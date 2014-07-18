@@ -134,9 +134,19 @@
     NSLog(@"MenuVC - viewDidLoad: %p, %p", self.menuDelegate, self.accountVC.parentVC);
     
     [self.view addSubview:self.accountVC.view];
-    cameraBarButton = [[UIBarButtonItem alloc] initWithTitle:@"Camera" style:UIBarButtonItemStylePlain target:self action:@selector(selectMenuCamera)];
-    settingsBarButton = [[UIBarButtonItem alloc] initWithTitle:@"Settings" style:UIBarButtonItemStylePlain target:self action:@selector(selectSettings)];
-    accountBarButton = [[UIBarButtonItem alloc] initWithTitle:@"Account" style:UIBarButtonItemStylePlain target:self action:@selector(selectAccountSetting)];
+    cameraBarButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"camera", nil, [NSBundle mainBundle], @"Camera", nil)
+                                                       style:UIBarButtonItemStylePlain
+                                                      target:self
+                                                      action:@selector(selectMenuCamera)];
+    settingsBarButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"settings", nil, [NSBundle mainBundle], @"Settings", nil)
+                                                         style:UIBarButtonItemStylePlain
+                                                        target:self
+                                                        action:@selector(selectSettings)];
+    accountBarButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"account",nil, [NSBundle mainBundle],
+                                                                                                @"Account", nil)
+                                                        style:UIBarButtonItemStylePlain
+                                                       target:self
+                                                       action:@selector(selectAccountSetting)];
     
     //NSArray *actionButtonItems = @[accountBarButton, settingsBarButton, cameraBarButton];
     self.navigationItem.rightBarButtonItems = @[accountBarButton, settingsBarButton, cameraBarButton];
