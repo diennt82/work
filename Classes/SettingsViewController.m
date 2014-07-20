@@ -463,7 +463,7 @@
     // Return the number of sections.
     tableView.sectionHeaderHeight = 0;
     tableView.sectionFooterHeight = 0.5f;
-    return _numberOfSections;
+    return _numberOfSections+1; //One extra section to show last line
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -471,6 +471,9 @@
     //#warning Incomplete method implementation.
     // Return the number of rows in the section.
     //return 1;
+    if(section==2){ //Last section to show last line
+        return 0;
+    }
     return numOfRows[section];
 }
 
