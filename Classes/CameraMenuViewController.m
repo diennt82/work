@@ -73,7 +73,7 @@
 @property (retain, nonatomic) IBOutlet UIView *vwHeaderCamDetail,*vwHeaderNotSens;
 @property (nonatomic) BOOL shouldWaitForUpdateSettings;
 @property (nonatomic) BOOL backGroundUpdateExecuting;
-@property (assign, nonatomic) SensitivityTemperatureCell *sensitivityTemperatureCell;
+@property (retain, nonatomic) SensitivityTemperatureCell *sensitivityTemperatureCell;
 
 @end
 
@@ -115,7 +115,7 @@
 //        [self performSelectorInBackground:@selector(updateFWVersion_bg) withObject:nil];
 //    }
     
-    self.tableViewSettings.backgroundColor = [UIColor colorWithRed:249/255.0 green:249/255.0 blue:249/255.0 alpha:1];
+//    self.tableViewSettings.backgroundColor = [UIColor colorWithRed:249/255.0 green:249/255.0 blue:249/255.0 alpha:1];
     
     UIImageView *imgView = (UIImageView*)[self.vwHeaderNotSens viewWithTag:500];
     if([self.camChannel.profile isNotAvailable]){
@@ -171,6 +171,7 @@
     [_viewPorgress release];
     [_alertViewRename release];
     [_jsonCommBlock release];
+    [_sensitivityTemperatureCell release];
     
     [super dealloc];
 }

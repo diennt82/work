@@ -16,7 +16,7 @@
 
 #define GAI_CATEGORY    @  "Registration view"
 
-@interface RegistrationViewController () <UITextFieldDelegate>
+@interface RegistrationViewController () <UITextFieldDelegate, UIAlertViewDelegate>
     
 @property (retain, nonatomic) IBOutlet UITextField *tfUsername;
 @property (retain, nonatomic) IBOutlet UITextField *tfEmail;
@@ -31,6 +31,7 @@
 @property (retain, nonatomic) NSString *stringPassword;
 @property (retain, nonatomic) NSString *stringCPassword;
 @property (retain, nonatomic) NSString *stringEmail;
+
 @end
 
 @implementation RegistrationViewController
@@ -86,13 +87,14 @@
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
-        UIButton *btnCheckbox = (UIButton *)[self.view viewWithTag:501];
+//        UIButton *btnCheckbox = (UIButton *)[self.view viewWithTag:501];
+//        
+//        btnCheckbox.frame = CGRectMake(_btnCreate.frame.origin.x - 6, btnCheckbox.frame.origin.y, btnCheckbox.frame.size.width, btnCheckbox.frame.size.height);
+//        UILabel *lblTermServices = (UILabel *)[self.view viewWithTag:502];
+//        lblTermServices.frame = CGRectMake(btnCheckbox.frame.origin.x + btnCheckbox.frame.size.width, lblTermServices.frame.origin.y, lblTermServices.frame.size.width, lblTermServices.frame.size.height);
+//        UIButton *btn = (UIButton *)[self.view viewWithTag:504];
+//        btn.frame = lblTermServices.frame;
         
-        btnCheckbox.frame = CGRectMake(_btnCreate.frame.origin.x - 6, btnCheckbox.frame.origin.y, btnCheckbox.frame.size.width, btnCheckbox.frame.size.height);
-        UILabel *lblTermServices = (UILabel *)[self.view viewWithTag:502];
-        lblTermServices.frame = CGRectMake(btnCheckbox.frame.origin.x + btnCheckbox.frame.size.width, lblTermServices.frame.origin.y, lblTermServices.frame.size.width, lblTermServices.frame.size.height);
-        UIButton *btn = (UIButton *)[self.view viewWithTag:504];
-        btn.frame = lblTermServices.frame;
         self.viewProgress.frame = CGRectMake(0, 0, UIScreen.mainScreen.bounds.size.width, UIScreen.mainScreen.bounds.size.height);
     }
 }
@@ -113,7 +115,16 @@
 
 - (IBAction)btnCreateTouchUpInsideAction:(id)sender
 {
-    [self checkInputDataToLogin];
+    if([self checkInputDataToLogin])
+    {
+        NSLog(@"RegistrationVC - Start registration");
+        
+        NSInteger networkFailed = [RegistrationViewController checkNetworkConnectionCallback:self];
+        
+        if (!networkFailed) {
+            [self doSignUp];
+        }
+    }
 }
 
 - (IBAction)btnAlreadyTouchUpInsideAction:(id)sender
@@ -122,6 +133,26 @@
 }
 
 #pragma mark - Methods
+
+- (void)doSignUp
+{
+    [self.view endEditing:YES];
+    [self.view addSubview:_viewProgress];
+    //Register user ...
+    self.stringUsername   = _tfUsername.text;
+    self.stringEmail      = _tfEmail.text;
+    self.stringPassword   = _tfPassword.text;
+    self.stringCPassword  = _tfConfirmPassword.text;
+    
+    BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
+                                                                              Selector:@selector(registerSuccessWithResponse:)
+                                                                          FailSelector:@selector(registerFailedWithError:)
+                                                                             ServerErr:@selector(registerFailedServerUnreachable)] autorelease];
+    [jsonComm registerAccountWithUsername:_stringUsername
+                                 andEmail:_stringEmail
+                              andPassword:_stringPassword
+                  andPasswordConfirmation:_stringCPassword];
+}
 
 -(void) validateAllFieldsAndEnableSignUp
 {
@@ -168,14 +199,14 @@
     [UIView commitAnimations];
 }
 
-- (void)checkInputDataToLogin
+- (BOOL )checkInputDataToLogin
 {
     NSString * msg = nil ;
     NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
                                                       @"Ok", nil);
     NSString *title = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed",nil, [NSBundle mainBundle],
                                                         @"Create Account Failed" , nil);
-    BOOL checkFailed = TRUE;
+    BOOL checkSucceed = FALSE;
     
     NSString * regex = @"[a-zA-Z0-9._-]+";
     NSPredicate * validatedUsername = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
@@ -208,37 +239,12 @@
         msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg3",nil, [NSBundle mainBundle],
                                                 @"Invalid email. Email address should be of the form somebody@somewhere.com"  , nil);
     }
-    
-    else if (![RegistrationViewController isWifiConnectionAvailable] )
-    {
-        msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg4",nil, [NSBundle mainBundle],
-                                                @"Please select a Wifi network to connect"  , nil);
-    }
     else //Good info now..
     {
-        checkFailed = FALSE;
-        [self.view endEditing:YES];
-        [self.view addSubview:_viewProgress];
-        //Register user ...
-        self.stringUsername   = _tfUsername.text;
-        self.stringEmail      = _tfEmail.text;
-        self.stringPassword   = _tfPassword.text;
-        self.stringCPassword  = _tfConfirmPassword.text;
-
-        NSLog(@"RegistrationVC - Start registration");
-        
-        BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
-                                                                                  Selector:@selector(registerSuccessWithResponse:)
-                                                                              FailSelector:@selector(registerFailedWithError:)
-                                                                                 ServerErr:@selector(registerFailedServerUnreachable)] autorelease];
-        [jsonComm registerAccountWithUsername:_stringUsername
-                                     andEmail:_stringEmail
-                                  andPassword:_stringPassword
-                      andPasswordConfirmation:_stringCPassword];
-        
+        checkSucceed = TRUE;
     }
     
-    if (checkFailed)
+    if (!checkSucceed)
     {
         //ERROR condition
         UIAlertView *alertViewError = [[UIAlertView alloc]
@@ -250,6 +256,116 @@
         [alertViewError show];
         [alertViewError release];
     }
+    
+    return checkSucceed;
+}
+
++ (NSInteger )checkNetworkConnectionCallback:(id)d
+{
+    /*
+     * 1. Checking if network is not reachable.
+     * 2. Checking 3G Connection.
+     * 3. Checking Camera WIFI connection.
+     */
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    BOOL skip_3g_popup = [userDefaults boolForKey:_Use3G];
+    
+    Reachability *reachability = [Reachability reachabilityForInternetConnection];
+    [reachability startNotifier];
+    
+    NetworkStatus networkStatus = [reachability currentReachabilityStatus];
+    NSInteger tagAlert = 0;
+    
+    if (networkStatus == NotReachable)
+    {
+        NSLog(@"%s Device's network is unreachable.", __FUNCTION__);
+        tagAlert = TAG_ALERT_VIEW_NETWORK_NOT_REACHABLE;
+    }
+    else if ((skip_3g_popup == FALSE) && (networkStatus == ReachableViaWWAN))
+    {
+        NSLog(@"%s Device is connecting to a 3G network.", __FUNCTION__);
+        tagAlert = TAG_ALERT_VIEW_3G;
+    }
+    else if ([RegistrationViewController isConnectingToCameraNetwork])
+    {
+        NSLog(@"%s Device is connecting to a CAMERA network.", __FUNCTION__);
+        tagAlert = TAG_ALERT_VIEW_CAMERA_WIFI;
+    }
+    else
+    {
+        tagAlert = 0;
+    }
+    
+    if (tagAlert != 0)
+    {
+        [RegistrationViewController showAlert:tagAlert delegate:d];
+    }
+    
+    return tagAlert;
+}
+
++ (BOOL) isConnectingToCameraNetwork
+{
+    NSString * current_ssid = [CameraPassword fetchSSIDInfo] ;
+    
+    if ([current_ssid hasPrefix:DEFAULT_SSID_HD_PREFIX] ||
+        [current_ssid hasPrefix:DEFAULT_SSID_PREFIX]
+        )
+    {
+        return TRUE;
+        
+    }
+    
+    return FALSE;
+}
+
++ (void)showAlert:(NSUInteger )tagAlert delegate:(id)d
+{
+    //self.viewProgress.hidden = YES;
+    
+    NSString *title = @"Network";
+    NSString *msg;
+    NSString *yes = NSLocalizedStringWithDefaultValue(@"Yes" ,nil, [NSBundle mainBundle],
+                                                      @"Yes", nil);
+    NSString *no = NSLocalizedStringWithDefaultValue(@"No" ,nil, [NSBundle mainBundle],
+                                                     @"No", nil);
+    NSString *skip = nil;
+    
+    if (tagAlert == TAG_ALERT_VIEW_NETWORK_NOT_REACHABLE)
+    {
+        msg = @"Network is unreachale.";
+        NSString *msg1 = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg4" ,nil, [NSBundle mainBundle],
+                                                @"Please go to wifi settings and select a Wifi network to connect", nil);
+        msg = [msg stringByAppendingString:msg1];
+        yes = NSLocalizedStringWithDefaultValue(@"ok" ,nil, [NSBundle mainBundle],
+                                                @"OK", nil);
+        no = nil;
+        d = nil;
+    }
+    else if (tagAlert == TAG_ALERT_VIEW_3G)
+    {
+        msg = NSLocalizedStringWithDefaultValue(@"wifi_not_available" ,nil, [NSBundle mainBundle],
+                                                @"Mobile data is enabled. If you continue to connect, you may incur air time charges. Do you want to proceed?", nil);
+        
+        skip = NSLocalizedStringWithDefaultValue(@"Yes_n" ,nil, [NSBundle mainBundle],
+                                                 @"Yes and don't ask again", nil);
+    }
+    else if (tagAlert == TAG_ALERT_VIEW_CAMERA_WIFI)
+    {
+        msg = NSLocalizedStringWithDefaultValue(@"phone_is_connected_to_camera" ,nil, [NSBundle mainBundle],
+                                                @"You are connecting to a Camera network which does not have internet access. Please go to wifi settings and switch to another WIFI. Do you want to continue?", nil);
+    }
+    
+    UIAlertView *alert = [[UIAlertView alloc]
+                          initWithTitle:title
+                          message:msg
+                          delegate:d
+                          cancelButtonTitle:no
+                          otherButtonTitles:yes, skip, nil];
+    alert.tag = tagAlert;
+    [alert show];
+    [alert release];
 }
 
 -(BOOL) isValidEmail:(NSString *) email
@@ -279,19 +395,6 @@
     NSPredicate * validatedDomain = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
     
     return [validatedDomain evaluateWithObject:modifiedString];
-}
-
-+ (BOOL)isWifiConnectionAvailable
-{
-    Reachability* wifiReach = [Reachability reachabilityForLocalWiFi];
-    NetworkStatus netStatus = [wifiReach currentReachabilityStatus];
-    
-    if (netStatus != ReachableViaWiFi)
-    {
-        return NO;
-    }
-    
-    return YES;
 }
 
 #pragma mark - Text field delegate
@@ -391,7 +494,7 @@
     [_alert show];
     [_alert release];
     
-    [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Regsiter failed - user: %@, error: %@", _stringUsername, msg] withProperties:nil];
+    //[[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Regsiter failed - user: %@, error: %@", _stringUsername, msg] withProperties:nil];
     
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:[NSString stringWithFormat:@"Register successfully - user: %@", _stringUsername]
@@ -422,7 +525,7 @@
 	[alert show];
 	[alert release];
     
-    [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Register failed - user: %@, error: Server is unreachable", _stringUsername] withProperties:nil];
+    //[[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Register failed - user: %@, error: Server is unreachable", _stringUsername] withProperties:nil];
     
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:[NSString stringWithFormat:@"Register failed, Server is unreachable - user: %@", _stringUsername]
@@ -451,6 +554,59 @@
     [self.navigationController pushViewController:vc animated:YES];
     [vc release];
     
+}
+
+#pragma mark Alertview delegate
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
+	
+	int tag = alertView.tag;
+    
+    if (tag == TAG_ALERT_VIEW_3G) // 3g check
+    {
+        switch (buttonIndex)
+        {
+            case 0:
+            {
+                NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+                [userDefaults setBool:NO forKey:_Use3G];
+                [userDefaults synchronize];
+            }
+                break;
+                
+            case 1: // Yes - go by 3g
+            {
+                [self doSignUp];
+            }
+                break;
+                
+            case 2://Yes - DONT ask again
+            {
+                NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+                [userDefaults setBool:YES forKey:_Use3G];
+                [userDefaults synchronize];
+                
+                [self doSignUp];
+            }
+                break;
+                
+            default:
+                break;
+        }
+    }
+    else if (tag == TAG_ALERT_VIEW_CAMERA_WIFI) // camera network check
+    {
+        switch (buttonIndex)
+        {      
+            case 1:
+            {
+                [self doSignUp];
+            }
+                break;
+                
+            default:
+                break;
+        }
+    }
 }
 
 - (void)didReceiveMemoryWarning

@@ -14,12 +14,14 @@
 #import "CreateBLEConnection_VController.h"
 #import "BLEConnectionManager.h"
 #import "KISSMetricsAPI.h"
+#import "Focus73TableViewController.h"
 
 #define GAI_CATEGORY    @"Step 02 view"
 
 @interface Step_02_ViewController () <Step_03Delegate>
 
 @property (retain, nonatomic) IBOutlet UIButton *btnContinue;
+@property (retain, nonatomic) IBOutlet UIView *viewInstructionFocus73;
 
 @end
 
@@ -44,7 +46,7 @@
     [self removeNavigationBarBottomLine];
     self.navigationItem.hidesBackButton = TRUE;
     
-    UIImage *hubbleLogo = [UIImage imageNamed:@"hubble_logo"];
+    UIImage *hubbleLogo = [UIImage imageNamed:@"Hubble_back_text"];
     UIBarButtonItem *barBtnHubble = [[UIBarButtonItem alloc] initWithImage:hubbleLogo
                                                                    style:UIBarButtonItemStylePlain
                                                                   target:self
@@ -56,17 +58,27 @@
     [self.btnContinue setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
     [self.btnContinue setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
     
-    UIImageView *imageView = (UIImageView *)[self.view viewWithTag:585];
-    imageView.animationImages = @[[UIImage imageNamed:@"setup_camera_led1"],
-                                  [UIImage imageNamed:@"setup_camera_led2"]];
-    imageView.animationDuration = 2.f;
-    imageView.animationRepeatCount = 0;
-    
-    [imageView startAnimating];
-    
-    if (_cameraType == BLUETOOTH_SETUP)
+    if (_cameraType == SETUP_CAMERA_FOCUS73)
     {
-        NSLog(@"Step_02_VC - viewDidLoad: - isOnBLE: %d", [BLEConnectionManager getInstanceBLE].isOnBLE);
+        /*
+         * TODO: UI for focus73 here. Implementing when it is required!
+         */
+        //self.viewInstructionFocus73.hidden = NO;
+    }
+    else
+    {
+        UIImageView *imageView = (UIImageView *)[self.view viewWithTag:585];
+        imageView.animationImages = @[[UIImage imageNamed:@"setup_camera_led1"],
+                                      [UIImage imageNamed:@"setup_camera_led2"]];
+        imageView.animationDuration = 2.f;
+        imageView.animationRepeatCount = 0;
+        
+        [imageView startAnimating];
+        
+        if (_cameraType == BLUETOOTH_SETUP)
+        {
+            NSLog(@"Step_02_VC - viewDidLoad: - isOnBLE: %d", [BLEConnectionManager getInstanceBLE].isOnBLE);
+        }
     }
 }
 
@@ -153,6 +165,13 @@
         [self.navigationController pushViewController:step03ViewController animated:NO];
         
         [step03ViewController release];
+    }
+    else if (_cameraType == SETUP_CAMERA_FOCUS73)
+    {
+        // Show Focus73 list.
+        Focus73TableViewController *focus73 = [[Focus73TableViewController alloc] init];
+        [self.navigationController pushViewController:focus73 animated:YES];
+        [focus73 release];
     }
     else
     {
@@ -285,6 +304,7 @@
 
 - (void)dealloc {
     [_btnContinue release];
+    [_viewInstructionFocus73 release];
     [super dealloc];
 }
 

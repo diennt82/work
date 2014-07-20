@@ -1016,11 +1016,6 @@ double _ticks = 0;
                 self.timerRemoteStreamKeepAlive = nil;
             }
             
-            if (_alertFWUpgrading)
-            {
-                [_alertFWUpgrading dismissWithClickedButtonIndex:0 animated:NO];
-            }
-            
     		NSLog(@"Timeout While streaming  OR server DIED - userWantToCancel: %d, returnFromPlayback: %d, forceStop: %d", userWantToCancel, _returnFromPlayback, ext1);
 
             [self stopStream];
@@ -2960,6 +2955,7 @@ double _ticks = 0;
         [self.ib_temperature setFont:temperatureFont];
         [self.ib_temperature setTextColor:[UIColor whiteColor]];
         [self.ib_temperature setText:stringTemperature];
+        [self.ib_temperature setHidden:NO];
         
         stringBoundingBox = [stringTemperature sizeWithAttributes:@{NSFontAttributeName: temperatureFont}];
         degreeCelBoundingBox = [degreeCel sizeWithAttributes:@{NSFontAttributeName: degreeFont}];
@@ -3003,6 +2999,8 @@ double _ticks = 0;
         
         //need update text for C or F
         [self.ib_temperature setText:stringTemperature];
+        [self.ib_temperature setHidden:NO];
+        
         //CGSize stringBoundingBox = [stringTemperature sizeWithFont:temperatureFont];
         CGSize stringBoundingBox = [stringTemperature sizeWithAttributes:@{NSFontAttributeName: temperatureFont}];
         //CGSize degreeCelBoundingBox = [degreeCel sizeWithFont:degreeFont];
@@ -4364,7 +4362,7 @@ double _ticks = 0;
         
         [self addGesturesPichInAndOut];
 	}
-	else if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
+	else
 	{
         //load new nib
         //remove pinch in, out (zoom for portrait)
@@ -4421,11 +4419,13 @@ double _ticks = 0;
                 
                 if (isiPhone4) // This condition check size of screen. Not iPhone4 or other
                 {
-                    self.timelineVC.view.frame = CGRectMake(0, alignYTimeLine, SCREEN_HEIGHT, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y + 64);
+                    CGRect rect = CGRectMake(0, alignYTimeLine, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y + 64);
+                    self.timelineVC.view.frame = rect;
                 }
                 else
                 {
-                    self.timelineVC.view.frame = CGRectMake(0, alignYTimeLine, SCREEN_HEIGHT, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
+                    CGRect rect = CGRectMake(0, alignYTimeLine, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
+                    self.timelineVC.view.frame = rect;
                 }
                 
                 _timelineVC.tableView.contentSize = CGSizeMake(SCREEN_WIDTH, _timelineVC.tableView.frame.size.height);
@@ -5393,16 +5393,15 @@ double _ticks = 0;
         }
         else if (_selectedItemMenu == INDEX_TEMP)
         {
-            [self.ib_temperature setHidden:NO];
             [ib_switchDegree setHidden:NO];
             [self.view bringSubviewToFront:ib_switchDegree];
             
+            [self setTemperatureState_Fg:_stringTemperature];
             if (_existTimerTemperature == FALSE)
             {
                 self.existTimerTemperature = TRUE;
                 NSLog(@"Log - Create Timer to get Temperature");
                 //should call it first and then update later
-                [self setTemperatureState_Fg:_stringTemperature];
                 [NSTimer scheduledTimerWithTimeInterval:10
                                                  target:self
                                                selector:@selector(getCameraTemperature_bg:)

@@ -644,7 +644,39 @@
     //NOTE: we can do this because we are connecting to camera now
     NSString * camera_mac= nil;
     NSString *stringUDID = @"";
+#if 1
+    NSString *response = [[HttpCom instance].comWithDevice sendCommandAndBlock:GET_UDID
+                                                                   withTimeout:5.0];
     
+    NSString *pattern = [NSString stringWithFormat:@"^%@: [0-9A-Z]{26}$", GET_UDID];
+    NSError *error = NULL;
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:pattern
+                                                                           options:NSRegularExpressionAnchorsMatchLines
+                                                                             error:&error];
+    if (!regex)
+    {
+        NSLog(@"%s error:%@", __FUNCTION__, error.description);
+    }
+    else
+    {
+        NSLog(@"%s respone:%@", __FUNCTION__, response);
+        
+        if (response)
+        {
+            //get_udid: 01008344334C32B0A0VFFRBSVA
+            NSUInteger numberOfMatches = [regex numberOfMatchesInString:response
+                                                                options:0
+                                                                  range:NSMakeRange(0, [response length])];
+            NSLog(@"%s numberOfMatches:%lu", __FUNCTION__, (unsigned long)numberOfMatches);
+            
+            if (numberOfMatches == 1)
+            {
+                stringUDID = [response substringFromIndex:GET_UDID.length + 2];
+                camera_mac = [Util add_colon_to_mac:[stringUDID substringWithRange:NSMakeRange(6, 12)]];
+            }
+        }
+    }
+#else
 
     stringUDID = [[HttpCom instance].comWithDevice sendCommandAndBlock:GET_UDID
                                                            withTimeout:5.0];
@@ -663,7 +695,7 @@
     {
         NSLog(@"Error - Received UDID wrong format - UDID: %@", stringUDID);
     }
-    
+#endif
     
     self.deviceConf.ssid = self.ssid;
     
@@ -745,8 +777,8 @@
                                                      withLabel:nil
                                                      withValue:nil];
      // >12.82 we can move on with new flow
-    if  ([fwVersion compare:FW_MILESTONE_F66_NEW_FLOW] >= NSOrderedSame) //||
-         //([fwVersion compare:FW_MILESTONE_F66_NEW_FLOW] == NSOrderedAscending) )
+    if  (([fwVersion compare:FW_MILESTONE_F66_NEW_FLOW] >= NSOrderedSame) ||
+         ([userDefaults integerForKey:SET_UP_CAMERA] == SETUP_CAMERA_FOCUS73))
     {
          /** SEND auth data over first */
         NSString * set_auth_cmd = [NSString stringWithFormat:@"%@%@%@%@%@",

@@ -651,6 +651,8 @@
 		8BA7F2831851C57200BE0145 /* blink11hd720p.sdp in Resources */ = {isa = PBXBuildFile; fileRef = 8BA7F2801851C57100BE0145 /* blink11hd720p.sdp */; };
 		8BA8AE881821F3E900DC9E9F /* stream720p_10_926.sdp in Resources */ = {isa = PBXBuildFile; fileRef = 8BA8AE871821F3E900DC9E9F /* stream720p_10_926.sdp */; };
 		8BB53A83194826050078B58E /* NotifViewController~iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8BB53A82194826050078B58E /* NotifViewController~iPad.xib */; };
+		8BB7EA9A196E3F5000FDD674 /* Focus73TableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BB7EA98196E3F5000FDD674 /* Focus73TableViewController.m */; };
+		8BB7EA9B196E3F5000FDD674 /* Focus73TableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8BB7EA99196E3F5000FDD674 /* Focus73TableViewController.xib */; };
 		8BC0A02F1844A87700A5FD52 /* temp_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BC0A02E1844A87700A5FD52 /* temp_bg.png */; };
 		8BC0A0461844B31700A5FD52 /* mbp_icon57x57.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BC0A0421844B31700A5FD52 /* mbp_icon57x57.png */; };
 		8BC0A0491844B31700A5FD52 /* mbp_icon144x144.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BC0A0451844B31700A5FD52 /* mbp_icon144x144.png */; };
@@ -1535,6 +1537,9 @@
 		8BA7F2801851C57100BE0145 /* blink11hd720p.sdp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = blink11hd720p.sdp; sourceTree = "<group>"; };
 		8BA8AE871821F3E900DC9E9F /* stream720p_10_926.sdp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stream720p_10_926.sdp; sourceTree = "<group>"; };
 		8BB53A82194826050078B58E /* NotifViewController~iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "NotifViewController~iPad.xib"; sourceTree = "<group>"; };
+		8BB7EA97196E3F5000FDD674 /* Focus73TableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Focus73TableViewController.h; sourceTree = "<group>"; };
+		8BB7EA98196E3F5000FDD674 /* Focus73TableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Focus73TableViewController.m; sourceTree = "<group>"; };
+		8BB7EA99196E3F5000FDD674 /* Focus73TableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Focus73TableViewController.xib; sourceTree = "<group>"; };
 		8BC0A02E1844A87700A5FD52 /* temp_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = temp_bg.png; sourceTree = "<group>"; };
 		8BC0A0421844B31700A5FD52 /* mbp_icon57x57.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mbp_icon57x57.png; sourceTree = "<group>"; };
 		8BC0A0451844B31700A5FD52 /* mbp_icon144x144.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mbp_icon144x144.png; sourceTree = "<group>"; };
@@ -1774,6 +1779,7 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				8BB7EA94196E337200FDD674 /* Focus73 */,
 				8412C98A195D26F7000FEA1C /* CrittercismSDK */,
 				84A66235195C0C2500EF7DB5 /* SDWebImage */,
 				5EBA456719405BEA00695155 /* XIB FIles */,
@@ -3345,6 +3351,32 @@
 			name = TermsCC;
 			sourceTree = "<group>";
 		};
+		8BB7EA94196E337200FDD674 /* Focus73 */ = {
+			isa = PBXGroup;
+			children = (
+				8BB7EA96196E37B900FDD674 /* Focus73ListVc */,
+				8BB7EA95196E37A400FDD674 /* LANSeupInstructionVC */,
+			);
+			name = Focus73;
+			sourceTree = "<group>";
+		};
+		8BB7EA95196E37A400FDD674 /* LANSeupInstructionVC */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = LANSeupInstructionVC;
+			sourceTree = "<group>";
+		};
+		8BB7EA96196E37B900FDD674 /* Focus73ListVc */ = {
+			isa = PBXGroup;
+			children = (
+				8BB7EA97196E3F5000FDD674 /* Focus73TableViewController.h */,
+				8BB7EA98196E3F5000FDD674 /* Focus73TableViewController.m */,
+				8BB7EA99196E3F5000FDD674 /* Focus73TableViewController.xib */,
+			);
+			name = Focus73ListVc;
+			sourceTree = "<group>";
+		};
 		8BEDE2ED1861B73F00D3AE2B /* Disturb */ = {
 			isa = PBXGroup;
 			children = (
@@ -3662,6 +3694,7 @@
 				5EAA4D8A19504D6600889F85 /* splash_ipad@2x.png in Resources */,
 				8B29A04218AF500900D36BE5 /* general@2x.png in Resources */,
 				A1AC858F18912859002A8CCD /* ProximaNova-RegularItalic.otf in Resources */,
+				8BB7EA9B196E3F5000FDD674 /* Focus73TableViewController.xib in Resources */,
 				8B29A06018AF500A00D36BE5 /* settings_temp_f@2x.png in Resources */,
 				8B9507AB18C9960D006D4945 /* setup_camera_b1@2x.png in Resources */,
 				A1B1E7CD18E9135800F076B6 /* back_pressed@2x.png in Resources */,
@@ -4391,6 +4424,7 @@
 				8B92A0A61863F69C005923D2 /* SavedEventCell.m in Sources */,
 				97A07FB117D5FD4A00653460 /* H264PlayerViewController.mm in Sources */,
 				979BC69A17D9B97700B3B373 /* PlaybackViewController.mm in Sources */,
+				8BB7EA9A196E3F5000FDD674 /* Focus73TableViewController.m in Sources */,
 				A160B4DF18C0360800739B53 /* EarlierNavigationController.m in Sources */,
 				8B9CE1FB18C81DEA00B1B7F9 /* CustomIOS7AlertView.m in Sources */,
 				8B97A3C018BEE628008A38E1 /* UIBarButtonItem+Custom.m in Sources */,
@@ -4483,7 +4517,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = HubbleHome;
-				PROVISIONING_PROFILE = "6005205D-B6D0-404C-8272-0A61B5418CCB";
+				PROVISIONING_PROFILE = "8821D41A-DC34-49AE-86CF-93C16E99264B";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
 				VALID_ARCHS = "armv6 armv7";
@@ -4533,7 +4567,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = HubbleHome;
-				PROVISIONING_PROFILE = "6005205D-B6D0-404C-8272-0A61B5418CCB";
+				PROVISIONING_PROFILE = "8821D41A-DC34-49AE-86CF-93C16E99264B";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
 				VALIDATE_PRODUCT = YES;
@@ -4606,7 +4640,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = HubbleHome;
-				PROVISIONING_PROFILE = "6005205D-B6D0-404C-8272-0A61B5418CCB";
+				PROVISIONING_PROFILE = "8821D41A-DC34-49AE-86CF-93C16E99264B";
 				RAMEWORK_SEARCH_PATHS = "$(inherited) \"$(SRCROOT)\"";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";

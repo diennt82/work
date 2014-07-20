@@ -20,7 +20,6 @@
 #import "MBP_iosAppDelegate.h"
 
 #define MOVEMENT_DURATION   0.3 //movementDuration
-#define _Use3G              @"use3GToConnect"
 #define GAI_CATEGORY        @"Login view"
 
 @interface LoginViewController ()  <UITextFieldDelegate, StunClientDelegate, UserAccountDelegate>
@@ -36,6 +35,7 @@
 @property (nonatomic, retain) NSString *stringPassword;
 @property (nonatomic) BOOL buttonEnterPressedFlag;
 @property (nonatomic,retain) StunClient *client;
+@property (nonatomic) BOOL isUsingOldApiKey;
 
 @property (retain, nonatomic) IBOutlet UIImageView *imgViewLoading;
 @end
@@ -107,36 +107,7 @@
                                           nil];
     self.imgViewLoading.animationDuration = 1.5;
     [self.imgViewLoading startAnimating];
-    
-    
-#if !TARGET_IPHONE_SIMULATOR
-    if ([self isConnectingToCameraNetwork])
-    {
-        NSString * msg = NSLocalizedStringWithDefaultValue(@"phone_is_connected_to_camera" ,nil, [NSBundle mainBundle],
-                                                           @"You are connecting to a Camera network which does not have internet access.Please go to wifi settings and switch to another WIFI." ,nil);
-        
-        NSString * ok = NSLocalizedStringWithDefaultValue(@"ok" ,nil, [NSBundle mainBundle],
-                                                          @"OK", nil);
-        
-        //ERROR condition
-        UIAlertView *alert = [[UIAlertView alloc]
-                              initWithTitle:@""
-                              message:msg
-                              delegate:self
-                              cancelButtonTitle:ok
-                              otherButtonTitles: nil];
-        alert.tag = 114;
-        [alert show];
-        [alert release];
-        
-    }
-    else
-#endif
-    {
-    
-        //load user/pass
-        [self performSelectorInBackground:@selector(loadUserInfo_bg) withObject:nil];
-    }
+    [self performSelectorInBackground:@selector(loadUserInfo_bg) withObject:nil];
 }
 
 -(void) viewWillAppear:(BOOL)animated
@@ -214,23 +185,45 @@
         {
             /* Don't need to go thru the login query again */
             NSLog(@" Use old api key");
+
             self.stringPassword = [NSString stringWithString:old_pass];
-            self.viewProgress.hidden = NO;
             self.tfPassword.text = old_pass;
+            self.isUsingOldApiKey = YES;
             
-            self.buttonEnterPressedFlag = YES;
-            [self moveOnAfterLoginOk:old_api_key];
+            NSInteger networkFailed = [RegistrationViewController checkNetworkConnectionCallback:self];
             
+            if (networkFailed == 0) {
+                self.viewProgress.hidden = NO;
+                self.buttonEnterPressedFlag = YES;
+                
+                [self moveOnAfterLoginOk:old_api_key];
+            }
+            else if (networkFailed == TAG_ALERT_VIEW_NETWORK_NOT_REACHABLE)
+            {
+                self.viewProgress.hidden = YES;
+            }
         }
         else if (shouldAutoLogin &&
                  old_pass != nil)
         {
+#if 1
             self.stringPassword = [NSString stringWithString:old_pass];
-            self.viewProgress.hidden = NO;
             self.tfPassword.text = old_pass;
             
-            self.buttonEnterPressedFlag = YES;
+            NSInteger networkFailed = [RegistrationViewController checkNetworkConnectionCallback:self];
+            
+            if (networkFailed == 0) {
+                self.viewProgress.hidden = NO;
+                self.buttonEnterPressedFlag = YES;
+                [self doSignIn:nil];
+            }
+            else if (networkFailed == TAG_ALERT_VIEW_NETWORK_NOT_REACHABLE)
+            {
+                self.viewProgress.hidden = YES;
+            }
+#else
             [self check3GConnectionAndPopup];
+#endif
         }
         else
         {
@@ -258,10 +251,6 @@
         self.buttonEnter.enabled = NO;
         NSLog(@"LoginVC - No login");
     }
-    
-    //self.viewProgress.hidden = NO;
-    
-    
 }
 
 - (void)didReceiveMemoryWarning
@@ -358,8 +347,23 @@
     
     self.stringUsername = [NSString stringWithString:_tfEmail.text];
     self.stringPassword = [NSString stringWithString:_tfPassword.text];
+#if 1
+    //[self loginAccountWithOldApiKey:nil];
+    NSInteger networkFailed = [RegistrationViewController checkNetworkConnectionCallback:self];
     
+    [self showProgressView];
+    
+    if (!networkFailed) {
+        self.viewProgress.hidden = NO;
+        [self doSignIn:nil];
+    }
+    else if (networkFailed == TAG_ALERT_VIEW_NETWORK_NOT_REACHABLE)
+    {
+        self.viewProgress.hidden = YES;
+    }
+#else
     [self check3GConnectionAndPopup];
+#endif
 }
 
 - (IBAction)buttonCreateAccountTouchUpInsideAction:(id)sender
@@ -449,6 +453,8 @@
     self.buttonEnter.enabled = YES;
 	self.viewProgress.hidden = YES;
 }
+
+#if 0
 /* check if phone is connected to 3g network 
    Also check if phone is connected to camera network (!!#@!#) 
  */
@@ -506,40 +512,12 @@
                                         repeats:NO];
     }
 }
-
--(BOOL) isCurrentConnection3G
-{
-    Reachability *reachability = [Reachability reachabilityForInternetConnection];
-    [reachability startNotifier];
-    
-    NetworkStatus status = [reachability currentReachabilityStatus];
-    
-    if (status == ReachableViaWWAN)
-    {
-        //3G
-        return TRUE;
-    }
-    
-    return FALSE;
-}
--(BOOL) isConnectingToCameraNetwork
-{
-    NSString * current_ssid = [CameraPassword fetchSSIDInfo] ;
-
-    if ([current_ssid hasPrefix:DEFAULT_SSID_HD_PREFIX] ||
-        [current_ssid hasPrefix:DEFAULT_SSID_PREFIX]
-        )
-    {
-        return TRUE;
-        
-    }
-    
-    return FALSE;
-}
+#endif
 
 - (void)doSignIn:(NSTimer *) exp
 {
     self.navigationController.navigationBarHidden = YES;
+    self.isUsingOldApiKey = NO;
     
     BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
                                                                               Selector:@selector(loginSuccessWithResponse:)
@@ -639,27 +617,53 @@
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
 	
 	int tag = alertView.tag;
-#if 0
-	if (tag == 112) //OFFLINE mode ??
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    
+    if (tag == TAG_ALERT_VIEW_3G) // 3g check
     {
-        switch (buttonIndex) {
+        switch (buttonIndex)
+        {
             case 0:
-                break;
-                
-            case 1://Yes - go offline mode
             {
-                NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-                [userDefaults setBool:YES forKey:_OfflineMode];
+                [userDefaults setBool:NO forKey:_Use3G];
                 [userDefaults synchronize];
                 
-                //Show Camera list
-                NSLog(@"LoginVC- didDismissWithButtonIndex: %p", _delegate);
-
-                [self.navigationController popToRootViewControllerAnimated:YES];
+                self.viewProgress.hidden = YES;
+                self.buttonEnterPressedFlag = NO;
+            }
+                break;
                 
-                if (_delegate)
+            case 1: // Yes - go by 3g
+            {
+                [self showProgressView];
+                
+                if (_isUsingOldApiKey)
                 {
-                    [_delegate sendStatus:SHOW_CAMERA_LIST];
+                    self.isUsingOldApiKey = NO;
+                    [self moveOnAfterLoginOk:[userDefaults objectForKey:@"PortalApiKey"]];
+                }
+                else
+                {
+                    [self doSignIn:nil];
+                }
+            }
+                break;
+                
+            case 2://Yes - DONT ask again
+            {
+                [userDefaults setBool:YES forKey:_Use3G];
+                [userDefaults synchronize];
+                
+                [self showProgressView];
+                
+                if (_isUsingOldApiKey)
+                {
+                    self.isUsingOldApiKey = NO;
+                    [self moveOnAfterLoginOk:[userDefaults objectForKey:@"PortalApiKey"]];
+                }
+                else
+                {
+                    [self doSignIn:nil];
                 }
             }
                 break;
@@ -668,71 +672,50 @@
                 break;
         }
     }
-    else
-#endif
-        if (tag == 113) // 3g check
-    {
-        switch (buttonIndex)
-        {
-            case 0:
-            {
-                NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-                [userDefaults setBool:NO forKey:_Use3G];
-                [userDefaults synchronize];
-                
-                break;
-            }
-            case 1: // Yes - go by 3g
-            {
-                NSString * msg = NSLocalizedStringWithDefaultValue(@"Logging_in_to_server" ,nil, [NSBundle mainBundle],
-                                                                   @"Logging in to server..." , nil);
-                self.viewProgress.hidden = NO;
-                UILabel *labelProgress = (UILabel *)[_viewProgress viewWithTag:509];
-                [labelProgress setText:msg];
-                self.buttonEnter.enabled = YES;
-                
-                //signal iosViewController
-                [self doSignIn:nil];
-                
-                break;
-            }
-            case 2://Yes - DONT ask again
-            {
-                NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-                [userDefaults setBool:YES forKey:_Use3G];
-                [userDefaults synchronize];
-                
-                NSString * msg = NSLocalizedStringWithDefaultValue(@"Logging_in_to_server" ,nil, [NSBundle mainBundle],
-                                                                   @"Logging in to server..." , nil);
-                self.viewProgress.hidden = NO;
-                
-                UILabel *labelProgress = (UILabel *)[_viewProgress viewWithTag:509];
-                
-                [labelProgress setText:msg];
-                self.buttonEnter.enabled = NO;
-                [self doSignIn:nil];
-                
-                break;
-            }
-        }
-    }
-    else if (tag == 114) // camera network check
+    else if (tag == TAG_ALERT_VIEW_CAMERA_WIFI) // camera network check
     {
         switch (buttonIndex)
         {
             case 0:
             {
                 //Stay at this screen.
-                NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
                 [userDefaults setBool:NO forKey:_AutoLogin];
                 [userDefaults synchronize];
                 
-
-                [self loadUserInfo];
-                break;
+                self.viewProgress.hidden = YES;
+                self.buttonEnterPressedFlag = NO;
             }
+                break;
+                
+            case 1:
+            {
+                [self showProgressView];
+
+                if (_isUsingOldApiKey)
+                {
+                    [self moveOnAfterLoginOk:[userDefaults objectForKey:@"PortalApiKey"]];
+                }
+                else
+                {
+                    [self doSignIn:nil];
+                }
+            }
+                break;
+                
+            default:
+                break;
         }
     }
+}
+
+- (void)showProgressView
+{
+    NSString * msg = NSLocalizedStringWithDefaultValue(@"Logging_in_to_server" ,nil, [NSBundle mainBundle],
+                                                       @"Logging in to server..." , nil);
+    self.viewProgress.hidden = NO;
+    UILabel *labelProgress = (UILabel *)[_viewProgress viewWithTag:509];
+    [labelProgress setText:msg];
+    self.buttonEnter.enabled = YES;
 }
 
 #pragma mark -

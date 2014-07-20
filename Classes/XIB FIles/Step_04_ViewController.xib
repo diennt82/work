@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5053" systemVersion="12F45" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5053" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
         <deployment defaultVersion="1792" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
@@ -8,6 +8,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="Step_04_ViewController">
             <connections>
                 <outlet property="btnContinue" destination="8" id="PFE-R4-7H7"/>
+                <outlet property="btnSkipWIFISetup" destination="zjo-8g-KGW" id="XE5-6n-ect"/>
                 <outlet property="progressView" destination="Qxr-3g-cG5" id="qHJ-18-P1E"/>
                 <outlet property="tfCamName" destination="UWF-Zv-RPc" id="HwO-JZ-V0N"/>
                 <outlet property="view" destination="3" id="20"/>
@@ -45,14 +46,14 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <textField opaque="NO" clipsSubviews="YES" tag="599" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Eg. Living Room, Nursery" minimumFontSize="17" id="UWF-Zv-RPc">
-                    <rect key="frame" x="20" y="457" width="280" height="30"/>
+                    <rect key="frame" x="20" y="410" width="280" height="30"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <color key="textColor" red="0.50196078430000002" green="0.50196078430000002" blue="0.50196078430000002" alpha="1" colorSpace="calibratedRGB"/>
                     <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="17"/>
                     <textInputTraits key="textInputTraits"/>
                 </textField>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="settings_seperator.png" id="gDw-3y-asK">
-                    <rect key="frame" x="20" y="486" width="280" height="1"/>
+                    <rect key="frame" x="20" y="439" width="280" height="1"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                 </imageView>
                 <button opaque="NO" tag="1002" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="8">
@@ -65,6 +66,18 @@
                     </state>
                     <connections>
                         <action selector="handleButtonPress:" destination="-1" eventType="touchUpInside" id="15"/>
+                    </connections>
+                </button>
+                <button hidden="YES" opaque="NO" tag="1003" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="zjo-8g-KGW">
+                    <rect key="frame" x="20" y="448" width="280" height="50"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <inset key="insetFor6xAndEarlier" minX="0.0" minY="64" maxX="0.0" maxY="-64"/>
+                    <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="20"/>
+                    <state key="normal" title="Skip WIFI Setup" backgroundImage="green_btn.png">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="handleButtonPress:" destination="-1" eventType="touchUpInside" id="SjN-4U-7LD"/>
                     </connections>
                 </button>
             </subviews>
