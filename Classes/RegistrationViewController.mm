@@ -87,13 +87,14 @@
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
-        UIButton *btnCheckbox = (UIButton *)[self.view viewWithTag:501];
+//        UIButton *btnCheckbox = (UIButton *)[self.view viewWithTag:501];
+//        
+//        btnCheckbox.frame = CGRectMake(_btnCreate.frame.origin.x - 6, btnCheckbox.frame.origin.y, btnCheckbox.frame.size.width, btnCheckbox.frame.size.height);
+//        UILabel *lblTermServices = (UILabel *)[self.view viewWithTag:502];
+//        lblTermServices.frame = CGRectMake(btnCheckbox.frame.origin.x + btnCheckbox.frame.size.width, lblTermServices.frame.origin.y, lblTermServices.frame.size.width, lblTermServices.frame.size.height);
+//        UIButton *btn = (UIButton *)[self.view viewWithTag:504];
+//        btn.frame = lblTermServices.frame;
         
-        btnCheckbox.frame = CGRectMake(_btnCreate.frame.origin.x - 6, btnCheckbox.frame.origin.y, btnCheckbox.frame.size.width, btnCheckbox.frame.size.height);
-        UILabel *lblTermServices = (UILabel *)[self.view viewWithTag:502];
-        lblTermServices.frame = CGRectMake(btnCheckbox.frame.origin.x + btnCheckbox.frame.size.width, lblTermServices.frame.origin.y, lblTermServices.frame.size.width, lblTermServices.frame.size.height);
-        UIButton *btn = (UIButton *)[self.view viewWithTag:504];
-        btn.frame = lblTermServices.frame;
         self.viewProgress.frame = CGRectMake(0, 0, UIScreen.mainScreen.bounds.size.width, UIScreen.mainScreen.bounds.size.height);
     }
 }
