@@ -503,25 +503,18 @@
         //NSLog(@"-- %@",ch.profile.snapUrl);
         if(ch.profile.snapUrl!=nil)
         {
-            //[cell.snapshotImage setImageWithURL:[NSURL URLWithString:ch.profile.snapUrl] placeholderImage:imgCamera];
-            [cell.snapshotImage setImageWithURL:[NSURL URLWithString:ch.profile.snapUrl] 
-                                placeholderImage:imgCamera 
-                                options:SDWebImageRefreshCached];
-        }
-
-        
-        /*NSString *strPath = [strDocDirPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.jpg",ch.profile.registrationID]];
-        UIImage *img = [UIImage imageWithContentsOfFile:strPath];
-        if(img){
-            cell.snapshotImage.image = img;
-        }else{
-            NSString *strModel = [ch.profile getModel];
-            if([strModel isEqualToString:@"0083"]){
-                cell.snapshotImage.image = [UIImage imageNamed:@"camera_mbp_83"];
-            }else{
-                cell.snapshotImage.image = [UIImage imageNamed:@"camera_focus_66"];
+            if([ch.profile.snapUrl rangeOfString:@"hubble.png"].location == NSNotFound)
+            {
+               [cell.snapshotImage setImageWithURL:[NSURL URLWithString:ch.profile.snapUrl] 
+                                   placeholderImage:imgCamera 
+                                   options:SDWebImageRefreshCached];
             }
-        } */
+            else
+            {
+                [cell.snapshotImage setImage:imgCamera];
+            }            
+        }
+        
         cell.ibCameraNameLabel.text = ch.profile.name;
         NSString *boundCameraName = ch.profile.name;
         CGSize size = [boundCameraName sizeWithAttributes:@{NSFontAttributeName:[UIFont fontWithName:PN_SEMIBOLD_FONT size:18]}];
