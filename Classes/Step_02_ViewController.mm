@@ -199,14 +199,19 @@
     [self.delegate sendStatus:LOGIN];
 }
 
--(void) startMonitorCallBack
+- (void)startMonitorCallBack:(BOOL)success;
 {
     [self dismissViewControllerAnimated:NO completion:^{
-        // New flow: Show Camera list after Add a new Camera
-        [self.delegate sendStatus:SHOW_CAMERA_LIST];
+        NSInteger status = SHOW_CAMERA_LIST;
+        
+        if (!success)
+        {
+            status = SHOW_CAMERA_LIST2;
+        }
+        
+        [self.delegate sendStatus:status];
     }];
 }
-
 
 - (IBAction)handleButtonPress:(id)sender
 {

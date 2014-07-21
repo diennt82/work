@@ -41,7 +41,7 @@
 #import "CustomIOS7AlertView.h"
 #import "HubbleProgressView.h"
 #import "MBProgressHUD.h"
-
+#import "UserAccount.h"
 
 
 #define H264_STREAM_STARTED              1
@@ -349,6 +349,8 @@
 @property (nonatomic) BOOL hasFwVersion;
 @property (nonatomic) BOOL shouldBeep;
 @property (nonatomic, retain) AudioOutStreamer * audioOut;
+@property (nonatomic, retain) UserAccount *userAccount;
+@property (nonatomic) BOOL isFwUpgradedByAnotherDevice;
 
 
 - (void)scan_done:(NSArray *) _scan_results;

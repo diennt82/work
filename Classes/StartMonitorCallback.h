@@ -11,7 +11,9 @@
 
 
 @protocol StartMonitorDelegate
-- (void)startMonitorCallBack;
+
+- (void)startMonitorCallBack:(BOOL)success;
+
 @end
 
 

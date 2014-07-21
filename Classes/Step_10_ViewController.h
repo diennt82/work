@@ -14,7 +14,7 @@
 #import "Step_12_ViewController.h"
 #import "Step_11_ViewController.h"
 #import "Step_02_ViewController.h"
-#import "ConnectionMethodDelegate.h"
+//#import "ConnectionMethodDelegate.h"
 
 @class ScanForCamera;
 
@@ -45,17 +45,17 @@
     //member to dismiss when disDisAppearView
     UIAlertView *_alertChooseConfig;    
     
-    id<ConnectionMethodDelegate> delegate;
+    //id<ConnectionMethodDelegate> delegate;
 }
 
 @property (retain, nonatomic) IBOutlet UIView *ib_viewGuild;
 @property (retain, nonatomic) IBOutlet UIScrollView *ib_scollViewGuide;
 @property (retain, nonatomic) IBOutlet UIButton *ib_resumeSetup;
 
-@property (nonatomic, assign)  id<ConnectionMethodDelegate> delegate;
+//@property (nonatomic, assign)  id<ConnectionMethodDelegate> delegate;
 @property (nonatomic, retain) NSString *cameraMac,  *master_key;
 
-@property (nonatomic, assign) NSString * errorCode;
+@property (nonatomic, retain) NSString * errorCode;
 @property (nonatomic, retain) NSString *stringUDID;
 @property (nonatomic, retain) NSString *stringAuth_token;
 
