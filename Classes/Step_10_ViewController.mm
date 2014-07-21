@@ -33,7 +33,6 @@
 
 #define TIMEOUT_PROCESS         2*60.f
 #define GAI_CATEGORY            @"Step 10 view"
-#define TIME_FW_UPGRADE         5*60 // 5 minutes.
 
 #define TAG_VIEW_FW_UPGRADE_PROGRESS     5990
 #define TAG_VIEW_FW_UPGRADE_5MINUTES     5991
@@ -1316,7 +1315,7 @@
     NSLog(@"%s _fwUpgradePercentage:%d, _fwUpgradeStatus:%d", __FUNCTION__,_fwUpgradePercentage, _fwUpgradeStatus);
     
     while (_fwUpgradePercentage < 100 &&
-           (_fwUpgradeStatus == FIRMWARE_UPGRADE_IN_PROGRESS || _fwUpgradePercentage == FIRMWARE_UPGRADE_REBOOT))
+           (_fwUpgradeStatus == FIRMWARE_UPGRADE_IN_PROGRESS || _fwUpgradeStatus == FIRMWARE_UPGRADE_REBOOT))
     {
         if (_fwUpgradePercentage <= 10)// 30s
         {

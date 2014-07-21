@@ -654,14 +654,14 @@
                 if (firmwareVersion != nil && ![firmwareVersion isEqual:[NSNull null]])
                 {
                     //if the version on server matches the version reported by FW earlier
-                    //if ([firmwareVersion compare:currentFw] == NSOrderedDescending)
-                    if ([firmwareVersion compare:currentFw] == NSOrderedSame)
+                    if ([firmwareVersion compare:currentFw] == NSOrderedDescending)
+                    //if ([firmwareVersion compare:currentFw] == NSOrderedSame)
                     {
-//                        if ([[data objectForKey:@"is_available"] boolValue])
-//                        {
-//                            fwUpgradeStatus = FIRMWARE_UPGRADE_SUCCEED;
-//                        }
-//                        else
+                        if ([[data objectForKey:@"is_available"] boolValue])
+                        {
+                            fwUpgradeStatus = FIRMWARE_UPGRADE_SUCCEED;
+                        }
+                        else
                         {
                             fwUpgradeStatus = FIRMWARE_UPGRADE_REBOOT; // Waiting for camera is available.
                         }

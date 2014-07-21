@@ -1119,54 +1119,6 @@
     }
 }
 
--(void) askUserToWaitForUpgrade
-{
-    [self resetAllTimer];
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-    
-    
-    [UIApplication sharedApplication].idleTimerDisabled=  YES;
-    
-    
-    [self.progressView removeFromSuperview];
-    [self.infoSelectCameView removeFromSuperview];
-    [self.progressView setHidden:YES];
-    
-    [self.view addSubview:self.otaDummyProgress];
-    [self.view bringSubviewToFront:self.otaDummyProgress];
-    self.otaDummyProgressBar.progress = 0.0;
-    
-	[self performSelectorInBackground:@selector(upgradeFwReboot_bg)  withObject:nil] ;
-    
-    
-}
-
--(void) upgradeFwReboot_bg
-{
-	//percentageProgress.
-	NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-    
-	//float totalTime  = 80.0; // 80 sec reboot time
-    
-	float sleepPeriod = 120.0 / 100; // 100 cycles
-	int percentage = 0;
-	while (percentage ++ < 100)
-	{
-        
-        
-		[self performSelectorOnMainThread:@selector(upgradeFwProgress_ui:)
-                               withObject:[NSNumber numberWithInt:percentage]
-                            waitUntilDone:YES];
-        
-		[NSThread sleepForTimeInterval:sleepPeriod];
-        
-	}
-    
-	[self performSelectorOnMainThread:@selector(goBackAndReaddCamera) withObject:nil waitUntilDone:NO];
-	[pool release];
-    
-}
-
 -(void) goBackAndReaddCamera
 {
     //ERROR condition
@@ -1180,19 +1132,6 @@
     alertViewBack.tag = 100;
     [alertViewBack show];
     [alertViewBack release];
-}
-
--(void) upgradeFwProgress_ui:(NSNumber *) number
-{
-	int value =  [number intValue];
-	float _value = (float) value;
-	_value = _value/100.0;
-    
-	if (value >=0)
-	{
-		self.otaDummyProgressBar.progress = _value;
-	}
-    
 }
 
 
