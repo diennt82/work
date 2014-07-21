@@ -72,6 +72,20 @@
     self.tfPassword.delegate = self;
     self.tfConfirmPassword.delegate =self;
     
+    self.tfUsername.autocorrectionType = UITextAutocorrectionTypeNo;
+    self.tfUsername.autocapitalizationType = UITextAutocapitalizationTypeNone;
+
+    
+    self.tfEmail.autocorrectionType = UITextAutocorrectionTypeNo;
+    self.tfEmail.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    
+    self.tfPassword.autocorrectionType = UITextAutocorrectionTypeNo;
+    self.tfPassword.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    
+    self.tfConfirmPassword.autocorrectionType = UITextAutocorrectionTypeNo;
+    self.tfConfirmPassword.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    
+    
     NSMutableAttributedString *commentString = [[NSMutableAttributedString alloc] initWithString:self.agreeButton.titleLabel.text];
     [commentString addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInteger:NSUnderlineStyleSingle] range:NSMakeRange(0, [commentString length])];
     [self.agreeButton.titleLabel setAttributedText:commentString];

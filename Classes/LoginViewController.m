@@ -107,6 +107,14 @@
                                           nil];
     self.imgViewLoading.animationDuration = 1.5;
     [self.imgViewLoading startAnimating];
+    
+    /* Disable autocorrect & auto cap */
+    self.tfEmail.autocorrectionType = UITextAutocorrectionTypeNo;
+    self.tfEmail.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    
+    self.tfPassword.autocorrectionType = UITextAutocorrectionTypeNo;
+    self.tfPassword.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    
     [self performSelectorInBackground:@selector(loadUserInfo_bg) withObject:nil];
 }    
     
