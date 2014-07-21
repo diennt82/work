@@ -82,8 +82,8 @@
     self.navigationItem.leftBarButtonItem = barBtnHubble;
     
     UIBarButtonItem *nextButton =
-    [[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"Next",nil, [NSBundle mainBundle],
-                                                                             @"Next" , nil)
+    [[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"next",nil, [NSBundle mainBundle],
+                                                                             @"Next", nil)
      
                                      style:UIBarButtonItemStylePlain
                                     target:self
@@ -584,10 +584,10 @@
             
             //ERROR condition
             UIAlertView *_alert = [[UIAlertView alloc]
-                                   initWithTitle:@"SSID cannot be empty"
-                                   message:@"Please fill the SSID name and try again"
+                                   initWithTitle:NSLocalizedStringWithDefaultValue(@"alert_title_ssid_cannot_be_empty", nil, [NSBundle mainBundle], @"SSID cannot be empty", nil)
+                                   message:NSLocalizedStringWithDefaultValue(@"alert_mes_fill_ssid_name", nil, [NSBundle mainBundle], @"Please fill the SSID name and try again", nil)
                                    delegate:self
-                                   cancelButtonTitle:@"OK"
+                                   cancelButtonTitle:NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil)
                                    otherButtonTitles:nil];
             [_alert show];
             [_alert release];
@@ -621,10 +621,10 @@
             
             //ERROR condition
             UIAlertView *_alert = [[UIAlertView alloc]
-                                   initWithTitle:@"Password Failed"
-                                   message:@"Please enter password"
+                                   initWithTitle:NSLocalizedStringWithDefaultValue(@"alert_title_password_failed", nil, [NSBundle mainBundle], @"Password Failed", nil)
+                                   message:NSLocalizedStringWithDefaultValue(@"alert_mes_enter_password", nil, [NSBundle mainBundle], @"Please enter password", nil)
                                    delegate:self
-                                   cancelButtonTitle:@"OK"
+                                   cancelButtonTitle:NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil)
                                    otherButtonTitles:nil];
             [_alert show];
             [_alert release];
@@ -1058,8 +1058,8 @@
                            initWithTitle:@"Confirm Password Failed"
                            message:msg_pw_wrong
                            delegate:self
-                           cancelButtonTitle:@"Cancel"
-                           otherButtonTitles:@"Ok", nil];
+                           cancelButtonTitle:NSLocalizedStringWithDefaultValue(@"cancel", nil, [NSBundle mainBundle], @"Cancel", nil)
+                           otherButtonTitles:NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil), nil];
     alertViewPassword.tag = 101;
     [alertViewPassword show];
     [alertViewPassword release];
@@ -1127,7 +1127,7 @@
                                                                           @"Upgrade Done" , nil)
                           message:@"Press OK to retry installing the camera."
                           delegate:self
-                          cancelButtonTitle:@"OK"
+                          cancelButtonTitle:NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil)
                           otherButtonTitles:nil];
     alertViewBack.tag = 100;
     [alertViewBack show];

@@ -350,8 +350,7 @@
     //NSString * msg1 = NSLocalizedStringWithDefaultValue(@"Get_Camera_list_Error_msg",nil, [NSBundle mainBundle],
     //                                                    @"Server error: %@", nil);
     
-    NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
-                                                      @"Ok", nil);
+    NSString * ok = NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil);
     NSNumber *status = [error_response objectForKey:@"status"];
     NSString *message = [error_response objectForKey:@"message"];
 	//ERROR condition

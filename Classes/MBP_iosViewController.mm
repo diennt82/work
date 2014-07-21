@@ -727,7 +727,7 @@
                 NSDateFormatter* df_local = [[NSDateFormatter alloc] init];
                 [df_local setTimeZone:[NSTimeZone localTimeZone]];
                 df_local.dateFormat = @"hh:mm a, dd-MM-yyyy";
-                NSString * combined_msg =[NSString stringWithFormat:@"Multiple detections at camera since %@",
+                NSString * combined_msg =[NSString stringWithFormat:@"%@ %@", NSLocalizedStringWithDefaultValue(@"multiple_detections", nil, [NSBundle mainBundle], @"Multiple detections at camera since", nil),
                                           [df_local stringFromDate:oldestDate]];
                 
                 [df_local release];
@@ -736,8 +736,7 @@
                 NSString * view_camera= NSLocalizedStringWithDefaultValue(@"Go_to_camera",nil, [NSBundle mainBundle],
                                                                           @"Go to camera", nil);
                 
-                NSString * cancel = NSLocalizedStringWithDefaultValue(@"Cancel",nil, [NSBundle mainBundle],
-                                                                      @"Cancel", nil);
+                NSString * cancel = NSLocalizedStringWithDefaultValue(@"cancel", nil, [NSBundle mainBundle], @"Cancel", nil);
                 
                 
                 pushAlert = [[UIAlertView alloc]
@@ -805,8 +804,7 @@
     }
     
     
-    NSString * cancel = NSLocalizedStringWithDefaultValue(@"Cancel",nil, [NSBundle mainBundle],
-                                                          @"Cancel", nil);
+    NSString * cancel = NSLocalizedStringWithDefaultValue(@"cancel", nil, [NSBundle mainBundle], @"Cancel", nil);
     
     NSDateFormatter* df_local = [[NSDateFormatter alloc] init];
     [df_local setTimeZone:[NSTimeZone localTimeZone]];
@@ -1795,10 +1793,11 @@
             NSLog(@"App was crashed!");
             hasOptionSendEmail = TRUE;
             
-            UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Send app log" message:nil
+            UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Send app log"
+                                                         message:nil
                                                         delegate:self
-                                               cancelButtonTitle:@"Cancel"
-                                               otherButtonTitles:@"OK", nil];
+                                               cancelButtonTitle:NSLocalizedStringWithDefaultValue(@"cancel", nil, [NSBundle mainBundle], @"Cancel", nil)
+                                               otherButtonTitles:NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil), nil];
             av.tag = 11;
             [av show];
             [av release];
@@ -1913,7 +1912,8 @@
     NSError *errorFile;
     BOOL success = [fileManager removeItemAtPath:logCrashedPath error:&errorFile];
     if (success) {
-        //        UIAlertView *removeSuccessFulAlert=[[UIAlertView alloc]initWithTitle:@"Congratulation:" message:@"Successfully removed" delegate:self cancelButtonTitle:@"Close" otherButtonTitles:nil];
+        //        UIAlertView *removeSuccessFulAlert=[[UIAlertView alloc]initWithTitle:@"Congratulation:" message:@"Successfully removed" delegate:self cancelButtonTitle:NSLocalizedStringWithDefaultValue(@"close",nil, [NSBundle mainBundle],
+//        @"Close", nil) otherButtonTitles:nil];
         //        [removeSuccessFulAlert show];
         NSLog(@"Removed application_crash.log successfuly!");
     }

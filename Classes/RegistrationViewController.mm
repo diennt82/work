@@ -72,6 +72,20 @@
     self.tfPassword.delegate = self;
     self.tfConfirmPassword.delegate =self;
     
+    self.tfUsername.autocorrectionType = UITextAutocorrectionTypeNo;
+    self.tfUsername.autocapitalizationType = UITextAutocapitalizationTypeNone;
+
+    
+    self.tfEmail.autocorrectionType = UITextAutocorrectionTypeNo;
+    self.tfEmail.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    
+    self.tfPassword.autocorrectionType = UITextAutocorrectionTypeNo;
+    self.tfPassword.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    
+    self.tfConfirmPassword.autocorrectionType = UITextAutocorrectionTypeNo;
+    self.tfConfirmPassword.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    
+    
     NSMutableAttributedString *commentString = [[NSMutableAttributedString alloc] initWithString:self.agreeButton.titleLabel.text];
     [commentString addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInteger:NSUnderlineStyleSingle] range:NSMakeRange(0, [commentString length])];
     [self.agreeButton.titleLabel setAttributedText:commentString];
@@ -202,8 +216,7 @@
 - (BOOL )checkInputDataToLogin
 {
     NSString * msg = nil ;
-    NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
-                                                      @"Ok", nil);
+    NSString * ok = NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil);
     NSString *title = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed",nil, [NSBundle mainBundle],
                                                         @"Create Account Failed" , nil);
     BOOL checkSucceed = FALSE;
@@ -480,8 +493,7 @@
 {
     [self.viewProgress removeFromSuperview];
     
-    NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
-                                                      @"Ok", nil);
+    NSString * ok = NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil);
     NSString * title = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed",nil, [NSBundle mainBundle],
                                                          @"Create Account Failed" , nil);
     NSString *msg = [error_response objectForKey:@"message"];
@@ -512,8 +524,7 @@
     NSString * msg = NSLocalizedStringWithDefaultValue(@"Registration_Error_1" ,nil, [NSBundle mainBundle],
                                                        @"BMS Server is unreachable. Please goto WIFI setting to ensure iOS device is connected to router/3G network" , nil);
     
-    NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
-                                                      @"Ok", nil);
+    NSString * ok = NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil);
     
 	//ERROR condition
 	UIAlertView *alert = [[UIAlertView alloc]

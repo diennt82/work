@@ -138,7 +138,7 @@
     UIFont *font1 = [UIFont regularMedium23Font];
     //Calculate font size needed to display 3 numbers
     NSString *str = @"0000";
-    NSString *minites = @"minutes";
+    NSString *minites = NSLocalizedStringWithDefaultValue(@"minutes", nil, [NSBundle mainBundle], @"minutes", nil);
     CGSize fontSize = [str sizeWithAttributes:@{NSFontAttributeName: font}];
     CGSize fontSize1 = [minites sizeWithAttributes:@{NSFontAttributeName: font1}];
     
@@ -163,7 +163,7 @@
     _minuteTField.backgroundColor = [UIColor clearColor];
     _minuteTField.textColor = [UIColor colorWithWhite:1 alpha:1];
     _minuteTField.textAlignment = NSTextAlignmentCenter;
-    _minuteTField.text = @"minutes";
+    _minuteTField.text = NSLocalizedStringWithDefaultValue(@"minutes", nil, [NSBundle mainBundle], @"minutes", nil);
     _minuteTField.font = font1;
     _minuteTField.enabled = NO;
     
@@ -510,8 +510,8 @@ int finalAngle;
     NSDate *fireDateNotification = [NSDate dateWithTimeIntervalSince1970:nextDateTime];
     UILocalNotification* localNotification = [[UILocalNotification alloc] init];
     localNotification.fireDate = fireDateNotification;
-    localNotification.alertBody = @"Your 'Do Not Disturb' time is over, you will now start to receive notifications";
-    localNotification.alertAction = @"Let push notification from camera";
+    localNotification.alertBody = NSLocalizedStringWithDefaultValue(@"do_not_disturb_time_is_over", nil, [NSBundle mainBundle], @"Your 'Do Not Disturb' time is over, you will now start to receive notifications", nil);
+    localNotification.alertAction = NSLocalizedStringWithDefaultValue(@"let_push_notification_from_camera", nil, [NSBundle mainBundle], @"Let push notification from camera", nil);
     localNotification.timeZone = [NSTimeZone defaultTimeZone];
     localNotification.applicationIconBadgeNumber = [[UIApplication sharedApplication] applicationIconBadgeNumber] + 1;
     

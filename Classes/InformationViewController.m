@@ -19,7 +19,7 @@
     self = [super initWithStyle:style];
     if (self) {
         // Custom initialization
-        self.title = @"Information";
+        self.title = NSLocalizedStringWithDefaultValue(@"information", nil, [NSBundle mainBundle], @"Information", nil);
     }
     return self;
 }
@@ -97,7 +97,7 @@
     switch (indexPath.section)
     {
         case 0:
-            cell.textLabel.text = @"Monitor Everywhere";
+            cell.textLabel.text = NSLocalizedString(@"monitor_everywhere", @"Monitor Everywhere");
             break;
             
         case 1:
@@ -109,7 +109,7 @@
             break;
             
         case 3:
-            cell.textLabel.text  = @"Monitoreverywhere \u00A9 All rights Reserved";
+            cell.textLabel.text  = NSLocalizedString(@"monitor_everywhere_all_rights_reserved", @"Monitoreverywhere \u00A9 All rights Reserved");
             break;
             
         default:
