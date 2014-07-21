@@ -1269,18 +1269,7 @@
        
         [self uploadImageToServer:imageSelected];
         
-        NSArray *paths = NSSearchPathForDirectoriesInDomains
-        (NSDocumentDirectory, NSUserDomainMask, YES);
-        NSString  *strPath = [paths objectAtIndex:0];
-        
-        strPath = [strPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.jpg",self.camChannel.profile.registrationID]];
-        
-        if([[NSFileManager defaultManager] fileExistsAtPath:strPath])
-        {
-            [[NSFileManager defaultManager] removeItemAtPath:strPath error:nil];
-        }
-        [UIImageJPEGRepresentation(imageSelected, 0.5) writeToFile:strPath atomically:YES];
-
+       
     }];
 }
 
@@ -1310,19 +1299,7 @@
         
         if(actionSheet.cancelButtonIndex!=buttonIndex)
         {
-            //self.camChannel.profile.registrationID
-            NSArray *paths = NSSearchPathForDirectoriesInDomains
-            (NSDocumentDirectory, NSUserDomainMask, YES);
-            NSString  *strPath = [paths objectAtIndex:0];
             
-            strPath = [strPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.jpg",self.camChannel.profile.registrationID]];
-            
-            if([[NSFileManager defaultManager] fileExistsAtPath:strPath])
-            {
-                [[NSFileManager defaultManager] removeItemAtPath:strPath error:nil];
-            }
-            [UIImageJPEGRepresentation(image, 0.5) writeToFile:strPath atomically:YES];
-            // [strPath release];
         }
     };
     [as showInView:self.view];
