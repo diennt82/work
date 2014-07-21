@@ -523,8 +523,7 @@
                                                                               Selector:@selector(loginSuccessWithResponse:)
                                                                           FailSelector:@selector(loginFailedWithError:)
                                                                              ServerErr:@selector(loginFailedServerUnreachable)] autorelease];
-    
-    [jsonComm loginWithLogin:_stringUsername andPassword:_stringPassword];
+    [jsonComm loginPostWithLogin:_stringUsername password:_stringPassword];
     
     NSLog(@"start logging");
 #if 1
