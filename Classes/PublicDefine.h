@@ -156,11 +156,12 @@
 #define CAM_IN_VEW      @"string_Camera_Mac_Being_Viewed"
 #define HANDLE_PN @"HANDLE_PN_NOW"
 
-#define FW_MILESTONE @"01.12.58"
-#define FW_MILESTONE_F66_NEW_FLOW @"01.12.82"
+#define FW_MILESTONE                          @"01.12.58"
+#define FW_MILESTONE_F66_NEW_FLOW             @"01.12.82"
 //Min version supports ota via app
-#define FW_VERSION_OTA_UPGRADING_MIN @"01.13.62"
-#define FW_VERSION_OTA_REMOTE_UPGRADE_ENABLE @"01.15.11"
+#define FW_VERSION_OTA_UPGRADING_MIN          @"01.13.62"
+#define FW_VERSION_OTA_REMOTE_UPGRADE_ENABLE  @"01.15.11"
+#define FW_VERSION_FACTORY_SHOULD_BE_UPGRADED @"01.13.40"
 
 #define FW_VERSION  @"firmware_version"
 #define CAMERA_SSID @"camera_ssid"

@@ -178,13 +178,12 @@
                                    action:@selector(didTapTableView:)];
     [self.tableView addGestureRecognizer:tap];
     [tap release];
-}
-
-- (void)viewDidUnload
-{
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    //[self resetAllTimer];
+    
+    if ([[[NSUserDefaults standardUserDefaults] stringForKey:FW_VERSION] compare:FW_VERSION_FACTORY_SHOULD_BE_UPGRADED] == NSOrderedSame)
+    {
+        UILabel *lblProgress = (UILabel *)[_progressView viewWithTag:695];
+        lblProgress.text = @"Note : Your camera may be upgraded to latest software. This may take about 5 minutes. During this time, you will not be able to access the camera.";
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -193,6 +192,7 @@
     self.trackedViewName = GAI_CATEGORY;
     NSLog(@"update security type");
     UITextField * _sec = (UITextField *) [self.securityCell viewWithTag:1];
+    
     if (_sec != nil)
     {
         _sec.text = self.security;
@@ -551,7 +551,7 @@
     [step07ViewController release];
 }
 
--(void) handleNextButton:(id) sender
+- (void)handleNextButton:(id) sender
 {
     [[HoldOnCamWifi shareInstance] stopHolder];
     
@@ -644,7 +644,7 @@
     //NOTE: we can do this because we are connecting to camera now
     NSString * camera_mac= nil;
     NSString *stringUDID = @"";
-#if 1
+
     NSString *response = [[HttpCom instance].comWithDevice sendCommandAndBlock:GET_UDID
                                                                    withTimeout:5.0];
     
@@ -676,26 +676,6 @@
             }
         }
     }
-#else
-
-    stringUDID = [[HttpCom instance].comWithDevice sendCommandAndBlock:GET_UDID
-                                                           withTimeout:5.0];
-    //get_udid: 01008344334C32B0A0VFFRBSVA
-    NSRange range = [stringUDID rangeOfString:@": "];
-    
-    if (range.location != NSNotFound)
-    {
-        //01008344334C32B0A0VFFRBSVA
-        stringUDID = [stringUDID substringFromIndex:range.location + 2];
-        camera_mac = [stringUDID substringWithRange:NSMakeRange(6, 12)];
-        
-        camera_mac = [Util add_colon_to_mac:camera_mac];
-    }
-    else
-    {
-        NSLog(@"Error - Received UDID wrong format - UDID: %@", stringUDID);
-    }
-#endif
     
     self.deviceConf.ssid = self.ssid;
     

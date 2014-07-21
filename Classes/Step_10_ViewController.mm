@@ -164,6 +164,12 @@
     self.fwUpgradeStatus = FIRMWARE_UPGRADE_SUCCEED;
 
     NSString *fwVersion = [userDefaults stringForKey:FW_VERSION];
+    
+    if ([fwVersion compare:FW_VERSION_FACTORY_SHOULD_BE_UPGRADED] == NSOrderedSame)
+    {
+        UILabel *lblProgress = (UILabel *)[_progressView viewWithTag:695];
+        lblProgress.text = @"Note : Your camera may be upgraded to latest software. This may take about 5 minutes. During this time, you will not be able to access the camera.";
+    }
 
     // >12.82 we can move on with new flow
     if ([fwVersion compare:FW_MILESTONE_F66_NEW_FLOW] >= NSOrderedSame ||
@@ -220,12 +226,6 @@
     {
         self.progressView.hidden = YES;
     }
-}
-
-- (void)viewDidUnload
-{
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
 }
 
 #pragma mark - Actions
