@@ -1480,17 +1480,38 @@
         self.jsonCommBlock = [[BMS_JSON_Communication alloc] initWithCaller:self];
     }
     
-    /*
-     * TODO: REMOVE the resetUploadToken line when Server is done.
-     */
-    
-    NSLog(@"%s %@", __FUNCTION__, [_jsonCommBlock resetUploadTokenBlockedWithApiKey:_apiKey]);
-    
     NSDictionary *responseDict = [_jsonCommBlock getUploadTokenBlockedWithApiKey:_apiKey];
     
     if (responseDict && [[responseDict valueForKey:@"status"] integerValue] == 200)
     {
-        return [[responseDict valueForKey:@"data"] valueForKey:@"upload_token"];
+        NSString *expireDate = [[responseDict valueForKey:@"data"] valueForKey:@"expire_at"];
+        
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
+        [dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+        NSDate *eventDate = [dateFormatter dateFromString:expireDate]; //2014-07-22T22:39:51Z
+        [dateFormatter release];
+        
+        NSTimeInterval diff = [[NSDate date] timeIntervalSinceDate:eventDate];
+        
+        NSLog(@"%s diff:%f, expireDate:%@, eventDate:%@", __FUNCTION__, diff, expireDate, eventDate);
+        
+        if (diff > 0)
+        {
+            /*
+             * TODO: REMOVE the resetUploadToken line when Server is done.
+             */
+            
+            NSLog(@"%s %@", __FUNCTION__, [_jsonCommBlock resetUploadTokenBlockedWithApiKey:_apiKey]);
+            
+            responseDict = [_jsonCommBlock getUploadTokenBlockedWithApiKey:_apiKey];
+            
+            return [[responseDict valueForKey:@"data"] valueForKey:@"upload_token"];
+        }
+        else
+        {
+            return [[responseDict valueForKey:@"data"] valueForKey:@"upload_token"];
+        }
     }
     
     return nil;
