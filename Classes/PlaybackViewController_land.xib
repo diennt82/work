@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
         <deployment defaultVersion="1792" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
@@ -28,10 +28,10 @@
                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                 </imageView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="th9-9d-uui">
-                    <rect key="frame" x="12" y="8" width="32" height="32"/>
+                    <rect key="frame" x="12" y="8" width="50" height="50"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                    <state key="normal" image="video_fullscreen_close.png">
+                    <state key="normal" image="video_fullscreen_close_72.png">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
@@ -142,7 +142,7 @@
     </objects>
     <resources>
         <image name="maximize.png" width="21" height="21"/>
-        <image name="video_fullscreen_close.png" width="32" height="32"/>
+        <image name="video_fullscreen_close_72.png" width="72" height="72"/>
         <image name="video_overlay_bg.png" width="240" height="90"/>
         <image name="video_overlay_del.png" width="25" height="25"/>
         <image name="video_overlay_download.png" width="25" height="25"/>

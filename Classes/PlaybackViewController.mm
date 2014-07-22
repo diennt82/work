@@ -508,8 +508,8 @@
             [self.imageVideo setFrame:CGRectMake(0, 0, SCREEN_HEIGHT, SCREEN_WIDTH)];
         }
         
-        [self.ib_closePlayBack setImage:[UIImage imageNamed:@"video_fullscreen_close"] forState:UIControlStateNormal];
-        [self.ib_closePlayBack setImage:[UIImage imageNamed:@"video_fullscreen_close_pressed"] forState:UIControlEventTouchDown];
+        [self.ib_closePlayBack setImage:[UIImage imageNamed:@"video_fullscreen_close_72"] forState:UIControlStateNormal];
+        //[self.ib_closePlayBack setImage:[UIImage imageNamed:@"video_fullscreen_close_pressed"] forState:UIControlEventTouchDown];
         self.ib_bg_top_player.hidden = YES;
 	}
 	else if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
