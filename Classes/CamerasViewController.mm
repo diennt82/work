@@ -491,16 +491,21 @@
         
         CamChannel *ch = (CamChannel *)[_camChannels objectAtIndex:indexPath.row];
         
-        UIImage *imgCamera;
-        NSString *strModel = [ch.profile getModel];
-        if([strModel isEqualToString:@"0083"]){
-            imgCamera = [UIImage imageNamed:@"camera_mbp_83"];
-        }else{
-            imgCamera = [UIImage imageNamed:@"camera_focus_66"];
+        NSString *strPath = [strDocDirPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.jpg",ch.profile.registrationID]];
+        
+        UIImage *imgCamera = [UIImage imageWithContentsOfFile:strPath];
+        
+        if(!imgCamera){
+            NSString *strModel = [ch.profile getModel];
+            if([strModel isEqualToString:@"0083"]){
+                imgCamera = [UIImage imageNamed:@"camera_mbp_83"];
+            }else{
+                imgCamera = [UIImage imageNamed:@"camera_focus_66"];
+            }
         }
         
         //NSLog(@"-- %@",ch.profile.snapUrl);
-        if(ch.profile.snapUrl!=nil)
+        if(ch.profile.snapUrl != nil)
         {
             if([ch.profile.snapUrl rangeOfString:@"hubble.png"].location == NSNotFound)
             {
@@ -508,11 +513,9 @@
                                    placeholderImage:imgCamera 
                                    options:SDWebImageRefreshCached];
             }
-            else
-            {
-                [cell.snapshotImage setImage:imgCamera];
-            }            
         }
+        
+        [cell.snapshotImage setImage:imgCamera];
         
         cell.ibCameraNameLabel.text = ch.profile.name;
         NSString *boundCameraName = ch.profile.name;
