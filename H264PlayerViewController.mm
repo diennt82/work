@@ -1048,6 +1048,7 @@ double _ticks = 0;
                     {
                         self.isFWUpgradingInProgress = TRUE;
                         self.fwUpgradedProgress = 9;
+                        self.fwUpgradeStatus = FIRMWARE_UPGRADE_IN_PROGRESS;
                         [self createHubbleAlertView];
                     }
                     else
@@ -4863,6 +4864,7 @@ double _ticks = 0;
                                 [hub setLabelText:@"Checking Fw upgrade..."];
                                 self.isFWUpgradingInProgress = YES; // Entering bg control
                                 self.fwUpgradedProgress = 0;
+                                self.fwUpgradeStatus = FIRMWARE_UPGRADE_IN_PROGRESS;
                                 [self createHubbleAlertView];
                                 
                                 NSLog(@"%s Start upgrading to %@", __FUNCTION__,_fwUpgrading );
@@ -6845,8 +6847,15 @@ double _ticks = 0;
     
     [alertView setUseMotionEffects:true];
     
-    // And launch the dialog
-    //[alertView show];
+    if (_isFwUpgradedByAnotherDevice)
+    {
+        // And launch the dialog
+        [alertView show];
+    }
+    else
+    {
+        NSLog(@"%s Alert will be shown after 6s.", __FUNCTION__);
+    }
     
     self.customeAlertView = alertView;
 }
@@ -7109,10 +7118,9 @@ double _ticks = 0;
 
 -(void) upgradeFwProgress_ui:(NSArray *) obj
 {
-    //NSLog(@"%s progress:%d, _isFwUpgradedByAnotherDevice:%d", __FUNCTION__, _fwUpgradedProgress, _isFwUpgradedByAnotherDevice);
+    //NSLog(@"%s progress:%d, fwStatus:%d", __FUNCTION__, _fwUpgradedProgress, _fwUpgradeStatus);
     
-    if (_fwUpgradedProgress == 2 ||
-        (_fwUpgradedProgress == 10)) //6s
+    if (_fwUpgradedProgress == 2) //6s
     {
         NSLog(@"%s Show custom dialog.", __FUNCTION__);
         [MBProgressHUD hideHUDForView:self.view animated:NO];
@@ -7159,10 +7167,9 @@ double _ticks = 0;
         }
         else
         {
-            NSLog(@"%s", __FUNCTION__);
-            
-            
             self.fwUpgradeStatus = [self checkFwUpgradeStatusFromServer];
+            
+            NSLog(@"%s fwUpgradeStatus:%d", __FUNCTION__, _fwUpgradeStatus);
         }
         
         [NSThread sleepForTimeInterval:2];
@@ -7190,7 +7197,7 @@ double _ticks = 0;
 
 - (void)checkFwUpgradeByAnotherDevice
 {
-    self.isFwUpgradedByAnotherDevice = NO;
+    //self.isFwUpgradedByAnotherDevice = NO;
     
     if ([self checkFwUpgradeStatusFromServer] == FIRMWARE_UPGRADE_IN_PROGRESS)
     {
