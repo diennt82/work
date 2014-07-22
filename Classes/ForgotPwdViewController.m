@@ -49,7 +49,7 @@
     self.navigationItem.leftBarButtonItem = backBarBtn;
     
    /* UIBarButtonItem *nextButton =
-    [[UIBarButtonItem alloc] initWithTitle: NSLocalizedStringWithDefaultValue(@"Next",nil, [NSBundle mainBundle],
+    [[UIBarButtonItem alloc] initWithTitle: NSLocalizedStringWithDefaultValue(@"next",nil, [NSBundle mainBundle],
                                                                               @"Next", nil)
                                      style:UIBarButtonItemStylePlain 
                                     target:self 
@@ -124,7 +124,7 @@
     {
         NSString *strMsg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg3",nil, [NSBundle mainBundle], @"Create_Account_Failed_msg3", nil);
         //NSString *strMsg = @"Please enter valid email.";
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:strMsg delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:strMsg delegate:nil cancelButtonTitle:NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil) otherButtonTitles:nil];
         [alertView show];
         [alertView release];
         return;
@@ -132,8 +132,7 @@
     
     [userEmailTF resignFirstResponder];
     
-    //NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
-    //                                                  @"Ok", nil);
+    //NSString * ok = NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil);
     self.userEmail = userEmailTF.text ;
     
     self.navigationItem.leftBarButtonItem.enabled = NO ;
@@ -192,8 +191,7 @@
     NSString * msg = NSLocalizedStringWithDefaultValue(@"Server_error_" ,nil, [NSBundle mainBundle],
                                                        @"Server error: %@" , nil);
     
-    NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
-                                                      @"Ok", nil);
+    NSString * ok = NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil);
     
 	//ERROR condition
 	[[[[UIAlertView alloc] initWithTitle:msg1
@@ -219,8 +217,7 @@
     NSString * msg = NSLocalizedStringWithDefaultValue(@"Server_error_1" ,nil, [NSBundle mainBundle],
                                                        @"Server is unreachable. Please try again later." , nil);
     
-    NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
-                                                      @"Ok", nil);
+    NSString * ok = NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil);
 	//ERROR condition
 	UIAlertView *alert = [[UIAlertView alloc]
 						  initWithTitle:msg1

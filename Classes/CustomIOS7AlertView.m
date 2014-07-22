@@ -45,7 +45,8 @@ CGFloat buttonSpacerHeight = 0;
 
         self.delegate = self;
         self.useMotionEffects = false;
-        self.buttonTitles = @[@"Close"];
+        self.buttonTitles = @[NSLocalizedStringWithDefaultValue(@"close",nil, [NSBundle mainBundle],
+                                                                @"Close", nil)];
 
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceOrientationDidChange:) name:UIDeviceOrientationDidChangeNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];

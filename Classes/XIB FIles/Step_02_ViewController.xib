@@ -79,7 +79,7 @@
                         <action selector="btnContinueTouchUpInsideAction:" destination="-1" eventType="touchUpInside" id="he5-yP-i1v"/>
                     </connections>
                 </button>
-                <view clipsSubviews="YES" contentMode="scaleToFill" id="eSu-Bp-tx7">
+                <view hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" id="eSu-Bp-tx7">
                     <rect key="frame" x="0.0" y="107" width="320" height="391"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <subviews>

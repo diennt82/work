@@ -222,10 +222,8 @@
 - (void) showDialog:(int) dialogType
 {
     NSString * title = @"Camera";
-    NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok", nil, [NSBundle mainBundle],
-                                                      @"Ok", nil);
-    NSString * cancel = NSLocalizedStringWithDefaultValue(@"Cancel", nil, [NSBundle mainBundle],
-                                                          @"Cancel", nil);
+    NSString * ok = NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil);
+    NSString * cancel = NSLocalizedStringWithDefaultValue(@"cancel", nil, [NSBundle mainBundle], @"Cancel", nil);
     NSString * msg = @"Message";
     id alertDelegate = self;
     
@@ -337,7 +335,7 @@
                     
                     dispatch_async(dispatch_get_main_queue(), ^{
                         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-                        [hud setLabelText:@"Updating..."];
+                        [hud setLabelText:NSLocalizedStringWithDefaultValue(@"hud_updating", nil, [NSBundle mainBundle], @"Updating...", nil)];
                         [self changeCameraName];
                     });
                 }
@@ -353,7 +351,7 @@
         if (buttonIndex == 1)
         {
             MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-            [hud setLabelText:@"Removing..."];
+            [hud setLabelText:NSLocalizedStringWithDefaultValue(@"hud_removing", nil, [NSBundle mainBundle], @"Removing...", nil)];
             self.navigationController.view.userInteractionEnabled = NO;
             [self removeRemoteCamera];
         }
@@ -685,14 +683,14 @@
             
             if (indexPath.row == 0)
             {
-                cell.nameLabel.text = @"Motion";
+                cell.nameLabel.text = NSLocalizedStringWithDefaultValue(@"motion", nil, [NSBundle mainBundle], @"Motion", nil);
                 cell.switchValue   = _sensitivityInfo.motionOn;
                 cell.settingsValue = _sensitivityInfo.motionValue;
 
             }
             else
             {
-                cell.nameLabel.text = @"Sound";
+                cell.nameLabel.text = NSLocalizedStringWithDefaultValue(@"sound", nil, [NSBundle mainBundle], @"Sound", nil);
                 cell.switchValue   = _sensitivityInfo.soundOn;
                 cell.settingsValue = _sensitivityInfo.soundValue;
             }
@@ -748,8 +746,8 @@
             self.alertViewRename = [[UIAlertView alloc] initWithTitle:@"Enter the new Camera name"
                                                               message:nil
                                                              delegate:self
-                                                    cancelButtonTitle:@"Cancel"
-                                                    otherButtonTitles:@"Ok", nil];
+                                                    cancelButtonTitle:NSLocalizedStringWithDefaultValue(@"cancel", nil, [NSBundle mainBundle], @"Cancel", nil)
+                                                    otherButtonTitles:NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil), nil];
             self.alertViewRename.alertViewStyle = UIAlertViewStylePlainTextInput;
             UITextField *textField = [_alertViewRename textFieldAtIndex:0];
             [textField setText:_cameraName];
@@ -783,10 +781,7 @@
 {
     if (!_jsonCommBlock)
     {
-        self.jsonCommBlock = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                                   Selector:nil
-                                                               FailSelector:nil
-                                                                  ServerErr:nil];
+        self.jsonCommBlock = [[BMS_JSON_Communication alloc] initWithCaller:self];
     }
     
     NSDictionary *responseDict = [_jsonCommBlock sendCommandBlockedWithRegistrationId:self.camChannel.profile.registrationID
@@ -874,10 +869,7 @@
     
     if (!_jsonCommBlock)
     {
-        self.jsonCommBlock = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                                   Selector:nil
-                                                               FailSelector:nil
-                                                                  ServerErr:nil];
+        self.jsonCommBlock = [[BMS_JSON_Communication alloc] initWithCaller:self];
     }
     
     NSLog(@"CameraMenuVC - changeCameraName - _cameraNewName: %@", _cameraNewName);
@@ -898,22 +890,22 @@
         {
             NSLog(@"CameraNameVC - Change cameraname failed!");
             
-            [[[[UIAlertView alloc] initWithTitle:@"Change Camera Name"
+            [[[[UIAlertView alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"alert_title_change_camera_name", nil, [NSBundle mainBundle], @"Change Camera Name", nil)
                                          message:[responseDict objectForKey:@"message"]
                                         delegate:nil
                                cancelButtonTitle:nil
-                               otherButtonTitles:@"OK", nil] autorelease] show];
+                               otherButtonTitles:NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil), nil] autorelease] show];
         }
     }
     else
     {
         NSLog(@"CameraNameVC - doneAction - responseDict == nil");
         
-        [[[[UIAlertView alloc] initWithTitle:@"Change Camera Name"
+        [[[[UIAlertView alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"alert_title_change_camera_name", nil, [NSBundle mainBundle], @"Change Camera Name", nil)
                                      message:@"Server Error"
                                     delegate:nil
                            cancelButtonTitle:nil
-                           otherButtonTitles:@"OK", nil] autorelease] show];
+                           otherButtonTitles:NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil), nil] autorelease] show];
     }
     
     //self.navigationItem.hidesBackButton = NO;
@@ -955,7 +947,7 @@
                                  message:[errorResponse objectForKey:@"message"]
                                 delegate:nil
                        cancelButtonTitle:nil
-                       otherButtonTitles:@"OK",
+                       otherButtonTitles:NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil),
        nil] autorelease] show];
     
 }
@@ -970,7 +962,7 @@
                                  message:@"Server is unreachable"
                                 delegate:nil
                        cancelButtonTitle:nil
-                       otherButtonTitles:@"OK",
+                       otherButtonTitles:NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil),
        nil] autorelease] show];
 }
 
@@ -1136,10 +1128,7 @@
     
     if (!_jsonCommBlock)
     {
-        self.jsonCommBlock = [[BMS_JSON_Communication alloc] initWithObject:self
-                                              Selector:nil
-                                          FailSelector:nil
-                                             ServerErr:nil];
+        self.jsonCommBlock = [[BMS_JSON_Communication alloc] initWithCaller:self];
     }
     
     NSDictionary *responseDict = [_jsonCommBlock sendCommandBlockedWithRegistrationId:self.camChannel.profile.registrationID
@@ -1208,8 +1197,8 @@
         self.alertViewRename = [[UIAlertView alloc] initWithTitle:@"Change Camera Name"
                                                           message:@"Enter the new camera name."
                                                          delegate:self
-                                                cancelButtonTitle:@"Cancel"
-                                                otherButtonTitles:@"OK", nil];
+                                                cancelButtonTitle:NSLocalizedStringWithDefaultValue(@"cancel", nil, [NSBundle mainBundle], @"Cancel", nil)
+                                                otherButtonTitles:NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil), nil];
         self.alertViewRename.alertViewStyle = UIAlertViewStylePlainTextInput;
         UITextField *textField = [_alertViewRename textFieldAtIndex:0];
         [textField setText:_cameraName];
@@ -1222,9 +1211,66 @@
 
 -(void)btnChangeCameraIcon
 {
+#if 1
+    NSString *deviceType = [UIDevice currentDevice].model;
+    
+    NSArray *arrButtonTitles = @[@"Select image from Photos", [NSString stringWithFormat:@"Take a photo using %@", deviceType], @"Get a live snapshot from camera"];
+    
+    if ([self.camChannel.profile isNotAvailable])
+    {
+        arrButtonTitles = @[@"Select image from Photos", [NSString stringWithFormat:@"Take a photo using %@", deviceType]];
+    }
+    
     [UIActionSheet showInView:self.view
                     withTitle:@"Change Image"
-            cancelButtonTitle:@"Cancel"
+            cancelButtonTitle:NSLocalizedStringWithDefaultValue(@"cancel", nil, [NSBundle mainBundle], @"Cancel", nil)
+       destructiveButtonTitle:nil
+            otherButtonTitles:arrButtonTitles
+                     tapBlock:^(UIActionSheet *actionSheet, NSInteger buttonIndex)
+     {
+         if(actionSheet.cancelButtonIndex == buttonIndex)
+         {
+             return ;
+         }
+         
+         if(buttonIndex==1 && ![UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypeCamera])
+         {
+             NSString *msg = [NSString stringWithFormat:@"Your %@ have not camera.", deviceType];
+             Alert(nil, msg);
+             return;
+         }
+         
+         UIImagePickerController *picker = [[[UIImagePickerController alloc] init] autorelease];
+         picker.delegate = self;
+         
+         /*
+          * 1. Photos.
+          * 2. Camera.
+          * 3. Live snapshot.
+          */
+         
+         if (buttonIndex == 2)
+         {
+             [self performSelector:@selector(openViewForSetCameraFromURL) withObject:nil afterDelay:0.1];
+         }
+         else
+         {
+             if (buttonIndex == 0)
+             {
+                 picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+             }
+             else if (buttonIndex == 1)
+             {
+                 picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+             }
+             
+             [self presentViewController:picker animated:YES completion:NULL];
+         }
+     }];
+#else
+    [UIActionSheet showInView:self.view
+                    withTitle:@"Change Image"
+            cancelButtonTitle:NSLocalizedStringWithDefaultValue(@"cancel", nil, [NSBundle mainBundle], @"Cancel", nil)
        destructiveButtonTitle:nil
             otherButtonTitles:@[@"Select image from gallery", @"Take a photo from Camera",@"Take a snapshot now"]
                      tapBlock:^(UIActionSheet *actionSheet, NSInteger buttonIndex)
@@ -1259,6 +1305,7 @@
         [self presentViewController:picker animated:YES completion:NULL];
         
     }];
+#endif
 }
 
 #pragma mark - UIImagePicker Delegate
@@ -1267,21 +1314,7 @@
     imageSelected = [[info valueForKey:UIImagePickerControllerOriginalImage] copy];
    
     [self dismissViewControllerAnimated:YES completion:^{
-       
         [self uploadImageToServer:imageSelected];
-        
-        NSArray *paths = NSSearchPathForDirectoriesInDomains
-        (NSDocumentDirectory, NSUserDomainMask, YES);
-        NSString  *strPath = [paths objectAtIndex:0];
-        
-        strPath = [strPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.jpg",self.camChannel.profile.registrationID]];
-        
-        if([[NSFileManager defaultManager] fileExistsAtPath:strPath])
-        {
-            [[NSFileManager defaultManager] removeItemAtPath:strPath error:nil];
-        }
-        [UIImageJPEGRepresentation(imageSelected, 0.5) writeToFile:strPath atomically:YES];
-
     }];
 }
 
@@ -1294,7 +1327,7 @@
 {
     UIActionSheet *as = [[UIActionSheet alloc] initWithTitle:@"Select Picture"
                                                     delegate:nil
-                                           cancelButtonTitle:@"Cancel"
+                                           cancelButtonTitle:NSLocalizedStringWithDefaultValue(@"cancel", nil, [NSBundle mainBundle], @"Cancel", nil)
                                       destructiveButtonTitle:nil
                                            otherButtonTitles:@"Set Picture", nil];
     as.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
@@ -1311,19 +1344,7 @@
         
         if(actionSheet.cancelButtonIndex!=buttonIndex)
         {
-            //self.camChannel.profile.registrationID
-            NSArray *paths = NSSearchPathForDirectoriesInDomains
-            (NSDocumentDirectory, NSUserDomainMask, YES);
-            NSString  *strPath = [paths objectAtIndex:0];
             
-            strPath = [strPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.jpg",self.camChannel.profile.registrationID]];
-            
-            if([[NSFileManager defaultManager] fileExistsAtPath:strPath])
-            {
-                [[NSFileManager defaultManager] removeItemAtPath:strPath error:nil];
-            }
-            [UIImageJPEGRepresentation(image, 0.5) writeToFile:strPath atomically:YES];
-            // [strPath release];
         }
     };
     [as showInView:self.view];
@@ -1342,6 +1363,8 @@
 
 -(IBAction)btnSnapshotRefreshPressed:(id)sender
 {
+    NSLog(@"%s", __FUNCTION__);
+    
     if(!imgVSnapshot.isAnimating)
     {
         imgVSnapshot.animationImages =[NSArray arrayWithObjects:
@@ -1358,27 +1381,33 @@
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0),
                    ^{
                        NSString *strURL = [self getSnapImageFromCamera];
-                       if(strURL==nil)
+                       
+                       if(strURL == nil)
                        {
                            return ;
                        }
+                       
                        NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:strURL]];
                        dispatch_async(dispatch_get_main_queue(), ^{
                            [imgVSnapshot stopAnimating];
                            imageSelected = [UIImage imageWithData:data];
                            imgVSnapshot.image = imageSelected;
+                           
+                           [self saveCameraSnapshot:imageSelected];
                        });
                    });
 }
 
 -(IBAction)btnSnapshotOKPressed:(id)sender
 {
+    NSLog(@"%s imageSelected:%@", __FUNCTION__, imageSelected);
+    
     [UIView animateWithDuration:0.3 animations:^{
         vwSnapshot.alpha = 0.0;
     } completion:^(BOOL finished) {
         vwSnapshot.hidden = YES;
     }];
-    
+#if 0
     if(imageSelected)
     {
         NSArray *paths = NSSearchPathForDirectoriesInDomains
@@ -1391,8 +1420,10 @@
         {
             [[NSFileManager defaultManager] removeItemAtPath:strPath error:nil];
         }
+        
         [UIImageJPEGRepresentation(imageSelected, 0.5) writeToFile:strPath atomically:YES];
     }
+#endif
 }
 
 
@@ -1400,10 +1431,7 @@
 {
     if (!_jsonCommBlock)
     {
-       self.jsonCommBlock = [[BMS_JSON_Communication alloc] initWithObject:self
-                                              Selector:nil
-                                          FailSelector:nil
-                                             ServerErr:nil];
+       self.jsonCommBlock = [[BMS_JSON_Communication alloc] initWithCaller:self];
     }
     
     NSDictionary *responseDict = [_jsonCommBlock sendCommandBlockedWithRegistrationId:self.camChannel.profile.registrationID
@@ -1426,15 +1454,12 @@
 {
     if (!_jsonCommBlock)
     {
-        self.jsonCommBlock = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                                   Selector:nil
-                                                               FailSelector:nil
-                                                                  ServerErr:nil];
+        self.jsonCommBlock = [[BMS_JSON_Communication alloc] initWithCaller:self];
     }
     
     NSDictionary *responseDictDInfo = [_jsonCommBlock getDeviceBasicInfoBlockedWithRegistrationId:self.camChannel.profile.registrationID
                                                                                         andApiKey:_apiKey];
-
+    
     if (responseDictDInfo)
     {
         if ([[responseDictDInfo objectForKey:@"status"] integerValue] == 200)
@@ -1446,6 +1471,52 @@
     return nil;
 }
 
+#if 1
+
+- (NSString *)getUploadToken
+{
+    if (!_jsonCommBlock)
+    {
+        self.jsonCommBlock = [[BMS_JSON_Communication alloc] initWithCaller:self];
+    }
+    
+    NSDictionary *responseDict = [_jsonCommBlock getUploadTokenBlockedWithApiKey:_apiKey];
+    
+    if (responseDict && [[responseDict valueForKey:@"status"] integerValue] == 200)
+    {
+        NSString *expireDate = [[responseDict valueForKey:@"data"] valueForKey:@"expire_at"];
+        
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
+        [dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+        NSDate *eventDate = [dateFormatter dateFromString:expireDate]; //2014-07-22T22:39:51Z
+        [dateFormatter release];
+        
+        NSTimeInterval diff = [[NSDate date] timeIntervalSinceDate:eventDate];
+        
+        NSLog(@"%s diff:%f, expireDate:%@, eventDate:%@", __FUNCTION__, diff, expireDate, eventDate);
+        
+        if (diff > 0)
+        {
+            /*
+             * TODO: REMOVE the resetUploadToken line when Server is done.
+             */
+            
+            NSLog(@"%s %@", __FUNCTION__, [_jsonCommBlock resetUploadTokenBlockedWithApiKey:_apiKey]);
+            
+            responseDict = [_jsonCommBlock getUploadTokenBlockedWithApiKey:_apiKey];
+            
+            return [[responseDict valueForKey:@"data"] valueForKey:@"upload_token"];
+        }
+        else
+        {
+            return [[responseDict valueForKey:@"data"] valueForKey:@"upload_token"];
+        }
+    }
+    
+    return nil;
+}
+#else
 //MOVE THIS IN FRAMEWORK
 -(NSString*)getUploadToken
 {
@@ -1469,21 +1540,22 @@
     }
     return nil;
 }
+#endif
 
 
-
--(void)uploadImageToServer:(UIImage*)image
+- (void)uploadImageToServer:(UIImage*)image
 {
     __block MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     [hud setLabelText:@"Uploading image ..."];
+    
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         
         NSString *strUploadToken = [[self getUploadToken] retain];
-        NSData *dataImage = [UIImageJPEGRepresentation(image, 1.0) retain];
+        NSData *dataImage = [UIImageJPEGRepresentation(image, 0) retain];
         
         if (!_jsonCommBlock)
         {
-            self.jsonCommBlock = [[BMS_JSON_Communication alloc] initWithObject:self Selector:nil FailSelector:nil ServerErr:nil];
+            self.jsonCommBlock = [[BMS_JSON_Communication alloc] initWithCaller:self];
         }
         
         NSDictionary *responseDictDInfo = [_jsonCommBlock uploadImageWithASIFormDataRequest:dataImage registerID:[self.camChannel.profile.registrationID retain] uploadToken:strUploadToken];
@@ -1495,6 +1567,8 @@
                 // NSLog(@"-- %@",responseDictDInfo);
                 hud.mode = MBProgressHUDModeText;
                 [hud setLabelText:@"Upload image successfully"];
+                
+                [self saveCameraSnapshot:image];
             }
             else
             {
@@ -1507,6 +1581,21 @@
     });
 }
 
+- (void)saveCameraSnapshot:(UIImage *)aImage
+{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains
+    (NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString  *strPath = [paths objectAtIndex:0];
+    
+    strPath = [strPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.jpg",self.camChannel.profile.registrationID]];
+    
+    if([[NSFileManager defaultManager] fileExistsAtPath:strPath])
+    {
+        [[NSFileManager defaultManager] removeItemAtPath:strPath error:nil];
+    }
+    
+    [UIImageJPEGRepresentation(aImage, 0.5) writeToFile:strPath atomically:YES];
+}
 
 - (void)getSensitivityInfoFromServer
 {
@@ -1521,10 +1610,7 @@
     
     if (!_jsonCommBlock)
     {
-        self.jsonCommBlock = [[BMS_JSON_Communication alloc] initWithObject:self
-                                              Selector:nil
-                                          FailSelector:nil
-                                             ServerErr:nil];
+        self.jsonCommBlock = [[BMS_JSON_Communication alloc] initWithCaller:self];
     }
     
     NSDictionary *responseDict = [_jsonCommBlock sendCommandBlockedWithRegistrationId:self.camChannel.profile.registrationID

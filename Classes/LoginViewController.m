@@ -107,8 +107,19 @@
                                           nil];
     self.imgViewLoading.animationDuration = 1.5;
     [self.imgViewLoading startAnimating];
+    
+    /* Disable autocorrect & auto cap */
+    self.tfEmail.autocorrectionType = UITextAutocorrectionTypeNo;
+    self.tfEmail.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    
+    self.tfPassword.autocorrectionType = UITextAutocorrectionTypeNo;
+    self.tfPassword.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    
     [self performSelectorInBackground:@selector(loadUserInfo_bg) withObject:nil];
-}
+}    
+    
+       
+
 
 -(void) viewWillAppear:(BOOL)animated
 {
@@ -300,8 +311,7 @@
             NSString * msg1 = NSLocalizedStringWithDefaultValue(@"Get_Camera_list_Error_msg1",nil, [NSBundle mainBundle],
                                                                 @"Server unreachable", nil);
             
-            NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
-                                                              @"Ok", nil);
+            NSString * ok = NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil);
             
             
             //ERROR condition
@@ -474,11 +484,10 @@
         NSString * msg = NSLocalizedStringWithDefaultValue(@"wifi_not_available" ,nil, [NSBundle mainBundle],
                                                            @"Mobile data is enabled. If you continue to connect, you may incur air time charges. Do you want to proceed?" ,nil);
         
-        NSString * no = NSLocalizedStringWithDefaultValue(@"No" ,nil, [NSBundle mainBundle],
+        NSString * no = NSLocalizedStringWithDefaultValue(@"no" ,nil, [NSBundle mainBundle],
                                                           @"No", nil);
         
-        NSString * yes = NSLocalizedStringWithDefaultValue(@"Yes" ,nil, [NSBundle mainBundle],
-                                                           @"Yes", nil);
+        NSString * yes = NSLocalizedStringWithDefaultValue(@"yes", nil, [NSBundle mainBundle], @"YES", nil);
         
         NSString * yes1 = NSLocalizedStringWithDefaultValue(@"Yes_n" ,nil, [NSBundle mainBundle],
                                                             @"Yes and don't ask again", nil);
@@ -523,8 +532,7 @@
                                                                               Selector:@selector(loginSuccessWithResponse:)
                                                                           FailSelector:@selector(loginFailedWithError:)
                                                                              ServerErr:@selector(loginFailedServerUnreachable)] autorelease];
-    
-    [jsonComm loginWithLogin:_stringUsername andPassword:_stringPassword];
+    [jsonComm loginPostWithLogin:_stringUsername password:_stringPassword];
     
     NSLog(@"start logging");
 #if 1
@@ -762,8 +770,7 @@
             NSString * msg = NSLocalizedStringWithDefaultValue(@"Login_Error_msg" ,nil, [NSBundle mainBundle],
                                                                @"Server response invalid, please try again!", nil);
             
-            NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok" ,nil, [NSBundle mainBundle],
-                                                              @"OK", nil);
+            NSString * ok = NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil);
             [[KISSMetricsAPI sharedAPI] recordEvent:@"Login Failed" withProperties:nil];
             
             [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
@@ -848,8 +855,7 @@
                                                        @"Server error: %@", nil);
     msg = [NSString stringWithFormat:msg, [responseError objectForKey:@"message"]];
     
-    NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok" ,nil, [NSBundle mainBundle],
-                                                      @"OK", nil);
+    NSString * ok = NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil);
     
     
 	//ERROR condition
@@ -883,8 +889,7 @@
                                                          @"Login Error", nil);
 #if 1
     NSString *msg = @"Server is unreachable or The request timed out.";
-    NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok" ,nil, [NSBundle mainBundle],
-                                                      @"OK", nil);
+    NSString * ok = NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil);
     UIAlertView *alert = [[UIAlertView alloc]
 						  initWithTitle:title
 						  message:msg
@@ -897,11 +902,10 @@
     NSString * msg = NSLocalizedStringWithDefaultValue(@"Login_Error_msg3" ,nil, [NSBundle mainBundle],
                                                        @"Server is unreachable. Do you want to access your cameras offline?" ,nil);
     
-    NSString * no = NSLocalizedStringWithDefaultValue(@"No" ,nil, [NSBundle mainBundle],
+    NSString * no = NSLocalizedStringWithDefaultValue(@"no" ,nil, [NSBundle mainBundle],
                                                       @"No", nil);
     
-    NSString * yes = NSLocalizedStringWithDefaultValue(@"Yes" ,nil, [NSBundle mainBundle],
-                                                       @"Yes", nil);
+    NSString * yes = NSLocalizedStringWithDefaultValue(@"yes", nil, [NSBundle mainBundle], @"YES", nil);
     
 	//ERROR condition
 	UIAlertView *alert = [[UIAlertView alloc]
@@ -937,11 +941,10 @@
 {
     NSLog(@"%s responseDict: %@", __FUNCTION__, responseDict);
     
-    NSString * title = @"Get User info failed!";
+    NSString * title = NSLocalizedStringWithDefaultValue(@"alert_title_user_info_failed", nil, [NSBundle mainBundle], @"Get User info failed!", nil);
     NSString * msg = [responseDict objectForKey:@"message"];
     
-    NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok" ,nil, [NSBundle mainBundle],
-                                                      @"OK", nil);
+    NSString * ok = NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil);
     
 	//ERROR condition
 	[[[[UIAlertView alloc] initWithTitle:title
@@ -955,11 +958,11 @@
 
 - (void)getUserInfoFailedServerUnreachable
 {
-    [[[[UIAlertView alloc] initWithTitle:@"Server Unreachable"
-                                 message:@"Server Unreachable"
+    [[[[UIAlertView alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"alert_title_server_unreachable", nil, [NSBundle mainBundle], @"Server Unreachable", nil)
+                                 message:NSLocalizedStringWithDefaultValue(@"alert_mes_server_unreachable", nil, [NSBundle mainBundle], @"Server Unreachable", nil)
                                 delegate:nil
                        cancelButtonTitle:nil
-                       otherButtonTitles:@"OK", nil]
+                       otherButtonTitles:NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil), nil]
       autorelease]
      show];
 }

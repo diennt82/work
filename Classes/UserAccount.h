@@ -17,6 +17,13 @@
 #define CAMERA_STATE_IS_AVAILABLE   1
 #define CAMERA_STATE_REGISTED_LOGGED_USER 2
 
+#define TIME_FW_UPGRADE         5*60 // 5 minutes.
+
+#define FIRMWARE_UPGRADE_IN_PROGRESS      0
+#define FIRMWARE_UPGRADE_FAILED          -1
+#define FIRMWARE_UPGRADE_REBOOT           1
+#define FIRMWARE_UPGRADE_SUCCEED          2
+
 @protocol UserAccountDelegate <NSObject>
 
 - (void)finishStoreCameraListData: (NSMutableArray *)arrayCamProfile success: (BOOL)success;
@@ -60,5 +67,6 @@
 -(void) readCameraListAndUpdate;
 - (BOOL)checkCameraIsAvailable:(NSString *) mac_w_colon;
 - (NSInteger )checkAvailableAndFWUpgradingWithCamera:(NSString *) mac_w_colon;
+- (NSInteger )checkFwUpgrageStatusWithRegistrationId:(NSString *)regId currentFwVersion:(NSString *)currentFw;
 
 @end

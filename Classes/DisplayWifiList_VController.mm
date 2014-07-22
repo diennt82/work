@@ -159,11 +159,11 @@
     
     if ([_selectedWifiEntry.auth_mode isEqualToString:@"open"])
     {
-        [[[[UIAlertView alloc] initWithTitle:@"SSID without password is not supported due to security concern. Please add password to your router."
+        [[[[UIAlertView alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"alert_title_ssid_without_password_not_supported", nil, [NSBundle mainBundle], @"SSID without password is not supported due to security concern. Please add password to your router.", nil)
                                      message:nil
                                     delegate:nil
                            cancelButtonTitle:nil
-                           otherButtonTitles:@"OK", nil]
+                           otherButtonTitles:NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil), nil]
           autorelease]
          show];
     }
@@ -271,7 +271,7 @@
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Notice"
                                                         message:msg
                                                        delegate:self
-                                              cancelButtonTitle:@"Cancel"
+                                              cancelButtonTitle:NSLocalizedStringWithDefaultValue(@"cancel", nil, [NSBundle mainBundle], @"Cancel", nil)
                                               otherButtonTitles:@"Continue", nil];
     alertView.tag = 555;
     [alertView show];
@@ -459,8 +459,7 @@
                                                        @"Fail to communicate with camera. Retry?", nil);
     
     
-    NSString * cancel = NSLocalizedStringWithDefaultValue(@"Cancel",nil, [NSBundle mainBundle],
-                                                          @"Cancel", nil);
+    NSString * cancel = NSLocalizedStringWithDefaultValue(@"cancel", nil, [NSBundle mainBundle], @"Cancel", nil);
     
     NSString * retry = NSLocalizedStringWithDefaultValue(@"Retry",nil, [NSBundle mainBundle],
                                                          @"Retry", nil);
@@ -542,17 +541,16 @@
         return;
     }
     //show info
-    NSString * msg =  @"Camera (ble) is disconnected abruptly, please retry adding camera again";
+    NSString * msg = NSLocalizedStringWithDefaultValue(@"alert_mes_camera_ble_is_disconnected", nil, [NSBundle mainBundle], @"Camera (ble) is disconnected abruptly, please retry adding camera again", nil);
     
     
     
-    NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
-                                                      @"Ok", nil);
+    NSString * ok = NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil);
     
     
     
     UIAlertView *_myAlert = nil ;
-    _myAlert = [[UIAlertView alloc] initWithTitle:@"Error"
+    _myAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"error", nil, [NSBundle mainBundle], @"Error", nil)
                                           message:msg
                                          delegate:self
                                 cancelButtonTitle:ok

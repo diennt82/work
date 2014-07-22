@@ -284,8 +284,7 @@
 
 - (void) cameraShowDialog:(int) dialogType
 {
-    NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
-                                                      @"Ok", nil);
+    NSString * ok = NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil);
     
 	switch (dialogType)
     {
@@ -446,7 +445,7 @@
         }
         
         // Configure the cell...
-        cell.textLabel.text = @"Loading...";
+        cell.textLabel.text = NSLocalizedStringWithDefaultValue(@"loading", nil, [NSBundle mainBundle], @"Loading...", nil);
         
         UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc]
                                             initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
@@ -492,44 +491,32 @@
         
         CamChannel *ch = (CamChannel *)[_camChannels objectAtIndex:indexPath.row];
         
-        UIImage *imgCamera;
-        NSString *strModel = [ch.profile getModel];
-        if([strModel isEqualToString:@"0083"]){
-            imgCamera = [UIImage imageNamed:@"camera_mbp_83"];
-        }else{
-            imgCamera = [UIImage imageNamed:@"camera_focus_66"];
-        }
+        NSString *strPath = [strDocDirPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.jpg",ch.profile.registrationID]];
         
-        ///Phung:commented due to incomplete fixes
-//        NSLog(@"-- %@",ch.profile.snapUrl);
-//        if( (ch.profile.snapUrl != nil) &&
-//            [ch.profile.snapUrl rangeOfString:@"hubble.png"].location == NSNotFound  )
-//        {
-//            [cell.snapshotImage setImageWithURL:[NSURL URLWithString:ch.profile.snapUrl]
-//                                      completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType)
-//            {
-//                NSLog(@"--Downloading image done w cache type: %d",cacheType);
-//            } ];
-//            
-//        }
-//        else
-        {
-            cell.snapshotImage.image = imgCamera;
-        }
-
+        UIImage *imgCamera = [UIImage imageWithContentsOfFile:strPath];
         
-        /*NSString *strPath = [strDocDirPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.jpg",ch.profile.registrationID]];
-        UIImage *img = [UIImage imageWithContentsOfFile:strPath];
-        if(img){
-            cell.snapshotImage.image = img;
-        }else{
+        if(!imgCamera){
             NSString *strModel = [ch.profile getModel];
             if([strModel isEqualToString:@"0083"]){
-                cell.snapshotImage.image = [UIImage imageNamed:@"camera_mbp_83"];
+                imgCamera = [UIImage imageNamed:@"camera_mbp_83"];
             }else{
-                cell.snapshotImage.image = [UIImage imageNamed:@"camera_focus_66"];
+                imgCamera = [UIImage imageNamed:@"camera_focus_66"];
             }
-        } */
+        }
+        
+        //NSLog(@"-- %@",ch.profile.snapUrl);
+        if(ch.profile.snapUrl != nil)
+        {
+            if([ch.profile.snapUrl rangeOfString:@"hubble.png"].location == NSNotFound)
+            {
+               [cell.snapshotImage setImageWithURL:[NSURL URLWithString:ch.profile.snapUrl] 
+                                   placeholderImage:imgCamera 
+                                   options:SDWebImageRefreshCached];
+            }
+        }
+        
+        [cell.snapshotImage setImage:imgCamera];
+        
         cell.ibCameraNameLabel.text = ch.profile.name;
         NSString *boundCameraName = ch.profile.name;
         CGSize size = [boundCameraName sizeWithAttributes:@{NSFontAttributeName:[UIFont fontWithName:PN_SEMIBOLD_FONT size:18]}];
@@ -551,7 +538,7 @@
         {
             shouldHighlightAtRow[indexPath.row] = NO;
             [cell.ibIconStatusCamera setImage:[UIImage imageNamed:@"offline"]];
-            [cell.ibTextStatusCamera setText:@"Updating..."];
+            [cell.ibTextStatusCamera setText:NSLocalizedStringWithDefaultValue(@"updating", nil, [NSBundle mainBundle], @"Updating...", nil)];
             cell.settingsButton.hidden = YES;
             
             NSLog(@"%s Updating...", __FUNCTION__);
@@ -560,7 +547,7 @@
         {
             shouldHighlightAtRow[indexPath.row] = NO;
             [cell.ibIconStatusCamera setImage:[UIImage imageNamed:@"online"]];
-            [cell.ibTextStatusCamera setText:@"FW is upgrading..."];
+            [cell.ibTextStatusCamera setText:NSLocalizedStringWithDefaultValue(@"FW_is_updating", nil, [NSBundle mainBundle], @"FW is upgrading...", nil)];
             cell.settingsButton.hidden = NO;
             
             NSLog(@"%s Fw is upgrading...", __FUNCTION__);
@@ -571,14 +558,14 @@
         {
             shouldHighlightAtRow[indexPath.row] = YES;
             [cell.ibIconStatusCamera setImage:[UIImage imageNamed:@"offline"]];
-            [cell.ibTextStatusCamera setText:@"Offline"];
+            [cell.ibTextStatusCamera setText:NSLocalizedStringWithDefaultValue(@"offline", nil, [NSBundle mainBundle], @"Offline", nil)];
             cell.settingsButton.hidden = NO;
         }
         else
         {
             shouldHighlightAtRow[indexPath.row] = YES;
             [cell.ibIconStatusCamera setImage:[UIImage imageNamed:@"online"]];
-            [cell.ibTextStatusCamera setText:@"Online"];
+            [cell.ibTextStatusCamera setText:NSLocalizedStringWithDefaultValue(@"online", nil, [NSBundle mainBundle], @"Online", nil)];
             cell.settingsButton.hidden = NO;
             
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];

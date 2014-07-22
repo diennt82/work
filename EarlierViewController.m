@@ -83,7 +83,7 @@
     }
     
     self.timelineVC = [[[TimelineViewController alloc] init] autorelease];
-    [_timelineVC setTitle:@"Timeline"];
+    [_timelineVC setTitle:NSLocalizedStringWithDefaultValue(@"timeline", nil, [NSBundle mainBundle], @"Timeline", nil)];
     
 #if 0
     NSArray *viewControllers;
@@ -95,7 +95,7 @@
     else
     {
         SavedEventViewController *savedViewController = [[SavedEventViewController alloc] initWithNibName:@"SavedEventViewController" bundle:nil];
-        [savedViewController setTitle:@"Saved"];
+        [savedViewController setTitle:NSLocalizedStringWithDefaultValue(@"saved", nil, [NSBundle mainBundle], @"Saved", nil)];
         viewControllers = @[_timelineVC, savedViewController];
     }
 #endif

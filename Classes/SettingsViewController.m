@@ -620,7 +620,7 @@
                     }
                     
                     // Configure the cell...
-                    cell.textLabel.text = @"General Settings";
+                    cell.textLabel.text = NSLocalizedStringWithDefaultValue(@"general_settings", nil, [NSBundle mainBundle], @"General Settings", nil);
                     cell.imageView.image = [UIImage imageNamed:@"general"];
                     cell.backgroundColor = [UIColor whiteColor];
                     
@@ -825,7 +825,7 @@
                     }
                     
                     // Configure the cell...
-                    cell.textLabel.text = @"Do Not Disturb";
+                    cell.textLabel.text = NSLocalizedStringWithDefaultValue(@"do_not_disturb_text", nil, [NSBundle mainBundle], @"Do Not Disturb", nil);
                     cell.imageView.image = [UIImage imageNamed:@"do_not_disturb"];
                     cell.backgroundColor = [UIColor whiteColor];
                     
@@ -878,7 +878,7 @@
                     }
                     
                     // Configure the cell...
-                    cell.textLabel.text = @"Notification Scheduler";
+                    cell.textLabel.text = NSLocalizedStringWithDefaultValue(@"notification_scheduler", nil, [NSBundle mainBundle], @"Notification Scheduler", nil);
                     cell.imageView.image = [UIImage imageNamed:@"scheduler"];
                     cell.backgroundColor = [UIColor whiteColor];
                     

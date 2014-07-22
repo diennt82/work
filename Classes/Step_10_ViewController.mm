@@ -13,6 +13,7 @@
 #import "HttpCom.h"
 #import "MBP_iosViewController.h"
 #import "KISSMetricsAPI.h"
+#import "HubbleProgressView.h"
 
 #define TAG_IMAGE_VIEW_ANIMATION 595
 #define PROXY_HOST @"192.168.193.1"
@@ -33,12 +34,19 @@
 #define TIMEOUT_PROCESS         2*60.f
 #define GAI_CATEGORY            @"Step 10 view"
 
+#define TAG_VIEW_FW_UPGRADE_PROGRESS     5990
+#define TAG_VIEW_FW_UPGRADE_5MINUTES     5991
+#define TAG_VIEW_FW_UPGRADE_INDICATOR    5992
+#define TAG_VIEW_FW_UPGRADE_MESSAGE      5993
+
 @interface Step_10_ViewController () <UIAlertViewDelegate>
 
 @property (nonatomic, assign) IBOutlet UIView * progressView;
 @property (retain, nonatomic) IBOutlet UIView *viewFwOtaUpgrading;
 @property (retain, nonatomic) IBOutlet UILabel *lblWordAddition;
 @property (retain, nonatomic) IBOutlet UIButton *btnCancel;
+@property (retain, nonatomic) IBOutlet UIButton *btnContinue;
+@property (retain, nonatomic) IBOutlet UIButton *btnCancelFirmware;
 
 @property (retain, nonatomic) UserAccount *userAccount;
 @property (nonatomic, retain) BMS_JSON_Communication *jsonCommBlocked;
@@ -47,6 +55,8 @@
 @property (retain, nonatomic) UIProgressView *otaDummyProgressBar;
 @property (nonatomic, retain) NSTimer *timeOut;
 @property (nonatomic) BOOL forceSetupFailed;
+@property (nonatomic) NSInteger fwUpgradePercentage;
+@property (nonatomic) NSInteger fwUpgradeStatus;
 
 @end
 
@@ -54,7 +64,7 @@
 
 
 @synthesize  cameraMac, master_key;
-@synthesize delegate;
+//@synthesize delegate;
 
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -79,6 +89,8 @@
     [_viewFwOtaUpgrading release];
     [_btnCancel release];
     [_lblWordAddition release];
+    [_btnContinue release];
+    [_btnCancel release];
     [super dealloc];
 }
 
@@ -148,8 +160,15 @@
     [_btnCancel performSelector:@selector(setHidden:) withObject:NO afterDelay:57]; //1 * 60 - 3
     
     self.otaDummyProgressBar = (UIProgressView *)[_viewFwOtaUpgrading viewWithTag:5990];
+    self.fwUpgradeStatus = FIRMWARE_UPGRADE_SUCCEED;
 
     NSString *fwVersion = [userDefaults stringForKey:FW_VERSION];
+    
+    if ([fwVersion compare:FW_VERSION_FACTORY_SHOULD_BE_UPGRADED] == NSOrderedSame)
+    {
+        UILabel *lblProgress = (UILabel *)[_progressView viewWithTag:695];
+        lblProgress.text = @"Note : Your camera may be upgraded to latest software. This may take about 5 minutes. During this time, you will not be able to access the camera.";
+    }
 
     // >12.82 we can move on with new flow
     if ([fwVersion compare:FW_MILESTONE_F66_NEW_FLOW] >= NSOrderedSame ||
@@ -208,15 +227,11 @@
     }
 }
 
-- (void)viewDidUnload
-{
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-}
-
 #pragma mark - Actions
+
 - (void)hubbleItemAction:(id)sender
 {
+    self.navigationItem.leftBarButtonItem.enabled = NO;
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -236,6 +251,33 @@
     self.forceSetupFailed = TRUE;
 }
 
+- (IBAction)btnContinueTouchUpInside:(id)sender
+{
+    [_viewFwOtaUpgrading removeFromSuperview];
+    self.btnContinue.enabled = NO;
+    self.btnCancelFirmware.enabled = NO;
+    [self performSelector:@selector(checkCameraStatusAgain) withObject:nil afterDelay:0.01];
+}
+
+- (IBAction)btnCancelFirmwareTouchUpInside:(id)sender
+{
+    [_viewFwOtaUpgrading removeFromSuperview];
+    self.btnContinue.enabled = NO;
+    self.btnCancelFirmware.enabled = NO;
+    
+    if (_timeOut != nil)
+    {
+        [self.timeOut invalidate];
+        self.timeOut = nil;
+    }
+    
+    [self setStopScanning:nil];
+    
+    id<StartMonitorDelegate> delegate = (id<StartMonitorDelegate>) [[self.navigationController viewControllers] objectAtIndex:0];
+    [self.navigationController popToRootViewControllerAnimated:NO];
+    
+    [delegate startMonitorCallBack:FALSE];
+}
 
 #pragma  mark -
 #pragma mark button handlers
@@ -377,14 +419,15 @@
 
 - (void)checkCameraStatus
 {
-    if (should_stop_scanning == TRUE)
-    {
-        return ;
-    }
-    
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString *apiKey    = [userDefaults objectForKey:@"PortalApiKey"];
     NSString *udid      = [userDefaults objectForKey:CAMERA_UDID];
+ 
+    if (should_stop_scanning == TRUE || !udid)
+    {
+        NSLog(@"%s should_stop_scanning:%d", __FUNCTION__, should_stop_scanning);
+        return ;
+    }
     
     if (_jsonCommBlocked == nil)
     {
@@ -421,11 +464,11 @@
                 {
                     if (deviceStatus == DEV_STATUS_NOT_IN_MASTER)
                     {
-                        self.statusMessage = @"Device is NOT present in device master";
+                        self.statusMessage = NSLocalizedStringWithDefaultValue(@"device_is_not_present", nil, [NSBundle mainBundle], @"Device is NOT present in device master", nil);
                     }
                     else
                     {
-                        self.statusMessage = @"Device is registered with other User";
+                        self.statusMessage = NSLocalizedStringWithDefaultValue(@"device_is_registered", nil, [NSBundle mainBundle], @"Device is registered with other User", nil);
                     }
                     
                     shouldCheckAgain = FALSE;
@@ -543,11 +586,11 @@
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString * homeSsid = (NSString *) [userDefaults objectForKey:HOME_SSID];
     
-    NSLog(@" Timeout while trying to search for Home Wifi: %@", homeSsid);
+    NSLog(@"Timeout while trying to search on Home Wifi: %@", homeSsid);
     
     [self setStopScanning:Nil];
     
-    [[KISSMetricsAPI sharedAPI] recordEvent:@"Step10 - Add camera failed - timeout" withProperties:nil];
+    //[[KISSMetricsAPI sharedAPI] recordEvent:@"Step10 - Add camera failed - timeout" withProperties:nil];
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:[NSString stringWithFormat:@"Add camera failed: %@", _errorCode]
                                                      withLabel:nil
@@ -650,6 +693,7 @@
                                    userInfo:nil
                                     repeats:NO];
 }
+
 - (void)sendMasterKeyToDevice
 {
     NSString * set_mkey = SET_MASTER_KEY;
@@ -719,7 +763,7 @@
 {
     if (should_stop_scanning == TRUE)
     {
-        NSLog(@"Step_10VC - stop scanning now.. should be 4 mins");
+        NSLog(@"%s Step_10VC - stop scanning now.. should be 4 mins.", __FUNCTION__);
         
         [self setupFailed];
         return ;
@@ -729,22 +773,6 @@
         NSLog(@"Step_10VC - Continue scan...");
     }
     
-//    if ([self checkItOnline])
-//    {
-//        //Found it online
-//        NSLog(@"Found it online");
-//        [self setupCompleted];
-//        return;
-//    }
-//    else
-//    {
-//        //retry scannning..
-//        [NSTimer scheduledTimerWithTimeInterval: 0.01
-//                                         target:self
-//                                       selector:@selector(wait_for_camera_to_reboot:)
-//                                       userInfo:nil
-//                                        repeats:NO];
-//    }
     [self checkCameraAvailableAndFWUpgrading];
 }
 
@@ -752,7 +780,7 @@
 {
     if (should_stop_scanning == TRUE)
     {
-        NSLog(@"Step_10VC - stop scanning now.. should be 4 mins");
+        NSLog(@"%s Step_10VC - stop scanning now.. should be 4 mins.", __FUNCTION__);
         
         [self setupFailed];
         return CAMERA_STATE_UNKNOWN;
@@ -794,7 +822,8 @@
     }
     else// unkown
     {
-        [self performSelector:@selector(checkCameraAvailableAndFWUpgrading) withObject:nil afterDelay:0.01];
+        [self performSelector:@selector(checkCameraAvailableAndFWUpgrading)
+                   withObject:nil afterDelay:0.01];
     }
     
     return cameraStatus;
@@ -804,7 +833,7 @@
 {
     if (should_stop_scanning == TRUE)
     {
-        NSLog(@"Step_10VC - stop scanning now.. should be 4 mins");
+        NSLog(@"%s Step_10VC - stop scanning now.. should be 4 mins.", __FUNCTION__);
         
         [self setupFailed];
         return FALSE;
@@ -926,7 +955,7 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     NSLog(@"Setup has failed - remove cam on server");
     
-    [[KISSMetricsAPI sharedAPI] recordEvent:@"Step10 - Add camera failed" withProperties:nil];
+    //[[KISSMetricsAPI sharedAPI] recordEvent:@"Step10 - Add camera failed" withProperties:nil];
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:[NSString stringWithFormat:@"Add camera failed:%@", _errorCode]
                                                      withLabel:nil
@@ -969,7 +998,7 @@
                                     initWithNibName:@"Step_11_ViewController" bundle:nil];
         }
         
-        step11ViewController.errorCode = self.errorCode;
+        step11ViewController.errorCode       = self.errorCode;
         [self.navigationController pushViewController:step11ViewController animated:NO];
         
         [step11ViewController release];
@@ -986,8 +1015,7 @@
         case ALERT_ADD_CAM_FAILED:
         case ALERT_CHECK_STATUS:
         {
-            NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
-                                                              @"Ok", nil);
+            NSString * ok = NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil);
             
             //ERROR condition
             UIAlertView *alert = [[UIAlertView alloc]
@@ -1012,8 +1040,7 @@
             
             NSString * message = NSLocalizedStringWithDefaultValue(@"addcam_error_1" ,nil, [NSBundle mainBundle],
                                                                @"The device is not able to connect to the server. Please check the WIFI and the internet. Go to WIFI setting to confirm device is connected to intended router", nil);
-            NSString * cancel = NSLocalizedStringWithDefaultValue(@"Cancel",nil, [NSBundle mainBundle],
-                                                                  @"Cancel", nil);
+            NSString * cancel = NSLocalizedStringWithDefaultValue(@"cancel", nil, [NSBundle mainBundle], @"Cancel", nil);
             
             NSString * retry = NSLocalizedStringWithDefaultValue(@"Retry",nil, [NSBundle mainBundle],
                                                                  @"Retry", nil);
@@ -1102,7 +1129,7 @@
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
-    [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Step10 - dismiss alert view with btn indx: %d", buttonIndex] withProperties:nil];
+    //[[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Step10 - dismiss alert view with btn indx: %d", buttonIndex] withProperties:nil];
     
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:[NSString stringWithFormat:@"Dismiss alert:%d", alertView.tag]
@@ -1137,8 +1164,10 @@
     [self.view addSubview:_viewFwOtaUpgrading];
     [self.view bringSubviewToFront:_viewFwOtaUpgrading];
     self.otaDummyProgressBar.progress = 0.0;
+    self.fwUpgradeStatus = FIRMWARE_UPGRADE_IN_PROGRESS;
     
-	[self performSelectorInBackground:@selector(upgradeFwReboot_bg)  withObject:nil] ;
+	[self performSelectorInBackground:@selector(upgradeFwReboot_bg)  withObject:nil];
+    [self performSelectorInBackground:@selector(checkFwUpgradeStatus) withObject:nil];
 }
 
 -(void) upgradeFwReboot_bg
@@ -1146,10 +1175,11 @@
 	//percentageProgress.
     
     @autoreleasepool {
-        float sleepPeriod = 120.0 / 100; // 100 cycles
-        int percentage = 0;
+        float sleepPeriod = TIME_FW_UPGRADE / 100.f; // 100 cycles
+        NSInteger percentage = 0;
         
-        while (percentage ++ < 100)
+        while (percentage++ < 100 &&
+               (_fwUpgradeStatus == FIRMWARE_UPGRADE_IN_PROGRESS || _fwUpgradeStatus == FIRMWARE_UPGRADE_REBOOT))
         {
             [self performSelectorOnMainThread:@selector(upgradeFwProgress_ui:)
                                    withObject:[NSNumber numberWithInt:percentage]
@@ -1158,7 +1188,90 @@
             [NSThread sleepForTimeInterval:sleepPeriod];
         }
         
-        [self performSelectorOnMainThread:@selector(checkCameraStatusAgain) withObject:nil waitUntilDone:NO];
+        NSLog(@"%s percentage:%d, fwStatus:%d", __FUNCTION__, percentage, _fwUpgradeStatus);
+        
+        //[self performSelectorOnMainThread:@selector(checkCameraStatusAgain) withObject:nil waitUntilDone:NO];
+        
+        if (_fwUpgradeStatus == FIRMWARE_UPGRADE_SUCCEED)
+        {
+            [_viewFwOtaUpgrading performSelectorOnMainThread:@selector(removeFromSuperview) withObject:nil waitUntilDone:NO];
+            [self performSelectorOnMainThread:@selector(checkCameraStatusAgain) withObject:nil waitUntilDone:NO];
+        }
+        else
+        {
+#if 1
+            if (!_userAccount)
+            {
+                NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+                NSString * userEmail  = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
+                NSString * userPass   = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
+                NSString * userApiKey = (NSString *) [userDefaults objectForKey:@"PortalApiKey"];
+                
+                self.userAccount = [[UserAccount alloc] initWithUser:userEmail
+                                                            password:userPass
+                                                              apiKey:userApiKey
+                                                            listener:nil];
+            }
+            
+            [_userAccount readCameraListAndUpdate];
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.btnContinue.hidden = NO;
+                self.btnCancelFirmware.hidden = NO;
+                
+                NSString *msg1 = @"Firmware upgrade could not be completed.";
+                
+                if (_fwUpgradeStatus == FIRMWARE_UPGRADE_FAILED)
+                {
+                    msg1 = @"Incorrect Firmware version.";
+                }
+                else if(_fwUpgradeStatus == FIRMWARE_UPGRADE_REBOOT)
+                {
+                    msg1 = @"Camera offline after upgrading.";
+                }
+                
+                msg1 = [NSString stringWithFormat:@"%@\n\rPlease manually off and on the camera.", msg1];
+                UILabel *lblTmp = (UILabel *)[_viewFwOtaUpgrading viewWithTag:TAG_VIEW_FW_UPGRADE_MESSAGE];
+                lblTmp.text = msg1;
+                
+                [[_viewFwOtaUpgrading viewWithTag:TAG_VIEW_FW_UPGRADE_5MINUTES] setHidden:YES];
+                [[_viewFwOtaUpgrading viewWithTag:TAG_VIEW_FW_UPGRADE_INDICATOR] setHidden:YES];
+                [[_viewFwOtaUpgrading viewWithTag:TAG_VIEW_FW_UPGRADE_PROGRESS] setHidden:YES];
+                
+                self.fwUpgradeStatus = FIRMWARE_UPGRADE_SUCCEED; // Reset state of firmware upgrade.
+            });
+#else
+            self.errorCode = [NSString stringWithFormat:@"%d", _fwUpgradeStatus];
+            
+            NSLog(@"%s errorCode:%@", __FUNCTION__, _errorCode);
+            
+            if (_timeOut != nil)
+            {
+                [self.timeOut invalidate];
+                self.timeOut = nil;
+            }
+            
+            [self setStopScanning:nil];
+            
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            
+            if (!_userAccount)
+            {
+                NSString * userEmail  = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
+                NSString * userPass   = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
+                NSString * userApiKey = (NSString *) [userDefaults objectForKey:@"PortalApiKey"];
+                
+                self.userAccount = [[UserAccount alloc] initWithUser:userEmail
+                                                            password:userPass
+                                                              apiKey:userApiKey
+                                                            listener:nil];
+            }
+            
+            [_userAccount readCameraListAndUpdate];
+            
+            [self performSelectorOnMainThread:@selector(setupFailed) withObject:nil waitUntilDone:NO];
+#endif
+        }
     }
 }
 
@@ -1183,17 +1296,75 @@
 
 - (void)upgradeFwProgress_ui:(NSNumber *)number
 {
-	int value =  [number intValue];
-	float _value = (float) value;
+	self.fwUpgradePercentage = [number intValue];
+	float _value = (float)_fwUpgradePercentage;
 	_value = _value/100.0;
     
-	if (value >=0)
+	if (_fwUpgradePercentage >= 0)
 	{
 		self.otaDummyProgressBar.progress = _value;
 	}
 }
 
 
+         //checkFwUpgradeStatus
+- (void )checkFwUpgradeStatus
+{
+    NSLog(@"%s _fwUpgradePercentage:%d, _fwUpgradeStatus:%d", __FUNCTION__,_fwUpgradePercentage, _fwUpgradeStatus);
+    
+    while (_fwUpgradePercentage < 100 &&
+           (_fwUpgradeStatus == FIRMWARE_UPGRADE_IN_PROGRESS || _fwUpgradeStatus == FIRMWARE_UPGRADE_REBOOT))
+    {
+        if (_fwUpgradePercentage <= 10)// 30s
+        {
+            self.fwUpgradeStatus = FIRMWARE_UPGRADE_IN_PROGRESS;
+        }
+        else
+        {
+            NSLog(@"%s", __FUNCTION__);
+            
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            
+            if (!_userAccount)
+            {
+                NSString * userEmail  = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
+                NSString * userPass   = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
+                NSString * userApiKey = (NSString *) [userDefaults objectForKey:@"PortalApiKey"];
+                
+                self.userAccount = [[UserAccount alloc] initWithUser:userEmail
+                                                            password:userPass
+                                                              apiKey:userApiKey
+                                                            listener:nil];
+            }
+            
+            NSString *udid       = [userDefaults objectForKey:CAMERA_UDID];
+            NSString *fwVersion  = [userDefaults stringForKey:FW_VERSION];
+            
+            self.fwUpgradeStatus = [_userAccount checkFwUpgrageStatusWithRegistrationId:udid currentFwVersion:fwVersion];
+        }
+        
+        [NSThread sleepForTimeInterval:2];
+    }
+}
 
 
 @end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

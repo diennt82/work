@@ -174,7 +174,7 @@
                            initWithTitle:@"Initializing Push-to-talk failed"
                            message:err.localizedDescription 
                            delegate:self
-                           cancelButtonTitle:@"OK"
+                           cancelButtonTitle:NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil)
                            otherButtonTitles:nil];
     [_alert show];
     [_alert release];

@@ -29,7 +29,7 @@
     
    self.navigationController.navigationBarHidden = NO;
     
-    [self.navigationItem setTitle:@"Terms & Conditions"];
+    [self.navigationItem setTitle:NSLocalizedStringWithDefaultValue(@"terms_condition", nil, [NSBundle mainBundle], @"Terms & Conditions", nil)];
     
     NSURL *url = [[NSBundle mainBundle] URLForResource:@"terms_of_use" withExtension:@"html"];
     NSURLRequest* request = [NSURLRequest requestWithURL:url];

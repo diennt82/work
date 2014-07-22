@@ -162,8 +162,7 @@
     BOOL isValidateUsername = [validatedUsername evaluateWithObject:tfUsername.text];
     
     NSString * msg = nil ;
-    NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
-                                                      @"Ok", nil);
+    NSString * ok = NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil);
     NSString * title = nil;
     
     //UserName at least 5 chars and at most 20 characters
@@ -413,15 +412,14 @@
                                 initWithNibName:@"Step_10_ViewController" bundle:nil];
         
     }
-    step10ViewController.delegate = self.delegate;
+    //step10ViewController.delegate = self.delegate;
     [self.navigationController pushViewController:step10ViewController animated:NO];
     [step10ViewController release];
 }
 
 - (void) regFailedWithError:(NSDictionary *) error_response
 {
-    NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
-                                                      @"Ok", nil);
+    NSString * ok = NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil);
     NSString * title = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed",nil, [NSBundle mainBundle],
                                                          @"Create Account Failed" , nil);
     UIAlertView *_alert = [[UIAlertView alloc]
@@ -444,8 +442,7 @@
     NSString * msg = NSLocalizedStringWithDefaultValue(@"Registration_Error_1" ,nil, [NSBundle mainBundle],
                                                        @"BMS Server is unreachable. Please goto WIFI setting to ensure iOS device is connected to router/3G network" , nil);
     
-    NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
-                                                      @"Ok", nil);
+    NSString * ok = NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil);
     
 	//ERROR condition
 	UIAlertView *alert = [[UIAlertView alloc]
