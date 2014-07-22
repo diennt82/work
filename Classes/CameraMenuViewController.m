@@ -1211,6 +1211,63 @@
 
 -(void)btnChangeCameraIcon
 {
+#if 1
+    NSString *deviceType = [UIDevice currentDevice].model;
+    
+    NSArray *arrButtonTitles = @[@"Select image from Photos", [NSString stringWithFormat:@"Take a photo using %@", deviceType], @"Get a live snapshot from camera"];
+    
+    if ([self.camChannel.profile isNotAvailable])
+    {
+        arrButtonTitles = @[@"Select image from Photos", [NSString stringWithFormat:@"Take a photo using %@", deviceType]];
+    }
+    
+    [UIActionSheet showInView:self.view
+                    withTitle:@"Change Image"
+            cancelButtonTitle:NSLocalizedStringWithDefaultValue(@"cancel", nil, [NSBundle mainBundle], @"Cancel", nil)
+       destructiveButtonTitle:nil
+            otherButtonTitles:arrButtonTitles
+                     tapBlock:^(UIActionSheet *actionSheet, NSInteger buttonIndex)
+     {
+         if(actionSheet.cancelButtonIndex == buttonIndex)
+         {
+             return ;
+         }
+         
+         if(buttonIndex==1 && ![UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypeCamera])
+         {
+             NSString *msg = [NSString stringWithFormat:@"Your %@ have not camera.", deviceType];
+             Alert(nil, msg);
+             return;
+         }
+         
+         UIImagePickerController *picker = [[[UIImagePickerController alloc] init] autorelease];
+         picker.delegate = self;
+         
+         /*
+          * 1. Photos.
+          * 2. Camera.
+          * 3. Live snapshot.
+          */
+         
+         if (buttonIndex == 2)
+         {
+             [self performSelector:@selector(openViewForSetCameraFromURL) withObject:nil afterDelay:0.1];
+         }
+         else
+         {
+             if (buttonIndex == 0)
+             {
+                 picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+             }
+             else if (buttonIndex == 1)
+             {
+                 picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+             }
+             
+             [self presentViewController:picker animated:YES completion:NULL];
+         }
+     }];
+#else
     [UIActionSheet showInView:self.view
                     withTitle:@"Change Image"
             cancelButtonTitle:NSLocalizedStringWithDefaultValue(@"cancel", nil, [NSBundle mainBundle], @"Cancel", nil)
@@ -1248,6 +1305,7 @@
         [self presentViewController:picker animated:YES completion:NULL];
         
     }];
+#endif
 }
 
 #pragma mark - UIImagePicker Delegate
@@ -1256,10 +1314,7 @@
     imageSelected = [[info valueForKey:UIImagePickerControllerOriginalImage] copy];
    
     [self dismissViewControllerAnimated:YES completion:^{
-       
         [self uploadImageToServer:imageSelected];
-        
-       
     }];
 }
 
@@ -1308,6 +1363,8 @@
 
 -(IBAction)btnSnapshotRefreshPressed:(id)sender
 {
+    NSLog(@"%s", __FUNCTION__);
+    
     if(!imgVSnapshot.isAnimating)
     {
         imgVSnapshot.animationImages =[NSArray arrayWithObjects:
@@ -1324,27 +1381,33 @@
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0),
                    ^{
                        NSString *strURL = [self getSnapImageFromCamera];
-                       if(strURL==nil)
+                       
+                       if(strURL == nil)
                        {
                            return ;
                        }
+                       
                        NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:strURL]];
                        dispatch_async(dispatch_get_main_queue(), ^{
                            [imgVSnapshot stopAnimating];
                            imageSelected = [UIImage imageWithData:data];
                            imgVSnapshot.image = imageSelected;
+                           
+                           [self saveCameraSnapshot:imageSelected];
                        });
                    });
 }
 
 -(IBAction)btnSnapshotOKPressed:(id)sender
 {
+    NSLog(@"%s imageSelected:%@", __FUNCTION__, imageSelected);
+    
     [UIView animateWithDuration:0.3 animations:^{
         vwSnapshot.alpha = 0.0;
     } completion:^(BOOL finished) {
         vwSnapshot.hidden = YES;
     }];
-    
+#if 0
     if(imageSelected)
     {
         NSArray *paths = NSSearchPathForDirectoriesInDomains
@@ -1357,8 +1420,10 @@
         {
             [[NSFileManager defaultManager] removeItemAtPath:strPath error:nil];
         }
+        
         [UIImageJPEGRepresentation(imageSelected, 0.5) writeToFile:strPath atomically:YES];
     }
+#endif
 }
 
 
@@ -1394,7 +1459,7 @@
     
     NSDictionary *responseDictDInfo = [_jsonCommBlock getDeviceBasicInfoBlockedWithRegistrationId:self.camChannel.profile.registrationID
                                                                                         andApiKey:_apiKey];
-
+    
     if (responseDictDInfo)
     {
         if ([[responseDictDInfo objectForKey:@"status"] integerValue] == 200)
@@ -1457,10 +1522,11 @@
 #endif
 
 
--(void)uploadImageToServer:(UIImage*)image
+- (void)uploadImageToServer:(UIImage*)image
 {
     __block MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     [hud setLabelText:@"Uploading image ..."];
+    
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         
         NSString *strUploadToken = [[self getUploadToken] retain];
@@ -1480,6 +1546,8 @@
                 // NSLog(@"-- %@",responseDictDInfo);
                 hud.mode = MBProgressHUDModeText;
                 [hud setLabelText:@"Upload image successfully"];
+                
+                [self saveCameraSnapshot:image];
             }
             else
             {
@@ -1492,6 +1560,21 @@
     });
 }
 
+- (void)saveCameraSnapshot:(UIImage *)aImage
+{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains
+    (NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString  *strPath = [paths objectAtIndex:0];
+    
+    strPath = [strPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.jpg",self.camChannel.profile.registrationID]];
+    
+    if([[NSFileManager defaultManager] fileExistsAtPath:strPath])
+    {
+        [[NSFileManager defaultManager] removeItemAtPath:strPath error:nil];
+    }
+    
+    [UIImageJPEGRepresentation(aImage, 0.5) writeToFile:strPath atomically:YES];
+}
 
 - (void)getSensitivityInfoFromServer
 {
