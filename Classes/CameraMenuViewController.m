@@ -781,10 +781,7 @@
 {
     if (!_jsonCommBlock)
     {
-        self.jsonCommBlock = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                                   Selector:nil
-                                                               FailSelector:nil
-                                                                  ServerErr:nil];
+        self.jsonCommBlock = [[BMS_JSON_Communication alloc] initWithCaller:self];
     }
     
     NSDictionary *responseDict = [_jsonCommBlock sendCommandBlockedWithRegistrationId:self.camChannel.profile.registrationID
@@ -872,10 +869,7 @@
     
     if (!_jsonCommBlock)
     {
-        self.jsonCommBlock = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                                   Selector:nil
-                                                               FailSelector:nil
-                                                                  ServerErr:nil];
+        self.jsonCommBlock = [[BMS_JSON_Communication alloc] initWithCaller:self];
     }
     
     NSLog(@"CameraMenuVC - changeCameraName - _cameraNewName: %@", _cameraNewName);
@@ -1134,10 +1128,7 @@
     
     if (!_jsonCommBlock)
     {
-        self.jsonCommBlock = [[BMS_JSON_Communication alloc] initWithObject:self
-                                              Selector:nil
-                                          FailSelector:nil
-                                             ServerErr:nil];
+        self.jsonCommBlock = [[BMS_JSON_Communication alloc] initWithCaller:self];
     }
     
     NSDictionary *responseDict = [_jsonCommBlock sendCommandBlockedWithRegistrationId:self.camChannel.profile.registrationID
@@ -1375,10 +1366,7 @@
 {
     if (!_jsonCommBlock)
     {
-       self.jsonCommBlock = [[BMS_JSON_Communication alloc] initWithObject:self
-                                              Selector:nil
-                                          FailSelector:nil
-                                             ServerErr:nil];
+       self.jsonCommBlock = [[BMS_JSON_Communication alloc] initWithCaller:self];
     }
     
     NSDictionary *responseDict = [_jsonCommBlock sendCommandBlockedWithRegistrationId:self.camChannel.profile.registrationID
@@ -1401,10 +1389,7 @@
 {
     if (!_jsonCommBlock)
     {
-        self.jsonCommBlock = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                                   Selector:nil
-                                                               FailSelector:nil
-                                                                  ServerErr:nil];
+        self.jsonCommBlock = [[BMS_JSON_Communication alloc] initWithCaller:self];
     }
     
     NSDictionary *responseDictDInfo = [_jsonCommBlock getDeviceBasicInfoBlockedWithRegistrationId:self.camChannel.profile.registrationID
@@ -1421,6 +1406,31 @@
     return nil;
 }
 
+#if 1
+
+- (NSString *)getUploadToken
+{
+    if (!_jsonCommBlock)
+    {
+        self.jsonCommBlock = [[BMS_JSON_Communication alloc] initWithCaller:self];
+    }
+    
+    /*
+     * TODO: REMOVE the resetUploadToken line when Server is done.
+     */
+    
+    NSLog(@"%s %@", __FUNCTION__, [_jsonCommBlock resetUploadTokenBlockedWithApiKey:_apiKey]);
+    
+    NSDictionary *responseDict = [_jsonCommBlock getUploadTokenBlockedWithApiKey:_apiKey];
+    
+    if (responseDict && [[responseDict valueForKey:@"status"] integerValue] == 200)
+    {
+        return [[responseDict valueForKey:@"data"] valueForKey:@"upload_token"];
+    }
+    
+    return nil;
+}
+#else
 //MOVE THIS IN FRAMEWORK
 -(NSString*)getUploadToken
 {
@@ -1444,7 +1454,7 @@
     }
     return nil;
 }
-
+#endif
 
 
 -(void)uploadImageToServer:(UIImage*)image
@@ -1454,11 +1464,11 @@
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         
         NSString *strUploadToken = [[self getUploadToken] retain];
-        NSData *dataImage = [UIImageJPEGRepresentation(image, 1.0) retain];
+        NSData *dataImage = [UIImageJPEGRepresentation(image, 0) retain];
         
         if (!_jsonCommBlock)
         {
-            self.jsonCommBlock = [[BMS_JSON_Communication alloc] initWithObject:self Selector:nil FailSelector:nil ServerErr:nil];
+            self.jsonCommBlock = [[BMS_JSON_Communication alloc] initWithCaller:self];
         }
         
         NSDictionary *responseDictDInfo = [_jsonCommBlock uploadImageWithASIFormDataRequest:dataImage registerID:[self.camChannel.profile.registrationID retain] uploadToken:strUploadToken];
@@ -1496,10 +1506,7 @@
     
     if (!_jsonCommBlock)
     {
-        self.jsonCommBlock = [[BMS_JSON_Communication alloc] initWithObject:self
-                                              Selector:nil
-                                          FailSelector:nil
-                                             ServerErr:nil];
+        self.jsonCommBlock = [[BMS_JSON_Communication alloc] initWithCaller:self];
     }
     
     NSDictionary *responseDict = [_jsonCommBlock sendCommandBlockedWithRegistrationId:self.camChannel.profile.registrationID
