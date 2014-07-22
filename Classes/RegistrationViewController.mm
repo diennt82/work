@@ -123,8 +123,8 @@
 
 - (IBAction)btnCheckboxTouchUpInsideAction:(UIButton *)sender
 {
-    if ([self checkInputDataToLogin])
-        [self.tfConfirmPassword resignFirstResponder];
+//    if ([self checkInputDataToLogin])
+//        [self.tfConfirmPassword resignFirstResponder];
     
     [self.btnCheckbox setSelected:!self.btnCheckbox.selected];
     [self validateAllFieldsAndEnableSignUp];
@@ -449,67 +449,67 @@
     return YES;
 }
 
-- (BOOL)textFieldShouldEndEditing:(UITextField *)textField {
-    NSString *msg = nil;
-    NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
-                                                      @"Ok", nil);
-    NSString *title = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed",nil, [NSBundle mainBundle],
-                                                        @"Create Account Failed" , nil);
-    if (textField == _tfUsername)
-    {
-        if ([_tfUsername.text length] < 5 || 20 < [_tfUsername.text length])
-        {
-            msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg",nil, [NSBundle mainBundle],
-                                                    @"User name has to be between 5-20 characters" , nil);
-        }
-        else if (![self checkValidateUsername])
-        {
-            msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg5", nil, [NSBundle mainBundle],
-                                                    @"Username should not contain special characters except for - _ and ."  , nil);
-        }
-    }
-    else if (textField == _tfEmail)
-    {
-        if(![self isValidEmail:_tfEmail.text])
-        {
-            msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg3",nil, [NSBundle mainBundle],
-                                                    @"Invalid email. Email address should be of the form somebody@somewhere.com"  , nil);
-        }
-    }
-    else if(textField == _tfPassword)
-    {
-        if (([_tfPassword.text length] < 8) ||
-            ([_tfPassword.text length] > 12) )
-        {
-            msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg1",nil, [NSBundle mainBundle],
-                                                    @"Password has to be between 8-12 characters" , nil);
-        }
-    }
-    else if(textField == _tfConfirmPassword)
-    {
-        if (![_tfPassword.text isEqualToString:_tfConfirmPassword.text] && ![_tfConfirmPassword.text isEqualToString:@""])
-        {
-            msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg2",nil, [NSBundle mainBundle],
-                                                    @"Password does not match" , nil);
-            [self.tfConfirmPassword setText:@""];
-        }
-    }
-    
-    if (msg)
-    {
-        //ERROR condition
-        UIAlertView *alertViewError = [[UIAlertView alloc]
-                                       initWithTitle:title
-                                       message:msg
-                                       delegate:nil
-                                       cancelButtonTitle:nil
-                                       otherButtonTitles:ok, nil];
-        [alertViewError show];
-        [alertViewError release];
-        return NO;
-    }
-    return YES;
-}
+//- (BOOL)textFieldShouldEndEditing:(UITextField *)textField {
+//    NSString *msg = nil;
+//    NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
+//                                                      @"Ok", nil);
+//    NSString *title = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed",nil, [NSBundle mainBundle],
+//                                                        @"Create Account Failed" , nil);
+//    if (textField == _tfUsername)
+//    {
+//        if ([_tfUsername.text length] < 5 || 20 < [_tfUsername.text length])
+//        {
+//            msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg",nil, [NSBundle mainBundle],
+//                                                    @"User name has to be between 5-20 characters" , nil);
+//        }
+//        else if (![self checkValidateUsername])
+//        {
+//            msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg5", nil, [NSBundle mainBundle],
+//                                                    @"Username should not contain special characters except for - _ and ."  , nil);
+//        }
+//    }
+//    else if (textField == _tfEmail)
+//    {
+//        if(![self isValidEmail:_tfEmail.text])
+//        {
+//            msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg3",nil, [NSBundle mainBundle],
+//                                                    @"Invalid email. Email address should be of the form somebody@somewhere.com"  , nil);
+//        }
+//    }
+//    else if(textField == _tfPassword)
+//    {
+//        if (([_tfPassword.text length] < 8) ||
+//            ([_tfPassword.text length] > 12) )
+//        {
+//            msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg1",nil, [NSBundle mainBundle],
+//                                                    @"Password has to be between 8-12 characters" , nil);
+//        }
+//    }
+//    else if(textField == _tfConfirmPassword)
+//    {
+//        if (![_tfPassword.text isEqualToString:_tfConfirmPassword.text] && ![_tfConfirmPassword.text isEqualToString:@""])
+//        {
+//            msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg2",nil, [NSBundle mainBundle],
+//                                                    @"Password does not match" , nil);
+//            [self.tfConfirmPassword setText:@""];
+//        }
+//    }
+//    
+//    if (msg)
+//    {
+//        //ERROR condition
+//        UIAlertView *alertViewError = [[UIAlertView alloc]
+//                                       initWithTitle:title
+//                                       message:msg
+//                                       delegate:nil
+//                                       cancelButtonTitle:nil
+//                                       otherButtonTitles:ok, nil];
+//        [alertViewError show];
+//        [alertViewError release];
+//        return NO;
+//    }
+//    return YES;
+//}
 
 #pragma mark - JSON call back
 
