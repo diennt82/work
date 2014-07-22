@@ -200,28 +200,52 @@
 {
     UIButton *button = sender;
     NSString *msg = [self.errorMessageDict objectForKey:@(button.tag)];
-    [self showErrorDialog:msg];
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        [self showErrorMessageiPadOnly:msg besideErrorButton:button];
+    }
+    else {
+        [self showErrorDialog:msg];
+    }
 }
 
 - (IBAction)handleEmailErrorButton:(id)sender
 {
     UIButton *button = sender;
     NSString *msg = [self.errorMessageDict objectForKey:@(button.tag)];
-    [self showErrorDialog:msg];
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        [self showErrorMessageiPadOnly:msg besideErrorButton:button];
+    }
+    else {
+        [self showErrorDialog:msg];
+    }
 }
 
 - (IBAction)handlePasswordErrorButton:(id)sender
 {
     UIButton *button = sender;
     NSString *msg = [self.errorMessageDict objectForKey:@(button.tag)];
-    [self showErrorDialog:msg];
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        [self showErrorMessageiPadOnly:msg besideErrorButton:button];
+    }
+    else {
+        [self showErrorDialog:msg];
+    }
 }
 
 - (IBAction)handleCPasswordErrorButton:(id)sender
 {
     UIButton *button = sender;
     NSString *msg = [self.errorMessageDict objectForKey:@(button.tag)];
-    [self showErrorDialog:msg];
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        [self showErrorMessageiPadOnly:msg besideErrorButton:button];
+    }
+    else {
+        [self showErrorDialog:msg];
+    }
 }
 
 #pragma mark - Methods
@@ -825,5 +849,40 @@
                                    otherButtonTitles:ok, nil];
     [alertViewError show];
     [alertViewError release];
+}
+
+- (void)showErrorMessageiPadOnly:(NSString *)message besideErrorButton:(UIButton *)button {
+    CGPoint point = [button convertPoint:button.frame.origin toView:self.view];
+    CGRect rect = CGRectMake(CGRectGetMaxX(self.containtView.frame), point.y - 5, 200, 100);
+    UILabel *label = [[UILabel alloc] initWithFrame:rect];
+    label.text = message;
+    label.textColor = [UIColor redColor];
+    label.textAlignment = NSTextAlignmentLeft;
+    label.numberOfLines = 0;
+    label.font = [UIFont fontWithName:@"Helvetica" size:13];
+    CGSize labelSize = [label.text sizeWithFont:label.font constrainedToSize:CGSizeMake(label.frame.size.width, MAXFLOAT)];
+    rect = label.frame;
+    rect.size.height = labelSize.height;
+    label.frame = rect;
+    [self.view addSubview:label];
+    
+    [UIView animateWithDuration:0.5
+                          delay:0.0
+                        options: UIViewAnimationCurveEaseOut
+                     animations:^{
+                         label.alpha = 1.0;
+                     }
+                     completion:^(BOOL finished){
+                         [UIView animateWithDuration:0.5
+                                               delay:2.0
+                                             options: UIViewAnimationCurveEaseOut
+                                          animations:^{
+                                              label.alpha = 0.0;
+                                          }
+                                          completion:^(BOOL finished){
+                                              [label removeFromSuperview];
+                                          }];
+                     }];
+    [label release];
 }
 @end
