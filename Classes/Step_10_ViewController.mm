@@ -159,6 +159,13 @@
     [_lblWordAddition performSelector:@selector(setHidden:) withObject:NO afterDelay:57]; //1 * 60 - 3
     [_btnCancel performSelector:@selector(setHidden:) withObject:NO afterDelay:57]; //1 * 60 - 3
     
+    [self.btnCancel setBackgroundImage:[UIImage imageNamed:@"green_btn.png"] forState:UIControlStateNormal];
+    [self.btnCancel setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed.png"] forState:UIControlEventTouchDown];
+    [self.btnContinue setBackgroundImage:[UIImage imageNamed:@"green_btn.png"] forState:UIControlStateNormal];
+    [self.btnContinue setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed.png"] forState:UIControlEventTouchDown];
+    [self.btnCancelFirmware setBackgroundImage:[UIImage imageNamed:@"green_btn.png"] forState:UIControlStateNormal];
+    [self.btnCancelFirmware setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed.png"] forState:UIControlEventTouchDown];
+    
     self.otaDummyProgressBar = (UIProgressView *)[_viewFwOtaUpgrading viewWithTag:5990];
     self.fwUpgradeStatus = FIRMWARE_UPGRADE_SUCCEED;
 

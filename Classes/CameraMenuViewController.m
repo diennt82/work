@@ -99,9 +99,9 @@
     self.tableViewSettings.delegate = self;
     self.tableViewSettings.dataSource = self;
     
-    [self.btnRmoveCamera setBackgroundImage:[UIImage imageNamed:@"remove_camera"]
+    [self.btnRmoveCamera setBackgroundImage:[UIImage imageNamed:@"enter.png"]
                                    forState:UIControlStateNormal];
-    [self.btnRmoveCamera setBackgroundImage:[UIImage imageNamed:@"remove_camera_pressed"]
+    [self.btnRmoveCamera setBackgroundImage:[UIImage imageNamed:@"enter_pressed.png"]
                                    forState:UIControlEventTouchDown];
     
     self.stringFW_Version = NSLocalizedStringWithDefaultValue(@"firmware_version", nil, [NSBundle mainBundle],
