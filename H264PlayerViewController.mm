@@ -557,6 +557,7 @@ double _ticks = 0;
     if (_wantToShowTimeLine)
     {
         [self showTimelineView];
+        [self.horizMenu resetStatus];
         _wantToShowTimeLine = NO;
     }
     
