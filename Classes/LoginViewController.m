@@ -849,9 +849,9 @@
 	self.viewProgress.hidden = YES;
 	
     
-    NSString * title = NSLocalizedStringWithDefaultValue(@"Login_Error" ,nil, [NSBundle mainBundle],
+    NSString * title = NSLocalizedStringWithDefaultValue(@"Login_Error", nil, [NSBundle mainBundle],
                                                          @"Login Error", nil);
-    NSString * msg = NSLocalizedStringWithDefaultValue(@"Login_Error_msg2" ,nil, [NSBundle mainBundle],
+    NSString * msg = NSLocalizedStringWithDefaultValue(@"Login_Error_msg2", nil, [NSBundle mainBundle],
                                                        @"Server error: %@", nil);
     msg = [NSString stringWithFormat:msg, [responseError objectForKey:@"message"]];
     
@@ -862,7 +862,7 @@
 	UIAlertView *alert = [[UIAlertView alloc]
 						  initWithTitle:title
                           message:msg
-						  delegate:self
+						  delegate:nil
 						  cancelButtonTitle:ok
 						  otherButtonTitles:nil];
 	[alert show];
@@ -885,24 +885,26 @@
 	NSLog(@"Loging failed : server unreachable");
 	self.viewProgress.hidden = YES;
     
-    NSString * title = NSLocalizedStringWithDefaultValue(@"Login_Error" ,nil, [NSBundle mainBundle],
+    NSString * title = NSLocalizedStringWithDefaultValue(@"Login_Error", nil, [NSBundle mainBundle],
                                                          @"Login Error", nil);
 #if 1
-    NSString *msg = @"Server is unreachable or The request timed out.";
+    NSString *msg = NSLocalizedStringWithDefaultValue(@"Login_Error_msg4" , nil, [NSBundle mainBundle],
+                                                      @"Unable to login. The server is currently unreachable or the connection has timed out", nil);
+    
     NSString * ok = NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil);
     UIAlertView *alert = [[UIAlertView alloc]
 						  initWithTitle:title
 						  message:msg
-						  delegate:self
+						  delegate:nil
 						  cancelButtonTitle:nil
 						  otherButtonTitles:ok, nil];
 	[alert show];
 	[alert release];
 #else
-    NSString * msg = NSLocalizedStringWithDefaultValue(@"Login_Error_msg3" ,nil, [NSBundle mainBundle],
-                                                       @"Server is unreachable. Do you want to access your cameras offline?" ,nil);
+    NSString * msg = NSLocalizedStringWithDefaultValue(@"Login_Error_msg3", nil, [NSBundle mainBundle],
+                                                       @"Server is unreachable. Do you want to access your cameras offline?", nil);
     
-    NSString * no = NSLocalizedStringWithDefaultValue(@"no" ,nil, [NSBundle mainBundle],
+    NSString * no = NSLocalizedStringWithDefaultValue(@"no", nil, [NSBundle mainBundle],
                                                       @"No", nil);
     
     NSString * yes = NSLocalizedStringWithDefaultValue(@"yes", nil, [NSBundle mainBundle], @"YES", nil);

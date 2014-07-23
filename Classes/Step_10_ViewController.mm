@@ -41,7 +41,7 @@
 
 @interface Step_10_ViewController () <UIAlertViewDelegate>
 
-@property (nonatomic, assign) IBOutlet UIView * progressView;
+@property (nonatomic, retain) IBOutlet UIView * progressView;
 @property (retain, nonatomic) IBOutlet UIView *viewFwOtaUpgrading;
 @property (retain, nonatomic) IBOutlet UILabel *lblWordAddition;
 @property (retain, nonatomic) IBOutlet UIButton *btnCancel;
@@ -57,6 +57,8 @@
 @property (nonatomic) BOOL forceSetupFailed;
 @property (nonatomic) NSInteger fwUpgradePercentage;
 @property (nonatomic) NSInteger fwUpgradeStatus;
+
+@property (nonatomic, retain) NSTimer *timerAdditionalOption;
 
 @end
 
@@ -78,6 +80,10 @@
 
 -(void) dealloc
 {
+    NSLog(@"%s", __FUNCTION__);
+
+    [_timerAdditionalOption release];
+    [_progressView release];
     [_userAccount release];
     [cameraMac release];
     [master_key release];
@@ -85,7 +91,6 @@
     [_ib_viewGuild release];
     [_ib_resumeSetup release];
     [_jsonCommBlocked release];
-    
     [_viewFwOtaUpgrading release];
     [_btnCancel release];
     [_lblWordAddition release];
@@ -156,8 +161,16 @@
     [imageView startAnimating];
     [self showProgress:nil];
     
+#if 1
+    self.timerAdditionalOption = [NSTimer scheduledTimerWithTimeInterval:57
+                                                                  target:self
+                                                                selector:@selector(showAdditionalOption:)
+                                                                userInfo:nil
+                                                                 repeats:NO];
+#else
     [_lblWordAddition performSelector:@selector(setHidden:) withObject:NO afterDelay:57]; //1 * 60 - 3
     [_btnCancel performSelector:@selector(setHidden:) withObject:NO afterDelay:57]; //1 * 60 - 3
+#endif
     
     self.otaDummyProgressBar = (UIProgressView *)[_viewFwOtaUpgrading viewWithTag:5990];
     self.fwUpgradeStatus = FIRMWARE_UPGRADE_SUCCEED;
@@ -197,6 +210,12 @@
     }
 }
 
+- (void)showAdditionalOption:(NSTimer *)timer
+{
+    _lblWordAddition.hidden = NO;
+    _btnCancel.hidden = NO;
+}
+
 -(void) showProgress:(NSTimer *) exp
 {
     NSLog(@"show progress ");
@@ -231,6 +250,12 @@
 
 - (void)hubbleItemAction:(id)sender
 {
+    if (_timerAdditionalOption)
+    {
+        [_timerAdditionalOption invalidate];
+        self.timerAdditionalOption = nil;
+    }
+    
     self.navigationItem.leftBarButtonItem.enabled = NO;
     [self.navigationController popViewControllerAnimated:YES];
 }
@@ -918,6 +943,13 @@
                                                      withValue:nil];
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
+    if (_timerAdditionalOption)
+    {
+        [_timerAdditionalOption invalidate];
+        self.timerAdditionalOption = nil;
+    }
+    
     // cancel timeout
     if (_timeOut != nil)// && [timeOut isValid])
     {
@@ -954,6 +986,12 @@
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     NSLog(@"Setup has failed - remove cam on server");
+    
+    if (_timerAdditionalOption)
+    {
+        [_timerAdditionalOption invalidate];
+        self.timerAdditionalOption = nil;
+    }
     
     //[[KISSMetricsAPI sharedAPI] recordEvent:@"Step10 - Add camera failed" withProperties:nil];
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
