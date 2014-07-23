@@ -2966,7 +2966,7 @@ double _ticks = 0;
         [self.ib_temperature setFont:temperatureFont];
         [self.ib_temperature setTextColor:[UIColor whiteColor]];
         [self.ib_temperature setText:stringTemperature];
-        [self.ib_temperature setHidden:NO];
+        //[self.ib_temperature setHidden:NO];
         
         stringBoundingBox = [stringTemperature sizeWithAttributes:@{NSFontAttributeName: temperatureFont}];
         degreeCelBoundingBox = [degreeCel sizeWithAttributes:@{NSFontAttributeName: degreeFont}];
@@ -3010,7 +3010,7 @@ double _ticks = 0;
         
         //need update text for C or F
         [self.ib_temperature setText:stringTemperature];
-        [self.ib_temperature setHidden:NO];
+        //
         
         //CGSize stringBoundingBox = [stringTemperature sizeWithFont:temperatureFont];
         CGSize stringBoundingBox = [stringTemperature sizeWithAttributes:@{NSFontAttributeName: temperatureFont}];
@@ -3026,8 +3026,19 @@ double _ticks = 0;
         [self.ib_temperature addSubview:degreeCelsius];
     }
     
+    if (self.selectedItemMenu == INDEX_TEMP)
+    {
+        [self.view bringSubviewToFront:self.ib_temperature ];
+        [self.ib_temperature setHidden:NO];
+    }
+    else
+    {
+        [self.ib_temperature setHidden:YES];
+    }
+    
     [degreeCelsius release];
 }
+
 
 #pragma mark -
 #pragma mark - Stun probe timer
@@ -5452,6 +5463,7 @@ double _ticks = 0;
     [self.melodyViewController.view setHidden:YES];
 }
 
+//Who on earth would call this ???
 - (void)showAllBottomView
 {
     [self.imgViewDrectionPad setHidden:NO];
