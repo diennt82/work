@@ -3011,7 +3011,10 @@ double _ticks = 0;
         
         //need update text for C or F
         [self.ib_temperature setText:stringTemperature];
-        [self.ib_temperature setHidden:NO];
+        if (self.selectedItemMenu == INDEX_TEMP)
+        {
+            [self.ib_temperature setHidden:NO];
+        }
         
         //CGSize stringBoundingBox = [stringTemperature sizeWithFont:temperatureFont];
         CGSize stringBoundingBox = [stringTemperature sizeWithAttributes:@{NSFontAttributeName: temperatureFont}];
