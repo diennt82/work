@@ -236,6 +236,8 @@
         MediaPlayer::Instance()->setListener(listener);
         MediaPlayer::Instance()->setPlaybackAndSharedCam(true, false);
         [self performSelectorInBackground:@selector(startStream_bg) withObject:nil];
+        
+        [self enableOverlayView];
     }
 }
 
@@ -265,9 +267,7 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.imageVideo setAlpha:1];
         [self.activityIndicator setHidden:YES];
-        //self.view.userInteractionEnabled = YES;
-        //self.ib_myOverlay.hidden = NO;
-        [self enableOverlayView];
+        //[self enableOverlayView];
         [self.ib_sliderPlayBack setMinimumTrackTintColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"video_progress_green"]]];
         [self.ib_sliderPlayBack setValue:0];
         [self watcher];
@@ -442,11 +442,8 @@
     
     if (self.navigationController != nil)
     {
-        if ([[UIDevice currentDevice] orientation] == UIDeviceOrientationLandscapeLeft ||
-            [[UIDevice currentDevice] orientation] == UIDeviceOrientationLandscapeRight ||
-            [UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeLeft ||
-            [UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeRight)
-        {
+        if (UIDeviceOrientationIsLandscape([UIDevice currentDevice].orientation) ||
+            UIInterfaceOrientationIsLandscape([UIApplication sharedApplication].statusBarOrientation)) {
             if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]) {
                 objc_msgSend([UIDevice currentDevice], @selector(setOrientation:),   UIDeviceOrientationPortrait);
             }

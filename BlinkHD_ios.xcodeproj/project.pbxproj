@@ -784,7 +784,6 @@
 		A1DEC68418D43CCB00EE29C8 /* info.png in Resources */ = {isa = PBXBuildFile; fileRef = A1DEC68318D43CCB00EE29C8 /* info.png */; };
 		A1E32FAD17E9899800504538 /* H264PlayerListener.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1E32FAB17E9899800504538 /* H264PlayerListener.mm */; };
 		A1E32FB017E98A4700504538 /* PlaybackListener.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1E32FAE17E98A4700504538 /* PlaybackListener.mm */; };
-		A1F3921718BB519F0048AD63 /* PlaybackViewController_land.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1F3921618BB519F0048AD63 /* PlaybackViewController_land.xib */; };
 		BC3C1B0316F05C0C00175AFF /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = BC3C1B0516F05C0C00175AFF /* Localizable.strings */; };
 		BC5B0FCE1701855600D2C308 /* cameraMenuRouter.plist in Resources */ = {isa = PBXBuildFile; fileRef = BC5B0FCD1701855600D2C308 /* cameraMenuRouter.plist */; };
 /* End PBXBuildFile section */
@@ -1716,7 +1715,6 @@
 		A1E32FAC17E9899800504538 /* H264PlayerListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = H264PlayerListener.h; sourceTree = "<group>"; };
 		A1E32FAE17E98A4700504538 /* PlaybackListener.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PlaybackListener.mm; sourceTree = "<group>"; };
 		A1E32FAF17E98A4700504538 /* PlaybackListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaybackListener.h; sourceTree = "<group>"; };
-		A1F3921618BB519F0048AD63 /* PlaybackViewController_land.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PlaybackViewController_land.xib; sourceTree = "<group>"; };
 		BC064B83174CDD6100EFAC66 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		BC3C1B0416F05C0C00175AFF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		BC3C1B0616F05C0D00175AFF /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -3393,7 +3391,6 @@
 				979BC69717D9B97700B3B373 /* PlaybackViewController.h */,
 				979BC69817D9B97700B3B373 /* PlaybackViewController.mm */,
 				979BC69917D9B97700B3B373 /* PlaybackViewController.xib */,
-				A1F3921618BB519F0048AD63 /* PlaybackViewController_land.xib */,
 				8B68F5D018066CE500661527 /* PlaybackViewController_ipad.xib */,
 				979BC6A617D9BCB100B3B373 /* PlaylistInfo.h */,
 				979BC6A717D9BCB100B3B373 /* PlaylistInfo.m */,
@@ -3764,7 +3761,6 @@
 				8B299FE218AF500900D36BE5 /* tab_inactive@2x.png in Resources */,
 				5EBA458819405BEA00695155 /* Account_ViewController.xib in Resources */,
 				8B299FAD18AF500900D36BE5 /* camera_action_pause_pressed.png in Resources */,
-				A1F3921718BB519F0048AD63 /* PlaybackViewController_land.xib in Resources */,
 				8B29A05518AF500A00D36BE5 /* settings_seperator.png in Resources */,
 				8B95079118C9960D006D4945 /* blue_btn@2x.png in Resources */,
 				8B29A00A18AF500900D36BE5 /* video_action_temp_pressed.png in Resources */,
@@ -4513,7 +4509,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = HubbleHome;
-				PROVISIONING_PROFILE = "8821D41A-DC34-49AE-86CF-93C16E99264B";
+				PROVISIONING_PROFILE = "6005205D-B6D0-404C-8272-0A61B5418CCB";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
 				VALID_ARCHS = "armv6 armv7";
@@ -4563,7 +4559,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = HubbleHome;
-				PROVISIONING_PROFILE = "8821D41A-DC34-49AE-86CF-93C16E99264B";
+				PROVISIONING_PROFILE = "6005205D-B6D0-404C-8272-0A61B5418CCB";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
 				VALIDATE_PRODUCT = YES;
@@ -4636,7 +4632,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = HubbleHome;
-				PROVISIONING_PROFILE = "8821D41A-DC34-49AE-86CF-93C16E99264B";
+				PROVISIONING_PROFILE = "6005205D-B6D0-404C-8272-0A61B5418CCB";
 				RAMEWORK_SEARCH_PATHS = "$(inherited) \"$(SRCROOT)\"";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
