@@ -369,6 +369,7 @@
     }
     else
     {
+        self.playing = NO;
         _melodyIndex = -1;
     }
     
