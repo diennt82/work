@@ -43,8 +43,8 @@
     CGRect rect = self.btnCancel.frame;
     rect.origin.y = [UIScreen mainScreen].bounds.size.height - rect.size.height - 15;
     self.btnCancel.frame = rect;
-    [self.btnCancel setBackgroundImage:[UIImage imageNamed:@"cancel_btn"] forState:UIControlStateNormal];
-    [self.btnCancel setBackgroundImage:[UIImage imageNamed:@"cancel_btn_pressed"] forState:UIControlEventTouchDown];
+    [self.btnCancel setBackgroundImage:[UIImage imageNamed:@"green_btn.png"] forState:UIControlStateNormal];
+    [self.btnCancel setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed.png"] forState:UIControlEventTouchDown];
     
     NSMutableArray *array = [[NSMutableArray alloc] init];
     Camera *cam = [[Camera alloc] initWith:FORCUS_66_TAG andLable:@"Focus 66" andImage:[UIImage imageNamed:@"focus661-black.png"]];
