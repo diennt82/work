@@ -29,6 +29,7 @@
 #import "KISSMetricsAPI.h"
 #import <MessageUI/MFMailComposeViewController.h>
 #import "NSData+AESCrypt.h"
+#import "CameraMenuViewController.h"
 
 @interface MBP_iosViewController () <MFMailComposeViewControllerDelegate>
 
@@ -707,7 +708,7 @@
     
     if ([self isStayingCamerasListPage])
     {
-        if ([camAlert.alertType isEqualToString:ALERT_TYPE_REMOVED_CAM])
+        if ([camAlert.alertType isEqualToString:ALERT_TYPE_REMOVED_CAM] && ![self isStayingCameraSettingsPage])
         {
             [self gotoCamerasListPage];
             return FALSE;
@@ -723,7 +724,7 @@
     
     NSString *alertTitle = @"";
     NSString *alertMess = @"";
-    NSString * alertLeftButtonText = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
+    NSString * alertLeftButtonText = NSLocalizedStringWithDefaultValue(@"ok",nil, [NSBundle mainBundle],
                                                                        @"Ok", nil);
     NSString *alertOtherButtonText = nil;
     int tag = -1;;
@@ -738,9 +739,12 @@
         autoDissmisAlertIndex = -1;
     }
     else {
-        if ([self checkPushNotification:camAlert.cameraMacNoColon] == NO) return FALSE;
+        if ([self checkPushNotification:camAlert.cameraMacNoColon] == NO)
+        {
+            return FALSE;
+        }
         alertTitle = camAlert.cameraName;
-        alertLeftButtonText = NSLocalizedStringWithDefaultValue(@"Cancel",nil, [NSBundle mainBundle],
+        alertLeftButtonText = NSLocalizedStringWithDefaultValue(@"cancel",nil, [NSBundle mainBundle],
                                                                 @"Cancel", nil);
         alertOtherButtonText = NSLocalizedStringWithDefaultValue(@"Go_to_camera",nil, [NSBundle mainBundle],
                                                                  @"Go to camera", nil);
@@ -778,7 +782,7 @@
         {
             alertTitle = @"";//camAlert.cameraName;
             alertMess = [NSString stringWithFormat:@"%@ %@", camAlert.cameraName, NSLocalizedStringWithDefaultValue( @"camera_removed",nil, [NSBundle mainBundle], @"was removed", nil)];
-            alertLeftButtonText = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
+            alertLeftButtonText = NSLocalizedStringWithDefaultValue(@"ok",nil, [NSBundle mainBundle],
                                                                     @"Ok", nil);
             alertOtherButtonText = nil;
             tag = ALERT_PUSH_RECVED_REMOVE_CAM;
@@ -809,7 +813,7 @@
                 
                 [df_local release];
                 
-                alertLeftButtonText = NSLocalizedStringWithDefaultValue(@"Cancel",nil, [NSBundle mainBundle],
+                alertLeftButtonText = NSLocalizedStringWithDefaultValue(@"cancel",nil, [NSBundle mainBundle],
                                                                         @"Cancel", nil);
                 alertOtherButtonText = NSLocalizedStringWithDefaultValue(@"Go_to_camera",nil, [NSBundle mainBundle],
                                                                          @"Go to camera", nil);
@@ -827,14 +831,12 @@
     
     NSLog(@"camAlert : %@",camAlert);
     NSLog(@"latestCamAlert is: %@", self.latestCamAlert);
-    pushAlert = [[UIAlertView alloc]
-                 initWithTitle:alertTitle
-                 message:alertMess
-                 delegate:self
-                 cancelButtonTitle:alertLeftButtonText
-                 otherButtonTitles:alertOtherButtonText, nil];
-    pushAlert.tag = tag;
     
+    [self showPushNotificationAlert:alertTitle
+                         andMessage:alertMess
+                    andCancelButton:alertLeftButtonText
+                     andOtherButton:alertOtherButtonText
+                        andAlertTag:tag];
     self.latestCamAlert = camAlert;
     
     NSLog(@"play sound");
@@ -1859,28 +1861,38 @@
                 pushAlert.tag = 0;
                 [pushAlert dismissWithClickedButtonIndex:-1 animated:NO];
             }
-            pushAlert = [[UIAlertView alloc]
-                         initWithTitle:@""
-                         message:NSLocalizedStringWithDefaultValue( @"reset_password",nil, [NSBundle mainBundle],
-                                                                   @"Your credentials has changed. Please re-login to continue.", nil)
-                         delegate:self
-                         cancelButtonTitle:NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
-                                                                             @"Ok", nil)
-                         otherButtonTitles:nil, nil];
-            pushAlert.tag = ALERT_PUSH_RECVED_RELOGIN_AFTER;
-            [pushAlert show];
+            [self showPushNotificationAlert:@""
+                                 andMessage:NSLocalizedStringWithDefaultValue( @"reset_password",nil, [NSBundle mainBundle],
+                                                                                            @"Your credentials has changed. Please re-login to continue.", nil)
+                            andCancelButton:NSLocalizedStringWithDefaultValue(@"ok",nil, [NSBundle mainBundle], @"Ok", nil)
+                             andOtherButton:nil
+                                andAlertTag:ALERT_PUSH_RECVED_RELOGIN_AFTER];
             self.latestCamAlert = self.camAlert;
         }
         return;
     }
     
-    if ([self checkPushNotification:self.camAlert.cameraMacNoColon] == NO) return;
+    if ([self checkPushNotification:self.camAlert.cameraMacNoColon] == NO)
+    {
+        return;
+    }
     
     if ([self.camAlert.alertType isEqualToString:ALERT_TYPE_REMOVED_CAM])
     {
         if ([self isStayingCamerasListPage])
         {
-            [self gotoCamerasListPage];
+            if (![self isStayingCameraSettingsPage])
+            {
+                [self gotoCamerasListPage];
+            }
+            else
+            {
+                [self showPushNotificationAlert:@""
+                                     andMessage:[NSString stringWithFormat:@"%@ %@", self.camAlert.cameraName, NSLocalizedStringWithDefaultValue( @"camera_removed",nil, [NSBundle mainBundle], @"was removed", nil)]
+                                andCancelButton:NSLocalizedStringWithDefaultValue(@"ok",nil, [NSBundle mainBundle], @"Ok", nil)
+                                 andOtherButton:nil
+                                    andAlertTag:ALERT_PUSH_RECVED_REMOVE_CAM];
+            }
         }
         else if ([self isStayingSelectedCamaraPage])
         {
@@ -1890,15 +1902,11 @@
                     pushAlert.tag = 0;
                     [pushAlert dismissWithClickedButtonIndex:-1 animated:NO];
                 }
-                pushAlert = [[UIAlertView alloc]
-                             initWithTitle:@""
-                             message:[NSString stringWithFormat:@"%@ %@", self.camAlert.cameraName, NSLocalizedStringWithDefaultValue( @"camera_removed",nil, [NSBundle mainBundle], @"was removed", nil)]
-                             delegate:self
-                             cancelButtonTitle:NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
-                                                                                 @"Ok", nil)
-                             otherButtonTitles:nil, nil];
-                pushAlert.tag = ALERT_PUSH_RECVED_REMOVE_CAM;
-                [pushAlert show];
+                [self showPushNotificationAlert:@""
+                                     andMessage:[NSString stringWithFormat:@"%@ %@", self.camAlert.cameraName, NSLocalizedStringWithDefaultValue( @"camera_removed",nil, [NSBundle mainBundle], @"was removed", nil)]
+                                andCancelButton:NSLocalizedStringWithDefaultValue(@"ok",nil, [NSBundle mainBundle], @"Ok", nil)
+                                 andOtherButton:nil
+                                    andAlertTag:ALERT_PUSH_RECVED_REMOVE_CAM];
                 self.latestCamAlert = self.camAlert;
             }
         }
@@ -2039,6 +2047,17 @@
     return self.app_stage == APP_STAGE_LOGGING_IN;
 }
 
+- (BOOL)isStayingCameraSettingsPage {
+    if (self.menuVC)
+    {
+        id obj = [self.menuVC.navigationController topViewController];
+        if ([obj isKindOfClass:[CameraMenuViewController class]]) {
+            return YES;
+        }
+    }
+    return NO;
+}
+
 - (BOOL)checkPushNotification:(NSString *)camMacNoColon {
     // check if push notification has camara mac address not exist any user account's camaras list
     BOOL allowPushNoti = NO;
@@ -2056,5 +2075,16 @@
         }
     }
     return allowPushNoti;
+}
+
+- (void)showPushNotificationAlert:(NSString *)title andMessage:(NSString *)message andCancelButton:(NSString *)cancel andOtherButton:(NSString *)other andAlertTag:(NSInteger)tag {
+    pushAlert = [[UIAlertView alloc]
+                 initWithTitle:title
+                 message:message
+                 delegate:self
+                 cancelButtonTitle:cancel
+                 otherButtonTitles:other, nil];
+    pushAlert.tag = tag;
+    [pushAlert show];
 }
 @end
