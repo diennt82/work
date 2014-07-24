@@ -423,6 +423,8 @@
     {
         if (success)
         {
+            self.camerasVC.isRetrying = FALSE;
+            
             if ([self rebindCamerasResource] == TRUE)
             {
                 [self updateCameraList];
@@ -447,10 +449,40 @@
             if (!camProfiles)
             {
                 // Forcing refresh here!
-                [self performSelectorOnMainThread:@selector(refreshCameraList) withObject:nil waitUntilDone:NO];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (!_camerasVC.isRetrying)
+                    {
+                        self.camerasVC.isRetrying = TRUE;
+                        [_camerasVC.ibTableListCamera reloadData];
+                    }
+                    
+                    Reachability *reachability = [Reachability reachabilityForInternetConnection];
+                    [reachability startNotifier];
+                    
+                    NetworkStatus networkStatus = [reachability currentReachabilityStatus];
+                    
+                    if (networkStatus == NotReachable)
+                    {
+                        [self performSelector:@selector(refreshCameraList) withObject:nil afterDelay:2];
+                    }
+                    else
+                    {
+                        [self refreshCameraList];
+                    }
+                });
+                //[self performSelectorOnMainThread:@selector(refreshCameraList) withObject:nil waitUntilDone:NO];
             }
             else
             {
+                if (_camerasVC.isRetrying)
+                {
+                    self.camerasVC.isRetrying = FALSE;
+                    
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [self.camerasVC.ibTableListCamera reloadData];
+                    });
+                }
+               
                 NSLog(@"%s Error:%@", __FUNCTION__, camProfiles);
             }
         }

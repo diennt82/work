@@ -52,8 +52,6 @@ static char operationArrayKey;
                 if (image) {
                     wself.image = image;
                     [wself setNeedsLayout];
-                    
-                    NSLog(@"%s", __FUNCTION__);
                 }
                 if (completedBlock && finished) {
                     completedBlock(image, error, cacheType);

@@ -398,6 +398,39 @@
     return 108;
 }
 
+- (CGFloat )tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return 44;
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
+{
+    NSString *titleFooter = nil;
+    
+    if (_isRetrying)
+    {
+        titleFooter = NSLocalizedStringWithDefaultValue(@"low_data_bandwidth_detected", nil, [NSBundle mainBundle], @"Low data bandwidth detected. ", nil);
+        
+        NSString *retry = NSLocalizedStringWithDefaultValue(@"retrying", nil, [NSBundle mainBundle], @"Retrying...", nil);
+        
+        titleFooter = [titleFooter stringByAppendingString:retry];
+    }
+    else if (!_camChannels ||
+        _camChannels.count == 0)
+    {
+        if (_waitingForUpdateData)
+        {
+            titleFooter = NSLocalizedStringWithDefaultValue(@"loading", nil, [NSBundle mainBundle], @"Loading...", nil);
+        }
+        else
+        {
+            titleFooter = NSLocalizedStringWithDefaultValue(@"no_camera_in_account", nil, [NSBundle mainBundle], @"There is no camera in current account.", nil);
+        }
+    }
+    
+    return titleFooter;
+}
+
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
     if (scrollView.contentOffset.y < -64.0f)
