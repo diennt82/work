@@ -39,11 +39,12 @@
 
 #define DIRECT_MODE_NEXT_BTN 311
 
-#define ALERT_PUSH_RECVED_RESCAN_AFTER  200
-#define ALERT_PUSH_RECVED_RELOGIN_AFTER 201
-#define ALERT_PUSH_SERVER_ANNOUNCEMENT  203
-#define ALERT_PUSH_RECVED_NON_MOTION    204
-#define ALERT_PUSH_RECVED_MULTIPLE      205
+#define ALERT_PUSH_RECVED_RESCAN_AFTER              200
+#define ALERT_PUSH_RECVED_RELOGIN_AFTER             201
+#define ALERT_PUSH_SERVER_ANNOUNCEMENT              203
+#define ALERT_PUSH_RECVED_SOUND_TEMP_HI_TEMP_LO     204
+#define ALERT_PUSH_RECVED_MULTIPLE                  205
+#define ALERT_PUSH_RECVED_REMOVE_CAM                206
 
 
 
@@ -101,7 +102,6 @@
 
     
     UIAlertView * pushAlert;
-    CameraAlert * latestCamAlert;
     
     DashBoard_ViewController * dashBoard;
     
@@ -122,6 +122,7 @@
 @property (nonatomic, retain) IBOutlet UIView * progressView;
 @property (nonatomic, retain) IBOutlet UIImageView * splashScreen;
 @property (nonatomic, assign) id<BonjourDelegate> bonjourDelegate;
+@property (nonatomic, retain) CameraAlert * latestCamAlert;
 //@property (nonatomic,retain) IBOutlet MBP_MainMenuView * mainMenuView;
 
 //@property (nonatomic,retain) HttpCommunication *comm;
