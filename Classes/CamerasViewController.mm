@@ -249,7 +249,8 @@
     MenuViewController *menuVC = (MenuViewController *)self.parentVC;
     
     cameraMenuCV.cameraMenuDelegate = menuVC.menuDelegate;
-    //menuVC.navigationItem.title = @"Menu";
+    CamerasCell *cell = (CamerasCell *)[self.ibTableListCamera cellForRowAtIndexPath:[NSIndexPath indexPathForRow:rowIdx inSection:0]];
+    cameraMenuCV.imageViewTemp = cell.snapshotImage;
     [menuVC.navigationController pushViewController:cameraMenuCV animated:YES];
     
     [cameraMenuCV release];
@@ -513,9 +514,15 @@
                                    placeholderImage:imgCamera 
                                    options:SDWebImageRefreshCached];
             }
+            else
+            {
+                [cell.snapshotImage setImage:imgCamera];
+            }
         }
-        
-        [cell.snapshotImage setImage:imgCamera];
+        else
+        {
+            //[cell.snapshotImage setImage:imgCamera];
+        }
         
         cell.ibCameraNameLabel.text = ch.profile.name;
         NSString *boundCameraName = ch.profile.name;

@@ -19,6 +19,7 @@
 #import "MBProgressHUD.h"
 #import "UIActionSheet+Blocks.h"
 #import "PublicDefine.h"
+#import "UIImageView+WebCache.h"
 
 
 
@@ -172,6 +173,7 @@
     [_alertViewRename release];
     [_jsonCommBlock release];
     [_sensitivityTemperatureCell release];
+    [_imageViewTemp release];
     
     [super dealloc];
 }
@@ -1587,7 +1589,7 @@
     (NSDocumentDirectory, NSUserDomainMask, YES);
     NSString  *strPath = [paths objectAtIndex:0];
     
-    strPath = [strPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.jpg",self.camChannel.profile.registrationID]];
+    strPath = [strPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.jpg", self.camChannel.profile.registrationID]];
     
     if([[NSFileManager defaultManager] fileExistsAtPath:strPath])
     {
@@ -1595,6 +1597,10 @@
     }
     
     [UIImageJPEGRepresentation(aImage, 0.5) writeToFile:strPath atomically:YES];
+    
+    [_imageViewTemp setImageWithURL:[NSURL URLWithString:_camChannel.profile.snapUrl]
+                       placeholderImage:aImage
+                                options:SDWebImageRefreshCached];
 }
 
 - (void)getSensitivityInfoFromServer
