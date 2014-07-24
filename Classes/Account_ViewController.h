@@ -10,7 +10,9 @@
 #import "CameraAlert.h"
 
 @interface Account_ViewController : UIViewController
-
+{
+    int debugEnabledCount;
+}
 @property (nonatomic, assign) id parentVC;
 
 @end

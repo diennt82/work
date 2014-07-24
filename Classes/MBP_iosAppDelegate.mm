@@ -171,7 +171,14 @@
     
     [CameraAlert reloadBlankTableIfNeeded];
     
-    NSString *serverName = [userDefaults stringForKey:@"name_server"];
+    NSString *serverName = nil;
+    
+    BOOL shouldUseSettingValues = [userDefaults boolForKey:@"DebugOpt"];
+    if (shouldUseSettingValues == YES)
+    {
+        NSLog(@"DEBUG ENABLED: use customized server"); 
+        serverName = [userDefaults stringForKey:@"name_server"];
+    }
     
     if (serverName == nil ||
         ![serverName hasPrefix:@"http"])
