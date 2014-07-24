@@ -249,8 +249,6 @@
     MenuViewController *menuVC = (MenuViewController *)self.parentVC;
     
     cameraMenuCV.cameraMenuDelegate = menuVC.menuDelegate;
-    CamerasCell *cell = (CamerasCell *)[self.ibTableListCamera cellForRowAtIndexPath:[NSIndexPath indexPathForRow:rowIdx inSection:0]];
-    cameraMenuCV.imageViewTemp = cell.snapshotImage;
     [menuVC.navigationController pushViewController:cameraMenuCV animated:YES];
     
     [cameraMenuCV release];
@@ -491,7 +489,14 @@
         cell.backgroundColor = [UIColor blackColor];
         
         CamChannel *ch = (CamChannel *)[_camChannels objectAtIndex:indexPath.row];
+#if 1
+        UIImage *imgCamera = [UIImage imageNamed:@"camera_focus_66"];
         
+        if ([[ch.profile getModel] hasPrefix:CP_MODEL_008])
+        {
+            imgCamera = [UIImage imageNamed:@"camera_mbp_83"];
+        }
+#else
         NSString *strPath = [strDocDirPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.jpg",ch.profile.registrationID]];
         
         UIImage *imgCamera = [UIImage imageWithContentsOfFile:strPath];
@@ -504,6 +509,7 @@
                 imgCamera = [UIImage imageNamed:@"camera_focus_66"];
             }
         }
+#endif
         
         //NSLog(@"-- %@",ch.profile.snapUrl);
         if(ch.profile.snapUrl != nil)
@@ -521,7 +527,8 @@
         }
         else
         {
-            //[cell.snapshotImage setImage:imgCamera];
+            NSLog(@"%s snapUrl == nil.", __FUNCTION__);
+            [cell.snapshotImage setImage:imgCamera];
         }
         
         cell.ibCameraNameLabel.text = ch.profile.name;

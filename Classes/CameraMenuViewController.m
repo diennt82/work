@@ -173,7 +173,6 @@
     [_alertViewRename release];
     [_jsonCommBlock release];
     [_sensitivityTemperatureCell release];
-    [_imageViewTemp release];
     
     [super dealloc];
 }
@@ -1213,7 +1212,6 @@
 
 -(void)btnChangeCameraIcon
 {
-#if 1
     NSString *deviceType = [UIDevice currentDevice].model;
     
     NSArray *arrButtonTitles = @[@"Select image from Photos", [NSString stringWithFormat:@"Take a photo using %@", deviceType], @"Get a live snapshot from camera"];
@@ -1269,45 +1267,6 @@
              [self presentViewController:picker animated:YES completion:NULL];
          }
      }];
-#else
-    [UIActionSheet showInView:self.view
-                    withTitle:@"Change Image"
-            cancelButtonTitle:NSLocalizedStringWithDefaultValue(@"cancel", nil, [NSBundle mainBundle], @"Cancel", nil)
-       destructiveButtonTitle:nil
-            otherButtonTitles:@[@"Select image from gallery", @"Take a photo from Camera",@"Take a snapshot now"]
-                     tapBlock:^(UIActionSheet *actionSheet, NSInteger buttonIndex)
-    {
-        if(actionSheet.cancelButtonIndex == buttonIndex)
-        {
-            return ;
-        }
-        
-        if(buttonIndex==1 && ![UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypeCamera])
-        {
-            Alert(nil, @"You iOS device have not camera.")
-            return;
-        }
-        
-        UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-        picker.delegate = self;
-        //picker.allowsEditing = YES;
-        if(buttonIndex==0)//Gallery
-        {
-            picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-        }
-        else if(buttonIndex==1)//Camera
-        {
-            picker.sourceType = UIImagePickerControllerSourceTypeCamera;
-        }
-        else if(buttonIndex==2)//Snapshot
-        {
-            [self performSelector:@selector(openViewForSetCameraFromURL) withObject:nil afterDelay:0.1];
-            return;
-        }
-        [self presentViewController:picker animated:YES completion:NULL];
-        
-    }];
-#endif
 }
 
 #pragma mark - UIImagePicker Delegate
@@ -1409,23 +1368,6 @@
     } completion:^(BOOL finished) {
         vwSnapshot.hidden = YES;
     }];
-#if 0
-    if(imageSelected)
-    {
-        NSArray *paths = NSSearchPathForDirectoriesInDomains
-        (NSDocumentDirectory, NSUserDomainMask, YES);
-        NSString  *strPath = [paths objectAtIndex:0];
-        
-        strPath = [strPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.jpg",self.camChannel.profile.registrationID]];
-        
-        if([[NSFileManager defaultManager] fileExistsAtPath:strPath])
-        {
-            [[NSFileManager defaultManager] removeItemAtPath:strPath error:nil];
-        }
-        
-        [UIImageJPEGRepresentation(imageSelected, 0.5) writeToFile:strPath atomically:YES];
-    }
-#endif
 }
 
 
@@ -1473,8 +1415,6 @@
     return nil;
 }
 
-#if 1
-
 - (NSString *)getUploadToken
 {
     if (!_jsonCommBlock)
@@ -1518,32 +1458,6 @@
     
     return nil;
 }
-#else
-//MOVE THIS IN FRAMEWORK
--(NSString*)getUploadToken
-{
-    NSString *strURLForGetUploadToken = @"https://api.hubble.in/v1/users/upload_token.json";
-    NSMutableURLRequest *postRequestForUploadToken = [[NSMutableURLRequest alloc] init];
-    [postRequestForUploadToken setURL:[NSURL URLWithString:strURLForGetUploadToken]];
-    [postRequestForUploadToken setHTTPMethod:@"POST"];
-    
-    NSString *strPara  = [NSString stringWithFormat:@"api_key=%@",_apiKey];
-    [postRequestForUploadToken setHTTPBody:[strPara dataUsingEncoding:NSUTF8StringEncoding]];
-    
-    NSURLResponse *response1;
-    NSError *error1;
-    NSData *dataResponseToken = [NSURLConnection sendSynchronousRequest:postRequestForUploadToken returningResponse:&response1 error:&error1];
-    NSString *strToken = [[NSString alloc] initWithData:dataResponseToken encoding:NSASCIIStringEncoding];
-    NSLog(@"--- %@",strToken);
-    NSDictionary *dicResultToken  = [NSJSONSerialization JSONObjectWithData:dataResponseToken options:NSJSONReadingMutableLeaves error:nil];
-    if(dicResultToken!=nil && [[dicResultToken valueForKey:@"status"] intValue]==200)
-    {
-        return [[dicResultToken valueForKey:@"data"] valueForKey:@"upload_token"];
-    }
-    return nil;
-}
-#endif
-
 
 - (void)uploadImageToServer:(UIImage*)image
 {
@@ -1585,6 +1499,10 @@
 
 - (void)saveCameraSnapshot:(UIImage *)aImage
 {
+#if 1
+    NSString * myCacheKey = [NSString stringWithFormat:@"http://hubble-resources.s3.amazonaws.com/devices/%@/image.png", self.camChannel.profile.registrationID];
+    [[SDImageCache sharedImageCache] storeImage:aImage forKey:myCacheKey];
+#else
     NSArray *paths = NSSearchPathForDirectoriesInDomains
     (NSDocumentDirectory, NSUserDomainMask, YES);
     NSString  *strPath = [paths objectAtIndex:0];
@@ -1597,10 +1515,7 @@
     }
     
     [UIImageJPEGRepresentation(aImage, 0.5) writeToFile:strPath atomically:YES];
-    
-    [_imageViewTemp setImageWithURL:[NSURL URLWithString:_camChannel.profile.snapUrl]
-                       placeholderImage:aImage
-                                options:SDWebImageRefreshCached];
+#endif
 }
 
 - (void)getSensitivityInfoFromServer

@@ -22,6 +22,4 @@
 @property (nonatomic, assign) CamChannel *camChannel;
 @property (retain, nonatomic) IBOutlet UIView *viewPorgress;
 
-@property (nonatomic, retain) UIImageView *imageViewTemp;
-
 @end
