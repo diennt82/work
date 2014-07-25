@@ -60,28 +60,29 @@
             marginLR = kLeftOffset + 60; //padding left and right = 100
             buttonWidth = 60; //60 for iPad
             paddingBetweenButton = 65;
+            xPos = 218;
         }
         else if (isiPhone4)
         {
             marginLR = 0;
             buttonWidth = kButtonSize_iPhone - 2;
             paddingBetweenButton = kPaddingBetweenButton - 6;
+            xPos = 101;
         }
         else
         {
             marginLR = 0;
             buttonWidth = kButtonSize_iPhone;
             paddingBetweenButton = kPaddingBetweenButton - 5;
+            xPos = 145;
         }
-        
-        xPos = 0;
     }
     else
     {
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
-            marginLR = 100; //padding left and right = 100
-            xPos = 30; //
+            marginLR = 0; //padding left and right = 100
+            xPos = 130; //
             buttonWidth = 60; //60 for iPad
             paddingBetweenButton = 50;
         }

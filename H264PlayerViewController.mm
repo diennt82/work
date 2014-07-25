@@ -88,8 +88,8 @@ double _ticks = 0;
     
     self.imageViewStreamer.userInteractionEnabled = NO;
     self.sharedCamConnectedTo = @"";
-    self.cameraModel = [self.selectedChannel.profile getModel];
     
+    self.cameraModel = [self.selectedChannel.profile getModel];
     /*
      * Move dow SetupCamera temporarily. Need to update here!
      */
@@ -1420,7 +1420,8 @@ double _ticks = 0;
 {
     NSLog(@"Single tap singleTapGestureCaptured");
     
-    if (_isHorizeShow == TRUE)
+    //if (_isHorizeShow == TRUE)
+    if (!_horizMenu.isHidden)
     {
         [self hideControlMenu];
     }
@@ -1429,7 +1430,7 @@ double _ticks = 0;
         [self showControlMenu];
     }
     
-    [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"PlayerView single tap on video image view: %d", _isHorizeShow] withProperties:nil];
+    //[[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"PlayerView single tap on video image view: %d", _isHorizeShow] withProperties:nil];
     
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:@"single tap on video image view"
@@ -4573,6 +4574,15 @@ double _ticks = 0;
             {
                 selectedItem--;
             }
+            else if ([_cameraModel isEqualToString:CP_MODEL_0073])
+            {
+                if (selectedItem == INDEX_RECORDING)
+                {
+                    selectedItem = 1;
+                }
+            }
+            
+            NSLog(@"%s selectedItem:%d", __FUNCTION__, _selectedItemMenu);
             
             [self.horizMenu setSelectedIndex:selectedItem animated:NO];
         });
@@ -5146,6 +5156,11 @@ double _ticks = 0;
         self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_mic", @"video_action_photo", @"video_action_music", @"video_action_temp", nil];
         self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_mic_pressed", @"video_action_photo_pressed", @"video_action_music_pressed", @"video_action_temp_pressed", nil];
     }
+    else if ([_cameraModel isEqualToString:CP_MODEL_0073])
+    {
+        self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_pan", @"video_action_video", nil];
+        self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_pan_pressed", @"video_action_video_pressed", nil];
+    }
     else //if ([_cameraModel isEqualToString:CP_MODEL_BLE])
     {
         self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_pan", @"video_action_mic", @"video_action_video", @"video_action_music", @"video_action_temp", nil];
@@ -5229,7 +5244,7 @@ double _ticks = 0;
         {
             switch (index)
             {
-                case 0:
+                case INDEX_PAN_TILT:
                     self.selectedItemMenu = INDEX_PAN_TILT;
                     break;
                     
@@ -5273,6 +5288,23 @@ double _ticks = 0;
                 break;
                 
             default:
+                break;
+        }
+    }
+    else if ([_cameraModel isEqualToString:CP_MODEL_0073])
+    {
+        switch (index)
+        {
+            case INDEX_PAN_TILT:
+                self.selectedItemMenu = INDEX_PAN_TILT;
+                break;
+                
+            case 1:
+                self.selectedItemMenu = INDEX_RECORDING;
+                break;
+                
+            default:
+                NSLog(@"Action out of bound");
                 break;
         }
     }
@@ -5531,6 +5563,7 @@ double _ticks = 0;
     [_melodyViewController release];
     [_alertFWUpgrading release];
     [_audioOut release];
+    [_userAccount release];
     
     NSLog(@"%s", __FUNCTION__);
     
