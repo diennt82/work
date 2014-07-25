@@ -185,6 +185,14 @@
     
 }
 
+- (void)resetStatus {
+    for(int i = 0; i < self.itemCount; i++)
+    {
+        UIButton *button = (UIButton*) [self viewWithTag:i + kButtonBaseTag];
+        [button setSelected:NO];
+    }
+}
+
 - (void)dealloc
 {
     [_selectedImage release];
