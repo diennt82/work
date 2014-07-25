@@ -41,7 +41,9 @@
     
     [[SDWebImageManager sharedManager] setCacheKeyFilter:^(NSURL *url) {
         url = [[NSURL alloc] initWithScheme:url.scheme host:url.host path:url.path];
-        return [url absoluteString];
+        NSString *absoluteString = [url absoluteString];
+        [url release];
+        return absoluteString;
     }];
     
     // Handle launching from a notification
@@ -102,7 +104,7 @@
     
     
     
-    NSArray *names = [UIFont fontNamesForFamilyName:@"Proxima Nova"];
+//    NSArray *names = [UIFont fontNamesForFamilyName:@"Proxima Nova"];
     //NSLog(@"names: %@",names);
     
     //[[UINavigationBar appearance] setTintColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"back"]]];
@@ -143,7 +145,9 @@
     [userDefaults synchronize];
     
     //[_window setRootViewController:viewController];
-    _window.rootViewController = [[EarlierNavigationController alloc] initWithRootViewController:viewController];
+    EarlierNavigationController *nav = [[EarlierNavigationController alloc] initWithRootViewController:viewController];
+    _window.rootViewController = nav;
+    [nav release];
     [_window makeKeyAndVisible];
     
 #if TARGET_IPHONE_SIMULATOR == 0
@@ -334,10 +338,40 @@ void checkingApplicationCrashed()
             
             
         }
-        else if ([str2 isEqualToString:@"1"] ||
-                 [str2 isEqualToString:@"2"]  ||
-                 [str2 isEqualToString:@"3"] ||
-                 [str2 isEqualToString:@"4"])
+        else if ([str2 isEqualToString:ALERT_TYPE_PASSWORD_CHANGED])
+        {
+            /**         alert = 7;
+             aps =     {
+             alert = "Reset password on HubbleHome platform";
+             };
+             cameraname = "N/A";
+             mac = "N/A";
+             time = "2014-07-08T08:36:30+00:00";
+             val = HubbleHome;
+             if (str2 == nil)
+             {
+             NSLog(@"NIL info.. silencely return");
+             return;
+             }
+             */
+            NSString * str4 = (NSString *) [userInfo objectForKey:@"val"];
+            NSString * str5 = (NSString *) [userInfo objectForKey:@"time"];
+            int rcvTimeStamp = [[NSDate date] timeIntervalSince1970];
+            CameraAlert * camAlert = [[CameraAlert alloc]initWithTimeStamp1:rcvTimeStamp];
+            camAlert.cameraName = @"";
+            camAlert.alertType = str2;
+            camAlert.alertTime =str5;
+            camAlert.alertVal = str4;
+            camAlert.registrationID = @"";
+            
+            [self openAlertPushNotification:camAlert andApplicationState:[application applicationState]];
+            [camAlert release];
+        }
+        else if ([str2 isEqualToString:ALERT_TYPE_SOUND] ||
+                 [str2 isEqualToString:ALERT_TYPE_TEMP_HI]  ||
+                 [str2 isEqualToString:ALERT_TYPE_TEMP_LO] ||
+                 [str2 isEqualToString:ALERT_TYPE_MOTION] ||
+                 [str2 isEqualToString:ALERT_TYPE_REMOVED_CAM])
         {
             
             
@@ -363,7 +397,9 @@ void checkingApplicationCrashed()
             int rcvTimeStamp = [[NSDate date] timeIntervalSince1970];
             CameraAlert * camAlert = [[CameraAlert alloc]initWithTimeStamp1:rcvTimeStamp];// autorelease];
             //set other values
-            camAlert.cameraMacNoColon = [str3 substringWithRange:NSMakeRange(6, 12)];
+            if (str3.length >= 12) {
+                camAlert.cameraMacNoColon = [str3 substringWithRange:NSMakeRange(6, 12)];
+            }
             
             camAlert.cameraName = str6;
             camAlert.alertType = str2;
@@ -378,41 +414,43 @@ void checkingApplicationCrashed()
                 NSLog(@"motion url is :%@", camAlert.server_url);
             }
             
-            BOOL shouldStoreAlert = TRUE;
-            
-            
-            //Next few lines: ORDER MATTERS
-            if ( [application applicationState] == UIApplicationStateActive)
-            {
-                //App is running now -> show a dialog popup
-                shouldStoreAlert = [viewController pushNotificationRcvedInForeground: camAlert];
-            }
-            else if ( [application applicationState] == UIApplicationStateInactive)
-            {
-                // App inactive in following cases:
-                //    - Launching -> switch directly to the camera/Motion view
-                //    - User pull down/up the menu , & click -> dont' do anything
-                NSLog(@"UIApplicationStateInactive - going to be active same thing");
-                
-                [self performSelectorOnMainThread:@selector(activateNotificationViewController:)
-                                       withObject:camAlert
-                                    waitUntilDone:YES];
-                
-            }
-            else
-            {
-                //  handle exception
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:str6
-                                                                message:str2
-                                                               delegate:self
-                                                      cancelButtonTitle:NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil)
-                                                      otherButtonTitles:nil];
-                [alert show];
-            }
+            [self openAlertPushNotification:camAlert andApplicationState:[application applicationState]];
+            [camAlert release];
         }
-        //[camAlert release]; camAlert leak memory but I can't release it.
     }
     
+}
+
+- (void)openAlertPushNotification:(CameraAlert *)camAlert andApplicationState:(UIApplicationState)state
+{
+    //Next few lines: ORDER MATTERS
+    if (state == UIApplicationStateActive)
+    {
+        //App is running now -> show a dialog popup
+        [viewController pushNotificationRcvedInForeground:camAlert];
+    }
+    else if (state == UIApplicationStateInactive)
+    {
+        // App inactive in following cases:
+        //    - Launching -> switch directly to the camera/Motion view
+        //    - User pull down/up the menu , & click -> dont' do anything
+        NSLog(@"UIApplicationStateInactive - going to be active same thing");
+        
+        [self performSelectorOnMainThread:@selector(activateNotificationViewController:)
+                               withObject:camAlert
+                            waitUntilDone:YES];
+        
+    }
+    else
+    {
+        //  handle exception
+//        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:camAlert.cameraName
+//                                                        message:camAlert.alertType
+//                                                       delegate:self cancelButtonTitle:@"OK"
+//                                              otherButtonTitles:nil];
+//        [alert show];
+        NSLog(@"UIApplicationStateBackground - received a push notification with Camera name: %@, Camera type: %@", camAlert.cameraName, camAlert.alertType);
+    }
 }
 
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
@@ -435,10 +473,15 @@ void checkingApplicationCrashed()
 
 - (void)activateNotificationViewController: (CameraAlert *)camAlert
 {
-    
-    //send a broadcast to all active listeners to take care of all necessary actions.
-    [[NSNotificationCenter defaultCenter] postNotificationName:PUSH_NOTIFY_BROADCAST_WHILE_APP_INACTIVE
-                                                        object:nil];
+    if ([camAlert.alertType isEqualToString:ALERT_TYPE_SOUND] ||
+        [camAlert.alertType isEqualToString:ALERT_TYPE_TEMP_HI]  ||
+        [camAlert.alertType isEqualToString:ALERT_TYPE_TEMP_LO] ||
+        [camAlert.alertType isEqualToString:ALERT_TYPE_MOTION])
+    {
+        //send a broadcast to all active listeners to take care of all necessary actions.
+        [[NSNotificationCenter defaultCenter] postNotificationName:PUSH_NOTIFY_BROADCAST_WHILE_APP_INACTIVE
+                                                            object:nil];
+    }
     viewController.camAlert = camAlert;
     [NSTimer scheduledTimerWithTimeInterval:0.01
                                      target:viewController
