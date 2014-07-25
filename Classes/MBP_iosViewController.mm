@@ -781,7 +781,7 @@
         else if ([camAlert.alertType isEqualToString:ALERT_TYPE_REMOVED_CAM])
         {
             alertTitle = @"";//camAlert.cameraName;
-            alertMess = [NSString stringWithFormat:@"%@ %@", camAlert.cameraName, NSLocalizedStringWithDefaultValue( @"camera_removed",nil, [NSBundle mainBundle], @"was removed", nil)];
+            alertMess = [NSString stringWithFormat:@"%@ %@", camAlert.cameraName, NSLocalizedStringWithDefaultValue( @"camera_removed",nil, [NSBundle mainBundle], @"has been removed on a different terminal. Please check and add camera again to continue to view.", nil)];
             alertLeftButtonText = NSLocalizedStringWithDefaultValue(@"ok",nil, [NSBundle mainBundle],
                                                                     @"Ok", nil);
             alertOtherButtonText = nil;
@@ -1888,7 +1888,7 @@
             else
             {
                 [self showPushNotificationAlert:@""
-                                     andMessage:[NSString stringWithFormat:@"%@ %@", self.camAlert.cameraName, NSLocalizedStringWithDefaultValue( @"camera_removed",nil, [NSBundle mainBundle], @"was removed", nil)]
+                                     andMessage:[NSString stringWithFormat:@"%@ %@", self.camAlert.cameraName, NSLocalizedStringWithDefaultValue( @"camera_removed",nil, [NSBundle mainBundle], @"has been removed on a different terminal. Please check and add camera again to continue to view.", nil)]
                                 andCancelButton:NSLocalizedStringWithDefaultValue(@"ok",nil, [NSBundle mainBundle], @"Ok", nil)
                                  andOtherButton:nil
                                     andAlertTag:ALERT_PUSH_RECVED_REMOVE_CAM];
@@ -1903,7 +1903,7 @@
                     [pushAlert dismissWithClickedButtonIndex:-1 animated:NO];
                 }
                 [self showPushNotificationAlert:@""
-                                     andMessage:[NSString stringWithFormat:@"%@ %@", self.camAlert.cameraName, NSLocalizedStringWithDefaultValue( @"camera_removed",nil, [NSBundle mainBundle], @"was removed", nil)]
+                                     andMessage:[NSString stringWithFormat:@"%@ %@", self.camAlert.cameraName, NSLocalizedStringWithDefaultValue( @"camera_removed",nil, [NSBundle mainBundle], @"as been removed on a different terminal. Please check and add camera again to continue to view.", nil)]
                                 andCancelButton:NSLocalizedStringWithDefaultValue(@"ok",nil, [NSBundle mainBundle], @"Ok", nil)
                                  andOtherButton:nil
                                     andAlertTag:ALERT_PUSH_RECVED_REMOVE_CAM];
