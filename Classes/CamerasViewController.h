@@ -23,6 +23,7 @@
 @property (assign, nonatomic) id<CamerasVCDelegate> camerasVCDelegate;
 @property (assign, nonatomic) id parentVC;
 @property (nonatomic) BOOL waitingForUpdateData;
+@property (nonatomic) BOOL isRetrying;
 
 @property (retain, nonatomic) NSMutableArray *camChannels;
 
