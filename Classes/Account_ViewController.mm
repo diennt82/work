@@ -60,6 +60,7 @@
     UILabel *lblVersion = (UILabel *)[self.view viewWithTag:559];
     
     lblVersion.text = [NSString stringWithFormat:@"Hubble Home v%@", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]];
+    debugEnabledCount = 8;
 }
 
 - (void)viewDidUnload
@@ -188,7 +189,12 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 3;
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    if( [userDefaults boolForKey:@"DebugOpt"] == YES)
+    {
+        return 3;
+    }
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -203,15 +209,8 @@
     }
     else if(section == 2)
     {
-        if (CUE_RELEASE_FLAG)
-        {
-            return 1;
-            
-        }
-        else
-        {
-            return 2;
-        }
+       
+        return 1;
     }
     else
     {
@@ -243,6 +242,7 @@
 - (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if ((indexPath.section == 0 && (indexPath.row == 2 || indexPath.row == 1)) ||
+         (indexPath.section ==1  && indexPath.row == 1) ||
         indexPath.section == 2)
     {
         return YES;
@@ -378,6 +378,43 @@
         {
             //log out
             [self userLogout];
+        }
+    }
+    else if(indexPath.section == 1 && indexPath.row == 1 ) //App Version
+    {
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        BOOL debugEnabled = [userDefaults  boolForKey:@"DebugOpt"];
+        if (debugEnabled == YES)
+        {
+           
+        }
+        else
+        {
+            //Increase debug enabled counter
+            debugEnabledCount --;
+            if (debugEnabledCount < 0)
+            {
+                debugEnabledCount =0 ;
+            }
+            
+            if (debugEnabledCount == 0 )
+            {
+                MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+                [hud setLabelText:@"Developer mode enabled"];
+                
+
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 2 * NSEC_PER_SEC), dispatch_get_main_queue(),
+                               ^{
+                                   [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+                               });
+                
+                [userDefaults setBool:YES forKey:@"DebugOpt"];
+                [userDefaults synchronize];
+                
+                [tableView reloadData];
+                //TODO: turn on SEND LOG options
+                
+            }
         }
     }
     else if(indexPath.section == 2)
