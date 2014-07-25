@@ -8,8 +8,8 @@
 
 #define TEMP_LOW_MIN 10
 #define TEMP_LOW_MAX 18
-#define TEMP_HIGH_MIN 25
-#define TEMP_HIGH_MAX 33
+#define TEMP_HIGH_MIN 26
+#define TEMP_HIGH_MAX 40
 
 #import "SensitivityTemperatureCell.h"
 
