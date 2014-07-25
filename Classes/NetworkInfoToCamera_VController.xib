@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5053" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
         <deployment defaultVersion="1792" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
@@ -42,7 +42,7 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="29">
-                        <rect key="frame" x="20" y="11" width="46" height="21"/>
+                        <rect key="frame" x="13" y="11" width="46" height="21"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -89,14 +89,14 @@
             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
         </tableViewCell>
         <tableViewCell tag="3" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="42" id="36">
-            <rect key="frame" x="0.0" y="0.0" width="324" height="42"/>
+            <rect key="frame" x="0.0" y="0.0" width="320" height="65"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="36" id="U9H-F3-K2W">
-                <rect key="frame" x="0.0" y="0.0" width="324" height="41"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Password" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="39">
-                        <rect key="frame" x="13" y="9" width="76" height="21"/>
+                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Router Password" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="10" id="39">
+                        <rect key="frame" x="13" y="0.0" width="90" height="41"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -104,7 +104,7 @@
                         <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </label>
                     <textField opaque="NO" clipsSubviews="YES" tag="200" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter WIFI password" minimumFontSize="17" id="40">
-                        <rect key="frame" x="97" y="5" width="212" height="31"/>
+                        <rect key="frame" x="110" y="5" width="202" height="31"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -112,6 +112,21 @@
                         <connections>
                             <outlet property="delegate" destination="-1" id="50"/>
                         </connections>
+                    </textField>
+                    <button opaque="NO" tag="501" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="FVI-fQ-biY">
+                        <rect key="frame" x="104" y="33" width="38" height="33"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <state key="normal" image="checkbox.png">
+                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                        </state>
+                    </button>
+                    <textField opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="202" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Show Password" minimumFontSize="17" id="Z54-Cs-VCH">
+                        <rect key="frame" x="133" y="41" width="116" height="19"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <textInputTraits key="textInputTraits"/>
                     </textField>
                 </subviews>
             </tableViewCellContentView>
@@ -197,7 +212,7 @@
                     <color key="textColor" red="0.50196078430000002" green="0.50196078430000002" blue="0.50196078430000002" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <progressView opaque="NO" tag="501" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.25" progressImage="setup_progress_blue.png" trackImage="setup_progress_grey.png" id="m0K-yq-IPv" customClass="HubbleProgressView">
+                <progressView opaque="NO" tag="501" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.89999997615814198" progressImage="setup_progress_blue.png" trackImage="setup_progress_grey.png" id="m0K-yq-IPv" customClass="HubbleProgressView">
                     <rect key="frame" x="-1" y="67" width="322" height="2"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                 </progressView>
@@ -224,6 +239,7 @@
         </view>
     </objects>
     <resources>
+        <image name="checkbox.png" width="25" height="23"/>
         <image name="green_btn.png" width="295" height="50"/>
         <image name="setup_camera_b2.png" width="100" height="110"/>
         <image name="setup_camera_c4.png" width="100" height="110"/>

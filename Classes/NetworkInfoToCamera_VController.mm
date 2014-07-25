@@ -14,7 +14,7 @@
 #define BTN_TRY_AGAIN_TAG   559
 #define BLE_TIMEOUT_PROCESS 4*60.0
 
-@interface NetworkInfoToCamera_VController () <UITextFieldDelegate>
+@interface NetworkInfoToCamera_VController () <UITextFieldDelegate, SecurityChangingDelegate>
 
 @property (retain, nonatomic) IBOutlet UIView *viewProgress;
 @property (retain, nonatomic) IBOutlet UIView *viewError;
@@ -114,6 +114,7 @@
     if (_sec != nil)
     {
         _sec.text = self.security;
+        
     }
     
     
@@ -211,13 +212,13 @@
 {
     [super viewWillAppear:animated];
     
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-    {
-        CGRect rect = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-        
-        self.viewProgress.frame = rect;
-        self.viewError.frame = rect;
-    }
+//    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+//    {
+//        CGRect rect = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+//        
+//        self.viewProgress.frame = rect;
+//        self.viewError.frame = rect;
+//    }
     
     NSLog(@"update security type");
     UITextField * _sec = (UITextField *) [self.securityCell viewWithTag:1];
@@ -414,6 +415,25 @@
 #define PASSWORD_INDEX 1
 #define CONFPASSWORD_INDEX 2
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == SEC_SECTION)
+    {
+        if (indexPath.row == PASSWORD_INDEX)
+        {
+            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+            {
+                return 75;
+            }
+            else {
+                return 65;
+            }
+        }
+    }
+    
+    return 44;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"Cell";
@@ -443,10 +463,21 @@
         {
             
             if (indexPath.row == SEC_INDEX) {
+                [self.securityCell setAccessoryType:UITableViewCellAccessoryNone];
+                if (self.isOtherNetwork) {
+                    [self.securityCell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
+                }
                 return securityCell;
             }
             if (indexPath.row == PASSWORD_INDEX)
             {
+                if ([[self.passwordCell viewWithTag:501] isKindOfClass:[UIButton class]]) {
+                    UIButton *button = (UIButton *) [self.passwordCell viewWithTag:501];
+                    [button setImage:[UIImage imageNamed:@"checkbox"] forState:UIControlStateNormal];
+                    [button setImage:[UIImage imageNamed:@"checkbox_active"] forState:UIControlStateSelected];
+                    [button setImage:[UIImage imageNamed:@"checkbox_active"] forState:UIControlStateHighlighted];
+                    [button addTarget:self action:@selector(handlerShowPasswordButon:) forControlEvents:UIControlEventTouchUpInside];
+                }
                 return passwordCell;
             }
             if (indexPath.row == CONFPASSWORD_INDEX)
@@ -503,19 +534,18 @@
     [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow]
                              animated:NO];
     
-    if ([self.ssid isEqualToString:@"Other Network"])
-    {
-        
-        if (indexPath.section == SEC_SECTION)
-        {
-            if (indexPath.row == SEC_INDEX)
-            {
-                [self changeSecurityType];
-                
-            }
-        }
-    }
-    
+//    if ([self.ssid isEqualToString:@"Other Network"])
+//    {
+//        
+//        if (indexPath.section == SEC_SECTION)
+//        {
+//            if (indexPath.row == SEC_INDEX)
+//            {
+//                [self changeSecurityType];
+//                
+//            }
+//        }
+//    }
     
     if (indexPath.section == SSID_SECTION)
     {
@@ -526,21 +556,23 @@
             [tfSsid setUserInteractionEnabled:TRUE];
             [tfSsid becomeFirstResponder];
         }
-        
     }
     else if (indexPath.section == SEC_SECTION)
     {
-        
-        
         if (indexPath.row == PASSWORD_INDEX)
         {
             UITextField * txtField = (UITextField*) [passwordCell viewWithTag:200];
             [txtField becomeFirstResponder];
         }
+        
         if (indexPath.row == CONFPASSWORD_INDEX)
         {
             UITextField * txtField = (UITextField*) [confPasswordCell viewWithTag:201];
             [txtField becomeFirstResponder];
+        }
+        else if (indexPath.row == SEC_INDEX && self.isOtherNetwork == TRUE)
+        {
+            [self changeSecurityType];
         }
     }
 }
@@ -553,30 +585,31 @@
     //load step 07
     NSLog(@"Load step 7");
     
+    NSLog(@"Load step 7");
+    
     
     //Load the next xib
-    //    Step_07_ViewController *step07ViewController = nil;
-    //
-    //    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-    //    {
-    //
-    //
-    //        step07ViewController = [[Step_07_ViewController alloc]
-    //                                initWithNibName:@"Step_07_ViewController_ipad" bundle:nil];
-    //
-    //    }
-    //    else
-    //    {
-    //        step07ViewController = [[Step_07_ViewController alloc]
-    //                                initWithNibName:@"Step_07_ViewController" bundle:nil];
-    //
-    //    }
-    //
-    //    step07ViewController.step06 = self;
-    //    [self.navigationController pushViewController:step07ViewController animated:NO];
-    //
-    //    [step07ViewController release];
+    Step_07_ViewController *step07ViewController = nil;
     
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        
+        
+        step07ViewController = [[Step_07_ViewController alloc]
+                                initWithNibName:@"Step_07_ViewController_ipad" bundle:nil];
+        
+    }
+    else
+    {
+        step07ViewController = [[Step_07_ViewController alloc]
+                                initWithNibName:@"Step_07_ViewController" bundle:nil];
+        
+    }
+    
+    step07ViewController.securityDelegate = self;
+    [self.navigationController pushViewController:step07ViewController animated:NO];
+    
+    [step07ViewController release];
 }
 
 
@@ -1108,5 +1141,14 @@
 	return FALSE;
 }
 
+- (void)handlerShowPasswordButon:(id)sender {
+    UIButton *button = sender;
+    [button setSelected:!button.selected];
+    [self.tfPassword setSecureTextEntry:!self.tfPassword.secureTextEntry];
+}
 
+#pragma mark - SecurityChangingDelegate
+- (void)changeSecurityType:(NSString *)security {
+    self.security = security;
+}
 @end
