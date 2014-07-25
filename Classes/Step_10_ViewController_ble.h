@@ -32,11 +32,7 @@
 #define ALERT_ADDCAM_SERVER_UNREACH 1
 
 @interface Step_10_ViewController_ble : UIViewController
-{
-    IBOutlet UIView * progressView; 
-    IBOutlet UILabel * userNameLabel;
-    IBOutlet UILabel * userEmailLabel;
-    
+{    
     //IBOutlet UIView * setupFailView, *setupCompleteView;
     IBOutlet UILabel * cameraName; 
     
@@ -55,9 +51,9 @@
 }
 
 @property (nonatomic,assign) IBOutlet UILabel * homeSSID;
-@property (nonatomic, assign) IBOutlet UIView * progressView; 
-@property (nonatomic, assign) IBOutlet UILabel * userNameLabel;
-@property (nonatomic, assign) IBOutlet UILabel * userEmailLabel,  * cameraName;
+@property (nonatomic, retain) IBOutlet UIView * progressView;
+@property (nonatomic, retain) IBOutlet UILabel * userNameLabel;
+@property (nonatomic, retain) IBOutlet UILabel * userEmailLabel,  * cameraName;
 //@property (nonatomic, assign) IBOutlet UIView * setupFailView, *setupCompleteView;
 
 @property (nonatomic, retain) NSString *cameraMac,  *master_key; 

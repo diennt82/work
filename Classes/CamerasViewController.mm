@@ -409,7 +409,7 @@
     
     if (_isRetrying)
     {
-        titleFooter = NSLocalizedStringWithDefaultValue(@"low_data_bandwidth_detected", nil, [NSBundle mainBundle], @"Low data bandwidth detected. ", nil);
+        titleFooter = NSLocalizedStringWithDefaultValue(@"low_data_bandwidth_detected_1", nil, [NSBundle mainBundle], @"Low data bandwidth detected. ", nil);
         
         NSString *retry = NSLocalizedStringWithDefaultValue(@"retrying", nil, [NSBundle mainBundle], @"Retrying...", nil);
         

@@ -177,6 +177,18 @@
         }
     }
     
+    NSString *message = NSLocalizedStringWithDefaultValue(@"take_up_to_a_minute", nil, [NSBundle mainBundle],
+                                                          @"This may take up to a minute", nil);
+    
+    if ([[[NSUserDefaults standardUserDefaults] stringForKey:FW_VERSION] compare:FW_VERSION_FACTORY_SHOULD_BE_UPGRADED] == NSOrderedSame)
+    {
+        message = NSLocalizedStringWithDefaultValue(@"note_camera_upgrade_lasted_software", nil, [NSBundle mainBundle],
+                                                    @"Note: Your camera may be upgraded to latest software. This may take about 5 minutes. During this time, you will not be able to access the camera.", nil);
+    }
+    
+    UILabel *lblProgress = (UILabel *)[_viewProgress viewWithTag:695];
+    lblProgress.text = message;
+    
     [BLEConnectionManager getInstanceBLE].delegate = self;
 }
 
