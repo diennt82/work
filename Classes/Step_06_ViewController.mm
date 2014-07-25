@@ -16,7 +16,7 @@
 #define RETRY_SETUP_WIFI_TIMES      5
 #define GAI_CATEGORY    @"Step 06 view"
 
-@interface Step_06_ViewController () <UITextFieldDelegate>
+@interface Step_06_ViewController () <UITextFieldDelegate, SecurityChangingDelegate>
 
 @property (retain, nonatomic) UITextField *tfSSID;
 @property (retain, nonatomic) UITextField *tfPassword;
@@ -545,7 +545,7 @@
         
     }
     
-    step07ViewController.step06 = self;
+    step07ViewController.securityDelegate = self;
     [self.navigationController pushViewController:step07ViewController animated:NO];
     
     [step07ViewController release];
@@ -1155,5 +1155,10 @@
             }
         }
     }
+}
+
+#pragma mark - SecurityChangingDelegate
+- (void)changeSecurityType:(NSString *)security {
+    self.security = security;
 }
 @end
