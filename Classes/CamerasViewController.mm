@@ -249,7 +249,6 @@
     MenuViewController *menuVC = (MenuViewController *)self.parentVC;
     
     cameraMenuCV.cameraMenuDelegate = menuVC.menuDelegate;
-    //menuVC.navigationItem.title = @"Menu";
     [menuVC.navigationController pushViewController:cameraMenuCV animated:YES];
     
     [cameraMenuCV release];
@@ -399,6 +398,39 @@
     return 108;
 }
 
+- (CGFloat )tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return 44;
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
+{
+    NSString *titleFooter = nil;
+    
+    if (_isRetrying)
+    {
+        titleFooter = NSLocalizedStringWithDefaultValue(@"low_data_bandwidth_detected_1", nil, [NSBundle mainBundle], @"Low data bandwidth detected. ", nil);
+        
+        NSString *retry = NSLocalizedStringWithDefaultValue(@"retrying", nil, [NSBundle mainBundle], @"Retrying...", nil);
+        
+        titleFooter = [titleFooter stringByAppendingString:retry];
+    }
+    else if (!_camChannels ||
+        _camChannels.count == 0)
+    {
+        if (_waitingForUpdateData)
+        {
+            titleFooter = NSLocalizedStringWithDefaultValue(@"loading", nil, [NSBundle mainBundle], @"Loading...", nil);
+        }
+        else
+        {
+            titleFooter = NSLocalizedStringWithDefaultValue(@"no_camera_in_account", nil, [NSBundle mainBundle], @"There is no camera in current account.", nil);
+        }
+    }
+    
+    return titleFooter;
+}
+
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
     if (scrollView.contentOffset.y < -64.0f)
@@ -490,7 +522,14 @@
         cell.backgroundColor = [UIColor blackColor];
         
         CamChannel *ch = (CamChannel *)[_camChannels objectAtIndex:indexPath.row];
+#if 1
+        UIImage *imgCamera = [UIImage imageNamed:@"camera_focus_66"];
         
+        if ([[ch.profile getModel] hasPrefix:CP_MODEL_008])
+        {
+            imgCamera = [UIImage imageNamed:@"camera_mbp_83"];
+        }
+#else
         NSString *strPath = [strDocDirPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.jpg",ch.profile.registrationID]];
         
         UIImage *imgCamera = [UIImage imageWithContentsOfFile:strPath];
@@ -503,6 +542,7 @@
                 imgCamera = [UIImage imageNamed:@"camera_focus_66"];
             }
         }
+#endif
         
         //NSLog(@"-- %@",ch.profile.snapUrl);
         if(ch.profile.snapUrl != nil)
@@ -513,9 +553,16 @@
                                    placeholderImage:imgCamera 
                                    options:SDWebImageRefreshCached];
             }
+            else
+            {
+                [cell.snapshotImage setImage:imgCamera];
+            }
         }
-        
-        [cell.snapshotImage setImage:imgCamera];
+        else
+        {
+            NSLog(@"%s snapUrl == nil.", __FUNCTION__);
+            [cell.snapshotImage setImage:imgCamera];
+        }
         
         cell.ibCameraNameLabel.text = ch.profile.name;
         NSString *boundCameraName = ch.profile.name;

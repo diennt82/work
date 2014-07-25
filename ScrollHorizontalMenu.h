@@ -47,4 +47,5 @@
 @property (nonatomic, assign) BOOL isAllButtonDeselected;
 -(void) reloadData:(BOOL)isLand;
 -(void) setSelectedIndex:(int) index animated:(BOOL) animated;
+- (void)resetStatus;
 @end

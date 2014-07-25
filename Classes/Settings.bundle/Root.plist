@@ -24,32 +24,6 @@
 		</dict>
 		<dict>
 			<key>Title</key>
-			<string>Remote stream</string>
-			<key>Type</key>
-			<string>PSGroupSpecifier</string>
-		</dict>
-		<dict>
-			<key>DefaultValue</key>
-			<false/>
-			<key>Key</key>
-			<string>remote_only</string>
-			<key>Title</key>
-			<string>Use Remote Only</string>
-			<key>Type</key>
-			<string>PSToggleSwitchSpecifier</string>
-		</dict>
-		<dict>
-			<key>DefaultValue</key>
-			<true/>
-			<key>Key</key>
-			<string>remote_view_timeout</string>
-			<key>Title</key>
-			<string>Remote View Timeout</string>
-			<key>Type</key>
-			<string>PSToggleSwitchSpecifier</string>
-		</dict>
-		<dict>
-			<key>Title</key>
 			<string>Alert</string>
 			<key>Type</key>
 			<string>PSGroupSpecifier</string>

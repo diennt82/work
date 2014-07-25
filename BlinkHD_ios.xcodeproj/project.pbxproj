@@ -136,6 +136,8 @@
 		84E9D1CD18B728A000468918 /* libpjnath-arm-apple-darwin9.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 84E9D1CA18B728A000468918 /* libpjnath-arm-apple-darwin9.a */; };
 		84F27EC118AE10750000CA7A /* UARTPeripheral.m in Sources */ = {isa = PBXBuildFile; fileRef = 84F27EC018AE10750000CA7A /* UARTPeripheral.m */; };
 		84FD1DCF1832399E00238089 /* stream720p_10_926_alaw.sdp in Resources */ = {isa = PBXBuildFile; fileRef = 84FD1DCE1832399E00238089 /* stream720p_10_926_alaw.sdp */; };
+		8B08B7B1197F893300ED1BDD /* alert@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B08B7AF197F893300ED1BDD /* alert@2x.png */; };
+		8B08B7B2197F893300ED1BDD /* alert.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B08B7B0197F893300ED1BDD /* alert.png */; };
 		8B1D544D186581B8008857F0 /* SchedulerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B1D544C186581B8008857F0 /* SchedulerCell.m */; };
 		8B1D544F186581CD008857F0 /* SchedulerCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B1D544E186581CD008857F0 /* SchedulerCell.xib */; };
 		8B1D5453186587CB008857F0 /* CellImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B1D5452186587CB008857F0 /* CellImageView.m */; };
@@ -963,6 +965,8 @@
 		84E9D1CA18B728A000468918 /* libpjnath-arm-apple-darwin9.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libpjnath-arm-apple-darwin9.a"; path = "../ios-frameworks/pjsip/dist-uarch/lib/libpjnath-arm-apple-darwin9.a"; sourceTree = "<group>"; };
 		84F27EC018AE10750000CA7A /* UARTPeripheral.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UARTPeripheral.m; sourceTree = "<group>"; };
 		84FD1DCE1832399E00238089 /* stream720p_10_926_alaw.sdp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stream720p_10_926_alaw.sdp; sourceTree = "<group>"; };
+		8B08B7AF197F893300ED1BDD /* alert@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "alert@2x.png"; sourceTree = "<group>"; };
+		8B08B7B0197F893300ED1BDD /* alert.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = alert.png; sourceTree = "<group>"; };
 		8B1D544B186581B8008857F0 /* SchedulerCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SchedulerCell.h; sourceTree = "<group>"; };
 		8B1D544C186581B8008857F0 /* SchedulerCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SchedulerCell.m; sourceTree = "<group>"; };
 		8B1D544E186581CD008857F0 /* SchedulerCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SchedulerCell.xib; sourceTree = "<group>"; };
@@ -1947,6 +1951,8 @@
 		3812F82315C8BEC700DADFA6 /* images13 */ = {
 			isa = PBXGroup;
 			children = (
+				8B08B7AF197F893300ED1BDD /* alert@2x.png */,
+				8B08B7B0197F893300ED1BDD /* alert.png */,
 				8B99DB9218B8759A0009612A /* Default-568h@2x.png */,
 				8B97A3C118BF1B5F008A38E1 /* Hubble_back_text@2x.png */,
 				8B97A3C218BF1B5F008A38E1 /* Hubble_back_text.png */,
@@ -3766,6 +3772,7 @@
 				8B29A00A18AF500900D36BE5 /* video_action_temp_pressed.png in Resources */,
 				8B9507B418C9960D006D4945 /* setup_camera_medium.png in Resources */,
 				8B29A01818AF500900D36BE5 /* launch_logo.png in Resources */,
+				8B08B7B2197F893300ED1BDD /* alert.png in Resources */,
 				8B299F7F18AF500900D36BE5 /* camera_action_pan_knob_shadow_land.png in Resources */,
 				8B299FEE18AF500900D36BE5 /* outline_circle.png in Resources */,
 				8B29A04418AF500A00D36BE5 /* remove_camera@2x.png in Resources */,
@@ -4158,6 +4165,7 @@
 				8B9ABBB918AA2AC30079F4A3 /* CameraMenuViewController.xib in Resources */,
 				8B977B7218C709A100A61115 /* PAIRInstructionViewController.xib in Resources */,
 				A18635F218B6F43F00CB5CDA /* CellMelody.xib in Resources */,
+				8B08B7B1197F893300ED1BDD /* alert@2x.png in Resources */,
 				A1ABF1BB187538280014FCB4 /* CreateBLEConnection_VController.xib in Resources */,
 				8B29A07718AF500A00D36BE5 /* video_overlay_bg.png in Resources */,
 				8B299FA718AF500900D36BE5 /* camera_action_pan_knob.png in Resources */,
@@ -4509,7 +4517,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = HubbleHome;
-				PROVISIONING_PROFILE = "8821D41A-DC34-49AE-86CF-93C16E99264B";
+				PROVISIONING_PROFILE = "6005205D-B6D0-404C-8272-0A61B5418CCB";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
 				VALID_ARCHS = "armv6 armv7";
@@ -4559,7 +4567,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = HubbleHome;
-				PROVISIONING_PROFILE = "8821D41A-DC34-49AE-86CF-93C16E99264B";
+				PROVISIONING_PROFILE = "6005205D-B6D0-404C-8272-0A61B5418CCB";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
 				VALIDATE_PRODUCT = YES;
@@ -4632,7 +4640,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = HubbleHome;
-				PROVISIONING_PROFILE = "8821D41A-DC34-49AE-86CF-93C16E99264B";
+				PROVISIONING_PROFILE = "6005205D-B6D0-404C-8272-0A61B5418CCB";
 				RAMEWORK_SEARCH_PATHS = "$(inherited) \"$(SRCROOT)\"";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";

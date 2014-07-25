@@ -16,7 +16,7 @@
 #define RETRY_SETUP_WIFI_TIMES      5
 #define GAI_CATEGORY    @"Step 06 view"
 
-@interface Step_06_ViewController () <UITextFieldDelegate>
+@interface Step_06_ViewController () <UITextFieldDelegate, SecurityChangingDelegate>
 
 @property (retain, nonatomic) UITextField *tfSSID;
 @property (retain, nonatomic) UITextField *tfPassword;
@@ -179,11 +179,17 @@
     [self.tableView addGestureRecognizer:tap];
     [tap release];
     
+    NSString *message = NSLocalizedStringWithDefaultValue(@"take_up_to_a_minute", nil, [NSBundle mainBundle],
+                                                          @"This may take up to a minute", nil);
+    
     if ([[[NSUserDefaults standardUserDefaults] stringForKey:FW_VERSION] compare:FW_VERSION_FACTORY_SHOULD_BE_UPGRADED] == NSOrderedSame)
     {
-        UILabel *lblProgress = (UILabel *)[_progressView viewWithTag:695];
-        lblProgress.text = @"Note : Your camera may be upgraded to latest software. This may take about 5 minutes. During this time, you will not be able to access the camera.";
+        message = NSLocalizedStringWithDefaultValue(@"note_camera_upgrade_lasted_software", nil, [NSBundle mainBundle],
+                                                              @"Note: Your camera may be upgraded to latest software. This may take about 5 minutes. During this time, you will not be able to access the camera.", nil);
     }
+    
+    UILabel *lblProgress = (UILabel *)[_progressView viewWithTag:695];
+    lblProgress.text = message;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -545,7 +551,7 @@
         
     }
     
-    step07ViewController.step06 = self;
+    step07ViewController.securityDelegate = self;
     [self.navigationController pushViewController:step07ViewController animated:NO];
     
     [step07ViewController release];
@@ -1155,5 +1161,10 @@
             }
         }
     }
+}
+
+#pragma mark - SecurityChangingDelegate
+- (void)changeSecurityType:(NSString *)security {
+    self.security = security;
 }
 @end

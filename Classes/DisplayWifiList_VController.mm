@@ -245,7 +245,18 @@
 {
     NSLog(@"Load step 6: Input network info");
     //Load the next xib
-    NetworkInfoToCamera_VController *netWorkInfoViewController = [[NetworkInfoToCamera_VController alloc] init];
+    NetworkInfoToCamera_VController *netWorkInfoViewController = nil;
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        netWorkInfoViewController = [[NetworkInfoToCamera_VController alloc]
+                                initWithNibName:@"NetworkInfoToCamera_VController_iPad" bundle:nil];
+    }
+    else
+    {
+        netWorkInfoViewController = [[NetworkInfoToCamera_VController alloc]
+                                initWithNibName:@"NetworkInfoToCamera_VController" bundle:nil];
+    }
     
     NSRange noQoute = NSMakeRange(1, _selectedWifiEntry.ssid_w_quote.length - 2);
     

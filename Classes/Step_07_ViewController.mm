@@ -15,7 +15,6 @@
 @implementation Step_07_ViewController
 @synthesize  cellView;
 @synthesize securityTypes;
-@synthesize  step06; 
 @synthesize  sec_index; 
 
 -(void)dealloc
@@ -214,8 +213,10 @@
         oldCell.accessoryType = UITableViewCellAccessoryNone;
     }
     
-    
-    step06.security = [securityTypes objectAtIndex:self.sec_index];
+    if ([self.securityDelegate respondsToSelector:@selector(changeSecurityType:)])
+    {
+        [self.securityDelegate changeSecurityType:[securityTypes objectAtIndex:self.sec_index]];
+    }
 }
 
 

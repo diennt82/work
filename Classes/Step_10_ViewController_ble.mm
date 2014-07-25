@@ -23,7 +23,6 @@
 
 @implementation Step_10_ViewController_ble
 
-@synthesize  userNameLabel, userEmailLabel,progressView ;
 @synthesize  cameraMac, master_key;
 @synthesize  cameraName;
 
@@ -44,13 +43,12 @@
 -(void) dealloc
 {
     
-    //[userNameLabel release];
-    //[userEmailLabel release];
+    [_userNameLabel release];
+    [_userEmailLabel release];
+    [_progressView release];
     [_jsonCommBlocked release];
     [cameraMac release];
     [master_key release];
-    
-    
     [_userAccount release];
     [super dealloc];
 }
@@ -103,10 +101,24 @@
     imageView.animationDuration = 1.5;
     imageView.animationRepeatCount = 0;
     
+    NSString *fwVersion = [userDefaults stringForKey:FW_VERSION];
+    
+    NSString *message = NSLocalizedStringWithDefaultValue(@"take_up_to_a_minute", nil, [NSBundle mainBundle],
+                                                          @"This may take up to a minute", nil);
+    
+    if ([fwVersion compare:FW_VERSION_FACTORY_SHOULD_BE_UPGRADED] == NSOrderedSame)
+    {
+        message = NSLocalizedStringWithDefaultValue(@"note_camera_upgrade_lasted_software", nil, [NSBundle mainBundle],
+                                                    @"Note: Your camera may be upgraded to latest software. This may take about 5 minutes. During this time, you will not be able to access the camera.", nil);
+    }
+    
+    UILabel *lblProgress = (UILabel *)[_progressView viewWithTag:695];
+    lblProgress.text = message;
+    
     [self.view addSubview:self.progressView];
     [imageView startAnimating];
     self.progressView.hidden = NO;
-    [self.view bringSubviewToFront:self.progressView];
+    [self.view bringSubviewToFront:_progressView];
     
     //CameraTest: try to search for camera now..
     

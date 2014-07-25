@@ -51,7 +51,7 @@
 #define DEFAULT_MAX_RECORD_SIZE 50
 
 #define SCAN_TIMEOUT 5*60//5*60 //5 mins
-#define SCAN_CAM_TIMEOUT_BLE 2*60//5*60 //5 mins
+#define SCAN_CAM_TIMEOUT_BLE 3*60//5*60 //5 mins
 //#define AIBALL_QUERY_REQUEST_STRING   @"Mot-Cam QUERY   *               192.168.3.125  "
 #define AIBALL_QUERY_REQUEST_STRING   @"Mot-Cam QUERY   *               "
 
@@ -178,12 +178,13 @@
 #define IS_FAHRENHEIT   @"IS_FAHRENHEIT"
 
 
-// Alert type
 #define ALERT_GENERIC_SERVER_INFO @"999999"
 #define  ALERT_TYPE_SOUND   @"1"
 #define  ALERT_TYPE_TEMP_HI @"2"
 #define  ALERT_TYPE_TEMP_LO @"3"
 #define  ALERT_TYPE_MOTION  @"4"
+#define  ALERT_TYPE_PASSWORD_CHANGED  @"7"
+#define  ALERT_TYPE_REMOVED_CAM @"8"
 
 #endif /* PUBLICDEFINE_H_ */
 

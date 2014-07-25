@@ -786,19 +786,6 @@
     self.ib_timerPlayBack.text = [NSString stringWithFormat:@"%02d:%02d / %02d:%02d", currentTime / 60, currentTime % 60, totalTime / 60, totalTime % 60];
 }
 
-- (NSString *) timeFormat: (float) seconds {
-    NSLog(@"%s seconds: %f", __FUNCTION__, seconds);
-    int minutes = seconds / 60;
-    int sec     = fabs(round((int)seconds % 60));
-    
-    return [NSString stringWithFormat:@"%02d:%02d", minutes, sec];
-    
-//    NSString *cm = minutes <= 9 ? @"00": @"";
-//    NSString *cs = sec <= 9 ? @"00": @"";
-//    
-//    return [NSString stringWithFormat:@"%@%i:%@%i", cm, minutes, cs, sec];
-}
-
 #pragma mark - Poll camera events
 
 -(void) getCameraPlaylistForEvent:(NSTimer *) clipTimer

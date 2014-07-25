@@ -9,21 +9,19 @@
 #import <UIKit/UIKit.h>
 #import "Step_06_ViewController.h"
 
+@protocol SecurityChangingDelegate <NSObject>
+- (void)changeSecurityType:(NSString *)security;
+@end
 
-@class  Step_06_ViewController; 
 @interface Step_07_ViewController : UIViewController
 {
     NSArray * securityTypes;
     
     IBOutlet UITableViewCell * cellView;
-
-    
-    
-    Step_06_ViewController * step06; 
     int sec_index; 
 }
 @property (nonatomic, assign) int sec_index;
-@property (nonatomic, assign ) Step_06_ViewController * step06;
+@property (nonatomic, assign) id <SecurityChangingDelegate> securityDelegate;
 @property (nonatomic, retain) IBOutlet UITableViewCell * cellView;
 @property (nonatomic, retain)  NSArray * securityTypes;
 @end
