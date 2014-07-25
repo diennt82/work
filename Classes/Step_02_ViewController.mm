@@ -170,7 +170,7 @@
     {
         // Show Focus73 list.
         Focus73TableViewController *focus73 = [[Focus73TableViewController alloc] init];
-        [self.navigationController pushViewController:focus73 animated:YES];
+        [self.navigationController pushViewController:focus73 animated:NO];
         [focus73 release];
     }
     else
@@ -187,7 +187,7 @@
             step03ViewController = [[Step_03_ViewController alloc] initWithNibName:@"Step_03_ViewController" bundle:nil];
         }
         step03ViewController.delegate = self;
-        [self.navigationController pushViewController:step03ViewController animated:YES];
+        [self.navigationController pushViewController:step03ViewController animated:NO];
         
         [step03ViewController release];
     }
