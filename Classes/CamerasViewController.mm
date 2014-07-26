@@ -561,7 +561,7 @@
         else
         {
             NSLog(@"%s snapUrl == nil.", __FUNCTION__);
-            [cell.snapshotImage setImage:imgCamera];
+            //[cell.snapshotImage setImage:imgCamera];
         }
         
         cell.ibCameraNameLabel.text = ch.profile.name;

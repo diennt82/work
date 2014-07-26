@@ -22,6 +22,7 @@
 @property (retain, nonatomic) UITextField *tfPassword;
 @property (retain, nonatomic) UITextField *tfConfirmPass;
 @property (assign, nonatomic) IBOutlet UITableView *tableView;
+@property (retain, nonatomic) IBOutlet UIButton *btnContinue;
 
 @end
 
@@ -55,6 +56,7 @@
     [_progressView release];
     [_infoSelectCameView release];
     [_scrollViewGuide release];
+    [_btnContinue release];
     [super dealloc];
 }
 
@@ -80,18 +82,19 @@
     [barBtnHubble setTintColor:[UIColor colorWithPatternImage:hubbleLogoBack]];
     
     self.navigationItem.leftBarButtonItem = barBtnHubble;
-    
-    UIBarButtonItem *nextButton =
-    [[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"next",nil, [NSBundle mainBundle],
-                                                                             @"Next", nil)
-     
-                                     style:UIBarButtonItemStylePlain
-                                    target:self
-                                    action:@selector(handleNextButton:)];
-    
-    self.navigationItem.rightBarButtonItem = nextButton;
-    self.navigationItem.rightBarButtonItem.enabled = NO;
-    [nextButton release];
+//    
+//    UIBarButtonItem *nextButton =
+//    [[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"next",nil, [NSBundle mainBundle],
+//                                                                             @"Next", nil)
+//     
+//                                     style:UIBarButtonItemStylePlain
+//                                    target:self
+//                                    action:@selector(handleNextButton:)];
+//    
+//    self.navigationItem.rightBarButtonItem = nextButton;
+//    self.navigationItem.rightBarButtonItem.enabled = NO;
+//    [nextButton release];
+    self.btnContinue.enabled = NO;
     
     UIImageView *imageView = (UIImageView *)[_progressView viewWithTag:595];
     imageView.animationImages =[NSArray arrayWithObjects:
@@ -161,6 +164,7 @@
                [[self.security lowercaseString] isEqualToString:@"open"])))
         {
             self.navigationItem.rightBarButtonItem.enabled = YES;
+            self.btnContinue.enabled = YES;
             self.navigationItem.rightBarButtonItem.tintColor = [UIColor blueColor];
             self.tfPassword.text = self.deviceConf.key;
             self.tfConfirmPass.text = self.deviceConf.key;
@@ -241,10 +245,12 @@
         }
         if (ssidTextLength > 0 && [self.tfPassword.text isEqualToString:self.tfConfirmPass.text]) {
             self.navigationItem.rightBarButtonItem.enabled = YES;
+            self.btnContinue.enabled = YES;
             self.navigationItem.rightBarButtonItem.tintColor = [UIColor blueColor];
         }
         else {
             self.navigationItem.rightBarButtonItem.enabled = NO;
+            self.btnContinue.enabled = NO;
             self.navigationItem.rightBarButtonItem.tintColor = nil;
         }
     }
@@ -264,10 +270,12 @@
         }
         if (self.tfSSID.text.length > 0 && passString.length>0) {
             self.navigationItem.rightBarButtonItem.enabled = YES;
+            self.btnContinue.enabled = YES;
             self.navigationItem.rightBarButtonItem.tintColor = [UIColor blueColor];
         }
         else {
             self.navigationItem.rightBarButtonItem.enabled = NO;
+            self.btnContinue.enabled = NO;
             self.navigationItem.rightBarButtonItem.tintColor = nil;
         }
     }
@@ -287,10 +295,12 @@
         }
         if (self.tfSSID.text.length > 0 && [self.tfPassword.text isEqualToString:confirmPassString]) {
             self.navigationItem.rightBarButtonItem.enabled = YES;
+            self.btnContinue.enabled = YES;
             self.navigationItem.rightBarButtonItem.tintColor = [UIColor blueColor];
         }
         else {
             self.navigationItem.rightBarButtonItem.enabled = NO;
+            self.btnContinue.enabled = NO;
             self.navigationItem.rightBarButtonItem.tintColor = nil;
         }
     }
@@ -557,7 +567,7 @@
     [step07ViewController release];
 }
 
-- (void)handleNextButton:(id) sender
+- (IBAction)handleNextButton:(id) sender
 {
     [[HoldOnCamWifi shareInstance] stopHolder];
     
@@ -569,6 +579,7 @@
     //create progressView for process verify network
     self.navigationItem.leftBarButtonItem.enabled = NO; // Disable go back
     self.navigationItem.rightBarButtonItem.enabled = NO;
+    self.btnContinue.enabled = NO;
     [self.view addSubview:self.progressView];
     [self.progressView setHidden:NO];
     
@@ -586,6 +597,7 @@
             //error
             self.navigationItem.leftBarButtonItem.enabled = YES; // enable go back
             self.navigationItem.rightBarButtonItem.enabled = YES;
+            self.btnContinue.enabled = YES;
             [self.progressView removeFromSuperview];
             
             //ERROR condition
@@ -621,6 +633,7 @@
             //error
             self.navigationItem.leftBarButtonItem.enabled = YES; // enable go back
             self.navigationItem.rightBarButtonItem.enabled = YES;
+            self.btnContinue.enabled = YES;
             [self.progressView removeFromSuperview];
             
            // NSString * msg_fail = NSLocalizedStringWithDefaultValue(@"Confirm_Pass_Fail", nil, [NSBundle mainBundle], @"Le mot de passe ne correspond pas. S'il vous plaît, saisir à nouveau !", nil);

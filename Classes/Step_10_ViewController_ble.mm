@@ -375,8 +375,17 @@
     NSLog(@"Load step 12- + dboule check");
     
     //Load the next xib
-    Step_12_ViewController *step12ViewController = [[Step_12_ViewController alloc]
-                                init];
+    Step_12_ViewController *step12ViewController = nil;
+    
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        step12ViewController = [[Step_12_ViewController alloc] initWithNibName:@"Step_12_ViewController_ipad" bundle:nil];
+    }
+    else
+    {
+        step12ViewController = [[Step_12_ViewController alloc] initWithNibName:@"Step_12_ViewController" bundle:nil];
+    }
     
     [self.navigationController pushViewController:step12ViewController animated:NO];
     

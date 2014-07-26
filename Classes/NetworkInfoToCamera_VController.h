@@ -50,10 +50,10 @@
 
 
 
--(void) handleNextButton:(id) sender;
+
 -(void) sendWifiInfoToCamera; 
 - (BOOL) restoreDataIfPossible;
 -(void) prepareWifiInfo;
 
-
+-(IBAction) handleNextButton:(id) sender;
 @end

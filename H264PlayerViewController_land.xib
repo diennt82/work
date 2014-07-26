@@ -9,6 +9,7 @@
             <connections>
                 <outlet property="activityIndicator" destination="A9Z-og-cX4" id="TaZ-U8-Zbe"/>
                 <outlet property="activityStopStreamingProgress" destination="pLL-JR-pvR" id="Jp8-RI-qp1"/>
+                <outlet property="btnSendingLog" destination="cGr-aP-XE9" id="aWy-Pk-Jb1"/>
                 <outlet property="customIndicator" destination="yns-Yb-cgQ" id="p59-vt-qne"/>
                 <outlet property="horizMenu" destination="Meo-mp-L42" id="GEV-Ih-WZ1"/>
                 <outlet property="ib_ViewTouchToTalk" destination="WJv-oB-VFG" id="4Ti-Be-A6e"/>
@@ -43,8 +44,8 @@
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                 </activityIndicatorView>
-                <scrollView autoresizesSubviews="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="yil-Y6-pAr">
-                    <rect key="frame" x="0.0" y="0.0" width="568" height="320"/>
+                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="yil-Y6-pAr">
+                    <rect key="frame" x="0.0" y="0.0" width="480" height="320"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <imageView autoresizesSubviews="NO" userInteractionEnabled="NO" contentMode="scaleToFill" id="kJh-sp-2JE">
@@ -90,7 +91,7 @@
                     </subviews>
                 </scrollView>
                 <scrollView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="Meo-mp-L42" customClass="ScrollHorizontalMenu">
-                    <rect key="frame" x="0.0" y="263" width="480" height="41"/>
+                    <rect key="frame" x="0.0" y="260" width="480" height="41"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" white="0.33333333333333331" alpha="0.19" colorSpace="calibratedWhite"/>
                     <inset key="insetFor6xAndEarlier" minX="0.0" minY="30" maxX="0.0" maxY="-30"/>
@@ -231,7 +232,7 @@
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="cGr-aP-XE9">
-                    <rect key="frame" x="430" y="280" width="46" height="30"/>
+                    <rect key="frame" x="430" y="277" width="46" height="37"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                     <state key="normal">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>

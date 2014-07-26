@@ -18,6 +18,7 @@
 
 @property (retain, nonatomic) IBOutlet UIView *viewProgress;
 @property (retain, nonatomic) IBOutlet UIView *viewError;
+@property (retain, nonatomic) IBOutlet UIButton *btnContinueMain;
 
 @property (retain, nonatomic) UITextField *tfSSID;
 @property (retain, nonatomic) UITextField *tfPassword;
@@ -55,6 +56,7 @@
     [_deviceConf release];
     [_ib_dialogVerifyNetwork release];
     [_viewProgress release];
+    [_btnContinueMain release];
     [super dealloc];
 }
 
@@ -117,7 +119,7 @@
         
     }
     
-    
+#if 0
     UIBarButtonItem *nextButton =
     [[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"next",nil, [NSBundle mainBundle],
                                                                              @"Next", nil)
@@ -128,6 +130,8 @@
     self.navigationItem.rightBarButtonItem = nextButton;
     self.navigationItem.rightBarButtonItem.enabled = NO;
     [nextButton release];
+#endif
+    self.btnContinueMain.enabled = NO;
     
     self.tfSSID = (UITextField *)[self.ssidCell viewWithTag:202];
     
@@ -171,6 +175,7 @@
         {
             
             self.navigationItem.rightBarButtonItem.enabled = YES;
+            self.btnContinueMain.enabled = YES;
             self.navigationItem.rightBarButtonItem.tintColor = [UIColor blueColor];
             
             self.tfPassword.text = self.deviceConf.key;
@@ -259,10 +264,12 @@
         }
         if (ssidTextLength > 0 && self.tfPassword.text.length>0) {
             self.navigationItem.rightBarButtonItem.enabled = YES;
+            self.btnContinueMain.enabled = YES;
             self.navigationItem.rightBarButtonItem.tintColor = [UIColor blueColor];
         }
         else {
             self.navigationItem.rightBarButtonItem.enabled = NO;
+            self.btnContinueMain.enabled = NO;
             self.navigationItem.rightBarButtonItem.tintColor = nil;
         }
     }
@@ -282,10 +289,12 @@
         }
         if (self.tfSSID.text.length > 0 && passString.length>0) {
             self.navigationItem.rightBarButtonItem.enabled = YES;
+            self.btnContinueMain.enabled = YES;
             self.navigationItem.rightBarButtonItem.tintColor = [UIColor blueColor];
         }
         else {
             self.navigationItem.rightBarButtonItem.enabled = NO;
+            self.btnContinueMain.enabled = NO;
             self.navigationItem.rightBarButtonItem.tintColor = nil;
         }
     }
@@ -305,10 +314,12 @@
         }
         if (self.tfSSID.text.length > 0 && [self.tfPassword.text isEqualToString:confirmPassString]) {
             self.navigationItem.rightBarButtonItem.enabled = YES;
+            self.btnContinueMain.enabled = YES;
             self.navigationItem.rightBarButtonItem.tintColor = [UIColor blueColor];
         }
         else {
             self.navigationItem.rightBarButtonItem.enabled = NO;
+            self.btnContinueMain.enabled = NO;
             self.navigationItem.rightBarButtonItem.tintColor = nil;
         }
     }
@@ -614,7 +625,7 @@
 
 
 
--(void) handleNextButton:(id) sender
+-(IBAction) handleNextButton:(id) sender
 {
     //check if password is ok?
     
@@ -649,7 +660,7 @@
     if ([self.security isEqualToString:@"open"])
     {
         self.navigationItem.rightBarButtonItem.enabled = NO;
-        
+        self.btnContinueMain.enabled = NO;
         
         /* Start timer to check for camera connection issue */
         
@@ -695,7 +706,7 @@
             
           
             self.navigationItem.rightBarButtonItem.enabled = NO;
-
+            self.btnContinueMain.enabled = NO;
             
             /* Start timer to check for camera connection issue */
             self.timerTimeoutConnectBLE  = [NSTimer scheduledTimerWithTimeInterval:BLE_TIMEOUT_PROCESS

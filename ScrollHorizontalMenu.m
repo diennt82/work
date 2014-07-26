@@ -58,7 +58,7 @@
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
             marginLR = kLeftOffset + 60; //padding left and right = 100
-            buttonWidth = 60; //60 for iPad
+            buttonWidth = 55; //55 for iPad
             paddingBetweenButton = 65;
             xPos = 218;
         }
@@ -83,7 +83,7 @@
         {
             marginLR = 0; //padding left and right = 100
             xPos = 130; //
-            buttonWidth = 60; //60 for iPad
+            buttonWidth = 55; //55 for iPad
             paddingBetweenButton = 50;
         }
         else
@@ -115,7 +115,7 @@
         [customButton setBackgroundImage:[UIImage imageNamed:imageSelected] forState:UIControlStateSelected];
         customButton.tag = tag++;
         [customButton addTarget:self action:@selector(buttonTapped:) forControlEvents:UIControlEventTouchUpInside];
-        customButton.frame = CGRectMake(xPos, 0, buttonWidth, buttonWidth);
+        customButton.frame = CGRectMake(xPos, 1, buttonWidth, buttonWidth);
         
         xPos += buttonWidth;
         xPos += paddingBetweenButton;
