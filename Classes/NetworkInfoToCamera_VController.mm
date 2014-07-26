@@ -117,7 +117,7 @@
         
     }
     
-    
+#if 0
     UIBarButtonItem *nextButton =
     [[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"next",nil, [NSBundle mainBundle],
                                                                              @"Next", nil)
@@ -128,6 +128,7 @@
     self.navigationItem.rightBarButtonItem = nextButton;
     self.navigationItem.rightBarButtonItem.enabled = NO;
     [nextButton release];
+#endif
     
     self.tfSSID = (UITextField *)[self.ssidCell viewWithTag:202];
     
@@ -614,7 +615,7 @@
 
 
 
--(void) handleNextButton:(id) sender
+-(IBAction) handleNextButton:(id) sender
 {
     //check if password is ok?
     
