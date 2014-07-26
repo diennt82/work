@@ -9,6 +9,7 @@
             <connections>
                 <outlet property="activityIndicator" destination="dcy-ii-kbn" id="T4H-nP-FoF"/>
                 <outlet property="activityStopStreamingProgress" destination="vBK-pC-VxX" id="piL-a5-2BP"/>
+                <outlet property="btnSendingLog" destination="h68-lY-yqv" id="nUs-6D-B9t"/>
                 <outlet property="customIndicator" destination="Csm-gN-pH3" id="ANm-cK-kVq"/>
                 <outlet property="horizMenu" destination="ftH-qh-QfZ" id="JdE-S9-yCk"/>
                 <outlet property="ib_ViewTouchToTalk" destination="2Nr-tN-W6C" id="wAW-Ms-mzf"/>
@@ -91,7 +92,7 @@
                     </subviews>
                 </scrollView>
                 <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="ftH-qh-QfZ" customClass="ScrollHorizontalMenu">
-                    <rect key="frame" x="0.0" y="705" width="1024" height="60"/>
+                    <rect key="frame" x="0.0" y="695" width="1024" height="60"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" white="0.33333333329999998" alpha="0.19" colorSpace="calibratedWhite"/>
                     <connections>
@@ -217,7 +218,7 @@
                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="ZlS-dN-ndj">
+                <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="ZlS-dN-ndj">
                     <rect key="frame" x="10" y="704" width="61" height="61"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <state key="normal">
@@ -227,8 +228,8 @@
                         <action selector="showInfoDebug:" destination="-1" eventType="touchUpInside" id="p3n-cX-3hk"/>
                     </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="h68-lY-yqv">
-                    <rect key="frame" x="961" y="725" width="55" height="30"/>
+                <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="h68-lY-yqv">
+                    <rect key="frame" x="961" y="716" width="55" height="49"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                     <state key="normal">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
