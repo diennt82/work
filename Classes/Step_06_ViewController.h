@@ -53,8 +53,8 @@
 
 
 
+- (IBAction)handleNextButton:(id) sender;
 
--(void) handleNextButton:(id) sender;
 -(void) sendWifiInfoToCamera; 
 - (BOOL) restoreDataIfPossible;
 -(void) prepareWifiInfo;

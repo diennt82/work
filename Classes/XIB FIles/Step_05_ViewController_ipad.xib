@@ -10,7 +10,7 @@
                 <outlet property="btnContinue" destination="lLb-sF-TYy" id="ZGn-oY-dcG"/>
                 <outlet property="cellOtherNetwork" destination="dNA-ai-fPo" id="vEL-I2-aqn"/>
                 <outlet property="cellRefresh" destination="MfA-bL-1xV" id="rQc-WH-3o5"/>
-                <outlet property="mTableView" destination="5" id="7"/>
+                <outlet property="mTableView" destination="6FT-ia-Ptf" id="83m-a1-NaZ"/>
                 <outlet property="view" destination="3" id="8"/>
                 <outlet property="viewProgress" destination="gN4-1a-vyM" id="6aQ-f0-qLB"/>
             </connections>
@@ -45,13 +45,14 @@
                     <color key="textColor" red="0.062745098040000002" green="0.062745098040000002" blue="0.062745098040000002" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <tableView clipsSubviews="YES" tag="11" contentMode="scaleToFill" bounces="NO" style="grouped" separatorStyle="default" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="5">
+                <tableView clipsSubviews="YES" tag="11" contentMode="scaleToFill" bounces="NO" style="grouped" separatorStyle="none" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="6FT-ia-Ptf">
                     <rect key="frame" x="83" y="262" width="601" height="682"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                    <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <color key="sectionIndexTrackingBackgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <connections>
-                        <outlet property="dataSource" destination="-1" id="9"/>
-                        <outlet property="delegate" destination="-1" id="10"/>
+                        <outlet property="dataSource" destination="-1" id="3GJ-u9-siQ"/>
+                        <outlet property="delegate" destination="-1" id="iWY-vm-Ylj"/>
                     </connections>
                 </tableView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="lLb-sF-TYy">
@@ -73,6 +74,7 @@
                     <nil key="highlightedColor"/>
                 </label>
             </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
             <inset key="insetFor6xAndEarlier" minX="0.0" minY="64" maxX="0.0" maxY="-64"/>

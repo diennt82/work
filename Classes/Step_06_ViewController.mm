@@ -80,18 +80,18 @@
     [barBtnHubble setTintColor:[UIColor colorWithPatternImage:hubbleLogoBack]];
     
     self.navigationItem.leftBarButtonItem = barBtnHubble;
-    
-    UIBarButtonItem *nextButton =
-    [[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"next",nil, [NSBundle mainBundle],
-                                                                             @"Next", nil)
-     
-                                     style:UIBarButtonItemStylePlain
-                                    target:self
-                                    action:@selector(handleNextButton:)];
-    
-    self.navigationItem.rightBarButtonItem = nextButton;
-    self.navigationItem.rightBarButtonItem.enabled = NO;
-    [nextButton release];
+//    
+//    UIBarButtonItem *nextButton =
+//    [[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"next",nil, [NSBundle mainBundle],
+//                                                                             @"Next", nil)
+//     
+//                                     style:UIBarButtonItemStylePlain
+//                                    target:self
+//                                    action:@selector(handleNextButton:)];
+//    
+//    self.navigationItem.rightBarButtonItem = nextButton;
+//    self.navigationItem.rightBarButtonItem.enabled = NO;
+//    [nextButton release];
     
     UIImageView *imageView = (UIImageView *)[_progressView viewWithTag:595];
     imageView.animationImages =[NSArray arrayWithObjects:
@@ -557,7 +557,7 @@
     [step07ViewController release];
 }
 
-- (void)handleNextButton:(id) sender
+- (IBAction)handleNextButton:(id) sender
 {
     [[HoldOnCamWifi shareInstance] stopHolder];
     

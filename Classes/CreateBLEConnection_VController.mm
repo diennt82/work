@@ -655,8 +655,19 @@
         //Load the next xib
         EditCamera_VController *step04ViewController = nil;
         
-        step04ViewController = [[EditCamera_VController alloc]
-                                initWithNibName:@"EditCamera_VController" bundle:nil];
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+            step04ViewController = [[EditCamera_VController alloc]
+                                    initWithNibName:@"EditCamera_VController_iPad" bundle:nil];
+        }
+        else
+        {
+            step04ViewController = [[EditCamera_VController alloc]
+                                    initWithNibName:@"EditCamera_VController" bundle:nil];
+        }
+    
+        
+       
         
         step04ViewController.cameraMac = self.cameraMac;
         step04ViewController.cameraName = self.cameraName;
