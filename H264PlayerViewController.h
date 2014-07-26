@@ -263,21 +263,17 @@
 #if 1 //Needed or not ??
 
 @property (retain, nonatomic) IBOutlet UIImageView *imageViewVideo;
-@property (retain, nonatomic) IBOutlet UIToolbar *topToolbar;
 @property (retain, nonatomic) IBOutlet UIBarButtonItem *backBarBtnItem;
 @property (retain, nonatomic) IBOutlet UIBarButtonItem *cameraNameBarBtnItem;
-@property (retain, nonatomic) IBOutlet UIView *progressView;
 
 @property (nonatomic, assign) CamChannel *selectedChannel;
 
-
 #endif
-
-
 
 @property (retain, nonatomic) IBOutlet UIImageView *imageViewHandle;
 @property (retain, nonatomic) IBOutlet UIImageView *imageViewKnob;
 @property (retain, nonatomic) IBOutlet UIView *viewDebugInfo;
+@property (retain, nonatomic) IBOutlet UIButton *btnSendingLog;
 
 @property (retain, nonatomic) EarlierViewController *earlierVC;
 @property (retain, nonatomic) TimelineViewController *timelineVC;
@@ -300,7 +296,6 @@
 
 @property (nonatomic, retain) NSString *sessionKey;
 @property (nonatomic, retain) NSString *streamID;
-@property (nonatomic) BOOL wantsCancelRemoteTalkback;
 @property (nonatomic, retain) AudioOutStreamRemote *audioOutStreamRemote;
 @property (nonatomic, retain) NSString *talkbackRemoteServer;
 //check if shared cam is connected to macOS
@@ -309,7 +304,6 @@
 @property (nonatomic) BOOL disconnectAlert;
 @property (nonatomic) BOOL returnFromPlayback;
 @property (nonatomic) BOOL shouldUpdateHorizeMenu;
-@property (nonatomic) BOOL isInLocal;
 @property (nonatomic) BOOL isAlreadyHorizeMenu;
 @property (nonatomic, retain) BMS_JSON_Communication *jsonCommBlocked;
 @property (nonatomic, retain) BMS_JSON_Communication *jsonComm;

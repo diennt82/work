@@ -110,6 +110,12 @@ double _ticks = 0;
     
     self.remoteViewTimeout = [userDefaults boolForKey:@"remote_view_timeout"];
     self.disconnectAlert   = [userDefaults boolForKey:@"disconnect_alert"];
+
+    if([userDefaults boolForKey:@"DebugOpt"] == YES)
+    {
+        self.btnSendingLog.enabled = YES;
+        self.ib_btShowDebugInfo.enabled = YES;
+    }
     
     self.enablePTT = YES;
     self.currentBitRate = @"128";
@@ -218,21 +224,6 @@ double _ticks = 0;
     
     [super viewWillDisappear:animated];
 }
-
-#if 0 // NS_DEPRECATED!
-- (void)viewDidUnload {
-    NSLog(@"%s", __FUNCTION__);
-    [self setImageViewVideo:nil];
-    //    [self setTopToolbar:nil];
-    [self setBackBarBtnItem:nil];
-    [self setProgressView:nil];
-    [self setCameraNameBarBtnItem:nil];
-    
-    [self setSelectedChannel:nil];
-    
-    [super viewDidUnload];
-}
-#endif
 
 - (void)applyFont
 {
@@ -524,7 +515,6 @@ double _ticks = 0;
         else
         {
             [self.navigationItem setTitle:cp.name];
-            [self.topToolbar setHidden:YES];
         }
     }
 }
@@ -1778,7 +1768,6 @@ double _ticks = 0;
 
 - (void)setupCamera
 {
-    self.isInLocal = self.selectedChannel.profile.isInLocal;
     self.mediaProcessStatus = 0;
     
     [self createMonvementControlTimer];
@@ -2995,12 +2984,6 @@ double _ticks = 0;
     
     self.timeStartingStageOne = [NSDate date];
     
-//    if (_jsonComm != nil)
-//    {
-//        [_jsonComm release];
-//        self.jsonComm = nil;
-//    }
-    
     self.jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
                                                           Selector:@selector(createSessionSuccessWithResponse:)
                                                       FailSelector:@selector(createSessionFailedWithResponse:)
@@ -3717,11 +3700,6 @@ double _ticks = 0;
             
             [self send_LR_dir_to_rabot: currentDirLR];
 		}
-        
-        //        if (need_to_send)
-        //        {
-        //            [self send_LR_dir_to_rabot: currentDirLR];
-        //        }
         
 		//Update directions
 		lastDirLR = currentDirLR;
@@ -4493,6 +4471,12 @@ double _ticks = 0;
     
     self.ib_buttonTouchToTalk.enabled = _enablePTT;
     self.ib_labelTouchToTalk.text = _stringStatePTT;
+    
+    if([[NSUserDefaults standardUserDefaults] boolForKey:@"DebugOpt"] == YES)
+    {
+        self.btnSendingLog.enabled = YES;
+        self.ib_btShowDebugInfo.enabled = YES;
+    }
 }
 
 
@@ -5418,8 +5402,6 @@ double _ticks = 0;
 - (void)dealloc {
     [_imageViewVideo release];
     [_imageViewStreamer release];
-    [_progressView release];
-    //[_selectedChannel release];
     [_imgViewDrectionPad release];
     [send_UD_dir_req_timer invalidate];
     [send_LR_dir_req_timer invalidate];
@@ -5460,6 +5442,7 @@ double _ticks = 0;
     
     NSLog(@"%s", __FUNCTION__);
     
+    [_btnSendingLog release];
     [super dealloc];
 }
 
