@@ -23,17 +23,49 @@
 
 @property (retain, nonatomic) NSArray* melodies;
 @property (retain, nonatomic) BMS_JSON_Communication *jsonCommBlock;
+@property (assign, nonatomic) CamChannel *selectedChannel;
+@property (nonatomic) BOOL shouldSendToGetMelodyValue;
 
 @end
 
 @implementation MelodyViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil andSelectedChannel:(CamChannel *)channel
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
+        self.selectedChannel = channel;
         self.melodyIndex = -1;
+        self.shouldSendToGetMelodyValue = YES;
+        
+        // Do any additional setup after loading the view from its nib.
+        NSString * mel1 = NSLocalizedStringWithDefaultValue(@"melody_I",  nil, [NSBundle mainBundle],
+                                                            @"Melody 1",  nil);
+        NSString * mel2 = NSLocalizedStringWithDefaultValue(@"melody_II", nil, [NSBundle mainBundle],
+                                                            @"Melody 2",  nil);
+        NSString * mel3 = NSLocalizedStringWithDefaultValue(@"melody_III",nil, [NSBundle mainBundle],
+                                                            @"Melody 3",  nil);
+        NSString * mel4 = NSLocalizedStringWithDefaultValue(@"melody_IV", nil, [NSBundle mainBundle],
+                                                            @"Melody 4",  nil);
+        NSString * mel5 = NSLocalizedStringWithDefaultValue(@"melody_V",  nil, [NSBundle mainBundle],
+                                                            @"Melody 5",  nil);
+        //if (self.selectedChannel.profile.modelID == 6) // SharedCam
+        if ([self.selectedChannel.profile isSharedCam]) // SharedCam
+        {
+            NSString * mel6 = NSLocalizedStringWithDefaultValue(@"melody_VI", nil, [NSBundle mainBundle],
+                                                                @"All Melodies", nil);
+            //All Melodies
+            NSArray *arr = [[NSArray alloc] initWithObjects:mel1, mel2, mel3, mel4, mel5, mel6,nil];
+            self.melodies = arr;
+            [arr release];
+        }
+        else // Expect CameraHD
+        {
+            NSArray *arr = [[NSArray alloc] initWithObjects:mel1, mel2, mel3, mel4, mel5,nil];
+            self.melodies = arr;
+            [arr release];
+        }
     }
     return self;
 }
@@ -41,34 +73,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
-    
-    NSString * mel1 = NSLocalizedStringWithDefaultValue(@"melody_I",  nil, [NSBundle mainBundle],
-                                                        @"Melody 1",  nil);
-    NSString * mel2 = NSLocalizedStringWithDefaultValue(@"melody_II", nil, [NSBundle mainBundle],
-                                                        @"Melody 2",  nil);
-    NSString * mel3 = NSLocalizedStringWithDefaultValue(@"melody_III",nil, [NSBundle mainBundle],
-                                                        @"Melody 3",  nil);
-    NSString * mel4 = NSLocalizedStringWithDefaultValue(@"melody_IV", nil, [NSBundle mainBundle],
-                                                        @"Melody 4",  nil);
-    NSString * mel5 = NSLocalizedStringWithDefaultValue(@"melody_V",  nil, [NSBundle mainBundle],
-                                                        @"Melody 5",  nil);
-    //if (self.selectedChannel.profile.modelID == 6) // SharedCam
-    if ([self.selectedChannel.profile isSharedCam]) // SharedCam
-    {
-        NSString * mel6 = NSLocalizedStringWithDefaultValue(@"melody_VI", nil, [NSBundle mainBundle],
-                                                            @"All Melodies", nil);
-        //All Melodies
-        NSArray *arr = [[NSArray alloc] initWithObjects:mel1, mel2, mel3, mel4, mel5, mel6,nil];
-        self.melodies = arr;
-        [arr release];
-    }
-    else // Expect CameraHD
-    {
-        NSArray *arr = [[NSArray alloc] initWithObjects:mel1, mel2, mel3, mel4, mel5,nil];
-        self.melodies = arr;
-        [arr release];
-    }
     
     self.melodyTableView.delegate = self;
     self.melodyTableView.dataSource = self;
@@ -113,6 +117,9 @@
 
 - (void)getMelodyValue_bg
 {
+    if (self.shouldSendToGetMelodyValue == NO)
+        return;
+    
     NSString *responseString = @"";
     
     if (self.selectedChannel.profile .isInLocal == TRUE)
@@ -145,42 +152,42 @@
         }
     }
     
-//    NSLog(@"%s _melodyIndex:%d, responsed: %@", __func__, _melodyIndex, responseString);
-//    
-//    if (![responseString isEqualToString:@""])
-//    {
-//        NSRange tmpRange = [responseString rangeOfString:@": "];
-//        
-//        if (tmpRange.location != NSNotFound)
-//        {
-//            NSArray *tokens = [responseString componentsSeparatedByString:@": "];
-//            
-//            if (tokens.count > 1 )
-//            {
-//                NSInteger melodyIndex = [[tokens lastObject] integerValue] - 1;
-//                
-//                for (int i = 0; i < _melodies.count; i++)
-//                {
-//                    valueMelodiesMap[i] = FALSE;
-//                }
-//                
-//                if (melodyIndex != -1)
-//                {
-//                    valueMelodiesMap[melodyIndex]  = YES;
-//                }
-//                
-//                if (self.isViewLoaded && self.view.window) {
-//                    [_melodyTableView performSelectorOnMainThread:@selector(reloadData)
-//                                                       withObject:nil
-//                                                    waitUntilDone:NO];
-//                }
-//                else
-//                {
-//                    NSLog(@"%s View is invisible. Ignoring.", __FUNCTION__);
-//                }
-//            }
-//        }
-//    }
+    NSLog(@"%s _melodyIndex:%d, responsed: %@", __func__, _melodyIndex, responseString);
+    
+    if (![responseString isEqualToString:@""])
+    {
+        NSRange tmpRange = [responseString rangeOfString:@": "];
+        
+        if (tmpRange.location != NSNotFound)
+        {
+            NSArray *tokens = [responseString componentsSeparatedByString:@": "];
+            
+            if (tokens.count > 1 )
+            {
+                NSInteger melodyIndex = [[tokens lastObject] integerValue] - 1;
+                
+                for (int i = 0; i < _melodies.count; i++)
+                {
+                    valueMelodiesMap[i] = FALSE;
+                }
+                
+                if (melodyIndex != -1)
+                {
+                    valueMelodiesMap[melodyIndex]  = YES;
+                }
+                
+                if (self.isViewLoaded && self.view.window) {
+                    [_melodyTableView performSelectorOnMainThread:@selector(reloadData)
+                                                       withObject:nil
+                                                    waitUntilDone:NO];
+                }
+                else
+                {
+                    NSLog(@"%s View is invisible. Ignoring.", __FUNCTION__);
+                }
+            }
+        }
+    }
 }
 
 - (void)setMelodyStatus_bg: (NSNumber *)melodyIndex
@@ -197,9 +204,15 @@
 		command = [NSString stringWithFormat:@"melody%d", melodyIdx];
 	}
     
+    NSString *responseString = @"";
     if (self.selectedChannel.profile .isInLocal == TRUE)
     {
-        [[HttpCom instance].comWithDevice sendCommandAndBlock_raw:command];
+        NSData *responseData = [[HttpCom instance].comWithDevice sendCommandAndBlock_raw:command];
+        if (responseData != nil)
+        {
+            responseString = [[[NSString alloc] initWithData:responseData encoding: NSUTF8StringEncoding] autorelease];
+            NSLog(@"Melody Local response string: %@", responseString);
+        }
     }
     else
     {
@@ -213,9 +226,49 @@
             [comm release];
         }
         
-        [_jsonCommBlock sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
+        NSDictionary *responseDict = [_jsonCommBlock sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
                                                      andCommand:[NSString stringWithFormat:@"action=command&command=%@", command]
                                                       andApiKey:[[NSUserDefaults standardUserDefaults] objectForKey:@"PortalApiKey"]];
+        if (responseDict != nil)
+        {
+            NSInteger status = [[responseDict objectForKey:@"status"] intValue];
+            
+            if (status == 200)
+            {
+                responseString = [[[responseDict objectForKey:@"data"] objectForKey:@"device_response"] objectForKey:@"body"];
+            }
+        }
+    }
+    
+    
+    NSLog(@"%s _melodyIndex:%d, responsed: %@", __func__, _melodyIndex, responseString);
+    BOOL success = NO;
+    if (![responseString isEqualToString:@""])
+    {
+        NSRange tmpRange = [responseString rangeOfString:@": "];
+        
+        if (tmpRange.location != NSNotFound)
+        {
+            NSArray *tokens = [responseString componentsSeparatedByString:@": "];
+            
+            if (tokens.count > 1 )
+            {
+                if ([[tokens objectAtIndex:0] isEqualToString:command] && [[tokens lastObject] integerValue] == 0)
+                {
+                    if (self.isViewLoaded && self.view.window) {
+                        [_melodyTableView performSelectorOnMainThread:@selector(reloadData)
+                                                           withObject:nil
+                                                        waitUntilDone:NO];
+                        success = YES;
+                        NSLog(@"%s _reload table from back ground", __func__);
+                    }
+                }
+            }
+        }
+    }
+    if ([self.melodyDelegate respondsToSelector:@selector(updateCompleted:)])
+    {
+        [self.melodyDelegate updateCompleted:success];
     }
     [self progressHDUDisplay:NO];
 }
@@ -372,8 +425,6 @@
         self.playing = NO;
         _melodyIndex = -1;
     }
-    
-    [_melodyTableView reloadData];
     [self performSelectorInBackground:@selector(setMelodyStatus_bg:) withObject:[NSNumber numberWithInt:(_melodyIndex + 1)]];
 }
 
@@ -410,6 +461,8 @@
     {
         valueMelodiesMap[melodyIndex] = TRUE;
     }
+    
+    self.shouldSendToGetMelodyValue = NO;
     [_melodyTableView reloadData];
 }
 @end

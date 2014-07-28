@@ -14,6 +14,9 @@
 #import "UIColor+Hubble.h"
 #import "GAI.h"
 
+@protocol MelodySetingDelegate <NSObject>
+- (void)updateCompleted:(BOOL)success;
+@end
 
 @interface MelodyViewController : GAITrackedViewController <UITableViewDataSource, UITableViewDelegate> {
     IBOutlet UITableViewCell * cellMelody;
@@ -23,9 +26,10 @@
 
 @property (retain, nonatomic) IBOutlet UITableView *melodyTableView;
 @property (nonatomic) NSInteger melodyIndex;
-@property (assign, nonatomic) CamChannel *selectedChannel;
 @property (nonatomic) BOOL playing;
+@property (nonatomic, assign) id <MelodySetingDelegate> melodyDelegate;
 
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil andSelectedChannel:(CamChannel *)channel;
 - (void)getMelodyValue_bg;
 - (void)resetStatus;
 - (void)setCurrentMelodyIndex:(NSInteger)melodyIndex andPlaying:(BOOL)playing;

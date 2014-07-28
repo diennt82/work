@@ -151,7 +151,7 @@
 
 
 @interface H264PlayerViewController: GAITrackedViewController
-<PlayerCallbackHandler, ScanForCameraNotifier, StunClientDelegate, UIScrollViewDelegate, ScrollHorizontalMenuDelegate, AudioOutStreamerDelegate, TimelineVCDelegate, AudioOutStreamRemoteDelegate, BonjourDelegate, CustomIOS7AlertViewDelegate>
+<PlayerCallbackHandler, ScanForCameraNotifier, StunClientDelegate, UIScrollViewDelegate, ScrollHorizontalMenuDelegate, AudioOutStreamerDelegate, TimelineVCDelegate, AudioOutStreamRemoteDelegate, BonjourDelegate, CustomIOS7AlertViewDelegate, MelodySetingDelegate>
 {
     ScrollHorizontalMenu *_horizMenu;
     int _selectedItemMenu;
