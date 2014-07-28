@@ -259,7 +259,7 @@
         title = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed",nil, [NSBundle mainBundle],
                                                   @"Create Account Failed" , nil);
         msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg4",nil, [NSBundle mainBundle],
-                                                @"Please select a Wifi network to connect"  , nil);
+                                                @"Please go to wifi settings and select a Wifi network to connect"  , nil);
         
         NSString * msg1 = NSLocalizedStringWithDefaultValue(@"Settings",nil, [NSBundle mainBundle],
                                                             @"Settings"  , nil);

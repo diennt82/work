@@ -122,7 +122,7 @@
 {
     if(![self checkEmailValidation:userEmailTF.text])
     {
-        NSString *strMsg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg3",nil, [NSBundle mainBundle], @"Create_Account_Failed_msg3", nil);
+        NSString *strMsg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg3",nil, [NSBundle mainBundle], @"Invalid email. Email address should be of the form somebody@somewhere.com", nil);
         //NSString *strMsg = @"Please enter valid email.";
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:strMsg delegate:nil cancelButtonTitle:NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil) otherButtonTitles:nil];
         [alertView show];

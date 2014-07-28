@@ -6879,7 +6879,7 @@ double _ticks = 0;
     
     NSString *msg = nil;
     NSString *title = @"Firmware Upgrade Succeeded";
-    NSString *ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
+    NSString *ok = NSLocalizedStringWithDefaultValue(@"ok",nil, [NSBundle mainBundle],
                                                      @"OK" , nil);
     NSInteger alertTag = TAG_ALERT_FW_OTA_UPGRADE_DONE;
     
