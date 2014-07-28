@@ -127,7 +127,10 @@
                                    selector:@selector(setStopScanning:)
                                    userInfo:nil
                                     repeats:NO];
-    
+    /*
+     * Updating the information below after camera is available --> Make sure updating succeeded.
+     */
+#if 0
     // Trying to enable all PN.
     [self sendToServerTheCommand:@"set_motion_area&grid=1x1&zone=00"];
     [self sendToServerTheCommand:@"vox_enable"];
@@ -136,7 +139,7 @@
     
     // Trying to update host ssid to server.
     [self updatesBasicInfoForCamera];
-    
+#endif
     // 2 of 3. no need to schedule timer here.
     [self wait_for_camera_to_reboot:nil];
 }
@@ -228,6 +231,18 @@
     {
         //Found it online
         NSLog(@"Found it online");
+        
+        // Trying to enable all PN.
+        [self sendToServerTheCommand:@"set_motion_area&grid=1x1&zone=00"];
+        [self sendToServerTheCommand:@"vox_enable"];
+        [self sendToServerTheCommand:@"set_temp_lo_enable&value=1"];
+        [self sendToServerTheCommand:@"set_temp_hi_enable&value=1"];
+        
+        // Trying to update host ssid to server.
+        [self updatesBasicInfoForCamera];
+        
+        [self checkItOnline]; // Just synch up data with offline data.
+        
         [self setupCompleted];
         return;
     }
