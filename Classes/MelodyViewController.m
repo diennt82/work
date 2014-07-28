@@ -145,42 +145,42 @@
         }
     }
     
-    NSLog(@"%s _melodyIndex:%d, responsed: %@", __func__, _melodyIndex, responseString);
-    
-    if (![responseString isEqualToString:@""])
-    {
-        NSRange tmpRange = [responseString rangeOfString:@": "];
-        
-        if (tmpRange.location != NSNotFound)
-        {
-            NSArray *tokens = [responseString componentsSeparatedByString:@": "];
-            
-            if (tokens.count > 1 )
-            {
-                NSInteger melodyIndex = [[tokens lastObject] integerValue] - 1;
-                
-                for (int i = 0; i < _melodies.count; i++)
-                {
-                    valueMelodiesMap[i] = FALSE;
-                }
-                
-                if (melodyIndex != -1)
-                {
-                    valueMelodiesMap[melodyIndex]  = YES;
-                }
-                
-                if (self.isViewLoaded && self.view.window) {
-                    [_melodyTableView performSelectorOnMainThread:@selector(reloadData)
-                                                       withObject:nil
-                                                    waitUntilDone:NO];
-                }
-                else
-                {
-                    NSLog(@"%s View is invisible. Ignoring.", __FUNCTION__);
-                }
-            }
-        }
-    }
+//    NSLog(@"%s _melodyIndex:%d, responsed: %@", __func__, _melodyIndex, responseString);
+//    
+//    if (![responseString isEqualToString:@""])
+//    {
+//        NSRange tmpRange = [responseString rangeOfString:@": "];
+//        
+//        if (tmpRange.location != NSNotFound)
+//        {
+//            NSArray *tokens = [responseString componentsSeparatedByString:@": "];
+//            
+//            if (tokens.count > 1 )
+//            {
+//                NSInteger melodyIndex = [[tokens lastObject] integerValue] - 1;
+//                
+//                for (int i = 0; i < _melodies.count; i++)
+//                {
+//                    valueMelodiesMap[i] = FALSE;
+//                }
+//                
+//                if (melodyIndex != -1)
+//                {
+//                    valueMelodiesMap[melodyIndex]  = YES;
+//                }
+//                
+//                if (self.isViewLoaded && self.view.window) {
+//                    [_melodyTableView performSelectorOnMainThread:@selector(reloadData)
+//                                                       withObject:nil
+//                                                    waitUntilDone:NO];
+//                }
+//                else
+//                {
+//                    NSLog(@"%s View is invisible. Ignoring.", __FUNCTION__);
+//                }
+//            }
+//        }
+//    }
 }
 
 - (void)setMelodyStatus_bg: (NSNumber *)melodyIndex
@@ -387,5 +387,29 @@
             [MBProgressHUD hideAllHUDsForView:sv animated:YES];
         }
     }
+}
+
+- (void)resetStatus {
+    if (!_playing) {
+        for (int i = 0; i < _melodies.count; i++)
+        {
+            valueMelodiesMap[i] = FALSE;
+        }
+        [_melodyTableView reloadData];
+    }
+}
+
+- (void)setCurrentMelodyIndex:(NSInteger)melodyIndex andPlaying:(BOOL)playing {
+    _melodyIndex = melodyIndex;
+    _playing = playing;
+    for (int i = 0; i < _melodies.count; i++)
+    {
+        valueMelodiesMap[i] = FALSE;
+    }
+    if (_melodyIndex > -1 && _playing)
+    {
+        valueMelodiesMap[melodyIndex] = TRUE;
+    }
+    [_melodyTableView reloadData];
 }
 @end

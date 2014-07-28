@@ -27,4 +27,6 @@
 @property (nonatomic) BOOL playing;
 
 - (void)getMelodyValue_bg;
-@end
+- (void)resetStatus;
+- (void)setCurrentMelodyIndex:(NSInteger)melodyIndex andPlaying:(BOOL)playing;
+ @end
