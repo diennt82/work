@@ -725,7 +725,7 @@
     NSString *alertTitle = @"";
     NSString *alertMess = @"";
     NSString * alertLeftButtonText = NSLocalizedStringWithDefaultValue(@"ok",nil, [NSBundle mainBundle],
-                                                                       @"Ok", nil);
+                                                                       @"OK", nil);
     NSString *alertOtherButtonText = nil;
     int tag = -1;;
     int autoDissmisAlertIndex = 0;
@@ -783,7 +783,7 @@
             alertTitle = @"";//camAlert.cameraName;
             alertMess = [NSString stringWithFormat:@"%@ %@", camAlert.cameraName, NSLocalizedStringWithDefaultValue( @"camera_removed",nil, [NSBundle mainBundle], @"has been removed on a different terminal. Please check and add camera again to continue to view.", nil)];
             alertLeftButtonText = NSLocalizedStringWithDefaultValue(@"ok",nil, [NSBundle mainBundle],
-                                                                    @"Ok", nil);
+                                                                    @"OK", nil);
             alertOtherButtonText = nil;
             tag = ALERT_PUSH_RECVED_REMOVE_CAM;
             autoDissmisAlertIndex = -1;
@@ -1864,7 +1864,7 @@
             [self showPushNotificationAlert:@""
                                  andMessage:NSLocalizedStringWithDefaultValue( @"reset_password",nil, [NSBundle mainBundle],
                                                                                             @"Your credentials has changed. Please re-login to continue.", nil)
-                            andCancelButton:NSLocalizedStringWithDefaultValue(@"ok",nil, [NSBundle mainBundle], @"Ok", nil)
+                            andCancelButton:NSLocalizedStringWithDefaultValue(@"ok",nil, [NSBundle mainBundle], @"OK", nil)
                              andOtherButton:nil
                                 andAlertTag:ALERT_PUSH_RECVED_RELOGIN_AFTER];
             self.latestCamAlert = self.camAlert;
@@ -1889,7 +1889,7 @@
             {
                 [self showPushNotificationAlert:@""
                                      andMessage:[NSString stringWithFormat:@"%@ %@", self.camAlert.cameraName, NSLocalizedStringWithDefaultValue( @"camera_removed",nil, [NSBundle mainBundle], @"has been removed on a different terminal. Please check and add camera again to continue to view.", nil)]
-                                andCancelButton:NSLocalizedStringWithDefaultValue(@"ok",nil, [NSBundle mainBundle], @"Ok", nil)
+                                andCancelButton:NSLocalizedStringWithDefaultValue(@"ok",nil, [NSBundle mainBundle], @"OK", nil)
                                  andOtherButton:nil
                                     andAlertTag:ALERT_PUSH_RECVED_REMOVE_CAM];
             }
@@ -1903,8 +1903,8 @@
                     [pushAlert dismissWithClickedButtonIndex:-1 animated:NO];
                 }
                 [self showPushNotificationAlert:@""
-                                     andMessage:[NSString stringWithFormat:@"%@ %@", self.camAlert.cameraName, NSLocalizedStringWithDefaultValue( @"camera_removed",nil, [NSBundle mainBundle], @"as been removed on a different terminal. Please check and add camera again to continue to view.", nil)]
-                                andCancelButton:NSLocalizedStringWithDefaultValue(@"ok",nil, [NSBundle mainBundle], @"Ok", nil)
+                                     andMessage:[NSString stringWithFormat:@"%@ %@", self.camAlert.cameraName, NSLocalizedStringWithDefaultValue( @"camera_removed",nil, [NSBundle mainBundle], @"has been removed on a different terminal. Please check and add camera again to continue to view.", nil)]
+                                andCancelButton:NSLocalizedStringWithDefaultValue(@"ok",nil, [NSBundle mainBundle], @"OK", nil)
                                  andOtherButton:nil
                                     andAlertTag:ALERT_PUSH_RECVED_REMOVE_CAM];
                 self.latestCamAlert = self.camAlert;
