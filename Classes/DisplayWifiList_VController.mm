@@ -11,6 +11,7 @@
 #import "define.h"
 #import "WifiListParser.h"
 #import "Step_10_ViewController_ble.h"
+#import "MBProgressHUD.h"
 
 #define BLE_TIMEOUT_PROCESS 1*60
 
@@ -208,11 +209,16 @@
 
 - (IBAction)btnSkipWIFISetupTouchUpInsideAction:(id)sender
 {
+    MBProgressHUD *hub = [MBProgressHUD showHUDAddedTo:self.view animated:NO];
+    hub.labelText = @"Configure camera...";
+    
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:HOST_SSID];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
     [self sendCommandRestartSystem];
     [self moveToFinalStep];
+    
+    [MBProgressHUD hideHUDForView:self.view animated:NO];
 }
 
 #pragma mark - Methods
