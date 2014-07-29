@@ -1664,7 +1664,7 @@ double _ticks = 0;
 
 - (BOOL)isStopProcess
 {
-    NSLog(@"%s userWantToCancel:%d, _h264StreamerIsStopped:%d, _returnFromPlayback:%d, _isFWUpgradingInProgress:%d", __FUNCTION__, userWantToCancel, _h264StreamerIsInStopped, _returnFromPlayback, _isFWUpgradingInProgress);
+    //NSLog(@"%s userWantToCancel:%d, _h264StreamerIsStopped:%d, _returnFromPlayback:%d, _isFWUpgradingInProgress:%d", __FUNCTION__, userWantToCancel, _h264StreamerIsInStopped, _returnFromPlayback, _isFWUpgradingInProgress);
     
     return (userWantToCancel         ||
             _h264StreamerIsInStopped ||
