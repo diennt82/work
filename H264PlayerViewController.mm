@@ -547,7 +547,6 @@ double _ticks = 0;
     if (_wantToShowTimeLine)
     {
         [self showTimelineView];
-        [self.horizMenu resetStatus];
         _wantToShowTimeLine = NO;
     }
     
@@ -1451,6 +1450,7 @@ double _ticks = 0;
         self.timelineVC.view.hidden = NO;
         [self.view bringSubviewToFront:self.timelineVC.view];
     }
+    [self.horizMenu resetStatus];
 }
 
 /*
