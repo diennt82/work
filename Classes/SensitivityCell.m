@@ -103,7 +103,10 @@
         self.imageViewCircleWhite.transform = CGAffineTransformMakeTranslation(recognizer.view.center.x - _imageViewCircleWhite.center.x, 0);
         self.settingsValue = tempValue;
         
-        [_sensitivityCellDelegate reportChangedSettingsValue:_settingsValue atRow:_rowIndex];
+        if ([_sensitivityCellDelegate respondsToSelector:@selector(reportChangedSettingsValue:atRow:)])
+        {
+            [_sensitivityCellDelegate reportChangedSettingsValue:_settingsValue atRow:_rowIndex];
+        }
     }
 }
 - (IBAction)btnSwitchTouchUpInsideAction:(UIButton *)sender
@@ -128,7 +131,10 @@
         imageViewLine.image = [UIImage imageNamed:@"settings_line_white.png"];
     }
     
-    [_sensitivityCellDelegate reportSwitchValue:_switchValue andRowIndex:_rowIndex];
+    if ([_sensitivityCellDelegate respondsToSelector:@selector(reportSwitchValue:andRowIndex:)])
+    {
+        [_sensitivityCellDelegate reportSwitchValue:_switchValue andRowIndex:_rowIndex];
+    }
 }
 
 - (void)dealloc {
