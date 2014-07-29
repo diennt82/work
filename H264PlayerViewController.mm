@@ -17,7 +17,7 @@
 #import <SystemConfiguration/CaptiveNetwork.h>
 #import <objc/message.h>
 
-
+#define TEMP_NULL @"NIL"
 
 @implementation H264PlayerViewController
 
@@ -1653,7 +1653,7 @@ double _ticks = 0;
     
     [self setupPtt];
     
-    self.stringTemperature = @"0";
+    self.stringTemperature = TEMP_NULL;
     //end add button to change
     [ib_switchDegree setHidden:YES];
     
@@ -2870,7 +2870,6 @@ double _ticks = 0;
         [self.ib_temperature setFont:temperatureFont];
         [self.ib_temperature setTextColor:[UIColor whiteColor]];
         [self.ib_temperature setText:stringTemperature];
-        //[self.ib_temperature setHidden:NO];
         
         stringBoundingBox = [stringTemperature sizeWithAttributes:@{NSFontAttributeName: temperatureFont}];
         degreeCelBoundingBox = [degreeCel sizeWithAttributes:@{NSFontAttributeName: degreeFont}];
@@ -2914,7 +2913,6 @@ double _ticks = 0;
         
         //need update text for C or F
         [self.ib_temperature setText:stringTemperature];
-        //
         
         //CGSize stringBoundingBox = [stringTemperature sizeWithFont:temperatureFont];
         CGSize stringBoundingBox = [stringTemperature sizeWithAttributes:@{NSFontAttributeName: temperatureFont}];
@@ -2930,9 +2928,10 @@ double _ticks = 0;
         [self.ib_temperature addSubview:degreeCelsius];
     }
     
-    if (self.selectedItemMenu == INDEX_TEMP)
+    if (self.selectedItemMenu == INDEX_TEMP && ![self.stringTemperature isEqualToString:TEMP_NULL])
     {
-        [self.view bringSubviewToFront:self.ib_temperature ];
+        [MBProgressHUD hideHUDForView:self.view animated:NO];
+        [self.view bringSubviewToFront:self.ib_temperature];
         [self.ib_temperature setHidden:NO];
     }
     else
@@ -5357,6 +5356,12 @@ double _ticks = 0;
         }
         else if (_selectedItemMenu == INDEX_TEMP)
         {
+            if ([self.stringTemperature isEqualToString:TEMP_NULL])
+            {
+                NSLog(@"%s Show progress.", __FUNCTION__);
+                MBProgressHUD *hub = [MBProgressHUD showHUDAddedTo:self.view animated:NO];
+                [hub setLabelText:NSLocalizedStringWithDefaultValue(@"loading", nil, [NSBundle mainBundle], @"Loading...", nil)];
+            }
             [ib_switchDegree setHidden:NO];
             [self.view bringSubviewToFront:ib_switchDegree];
             
