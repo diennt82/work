@@ -238,11 +238,12 @@
 {
     if (scanMode == SCAN_FOR_ANY_DEVICE)
     {
-        if ([peripheral.name hasPrefix:@"MBP83"] ||
+        if ([peripheral.name hasPrefix:@"MBP83"]         ||
             [peripheral.name hasPrefix:@"CameraHD-0083"] ||
-            [peripheral.name hasPrefix:@"CameraHD-0836"]  ||
+            [peripheral.name hasPrefix:@"CameraHD-0836"] ||
             [peripheral.name hasPrefix:@"CameraHD-0854"] ||
-            [peripheral.name hasPrefix:@"CameraHD-0085"])
+            [peripheral.name hasPrefix:@"CameraHD-0085"] ||
+            [peripheral.name hasPrefix:@"CameraHD-0073"])
         {
             NSLog(@"Did discover peripheral name %@ and peripheral is %@", peripheral.name, peripheral);
             

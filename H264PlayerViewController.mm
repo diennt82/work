@@ -1736,7 +1736,7 @@ double _ticks = 0;
 {
     NSLog(@"%s model:%@", __FUNCTION__, _cameraModel);
     
-    if([_cameraModel hasPrefix:CP_MODEL_008])
+    if([_cameraModel hasPrefix:CP_MODEL_008] || [_cameraModel isEqualToString:CP_MODEL_0073])
     {
         [self cleanUpDirectionTimers];
         

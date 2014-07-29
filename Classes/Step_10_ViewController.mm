@@ -484,23 +484,9 @@
             
             switch (deviceStatus)
             {
-                case DEV_STATUS_UNKOWN:
-                case DEV_STATUS_NOT_REGISTERED:
-                case DEV_STATUS_DELETED:
-                case DEV_STATUS_REGISTERED_OTHER_USER:
-                    // Check again
-                    break;
-                    
                 case DEV_STATUS_NOT_IN_MASTER:
                 {
-                    if (deviceStatus == DEV_STATUS_NOT_IN_MASTER)
-                    {
-                        self.statusMessage = NSLocalizedStringWithDefaultValue(@"device_is_not_present", nil, [NSBundle mainBundle], @"Device is NOT present in device master", nil);
-                    }
-                    else
-                    {
-                        self.statusMessage = NSLocalizedStringWithDefaultValue(@"device_is_registered", nil, [NSBundle mainBundle], @"Device is registered with other User", nil);
-                    }
+                    self.statusMessage = NSLocalizedStringWithDefaultValue(@"device_is_not_present", nil, [NSBundle mainBundle], @"Device is NOT present in device master", nil);
                     
                     shouldCheckAgain = FALSE;
                     self.errorCode = [NSString stringWithFormat:@"%d", deviceStatus];
@@ -523,8 +509,12 @@
                 }
                     break;
                     
+                case DEV_STATUS_UNKOWN:
+                case DEV_STATUS_NOT_REGISTERED:
+                case DEV_STATUS_DELETED:
+                case DEV_STATUS_REGISTERED_OTHER_USER:
                 case DEV_STATUS_REGISTERED_LOGGED_USER:
-                    NSLog(@"Step_10_VC register successfully. Move on");
+                    NSLog(@"Step_10_VC register successfully. Move on. DEV_STATUS:%d", deviceStatus);
                     shouldCheckAgain = FALSE;
                     //[[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Step10 - Check camera status: %d", deviceStatus] withProperties:nil];
                     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
