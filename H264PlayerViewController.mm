@@ -17,7 +17,7 @@
 #import <SystemConfiguration/CaptiveNetwork.h>
 #import <objc/message.h>
 
-
+#define TEMP_NULL @"NIL"
 
 @implementation H264PlayerViewController
 
@@ -1653,7 +1653,7 @@ double _ticks = 0;
     
     [self setupPtt];
     
-    self.stringTemperature = @"NA";
+    self.stringTemperature = TEMP_NULL;
     //end add button to change
     [ib_switchDegree setHidden:YES];
     
@@ -2916,8 +2916,9 @@ double _ticks = 0;
         [self.ib_temperature addSubview:degreeCelsius];
     }
     
-    if (self.selectedItemMenu == INDEX_TEMP && ![self.stringTemperature isEqualToString:@"NA"])
+    if (self.selectedItemMenu == INDEX_TEMP && ![self.stringTemperature isEqualToString:TEMP_NULL])
     {
+        [MBProgressHUD hideHUDForView:self.view animated:NO];
         [self.view bringSubviewToFront:self.ib_temperature];
         [self.ib_temperature setHidden:NO];
     }
@@ -5325,6 +5326,12 @@ double _ticks = 0;
         }
         else if (_selectedItemMenu == INDEX_TEMP)
         {
+            if ([self.stringTemperature isEqualToString:TEMP_NULL])
+            {
+                NSLog(@"%s Show progress.", __FUNCTION__);
+                MBProgressHUD *hub = [MBProgressHUD showHUDAddedTo:self.view animated:NO];
+                [hub setLabelText:NSLocalizedStringWithDefaultValue(@"loading", nil, [NSBundle mainBundle], @"Loading...", nil)];
+            }
             [ib_switchDegree setHidden:NO];
             [self.view bringSubviewToFront:ib_switchDegree];
             
