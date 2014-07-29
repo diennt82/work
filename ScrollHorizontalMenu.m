@@ -29,7 +29,6 @@
 
 -(void) awakeFromNib
 {
-    currentTappedButtonIndex = -1;
     self.bounces = YES;
     self.scrollEnabled = YES;
     self.alwaysBounceHorizontal = YES;
@@ -146,29 +145,16 @@
         
         if(i + kButtonBaseTag == button.tag)
         {
-            _isOddTapButton = !_isOddTapButton;
-            //select one button
-            if (currentTappedButtonIndex == i)
+            if (button.selected)
             {
-                //select continue;
-                if (_isOddTapButton)
-                {
-                    thisButton.selected = YES;
-                    _isAllButtonDeselected = NO;
-                }
-                else
-                {
-                    _isAllButtonDeselected = YES;
-                    thisButton.selected = NO;
-                }
-                
-            } else
-            {
-                _isAllButtonDeselected = NO;
-                _isOddTapButton = YES;
-                thisButton.selected = YES;
+                thisButton.selected = NO;
+                _isAllButtonDeselected = YES;
             }
-            currentTappedButtonIndex = i;
+            else
+            {
+                thisButton.selected = YES;
+                _isAllButtonDeselected = NO;
+            }
         }
         else
         {
