@@ -178,13 +178,15 @@
 #define IS_FAHRENHEIT   @"IS_FAHRENHEIT"
 
 
-#define ALERT_GENERIC_SERVER_INFO @"999999"
-#define  ALERT_TYPE_SOUND   @"1"
-#define  ALERT_TYPE_TEMP_HI @"2"
-#define  ALERT_TYPE_TEMP_LO @"3"
-#define  ALERT_TYPE_MOTION  @"4"
-#define  ALERT_TYPE_PASSWORD_CHANGED  @"7"
-#define  ALERT_TYPE_REMOVED_CAM @"8"
+#define  ALERT_GENERIC_SERVER_INFO   @"999999"
+#define  ALERT_TYPE_SOUND            @"1"
+#define  ALERT_TYPE_TEMP_HI          @"2"
+#define  ALERT_TYPE_TEMP_LO          @"3"
+#define  ALERT_TYPE_MOTION           @"4"
+#define  ALERT_TYPE_PASSWORD_CHANGED @"7"
+#define  ALERT_TYPE_REMOVED_CAM      @"8"
+
+#define EVENT_DELETED_ID             @"event_id_deleted"
 
 #endif /* PUBLICDEFINE_H_ */
 

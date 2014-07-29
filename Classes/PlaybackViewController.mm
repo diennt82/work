@@ -182,6 +182,8 @@
     {
         listener = new PlaybackListener(self);
         
+        NSLog(@"%s eventId:%d", __FUNCTION__, _intEventId);
+        
         if ([self.clip_info isLastClip])
         {
             //Only one clip & it is the last
@@ -617,9 +619,11 @@
             {
                 [[TimelineDatabase getSharedInstance]  deleteEventWithID:strEventID];
                 
-                if([self.plabackVCDelegate respondsToSelector:@selector(motioEventDeleted)])
+                if([self.plabackVCDelegate respondsToSelector:@selector(motionEventDeleted)])
                 {
-                    [self.plabackVCDelegate motioEventDeleted];
+                    [[NSUserDefaults standardUserDefaults] setInteger:_intEventId forKey:EVENT_DELETED_ID];
+                    [[NSUserDefaults standardUserDefaults] synchronize];
+                    [self.plabackVCDelegate motionEventDeleted];
                 }
                 
                 [self closePlayBack:_ib_closePlayBack];
