@@ -208,7 +208,7 @@
 
 - (IBAction)btnSkipWIFISetupTouchUpInsideAction:(id)sender
 {
-    [[NSUserDefaults standardUserDefaults] setNilValueForKey:HOST_SSID];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:HOST_SSID];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
     [self sendCommandRestartSystem];

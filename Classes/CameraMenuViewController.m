@@ -110,12 +110,6 @@
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     self.apiKey = [userDefaults stringForKey:@"PortalApiKey"];
     
-//    if (![self.camChannel.profile isNotAvailable])
-//    {
-//        self.isLoading = TRUE;
-//        [self performSelectorInBackground:@selector(updateFWVersion_bg) withObject:nil];
-//    }
-    
 //    self.tableViewSettings.backgroundColor = [UIColor colorWithRed:249/255.0 green:249/255.0 blue:249/255.0 alpha:1];
     
     UIImageView *imgView = (UIImageView*)[self.vwHeaderNotSens viewWithTag:500];
@@ -378,39 +372,22 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-/*    //#warning Incomplete method implementation.
+    //#warning Incomplete method implementation.
     // Return the number of rows in the section.
-#if ENABLE_CHANGE_IMAGE
-    return 3;
-#else
-    return 2;
-#endif
- */
-   
-    /*if(intTableSectionStatus==0)
-    {
-        return 0;
-    }
-    else{
-        if(section==0 && intTableSectionStatus==1){
-            return 1;
-        }
-        else if(section==1 && intTableSectionStatus==2){
-            return 3;
-        }
-    }*/
     
     if(section==0){
         return 1;
     }
     else if(section==1){
-        return 3;
+        if ([[self.camChannel.profile getModel] isEqualToString:CP_MODEL_0073]) {
+            return 1;
+        }
+        else{
+            return 3;
+        }
     }
     return 0;
-    
 }
-
-
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
     
@@ -1244,9 +1221,9 @@
          picker.delegate = self;
          
          /*
-          * 1. Photos.
-          * 2. Camera.
-          * 3. Live snapshot.
+          * 0. Photos.
+          * 1. Camera.
+          * 2. Live snapshot.
           */
          
          if (buttonIndex == 2)
