@@ -6,7 +6,6 @@
 //  Copyright (c) 2013 Smart Panda Ltd. All rights reserved.
 //
 
-#define TEST 0
 
 #import "TimelineViewController.h"
 #import "TimelineCell.h"
@@ -20,9 +19,10 @@
 #import "TimeLinePremiumCell.h"
 #import "define.h"
 #import "TimelineDatabase.h"
-
 #import "NSData+Base64.h"
 
+#define EVENT_NOT_READY 575
+#define EVENT_DELETED   675
 
 @interface TimelineViewController () <PlaybackDelegate>
 
@@ -1402,15 +1402,22 @@
  return YES;
  }
  */
-- (void)showDialogToConfirm
+- (void)showDialogToConfirm:(NSInteger )alertType
 {
-    NSString * msg = [NSString stringWithFormat:NSLocalizedStringWithDefaultValue(@"alert_mes_video_clip_is_not_ready", nil, [NSBundle mainBundle], @"Video clip is not ready, please try again later.", nil)];
+    NSString *msg = [NSString stringWithFormat:NSLocalizedStringWithDefaultValue(@"alert_mes_video_clip_is_not_ready", nil, [NSBundle mainBundle], @"Video clip is not ready, please try again later.", nil)];
+    NSString *notice = NSLocalizedStringWithDefaultValue(@"notice", nil, [NSBundle mainBundle], @"Notice", nil);
+    NSString *ok = NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil);
     
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"notice", nil, [NSBundle mainBundle], @"Notice", nil)
+    if (alertType == EVENT_DELETED)
+    {
+        msg = [NSString stringWithFormat:NSLocalizedStringWithDefaultValue(@"video_clip_was_deleted", nil, [NSBundle mainBundle], @"This event was deleted. It's going to be removed from list.", nil)];
+    }
+    
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:notice
                                                         message:msg
-                                                       delegate:self
-                                              cancelButtonTitle:NSLocalizedStringWithDefaultValue(@"cancel", nil, [NSBundle mainBundle], @"Cancel", nil)
-                                              otherButtonTitles:nil, nil];
+                                                       delegate:nil
+                                              cancelButtonTitle:ok
+                                              otherButtonTitles:nil];
     [alertView show];
     [alertView release];
 }
@@ -1426,11 +1433,20 @@
     if (indexPath.section == 1)
     {
         
-        EventInfo * event = [self.events objectAtIndex:indexPath.row];
+        EventInfo *event = [self.events objectAtIndex:indexPath.row];
         
         if (event.alert !=  4)
         {
             //NOt motion..
+            return;
+        }
+        
+        if (event.eventID == [[NSUserDefaults standardUserDefaults] integerForKey:EVENT_DELETED_ID])
+        {
+            [self showDialogToConfirm:EVENT_DELETED];
+            [self removeDeletedEventAtIndexPath:indexPath];
+            [[NSUserDefaults standardUserDefaults] setInteger:-1 forKey:EVENT_DELETED_ID];
+            [[NSUserDefaults standardUserDefaults] synchronize];
             return;
         }
         
@@ -1472,7 +1488,7 @@
         else
         {
             NSLog(@"URL file is not correct");
-            [self showDialogToConfirm];
+            [self showDialogToConfirm:EVENT_NOT_READY];
         }
         
         
@@ -1559,12 +1575,15 @@
 
 #pragma mark - PlayBackDelegate Methods
 
-- (void)motioEventDeleted
+- (void)motionEventDeleted
 {
     NSLog(@"%s row:%d, _events: %d, [self.tableView numberOfRowsInSection:1]:%d", __FUNCTION__, _selectedIndexPath.row, _events.count, [self.tableView numberOfRowsInSection:1]);
     
     if (_selectedIndexPath.row < _events.count)
     {
+#if 1
+        [self removeDeletedEventAtIndexPath:_selectedIndexPath];
+#else
         [_events removeObjectAtIndex:_selectedIndexPath.row];
         
         if([self.tableView numberOfRowsInSection:1] - 1 == _events.count &&
@@ -1579,6 +1598,25 @@
             // Tableview will be loaded somewhere.
             //[self.tableView reloadData];
         }
+#endif
+    }
+}
+
+- (void)removeDeletedEventAtIndexPath:(NSIndexPath *)selectedIdxPath
+{
+    [_events removeObjectAtIndex:selectedIdxPath.row];
+    
+    if([self.tableView numberOfRowsInSection:1] - 1 == _events.count &&
+       _events.count > 0)
+    {
+        [self.tableView beginUpdates];
+        [self.tableView deleteRowsAtIndexPaths:@[selectedIdxPath] withRowAnimation:UITableViewRowAnimationFade];
+        [self.tableView endUpdates];
+    }
+    else
+    {
+        // Tableview will be loaded somewhere.
+        //[self.tableView reloadData];
     }
 }
 

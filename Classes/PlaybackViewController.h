@@ -19,7 +19,7 @@
 @protocol PlaybackDelegate <NSObject>
 
 @optional
--(void)motioEventDeleted;
+-(void)motionEventDeleted;
 
 @end
 
