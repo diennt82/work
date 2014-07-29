@@ -395,7 +395,7 @@
     
     if (_alertView == nil)
     {
-        self.alertView = [[CustomIOS7AlertView alloc] init];
+        _alertView = [[CustomIOS7AlertView alloc] init];
         // Add some custom content to the alert view
         [_alertView setContainerView:[self createDemoView]];
         

@@ -284,7 +284,7 @@
 {
     if (!_jsonCommBlocked)
     {
-        self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
+        _jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
                                                                      Selector:nil
                                                                  FailSelector:nil
                                                                     ServerErr:nil];
@@ -336,7 +336,7 @@
 {
     if (!_jsonCommBlocked)
     {
-        self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
+        _jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
                                                                              Selector:nil
                                                                          FailSelector:nil
                                                                             ServerErr:nil];

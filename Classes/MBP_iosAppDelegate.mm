@@ -750,7 +750,7 @@ void checkingApplicationCrashed()
         
         if (!_jsonComm)
         {
-            self.jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+            _jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
                                                                   Selector:nil
                                                               FailSelector:nil
                                                                  ServerErr:nil];

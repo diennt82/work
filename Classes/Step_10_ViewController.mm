@@ -1251,7 +1251,7 @@
                 NSString * userPass   = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
                 NSString * userApiKey = (NSString *) [userDefaults objectForKey:@"PortalApiKey"];
                 
-                self.userAccount = [[UserAccount alloc] initWithUser:userEmail
+                _userAccount = [[UserAccount alloc] initWithUser:userEmail
                                                             password:userPass
                                                               apiKey:userApiKey
                                                             listener:nil];
@@ -1375,7 +1375,7 @@
                 NSString * userPass   = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
                 NSString * userApiKey = (NSString *) [userDefaults objectForKey:@"PortalApiKey"];
                 
-                self.userAccount = [[UserAccount alloc] initWithUser:userEmail
+                _userAccount = [[UserAccount alloc] initWithUser:userEmail
                                                             password:userPass
                                                               apiKey:userApiKey
                                                             listener:nil];
