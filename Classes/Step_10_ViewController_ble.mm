@@ -13,6 +13,7 @@
 #import "UserAccount.h"
 #import "BLEConnectionManager.h"
 #import "MBP_iosViewController.h"
+#import "define.h"
 
 @interface Step_10_ViewController_ble ()
 
@@ -127,7 +128,10 @@
                                    selector:@selector(setStopScanning:)
                                    userInfo:nil
                                     repeats:NO];
-    
+    /*
+     * Updating the information below after camera is available --> Make sure updating succeeded.
+     */
+#if 0
     // Trying to enable all PN.
     [self sendToServerTheCommand:@"set_motion_area&grid=1x1&zone=00"];
     [self sendToServerTheCommand:@"vox_enable"];
@@ -136,7 +140,7 @@
     
     // Trying to update host ssid to server.
     [self updatesBasicInfoForCamera];
-    
+#endif
     // 2 of 3. no need to schedule timer here.
     [self wait_for_camera_to_reboot:nil];
 }
@@ -228,6 +232,26 @@
     {
         //Found it online
         NSLog(@"Found it online");
+        
+        // Trying to enable all PN.
+        [self sendToServerTheCommand:@"set_motion_area&grid=1x1&zone=00"];
+        
+        if ([[NSUserDefaults standardUserDefaults] integerForKey:SET_UP_CAMERA] != SETUP_CAMERA_FOCUS73)
+        {
+            [self sendToServerTheCommand:@"vox_enable"];
+            [self sendToServerTheCommand:@"set_temp_lo_enable&value=1"];
+            [self sendToServerTheCommand:@"set_temp_hi_enable&value=1"];
+        }
+        else
+        {
+            NSLog(@"%s Setup model Focus73.", __FUNCTION__);
+        }
+        
+        // Trying to update host ssid to server.
+        [self updatesBasicInfoForCamera];
+        
+        [self checkItOnline]; // Just synch up data with offline data.
+        
         [self setupCompleted];
         return;
     }

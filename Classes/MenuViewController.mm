@@ -191,9 +191,10 @@
     self.navigationController.navigationBarHidden = NO;
     self.navigationItem.title = @"";
     [self selectMenuCamera];
-    
-//    self.camerasVC.tableView.frame = CGRectMake(0, 30, self.view.frame.size.width, self.view.frame.size.height - 30);
     self.camerasVC.ibTableListCamera.contentInset = UIEdgeInsetsMake(30, 0, 64, 0);
+    
+    [[NSUserDefaults standardUserDefaults] setInteger:-1 forKey:EVENT_DELETED_ID];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 
     if (!_isFirttime) //revert
     {

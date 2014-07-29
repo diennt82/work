@@ -25,6 +25,7 @@
 @property (retain, nonatomic) IBOutlet UITextField  *tfConfirmPassword;
 @property (retain, nonatomic) IBOutlet UIButton     *btnCheckbox;
 @property (retain, nonatomic) IBOutlet UIButton     *btnCreate;
+@property (assign, nonatomic) IBOutlet UIButton     *btnAlreadyAccount;
 @property (retain, nonatomic) IBOutlet UIView       *viewProgress;
 @property (nonatomic, assign) IBOutlet UIButton     *agreeButton;
 @property (assign, nonatomic) IBOutlet UIButton     *btnUserNameErr;
@@ -293,15 +294,13 @@
 {
     //const int movementDistance = 80; // tweak as needed
     const float movementDuration = 0.3f; // tweak as needed
-    
-    NSInteger movementDistance = 180; // tweak as needed
+    NSInteger movementDistance = 190; // tweak as needed
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
-        movementDistance = 190;
+        movementDistance = 270;
     }
-    
-    if (UIScreen.mainScreen.bounds.size.height < 568)
+    else if (UIScreen.mainScreen.bounds.size.height < 568)// iphone 4s and before
     {
         movementDistance = 155;
     }
@@ -311,7 +310,15 @@
     [UIView beginAnimations: @"anim" context: nil];
     [UIView setAnimationBeginsFromCurrentState: YES];
     [UIView setAnimationDuration: movementDuration];
-    self.view.frame = CGRectOffset(self.view.frame, 0, movement);
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        self.btnCreate.frame = CGRectOffset(self.btnCreate.frame, 0, movement);
+        self.btnAlreadyAccount.frame = CGRectOffset(self.btnAlreadyAccount.frame, 0, movement);
+    }
+    else
+    {
+        self.view.frame = CGRectOffset(self.view.frame, 0, movement);
+    }
     [UIView commitAnimations];
 }
 

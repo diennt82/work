@@ -126,7 +126,8 @@
     }
     
     // Configure the cell...
-    cell.textLabel.text = (NSString *) [self.securityTypes objectAtIndex:indexPath.row];
+    NSString *str = (NSString *) [self.securityTypes objectAtIndex:indexPath.row];
+    cell.textLabel.text = [str uppercaseString];
     
     return cell;
 #else

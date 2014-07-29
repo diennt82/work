@@ -28,6 +28,8 @@
 @property (retain, nonatomic) IBOutlet UITextField *tfEmail;
 @property (retain, nonatomic) IBOutlet UITextField *tfPassword;
 @property (retain, nonatomic) IBOutlet UIButton *buttonEnter;
+@property (assign, nonatomic) IBOutlet UIButton *buttonCreateAccount;
+@property (assign, nonatomic) IBOutlet UIButton *buttonForgotPass;
 
 @property (nonatomic, assign) id<ConnectionMethodDelegate> delegate;
 @property (nonatomic, retain) NSString *stringUsername;
@@ -116,10 +118,15 @@
     self.tfPassword.autocapitalizationType = UITextAutocapitalizationTypeNone;
     
     [self performSelectorInBackground:@selector(loadUserInfo_bg) withObject:nil];
-}    
     
-       
-
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWasShown:)
+                                                 name:UIKeyboardDidShowNotification object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillBeHidden:)
+                                                 name:UIKeyboardWillHideNotification object:nil];
+}    
 
 -(void) viewWillAppear:(BOOL)animated
 {
@@ -162,6 +169,16 @@
     //[self performSelector:@selector(crash) withObject:nil];
     [self.view endEditing:YES];
     [super viewWillDisappear:animated];
+}
+
+- (void)keyboardWasShown:(NSNotification*)aNotification
+{
+    [self animateTextFieldWithUp:YES];
+}
+
+- (void)keyboardWillBeHidden:(NSNotification*)aNotification
+{
+    [self animateTextFieldWithUp:NO];
 }
 
 - (void)loadUserInfo_bg
@@ -586,23 +603,13 @@
     return YES;
 }
 
-- (void)textFieldDidBeginEditing:(UITextField *)textField
-{
-    [self animateTextField: textField up: YES];
-}
-
-- (void)textFieldDidEndEditing:(UITextField *)textField
-{
-    [self animateTextField: textField up: NO];
-}
-
-- (void) animateTextField: (UITextField*) textField up: (BOOL) up
+- (void)animateTextFieldWithUp:(BOOL) up
 {
     NSInteger movementDistance = 216; // tweak as needed
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
-        movementDistance = 264;
+        movementDistance = 270;
     }
     
     if (UIScreen.mainScreen.bounds.size.height < 568)
@@ -616,7 +623,16 @@
     [UIView beginAnimations: @"anim" context: nil];
     [UIView setAnimationBeginsFromCurrentState: YES];
     [UIView setAnimationDuration: MOVEMENT_DURATION];
-    self.view.frame = CGRectOffset(self.view.frame, 0, movement);
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        self.buttonEnter.frame = CGRectOffset(self.buttonEnter.frame, 0, movement);
+        self.buttonCreateAccount.frame = CGRectOffset(self.buttonCreateAccount.frame, 0, movement);
+        self.buttonForgotPass.frame = CGRectOffset(self.buttonForgotPass.frame, 0, movement);
+    }
+    else
+    {
+        self.view.frame = CGRectOffset(self.view.frame, 0, movement);
+    }
     [UIView commitAnimations];
 }
 

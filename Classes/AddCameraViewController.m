@@ -47,19 +47,19 @@
     [self.btnCancel setBackgroundImage:[UIImage imageNamed:@"cancel_btn_pressed"] forState:UIControlEventTouchDown];
     
     NSMutableArray *array = [[NSMutableArray alloc] init];
-    Camera *cam = [[Camera alloc] initWith:FORCUS_66_TAG andLable:@"Focus 66" andImage:[UIImage imageNamed:@"focus661-black.png"]];
+    Camera *cam = [[Camera alloc] initWith:FORCUS_66_TAG andLable:@"Focus 66" andImage:[UIImage imageNamed:@"focus661-black"]];
     [array addObject:cam];
     [cam release];
     
-    cam = [[Camera alloc] initWith:MBP_83_TAG andLable:@"MBP 83/836" andImage:[UIImage imageNamed:@"camera_2.png"]];
+    cam = [[Camera alloc] initWith:MBP_83_TAG andLable:@"MBP 83/836" andImage:[UIImage imageNamed:@"camera_2"]];
     [array addObject:cam];
     [cam release];
     
-    cam = [[Camera alloc] initWith:SCOUT_73_TAG andLable:@"Scout 73" andImage:[UIImage imageNamed:@"camera_scout85.png"]];
+    cam = [[Camera alloc] initWith:SCOUT_73_TAG andLable:@"Scout 73" andImage:[UIImage imageNamed:@"camera_scout85"]];
     [array addObject:cam];
     [cam release];
     
-    cam = [[Camera alloc] initWith:MBP_85_TAG andLable:@"MBP 85/854" andImage:[UIImage imageNamed:@"mbp85.png"]];
+    cam = [[Camera alloc] initWith:MBP_85_TAG andLable:@"MBP 85/854" andImage:[UIImage imageNamed:@"mbp85"]];
     [array addObject:cam];
     [cam release];
     

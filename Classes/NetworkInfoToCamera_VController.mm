@@ -115,8 +115,7 @@
     UITextField * _sec = (UITextField *) [self.securityCell viewWithTag:1];
     if (_sec != nil)
     {
-        _sec.text = self.security;
-        
+        _sec.text = [self.security uppercaseString];
     }
     
 #if 0
@@ -229,7 +228,7 @@
     UITextField * _sec = (UITextField *) [self.securityCell viewWithTag:1];
     if (_sec != nil)
     {
-        _sec.text = self.security;
+        _sec.text = [self.security uppercaseString];
     }
 }
 

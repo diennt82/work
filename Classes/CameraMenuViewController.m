@@ -46,6 +46,12 @@
 #define SENSITIVITY_MOTION_VALUE(x) (x<=SENSITIVITY_MOTION_LOW?0:(x<=SENSITIVITY_MOTION_MEDIUM?1:2))
 #define SENSITIVITY_SOUND_VALUE(x)  (x>=SENSITIVITY_SOUND_LOW?0:(x>=SENSITIVITY_SOUND_MEDIUM?1:2))
 
+typedef enum _WAIT_FOR_UPDATING {
+    NOT_WAITING = 0,
+    WAITING_FOR_BACK_PRESSED,
+    WAITING_FOR_TEMP_CELL_CLOSING
+} WAIT_FOR_UPDATING;
+
 @interface CameraMenuViewController () <UITableViewDataSource, UITableViewDelegate,SensitivityCellDelegate,SensitivityTemperaureCellDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 {
     int intTableSectionStatus; // 0 No open, 1 = 0 section open , 2 = 1 section open
@@ -73,6 +79,7 @@
 
 @property (retain, nonatomic) IBOutlet UIView *vwHeaderCamDetail,*vwHeaderNotSens;
 @property (nonatomic) BOOL shouldWaitForUpdateSettings;
+@property (nonatomic) WAIT_FOR_UPDATING shoulfWaitForUpdatingType;
 @property (nonatomic) BOOL backGroundUpdateExecuting;
 @property (retain, nonatomic) SensitivityTemperatureCell *sensitivityTemperatureCell;
 
@@ -95,6 +102,7 @@
     [super viewDidLoad];
     intTableSectionStatus = 0;
     self.shouldWaitForUpdateSettings = FALSE;
+    self.shoulfWaitForUpdatingType = NOT_WAITING;
     self.backGroundUpdateExecuting = NO;
     
     self.tableViewSettings.delegate = self;
@@ -109,12 +117,6 @@
                                                    @"Firmware version", nil);
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     self.apiKey = [userDefaults stringForKey:@"PortalApiKey"];
-    
-//    if (![self.camChannel.profile isNotAvailable])
-//    {
-//        self.isLoading = TRUE;
-//        [self performSelectorInBackground:@selector(updateFWVersion_bg) withObject:nil];
-//    }
     
 //    self.tableViewSettings.backgroundColor = [UIColor colorWithRed:249/255.0 green:249/255.0 blue:249/255.0 alpha:1];
     
@@ -183,15 +185,17 @@
 {
     self.navigationItem.leftBarButtonItem = NO;
     self.shouldWaitForUpdateSettings = FALSE;
+    self.shoulfWaitForUpdatingType = NOT_WAITING;
     
     if (_sensitivityTemperatureCell)
     {
         self.shouldWaitForUpdateSettings = [_sensitivityTemperatureCell shouldWaitForUpdateSettings];
     }
     
-    if (_shouldWaitForUpdateSettings)
+    if (self.shouldWaitForUpdateSettings)
     {
         [self showUpdatingProgressHUD];
+        self.shoulfWaitForUpdatingType = WAITING_FOR_BACK_PRESSED;
     }
     else
     {
@@ -378,39 +382,22 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-/*    //#warning Incomplete method implementation.
+    //#warning Incomplete method implementation.
     // Return the number of rows in the section.
-#if ENABLE_CHANGE_IMAGE
-    return 3;
-#else
-    return 2;
-#endif
- */
-   
-    /*if(intTableSectionStatus==0)
-    {
-        return 0;
-    }
-    else{
-        if(section==0 && intTableSectionStatus==1){
-            return 1;
-        }
-        else if(section==1 && intTableSectionStatus==2){
-            return 3;
-        }
-    }*/
     
     if(section==0){
         return 1;
     }
     else if(section==1){
-        return 3;
+        if ([[self.camChannel.profile getModel] isEqualToString:CP_MODEL_0073]) {
+            return 1;
+        }
+        else{
+            return 3;
+        }
     }
     return 0;
-    
 }
-
-
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
     
@@ -944,7 +931,7 @@
     [MBProgressHUD hideHUDForView:self.view animated:NO];
     self.navigationController.view.userInteractionEnabled = YES;
     
-    [[[[UIAlertView alloc] initWithTitle:@"Remove Camera"
+    [[[[UIAlertView alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"alert_title_remove_camera", nil, [NSBundle mainBundle], @"Remove Camera", nil)
                                  message:[errorResponse objectForKey:@"message"]
                                 delegate:nil
                        cancelButtonTitle:nil
@@ -959,57 +946,87 @@
     [MBProgressHUD hideHUDForView:self.view animated:NO];
     self.navigationController.view.userInteractionEnabled = YES;
     
-    [[[[UIAlertView alloc] initWithTitle:@"Remove Camera"
-                                 message:@"Server is unreachable"
+    [[[[UIAlertView alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"alert_title_remove_camera", nil, [NSBundle mainBundle], @"Remove Camera", nil)
+                                 message:NSLocalizedString(@"Server_error_1", @"")
                                 delegate:nil
                        cancelButtonTitle:nil
                        otherButtonTitles:NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil),
        nil] autorelease] show];
 }
 
--(IBAction)btnCameraDetailPressed:(id)sender
+- (IBAction)btnCameraDetailPressed:(id)sender
 {
-    if(intTableSectionStatus!=1){
+    if(intTableSectionStatus!=1)
+    {
         intTableSectionStatus = 1;
-    }else{
+    }
+    else
+    {
         intTableSectionStatus = 0;
     }
-    [self.tableViewSettings beginUpdates];
-    [self.tableViewSettings reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, 1)] withRowAnimation:UITableViewRowAnimationAutomatic];
-    [self.tableViewSettings endUpdates];
     
+    self.shouldWaitForUpdateSettings = FALSE;
+    self.shoulfWaitForUpdatingType = NOT_WAITING;
+    if (_sensitivityTemperatureCell)
+    {
+        self.shouldWaitForUpdateSettings = [_sensitivityTemperatureCell shouldWaitForUpdateSettings];
+    }
     
-
+    if (self.shouldWaitForUpdateSettings)
+    {
+        [self showUpdatingProgressHUD];
+        self.shoulfWaitForUpdatingType = WAITING_FOR_TEMP_CELL_CLOSING;
+    }
+    else
+    {
+        [self animationReloadSectionsOfTableView];
+    }
 }
 
 -(IBAction)btnNotiSenPressed:(id)sender
 {
-    if([self.camChannel.profile isNotAvailable]){
-
+    if([self.camChannel.profile isNotAvailable])
+    {
         return;
     }
     
-    if(intTableSectionStatus!=2){
+    if(intTableSectionStatus != 2)
+    {
         intTableSectionStatus = 2;
-    }else{
+    }
+    else
+    {
         intTableSectionStatus = 0;
     }
     
-    //[self.tableViewSettings reloadData];
-     [self.tableViewSettings beginUpdates];
-    [self.tableViewSettings reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, 1)] withRowAnimation:UITableViewRowAnimationAutomatic];
-     [self.tableViewSettings endUpdates];
+    self.shouldWaitForUpdateSettings = FALSE;
+    self.shoulfWaitForUpdatingType = NOT_WAITING;
+    if (_sensitivityTemperatureCell)
+    {
+        self.shouldWaitForUpdateSettings = [_sensitivityTemperatureCell shouldWaitForUpdateSettings];
+    }
     
-    if(intTableSectionStatus==2){
+    if (self.shouldWaitForUpdateSettings)
+    {
+        [self showUpdatingProgressHUD];
+        self.shoulfWaitForUpdatingType = WAITING_FOR_TEMP_CELL_CLOSING;
+    }
+    else
+    {
+        [self animationReloadSectionsOfTableView];
+    }
+    
+    if(intTableSectionStatus == 2)
+    {
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-        [hud setLabelText:@"Loading..."];
+        [hud setLabelText:NSLocalizedStringWithDefaultValue(@"loading", nil, [NSBundle mainBundle], @"Loading...", nil)];
         [self performSelector:@selector(getSensitivityInfoFromServer) withObject:nil afterDelay:0.1];
     }
 }
 
 - (void)showUpdatingProgressHUD {
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    [hud setLabelText:@"Updating..."];
+    [hud setLabelText:NSLocalizedStringWithDefaultValue(@"hud_updating", nil, [NSBundle mainBundle], @"Updating...", nil)];
 }
 
 #pragma mark - Sensitivity deletate
@@ -1156,19 +1173,15 @@
     
     NSLog(@"%s cmd:%@, error: %d", __func__, command, errorCode);
     
-    dispatch_sync(dispatch_get_main_queue(), ^{
+    dispatch_async(dispatch_get_main_queue(), ^{
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
     });
     
     if (errorCode == 200)
     {
-        if (_shouldWaitForUpdateSettings)
-        {
-            self.shouldWaitForUpdateSettings = FALSE;
-            dispatch_sync(dispatch_get_main_queue(), ^{
-                [self.navigationController popViewControllerAnimated:YES];
-            });
-        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self executeAfterUpdateWaiting];
+        });
     }
     else
     {
@@ -1177,16 +1190,28 @@
         [showError setMode:MBProgressHUDModeText];
         
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-            
-            if (_shouldWaitForUpdateSettings)
-            {
-                self.shouldWaitForUpdateSettings = FALSE;
-                [self.navigationController popViewControllerAnimated:YES];
-            }
+            [self executeAfterUpdateWaiting];
         });
     }
     self.backGroundUpdateExecuting = NO;
+}
+
+- (void)executeAfterUpdateWaiting {
+    if (self.shouldWaitForUpdateSettings)
+    {
+        if (self.shoulfWaitForUpdatingType == WAITING_FOR_BACK_PRESSED)
+        {
+            self.shouldWaitForUpdateSettings = FALSE;
+            self.shoulfWaitForUpdatingType = NOT_WAITING;
+            [self.navigationController popViewControllerAnimated:YES];
+        }
+        else if (self.shoulfWaitForUpdatingType == WAITING_FOR_TEMP_CELL_CLOSING)
+        {
+            self.shouldWaitForUpdateSettings = FALSE;
+            self.shoulfWaitForUpdatingType = NOT_WAITING;
+            [self animationReloadSectionsOfTableView];
+        }
+    }
 }
 
 -(void)btnChangeCameraName
@@ -1244,9 +1269,9 @@
          picker.delegate = self;
          
          /*
-          * 1. Photos.
-          * 2. Camera.
-          * 3. Live snapshot.
+          * 0. Photos.
+          * 1. Camera.
+          * 2. Live snapshot.
           */
          
          if (buttonIndex == 2)
@@ -1626,5 +1651,9 @@
     }
 }
 
-
+- (void)animationReloadSectionsOfTableView {
+    [self.tableViewSettings beginUpdates];
+    [self.tableViewSettings reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, 1)] withRowAnimation:UITableViewRowAnimationAutomatic];
+    [self.tableViewSettings endUpdates];
+}
 @end

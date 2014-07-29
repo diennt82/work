@@ -10,6 +10,8 @@
 #import "Step05Cell.h"
 #import "define.h"
 #import "WifiListParser.h"
+#import "Step_10_ViewController_ble.h"
+#import "MBProgressHUD.h"
 
 #define BLE_TIMEOUT_PROCESS 1*60
 
@@ -21,6 +23,7 @@
 @property (retain, nonatomic) IBOutlet UITableView *mTableView;
 @property (retain, nonatomic) IBOutlet UIView *viewProgress;
 @property (retain, nonatomic) IBOutlet UIView *viewError;
+@property (retain, nonatomic) IBOutlet UIButton *btnSkipWIFISetup;
 
 @property (retain, nonatomic) WifiEntry *selectedWifiEntry;
 @property (nonatomic) BOOL newCmdFlag;
@@ -59,8 +62,10 @@
     [_viewProgress release];
     [_cellRefresh release];
     [_viewError release];
+    [_btnSkipWIFISetup release];
     [super dealloc];
 }
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -79,6 +84,18 @@
     [self.btnContinue setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
     [self.btnContinue setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
     self.btnContinue.enabled = NO;
+    
+    if ([[NSUserDefaults standardUserDefaults] integerForKey:SET_UP_CAMERA] == SETUP_CAMERA_FOCUS73)
+    {
+        NSString *contTitle = NSLocalizedStringWithDefaultValue(@"continue", nil, [NSBundle mainBundle], @"Continue", nil);
+        self.btnContinue.titleLabel.text = contTitle;
+        
+        NSString *skipWIFISetup = NSLocalizedStringWithDefaultValue(@"skip_wifi_setup", nil, [NSBundle mainBundle], @"Skip WIFI Setup", nil);
+        self.btnSkipWIFISetup.titleLabel.text = skipWIFISetup;
+        self.btnSkipWIFISetup.hidden = NO;
+    }
+    
+    
     self.newCmdFlag = TRUE;
     
     [BLEConnectionManager getInstanceBLE].delegate = self;
@@ -190,6 +207,20 @@
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
+- (IBAction)btnSkipWIFISetupTouchUpInsideAction:(id)sender
+{
+    MBProgressHUD *hub = [MBProgressHUD showHUDAddedTo:self.view animated:NO];
+    hub.labelText = @"Configure camera...";
+    
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:HOST_SSID];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    [self sendCommandRestartSystem];
+    [self moveToFinalStep];
+    
+    [MBProgressHUD hideHUDForView:self.view animated:NO];
+}
+
 #pragma mark - Methods
 
 - (void)hubbleItemAction: (id)sender
@@ -278,12 +309,14 @@
 - (void)showDialogToConfirm: (NSString *)homeWifi selectedWifi: (NSString *)selectedWifi
 {
     NSString * msg = [NSString stringWithFormat:@"You have selected wifi %@ which is not the same as your Home wifi, %@. If you choose to continue, there will more steps to setup your camera. Do you want to proceed?", selectedWifi, homeWifi];
+    NSString *contTitle = NSLocalizedStringWithDefaultValue(@"continue", nil, [NSBundle mainBundle], @"Continue", nil);
+    NSString *cancelString = NSLocalizedStringWithDefaultValue(@"cancel", nil, [NSBundle mainBundle], @"Cancel", nil);
     
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Notice"
                                                         message:msg
                                                        delegate:self
-                                              cancelButtonTitle:NSLocalizedStringWithDefaultValue(@"cancel", nil, [NSBundle mainBundle], @"Cancel", nil)
-                                              otherButtonTitles:@"Continue", nil];
+                                              cancelButtonTitle:cancelString
+                                              otherButtonTitles:contTitle, nil];
     alertView.tag = 555;
     [alertView show];
     [alertView release];
@@ -299,6 +332,65 @@
     [self.viewProgress removeFromSuperview];
     [self.view addSubview:_viewError];
     [self.view bringSubviewToFront:_viewError];
+}
+
+- (void)sendCommandRestartSystem
+{
+    NSLog(@"%s", __FUNCTION__);
+    
+    NSDate * date;
+    while( ([BLEConnectionManager getInstanceBLE].state != CONNECTED) &&
+          ( self.shouldTimeoutProcessing == FALSE ) )
+    {
+        date = [NSDate dateWithTimeInterval:2.0 sinceDate:[NSDate date]];
+        [[NSRunLoop currentRunLoop] runUntilDate:date];
+    }
+    
+    if ( self.shouldTimeoutProcessing == TRUE)
+    {
+        NSLog(@"%s SETUP PROCESS TIMEOUT --> return", __FUNCTION__);
+        return ;
+    }
+    
+    [BLEConnectionManager getInstanceBLE].delegate = self;
+    [[BLEConnectionManager getInstanceBLE].uartPeripheral writeString:RESTART_HTTP_CMD withTimeOut:SHORT_TIME_OUT_SEND_COMMAND];
+    
+    if ([BLEConnectionManager getInstanceBLE].uartPeripheral.isBusy  )
+    {
+        date = [NSDate dateWithTimeInterval:1.5 sinceDate:[NSDate date]];
+        
+        [[NSRunLoop currentRunLoop] runUntilDate:date];
+        
+        if([BLEConnectionManager getInstanceBLE].uartPeripheral.isBusy  )
+        {
+            NSLog(@"BLE still busy, camera may have already rebooted. Moving on..");
+        }
+    }
+}
+
+- (void)moveToFinalStep
+{
+    NSLog(@"%s", __FUNCTION__);
+    
+    if (_timerTimeoutConnectBLE != nil)
+    {
+        [self.timerTimeoutConnectBLE invalidate];
+        self.timerTimeoutConnectBLE = nil;
+    }
+    
+    NSLog(@"%s Killing BLE.", __FUNCTION__);
+    [BLEConnectionManager getInstanceBLE].delegate = nil;
+    [[BLEConnectionManager getInstanceBLE] stopScanBLE];
+    [BLEConnectionManager getInstanceBLE].needReconnect = NO;
+    [[BLEConnectionManager getInstanceBLE].uartPeripheral didDisconnect];
+    
+    NSLog(@"%s Load Step 10.", __FUNCTION__);
+    
+    Step_10_ViewController_ble *step10ViewController = [[Step_10_ViewController_ble alloc]
+                                                        initWithNibName:@"Step_10_ViewController_ble" bundle:nil];
+    
+    [self.navigationController pushViewController:step10ViewController animated:NO];
+    [step10ViewController release];
 }
 
 #pragma mark - Alert view delegate

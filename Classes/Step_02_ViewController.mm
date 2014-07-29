@@ -9,7 +9,7 @@
 #import "Step_02_ViewController.h"
 #import "Step_03_ViewController.h"
 #import "UIBarButtonItem+Custom.h"
-#import "PAIRInstructionViewController.h"
+
 #import "MBPNavController.h"
 #import "CreateBLEConnection_VController.h"
 #import "BLEConnectionManager.h"
@@ -58,14 +58,19 @@
     [self.btnContinue setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
     [self.btnContinue setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
     
+    NSLog(@"%s Camera model:%d", __FUNCTION__, _cameraType);
+    
+#if 0
     if (_cameraType == SETUP_CAMERA_FOCUS73)
     {
         /*
          * TODO: UI for focus73 here. Implementing when it is required!
          */
         //self.viewInstructionFocus73.hidden = NO;
+        NSLog(@"%s - isOnBLE: %d", __FUNCTION__, [BLEConnectionManager getInstanceBLE].isOnBLE);
     }
     else
+#endif
     {
         UIImageView *imageView = (UIImageView *)[self.view viewWithTag:585];
         imageView.animationImages = @[[UIImage imageNamed:@"setup_camera_led1"],
@@ -75,9 +80,9 @@
         
         [imageView startAnimating];
         
-        if (_cameraType == BLUETOOTH_SETUP)
+        if (_cameraType == BLUETOOTH_SETUP || _cameraType == SETUP_CAMERA_FOCUS73)
         {
-            NSLog(@"Step_02_VC - viewDidLoad: - isOnBLE: %d", [BLEConnectionManager getInstanceBLE].isOnBLE);
+            NSLog(@"%s- isOnBLE: %d", __FUNCTION__, [BLEConnectionManager getInstanceBLE].isOnBLE);
         }
     }
 }
@@ -154,18 +159,32 @@
                                                      withLabel:@"Continue"
                                                      withValue:[NSNumber numberWithInteger:_cameraType]];
     
-    if (_cameraType == BLUETOOTH_SETUP)
+    if (_cameraType == BLUETOOTH_SETUP || _cameraType == SETUP_CAMERA_FOCUS73)
     {
         NSLog(@"Load step Create BLE Connection");
         //Load the next xib
-        CreateBLEConnection_VController *step03ViewController =
-        [[CreateBLEConnection_VController alloc] initWithNibName:@"CreateBLEConnection_VController"
-                                                          bundle:nil];
+        CreateBLEConnection_VController *step03ViewController = nil;
+        
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+            step03ViewController = [[CreateBLEConnection_VController alloc]
+                                    initWithNibName:@"CreateBLEConnection_VController_iPad"
+                                    bundle:nil];
+        }
+        else
+        {
+            step03ViewController = [[CreateBLEConnection_VController alloc] initWithNibName:@"CreateBLEConnection_VController"
+                                                                                     bundle:nil];
+        }
         
         [self.navigationController pushViewController:step03ViewController animated:NO];
         
         [step03ViewController release];
     }
+    /*
+     * TODO: Enable #if 0 below & change condition above if needed Bonjour on Focus73
+     */
+#if 0
     else if (_cameraType == SETUP_CAMERA_FOCUS73)
     {
         // Show Focus73 list.
@@ -173,6 +192,7 @@
         [self.navigationController pushViewController:focus73 animated:NO];
         [focus73 release];
     }
+#endif
     else
     {
         NSLog(@"Load step 3 Concurrent");

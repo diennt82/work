@@ -155,7 +155,10 @@
     self.lblTempValueLeft.text = [NSString stringWithFormat:@"%ld", lroundf(_tempValueLeft)];
     self.lblTemperatureValueRight.text = [NSString stringWithFormat:@"%ld", lroundf(_tempValueRight)];
     
-    [_sensitivityTempCellDelegate valueChangedTypeTemperaure:_isFahrenheit];
+    if ([_sensitivityTempCellDelegate respondsToSelector:@selector(valueChangedTypeTemperaure:)])
+    {
+        [_sensitivityTempCellDelegate valueChangedTypeTemperaure:_isFahrenheit];
+    }
 }
 
 - (IBAction)btnMinusLeftTouchUpInsideAction:(id)sender
@@ -239,7 +242,10 @@
         tempLowValue = round((tempLowValue - 32) * 5.f/9.f); // Convert to °C
     }
     
-    [_sensitivityTempCellDelegate valueChangedTempLowValue:tempLowValue];
+    if ([_sensitivityTempCellDelegate respondsToSelector:@selector(valueChangedTempLowValue:)])
+    {
+        [_sensitivityTempCellDelegate valueChangedTempLowValue:tempLowValue];
+    }
 }
 
 - (IBAction)btnMinusRightTouchUpInsideAction:(id)sender
@@ -321,7 +327,10 @@
         tempHiValue = round((tempHiValue - 32) * 5.f/9.f); // Convert to °C
     }
     
-    [_sensitivityTempCellDelegate valueChangedTempHighValue:tempHiValue];
+    if ([_sensitivityTempCellDelegate respondsToSelector:@selector(valueChangedTempHighValue:)])
+    {
+        [_sensitivityTempCellDelegate valueChangedTempHighValue:tempHiValue];
+    }
 }
 
 - (IBAction)btnSwtichLeftTouchUpInsideAction:(UIButton *)sender
@@ -350,24 +359,9 @@
         self.timerTempLowSwitch = nil;
     }
     
-    self.timerTempLowSwitch = [NSTimer scheduledTimerWithTimeInterval:1
-                                                                      target:self
-                                                                    selector:@selector(reportTempLowSwitch:)
-                                                                    userInfo:nil
-                                                                     repeats:NO];
-    
-    //[_sensitivityTempCellDelegate valueChangedTempLowOn:_isSwitchOnLeft];
-}
-
-- (void)reportTempLowSwitch:(NSTimer *)timer
-{
-    if (_sensitivityTempCellDelegate)
+    if ([_sensitivityTempCellDelegate respondsToSelector:@selector(valueChangedTempLowOn:)])
     {
         [_sensitivityTempCellDelegate valueChangedTempLowOn:_isSwitchOnLeft];
-    }
-    else
-    {
-        NSLog(@"%s Sensitivity delete is nil.", __FUNCTION__);
     }
 }
 
@@ -396,24 +390,9 @@
         self.timerTempHighSwitch = nil;
     }
     
-    self.timerTempHighSwitch = [NSTimer scheduledTimerWithTimeInterval:1
-                                                               target:self
-                                                             selector:@selector(reportTempHighSwitch:)
-                                                             userInfo:nil
-                                                              repeats:NO];
-    
-    //[_sensitivityTempCellDelegate valueChangedTempHighOn:_isSwitchOnRight];
-}
-
-- (void)reportTempHighSwitch:(NSTimer *)timer
-{
-    if (_sensitivityTempCellDelegate)
+    if ([_sensitivityTempCellDelegate respondsToSelector:@selector(valueChangedTempHighOn:)])
     {
         [_sensitivityTempCellDelegate valueChangedTempHighOn:_isSwitchOnRight];
-    }
-    else
-    {
-        NSLog(@"%s Sensitivity delete is nil.", __FUNCTION__);
     }
 }
 

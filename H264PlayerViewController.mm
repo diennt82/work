@@ -17,7 +17,7 @@
 #import <SystemConfiguration/CaptiveNetwork.h>
 #import <objc/message.h>
 
-
+#define TEMP_NULL @"NIL"
 
 @implementation H264PlayerViewController
 
@@ -547,7 +547,6 @@ double _ticks = 0;
     if (_wantToShowTimeLine)
     {
         [self showTimelineView];
-        [self.horizMenu resetStatus];
         _wantToShowTimeLine = NO;
     }
     
@@ -1451,6 +1450,7 @@ double _ticks = 0;
         self.timelineVC.view.hidden = NO;
         [self.view bringSubviewToFront:self.timelineVC.view];
     }
+    [self.horizMenu resetStatus];
 }
 
 /*
@@ -1653,7 +1653,7 @@ double _ticks = 0;
     
     [self setupPtt];
     
-    self.stringTemperature = @"0";
+    self.stringTemperature = TEMP_NULL;
     //end add button to change
     [ib_switchDegree setHidden:YES];
     
@@ -1664,7 +1664,7 @@ double _ticks = 0;
 
 - (BOOL)isStopProcess
 {
-    NSLog(@"%s userWantToCancel:%d, _h264StreamerIsStopped:%d, _returnFromPlayback:%d, _isFWUpgradingInProgress:%d", __FUNCTION__, userWantToCancel, _h264StreamerIsInStopped, _returnFromPlayback, _isFWUpgradingInProgress);
+    //NSLog(@"%s userWantToCancel:%d, _h264StreamerIsStopped:%d, _returnFromPlayback:%d, _isFWUpgradingInProgress:%d", __FUNCTION__, userWantToCancel, _h264StreamerIsInStopped, _returnFromPlayback, _isFWUpgradingInProgress);
     
     return (userWantToCancel         ||
             _h264StreamerIsInStopped ||
@@ -1736,7 +1736,7 @@ double _ticks = 0;
 {
     NSLog(@"%s model:%@", __FUNCTION__, _cameraModel);
     
-    if([_cameraModel hasPrefix:CP_MODEL_008])
+    if([_cameraModel hasPrefix:CP_MODEL_008] || [_cameraModel isEqualToString:CP_MODEL_0073])
     {
         [self cleanUpDirectionTimers];
         
@@ -2792,15 +2792,27 @@ double _ticks = 0;
 - (void)setTemperatureState_Fg: (NSString *)temperature
 {
     // Update UI
-    // start
-    [self.ib_temperature.subviews makeObjectsPerformSelector: @selector(removeFromSuperview)];
+    
+    NSLog(@"%s isEarlierView:%d", __FUNCTION__, _earlierNavi.isEarlierView);
+    
     NSString *stringTemperature = [NSString stringWithFormat:@"%d", (int)roundf([temperature floatValue])];
     _degreeCString = stringTemperature;
-  
     
     int degreeF = (int) [self temperatureToFfromC:[temperature floatValue]];
     
     _degreeFString = [NSString stringWithFormat:@"%d", degreeF];
+    
+    /*
+     * Need not to update Temperature UI if the current view is Earlier view.
+     */
+    
+    if (_earlierNavi.isEarlierView)
+    {
+        return;
+    }
+    
+    // start
+    [self.ib_temperature.subviews makeObjectsPerformSelector: @selector(removeFromSuperview)];
     
     UILabel *degreeCelsius = [[UILabel alloc] init];
     degreeCelsius.backgroundColor=[UIColor clearColor];
@@ -2858,7 +2870,6 @@ double _ticks = 0;
         [self.ib_temperature setFont:temperatureFont];
         [self.ib_temperature setTextColor:[UIColor whiteColor]];
         [self.ib_temperature setText:stringTemperature];
-        //[self.ib_temperature setHidden:NO];
         
         stringBoundingBox = [stringTemperature sizeWithAttributes:@{NSFontAttributeName: temperatureFont}];
         degreeCelBoundingBox = [degreeCel sizeWithAttributes:@{NSFontAttributeName: degreeFont}];
@@ -2902,7 +2913,6 @@ double _ticks = 0;
         
         //need update text for C or F
         [self.ib_temperature setText:stringTemperature];
-        //
         
         //CGSize stringBoundingBox = [stringTemperature sizeWithFont:temperatureFont];
         CGSize stringBoundingBox = [stringTemperature sizeWithAttributes:@{NSFontAttributeName: temperatureFont}];
@@ -2918,9 +2928,10 @@ double _ticks = 0;
         [self.ib_temperature addSubview:degreeCelsius];
     }
     
-    if (self.selectedItemMenu == INDEX_TEMP)
+    if (self.selectedItemMenu == INDEX_TEMP && ![self.stringTemperature isEqualToString:TEMP_NULL])
     {
-        [self.view bringSubviewToFront:self.ib_temperature ];
+        [MBProgressHUD hideHUDForView:self.view animated:NO];
+        [self.view bringSubviewToFront:self.ib_temperature];
         [self.ib_temperature setHidden:NO];
     }
     else
@@ -4199,9 +4210,6 @@ double _ticks = 0;
     for (UIView *v in viewsToRemove) {
         [v removeFromSuperview];
     }
-    // I don't know why remove it.
-    [self.melodyViewController.view removeFromSuperview];
-    self.melodyViewController = nil;
     
 	if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight)
 	{
@@ -4209,25 +4217,37 @@ double _ticks = 0;
         //load new nib for landscape iPad
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
+            MelodyViewController *melodyVC = [[MelodyViewController alloc] initWithNibName:@"MelodyViewController_land" bundle:nil andSelectedChannel:self.selectedChannel];
+            if (self.melodyViewController)
+            {
+                [melodyVC setCurrentMelodyIndex:self.melodyViewController.melodyIndex andPlaying:self.melodyViewController.playing];
+            }
             
-             [self release];
+            [self release];
             [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController_land_iPad"
                                           owner:self
                                         options:nil];
+            self.melodyViewController = melodyVC;
+            self.melodyViewController.melodyDelegate = self;
+            [melodyVC release];
             
-            self.melodyViewController = [[[MelodyViewController alloc] initWithNibName:@"MelodyViewController_land" bundle:nil] autorelease];
             [_earlierVC.view setFrame:CGRectMake(0, 0, SCREEN_HEIGHT, SCREEN_WIDTH)];
-            
-            
         }
         else
         {
+            MelodyViewController *melodyVC = [[MelodyViewController alloc] initWithNibName:@"MelodyViewController_land" bundle:nil andSelectedChannel:self.selectedChannel];
+            if (self.melodyViewController)
+            {
+                [melodyVC setCurrentMelodyIndex:self.melodyViewController.melodyIndex andPlaying:self.melodyViewController.playing];
+            }
+            
             [self release];
             [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController_land"
                                           owner:self
                                         options:nil];
-            
-            self.melodyViewController = [[[MelodyViewController alloc] initWithNibName:@"MelodyViewController_land" bundle:nil] autorelease];
+            self.melodyViewController = melodyVC;
+            self.melodyViewController.melodyDelegate = self;
+            [melodyVC release];
             
             if (isiOS7AndAbove)
             {
@@ -4239,9 +4259,6 @@ double _ticks = 0;
             }
             
         }
-        
-        self.melodyViewController.selectedChannel = self.selectedChannel;
-        //self.melodyViewController.melodyVcDelegate = self;
         //landscape mode
         //hide navigation bar
         [self.navigationController setNavigationBarHidden:YES];
@@ -4273,27 +4290,39 @@ double _ticks = 0;
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
-             [self release];
+            MelodyViewController *melodyVC = [[MelodyViewController alloc] initWithNibName:@"MelodyViewController_iPad" bundle:nil andSelectedChannel:self.selectedChannel];
+            if (self.melodyViewController)
+            {
+                [melodyVC setCurrentMelodyIndex:self.melodyViewController.melodyIndex andPlaying:self.melodyViewController.playing];
+            }
+            
+            [self release];
             [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController_ipad"
                                           owner:self
                                         options:nil];
-            self.melodyViewController = [[[MelodyViewController alloc] initWithNibName:@"MelodyViewController_iPad" bundle:nil] autorelease];
+            self.melodyViewController = melodyVC;
+            self.melodyViewController.melodyDelegate = self;
+            [melodyVC release];
+            
             [_earlierVC.view setFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT - 64)];
         }
         else
         {
-            [self release];
+            MelodyViewController *melodyVC = [[MelodyViewController alloc] initWithNibName:@"MelodyViewController" bundle:nil andSelectedChannel:self.selectedChannel];
+            if (self.melodyViewController)
+            {
+                [melodyVC setCurrentMelodyIndex:self.melodyViewController.melodyIndex andPlaying:self.melodyViewController.playing];
+            }
             
-           [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController"
+            [self release];
+            [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController"
                                           owner:self
                                         options:nil];
-            self.melodyViewController = [[[MelodyViewController alloc] initWithNibName:@"MelodyViewController" bundle:nil] autorelease];
+            self.melodyViewController = melodyVC;
+            self.melodyViewController.melodyDelegate = self;
+            [melodyVC release];
         }
         //portrait mode
-        
-        self.melodyViewController.selectedChannel = self.selectedChannel;
-        //self.melodyViewController.melodyVcDelegate = self;
-        
         
         [self.navigationController setNavigationBarHidden:NO];
         [[UIApplication sharedApplication] setStatusBarHidden:NO];
@@ -5327,6 +5356,12 @@ double _ticks = 0;
         }
         else if (_selectedItemMenu == INDEX_TEMP)
         {
+            if ([self.stringTemperature isEqualToString:TEMP_NULL])
+            {
+                NSLog(@"%s Show progress.", __FUNCTION__);
+                MBProgressHUD *hub = [MBProgressHUD showHUDAddedTo:self.view animated:NO];
+                [hub setLabelText:NSLocalizedStringWithDefaultValue(@"loading", nil, [NSBundle mainBundle], @"Loading...", nil)];
+            }
             [ib_switchDegree setHidden:NO];
             [self.view bringSubviewToFront:ib_switchDegree];
             
@@ -5456,8 +5491,7 @@ double _ticks = 0;
                            withObject:@"0"];
     
     self.audioOut = nil;
-    
-    //self.walkieTalkieEnabled = NO;
+    self.walkieTalkieEnabled = NO;
 }
 
 -(void) setupPtt
@@ -5632,6 +5666,7 @@ double _ticks = 0;
             if (self.melodyViewController) {
                 if (self.melodyViewController.playing) {
                     self.melodyViewController.playing = NO;
+                    [self.melodyViewController resetStatus];
                     [self showToat:NSLocalizedStringWithDefaultValue(@"stop_melody_toat", nil, [NSBundle mainBundle], @"Melody will be stopped", nil)];
                 }
             }
@@ -5644,6 +5679,8 @@ double _ticks = 0;
     [_ib_buttonTouchToTalk setBackgroundColor:[UIColor clearColor]];
     [_ib_buttonTouchToTalk setBackgroundImage:[UIImage imageMic] forState:UIControlStateNormal];
     [_ib_buttonTouchToTalk setBackgroundImage:[UIImage imageMic] forState:UIControlEventTouchUpInside];
+    
+    self.disableAutorotateFlag = FALSE;
     
     if (self.selectedChannel.profile.isInLocal)
     {
@@ -5780,6 +5817,7 @@ double _ticks = 0;
                 if (self.melodyViewController) {
                     if (self.melodyViewController.playing) {
                         self.melodyViewController.playing = NO;
+                        [self.melodyViewController resetStatus];
                         [self showToat:NSLocalizedStringWithDefaultValue(@"stop_melody_toat", nil, [NSBundle mainBundle], @"Melody will be stopped", nil)];
                     }
                 }
@@ -6019,9 +6057,9 @@ double _ticks = 0;
     
     _isDegreeFDisplay = !_isDegreeFDisplay;
     
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setBool:_isDegreeFDisplay forKey:IS_FAHRENHEIT];
-    [userDefaults synchronize];
+    //NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    //[userDefaults setBool:_isDegreeFDisplay forKey:IS_FAHRENHEIT];
+    //[userDefaults synchronize];
     
     [self setTemperatureState_Fg:_stringTemperature];
 }
@@ -6879,7 +6917,7 @@ double _ticks = 0;
     
     NSString *msg = nil;
     NSString *title = @"Firmware Upgrade Succeeded";
-    NSString *ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
+    NSString *ok = NSLocalizedStringWithDefaultValue(@"ok",nil, [NSBundle mainBundle],
                                                      @"OK" , nil);
     NSInteger alertTag = TAG_ALERT_FW_OTA_UPGRADE_DONE;
     
@@ -7113,4 +7151,14 @@ double _ticks = 0;
     self.timeStartingStageTwo = [NSDate date];
 }
 
+#pragma mark - MelodySetingDelegate
+- (void)updateCompleted:(BOOL)success
+{
+    if (!success)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self showToat:NSLocalizedStringWithDefaultValue(@"update_melody_failed", nil, [NSBundle mainBundle], @"Update melody failed", nil)];
+        });
+    }
+}
 @end
