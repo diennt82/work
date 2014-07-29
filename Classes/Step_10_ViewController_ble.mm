@@ -13,6 +13,7 @@
 #import "UserAccount.h"
 #import "BLEConnectionManager.h"
 #import "MBP_iosViewController.h"
+#import "define.h"
 
 @interface Step_10_ViewController_ble ()
 
@@ -234,9 +235,17 @@
         
         // Trying to enable all PN.
         [self sendToServerTheCommand:@"set_motion_area&grid=1x1&zone=00"];
-        [self sendToServerTheCommand:@"vox_enable"];
-        [self sendToServerTheCommand:@"set_temp_lo_enable&value=1"];
-        [self sendToServerTheCommand:@"set_temp_hi_enable&value=1"];
+        
+        if ([[NSUserDefaults standardUserDefaults] integerForKey:SET_UP_CAMERA] != SETUP_CAMERA_FOCUS73)
+        {
+            [self sendToServerTheCommand:@"vox_enable"];
+            [self sendToServerTheCommand:@"set_temp_lo_enable&value=1"];
+            [self sendToServerTheCommand:@"set_temp_hi_enable&value=1"];
+        }
+        else
+        {
+            NSLog(@"%s Setup model Focus73.", __FUNCTION__);
+        }
         
         // Trying to update host ssid to server.
         [self updatesBasicInfoForCamera];
