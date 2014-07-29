@@ -5474,8 +5474,7 @@ double _ticks = 0;
                            withObject:@"0"];
     
     self.audioOut = nil;
-    
-    //self.walkieTalkieEnabled = NO;
+    self.walkieTalkieEnabled = NO;
 }
 
 -(void) setupPtt
