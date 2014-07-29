@@ -31,8 +31,6 @@
     UIImage *_selectedImage;
     //image for menu scroll
     NSMutableArray *_imageMenu;
-    BOOL _isOddTapButton;
-    NSInteger currentTappedButtonIndex;
     
     //check if all button deselect
     BOOL _isAllButtonDeselected;
@@ -45,6 +43,7 @@
 @property (nonatomic, retain) IBOutlet id <ScrollHorizontalMenuDataSource> dataSource;
 @property (nonatomic, assign) int itemCount;
 @property (nonatomic, assign) BOOL isAllButtonDeselected;
+
 -(void) reloadData:(BOOL)isLand;
 -(void) setSelectedIndex:(int) index animated:(BOOL) animated;
 - (void)resetStatus;

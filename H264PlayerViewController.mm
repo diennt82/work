@@ -547,7 +547,6 @@ double _ticks = 0;
     if (_wantToShowTimeLine)
     {
         [self showTimelineView];
-        [self.horizMenu resetStatus];
         _wantToShowTimeLine = NO;
     }
     
@@ -1451,6 +1450,7 @@ double _ticks = 0;
         self.timelineVC.view.hidden = NO;
         [self.view bringSubviewToFront:self.timelineVC.view];
     }
+    [self.horizMenu resetStatus];
 }
 
 /*
@@ -4211,9 +4211,6 @@ double _ticks = 0;
     for (UIView *v in viewsToRemove) {
         [v removeFromSuperview];
     }
-    // I don't know why remove it.
-    [self.melodyViewController.view removeFromSuperview];
-    self.melodyViewController = nil;
     
 	if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight)
 	{
@@ -4221,25 +4218,37 @@ double _ticks = 0;
         //load new nib for landscape iPad
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
+            MelodyViewController *melodyVC = [[MelodyViewController alloc] initWithNibName:@"MelodyViewController_land" bundle:nil andSelectedChannel:self.selectedChannel];
+            if (self.melodyViewController)
+            {
+                [melodyVC setCurrentMelodyIndex:self.melodyViewController.melodyIndex andPlaying:self.melodyViewController.playing];
+            }
             
-             [self release];
+            [self release];
             [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController_land_iPad"
                                           owner:self
                                         options:nil];
+            self.melodyViewController = melodyVC;
+            self.melodyViewController.melodyDelegate = self;
+            [melodyVC release];
             
-            self.melodyViewController = [[[MelodyViewController alloc] initWithNibName:@"MelodyViewController_land" bundle:nil] autorelease];
             [_earlierVC.view setFrame:CGRectMake(0, 0, SCREEN_HEIGHT, SCREEN_WIDTH)];
-            
-            
         }
         else
         {
+            MelodyViewController *melodyVC = [[MelodyViewController alloc] initWithNibName:@"MelodyViewController_land" bundle:nil andSelectedChannel:self.selectedChannel];
+            if (self.melodyViewController)
+            {
+                [melodyVC setCurrentMelodyIndex:self.melodyViewController.melodyIndex andPlaying:self.melodyViewController.playing];
+            }
+            
             [self release];
             [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController_land"
                                           owner:self
                                         options:nil];
-            
-            self.melodyViewController = [[[MelodyViewController alloc] initWithNibName:@"MelodyViewController_land" bundle:nil] autorelease];
+            self.melodyViewController = melodyVC;
+            self.melodyViewController.melodyDelegate = self;
+            [melodyVC release];
             
             if (isiOS7AndAbove)
             {
@@ -4251,9 +4260,6 @@ double _ticks = 0;
             }
             
         }
-        
-        self.melodyViewController.selectedChannel = self.selectedChannel;
-        //self.melodyViewController.melodyVcDelegate = self;
         //landscape mode
         //hide navigation bar
         [self.navigationController setNavigationBarHidden:YES];
@@ -4285,27 +4291,39 @@ double _ticks = 0;
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
-             [self release];
+            MelodyViewController *melodyVC = [[MelodyViewController alloc] initWithNibName:@"MelodyViewController_iPad" bundle:nil andSelectedChannel:self.selectedChannel];
+            if (self.melodyViewController)
+            {
+                [melodyVC setCurrentMelodyIndex:self.melodyViewController.melodyIndex andPlaying:self.melodyViewController.playing];
+            }
+            
+            [self release];
             [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController_ipad"
                                           owner:self
                                         options:nil];
-            self.melodyViewController = [[[MelodyViewController alloc] initWithNibName:@"MelodyViewController_iPad" bundle:nil] autorelease];
+            self.melodyViewController = melodyVC;
+            self.melodyViewController.melodyDelegate = self;
+            [melodyVC release];
+            
             [_earlierVC.view setFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT - 64)];
         }
         else
         {
-            [self release];
+            MelodyViewController *melodyVC = [[MelodyViewController alloc] initWithNibName:@"MelodyViewController" bundle:nil andSelectedChannel:self.selectedChannel];
+            if (self.melodyViewController)
+            {
+                [melodyVC setCurrentMelodyIndex:self.melodyViewController.melodyIndex andPlaying:self.melodyViewController.playing];
+            }
             
-           [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController"
+            [self release];
+            [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController"
                                           owner:self
                                         options:nil];
-            self.melodyViewController = [[[MelodyViewController alloc] initWithNibName:@"MelodyViewController" bundle:nil] autorelease];
+            self.melodyViewController = melodyVC;
+            self.melodyViewController.melodyDelegate = self;
+            [melodyVC release];
         }
         //portrait mode
-        
-        self.melodyViewController.selectedChannel = self.selectedChannel;
-        //self.melodyViewController.melodyVcDelegate = self;
-        
         
         [self.navigationController setNavigationBarHidden:NO];
         [[UIApplication sharedApplication] setStatusBarHidden:NO];
@@ -5468,8 +5486,7 @@ double _ticks = 0;
                            withObject:@"0"];
     
     self.audioOut = nil;
-    
-    //self.walkieTalkieEnabled = NO;
+    self.walkieTalkieEnabled = NO;
 }
 
 -(void) setupPtt
@@ -5644,6 +5661,7 @@ double _ticks = 0;
             if (self.melodyViewController) {
                 if (self.melodyViewController.playing) {
                     self.melodyViewController.playing = NO;
+                    [self.melodyViewController resetStatus];
                     [self showToat:NSLocalizedStringWithDefaultValue(@"stop_melody_toat", nil, [NSBundle mainBundle], @"Melody will be stopped", nil)];
                 }
             }
@@ -5794,6 +5812,7 @@ double _ticks = 0;
                 if (self.melodyViewController) {
                     if (self.melodyViewController.playing) {
                         self.melodyViewController.playing = NO;
+                        [self.melodyViewController resetStatus];
                         [self showToat:NSLocalizedStringWithDefaultValue(@"stop_melody_toat", nil, [NSBundle mainBundle], @"Melody will be stopped", nil)];
                     }
                 }
@@ -7127,4 +7146,14 @@ double _ticks = 0;
     self.timeStartingStageTwo = [NSDate date];
 }
 
+#pragma mark - MelodySetingDelegate
+- (void)updateCompleted:(BOOL)success
+{
+    if (!success)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self showToat:NSLocalizedStringWithDefaultValue(@"update_melody_failed", nil, [NSBundle mainBundle], @"Update melody failed", nil)];
+        });
+    }
+}
 @end
