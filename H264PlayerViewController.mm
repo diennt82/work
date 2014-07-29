@@ -2792,15 +2792,27 @@ double _ticks = 0;
 - (void)setTemperatureState_Fg: (NSString *)temperature
 {
     // Update UI
-    // start
-    [self.ib_temperature.subviews makeObjectsPerformSelector: @selector(removeFromSuperview)];
+    
+    NSLog(@"%s isEarlierView:%d", __FUNCTION__, _earlierNavi.isEarlierView);
+    
     NSString *stringTemperature = [NSString stringWithFormat:@"%d", (int)roundf([temperature floatValue])];
     _degreeCString = stringTemperature;
-  
     
     int degreeF = (int) [self temperatureToFfromC:[temperature floatValue]];
     
     _degreeFString = [NSString stringWithFormat:@"%d", degreeF];
+    
+    /*
+     * Need not to update Temperature UI if the current view is Earlier view.
+     */
+    
+    if (_earlierNavi.isEarlierView)
+    {
+        return;
+    }
+    
+    // start
+    [self.ib_temperature.subviews makeObjectsPerformSelector: @selector(removeFromSuperview)];
     
     UILabel *degreeCelsius = [[UILabel alloc] init];
     degreeCelsius.backgroundColor=[UIColor clearColor];
@@ -5644,6 +5656,8 @@ double _ticks = 0;
     [_ib_buttonTouchToTalk setBackgroundColor:[UIColor clearColor]];
     [_ib_buttonTouchToTalk setBackgroundImage:[UIImage imageMic] forState:UIControlStateNormal];
     [_ib_buttonTouchToTalk setBackgroundImage:[UIImage imageMic] forState:UIControlEventTouchUpInside];
+    
+    self.disableAutorotateFlag = FALSE;
     
     if (self.selectedChannel.profile.isInLocal)
     {

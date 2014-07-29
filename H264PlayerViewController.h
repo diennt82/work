@@ -280,7 +280,6 @@
 @property (retain, nonatomic) UIImageView *imageViewStreamer;
 @property (nonatomic) BOOL isHorizeShow;
 @property (nonatomic, retain) NSTimer *timerHideMenu;
-@property (nonatomic) BOOL isEarlierView;
 @property (nonatomic) NSInteger numberOfSTUNError;
 @property (nonatomic, retain) NSString *stringTemperature;
 @property (nonatomic) BOOL existTimerTemperature;
