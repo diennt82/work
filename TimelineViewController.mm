@@ -942,6 +942,11 @@
 {
     if (indexPath.section == 0)
     {
+        if (_events == nil || _events.count == 0)
+        {            
+            CGRect f = [[[[UIApplication sharedApplication] delegate] window] convertRect:self.tableView.bounds fromView:self.tableView];
+            return SCREEN_HEIGHT-(f.origin.y+20);
+        }
         return 77;
     }
     
@@ -1100,7 +1105,7 @@
     }
     else if (_events == nil || _events.count == 0)
     {
-        static NSString *CellIdentifier = @"Cell";
+        static NSString *CellIdentifier = @"CellWithNoEvent";
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         if (cell == nil) {
             cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
@@ -1108,7 +1113,7 @@
         
         // Configure the cell...
         cell.textLabel.text = self.stringIntelligentMessage;
-        
+        cell.textLabel.textAlignment = NSTextAlignmentCenter;
         return cell;
     }
     
