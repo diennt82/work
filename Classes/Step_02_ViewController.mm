@@ -9,7 +9,7 @@
 #import "Step_02_ViewController.h"
 #import "Step_03_ViewController.h"
 #import "UIBarButtonItem+Custom.h"
-#import "PAIRInstructionViewController.h"
+
 #import "MBPNavController.h"
 #import "CreateBLEConnection_VController.h"
 #import "BLEConnectionManager.h"
@@ -158,9 +158,19 @@
     {
         NSLog(@"Load step Create BLE Connection");
         //Load the next xib
-        CreateBLEConnection_VController *step03ViewController =
-        [[CreateBLEConnection_VController alloc] initWithNibName:@"CreateBLEConnection_VController"
-                                                          bundle:nil];
+        CreateBLEConnection_VController *step03ViewController = nil;
+        
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+            step03ViewController = [[CreateBLEConnection_VController alloc]
+                                    initWithNibName:@"CreateBLEConnection_VController_iPad"
+                                    bundle:nil];
+        }
+        else
+        {
+            step03ViewController = [[CreateBLEConnection_VController alloc] initWithNibName:@"CreateBLEConnection_VController"
+                                                                                     bundle:nil];
+        }
         
         [self.navigationController pushViewController:step03ViewController animated:NO];
         

@@ -18,7 +18,7 @@
 @interface CreateBLEConnection_VController () <CustomIOS7AlertViewDelegate>
 
 @property (retain, nonatomic) IBOutlet UIButton *btnConnect;
-@property (retain, nonatomic) IBOutlet UIView *viewProgress;
+
 @property (retain, nonatomic) IBOutlet UITableViewCell *searchAgainCell;
 @property (retain, nonatomic) IBOutlet UIView *viewError;
 @property (retain, nonatomic) IBOutlet UIView *viewPairNDetecting;
@@ -81,15 +81,6 @@
     
     self.currentBLEList = [[NSMutableArray alloc] init];
     
-    UIImageView *imageView  = (UIImageView *)[self.viewProgress viewWithTag:575];
-    imageView.animationImages = @[[UIImage imageNamed:@"setup_camera_c1"],
-                                  [UIImage imageNamed:@"setup_camera_c2"],
-                                  [UIImage imageNamed:@"setup_camera_c3"],
-                                  [UIImage imageNamed:@"setup_camera_c4"]];
-    imageView.animationDuration = 1.5f;
-    imageView.animationRepeatCount = 0;
-
-#if 1
     
     self.viewSearching = (UIView *)[self.viewPairNDetecting viewWithTag:675];
     
@@ -105,12 +96,8 @@
     [self.view bringSubviewToFront:_viewPairNDetecting];
     
     [imgView startAnimating];
-#else
-    [self.view addSubview:_viewProgress];
-    [self.view bringSubviewToFront:_viewProgress];
-#endif
     
-    [imageView startAnimating];
+
     self.homeWifiSSID = [CameraPassword fetchSSIDInfo];
     NSLog(@"homeWifiSSID: %@", self.homeWifiSSID);
     
@@ -133,7 +120,7 @@
     {
         CGRect rect = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
         self.viewError.frame = rect;
-        self.viewProgress.frame = rect;
+        //self.viewProgress.frame = rect;
     }
     
     [self createBLEConnectionRescan:FALSE];
@@ -247,7 +234,7 @@
     
     [[BLEConnectionManager getInstanceBLE] stopScanBLE];
     
-    [self.viewProgress removeFromSuperview];
+
     [self.viewPairNDetecting removeFromSuperview];
     [self customIOS7dialogButtonTouchUpInside:_alertView clickedButtonAtIndex:0];
     
@@ -268,7 +255,7 @@
         [_alertView setContainerView:[self createDemoView]];
         
         // Modify the parameters
-        //[alertView setButtonTitles:[NSMutableArray arrayWithObjects:@"Close1", @"Close2", @"Close3", nil]];
+
         [_alertView setButtonTitles:NULL];
         [_alertView setDelegate:self];
         
@@ -329,8 +316,6 @@
     
     if (rescanFlag)
     {
-        [self.view addSubview:_viewProgress];
-        [self.view bringSubviewToFront:_viewProgress];
     }
     else
     {
@@ -424,7 +409,7 @@
         if ([_currentBLEList count] == 1) //connect directly
         {
             //Update UI
-            [self.viewProgress removeFromSuperview];
+            //[self.viewProgress removeFromSuperview];
             [self.viewPairNDetecting removeFromSuperview];
             [self.ib_lableStage setText:NSLocalizedStringWithDefaultValue(@"select_a_device_to_connect", nil, [NSBundle mainBundle], @"Select a device to connect", nil)];
             [self.ib_tableListBLE reloadData];
@@ -442,7 +427,7 @@
             NSLog(@"Found more than 1 valid devices -> Show lists");
             
             //Update UI
-            [self.viewProgress removeFromSuperview];
+           // [self.viewProgress removeFromSuperview];
             [self.viewPairNDetecting removeFromSuperview];
             
             [self.ib_lableStage setText:NSLocalizedStringWithDefaultValue(@"select_a_device_to_connect", nil, [NSBundle mainBundle], @"Select a device to connect", nil)];
@@ -489,7 +474,7 @@
     [homeWifiSSID release];
     [_ib_tableListBLE release];
     [_btnConnect release];
-    [_viewProgress release];
+  //  [_viewProgress release];
     [_searchAgainCell release];
     [_alertView release];
     [_viewError release];

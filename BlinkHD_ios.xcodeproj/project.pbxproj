@@ -589,8 +589,6 @@
 		8B9640B218811106000C388E /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B9640B118811106000C388E /* CoreText.framework */; };
 		8B977B6A18C7025200A61115 /* BLEConnectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B977B6918C7025100A61115 /* BLEConnectionCell.m */; };
 		8B977B6C18C7026A00A61115 /* BLEConnectionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B977B6B18C7026A00A61115 /* BLEConnectionCell.xib */; };
-		8B977B7118C709A100A61115 /* PAIRInstructionViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B977B6F18C709A100A61115 /* PAIRInstructionViewController.mm */; };
-		8B977B7218C709A100A61115 /* PAIRInstructionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B977B7018C709A100A61115 /* PAIRInstructionViewController.xib */; };
 		8B977C9E18C70BDA00A61115 /* HubbleProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B977C9D18C70BDA00A61115 /* HubbleProgressView.m */; };
 		8B97A3C018BEE628008A38E1 /* UIBarButtonItem+Custom.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B97A3BF18BEE628008A38E1 /* UIBarButtonItem+Custom.m */; };
 		8B97A3C318BF1B5F008A38E1 /* Hubble_back_text@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B97A3C118BF1B5F008A38E1 /* Hubble_back_text@2x.png */; };
@@ -1457,9 +1455,6 @@
 		8B977B6818C7025100A61115 /* BLEConnectionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BLEConnectionCell.h; sourceTree = "<group>"; };
 		8B977B6918C7025100A61115 /* BLEConnectionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BLEConnectionCell.m; sourceTree = "<group>"; };
 		8B977B6B18C7026A00A61115 /* BLEConnectionCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BLEConnectionCell.xib; sourceTree = "<group>"; };
-		8B977B6E18C709A100A61115 /* PAIRInstructionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAIRInstructionViewController.h; sourceTree = "<group>"; };
-		8B977B6F18C709A100A61115 /* PAIRInstructionViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PAIRInstructionViewController.mm; sourceTree = "<group>"; };
-		8B977B7018C709A100A61115 /* PAIRInstructionViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PAIRInstructionViewController.xib; sourceTree = "<group>"; };
 		8B977C9C18C70BDA00A61115 /* HubbleProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HubbleProgressView.h; sourceTree = "<group>"; };
 		8B977C9D18C70BDA00A61115 /* HubbleProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HubbleProgressView.m; sourceTree = "<group>"; };
 		8B97A3BE18BEE628008A38E1 /* UIBarButtonItem+Custom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBarButtonItem+Custom.h"; sourceTree = "<group>"; };
@@ -3039,16 +3034,6 @@
 			name = BLEConnectionCell;
 			sourceTree = "<group>";
 		};
-		8B977B6D18C7095F00A61115 /* PairInstructionVC */ = {
-			isa = PBXGroup;
-			children = (
-				8B977B6E18C709A100A61115 /* PAIRInstructionViewController.h */,
-				8B977B6F18C709A100A61115 /* PAIRInstructionViewController.mm */,
-				8B977B7018C709A100A61115 /* PAIRInstructionViewController.xib */,
-			);
-			name = PairInstructionVC;
-			sourceTree = "<group>";
-		};
 		8B977C9B18C70BB300A61115 /* ProgressViewCustom */ = {
 			isa = PBXGroup;
 			children = (
@@ -3522,7 +3507,6 @@
 			isa = PBXGroup;
 			children = (
 				8B9CE1F818C81DBA00B1B7F9 /* HubbleAlertView */,
-				8B977B6D18C7095F00A61115 /* PairInstructionVC */,
 				8B977B6718C701F200A61115 /* BLEConnectionCell */,
 				A1ABF1C8187539000014FCB4 /* refresh.png */,
 				A1ABF19D187536B20014FCB4 /* Connection */,
@@ -4163,7 +4147,6 @@
 				8B9507B918C9960D006D4945 /* setup_check@2x.png in Resources */,
 				8B9507B318C9960D006D4945 /* setup_camera_led2@2x.png in Resources */,
 				8B9ABBB918AA2AC30079F4A3 /* CameraMenuViewController.xib in Resources */,
-				8B977B7218C709A100A61115 /* PAIRInstructionViewController.xib in Resources */,
 				A18635F218B6F43F00CB5CDA /* CellMelody.xib in Resources */,
 				8B08B7B1197F893300ED1BDD /* alert@2x.png in Resources */,
 				A1ABF1BB187538280014FCB4 /* CreateBLEConnection_VController.xib in Resources */,
@@ -4413,7 +4396,6 @@
 				380CB0C716DC568500290587 /* Step_12_ViewController.m in Sources */,
 				A12A9D8A18B1DF4C004987F2 /* UIImage+Hubble.m in Sources */,
 				8B9ABBB818AA2AC30079F4A3 /* CameraMenuViewController.m in Sources */,
-				8B977B7118C709A100A61115 /* PAIRInstructionViewController.mm in Sources */,
 				380CB0D616DC60DC00290587 /* Step_11_ViewController.m in Sources */,
 				8B92A0AF1863FD13005923D2 /* EarlierViewController.m in Sources */,
 				8B9384921856EEFE009C4771 /* SlideSettingsCell.m in Sources */,
