@@ -1387,8 +1387,6 @@
 	}
 }
 
-#pragma mark - SetupHTTPDelegate --- NOT USED --- check ..
-
 -(void) show_login_or_reg:(NSTimer *)timer
 {
     /*
