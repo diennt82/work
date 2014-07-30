@@ -183,10 +183,6 @@
         }
 	}
     
-    if ( option && [option intValue] == STAY_AT_CAMERA_LIST ) {
-        self.menuVC.isFirttime = TRUE;
-    }
-    
 	self.menuVC.cameras = validChannels;
     self.menuVC.camerasVC.camChannels = validChannels;
     
@@ -199,7 +195,6 @@
         [self presentViewController:_menuVC animated:NO completion:nil];
     }
     
-    NSLog(@"MBP_iosVC - Showing cameralist?  %d", self.menuVC.isFirttime);
     [validChannels release];
 }
 
