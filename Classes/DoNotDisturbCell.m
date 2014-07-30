@@ -44,7 +44,7 @@
     self.backgroundColor = [UIColor colorWithRed:43/255.f green:50/255.f blue:56/255.f alpha:1];
         
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    _isEnableDoNotDisturb = [userDefaults boolForKey:@"EnableDoNotDisturb"];
+    _isEnableDoNotDisturb = [userDefaults boolForKey:ENABLE_DO_NOT_DISTURB];
     if (_isEnableDoNotDisturb)
     {
         self.imgViewEnableDisable.hidden = YES;
@@ -86,8 +86,6 @@
     }
 }
 - (void)dealloc {
-    [_ib_enableDoNotDisturb release];
-    [_ib_circleSliderCustom release];
     [super dealloc];
 }
 
@@ -104,7 +102,7 @@
     }
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setBool:_isEnableDoNotDisturb forKey:@"EnableDoNotDisturb"];
+    [userDefaults setBool:_isEnableDoNotDisturb forKey:ENABLE_DO_NOT_DISTURB];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
     if (_isEnableDoNotDisturb)

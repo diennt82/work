@@ -75,6 +75,8 @@
 @synthesize minimumTrackTintColor = _minimumTrackTintColor;
 - (void)setMinimumTrackTintColor:(UIColor *)minimumTrackTintColor {
 	if (![minimumTrackTintColor isEqual:_minimumTrackTintColor]) {
+        [minimumTrackTintColor retain];
+        [_minimumTrackTintColor release];
 		_minimumTrackTintColor = minimumTrackTintColor;
 		[self setNeedsDisplay];
 	}
@@ -83,6 +85,8 @@
 @synthesize maximumTrackTintColor = _maximumTrackTintColor;
 - (void)setMaximumTrackTintColor:(UIColor *)maximumTrackTintColor {
 	if (![maximumTrackTintColor isEqual:_maximumTrackTintColor]) {
+        [maximumTrackTintColor retain];
+        [_maximumTrackTintColor release];
 		_maximumTrackTintColor = maximumTrackTintColor;
 		[self setNeedsDisplay];
 	}
@@ -91,6 +95,8 @@
 @synthesize thumbTintColor = _thumbTintColor;
 - (void)setThumbTintColor:(UIColor *)thumbTintColor {
 	if (![thumbTintColor isEqual:_thumbTintColor]) {
+        [thumbTintColor retain];
+        [_thumbTintColor release];
 		_thumbTintColor = thumbTintColor;
 		[self setNeedsDisplay];
 	}
@@ -199,6 +205,17 @@
 
 }
 
+- (void)dealloc
+{
+    [_minimumTrackTintColor release];
+    [_maximumTrackTintColor release];
+    [_thumbTintColor release];
+    [_timer release];
+    [_textField release];
+    [_minuteTField release];
+    [super dealloc];
+}
+
 -(void) handleEnteredBackground
 {
     //save value to handle later
@@ -248,7 +265,7 @@
 - (void)killTimer{
 	if(_timer && [_timer isValid]){
 		[_timer invalidate];
-		_timer = nil;
+		self.timer = nil;
 	}
 }
 
@@ -480,16 +497,22 @@ int finalAngle;
 - (void)startTimerUpdateLabel
 {
     [self killTimer];
-    _timer = [NSTimer scheduledTimerWithTimeInterval:60.0
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:60.0
                                               target:self
                                             selector:@selector(updateLabel:)
                                             userInfo:nil
                                              repeats:YES ];
 }
+
+-(void)setEnableView:(BOOL)isEnable {
+    
+}
+
 - (void)cancelAllLocalNotification
 {
     [[UIApplication sharedApplication] cancelAllLocalNotifications];
 }
+
 - (void)registerLocalNotification
 {
     // Get the current date
@@ -521,6 +544,7 @@ int finalAngle;
 //    [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadData" object:self];
     [localNotification release];
 }
+
 - (void)tapGestureHappened:(UITapGestureRecognizer *)tapGestureRecognizer {
 	if (tapGestureRecognizer.state == UIGestureRecognizerStateEnded) {
 		CGPoint tapLocation = [tapGestureRecognizer locationInView:self];
