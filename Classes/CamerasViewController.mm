@@ -46,8 +46,10 @@
         self.parentVC = (MenuViewController *)parentVC;
 
         // Setup a custom title view so we can show a nice looking logo image
-        UIImage *image = [UIImage imageNamed:@"hubble_logo"];
+        UIImage *image = [UIImage imageNamed:@"logo"];
         UIImageView *imageview = [[UIImageView alloc] initWithImage:image];
+        imageview.frame = CGRectMake(0, 0, 120, 30);
+        imageview.contentMode = UIViewContentModeScaleAspectFit;
         self.navigationItem.titleView = imageview;
         
         [image release];
@@ -63,7 +65,7 @@
     self.view.backgroundColor = [UIColor whiteColor];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
-    self.snapshotImages = [NSArray arrayWithObjects:@"mountain", @"garden", @"desk", @"bridge", nil];
+    self.snapshotImages = @[@"mountain", @"garden", @"desk", @"bridge"];
     
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     strDocDirPath = [[paths firstObject] retain];
