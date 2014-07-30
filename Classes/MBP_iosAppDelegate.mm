@@ -24,62 +24,16 @@
 
 #pragma mark - Application lifecycle
 
-//Kiran Patel Git Hub Sync Test / Branch Test
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    // Override point for customization after application launch.
-    /*nguyendang_20130719
-        - Add Google Analytics Delegates to this project.
-     */
+    // Setup global L&F
     
-    // Handle launching from a notification
-    UILocalNotification *locationNotification = [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
-    if (locationNotification) {
-        // Set icon badge number to zero
-        application.applicationIconBadgeNumber = 0;
-    }
-
-    self.handling_PN = FALSE;
-    
-#if 0
-    [KISSMetricsAPI sharedAPIWithKey:@"ff38140e358fdc343bb97297de4963291eec47d5"];
-    
-    [[KISSMetricsAPI sharedAPI] identify:@"85FF7C5E-3412-4AAC-9B07-5491AD022B4F"];
-    
-    // include some info about the type of device, operating system, and version of your app
-    NSDictionary *info = [NSDictionary dictionaryWithObjectsAndKeys:
-                          [UIDevice currentDevice].model, @"Model",
-                          [UIDevice currentDevice].systemName, @"System Name",
-                          [UIDevice currentDevice].systemVersion, @"System Version",
-                          //[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"], @"My App Version",CFBundleShortVersionString
-                          [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"], @"My App Version",
-                          nil];
-
-    [[KISSMetricsAPI sharedAPI] recordEvent:@"Launched App" withProperties:info];
+#ifdef VTECH
+    UIColor *themeTintColor = [UIColor colorWithRed:11/255.f green:41/255.0f blue:109/255.f alpha:1];
 #else
-    // Optional: automatically send uncaught exceptions to Google Analytics.
-    [GAI sharedInstance].trackUncaughtExceptions = YES;
-    // Optional: set Google Analytics dispatch interval to e.g. 20 seconds.
-    [GAI sharedInstance].dispatchInterval = 20;
-    // Optional: set debug to YES for extra debugging information.
-    [GAI sharedInstance].debug = YES;
-    // Create tracker instance.
-    
-    //UA-ID_INSTANCE is taken from the account analytics on google analytics
-    //id<GAITracker> tracker =
-    [[GAI sharedInstance] trackerWithTrackingId:@"UA-51500380-2"];
-#endif
-    // !!!: Use the next line only during TEST - appstore release: need to comment this line
-    //[TestFlight setDeviceIdentifier:[[UIDevice currentDevice] uniqueIdentifier]];
-  
-    //Add testflight app token - For remote login & crash reporting
-    //[TestFlight takeOff:@"4574de50-f54d-4414-a803-fc460426c915"];
-    
-    NSArray *names = [UIFont fontNamesForFamilyName:@"Proxima Nova"];
-    NSLog(@"names: %@",names);
-    
     UIColor *themeTintColor = [UIColor colorWithRed:252/255.f green:0 blue:7/255.f alpha:1];
+#endif
+    
     if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1) {
         // iOS 7+
         _window.tintColor = themeTintColor;
@@ -99,6 +53,55 @@
                                                 forState:UIControlStateNormal];
     
     [[UILabel appearanceWhenContainedIn:[UITableViewHeaderFooterView class], nil] setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:17]];
+    
+    // Handle launching from a notification
+    UILocalNotification *locationNotification = [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
+    if (locationNotification) {
+        // Set icon badge number to zero
+        application.applicationIconBadgeNumber = 0;
+    }
+    
+    self.handling_PN = FALSE;
+    
+    // Initialize Analytics
+#if 0
+    [KISSMetricsAPI sharedAPIWithKey:@"ff38140e358fdc343bb97297de4963291eec47d5"];
+    
+    [[KISSMetricsAPI sharedAPI] identify:@"85FF7C5E-3412-4AAC-9B07-5491AD022B4F"];
+    
+    // include some info about the type of device, operating system, and version of your app
+    NSDictionary *info = [NSDictionary dictionaryWithObjectsAndKeys:
+                          [UIDevice currentDevice].model, @"Model",
+                          [UIDevice currentDevice].systemName, @"System Name",
+                          [UIDevice currentDevice].systemVersion, @"System Version",
+                          //[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"], @"My App Version",CFBundleShortVersionString
+                          [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"], @"My App Version",
+                          nil];
+    
+    [[KISSMetricsAPI sharedAPI] recordEvent:@"Launched App" withProperties:info];
+#else
+    // Optional: automatically send uncaught exceptions to Google Analytics.
+    [GAI sharedInstance].trackUncaughtExceptions = YES;
+    // Optional: set Google Analytics dispatch interval to e.g. 20 seconds.
+    [GAI sharedInstance].dispatchInterval = 20;
+    // Optional: set debug to YES for extra debugging information.
+    [GAI sharedInstance].debug = YES;
+    // Create tracker instance.
+    
+    //UA-ID_INSTANCE is taken from the account analytics on google analytics
+    //id<GAITracker> tracker =
+    [[GAI sharedInstance] trackerWithTrackingId:@"UA-51500380-2"];
+#endif
+    // !!!: Use the next line only during TEST - appstore release: need to comment this line
+    //[TestFlight setDeviceIdentifier:[[UIDevice currentDevice] uniqueIdentifier]];
+    
+    //Add testflight app token - For remote login & crash reporting
+    //[TestFlight takeOff:@"4574de50-f54d-4414-a803-fc460426c915"];
+    
+    //NSArray *names = [UIFont fontNamesForFamilyName:@"Proxima Nova"];
+    //NSLog(@"names: %@",names);
+    
+    _window.rootViewController = [[EarlierNavigationController alloc] initWithRootViewController:viewController];
     
     // Check condition use STUN or not
     [self registerDefaultsFromSettingsBundle];
@@ -122,8 +125,6 @@
     [userDefaults removeObjectForKey:CAM_IN_VEW];
     [userDefaults synchronize];
     
-    //[_window setRootViewController:viewController];
-    _window.rootViewController = [[EarlierNavigationController alloc] initWithRootViewController:viewController];
     [_window makeKeyAndVisible];
     
 #if !DEBUG
@@ -160,6 +161,7 @@
     }
     
     [BMS_JSON_Communication setServerInput:serverName];
+    
     return YES;
 }
 
