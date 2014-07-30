@@ -20,6 +20,7 @@
 #import "define.h"
 #import "TimelineDatabase.h"
 #import "NSData+Base64.h"
+#import "ios-ntp.h"
 
 #define EVENT_NOT_READY 575
 #define EVENT_DELETED   675
@@ -100,6 +101,8 @@
     
     //Clear away image cache
     [SDWebImageManager.sharedManager.imageCache clearMemory];
+    
+    NSLog(@"%s networkTime:%@", __FUNCTION__, [NSDate networkDate]);
 }
 
 - (void)didReceiveMemoryWarning
@@ -290,20 +293,22 @@
                                                           FailSelector:nil
                                                              ServerErr:nil];
     }
-    
+#if 1
+    self.currentDate = [NSDate networkDate];
+#else
     self.currentDate = [NSDate date];
-    
+#endif
     
     // Calculate the time to anchor the loading of events
     
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     // Set the dateFormatter format
-    [dateFormatter setTimeZone:[NSTimeZone localTimeZone]];
+    //[dateFormatter setTimeZone:[NSTimeZone localTimeZone]];
     
     // Get the date time in NSString
     [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
-    NSString *dateInStringFormated = [dateFormatter stringFromDate:self.currentDate];
+    NSString *dateInStringFormated = [dateFormatter stringFromDate:_currentDate];
     
     [dateFormatter release];
     
@@ -315,7 +320,7 @@
                                                                  beforeStartTime:dateInStringFormated//@"2013-12-28 20:10:18"
                                                                        eventCode:nil
                                                                           alerts:nil
-                                                                            page:[NSString stringWithFormat:@"%d", self.eventPage]
+                                                                            page:[NSString stringWithFormat:@"%d", _eventPage]
                                                                           offset:nil
                                                                             size:nil
                                                                           apiKey:apiKey];
@@ -444,19 +449,22 @@
                                                              ServerErr:nil];
     }
     
+#if 1
+    self.currentDate = [NSDate networkDate];
+#else
     self.currentDate = [NSDate date];
-    
+#endif
     
     // Calculate the time to anchor the loading of events
     
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     // Set the dateFormatter format
-    [dateFormatter setTimeZone:[NSTimeZone localTimeZone]];
+    //[dateFormatter setTimeZone:[NSTimeZone localTimeZone]];
     
     // Get the date time in NSString
     [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
-    NSString *dateInStringFormated = [dateFormatter stringFromDate:self.currentDate];
+    NSString *dateInStringFormated = [dateFormatter stringFromDate:_currentDate];
     
     [dateFormatter release];
     
@@ -602,10 +610,19 @@
     int numberOfMovement =0,numberOfVOX =0;
     
     //First update the time string
+#if 1
+    self.currentDate = [NSDate networkDate];
+#else
     self.currentDate = [NSDate date];
+#endif
+    
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     // Set the dateFormatter format
+#if 1
+    [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+#else
     [dateFormatter setTimeZone:[NSTimeZone localTimeZone]];
+#endif
     
     if (_is12hr)
     {
@@ -620,7 +637,9 @@
     
     // Get the date time in NSString
     [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+#if 0
     [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+#endif
     NSString *dateInStringFormated = [dateFormatter stringFromDate:_currentDate];
     NSLog(@"%@, %@", dateInStringFormated, _stringCurrentDate);
     
@@ -639,7 +658,7 @@
                 NSDate *eventDate = [dateFormatter dateFromString:eventInfo.time_stamp]; //2013-12-31 07:38:35 +0000
                 [dateFormatter release];
                 
-                NSTimeInterval diff = [self.currentDate timeIntervalSinceDate:eventDate];
+                NSTimeInterval diff = [_currentDate timeIntervalSinceDate:eventDate];
                 
                 if (diff / 60 <= 20)
                 {
@@ -1513,17 +1532,20 @@
     [dateFormater release];
     
     NSDateFormatter* df_local = [[NSDateFormatter alloc] init] ;
+#if 1
+    [df_local setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+#else
     [df_local setTimeZone:[NSTimeZone localTimeZone]];
-    
+#endif
     
     NSDateComponents * offset= [[[NSDateComponents alloc]init] autorelease];
     [offset setDay:-1];
     NSDate  *yesterday = [CURRENT_CALENDAR dateByAddingComponents:offset
-                                                           toDate:[NSDate date]
+                                                           toDate:[NSDate networkDate]
                                                           options:nil];
     
     //BOOL isYesterday= NO;
-    if  ([self isEqualToDateIgnoringTime:[NSDate date] vsDate:eventDate]) //if it is today
+    if  ([self isEqualToDateIgnoringTime:[NSDate networkDate] vsDate:eventDate]) //if it is today
     {
         //Show only hours/minutes
         if (_is12hr)
