@@ -677,6 +677,7 @@ double _ticks = 0;
         NSLog(@"%s ", __FUNCTION__);
         
         [self handleMessage:MEDIA_ERROR_SERVER_DIED ext1:-99 ext2:-1];
+        [self showTimelineView];
         self.messageStreamingState = NSLocalizedStringWithDefaultValue(@"low_data_bandwidth_detected", nil, [NSBundle mainBundle], @"Low data bandwidth detected. Trying to connect...", nil);
     }
 }
@@ -1442,15 +1443,18 @@ double _ticks = 0;
 
 - (void)showTimelineView
 {
-    //reset selected menu;
-    _selectedItemMenu = -1;
-    
     if (_timelineVC != nil)
     {
         self.timelineVC.view.hidden = NO;
         [self.view bringSubviewToFront:self.timelineVC.view];
     }
-    [self.horizMenu resetStatus];
+    
+    //reset selected menu;
+    if (self.selectedItemMenu != -1)
+    {
+        _selectedItemMenu = -1;
+        [self.horizMenu resetStatus];
+    }
 }
 
 /*
