@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleDisplayName</key>
+	<string>VTech Connect</string>
+	<key>CFBundleExecutable</key>
+	<string>${EXECUTABLE_NAME}</string>
+	<key>CFBundleIconFiles</key>
+	<array>
+		<string>29</string>
+		<string>40</string>
+		<string>58</string>
+		<string>76</string>
+		<string>80</string>
+		<string>114</string>
+		<string>120</string>
+		<string>152</string>
+	</array>
+	<key>CFBundleIconFiles~ipad</key>
+	<array>
+		<string>58</string>
+		<string>29</string>
+		<string>80</string>
+		<string>40</string>
+		<string>152</string>
+		<string>76</string>
+		<string>Icon-Small</string>
+		<string>Icon</string>
+		<string>Icon-Small-40</string>
+		<string>mbp_icon152x152</string>
+		<string>mbp_icon76x76</string>
+		<string>mbp_icon144x144</string>
+		<string>mbp_icon114x114</string>
+		<string>mbp_icon57x57.png</string>
+		<string>mbp_icon72x72.png</string>
+	</array>
+	<key>CFBundleIdentifier</key>
+	<string>com.hubble.vtechcam</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>${PRODUCT_NAME}</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>03.20.1</string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>15</string>
+	<key>IBCustomFonts</key>
+	<dict>
+		<key>Avenir-Heavy</key>
+		<string>ProximaNova-SemiboldIt</string>
+		<key>Helvetica-Light</key>
+		<string>ProximaNova-LightIt</string>
+		<key>HelveticaNeue</key>
+		<string>ProximaNova-Regular</string>
+		<key>HelveticaNeue-Bold</key>
+		<string>ProximaNova-Bold</string>
+		<key>HelveticaNeue-BoldItalic</key>
+		<string>ProximaNova-BoldIt</string>
+		<key>HelveticaNeue-CondensedBlack</key>
+		<string>ProximaNova-Black</string>
+		<key>HelveticaNeue-CondensedBold</key>
+		<string>ProximaNova-Extrabld</string>
+		<key>HelveticaNeue-Light</key>
+		<string>ProximaNova-Light</string>
+		<key>HelveticaNeue-MediumItalic</key>
+		<string>ProximaNova-RegularIt</string>
+		<key>HelveticaNeue-Thin</key>
+		<string>ProximaNova-Semibold</string>
+	</dict>
+	<key>LSRequiresIPhoneOS</key>
+	<true/>
+	<key>NSMainNibFile</key>
+	<string>MainWindow</string>
+	<key>NSMainNibFile~ipad</key>
+	<string>MainWindow_ipad</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>ProximaNova-Black.otf
+ProximaNova-Bold.otf
+ProximaNova-BoldIt.otf
+ProximaNova-Extrabold.otf
+ProximaNova-Light.otf
+ProximaNova-LightItalic.otf
+ProximaNova-Regular.otf
+ProximaNova-RegularItalic.otf
+ProximaNova-Semibold.otf
+ProximaNova-SemiboldItalic.otf</string>
+		<string>ProximaNova-Bold.otf</string>
+		<string>ProximaNova-BoldIt.otf</string>
+		<string>ProximaNova-Extrabold.otf</string>
+		<string>ProximaNova-Light.otf</string>
+		<string>ProximaNova-LightItalic.otf</string>
+		<string>ProximaNova-Regular.otf</string>
+		<string>ProximaNova-RegularItalic.otf</string>
+		<string>ProximaNova-Semibold.otf</string>
+		<string>ProximaNova-SemiboldItalic.otf</string>
+	</array>
+	<key>UIApplicationExitsOnSuspend</key>
+	<false/>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+		<string>audio</string>
+	</array>
+	<key>UIFileSharingEnabled</key>
+	<true/>
+	<key>UILaunchImageFile</key>
+	<string>Default</string>
+	<key>UIPrerenderedIcon</key>
+	<true/>
+	<key>UIStatusBarHidden</key>
+	<false/>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<false/>
+</dict>
+</plist>
