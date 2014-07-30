@@ -313,6 +313,7 @@ double _ticks = 0;
     [self setProgressView:nil];
     [self setCameraNameBarBtnItem:nil];
     [self setSelectedChannel:nil];
+    [self setBackCover:nil];
 }
 
 - (void)applyFont
@@ -1312,24 +1313,24 @@ double _ticks = 0;
         self.h264StreamerIsInStopped = FALSE;
     }
     
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setObject:_selectedChannel.profile.mac_address forKey:CAM_IN_VEW];
-    [userDefaults synchronize];
+//    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+//    [userDefaults setObject:_selectedChannel.profile.mac_address forKey:CAM_IN_VEW];
+//    [userDefaults synchronize];
     
     [self checkOrientation];
     
     if ( !_backCover ) {
         // Cover the back button so we can overide the default back action
         self.backCover = [[UIControl alloc] initWithFrame:CGRectMake( 0, 0, 100, 44)]; // Width setup for @"Cameras"
+        [_backCover addTarget:self action:@selector(prepareGoBackToCameraList:) forControlEvents:UIControlEventTouchUpInside];
         
         // Show the cover for testing
         //_backCover.backgroundColor = [UIColor colorWithRed:1.0 green:0.0 blue:0.0 alpha:0.15];
-        
-        [_backCover addTarget:self action:@selector(prepareGoBackToCameraList:) forControlEvents:UIControlEventTouchUpInside];
-        UINavigationBar *navBar = self.navigationController.navigationBar;
-        [navBar addSubview:_backCover];
-        [_backCover release];
     }
+    
+    // Ensure view is reset of else we can lose it!
+    [_backCover removeFromSuperview];
+    [self.navigationController.navigationBar addSubview:_backCover];
 }
 
 #pragma mark - Delegate Melody
@@ -1996,7 +1997,7 @@ double _ticks = 0;
         MediaPlayer::Instance()->sendInterrupt();
     }
     else {
-        //MediaPlayer::Instance()->sendInterrupt();
+        MediaPlayer::Instance()->sendInterrupt();
         [self stopStream];
         [self goBack];
     }
@@ -2072,13 +2073,11 @@ double _ticks = 0;
 
 - (void)goBack
 {
-    
     // Release the instance here - since we are going to camera list
     MediaPlayer::release();
     
     self.activityStopStreamingProgress.hidden = NO;
     [self.view bringSubviewToFront:_activityStopStreamingProgress];
-    
     
     NSLog(@"self.currentMediaStatus: %d", self.currentMediaStatus);
     
