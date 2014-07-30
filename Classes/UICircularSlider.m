@@ -13,7 +13,11 @@
 #import "UIFont+Hubble.h"
 #import "define.h"
 
-@interface UICircularSlider()
+@interface UICircularSlider() {
+    BOOL isReachLimit;
+    int previousSweepAngle, storeAngle;
+    int finalAngle;
+}
 #define Rgb2UIColor(r, g, b)  [UIColor colorWithRed:((r) / 255.0) green:((g) / 255.0) blue:((b) / 255.0) alpha:1.0]
 
 /** Helper Functions **/
@@ -137,6 +141,9 @@
 	self.continuous = YES;
     self.thumbTintColor = Rgb2UIColor(223, 237, 244);
 	self.thumbCenterPoint = CGPointZero;
+    
+    isReachLimit = NO;
+    previousSweepAngle = storeAngle = finalAngle = 0;
     //Add label
     //Define the Font
 
@@ -387,9 +394,6 @@
 	CGRect thumbTouchRect = CGRectMake(self.thumbCenterPoint.x - kThumbRadius, self.thumbCenterPoint.y - kThumbRadius, kThumbRadius*2, kThumbRadius*2);
 	return CGRectContainsPoint(thumbTouchRect, point);
 }
-BOOL isReachLimit = NO;
-int previousSweepAngle, storeAngle;
-int finalAngle;
 
 /** @name UIGestureRecognizer management methods */
 #pragma mark - UIGestureRecognizer management methods
