@@ -22,6 +22,7 @@
 @property (nonatomic, retain) Account_ViewController *accountVC;
 @property (nonatomic, retain) NSMutableArray *restoredProfiles;
 @property (nonatomic, retain) NSMutableArray *arrayChannel;
+@property (nonatomic) BOOL initialView;
 
 @end
 
@@ -45,9 +46,11 @@
 {
     [super viewDidLoad];
     
+    self.initialView = YES;
+    
     self.camerasVC = [[CamerasViewController alloc] initWithDelegate:self.menuDelegate parentVC:self];
     EarlierNavigationController *camerasNavContoller = [[EarlierNavigationController alloc] initWithRootViewController:_camerasVC];
-    _camerasVC.tabBarItem.image = [UIImage imageNamed:@"hubble_logo2"];
+    _camerasVC.tabBarItem.image = [UIImage imageNamed:@"logo2"];
     
     if (_cameras) {
         _camerasVC.camChannels = _cameras;
@@ -82,9 +85,8 @@
 {
     self.navigationController.navigationBarHidden = NO;
     
-    if (!_isFirttime) {
-        //revert
-        self.isFirttime = TRUE;
+    if ( _initialView ) {
+        self.initialView = NO;
         
         [self menuBackAction:nil];
         [self removeNavigationBarBottomLine];
@@ -165,7 +167,7 @@
     }
 }
 
-- (void)menuBackAction: (id)sender
+- (void)menuBackAction:(id)sender
 {
     // Back to Player view. What is camera selected? 0?
     if (self.cameras != nil && self.cameras.count > 0) {
@@ -213,15 +215,15 @@
             [userDefaults setObject:camChannel.profile.mac_address forKey:CAM_IN_VEW];
             [userDefaults synchronize];
             
-            H264PlayerViewController *h264PlayerViewController = [[H264PlayerViewController alloc] init];
-            
-            h264PlayerViewController.selectedChannel = camChannel;
-            h264PlayerViewController.h264PlayerVCDelegate = self;
-            
-            NSLog(@"%@, %@", self.parentViewController.description, self.parentViewController.parentViewController);
-            
-            [self.navigationController pushViewController:h264PlayerViewController animated:YES];
-            [h264PlayerViewController release];
+//            H264PlayerViewController *h264PlayerViewController = [[H264PlayerViewController alloc] init];
+//            
+//            h264PlayerViewController.selectedChannel = camChannel;
+//            h264PlayerViewController.h264PlayerVCDelegate = self;
+//            
+//            NSLog(@"%@, %@", self.parentViewController.description, self.parentViewController.parentViewController);
+//            
+//            [self.navigationController pushViewController:h264PlayerViewController animated:YES];
+//            [h264PlayerViewController release];
         }
     }
     else {
