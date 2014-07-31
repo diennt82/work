@@ -218,6 +218,7 @@
     [_maximumTrackTintColor release];
     [_thumbTintColor release];
     [_timer release];
+    [_timerRunInBg release];
     [_textField release];
     [_minuteTField release];
     [super dealloc];
@@ -225,16 +226,32 @@
 
 -(void) handleEnteredBackground
 {
-    //save value to handle later
-    //NSTimeInterval nowInterval =
-    [[NSDate date] timeIntervalSince1970];
-    
+    if (self.value > 0 && self.value <= 180 && self.userInteractionEnabled)
+    {
+        UIApplication *app = [UIApplication sharedApplication];
+        //create UIBackgroundTaskIdentifier and create tackground task, which starts after time
+        __block UIBackgroundTaskIdentifier bgTask = [app beginBackgroundTaskWithExpirationHandler:^{
+            [app endBackgroundTask:bgTask];
+            bgTask = UIBackgroundTaskInvalid;
+        }];
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+            self.timerRunInBg = [NSTimer scheduledTimerWithTimeInterval:60.0 target:self selector:@selector(updateStatus) userInfo:nil repeats:YES];
+            [[NSRunLoop currentRunLoop] addTimer:self.timerRunInBg forMode:NSDefaultRunLoopMode];
+            [[NSRunLoop currentRunLoop] run];
+        });
+    }
 }
 
 -(void) becomeActive
 {
     //load from save value and update UI
     [self updateCustomSlider];
+    if (self.timerRunInBg && [self.timerRunInBg isValid])
+    {
+        [self.timerRunInBg invalidate];
+        self.timerRunInBg = nil;
+    }
 }
 
 - (void)updateCustomSlider
@@ -259,14 +276,27 @@
     [self setValue:self.value];
 }
 
-- (void)updateLabel:(NSTimer *)exp{
+- (void)updateStatus
+{
     NSInteger value = (int)round(self.value);
-	if((int)self.value == 0 || self.value > 180 || !self.userInteractionEnabled){
-		[self killTimer];
-	}
-	self.textField.text = [self timeFormat:value];
     value = value -1;
+    if (self.timerRunInBg == nil)
+    {
+        self.textField.text = [self timeFormat:value];
+    }
 	self.value = value;
+	if((int)self.value == 0 || self.value > 180 || !self.userInteractionEnabled)
+    {
+		[self killTimer];
+        if (self.timerRunInBg && [self.timerRunInBg isValid])
+        {
+            [self.timerRunInBg invalidate];
+            self.timerRunInBg = nil;
+        }
+        NSLog(@"%s register remote notifiation", __FUNCTION__);
+        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:
+         (UIRemoteNotificationType) (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
+	}
 }
 
 - (void)killTimer{
@@ -464,23 +494,32 @@
             {
                 NSInteger timeValue = (int)round(self.value);
 
-                if (timeValue>0)
+                if (timeValue > 0)
                 {
                     //disable
                     [[UIApplication sharedApplication] unregisterForRemoteNotifications];
+                    //timer to update after one minutes
+                    [self startTimerUpdateLabel];
                 }
                 else
                 {
-                    //disable
-                    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound)];
+                    //enable
+                    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:
+                     (UIRemoteNotificationType) (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
                 }
-                [self cancelAllLocalNotification];
-                /*Check todo
-                 1. create local notification, from now
-                 */
-                [self registerLocalNotification];
-                //timer to update after one minutes
-                [self startTimerUpdateLabel];
+                
+                
+                // Get the current date
+                NSTimeInterval nowInterval = [[NSDate date] timeIntervalSince1970];
+                NSLog(@"picker Date is %f", nowInterval);
+                //get value of slider currently
+                NSTimeInterval timeRemider = (NSTimeInterval)round(self.value) * 60;
+                NSTimeInterval nextDateTime = nowInterval + timeRemider;
+                NSLog(@"nextDay Date is %f and time to store is %d", nextDateTime, (int)nextDateTime);
+                //save time to exp to call expire later
+                NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+                [userDefaults setInteger:(int)nextDateTime forKey:TIME_TO_EXPIRED];
+                [userDefaults synchronize];
             }
             
             if (!self.isContinuous) {
@@ -503,7 +542,7 @@
     [self killTimer];
     self.timer = [NSTimer scheduledTimerWithTimeInterval:60.0
                                               target:self
-                                            selector:@selector(updateLabel:)
+                                            selector:@selector(updateStatus)
                                             userInfo:nil
                                              repeats:YES ];
 }
@@ -515,38 +554,6 @@
 - (void)cancelAllLocalNotification
 {
     [[UIApplication sharedApplication] cancelAllLocalNotifications];
-}
-
-- (void)registerLocalNotification
-{
-    // Get the current date
-    NSTimeInterval nowInterval = [[NSDate date] timeIntervalSince1970];
-    NSLog(@"picker Date is %f", nowInterval);
-    
-    //get value of slider currently
-    NSTimeInterval timeRemider = (NSTimeInterval)round(self.value) * 60;
-    NSTimeInterval nextDateTime = nowInterval + timeRemider;
-    NSLog(@"nextDay Date is %f and time to store is %d", nextDateTime, (int)nextDateTime);
-    
-    //save time to exp to call expire later
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setInteger:(int)nextDateTime forKey:TIME_TO_EXPIRED];
-    [userDefaults synchronize];
-   
-    // Schedule the notification
-    NSDate *fireDateNotification = [NSDate dateWithTimeIntervalSince1970:nextDateTime];
-    UILocalNotification* localNotification = [[UILocalNotification alloc] init];
-    localNotification.fireDate = fireDateNotification;
-    localNotification.alertBody = NSLocalizedStringWithDefaultValue(@"do_not_disturb_time_is_over", nil, [NSBundle mainBundle], @"Your 'Do Not Disturb' time is over, you will now start to receive notifications", nil);
-    localNotification.alertAction = NSLocalizedStringWithDefaultValue(@"let_push_notification_from_camera", nil, [NSBundle mainBundle], @"Let push notification from camera", nil);
-    localNotification.timeZone = [NSTimeZone defaultTimeZone];
-    localNotification.applicationIconBadgeNumber = [[UIApplication sharedApplication] applicationIconBadgeNumber] + 1;
-    
-    [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
-    
-    //
-//    [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadData" object:self];
-    [localNotification release];
 }
 
 - (void)tapGestureHappened:(UITapGestureRecognizer *)tapGestureRecognizer {

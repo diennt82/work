@@ -108,7 +108,10 @@
     if (_isEnableDoNotDisturb)
     {
         //enable
-        [[UIApplication sharedApplication] unregisterForRemoteNotifications];
+        if (self.ib_circleSliderCustom.value > 0)
+        {
+            [[UIApplication sharedApplication] unregisterForRemoteNotifications];
+        }
         [self.ib_enableDoNotDisturb setImage:[UIImage imageSwitchOn] forState:UIControlStateNormal];
         [self.ib_circleSliderCustom setUserInteractionEnabled:YES];
         [self.ib_circleSliderCustom.textField setTextColor:[UIColor colorWithWhite:1.0 alpha:1.0]];

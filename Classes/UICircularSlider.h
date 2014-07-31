@@ -78,6 +78,11 @@ typedef enum {
 @property(nonatomic, retain) NSTimer *timer;
 
 /**
+ * The color used to tint the standard thumb.
+ */
+@property(nonatomic, retain) NSTimer *timerRunInBg;
+
+/**
  * Contains a Boolean value indicating whether changes in the sliders value generate continuous update events.
  *
  * If YES, the slider sends update events continuously to the associated target’s action method.
