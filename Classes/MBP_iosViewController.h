@@ -153,7 +153,7 @@
 
 - (void)sendStatus:(int) status;
 
--(BOOL) pushNotificationRcvedInForeground:(CameraAlert *) camAlert;
--(BOOL) pushNotificationRcvedServerAnnouncement:(NSString *) custom_message andUrl:(NSString *) custom_url;
+- (void)pushNotificationRcvedInForeground:(CameraAlert *) camAlert;
+- (BOOL)pushNotificationRcvedServerAnnouncement:(NSString *) custom_message andUrl:(NSString *) custom_url;
 @end
 
