@@ -227,12 +227,40 @@
         NSLog(@"Continue scan...");
     }
     
-    
+    if (_userAccount == nil)
+    {
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        NSString * userEmail  = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
+        NSString * userPass   = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
+        NSString * userApiKey = (NSString *) [userDefaults objectForKey:@"PortalApiKey"];
+        
+        self.userAccount = [[UserAccount alloc] initWithUser:userEmail
+                                                    password:userPass
+                                                      apiKey:userApiKey
+                                                    listener:nil];
+    }
+#if 1
+    if ([_userAccount checkCameraIsAvailable:self.cameraMac])
+#else
     if ([self checkItOnline])
+#endif
     {
         //Found it online
         NSLog(@"Found it online");
+#if 1
+        [_userAccount sendToServerTheCommand:@"set_motion_area&grid=1x1&zone=00"];
         
+        if ([[NSUserDefaults standardUserDefaults] integerForKey:SET_UP_CAMERA] != SETUP_CAMERA_FOCUS73)
+        {
+            [_userAccount sendToServerTheCommand:@"vox_enable"];
+            [_userAccount sendToServerTheCommand:@"set_temp_lo_enable&value=1"];
+            [_userAccount sendToServerTheCommand:@"set_temp_hi_enable&value=1"];
+        }
+        else
+        {
+            NSLog(@"%s Setup model Focus73.", __FUNCTION__);
+        }
+#else
         // Trying to enable all PN.
         [self sendToServerTheCommand:@"set_motion_area&grid=1x1&zone=00"];
         
@@ -246,11 +274,17 @@
         {
             NSLog(@"%s Setup model Focus73.", __FUNCTION__);
         }
+#endif
         
         // Trying to update host ssid to server.
+#if 1
+        [_userAccount updatesBasicInfoForCamera];
+        [_userAccount checkCameraIsAvailable:self.cameraMac];
+#else
         [self updatesBasicInfoForCamera];
         
         [self checkItOnline]; // Just synch up data with offline data.
+#endif
         
         [self setupCompleted];
         return;
@@ -265,16 +299,18 @@
 
 #pragma mark - MBS_JSON communication
 
+#if 0
 -(BOOL) checkItOnline
 {
     NSLog(@"--> Try to search IP online...");
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSString * userEmail  = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
-    NSString * userPass   = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
-    NSString * userApiKey = (NSString *) [userDefaults objectForKey:@"PortalApiKey"];
     
     if (_userAccount == nil)
     {
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        NSString * userEmail  = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
+        NSString * userPass   = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
+        NSString * userApiKey = (NSString *) [userDefaults objectForKey:@"PortalApiKey"];
+        
         UserAccount *user = [[UserAccount alloc] initWithUser:userEmail
                                  password:userPass
                                    apiKey:userApiKey
@@ -389,6 +425,7 @@
     
     NSLog(@"%s cmd:%@, error: %d", __func__, command, errorCode);
 }
+#endif
 
 - (void) setupCompleted
 {
