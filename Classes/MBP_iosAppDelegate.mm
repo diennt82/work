@@ -574,11 +574,10 @@ void checkingApplicationCrashed()
     {
         if (_jsonComm)
         {
-            [_jsonComm release];
             self.jsonComm = nil;
         }
         
-        self.jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+        _jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
                                                               Selector:@selector(registerAppSuccessWithResponse:)
                                                           FailSelector:@selector(registerAppFailedWithResponse:)
                                                              ServerErr:@selector(registerAppFailedServerUnreachable)];
@@ -755,7 +754,7 @@ void checkingApplicationCrashed()
         
         if (!_jsonComm)
         {
-            self.jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+            _jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
                                                                   Selector:nil
                                                               FailSelector:nil
                                                                  ServerErr:nil];

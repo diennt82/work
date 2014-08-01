@@ -1316,6 +1316,7 @@ double _ticks = 0;
                 }
             }
         }
+        [jsoncomm release];
     }
 }
 
@@ -7028,7 +7029,7 @@ double _ticks = 0;
         NSString * userPass   = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
         NSString * userApiKey = (NSString *) [userDefaults objectForKey:@"PortalApiKey"];
         
-        self.userAccount = [[UserAccount alloc] initWithUser:userEmail
+        _userAccount = [[UserAccount alloc] initWithUser:userEmail
                                                     password:userPass
                                                       apiKey:userApiKey
                                                     listener:nil];
