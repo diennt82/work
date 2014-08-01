@@ -183,7 +183,12 @@ typedef enum _WAIT_FOR_UPDATING {
 
 -(void)backButtonPressed
 {
-    self.navigationItem.leftBarButtonItem = NO;
+//    self.navigationItem.leftBarButtonItem = NO;
+    if (self.shoulfWaitForUpdatingType == WAITING_FOR_BACK_PRESSED)
+    {
+        return;
+    }
+    
     self.shouldWaitForUpdateSettings = FALSE;
     self.shoulfWaitForUpdatingType = NOT_WAITING;
     
