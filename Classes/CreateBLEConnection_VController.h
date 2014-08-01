@@ -29,7 +29,6 @@
     NSTimer *_getMacAddressTimer;
     NSString *_cameraMac;
     NSString *_cameraName;
-    NSMutableArray *_currentBLEList;
     BOOL _isBackPress;
 }
 
@@ -47,9 +46,10 @@
 
 @property (nonatomic, retain) UIView * inProgress;
 @property (nonatomic, retain) NSString *homeWifiSSID;
+@property (nonatomic) NSInteger cameraType;
 
-- (void) hideProgess;
--(void) showProgress:(NSTimer *) exp;
+//- (void) hideProgess;
+//-(void) showProgress:(NSTimer *) exp;
 - (void) checkConnectionToCamera:(NSTimer *) expired;
 -(void) moveToNextStep;
 

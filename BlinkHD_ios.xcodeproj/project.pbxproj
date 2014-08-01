@@ -445,6 +445,11 @@
 		8B29A08718AF500A00D36BE5 /* video_progress_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299F5118AF500900D36BE5 /* video_progress_bg@2x.png */; };
 		8B29A08818AF500A00D36BE5 /* video_progress_green.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299F5218AF500900D36BE5 /* video_progress_green.png */; };
 		8B29A08918AF500A00D36BE5 /* video_progress_green@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299F5318AF500900D36BE5 /* video_progress_green@2x.png */; };
+		8B3E0EEF198902A600BF5788 /* ntp.hosts in Resources */ = {isa = PBXBuildFile; fileRef = 8B3E0EE5198902A600BF5788 /* ntp.hosts */; };
+		8B3E0EF0198902A600BF5788 /* GCDAsyncUdpSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B3E0EE7198902A600BF5788 /* GCDAsyncUdpSocket.m */; };
+		8B3E0EF1198902A600BF5788 /* NSDate+NetworkClock.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B3E0EE9198902A600BF5788 /* NSDate+NetworkClock.m */; };
+		8B3E0EF2198902A600BF5788 /* NetAssociation.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B3E0EEC198902A600BF5788 /* NetAssociation.m */; };
+		8B3E0EF3198902A600BF5788 /* NetworkClock.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B3E0EEE198902A600BF5788 /* NetworkClock.m */; };
 		8B53659318B34DA80018671F /* SensitivityTemperatureCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B53659218B34DA80018671F /* SensitivityTemperatureCell.m */; };
 		8B53659518B34DCA0018671F /* SensitivityTemperatureCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B53659418B34DCA0018671F /* SensitivityTemperatureCell.xib */; };
 		8B68F5D118066CE500661527 /* PlaybackViewController_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B68F5D018066CE500661527 /* PlaybackViewController_ipad.xib */; };
@@ -1280,6 +1285,16 @@
 		8B299F5118AF500900D36BE5 /* video_progress_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "video_progress_bg@2x.png"; sourceTree = "<group>"; };
 		8B299F5218AF500900D36BE5 /* video_progress_green.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = video_progress_green.png; sourceTree = "<group>"; };
 		8B299F5318AF500900D36BE5 /* video_progress_green@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "video_progress_green@2x.png"; sourceTree = "<group>"; };
+		8B3E0EE5198902A600BF5788 /* ntp.hosts */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ntp.hosts; sourceTree = "<group>"; };
+		8B3E0EE6198902A600BF5788 /* GCDAsyncUdpSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDAsyncUdpSocket.h; sourceTree = "<group>"; };
+		8B3E0EE7198902A600BF5788 /* GCDAsyncUdpSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCDAsyncUdpSocket.m; sourceTree = "<group>"; };
+		8B3E0EE8198902A600BF5788 /* NSDate+NetworkClock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+NetworkClock.h"; sourceTree = "<group>"; };
+		8B3E0EE9198902A600BF5788 /* NSDate+NetworkClock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+NetworkClock.m"; sourceTree = "<group>"; };
+		8B3E0EEA198902A600BF5788 /* ios-ntp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ios-ntp.h"; sourceTree = "<group>"; };
+		8B3E0EEB198902A600BF5788 /* NetAssociation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetAssociation.h; sourceTree = "<group>"; };
+		8B3E0EEC198902A600BF5788 /* NetAssociation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NetAssociation.m; sourceTree = "<group>"; };
+		8B3E0EED198902A600BF5788 /* NetworkClock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkClock.h; sourceTree = "<group>"; };
+		8B3E0EEE198902A600BF5788 /* NetworkClock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NetworkClock.m; sourceTree = "<group>"; };
 		8B53659118B34DA80018671F /* SensitivityTemperatureCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SensitivityTemperatureCell.h; sourceTree = "<group>"; };
 		8B53659218B34DA80018671F /* SensitivityTemperatureCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SensitivityTemperatureCell.m; sourceTree = "<group>"; };
 		8B53659418B34DCA0018671F /* SensitivityTemperatureCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SensitivityTemperatureCell.xib; sourceTree = "<group>"; };
@@ -1772,6 +1787,7 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				8B3E0EE41988FF8A00BF5788 /* TheTimeNow */,
 				8BB7EA94196E337200FDD674 /* Focus73 */,
 				8412C98A195D26F7000FEA1C /* CrittercismSDK */,
 				84A66235195C0C2500EF7DB5 /* SDWebImage */,
@@ -2642,6 +2658,23 @@
 			name = Step_03;
 			sourceTree = "<group>";
 		};
+		8B3E0EE41988FF8A00BF5788 /* TheTimeNow */ = {
+			isa = PBXGroup;
+			children = (
+				8B3E0EE5198902A600BF5788 /* ntp.hosts */,
+				8B3E0EE6198902A600BF5788 /* GCDAsyncUdpSocket.h */,
+				8B3E0EE7198902A600BF5788 /* GCDAsyncUdpSocket.m */,
+				8B3E0EE8198902A600BF5788 /* NSDate+NetworkClock.h */,
+				8B3E0EE9198902A600BF5788 /* NSDate+NetworkClock.m */,
+				8B3E0EEA198902A600BF5788 /* ios-ntp.h */,
+				8B3E0EEB198902A600BF5788 /* NetAssociation.h */,
+				8B3E0EEC198902A600BF5788 /* NetAssociation.m */,
+				8B3E0EED198902A600BF5788 /* NetworkClock.h */,
+				8B3E0EEE198902A600BF5788 /* NetworkClock.m */,
+			);
+			name = TheTimeNow;
+			sourceTree = "<group>";
+		};
 		8B53659018B34D590018671F /* Temperature */ = {
 			isa = PBXGroup;
 			children = (
@@ -3506,7 +3539,6 @@
 			isa = PBXGroup;
 			children = (
 				8B9CE1F818C81DBA00B1B7F9 /* HubbleAlertView */,
-				8B977B6D18C7095F00A61115 /* PairInstructionVC */,
 				8B977B6718C701F200A61115 /* BLEConnectionCell */,
 				A1ABF19D187536B20014FCB4 /* Connection */,
 				A1ABF1B7187538280014FCB4 /* CreateBLEConnection_VController.h */,
@@ -3704,6 +3736,7 @@
 				8B9507BF18C9960D006D4945 /* setup_progress_blue@2x.png in Resources */,
 				5EBA45A119405BEA00695155 /* Step_08_ViewController_land_ipad.xib in Resources */,
 				5EBA459D19405BEA00695155 /* Step_07_ViewController_ipad.xib in Resources */,
+				8B3E0EEF198902A600BF5788 /* ntp.hosts in Resources */,
 				8B299FDB18AF500900D36BE5 /* video_grey@5.png in Resources */,
 				8B299F6218AF500900D36BE5 /* alert_settings@2x.png in Resources */,
 				8B29A07B18AF500A00D36BE5 /* video_overlay_download.png in Resources */,
@@ -4363,6 +4396,7 @@
 				84A6625A195C0C2500EF7DB5 /* SDWebImageManager.m in Sources */,
 				84F27EC118AE10750000CA7A /* UARTPeripheral.m in Sources */,
 				5EAFC058192A0CB9001FB3AA /* CameraDetailCell.m in Sources */,
+				8B3E0EF1198902A600BF5788 /* NSDate+NetworkClock.m in Sources */,
 				A1AC859518913014002A8CCD /* UIColor+Hubble.m in Sources */,
 				84B2EABB18FFBFBB00763F06 /* UIDeviceHardware.m in Sources */,
 				38A478FA15C12914008682FE /* Step_08_ViewController.mm in Sources */,
@@ -4376,6 +4410,7 @@
 				38C79E2215C26947006EE378 /* Step_10_ViewController.mm in Sources */,
 				84A66258195C0C2500EF7DB5 /* SDWebImageDownloader.m in Sources */,
 				38355AE715CB76630045909C /* Account_ViewController.mm in Sources */,
+				8B3E0EF0198902A600BF5788 /* GCDAsyncUdpSocket.m in Sources */,
 				84A66254195C0C2500EF7DB5 /* NSData+ImageContentType.m in Sources */,
 				A1ABF1A9187537AD0014FCB4 /* NetworkInfoToCamera_VController.mm in Sources */,
 				38B85E5415CFAA7F00E5A1FA /* Step_07_ViewController.mm in Sources */,
@@ -4409,6 +4444,7 @@
 				8B9CE1FB18C81DEA00B1B7F9 /* CustomIOS7AlertView.m in Sources */,
 				8B97A3C018BEE628008A38E1 /* UIBarButtonItem+Custom.m in Sources */,
 				A1ABF1AF187537D10014FCB4 /* Step_10_ViewController_ble.mm in Sources */,
+				8B3E0EF2198902A600BF5788 /* NetAssociation.m in Sources */,
 				8B92D45518865F0400120BCE /* SchedulingViewController.m in Sources */,
 				979BC6A817D9BCB200B3B373 /* PlaylistInfo.m in Sources */,
 				A1239E86186185F200A25A04 /* AudioOutStreamer.m in Sources */,
@@ -4419,6 +4455,7 @@
 				A1E32FAD17E9899800504538 /* H264PlayerListener.mm in Sources */,
 				A1E32FB017E98A4700504538 /* PlaybackListener.mm in Sources */,
 				8B9CE20518C848A000B1B7F9 /* AddCameraViewController.m in Sources */,
+				8B3E0EF3198902A600BF5788 /* NetworkClock.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

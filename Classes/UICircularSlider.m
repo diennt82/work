@@ -12,8 +12,13 @@
 #import "UICircularSlider.h"
 #import "UIFont+Hubble.h"
 #import "define.h"
+#import "MBP_iosAppDelegate.h"
 
-@interface UICircularSlider()
+@interface UICircularSlider() {
+    BOOL isReachLimit;
+    int previousSweepAngle, storeAngle;
+    int finalAngle;
+}
 #define Rgb2UIColor(r, g, b)  [UIColor colorWithRed:((r) / 255.0) green:((g) / 255.0) blue:((b) / 255.0) alpha:1.0]
 
 /** Helper Functions **/
@@ -75,6 +80,8 @@
 @synthesize minimumTrackTintColor = _minimumTrackTintColor;
 - (void)setMinimumTrackTintColor:(UIColor *)minimumTrackTintColor {
 	if (![minimumTrackTintColor isEqual:_minimumTrackTintColor]) {
+        [minimumTrackTintColor retain];
+        [_minimumTrackTintColor release];
 		_minimumTrackTintColor = minimumTrackTintColor;
 		[self setNeedsDisplay];
 	}
@@ -83,6 +90,8 @@
 @synthesize maximumTrackTintColor = _maximumTrackTintColor;
 - (void)setMaximumTrackTintColor:(UIColor *)maximumTrackTintColor {
 	if (![maximumTrackTintColor isEqual:_maximumTrackTintColor]) {
+        [maximumTrackTintColor retain];
+        [_maximumTrackTintColor release];
 		_maximumTrackTintColor = maximumTrackTintColor;
 		[self setNeedsDisplay];
 	}
@@ -91,6 +100,8 @@
 @synthesize thumbTintColor = _thumbTintColor;
 - (void)setThumbTintColor:(UIColor *)thumbTintColor {
 	if (![thumbTintColor isEqual:_thumbTintColor]) {
+        [thumbTintColor retain];
+        [_thumbTintColor release];
 		_thumbTintColor = thumbTintColor;
 		[self setNeedsDisplay];
 	}
@@ -131,6 +142,9 @@
 	self.continuous = YES;
     self.thumbTintColor = Rgb2UIColor(223, 237, 244);
 	self.thumbCenterPoint = CGPointZero;
+    
+    isReachLimit = NO;
+    previousSweepAngle = storeAngle = finalAngle = 0;
     //Add label
     //Define the Font
 
@@ -199,6 +213,17 @@
 
 }
 
+- (void)dealloc
+{
+    [_minimumTrackTintColor release];
+    [_maximumTrackTintColor release];
+    [_thumbTintColor release];
+    [_timer release];
+    [_textField release];
+    [_minuteTField release];
+    [super dealloc];
+}
+
 -(void) handleEnteredBackground
 {
     //save value to handle later
@@ -222,6 +247,8 @@
     if (deltaTime >= 0)
     {
         self.value = 0;
+        MBP_iosAppDelegate *appDelegate = (MBP_iosAppDelegate *)[UIApplication sharedApplication].delegate;
+        [appDelegate registerForRemoteNotification];
     }
     else
     {
@@ -248,7 +275,7 @@
 - (void)killTimer{
 	if(_timer && [_timer isValid]){
 		[_timer invalidate];
-		_timer = nil;
+		self.timer = nil;
 	}
 }
 
@@ -370,9 +397,6 @@
 	CGRect thumbTouchRect = CGRectMake(self.thumbCenterPoint.x - kThumbRadius, self.thumbCenterPoint.y - kThumbRadius, kThumbRadius*2, kThumbRadius*2);
 	return CGRectContainsPoint(thumbTouchRect, point);
 }
-BOOL isReachLimit = NO;
-int previousSweepAngle, storeAngle;
-int finalAngle;
 
 /** @name UIGestureRecognizer management methods */
 #pragma mark - UIGestureRecognizer management methods
@@ -443,15 +467,17 @@ int finalAngle;
             {
                 NSInteger timeValue = (int)round(self.value);
 
-                if (timeValue>0)
+                if (timeValue > 0)
                 {
-                    //disable
-                    [[UIApplication sharedApplication] unregisterForRemoteNotifications];
+                    //enable
+                    MBP_iosAppDelegate *appDelegate = (MBP_iosAppDelegate *)[UIApplication sharedApplication].delegate;
+                    [appDelegate unregisterForRemoteNotifications];
                 }
                 else
                 {
                     //disable
-                    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound)];
+                    MBP_iosAppDelegate *appDelegate = (MBP_iosAppDelegate *)[UIApplication sharedApplication].delegate;
+                    [appDelegate registerForRemoteNotification];
                 }
                 [self cancelAllLocalNotification];
                 /*Check todo
@@ -480,16 +506,22 @@ int finalAngle;
 - (void)startTimerUpdateLabel
 {
     [self killTimer];
-    _timer = [NSTimer scheduledTimerWithTimeInterval:60.0
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:60.0
                                               target:self
                                             selector:@selector(updateLabel:)
                                             userInfo:nil
                                              repeats:YES ];
 }
+
+-(void)setEnableView:(BOOL)isEnable {
+    
+}
+
 - (void)cancelAllLocalNotification
 {
     [[UIApplication sharedApplication] cancelAllLocalNotifications];
 }
+
 - (void)registerLocalNotification
 {
     // Get the current date
@@ -506,21 +538,25 @@ int finalAngle;
     [userDefaults setInteger:(int)nextDateTime forKey:TIME_TO_EXPIRED];
     [userDefaults synchronize];
    
-    // Schedule the notification
-    NSDate *fireDateNotification = [NSDate dateWithTimeIntervalSince1970:nextDateTime];
-    UILocalNotification* localNotification = [[UILocalNotification alloc] init];
-    localNotification.fireDate = fireDateNotification;
-    localNotification.alertBody = NSLocalizedStringWithDefaultValue(@"do_not_disturb_time_is_over", nil, [NSBundle mainBundle], @"Your 'Do Not Disturb' time is over, you will now start to receive notifications", nil);
-    localNotification.alertAction = NSLocalizedStringWithDefaultValue(@"let_push_notification_from_camera", nil, [NSBundle mainBundle], @"Let push notification from camera", nil);
-    localNotification.timeZone = [NSTimeZone defaultTimeZone];
-    localNotification.applicationIconBadgeNumber = [[UIApplication sharedApplication] applicationIconBadgeNumber] + 1;
-    
-    [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
-    
-    //
-//    [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadData" object:self];
-    [localNotification release];
+    if (self.value > 0)
+    {
+        // Schedule the notification
+        NSDate *fireDateNotification = [NSDate dateWithTimeIntervalSince1970:nextDateTime];
+        UILocalNotification* localNotification = [[UILocalNotification alloc] init];
+        localNotification.fireDate = fireDateNotification;
+        localNotification.alertBody = NSLocalizedStringWithDefaultValue(@"do_not_disturb_time_is_over", nil, [NSBundle mainBundle], @"Your 'Do Not Disturb' time is over, you will now start to receive notifications", nil);
+        localNotification.alertAction = NSLocalizedStringWithDefaultValue(@"let_push_notification_from_camera", nil, [NSBundle mainBundle], @"Let push notification from camera", nil);
+        localNotification.timeZone = [NSTimeZone defaultTimeZone];
+        localNotification.applicationIconBadgeNumber = [[UIApplication sharedApplication] applicationIconBadgeNumber] + 1;
+        
+        [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
+        
+        //
+        //    [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadData" object:self];
+        [localNotification release];
+    }
 }
+
 - (void)tapGestureHappened:(UITapGestureRecognizer *)tapGestureRecognizer {
 	if (tapGestureRecognizer.state == UIGestureRecognizerStateEnded) {
 		CGPoint tapLocation = [tapGestureRecognizer locationInView:self];

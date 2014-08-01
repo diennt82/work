@@ -13,12 +13,14 @@
 #import "EarlierNavigationController.h"
 #import "Crittercism.h"
 #import "SDWebImageManager.h"
+#import "ios-ntp.h"
 
 @interface MBP_iosAppDelegate()
 
 @property (retain, nonatomic) BMS_JSON_Communication *jsonComm;
 @property (retain, nonatomic) NSString * devTokenStr;
 @property (nonatomic) BOOL shouldCancelRegisterApp;
+@property (nonatomic) BOOL isRegisteredPushNotification;
 
 @end
 
@@ -196,6 +198,9 @@
     }
     
     [BMS_JSON_Communication setServerInput:serverName];
+    
+    [NetworkClock sharedNetworkClock]; // Just gather up the ntp servers...
+    [NSDate networkDate];              // Start ntp process...
     
     return YES;
 }
@@ -457,19 +462,10 @@ void checkingApplicationCrashed()
 {
     //delegate is called when app is active
     //in case app in background, must click to active it.
-    UIApplicationState state = [application applicationState];
-    
-    if (state == UIApplicationStateActive)
-    {
-        //enable remote push notification
-        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
-    }
-    // Set icon badge number to zero
-    application.applicationIconBadgeNumber = 0;
+    //enable remote push notification
+    MBP_iosAppDelegate *appDelegate = (MBP_iosAppDelegate *)[UIApplication sharedApplication].delegate;
+    [appDelegate registerForRemoteNotification];
 }
-
-
-
 
 - (void)activateNotificationViewController: (CameraAlert *)camAlert
 {
@@ -570,11 +566,10 @@ void checkingApplicationCrashed()
     {
         if (_jsonComm)
         {
-            [_jsonComm release];
             self.jsonComm = nil;
         }
         
-        self.jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+        _jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
                                                               Selector:@selector(registerAppSuccessWithResponse:)
                                                           FailSelector:@selector(registerAppFailedWithResponse:)
                                                              ServerErr:@selector(registerAppFailedServerUnreachable)];
@@ -693,10 +688,11 @@ void checkingApplicationCrashed()
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString * camInView = (NSString*)[userDefaults objectForKey:CAM_IN_VEW];
     
-    if (camInView != nil)
+    if (camInView != nil || [userDefaults objectForKey:PLAYBACK_IN_VEW])
     {
         return  UIInterfaceOrientationMaskAllButUpsideDown;
     }
+    
     return  UIInterfaceOrientationMaskPortrait;
 }
 
@@ -750,7 +746,7 @@ void checkingApplicationCrashed()
         
         if (!_jsonComm)
         {
-            self.jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+            _jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
                                                                   Selector:nil
                                                               FailSelector:nil
                                                                  ServerErr:nil];
@@ -791,4 +787,23 @@ void checkingApplicationCrashed()
     }
 }
 
+- (void)registerForRemoteNotification
+{
+    if (!self.isRegisteredPushNotification)
+    {
+        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
+        self.isRegisteredPushNotification = YES;
+        // Set icon badge number to zero
+        [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+    }
+}
+
+- (void)unregisterForRemoteNotifications
+{
+    if (self.isRegisteredPushNotification)
+    {
+        [[UIApplication sharedApplication] unregisterForRemoteNotifications];;
+        self.isRegisteredPushNotification = NO;
+    }
+}
 @end

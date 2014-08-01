@@ -31,6 +31,7 @@
 
 
 - (void)cancelRegisterApp;
-
+- (void)registerForRemoteNotification;
+- (void)unregisterForRemoteNotifications;
 @end
 

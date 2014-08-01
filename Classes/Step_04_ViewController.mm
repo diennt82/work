@@ -61,7 +61,10 @@
     if (_camProfile) // Focus73
     {
         self.cameraName = _camProfile.name;
+#if 0
+        // Need not to show anymore, as far as, the flow will be teminated!
         self.btnSkipWIFISetup.hidden = NO;
+#endif
         
         [[HttpCom instance].comWithDevice setDevice_ip:_camProfile.ip_address];
         [[HttpCom instance].comWithDevice setDevice_port:_camProfile.port];
@@ -108,6 +111,8 @@
     [step05ViewController release];
     
     self.btnContinue.enabled = YES;
+    
+    [self customIOS7dialogButtonTouchUpInside:_alertView clickedButtonAtIndex:0];
 }
 
 - (void)configureCameraAndMoveToFinalStep
@@ -176,6 +181,48 @@
     [self defaultOnAllPNToCamera];
     
     // 3.
+#if 1
+    NSString *stringUDID = @"";
+    NSString *stringMac = @"00:00:00:00:00";
+    
+    response = [[HttpCom instance].comWithDevice sendCommandAndBlock:GET_UDID
+                                                                   withTimeout:5.0];
+    
+    NSString *pattern = [NSString stringWithFormat:@"^%@: [0-9A-Z]{26}$", GET_UDID];
+    NSError *error = NULL;
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:pattern
+                                                                           options:NSRegularExpressionAnchorsMatchLines
+                                                                             error:&error];
+    if (!regex)
+    {
+        NSLog(@"%s error:%@", __FUNCTION__, error.description);
+    }
+    else
+    {
+        NSLog(@"%s respone:%@", __FUNCTION__, response);
+        
+        if (response)
+        {
+            //get_udid: 01008344334C32B0A0VFFRBSVA
+            NSUInteger numberOfMatches = [regex numberOfMatchesInString:response
+                                                                options:0
+                                                                  range:NSMakeRange(0, [response length])];
+            NSLog(@"%s numberOfMatches:%lu", __FUNCTION__, (unsigned long)numberOfMatches);
+            
+            if (numberOfMatches == 1)
+            {
+                stringUDID = [response substringFromIndex:GET_UDID.length + 2];
+                stringMac = [Util add_colon_to_mac:[stringUDID substringWithRange:NSMakeRange(6, 12)]];
+            }
+        }
+    }
+    //save mac address for used later
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setObject:stringMac forKey:@"CameraMacWithQuote"];
+    [userDefaults setObject:stringUDID forKey:CAMERA_UDID];
+    [userDefaults synchronize];
+#else
     NSString *stringUDID = @"";
     
     stringUDID = [[HttpCom instance].comWithDevice sendCommandAndBlock:GET_UDID
@@ -201,6 +248,7 @@
     [userDefaults setObject:_camProfile.mac_address forKey:@"CameraMacWithQuote"];
     [userDefaults setObject:stringUDID forKey:CAMERA_UDID];
     [userDefaults synchronize];
+#endif
     
     // 4.
     response = [[HttpCom instance].comWithDevice sendCommandAndBlock:RESTART_HTTP_CMD];
@@ -215,14 +263,17 @@
     NSString *response = [[HttpCom instance].comWithDevice sendCommandAndBlock:@"set_motion_area&grid=1x1&zone=00"];
     result = [result stringByAppendingString:response];
     
-    response = [[HttpCom instance].comWithDevice sendCommandAndBlock:@"vox_enable"];
-    result = [result stringByAppendingFormat:@", %@", response];
-    
-    response = [[HttpCom instance].comWithDevice sendCommandAndBlock:@"set_temp_lo_enable&value=1"];
-    result = [result stringByAppendingFormat:@", %@", response];
-    
-    response = [[HttpCom instance].comWithDevice sendCommandAndBlock:@"set_temp_hi_enable&value=1"];
-    result = [result stringByAppendingFormat:@", %@", response];
+    if (!_camProfile) // Meaning this is not a Focus73 model!
+    {
+        response = [[HttpCom instance].comWithDevice sendCommandAndBlock:@"vox_enable"];
+        result = [result stringByAppendingFormat:@", %@", response];
+        
+        response = [[HttpCom instance].comWithDevice sendCommandAndBlock:@"set_temp_lo_enable&value=1"];
+        result = [result stringByAppendingFormat:@", %@", response];
+        
+        response = [[HttpCom instance].comWithDevice sendCommandAndBlock:@"set_temp_hi_enable&value=1"];
+        result = [result stringByAppendingFormat:@", %@", response];
+    }
     
     NSLog(@"%s respnse:%@", __FUNCTION__, result);
 }
@@ -358,10 +409,13 @@
     else if (tag == CONF_CAM_BTN_TAG)
     {
         //show progress view
-
+#if 1
+        [self createHubbleAlertView];
+#else
         [self.progressView setHidden:NO];
         [self.view addSubview:self.progressView];
         [self.view bringSubviewToFront:self.progressView];
+#endif
         
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         [userDefaults setObject:cameraName_text forKey:CAMERA_NAME];
@@ -371,8 +425,18 @@
         
         //[self performSelectorInBackground:@selector(queryWifiList) withObject:nil];
         self.btnContinue.enabled = NO;
-        [self moveToNextStep];
+        
+        if (_camProfile) // This is a Focus73 model!
+        {
+            [self performSelectorInBackground:@selector(configureCameraAndMoveToFinalStep) withObject:NO];
+        }
+        else
+        {
+            [self moveToNextStep];
+        }
     }
+#if 0
+    // As far as,this flow will be terminated!
     else if (tag == TAG_BTN_SKIP)
     {
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -385,6 +449,7 @@
         
         [self performSelectorInBackground:@selector(configureCameraAndMoveToFinalStep) withObject:NO];
     }
+#endif
 }
 
 #pragma mark - Hubble alert view & delegate
