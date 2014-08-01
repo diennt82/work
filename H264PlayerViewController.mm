@@ -5074,8 +5074,8 @@ double _ticks = 0;
     }
     else if ([_cameraModel isEqualToString:CP_MODEL_0073])
     {
-        self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_pan", @"video_action_video", nil];
-        self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_pan_pressed", @"video_action_video_pressed", nil];
+        self.itemImages = [NSMutableArray arrayWithObjects:@"video_action_pan", @"video_action_photo", nil];
+        self.itemSelectedImages = [NSMutableArray arrayWithObjects:@"video_action_pan_pressed", @"video_action_photo_pressed", nil];
     }
     else //if ([_cameraModel isEqualToString:CP_MODEL_BLE])
     {

@@ -12,9 +12,10 @@
 #import "CustomIOS7AlertView.h"
 #import "Camera.h"
 #import "Step_04_ViewController.h"
+#import "MBProgressHUD.h"
 
-#define BTN_CONTINUE_TAG 599
-#define BLE_TIMEOUT_PROCESS 2*60
+#define BTN_CONTINUE_TAG    599
+#define BLE_TIMEOUT_PROCESS 1.5*60
 
 @interface CreateBLEConnection_VController () <CustomIOS7AlertViewDelegate, BonjourDelegate>
 
@@ -234,6 +235,11 @@
     ConnectionState stateConnectBLE = [BLEConnectionManager getInstanceBLE].state;
     NSLog(@"CreateBLE VC - hubbleItemAction - stateConnectBLE: %d", stateConnectBLE);
     
+    if (_cameraType == SETUP_CAMERA_FOCUS73)
+    {
+        [self cancelBonjourThread];
+    }
+    
     if ( stateConnectBLE != CONNECTED)
     {
         //in state : SCANNING OR IDLE
@@ -260,15 +266,19 @@
     }
     else
     {
-        //In State CONNECTED
-        //wait for return from delegate,
-        //handle it on bleDisconnected
-        //disconnect to BLE
-        [BLEConnectionManager getInstanceBLE].delegate = nil;
+        MBProgressHUD *hub = [MBProgressHUD showHUDAddedTo:self.view animated:NO];
+        hub.labelText = @"Disconnecting BLE...";
+        /*
+         * -- In State CONNECTED --
+         * wait for return from delegate,
+         * handle it on bleDisconnected
+         * disconnect to BLE
+         */
+        
+        [BLEConnectionManager getInstanceBLE].needReconnect = FALSE;
+        [BLEConnectionManager getInstanceBLE].delegate = self;
         [[BLEConnectionManager getInstanceBLE] disconnect];
     }
-    
-    [self cancelBonjourThread];
 }
 
 - (IBAction)refreshCamBLE:(id)sender
@@ -549,6 +559,7 @@
             
             //[[BLEConnectionManager getInstanceBLE] connectToBLEWithPeripheral:_selectedPeripheral];
             //[self createHubbleAlertView];
+            self.shouldTimeoutProcessing = TRUE;
             self.btnConnect.enabled = YES;
             self.isLANSetup = FALSE;
             [self btnConnectTouchUpInsideAction:nil];
@@ -679,13 +690,20 @@
     }
     else
     {
-        //do nothing
+        [MBProgressHUD hideHUDForView:self.view animated:NO];
+        
         if (_timerTimeoutConnectBLE != nil)
         {
             [self.timerTimeoutConnectBLE invalidate];
             self.timerTimeoutConnectBLE = nil;
         }
+        
+        NSLog(@"%s Killing BLE.", __FUNCTION__);
+        [BLEConnectionManager getInstanceBLE].delegate = nil;
+        [[BLEConnectionManager getInstanceBLE] stopScanBLE];
 
+        [self.navigationController popViewControllerAnimated:YES];
+        
         NSLog(@"CreateBLEConnection_VC - bleDisconnected - _isBackPress = TRUE");
     }
 }

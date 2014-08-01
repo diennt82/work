@@ -111,6 +111,8 @@
     [step05ViewController release];
     
     self.btnContinue.enabled = YES;
+    
+    [self customIOS7dialogButtonTouchUpInside:_alertView clickedButtonAtIndex:0];
 }
 
 - (void)configureCameraAndMoveToFinalStep

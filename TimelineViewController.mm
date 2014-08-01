@@ -618,7 +618,7 @@
     
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     // Set the dateFormatter format
-#if 1
+#if 0
     [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
 #else
     [dateFormatter setTimeZone:[NSTimeZone localTimeZone]];
@@ -637,7 +637,7 @@
     
     // Get the date time in NSString
     [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-#if 0
+#if 1
     [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
 #endif
     NSString *dateInStringFormated = [dateFormatter stringFromDate:_currentDate];
@@ -1532,7 +1532,7 @@
     [dateFormater release];
     
     NSDateFormatter* df_local = [[NSDateFormatter alloc] init] ;
-#if 1
+#if 0
     [df_local setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
 #else
     [df_local setTimeZone:[NSTimeZone localTimeZone]];
