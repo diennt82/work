@@ -416,6 +416,12 @@
             
 		case LOGIN_FAILED_OR_LOGOUT : //back from login -failed Or logout
         {
+            //Clear Do Not Disturb Cache
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            [userDefaults setInteger:(NSInteger)[[NSDate date] timeIntervalSince1970] forKey:TIME_TO_EXPIRED];
+            [userDefaults setBool:NO forKey:ENABLE_DO_NOT_DISTURB];
+            [userDefaults synchronize];
+            
             statusDialogLabel.hidden = YES;
             self.app_stage = APP_STAGE_LOGGING_IN;
             
@@ -895,7 +901,8 @@
         [userDefaults removeObjectForKey:@"PortalUseremail"];
         
         // Let the device know we want to receive push notifications
-        [[UIApplication sharedApplication] unregisterForRemoteNotifications];
+        MBP_iosAppDelegate *appDelegate = (MBP_iosAppDelegate *)[UIApplication sharedApplication].delegate;
+        [appDelegate unregisterForRemoteNotifications];
         
         /* Drop all timeline for this user */
         [[TimelineDatabase getSharedInstance] clearEventForUserName:userName];

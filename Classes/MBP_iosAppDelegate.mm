@@ -20,6 +20,7 @@
 @property (retain, nonatomic) BMS_JSON_Communication *jsonComm;
 @property (retain, nonatomic) NSString * devTokenStr;
 @property (nonatomic) BOOL shouldCancelRegisterApp;
+@property (nonatomic) BOOL isRegisteredPushNotification;
 
 @end
 
@@ -461,19 +462,10 @@ void checkingApplicationCrashed()
 {
     //delegate is called when app is active
     //in case app in background, must click to active it.
-    UIApplicationState state = [application applicationState];
-    
-    if (state == UIApplicationStateActive)
-    {
-        //enable remote push notification
-        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
-    }
-    // Set icon badge number to zero
-    application.applicationIconBadgeNumber = 0;
+    //enable remote push notification
+    MBP_iosAppDelegate *appDelegate = (MBP_iosAppDelegate *)[UIApplication sharedApplication].delegate;
+    [appDelegate registerForRemoteNotification];
 }
-
-
-
 
 - (void)activateNotificationViewController: (CameraAlert *)camAlert
 {
@@ -795,4 +787,23 @@ void checkingApplicationCrashed()
     }
 }
 
+- (void)registerForRemoteNotification
+{
+    if (!self.isRegisteredPushNotification)
+    {
+        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
+        self.isRegisteredPushNotification = YES;
+        // Set icon badge number to zero
+        [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+    }
+}
+
+- (void)unregisterForRemoteNotifications
+{
+    if (self.isRegisteredPushNotification)
+    {
+        [[UIApplication sharedApplication] unregisterForRemoteNotifications];;
+        self.isRegisteredPushNotification = NO;
+    }
+}
 @end

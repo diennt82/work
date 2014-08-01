@@ -454,7 +454,8 @@
         [userDefaults synchronize];
         
         // Let the device know we want to receive push notifications
-        [[UIApplication sharedApplication] unregisterForRemoteNotifications];
+        MBP_iosAppDelegate *appDelegate = (MBP_iosAppDelegate *)[UIApplication sharedApplication].delegate;
+        [appDelegate unregisterForRemoteNotifications];
         
         /* Drop all timeline for this user */
         [[TimelineDatabase getSharedInstance] clearEventForUserName:userName];
@@ -830,8 +831,8 @@
     
 #if !TARGET_IPHONE_SIMULATOR
     // Let the device know we want to receive push notifications
-    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:
-     (UIRemoteNotificationType) (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
+    MBP_iosAppDelegate *appDelegate = (MBP_iosAppDelegate *)[UIApplication sharedApplication].delegate;
+    [appDelegate registerForRemoteNotification];
 #endif
     NSLog(@"Login success! 2");
     

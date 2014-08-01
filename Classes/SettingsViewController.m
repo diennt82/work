@@ -648,7 +648,7 @@
                     cell.is12hr = valueGeneralSettings[0];
                     cell.isFahrenheit = valueGeneralSettings[1];
                     cell.generalCellDelegate = self;
-
+                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
                     return cell;
                 }
                     break;
@@ -855,6 +855,7 @@
                             if([curObj isKindOfClass:[UITableViewCell class]])
                             {
                                 cell = (DoNotDisturbCell *)curObj;
+                                cell.selectionStyle = UITableViewCellSelectionStyleNone;
                                 break;
                             }
                         }
