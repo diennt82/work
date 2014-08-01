@@ -693,10 +693,11 @@ void checkingApplicationCrashed()
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString * camInView = (NSString*)[userDefaults objectForKey:CAM_IN_VEW];
     
-    if (camInView != nil)
+    if (camInView != nil || [userDefaults objectForKey:PLAYBACK_IN_VEW])
     {
         return  UIInterfaceOrientationMaskAllButUpsideDown;
     }
+    
     return  UIInterfaceOrientationMaskPortrait;
 }
 

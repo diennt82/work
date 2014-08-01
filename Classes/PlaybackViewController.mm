@@ -78,6 +78,9 @@
     [singleTap release];
     self.duration = 1;
     self.timeStarting = 0;
+    
+    [[NSUserDefaults standardUserDefaults] setObject:clip_info.registrationID forKey:PLAYBACK_IN_VEW];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -115,6 +118,9 @@
 -(void) viewWillDisappear:(BOOL)animated
 {
     NSLog(@"%s", __FUNCTION__);
+    
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:PLAYBACK_IN_VEW];
+    [[NSUserDefaults standardUserDefaults] synchronize];
     
     [self.navigationController.navigationBar setHidden:NO];
     [super viewWillDisappear:animated];
@@ -470,10 +476,12 @@
     return YES;
 }
 
+#if 0
 -(NSUInteger)supportedInterfaceOrientations
 {
     return UIInterfaceOrientationMaskAll;
 }
+#endif
 
 - (void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {

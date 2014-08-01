@@ -192,13 +192,14 @@
     self.navigationItem.title = @"";
     [self selectMenuCamera];
     self.camerasVC.ibTableListCamera.contentInset = UIEdgeInsetsMake(30, 0, 64, 0);
-    
-    [[NSUserDefaults standardUserDefaults] setInteger:-1 forKey:EVENT_DELETED_ID];
-    [[NSUserDefaults standardUserDefaults] synchronize];
 
     if (!_isFirttime) //revert
     {
         self.isFirttime = TRUE;
+        
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:PLAYBACK_IN_VEW];
+        [[NSUserDefaults standardUserDefaults] setInteger:-1 forKey:EVENT_DELETED_ID];
+        [[NSUserDefaults standardUserDefaults] synchronize];
         
         dispatch_async(dispatch_get_main_queue(), ^{
              [self menuBackAction:nil];
