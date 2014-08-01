@@ -455,7 +455,7 @@
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString *udid      = [userDefaults objectForKey:CAMERA_UDID];
  
-    if (should_stop_scanning == TRUE || !udid)
+    if (should_stop_scanning == TRUE || !udid || [udid isEqualToString:@""])
     {
         NSLog(@"%s should_stop_scanning:%d", __FUNCTION__, should_stop_scanning);
         return ;
