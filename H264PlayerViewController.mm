@@ -142,7 +142,7 @@ double _ticks = 0;
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"PlayerView view will appear - return from Playback: %d", _returnFromPlayback] withProperties:nil];
+    //[[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"PlayerView view will appear - return from Playback: %d", _returnFromPlayback] withProperties:nil];
     NSLog(@"%s -_wantToShowTimeLine: %d, userWantToCancel: %d, returnFromPlayback: %d", __FUNCTION__, _wantToShowTimeLine, userWantToCancel, _returnFromPlayback);
     
     self.trackedViewName = GAI_CATEGORY;
@@ -521,7 +521,7 @@ double _ticks = 0;
 
 - (void)nowButtonAciton:(id)sender
 {
-    [[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView Touch up inside NOW btn item" withProperties:nil];
+    //[[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView Touch up inside NOW btn item" withProperties:nil];
     
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:@"nowButtonAciton"
@@ -557,7 +557,7 @@ double _ticks = 0;
 
 - (void)earlierButtonAction:(id)sender
 {
-    [[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView Touch up inside EARLIER btn item" withProperties:nil];
+    //[[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView Touch up inside EARLIER btn item" withProperties:nil];
     
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:@"earlierButtonAction"
@@ -1736,10 +1736,12 @@ double _ticks = 0;
 {
     NSLog(@"%s model:%@", __FUNCTION__, _cameraModel);
     
-    if([_cameraModel hasPrefix:CP_MODEL_008] || [_cameraModel isEqualToString:CP_MODEL_0073])
+     [self cleanUpDirectionTimers];
+    
+    //if([_cameraModel hasPrefix:CP_MODEL_008] || [_cameraModel isEqualToString:CP_MODEL_0073] )
+    if(![_cameraModel isEqualToString:CP_MODEL_CONCURRENT] &&
+       ![_cameraModel isEqualToString:CP_MODEL_SHARED_CAM])
     {
-        [self cleanUpDirectionTimers];
-        
         //Direction stuf
         /* Kick off the two timer for direction sensing */
         currentDirUD = DIRECTION_V_NON;
@@ -2187,7 +2189,9 @@ double _ticks = 0;
 
 -(void) cleanUpDirectionTimers
 {
-    if([_cameraModel hasPrefix:CP_MODEL_008])
+    //if([_cameraModel hasPrefix:CP_MODEL_008] || [_cameraModel isEqualToString:CP_MODEL_0073])
+    if(![_cameraModel isEqualToString:CP_MODEL_CONCURRENT] &&
+       ![_cameraModel isEqualToString:CP_MODEL_SHARED_CAM])
     {
         /* Kick off the two timer for direction sensing */
         currentDirUD = DIRECTION_V_NON;
@@ -3614,7 +3618,7 @@ double _ticks = 0;
         
 		if (lastDirUD != DIRECTION_V_NON)
         {
-            [[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView V directional change" withProperties:nil];
+            //[[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView V directional change" withProperties:nil];
             
             [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                             withAction:@"V directional change"
@@ -3702,7 +3706,7 @@ double _ticks = 0;
 		if ( lastDirLR != DIRECTION_H_NON)
         {
 			//need_to_send = TRUE;
-            [[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView H directional change" withProperties:nil];
+            //[[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView H directional change" withProperties:nil];
             
             [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                             withAction:@"H directional change"
@@ -3997,23 +4001,20 @@ double _ticks = 0;
 
 - (void) touchEventAt:(CGPoint) location phase:(UITouchPhase) phase
 {
-    if([_cameraModel hasPrefix:CP_MODEL_008])
+    switch (phase)
     {
-        switch (phase)
-        {
-            case UITouchPhaseBegan:
-                [self _touchesbegan:location];
-                break;
-            case UITouchPhaseMoved:
-            case UITouchPhaseStationary:
-                [self _touchesmoved:location];
-                break;
-            case UITouchPhaseEnded:
-                [self _touchesended:location];
-                
-            default:
-                break;
-        }
+        case UITouchPhaseBegan:
+            [self _touchesbegan:location];
+            break;
+        case UITouchPhaseMoved:
+        case UITouchPhaseStationary:
+            [self _touchesmoved:location];
+            break;
+        case UITouchPhaseEnded:
+            [self _touchesended:location];
+            
+        default:
+            break;
     }
 }
 
@@ -4149,7 +4150,7 @@ double _ticks = 0;
 
 - (void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
-    [[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView - will rotate interface" withProperties:nil];
+    //[[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView - will rotate interface" withProperties:nil];
     
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:@"View will rotate interface"
@@ -6037,7 +6038,7 @@ double _ticks = 0;
 
 - (IBAction)changeToMainRecording:(id)sender
 {
-    [[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView changes Take picture to Recording or " withProperties:nil];
+    //[[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView changes Take picture to Recording or " withProperties:nil];
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:@"Changes Take picture to Recording or vice versa"
                                                      withLabel:@"Recording"
@@ -6048,7 +6049,7 @@ double _ticks = 0;
 
 - (IBAction)switchDegreePressed:(id)sender
 {
-    [[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView changes Temperature type" withProperties:nil];
+    //[[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView changes Temperature type" withProperties:nil];
     
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:@"Changes Temperature type"
@@ -6071,7 +6072,7 @@ double _ticks = 0;
 
 - (IBAction)processingRecordingOrTakePicture:(id)sender
 {
-    [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"PlayerView Touch up inside recording - mode: %d", _isRecordInterface] withProperties:nil];
+    //[[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"PlayerView Touch up inside recording - mode: %d", _isRecordInterface] withProperties:nil];
     
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:@"Changes Temperature type"
@@ -6163,7 +6164,7 @@ double _ticks = 0;
 
 - (IBAction)changeAction:(id)sender
 {
-    [[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView changes Take picture to Recording or " withProperties:nil];
+    //[[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView changes Take picture to Recording or " withProperties:nil];
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:@"Take picture to Recording or vice versa"
                                                      withLabel:@"Temperature"
