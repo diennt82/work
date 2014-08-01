@@ -908,7 +908,8 @@
         [userDefaults removeObjectForKey:@"PortalUseremail"];
         
         // Let the device know we want to receive push notifications
-        [[UIApplication sharedApplication] unregisterForRemoteNotifications];
+        MBP_iosAppDelegate *appDelegate = (MBP_iosAppDelegate *)[UIApplication sharedApplication].delegate;
+        [appDelegate unregisterForRemoteNotifications];
         
         /* Drop all timeline for this user */
         [[TimelineDatabase getSharedInstance] clearEventForUserName:userName];

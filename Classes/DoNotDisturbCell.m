@@ -10,6 +10,7 @@
 #import "UIColor+Hubble.h"
 #import "UIImage+Hubble.h"
 #import "define.h"
+#import "MBP_iosAppDelegate.h"
 
 @implementation DoNotDisturbCell
 
@@ -49,7 +50,11 @@
     {
         self.imgViewEnableDisable.hidden = YES;
         //enable
-        [[UIApplication sharedApplication] unregisterForRemoteNotifications];
+        if (self.ib_circleSliderCustom.value > 0)
+        {
+            MBP_iosAppDelegate *appDelegate = (MBP_iosAppDelegate *)[UIApplication sharedApplication].delegate;
+            [appDelegate unregisterForRemoteNotifications];
+        }
         [self.ib_enableDoNotDisturb setImage:[UIImage imageSwitchOn] forState:UIControlStateNormal];
         [self.ib_circleSliderCustom setUserInteractionEnabled:YES];
         self.ib_circleSliderCustom.value = [self updateValueCustomSlider];
@@ -62,7 +67,8 @@
         self.imgViewEnableDisable.hidden = NO;
 
         //disable
-        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
+        MBP_iosAppDelegate *appDelegate = (MBP_iosAppDelegate *)[UIApplication sharedApplication].delegate;
+        [appDelegate registerForRemoteNotification];
         [self.ib_enableDoNotDisturb setImage:[UIImage imageSwitchOff] forState:UIControlStateNormal];
         [self.ib_circleSliderCustom setUserInteractionEnabled:NO];
         [self.ib_circleSliderCustom.textField setTextColor:[UIColor lightGrayColor]];
@@ -108,7 +114,11 @@
     if (_isEnableDoNotDisturb)
     {
         //enable
-        [[UIApplication sharedApplication] unregisterForRemoteNotifications];
+        if (self.ib_circleSliderCustom.value > 0)
+        {
+            MBP_iosAppDelegate *appDelegate = (MBP_iosAppDelegate *)[UIApplication sharedApplication].delegate;
+            [appDelegate unregisterForRemoteNotifications];
+        }
         [self.ib_enableDoNotDisturb setImage:[UIImage imageSwitchOn] forState:UIControlStateNormal];
         [self.ib_circleSliderCustom setUserInteractionEnabled:YES];
         [self.ib_circleSliderCustom.textField setTextColor:[UIColor colorWithWhite:1.0 alpha:1.0]];
@@ -117,7 +127,8 @@
     else
     {
         //disable
-        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
+        MBP_iosAppDelegate *appDelegate = (MBP_iosAppDelegate *)[UIApplication sharedApplication].delegate;
+        [appDelegate registerForRemoteNotification];
         [self.ib_enableDoNotDisturb setImage:[UIImage imageSwitchOff] forState:UIControlStateNormal];
         [self.ib_circleSliderCustom setUserInteractionEnabled:NO];
         [self.ib_circleSliderCustom.textField setTextColor:[UIColor lightGrayColor]];

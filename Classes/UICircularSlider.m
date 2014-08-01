@@ -12,6 +12,7 @@
 #import "UICircularSlider.h"
 #import "UIFont+Hubble.h"
 #import "define.h"
+#import "MBP_iosAppDelegate.h"
 
 @interface UICircularSlider() {
     BOOL isReachLimit;
@@ -246,6 +247,8 @@
     if (deltaTime >= 0)
     {
         self.value = 0;
+        MBP_iosAppDelegate *appDelegate = (MBP_iosAppDelegate *)[UIApplication sharedApplication].delegate;
+        [appDelegate registerForRemoteNotification];
     }
     else
     {
@@ -464,15 +467,17 @@
             {
                 NSInteger timeValue = (int)round(self.value);
 
-                if (timeValue>0)
+                if (timeValue > 0)
                 {
-                    //disable
-                    [[UIApplication sharedApplication] unregisterForRemoteNotifications];
+                    //enable
+                    MBP_iosAppDelegate *appDelegate = (MBP_iosAppDelegate *)[UIApplication sharedApplication].delegate;
+                    [appDelegate unregisterForRemoteNotifications];
                 }
                 else
                 {
                     //disable
-                    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound)];
+                    MBP_iosAppDelegate *appDelegate = (MBP_iosAppDelegate *)[UIApplication sharedApplication].delegate;
+                    [appDelegate registerForRemoteNotification];
                 }
                 [self cancelAllLocalNotification];
                 /*Check todo
@@ -533,20 +538,23 @@
     [userDefaults setInteger:(int)nextDateTime forKey:TIME_TO_EXPIRED];
     [userDefaults synchronize];
    
-    // Schedule the notification
-    NSDate *fireDateNotification = [NSDate dateWithTimeIntervalSince1970:nextDateTime];
-    UILocalNotification* localNotification = [[UILocalNotification alloc] init];
-    localNotification.fireDate = fireDateNotification;
-    localNotification.alertBody = NSLocalizedStringWithDefaultValue(@"do_not_disturb_time_is_over", nil, [NSBundle mainBundle], @"Your 'Do Not Disturb' time is over, you will now start to receive notifications", nil);
-    localNotification.alertAction = NSLocalizedStringWithDefaultValue(@"let_push_notification_from_camera", nil, [NSBundle mainBundle], @"Let push notification from camera", nil);
-    localNotification.timeZone = [NSTimeZone defaultTimeZone];
-    localNotification.applicationIconBadgeNumber = [[UIApplication sharedApplication] applicationIconBadgeNumber] + 1;
-    
-    [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
-    
-    //
-//    [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadData" object:self];
-    [localNotification release];
+    if (self.value > 0)
+    {
+        // Schedule the notification
+        NSDate *fireDateNotification = [NSDate dateWithTimeIntervalSince1970:nextDateTime];
+        UILocalNotification* localNotification = [[UILocalNotification alloc] init];
+        localNotification.fireDate = fireDateNotification;
+        localNotification.alertBody = NSLocalizedStringWithDefaultValue(@"do_not_disturb_time_is_over", nil, [NSBundle mainBundle], @"Your 'Do Not Disturb' time is over, you will now start to receive notifications", nil);
+        localNotification.alertAction = NSLocalizedStringWithDefaultValue(@"let_push_notification_from_camera", nil, [NSBundle mainBundle], @"Let push notification from camera", nil);
+        localNotification.timeZone = [NSTimeZone defaultTimeZone];
+        localNotification.applicationIconBadgeNumber = [[UIApplication sharedApplication] applicationIconBadgeNumber] + 1;
+        
+        [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
+        
+        //
+        //    [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadData" object:self];
+        [localNotification release];
+    }
 }
 
 - (void)tapGestureHappened:(UITapGestureRecognizer *)tapGestureRecognizer {
