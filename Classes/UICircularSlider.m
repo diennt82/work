@@ -17,6 +17,7 @@
     BOOL isReachLimit;
     int previousSweepAngle, storeAngle;
     int finalAngle;
+    __block UIBackgroundTaskIdentifier bgTask;
 }
 #define Rgb2UIColor(r, g, b)  [UIColor colorWithRed:((r) / 255.0) green:((g) / 255.0) blue:((b) / 255.0) alpha:1.0]
 
@@ -228,12 +229,16 @@
 {
     if (self.value > 0 && self.value <= 180 && self.userInteractionEnabled)
     {
-        UIApplication *app = [UIApplication sharedApplication];
-        //create UIBackgroundTaskIdentifier and create tackground task, which starts after time
-        __block UIBackgroundTaskIdentifier bgTask = [app beginBackgroundTaskWithExpirationHandler:^{
-            [app endBackgroundTask:bgTask];
-            bgTask = UIBackgroundTaskInvalid;
-        }];
+        if([[UIDevice currentDevice] respondsToSelector:@selector(isMultitaskingSupported)])
+        {
+            UIApplication *app = [UIApplication sharedApplication];
+            //create UIBackgroundTaskIdentifier and create tackground task, which starts after time
+            bgTask = [app beginBackgroundTaskWithExpirationHandler:^{
+                //Clean up code in background. Tell the system that we are done.
+                [app endBackgroundTask:bgTask];
+                bgTask = UIBackgroundTaskInvalid;
+            }];
+        }
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
             self.timerRunInBg = [NSTimer scheduledTimerWithTimeInterval:60.0 target:self selector:@selector(updateStatus) userInfo:nil repeats:YES];
@@ -243,7 +248,7 @@
     }
 }
 
--(void) becomeActive
+- (void)becomeActive
 {
     //load from save value and update UI
     [self updateCustomSlider];
@@ -251,6 +256,13 @@
     {
         [self.timerRunInBg invalidate];
         self.timerRunInBg = nil;
+        
+        //Clean up code in background. Tell the system that we are done.
+        if (bgTask != UIBackgroundTaskInvalid)
+        {
+            [[UIApplication sharedApplication] endBackgroundTask:bgTask];
+            bgTask = UIBackgroundTaskInvalid;
+        }
     }
 }
 
@@ -292,6 +304,13 @@
         {
             [self.timerRunInBg invalidate];
             self.timerRunInBg = nil;
+            
+            //Clean up code in background. Tell the system that we are done.
+            if (bgTask != UIBackgroundTaskInvalid)
+            {
+                [[UIApplication sharedApplication] endBackgroundTask:bgTask];
+                bgTask = UIBackgroundTaskInvalid;
+            }
         }
         NSLog(@"%s register remote notifiation", __FUNCTION__);
         [[UIApplication sharedApplication] registerForRemoteNotificationTypes:
