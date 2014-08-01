@@ -19,12 +19,14 @@
 #define PROXY_HOST @"192.168.193.1"
 #define PROXY_PORT 8888
 
+#if 0
 #define DEV_STATUS_UNKOWN                   0
 #define DEV_STATUS_NOT_IN_MASTER            1
 #define DEV_STATUS_NOT_REGISTERED           2
 #define DEV_STATUS_REGISTERED_LOGGED_USER   3
 #define DEV_STATUS_REGISTERED_OTHER_USER    4
 #define DEV_STATUS_DELETED                  5
+#endif
 
 #define ALERT_ADD_CAM_FAILED    500
 #define ALERT_ADD_CAM_UNREACH   501
@@ -451,14 +453,81 @@
 - (void)checkCameraStatus
 {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSString *apiKey    = [userDefaults objectForKey:@"PortalApiKey"];
     NSString *udid      = [userDefaults objectForKey:CAMERA_UDID];
  
-    if (should_stop_scanning == TRUE || !udid)
+    if (should_stop_scanning == TRUE || !udid || [udid isEqualToString:@""])
     {
         NSLog(@"%s should_stop_scanning:%d", __FUNCTION__, should_stop_scanning);
         return ;
     }
+    
+#if 1
+    if (_userAccount == nil)
+    {
+        NSString * userEmail  = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
+        NSString * userPass   = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
+        NSString * userApiKey = (NSString *) [userDefaults objectForKey:@"PortalApiKey"];
+        
+        self.userAccount = [[UserAccount alloc] initWithUser:userEmail
+                                                     password:userPass
+                                                       apiKey:userApiKey
+                                                     listener:nil];
+    }
+    
+    NSInteger deviceStatus = [_userAccount checkStatusCamera:udid];
+    
+    BOOL shouldCheckAgain = TRUE;
+    
+    switch (deviceStatus)
+    {
+        case DEV_STATUS_UNKOWN:
+            // Check again...
+            break;
+            
+        case DEV_STATUS_NOT_IN_MASTER:
+        {
+            self.statusMessage = NSLocalizedStringWithDefaultValue(@"device_is_not_present", nil, [NSBundle mainBundle], @"Device is NOT present in device master", nil);
+            
+            shouldCheckAgain = FALSE;
+            
+            self.errorCode = [NSString stringWithFormat:@"%d", deviceStatus];
+            
+            if (_timeOut != nil)
+            {
+                [self.timeOut invalidate];
+                self.timeOut = nil;
+            }
+            
+            [self setStopScanning:nil];
+            //[[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Step10 - Check camera status: %@", _statusMessage] withProperties:nil];
+            [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
+                                                            withAction:[NSString stringWithFormat:@"Check camera status: %@", _statusMessage]
+                                                             withLabel:nil
+                                                             withValue:nil];
+            [self showDialogWithTag:ALERT_CHECK_STATUS message:_statusMessage];
+            
+            [self setupFailed];
+        }
+            break;
+            
+        case DEV_STATUS_NOT_REGISTERED:
+        case DEV_STATUS_DELETED:
+        case DEV_STATUS_REGISTERED_OTHER_USER:
+        case DEV_STATUS_REGISTERED_LOGGED_USER:
+            NSLog(@"Step_10_VC register successfully. Move on. DEV_STATUS:%d", deviceStatus);
+            shouldCheckAgain = FALSE;
+            //[[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Step10 - Check camera status: %d", deviceStatus] withProperties:nil];
+            [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
+                                                            withAction:[NSString stringWithFormat:@"Check camera status: %@", _statusMessage]
+                                                             withLabel:nil
+                                                             withValue:nil];
+            break;
+            
+        default:
+            break;
+    }
+    
+#else
     
     if (_jsonCommBlocked == nil)
     {
@@ -472,7 +541,7 @@
     
     NSDictionary *responseDict = [_jsonCommBlocked checkStatusBlockedWithRegistrationId:udid apiKey:apiKey];
     
-    NSLog(@"Step_10_VC - checkCameraStatus: %@", responseDict);
+    //NSLog(@"Step_10_VC - checkCameraStatus: %@", responseDict);
     
     BOOL shouldCheckAgain = TRUE;
 
@@ -536,6 +605,7 @@
     {
         // Check again
     }
+#endif
     
     if (shouldCheckAgain)
     {
@@ -543,6 +613,7 @@
     }
 }
 
+#if 0
 - (void)updatesBasicInfoForCamera
 {
     if (_jsonCommBlocked == nil)
@@ -597,6 +668,7 @@
         NSLog(@"Step10VC - updatesBasicInforForCamera successfully!");
     }
 }
+#endif
 
 #pragma  mark -
 #pragma mark Timer callbacks
@@ -807,13 +879,13 @@
         return CAMERA_STATE_UNKNOWN;
     }
     
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSString * userEmail  = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
-    NSString * userPass   = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
-    NSString * userApiKey = (NSString *) [userDefaults objectForKey:@"PortalApiKey"];
-    
     if (_userAccount == nil)
     {
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        NSString * userEmail  = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
+        NSString * userPass   = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
+        NSString * userApiKey = (NSString *) [userDefaults objectForKey:@"PortalApiKey"];
+        
         UserAccount *user = [[UserAccount alloc] initWithUser:userEmail
                                  password:userPass
                                    apiKey:userApiKey
@@ -828,7 +900,7 @@
     
     if (cameraStatus == CAMERA_STATE_REGISTED_LOGGED_USER)
     {
-        [self updatesBasicInfoForCamera];
+        [_userAccount updatesBasicInfoForCamera];
         [self checkCameraIsAvailable];
     }
     else if (cameraStatus == CAMERA_STATE_FW_UPGRADING)
@@ -861,13 +933,14 @@
     }
     
     NSLog(@"--> Try to search IP online...");
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSString * userEmail  = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
-    NSString * userPass   = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
-    NSString * userApiKey = (NSString *) [userDefaults objectForKey:@"PortalApiKey"];
     
     if (_userAccount == nil)
     {
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        NSString * userEmail  = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
+        NSString * userPass   = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
+        NSString * userApiKey = (NSString *) [userDefaults objectForKey:@"PortalApiKey"];
+        
         UserAccount *user = [[UserAccount alloc] initWithUser:userEmail
                                  password:userPass
                                    apiKey:userApiKey

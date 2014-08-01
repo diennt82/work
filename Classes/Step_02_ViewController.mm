@@ -177,6 +177,7 @@
                                                                                      bundle:nil];
         }
         
+        step03ViewController.cameraType = _cameraType;
         [self.navigationController pushViewController:step03ViewController animated:NO];
         
         [step03ViewController release];

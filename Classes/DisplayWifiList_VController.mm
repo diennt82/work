@@ -92,7 +92,7 @@
         
         NSString *skipWIFISetup = NSLocalizedStringWithDefaultValue(@"skip_wifi_setup", nil, [NSBundle mainBundle], @"Skip WIFI Setup", nil);
         self.btnSkipWIFISetup.titleLabel.text = skipWIFISetup;
-        self.btnSkipWIFISetup.hidden = NO;
+        //self.btnSkipWIFISetup.hidden = NO; //Need not to show anymore. As far as, this flow will be terminated!
     }
     
     

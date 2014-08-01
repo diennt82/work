@@ -11,11 +11,12 @@
 #import "BLEConnectionCell.h"
 #import "CustomIOS7AlertView.h"
 #import "Camera.h"
+#import "Step_04_ViewController.h"
 
 #define BTN_CONTINUE_TAG 599
-#define BLE_TIMEOUT_PROCESS 1*60
+#define BLE_TIMEOUT_PROCESS 2*60
 
-@interface CreateBLEConnection_VController () <CustomIOS7AlertViewDelegate>
+@interface CreateBLEConnection_VController () <CustomIOS7AlertViewDelegate, BonjourDelegate>
 
 @property (retain, nonatomic) IBOutlet UIButton *btnConnect;
 
@@ -32,17 +33,20 @@
 @property (nonatomic) BOOL rescanFlag;
 @property (nonatomic, retain) UIView *viewSearching;
 @property (nonatomic) BOOL isNotFirstTime;
+@property (nonatomic, retain) NSMutableArray *arrayFocus73;
+@property (nonatomic) BOOL isScanning;
+@property (nonatomic) BOOL isLANSetup;
+@property (nonatomic, retain) CamProfile *selectedCamProfile;
+@property (retain, nonatomic) NSThread *threadBonjour;
 
 @end
 
 @implementation CreateBLEConnection_VController
 
-
 @synthesize  inProgress;
 @synthesize  homeWifiSSID;
 @synthesize cameraName = _cameraName;
 @synthesize cameraMac = _cameraMac;
-@synthesize currentBLEList = _currentBLEList;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -61,7 +65,7 @@
     
     self.navigationItem.hidesBackButton = YES;
     
-    UIImage *hubbleLogoBack = [UIImage imageNamed:@"hubble_logo"];
+    UIImage *hubbleLogoBack = [UIImage imageNamed:@"Hubble_back_text"];
     UIBarButtonItem *barBtnHubble = [[UIBarButtonItem alloc] initWithImage:hubbleLogoBack
                                                                      style:UIBarButtonItemStylePlain
                                                                     target:self
@@ -114,7 +118,7 @@
 {
     [super viewWillAppear:animated];
     
-    self.navigationItem.rightBarButtonItem.enabled = YES;
+    //self.navigationItem.rightBarButtonItem.enabled = YES;
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
@@ -123,7 +127,25 @@
         //self.viewProgress.frame = rect;
     }
     
-    [self createBLEConnectionRescan:FALSE];
+    if (_cameraType == SETUP_CAMERA_FOCUS73)
+    {
+        if (_arrayFocus73.count == 0 && _currentBLEList.count == 0)
+        {
+            [self createBLEConnectionRescan:FALSE];
+            
+            if (_cameraType == SETUP_CAMERA_FOCUS73)
+            {
+                [self startScanningWithBonjour];
+            }
+        }
+    }
+    else
+    {
+        if (_currentBLEList.count == 0)
+        {
+            [self createBLEConnectionRescan:FALSE];
+        }
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -149,19 +171,47 @@
 
 - (IBAction)btnConnectTouchUpInsideAction:(id)sender
 {
-    [[BLEConnectionManager getInstanceBLE] stopScanBLE];
-    
-    if ([BLEConnectionManager getInstanceBLE].state == CONNECTING )
+    if (_isLANSetup)
     {
-        NSLog(@"%s BLE is connecting... return.", __FUNCTION__);
-        return;
+        NSLog(@"Load step 4");
+        //Load the next xib
+        Step_04_ViewController *step04ViewController = nil;
+        
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+            
+            step04ViewController = [[Step_04_ViewController alloc]
+                                    initWithNibName:@"Step_04_ViewController_ipad" bundle:nil];
+        }
+        else
+        {
+            step04ViewController = [[Step_04_ViewController alloc]
+                                    initWithNibName:@"Step_04_ViewController" bundle:nil];
+        }
+        
+        // Pass the selected object to the new view controller.
+        step04ViewController.camProfile = _selectedCamProfile;
+        
+        // Push the view controller.
+        [self.navigationController pushViewController:step04ViewController animated:YES];
+        [step04ViewController release];
     }
-    
-    NSLog(@"%s %@", __FUNCTION__, self.selectedPeripheral);
-    
-    [[BLEConnectionManager getInstanceBLE] connectToBLEWithPeripheral:_selectedPeripheral];
-    
-    [self createHubbleAlertView];
+    else
+    {
+        [[BLEConnectionManager getInstanceBLE] stopScanBLE];
+        
+        if ([BLEConnectionManager getInstanceBLE].state == CONNECTING )
+        {
+            NSLog(@"%s BLE is connecting... return.", __FUNCTION__);
+            return;
+        }
+        
+        NSLog(@"%s %@", __FUNCTION__, self.selectedPeripheral);
+        
+        [[BLEConnectionManager getInstanceBLE] connectToBLEWithPeripheral:_selectedPeripheral];
+        
+        [self createHubbleAlertView];
+    }
 }
 
 - (IBAction)btnContinueTouchUpInsideAction:(id)sender
@@ -169,7 +219,13 @@
     NSLog(@"CreateBLE VC - btnContinueTouchUpInsideAction - refreshCamBLE");
     [self.viewError removeFromSuperview];
     self.shouldTimeoutProcessing = FALSE;
+    
     [self createBLEConnectionRescan:_rescanFlag];
+    
+    if (_cameraType == SETUP_CAMERA_FOCUS73)
+    {
+        [self rescanBonjour];
+    }
 }
 
 - (void)hubbleItemAction:(id)sender
@@ -211,13 +267,28 @@
         [BLEConnectionManager getInstanceBLE].delegate = nil;
         [[BLEConnectionManager getInstanceBLE] disconnect];
     }
+    
+    [self cancelBonjourThread];
 }
 
 - (IBAction)refreshCamBLE:(id)sender
 {
     NSLog(@"%s", __FUNCTION__);
     
+    self.selectedPeripheral = nil;
+    self.selectedCamProfile = nil;
+    self.btnConnect.enabled = NO;
+    
     [self createBLEConnectionRescan:TRUE];
+    
+    if (_cameraType == SETUP_CAMERA_FOCUS73)
+    {
+        self.viewPairNDetecting.hidden = NO;
+        [self.view addSubview:_viewPairNDetecting];
+        [self.view bringSubviewToFront:_viewPairNDetecting];
+        
+        [self rescanBonjour];
+    }
 }
 
 - (void)timeoutBLESetupProcessing:(NSTimer *)timer
@@ -333,6 +404,7 @@
     [self.ib_tableListBLE reloadData];
 
     task_cancelled = NO;
+    self.shouldTimeoutProcessing = NO;
     
     [BLEConnectionManager getInstanceBLE].delegate = self;
     [BLEConnectionManager getInstanceBLE].needReconnect = YES;
@@ -378,7 +450,7 @@
 
 - (void)scanCameraBLEDone
 {
-    NSLog(@"%s - task_cancelled: %d, - _currentBLEList count: %d, - shouldTimeoutProcessing: %d", __FUNCTION__, task_cancelled, _currentBLEList.count, _shouldTimeoutProcessing);
+    NSLog(@"%s - task_cancelled: %d, - _currentBLEList.count: %d, - shouldTimeoutProcessing: %d, isMT:%d", __FUNCTION__, task_cancelled, _currentBLEList.count, _shouldTimeoutProcessing, [NSThread currentThread].isMainThread);
     
     if (task_cancelled == TRUE || _shouldTimeoutProcessing)
     {
@@ -387,10 +459,66 @@
     
     self.viewSearching.hidden = NO;
     
+    if (_cameraType == SETUP_CAMERA_FOCUS73)
+    {
+        if (_threadBonjour && !_threadBonjour.isExecuting)
+        {
+            NSLog(@"%s Stop scanning Bonjour services.", __FUNCTION__);
+            
+            if (_arrayFocus73.count > 0)
+            {
+                NSLog(@"%s Got some Bonjour services.", __FUNCTION__);
+                
+                if (_timerTimeoutConnectBLE)
+                {
+                    if ([_timerTimeoutConnectBLE isValid])
+                    {
+                        [_timerTimeoutConnectBLE invalidate];
+                    }
+                }
+                
+                self.shouldTimeoutProcessing = TRUE;
+                
+                if (_timerScanCameraBLEDone)
+                {
+                    [self.timerScanCameraBLEDone invalidate];
+                    self.timerScanCameraBLEDone = nil;
+                }
+                
+                [[BLEConnectionManager getInstanceBLE] stopScanBLE];
+                
+                self.viewPairNDetecting.hidden = YES;
+                [self.viewPairNDetecting removeFromSuperview];
+                [self.ib_lableStage setText:NSLocalizedStringWithDefaultValue(@"select_a_device_to_connect", nil, [NSBundle mainBundle], @"Select a device to connect", nil)];
+                [self.ib_tableListBLE reloadData];
+                
+                if (_arrayFocus73.count == 1)
+                {
+                    self.btnConnect.enabled = YES;
+                    self.selectedCamProfile = _arrayFocus73[0];
+                    self.isLANSetup = TRUE;
+                    [self btnConnectTouchUpInsideAction:nil];
+                    
+                    NSLog(@"%s Got a Bonjour service.", __FUNCTION__);
+                }
+                
+                return;
+            }
+            else
+            {
+                NSLog(@"%s There is currently no Bonjour service.", __FUNCTION__);
+            }
+        }
+        else
+        {
+            NSLog(@"%s Scanning Bonjour services.", __FUNCTION__);
+        }
+    }
+    
     if ([_currentBLEList count] == 0) //NO camera found
     {
         NSLog(@"No BLE device found! schedule next check ");
-
+        
         self.timerScanCameraBLEDone = [NSTimer scheduledTimerWithTimeInterval:5.0
                                                                        target:self
                                                                      selector:@selector(scanCameraBLEDone)
@@ -406,34 +534,35 @@
         
         [[BLEConnectionManager getInstanceBLE] stopScanBLE];
         
+        [self cancelBonjourThread];
+        
+        [self.viewPairNDetecting removeFromSuperview];
+        [self.ib_lableStage setText:NSLocalizedStringWithDefaultValue(@"select_a_device_to_connect", nil, [NSBundle mainBundle], @"Select a device to connect", nil)];
+        [self.ib_tableListBLE reloadData];
+        
         if ([_currentBLEList count] == 1) //connect directly
         {
             //Update UI
             //[self.viewProgress removeFromSuperview];
-            [self.viewPairNDetecting removeFromSuperview];
-            [self.ib_lableStage setText:NSLocalizedStringWithDefaultValue(@"select_a_device_to_connect", nil, [NSBundle mainBundle], @"Select a device to connect", nil)];
-            [self.ib_tableListBLE reloadData];
-            
-            self.btnConnect.enabled = YES;
-            self.selectedPeripheral = (CBPeripheral *)[_currentBLEList objectAtIndex:0];
+            self.selectedPeripheral = (CBPeripheral *)_currentBLEList[0];
             NSLog(@"Found 1 %@, connect now", self.selectedPeripheral.name );
             
-            [[BLEConnectionManager getInstanceBLE] connectToBLEWithPeripheral:_selectedPeripheral];
-            
-            [self createHubbleAlertView];
+            //[[BLEConnectionManager getInstanceBLE] connectToBLEWithPeripheral:_selectedPeripheral];
+            //[self createHubbleAlertView];
+            self.btnConnect.enabled = YES;
+            self.isLANSetup = FALSE;
+            [self btnConnectTouchUpInsideAction:nil];
         }
         else //more than 2
         {
             NSLog(@"Found more than 1 valid devices -> Show lists");
             
             //Update UI
-           // [self.viewProgress removeFromSuperview];
-            [self.viewPairNDetecting removeFromSuperview];
-            
-            [self.ib_lableStage setText:NSLocalizedStringWithDefaultValue(@"select_a_device_to_connect", nil, [NSBundle mainBundle], @"Select a device to connect", nil)];
-            
-            [self.ib_tableListBLE reloadData];
-            self.btnConnect.enabled = YES;
+            // [self.viewProgress removeFromSuperview];
+            //[self.viewPairNDetecting removeFromSuperview];
+            //[self.ib_lableStage setText:NSLocalizedStringWithDefaultValue(@"select_a_device_to_connect", nil, [NSBundle mainBundle], @"Select a device to connect", nil)];
+            //[self.ib_tableListBLE reloadData];
+            //self.btnConnect.enabled = YES;
         }
     }
 }
@@ -480,9 +609,11 @@
     [_viewError release];
     [_timerTimeoutConnectBLE release];
     [_viewPairNDetecting release];
+    [_threadBonjour release];
     [super dealloc];
 }
 
+#if 0
 -(void) handleEnteredBackground
 {
     showProgressNextTime = TRUE;
@@ -521,6 +652,7 @@
         self.inProgress.hidden = YES;
     }
 }
+#endif
 
 #pragma mark - BLEConnectionManagerDelegate
 
@@ -650,9 +782,6 @@
             step04ViewController = [[EditCamera_VController alloc]
                                     initWithNibName:@"EditCamera_VController" bundle:nil];
         }
-    
-        
-       
         
         step04ViewController.cameraMac = self.cameraMac;
         step04ViewController.cameraName = self.cameraName;
@@ -708,11 +837,10 @@
     }
 }
 
--(void) moveToNextStep
+- (void)moveToNextStep
 {
     //First time enter, try to flush BLE buffer
-    
-    // FLUSH ---
+
     [BLEConnectionManager getInstanceBLE].delegate = self;
     
     if ([BLEConnectionManager getInstanceBLE].state == CONNECTED)
@@ -815,22 +943,31 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 2;
+    return 3;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (section == 1)
+#if 1
+    return section==0?_currentBLEList.count:(section==1?_arrayFocus73.count:1);
+#else
+    if (section == 2)
     {
         return 1;
     }
     
-    return [_currentBLEList count];
+    if (section == 1)
+    {
+        return _arrayFocus73.count;
+    }
+    
+    return _currentBLEList.count;
+#endif
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 0)
+    if (indexPath.section == 0 || indexPath.section == 1)
     {
         static NSString *CellIdentifier = @"BLEConnectionCell";
         BLEConnectionCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -846,8 +983,16 @@
             }
         }
         
-        CBPeripheral *peripheral = [_currentBLEList objectAtIndex:indexPath.row];
-        cell.lblName.text = peripheral.name;
+        if (indexPath.section == 0)
+        {
+            CBPeripheral *peripheral = _currentBLEList[indexPath.row];
+            cell.lblName.text = peripheral.name;
+        }
+        else
+        {
+            CamProfile *cp = _arrayFocus73[indexPath.row];
+            cell.lblName.text = cp.name;
+        }
         
         return cell;
     }
@@ -859,14 +1004,24 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 1 && indexPath.row == 0)
+    if (indexPath.section == 2 && indexPath.row == 0)
     {
         [self refreshCamBLE:nil];
     }
     else
     {
         self.btnConnect.enabled = YES;
-        self.selectedPeripheral = (CBPeripheral *)[[BLEConnectionManager getInstanceBLE].listBLEs objectAtIndex:indexPath.row];
+        
+        if (indexPath.section == 0)
+        {
+            self.isLANSetup = FALSE;
+            self.selectedPeripheral = (CBPeripheral *)[BLEConnectionManager getInstanceBLE].listBLEs[indexPath.row];
+        }
+        else
+        {
+            self.isLANSetup = TRUE;
+            self.selectedCamProfile = _arrayFocus73[indexPath.row];
+        }
     }
 }
 
@@ -883,4 +1038,75 @@
     }
     return nil;
 }
+
+#pragma mark - Bonjour flow
+
+- (void)startScanningWithBonjour
+{
+    self.threadBonjour = [[NSThread alloc] initWithTarget:self
+                                                 selector:@selector(scanWithBonjour)
+                                                   object:nil];
+    [_threadBonjour start];
+}
+
+-(void) scanWithBonjour
+{
+    @autoreleasepool
+    {
+        self.isScanning = TRUE;
+        // When use autoreleseapool, no need to call autorelease.
+        Bonjour *bonjour = [[Bonjour alloc] initSetupWith:nil];
+        [bonjour setDelegate:self];
+        
+        [bonjour startScanLocalWiFi];
+        
+        NSDate * endDate = [NSDate dateWithTimeIntervalSinceNow:0.5];
+        
+        while (bonjour.isSearching)
+        {
+            [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:endDate];
+        }
+        
+        self.arrayFocus73 = [NSMutableArray arrayWithArray:bonjour.cameraList];
+        self.isScanning = FALSE;
+        
+        NSLog(@"%s Scanning Bonjour completely.", __FUNCTION__);
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (!_timerScanCameraBLEDone || ![_timerScanCameraBLEDone isValid])
+            {
+                [self scanCameraBLEDone];
+            }
+        });
+        
+        [bonjour release];
+        
+        [NSThread exit];
+    }
+    
+    //[NSThread exit];
+}
+
+- (void)rescanBonjour
+{
+    if (!_isScanning)
+    {
+        [self startScanningWithBonjour];
+    }
+}
+
+- (void)cancelBonjourThread
+{
+    if (_threadBonjour && _threadBonjour.isExecuting)
+    {
+        [_threadBonjour cancel];
+    }
+}
+
+#pragma  mark Bongour delete
+
+- (void)bonjourReturnCameraListAvailable:(NSMutableArray *)cameraList
+{
+}
+
 @end

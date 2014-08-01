@@ -112,12 +112,22 @@
 
 - (BOOL)checkCameraIsAvailable:(NSString *) mac_w_colon
 {
+#if 1
+    if (!_jsonCommBlocked)
+    {
+        self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithCaller:self];
+    }
+    
+    NSDictionary *responseDict = [_jsonCommBlocked getAllDevicesBlockedWithApiKey:_apiKey];
+    
+#else
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     self.jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
                                                           Selector:@selector(getCamListSuccess:)
                                                       FailSelector:@selector(getCamListFailure:)
                                                          ServerErr:@selector(getCamListServerUnreachable)];
     NSDictionary *responseDict = [self.jsonComm getAllDevicesBlockedWithApiKey:[userDefaults objectForKey:@"PortalApiKey"]];
+#endif
     
     if (responseDict != nil)
     {
@@ -221,6 +231,50 @@
 
 - (void)updatesBasicInfoForCamera
 {
+#if 1
+    if (_jsonCommBlocked == nil)
+    {
+        self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithCaller:self];
+    }
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    
+    NSString *udid       = [userDefaults objectForKey:CAMERA_UDID];
+    NSString *hostSSID   = [userDefaults objectForKey:HOST_SSID];
+    NSString *cameraName = [userDefaults objectForKey:CAMERA_NAME];
+    
+    NSDictionary *responseDict = [_jsonCommBlocked updateDeviceBasicInfoBlockedWithRegistrationId:udid
+                                                                                       deviceName:cameraName
+                                                                                         timeZone:nil
+                                                                                             mode:nil
+                                                                                  firmwareVersion:nil
+                                                                                         hostSSID:hostSSID
+                                                                                       hostRouter:nil
+                                                                                        andApiKey:_apiKey];
+    BOOL updateFailed = TRUE;
+    
+    if (responseDict)
+    {
+        if ([[responseDict objectForKey:@"status"] integerValue] == 200)
+        {
+            NSString *bodyKey = [[responseDict objectForKey:@"data"] objectForKey:@"host_ssid"];
+            
+            if (![bodyKey isEqual:[NSNull null]] && [bodyKey isEqualToString:hostSSID])
+            {
+                updateFailed = FALSE;
+            }
+        }
+    }
+    
+    if (updateFailed)
+    {
+        NSLog(@"%s %@", __FUNCTION__, responseDict);
+    }
+    else
+    {
+        NSLog(@"%s successfully!", __FUNCTION__);
+    }
+#else
         BMS_JSON_Communication *jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
                                                                      Selector:nil
                                                                  FailSelector:nil
@@ -266,6 +320,7 @@
     {
         NSLog(@"UserAccount - updatesBasicInforForCamera successfully!");
     }
+#endif
 }
 
 -(void) readCameraListAndUpdate
@@ -609,7 +664,7 @@
 
 - (NSInteger )checkFwUpgrageStatusWithRegistrationId:(NSString *)regId currentFwVersion:(NSString *)currentFw
 {
-    NSInteger fwUpgradeStatus = FIRMWARE_UPGRADE_IN_PROGRESS;
+    NSInteger fwUpgradeStatus = FIRMWARE_UPGRADE_REBOOT;
     
     if (_jsonCommBlocked == nil)
     {
@@ -689,5 +744,65 @@
     
     return fwUpgradeStatus;
 }
+
+- (void)sendToServerTheCommand:(NSString *) command
+{
+    if (!_jsonCommBlocked)
+    {
+        self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithCaller:self];
+    }
+    
+    NSString *stringUDID = [[NSUserDefaults standardUserDefaults] stringForKey:CAMERA_UDID];
+    
+    NSDictionary *responseDict = [_jsonCommBlocked sendCommandBlockedWithRegistrationId:stringUDID
+                                                                             andCommand:command
+                                                                              andApiKey:_apiKey];
+    
+    NSInteger errorCode = -1;
+    NSString *errorMessage = @"";
+    
+    if (responseDict)
+    {
+        errorCode = [[responseDict objectForKey:@"status"] integerValue];
+        
+        if (errorCode == 200)
+        {
+            errorCode = [[[[responseDict objectForKey:@"data"] objectForKey:@"device_response"] objectForKey:@"device_response_code"] integerValue];
+        }
+        else
+        {
+            errorMessage = [responseDict objectForKey:@"message"];
+        }
+    }
+    
+    NSLog(@"%s cmd:%@, error: %d, message:%@", __func__, command, errorCode, errorMessage);
+}
+
+- (NSInteger )checkStatusCamera:(NSString *)camRegId
+{
+    NSInteger deviceStatus = DEV_STATUS_UNKOWN;
+    
+    if (_jsonCommBlocked == nil)
+    {
+        self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithCaller:self];
+    }
+    
+    NSDictionary *responseDict = [_jsonCommBlocked checkStatusBlockedWithRegistrationId:camRegId apiKey:_apiKey];
+    
+    if (responseDict)
+    {
+        if ([[responseDict objectForKey:@"status"] integerValue] == 200)
+        {
+            deviceStatus = [[[responseDict objectForKey:@"data"] objectForKey:@"device_status"] integerValue];
+        }
+        else
+        {
+            NSLog(@"%s responseDict:%@", __FUNCTION__, responseDict);
+        }
+    }
+    
+    return deviceStatus;
+}
+
 
 @end
