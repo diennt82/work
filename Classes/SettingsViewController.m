@@ -462,8 +462,8 @@
     //#warning Potentially incomplete method implementation.
     // Return the number of sections.
     tableView.sectionHeaderHeight = 0;
-    tableView.sectionFooterHeight = 0.5f;
-    return _numberOfSections+1; //One extra section to show last line
+    tableView.sectionFooterHeight = 1.0f;
+    return _numberOfSections; 
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -554,8 +554,9 @@
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
-    UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.bounds.size.width, 0.5f)];
+    UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.bounds.size.width, 1.0f)];
         [footerView setBackgroundColor:[UIColor colorWithRed:195/255.0 green:195/255.0 blue:195/255.0 alpha:1]];
+    footerView.clipsToBounds = YES;
     return footerView;
 }
 
@@ -600,7 +601,7 @@
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightFooterInSection:(NSInteger)section{
-    return 0.5f;
+    return 1.0f;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -613,7 +614,7 @@
             {
                 case 0:
                 {
-                    static NSString *CellIdentifier = @"Cell";
+                    static NSString *CellIdentifier = @"Cell1";
                     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
                     if (cell == nil) {
                         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
