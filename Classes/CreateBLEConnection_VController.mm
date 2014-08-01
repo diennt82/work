@@ -127,6 +127,9 @@
         //self.viewProgress.frame = rect;
     }
     
+    self.selectedCamProfile = nil;
+    self.selectedPeripheral = nil;
+    
     [self createBLEConnectionRescan:FALSE];
     
     if (_cameraType == SETUP_CAMERA_FOCUS73)
@@ -262,10 +265,17 @@
 {
     NSLog(@"%s", __FUNCTION__);
     
+    self.selectedPeripheral = nil;
+    self.selectedCamProfile = nil;
+    
     [self createBLEConnectionRescan:TRUE];
     
     if (_cameraType == SETUP_CAMERA_FOCUS73)
     {
+        self.viewPairNDetecting.hidden = NO;
+        [self.view addSubview:_viewPairNDetecting];
+        [self.view bringSubviewToFront:_viewPairNDetecting];
+        
         [self scanWithBonjour];
     }
 }
@@ -462,8 +472,6 @@
         [self.ib_lableStage setText:NSLocalizedStringWithDefaultValue(@"select_a_device_to_connect", nil, [NSBundle mainBundle], @"Select a device to connect", nil)];
         [self.ib_tableListBLE reloadData];
         
-        self.btnConnect.enabled = YES;
-        
         if ([_currentBLEList count] == 1) //connect directly
         {
             //Update UI
@@ -473,7 +481,7 @@
             
             //[[BLEConnectionManager getInstanceBLE] connectToBLEWithPeripheral:_selectedPeripheral];
             //[self createHubbleAlertView];
-            
+            self.btnConnect.enabled = YES;
             self.isLANSetup = FALSE;
             [self btnConnectTouchUpInsideAction:nil];
         }
@@ -870,7 +878,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
 #if 1
-    return section==0?_currentBLEList.count:(section==1?_arrayFocus73.count:2);
+    return section==0?_currentBLEList.count:(section==1?_arrayFocus73.count:1);
 #else
     if (section == 2)
     {
@@ -992,6 +1000,10 @@
         
         dispatch_async(dispatch_get_main_queue(), ^{
             
+            if (_selectedPeripheral) { // Selectin a BLE.
+                return;
+            }
+            
             if (_timerTimeoutConnectBLE)
             {
                 if ([_timerTimeoutConnectBLE isValid])
@@ -1010,15 +1022,16 @@
             
             [[BLEConnectionManager getInstanceBLE] stopScanBLE];
             
+            self.viewPairNDetecting.hidden = YES;
             [self.viewPairNDetecting removeFromSuperview];
             [self.ib_lableStage setText:NSLocalizedStringWithDefaultValue(@"select_a_device_to_connect", nil, [NSBundle mainBundle], @"Select a device to connect", nil)];
             [self.ib_tableListBLE reloadData];
-            self.btnConnect.enabled = YES;
             
             self.isScanning = FALSE;
             
             if (_arrayFocus73.count == 1)
             {
+                self.btnConnect.enabled = YES;
                 //[self moveToNextStep:(CamProfile *)_arrayFocus73[0]];
                 //[self moveToNextStepLAN:TRUE];
                 self.selectedCamProfile = _arrayFocus73[0];
