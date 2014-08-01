@@ -14,7 +14,7 @@
 #import "Step_04_ViewController.h"
 
 #define BTN_CONTINUE_TAG 599
-#define BLE_TIMEOUT_PROCESS 6*60
+#define BLE_TIMEOUT_PROCESS 2*60
 
 @interface CreateBLEConnection_VController () <CustomIOS7AlertViewDelegate, BonjourDelegate>
 
@@ -118,7 +118,7 @@
 {
     [super viewWillAppear:animated];
     
-    self.navigationItem.rightBarButtonItem.enabled = YES;
+    //self.navigationItem.rightBarButtonItem.enabled = YES;
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
@@ -127,14 +127,24 @@
         //self.viewProgress.frame = rect;
     }
     
-    self.selectedCamProfile = nil;
-    self.selectedPeripheral = nil;
-    
-    [self createBLEConnectionRescan:FALSE];
-    
     if (_cameraType == SETUP_CAMERA_FOCUS73)
     {
-        [self startScanningWithBonjour];
+        if (_arrayFocus73.count == 0 && _currentBLEList.count == 0)
+        {
+            [self createBLEConnectionRescan:FALSE];
+            
+            if (_cameraType == SETUP_CAMERA_FOCUS73)
+            {
+                [self startScanningWithBonjour];
+            }
+        }
+    }
+    else
+    {
+        if (_currentBLEList.count == 0)
+        {
+            [self createBLEConnectionRescan:FALSE];
+        }
     }
 }
 
@@ -214,7 +224,7 @@
     
     if (_cameraType == SETUP_CAMERA_FOCUS73)
     {
-        [self scanWithBonjour];
+        [self rescanBonjour];
     }
 }
 
@@ -267,6 +277,7 @@
     
     self.selectedPeripheral = nil;
     self.selectedCamProfile = nil;
+    self.btnConnect.enabled = NO;
     
     [self createBLEConnectionRescan:TRUE];
     
@@ -276,7 +287,7 @@
         [self.view addSubview:_viewPairNDetecting];
         [self.view bringSubviewToFront:_viewPairNDetecting];
         
-        [self scanWithBonjour];
+        [self rescanBonjour];
     }
 }
 
@@ -393,6 +404,7 @@
     [self.ib_tableListBLE reloadData];
 
     task_cancelled = NO;
+    self.shouldTimeoutProcessing = NO;
     
     [BLEConnectionManager getInstanceBLE].delegate = self;
     [BLEConnectionManager getInstanceBLE].needReconnect = YES;
@@ -438,7 +450,7 @@
 
 - (void)scanCameraBLEDone
 {
-    NSLog(@"%s - task_cancelled: %d, - _currentBLEList count: %d, - shouldTimeoutProcessing: %d", __FUNCTION__, task_cancelled, _currentBLEList.count, _shouldTimeoutProcessing);
+    NSLog(@"%s - task_cancelled: %d, - _currentBLEList.count: %d, - shouldTimeoutProcessing: %d, isMT:%d", __FUNCTION__, task_cancelled, _currentBLEList.count, _shouldTimeoutProcessing, [NSThread currentThread].isMainThread);
     
     if (task_cancelled == TRUE || _shouldTimeoutProcessing)
     {
@@ -447,10 +459,66 @@
     
     self.viewSearching.hidden = NO;
     
+    if (_cameraType == SETUP_CAMERA_FOCUS73)
+    {
+        if (_threadBonjour && !_threadBonjour.isExecuting)
+        {
+            NSLog(@"%s Stop scanning Bonjour services.", __FUNCTION__);
+            
+            if (_arrayFocus73.count > 0)
+            {
+                NSLog(@"%s Got some Bonjour services.", __FUNCTION__);
+                
+                if (_timerTimeoutConnectBLE)
+                {
+                    if ([_timerTimeoutConnectBLE isValid])
+                    {
+                        [_timerTimeoutConnectBLE invalidate];
+                    }
+                }
+                
+                self.shouldTimeoutProcessing = TRUE;
+                
+                if (_timerScanCameraBLEDone)
+                {
+                    [self.timerScanCameraBLEDone invalidate];
+                    self.timerScanCameraBLEDone = nil;
+                }
+                
+                [[BLEConnectionManager getInstanceBLE] stopScanBLE];
+                
+                self.viewPairNDetecting.hidden = YES;
+                [self.viewPairNDetecting removeFromSuperview];
+                [self.ib_lableStage setText:NSLocalizedStringWithDefaultValue(@"select_a_device_to_connect", nil, [NSBundle mainBundle], @"Select a device to connect", nil)];
+                [self.ib_tableListBLE reloadData];
+                
+                if (_arrayFocus73.count == 1)
+                {
+                    self.btnConnect.enabled = YES;
+                    self.selectedCamProfile = _arrayFocus73[0];
+                    self.isLANSetup = TRUE;
+                    [self btnConnectTouchUpInsideAction:nil];
+                    
+                    NSLog(@"%s Got a Bonjour service.", __FUNCTION__);
+                }
+                
+                return;
+            }
+            else
+            {
+                NSLog(@"%s There is currently no Bonjour service.", __FUNCTION__);
+            }
+        }
+        else
+        {
+            NSLog(@"%s Scanning Bonjour services.", __FUNCTION__);
+        }
+    }
+    
     if ([_currentBLEList count] == 0) //NO camera found
     {
         NSLog(@"No BLE device found! schedule next check ");
-
+        
         self.timerScanCameraBLEDone = [NSTimer scheduledTimerWithTimeInterval:5.0
                                                                        target:self
                                                                      selector:@selector(scanCameraBLEDone)
@@ -490,7 +558,7 @@
             NSLog(@"Found more than 1 valid devices -> Show lists");
             
             //Update UI
-           // [self.viewProgress removeFromSuperview];
+            // [self.viewProgress removeFromSuperview];
             //[self.viewPairNDetecting removeFromSuperview];
             //[self.ib_lableStage setText:NSLocalizedStringWithDefaultValue(@"select_a_device_to_connect", nil, [NSBundle mainBundle], @"Select a device to connect", nil)];
             //[self.ib_tableListBLE reloadData];
@@ -541,9 +609,11 @@
     [_viewError release];
     [_timerTimeoutConnectBLE release];
     [_viewPairNDetecting release];
+    [_threadBonjour release];
     [super dealloc];
 }
 
+#if 0
 -(void) handleEnteredBackground
 {
     showProgressNextTime = TRUE;
@@ -582,6 +652,7 @@
         self.inProgress.hidden = YES;
     }
 }
+#endif
 
 #pragma mark - BLEConnectionManagerDelegate
 
@@ -997,60 +1068,30 @@
         }
         
         self.arrayFocus73 = [NSMutableArray arrayWithArray:bonjour.cameraList];
+        self.isScanning = FALSE;
+        
+        NSLog(@"%s Scanning Bonjour completely.", __FUNCTION__);
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            
-            if (_selectedPeripheral) { // Selectin a BLE.
-                return;
-            }
-            
-            if (_timerTimeoutConnectBLE)
+            if (!_timerScanCameraBLEDone || ![_timerScanCameraBLEDone isValid])
             {
-                if ([_timerTimeoutConnectBLE isValid])
-                {
-                    [_timerTimeoutConnectBLE invalidate];
-                }
-            }
-            
-            self.shouldTimeoutProcessing = TRUE;
-            
-            if (_timerScanCameraBLEDone)
-            {
-                [self.timerScanCameraBLEDone invalidate];
-                self.timerScanCameraBLEDone = nil;
-            }
-            
-            [[BLEConnectionManager getInstanceBLE] stopScanBLE];
-            
-            self.viewPairNDetecting.hidden = YES;
-            [self.viewPairNDetecting removeFromSuperview];
-            [self.ib_lableStage setText:NSLocalizedStringWithDefaultValue(@"select_a_device_to_connect", nil, [NSBundle mainBundle], @"Select a device to connect", nil)];
-            [self.ib_tableListBLE reloadData];
-            
-            self.isScanning = FALSE;
-            
-            if (_arrayFocus73.count == 1)
-            {
-                self.btnConnect.enabled = YES;
-                //[self moveToNextStep:(CamProfile *)_arrayFocus73[0]];
-                //[self moveToNextStepLAN:TRUE];
-                self.selectedCamProfile = _arrayFocus73[0];
-                self.isLANSetup = TRUE;
-                [self btnConnectTouchUpInsideAction:nil];
+                [self scanCameraBLEDone];
             }
         });
         
         [bonjour release];
+        
+        [NSThread exit];
     }
     
-    [NSThread exit];
+    //[NSThread exit];
 }
 
 - (void)rescanBonjour
 {
     if (!_isScanning)
     {
-        [self scanWithBonjour];
+        [self startScanningWithBonjour];
     }
 }
 

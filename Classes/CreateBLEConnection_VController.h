@@ -48,8 +48,8 @@
 @property (nonatomic, retain) NSString *homeWifiSSID;
 @property (nonatomic) NSInteger cameraType;
 
-- (void) hideProgess;
--(void) showProgress:(NSTimer *) exp;
+//- (void) hideProgess;
+//-(void) showProgress:(NSTimer *) exp;
 - (void) checkConnectionToCamera:(NSTimer *) expired;
 -(void) moveToNextStep;
 
