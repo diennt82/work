@@ -2006,6 +2006,7 @@ double _ticks = 0;
                 
                 if (self.selectedChannel.profile.isInLocal)
                 {
+                    [self showTimelineView];
                     self.messageStreamingState = @"Camera is not accessible";
                 }
                 
@@ -7126,6 +7127,7 @@ double _ticks = 0;
             [UIApplication sharedApplication].applicationState != UIApplicationStateBackground) // Testing this to decide using it or not
         {
             NSLog(@"SERVER unreachable (timeout) ");
+            [self showTimelineView];
             self.messageStreamingState = NSLocalizedStringWithDefaultValue(@"camera_is_not_accessible", nil, [NSBundle mainBundle], @"Camera is not accessible", nil);
             _isShowTextCameraIsNotAccesible = YES;
             [self.ib_lbCameraNotAccessible setHidden:NO];
