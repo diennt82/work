@@ -289,8 +289,8 @@
     {
 		case DIALOG_CANT_ADD_CAM:
 		{
-            NSString * msg = NSLocalizedStringWithDefaultValue(@"remove_one_cam",nil, [NSBundle mainBundle],
-                                                               @"Please remove one camera from the current  list before addding the new one", nil);
+            NSString * msg = NSLocalizedStringWithDefaultValue(@"maximum_camera_support", nil, [NSBundle mainBundle],
+                                                               @"Only maximum of 4 camera is supported. Please remove one camera from the list before adding the new camera.", nil);
             
 			UIAlertView *alert = [[UIAlertView alloc]
 								  initWithTitle:@""
@@ -300,8 +300,8 @@
 								  otherButtonTitles:nil];
 			[alert show];
 			[alert release];
-			break;
 		}
+            break;
             
 		default:
 			break;
