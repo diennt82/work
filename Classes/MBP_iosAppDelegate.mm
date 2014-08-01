@@ -13,6 +13,7 @@
 #import "EarlierNavigationController.h"
 #import "Crittercism.h"
 #import "SDWebImageManager.h"
+#import "ios-ntp.h"
 
 @interface MBP_iosAppDelegate()
 
@@ -196,6 +197,9 @@
     }
     
     [BMS_JSON_Communication setServerInput:serverName];
+    
+    [NetworkClock sharedNetworkClock]; // Just gather up the ntp servers...
+    [NSDate networkDate];              // Start ntp process...
     
     return YES;
 }
