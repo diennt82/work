@@ -3,7 +3,7 @@
 //  MBP_ios
 //
 //  Created by NxComm on 7/26/12.
-//  Copyright (c) 2012 eBuyNow eCommerce Limited. All rights reserved.
+//  Copyright (c) 2012 Hubble Connected Ltd. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
@@ -27,23 +27,13 @@
 @property (nonatomic, assign) IBOutlet UITableViewCell * passwordCell;
 @property (nonatomic, assign) IBOutlet UITableViewCell * confPasswordCell;
 
-//timeout input password
-@property (nonatomic, retain) NSTimer *inputPasswordTimer;
-@property (nonatomic, retain) NSTimer *timeOut;
-
-@property (nonatomic, copy) NSString *currentStateCamera;
-@property (nonatomic, copy) NSString* ssid, * security, *password;
-@property (nonatomic, retain) DeviceConfiguration * deviceConf;
+@property (nonatomic, copy) NSString *security;
+@property (nonatomic, copy) NSString *ssid;
 @property (nonatomic, assign) BOOL isOtherNetwork;
-
-//current state of camera
-@property (nonatomic, assign) BOOL isUserMakeConnect;
-@property (nonatomic, assign) BOOL task_cancelled;
 
 - (void)handleNextButton:(id)sender;
 - (void)sendWifiInfoToCamera;
 - (BOOL)restoreDataIfPossible;
 - (void)prepareWifiInfo;
 
-\
 @end

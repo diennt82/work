@@ -3,22 +3,12 @@
 //  BlinkHD_ios
 //
 //  Created by Developer on 3/5/14.
-//  Copyright (c) 2014 Smart Panda Ltd. All rights reserved.
+//  Copyright (c) 2014 Hubble Connected Ltd. All rights reserved.
 //
 
 #import "HubbleProgressView.h"
 
 @implementation HubbleProgressView
-
-- (id)initWithFrame:(CGRect)frame
-{
-    self = [super initWithFrame:frame];
-    if (self) {
-        // Initialization code
-    }
-    return self;
-}
-
 
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.

@@ -3,7 +3,7 @@
 //  BlinkHD_ios
 //
 //  Created by Developer on 12/16/13.
-//  Copyright (c) 2013 Smart Panda Ltd. All rights reserved.
+//  Copyright (c) 2013 Hubble Connected Ltd. All rights reserved.
 //
 
 #import "CamerasCell.h"
@@ -14,18 +14,10 @@
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        // Initialization code
-        [self.settingsButton setImage:[UIImage imageNamed:@"camera_settings"] forState:UIControlStateNormal];
-        [self.settingsButton setImage:[UIImage imageNamed:@"camera_settings_pressed"] forState:UIControlEventTouchUpInside];
+        [_settingsButton setImage:[UIImage imageNamed:@"camera_settings"] forState:UIControlStateNormal];
+        [_settingsButton setImage:[UIImage imageNamed:@"camera_settings_pressed"] forState:UIControlEventTouchUpInside];
     }
     return self;
-}
-
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated
-{
-    [super setSelected:selected animated:animated];
-
-    // Configure the view for the selected state
 }
 
 - (IBAction)settingsButtonTouchAction:(id)sender
@@ -33,7 +25,8 @@
     [_camerasCellDelegate sendTouchSettingsActionWithRowIndex:_rowIndex];
 }
 
-- (void)dealloc {
+- (void)dealloc
+{
     [_snapshotImage release];
     [_photoItemImage release];
     [_ibCameraNameLabel release];
@@ -43,4 +36,5 @@
     [_ibBGColorCameraSelected release];
     [super dealloc];
 }
+
 @end

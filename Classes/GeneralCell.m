@@ -3,29 +3,12 @@
 //  BlinkHD_ios
 //
 //  Created by Developer on 12/17/13.
-//  Copyright (c) 2013 Smart Panda Ltd. All rights reserved.
+//  Copyright (c) 2013 Hubble Connected Ltd. All rights reserved.
 //
 
 #import "GeneralCell.h"
 
 @implementation GeneralCell
-
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
-{
-    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
-    if (self) {
-        // Initialization code
-        //self.backgroundColor = [UIColor blackColor];
-    }
-    return self;
-}
-
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated
-{
-    [super setSelected:selected animated:animated];
-
-    // Configure the view for the selected state
-}
 
 - (void)drawRect:(CGRect)rect
 {
@@ -56,11 +39,13 @@
     [_generalCellDelegate temperatureValueChanged:_isFahrenheit];
 }
 
-- (void)dealloc {
+- (void)dealloc
+{
     [_labelClock release];
     [_btnClock release];
     [_labelTemperature release];
     [_btnTemperature release];
     [super dealloc];
 }
+
 @end

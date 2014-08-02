@@ -3,7 +3,7 @@
 //  MBP_ios
 //
 //  Created by NxComm on 9/26/11.
-//  Copyright 2011 eBuyNow eCommerce Limited. All rights reserved.
+//  Copyright 2011 Hubble Connected Ltd. All rights reserved.
 //
 
 #import "MBP_iosAppDelegate.h"
@@ -563,7 +563,7 @@ void checkingApplicationCrashed()
         }
     }
     else if (viewController.app_stage == APP_STAGE_LOGGING_IN || viewController.app_stage == APP_STAGE_INIT) {
-        [userDefaults setBool:FALSE forKey:_AutoLogin];
+        [userDefaults setBool:NO forKey:AUTO_LOGIN_KEY];
         [userDefaults synchronize];
     }
 }

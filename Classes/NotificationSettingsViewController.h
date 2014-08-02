@@ -3,7 +3,7 @@
 //  BlinkHD_ios
 //
 //  Created by Nxcomm Developer on 21/11/13.
-//  Copyright (c) 2013 Smart Panda Ltd. All rights reserved.
+//  Copyright (c) 2013 Hubble Connected Ltd. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
@@ -11,6 +11,6 @@
 
 @interface NotificationSettingsViewController : UIViewController
 
-@property (nonatomic, assign) CamProfile* camProfile;
+@property (nonatomic, assign) CamProfile *camProfile;
 
 @end

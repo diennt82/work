@@ -3,7 +3,7 @@
 //  BlinkHD_ios
 //
 //  Created by Jason Lee on 14/3/14.
-//  Copyright (c) 2014 Smart Panda Ltd. All rights reserved.
+//  Copyright (c) 2014 Hubble Connected Ltd. All rights reserved.
 //
 
 #import "ChangeImageViewController.h"
@@ -14,56 +14,42 @@
 
 @implementation ChangeImageViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
-    
-//    self.capturedImages = [[NSMutableArray alloc] init];
 
-//     self.view.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:.4];
+    /*
+    self.capturedImages = [[NSMutableArray alloc] init];
+    self.view.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:.4];
     
-//    if (![UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera])
-//    {
-//        // There is not a camera on this device, so don't show the camera button.
-//        NSMutableArray *toolbarItems = [self.toolBar.items mutableCopy];
-//        [toolbarItems removeObjectAtIndex:2];
-//        [self.toolBar setItems:toolbarItems animated:NO];
-//    }
-    
+    if (![UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera])
+    {
+        // There is not a camera on this device, so don't show the camera button.
+        NSMutableArray *toolbarItems = [self.toolBar.items mutableCopy];
+        [toolbarItems removeObjectAtIndex:2];
+        [self.toolBar setItems:toolbarItems animated:NO];
+    }
+    */
     
     [self.navigationController.view setHidden:YES];
     [self.navigationController.view setUserInteractionEnabled:NO];
 }
 
-- (void)didReceiveMemoryWarning
+- (void)dealloc
 {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    [_dismissChangeImageButton release];
+    [super dealloc];
 }
-
-
 
 - (IBAction)showImagePickerForCamera:(id)sender
 {
     [self showImagePickerForSourceType:UIImagePickerControllerSourceTypeCamera];
 }
 
-
 - (IBAction)showImagePickerForPhotoPicker:(id)sender
 {
     [self showImagePickerForSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
 }
-
 
 - (void)showImagePickerForSourceType:(UIImagePickerControllerSourceType)sourceType
 {
@@ -111,12 +97,10 @@
     [self finishAndUpdate];
 }
 
-
 - (IBAction)takePhoto:(id)sender
 {
     [self.imagePickerController takePicture];
 }
-
 
 - (IBAction)delayedTakePhoto:(id)sender
 {
@@ -132,7 +116,6 @@
     [[NSRunLoop mainRunLoop] addTimer:cameraTimer forMode:NSDefaultRunLoopMode];
     self.cameraTimer = cameraTimer;
 }
-
 
 - (IBAction)startTakingPicturesAtIntervals:(id)sender
 {
@@ -155,7 +138,6 @@
     [self.cameraTimer fire]; // Start taking pictures right away.
 }
 
-
 - (IBAction)stopTakingPicturesAtIntervals:(id)sender
 {
     // Stop and reset the timer.
@@ -165,20 +147,16 @@
     [self finishAndUpdate];
 }
 
-
 - (void)finishAndUpdate
 {
     [self dismissViewControllerAnimated:YES completion:NULL];
     
-    if ([self.capturedImages count] > 0)
-    {
-        if ([self.capturedImages count] == 1)
-        {
+    if ([self.capturedImages count] > 0) {
+        if ([self.capturedImages count] == 1) {
             // Camera took a single picture.
             [self.imageView setImage:[self.capturedImages objectAtIndex:0]];
         }
-        else
-        {
+        else {
             // Camera took multiple pictures; use the list of images for animation.
             self.imageView.animationImages = self.capturedImages;
             self.imageView.animationDuration = 5.0;    // Show each captured photo for 5 seconds.
@@ -193,7 +171,6 @@
     self.imagePickerController = nil;
 }
 
-
 #pragma mark - Timer
 
 // Called by the timer to take a picture.
@@ -201,7 +178,6 @@
 {
     [self.imagePickerController takePicture];
 }
-
 
 #pragma mark - UIImagePickerControllerDelegate
 
@@ -222,32 +198,22 @@
     */
     
     [self dismissViewControllerAnimated:YES completion:NULL];
-    
-    
 }
-
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
 {
     [self dismissViewControllerAnimated:YES completion:NULL];
 }
 
-
-
-- (void)dealloc {
-    [_ib_dissMissChangeImage release];
-    [super dealloc];
-}
-- (IBAction)dissmissChangeImageVC:(id)sender {
-
+- (IBAction)dissmissChangeImageVC:(id)sender
+{
     [UIView transitionWithView:self.view
                       duration:1.0
                        options:UIViewAnimationOptionTransitionFlipFromBottom
                     animations:^{
                         [self.view setHidden:YES];
                     }
-                    completion:NULL];
-
-    
+                    completion:nil];
 }
+
 @end

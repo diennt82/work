@@ -3,7 +3,7 @@
 //  MBP_ios
 //
 //  Created by NxComm on 7/24/12.
-//  Copyright (c) 2012 eBuyNow eCommerce Limited. All rights reserved.
+//  Copyright (c) 2012 Hubble Connected Ltd. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
@@ -13,9 +13,10 @@
 #import "GAI.h"
 
 @interface Step_02_ViewController : GAITrackedViewController <StartMonitorDelegate>
-{
-    IBOutlet UITableViewCell * step1_cell, * step2_cell, * step3_cell;
-}
+
+@property (nonatomic, retain) IBOutlet UITableViewCell *step1_cell;
+@property (nonatomic, retain) IBOutlet UITableViewCell *step2_cell;
+@property (nonatomic, retain) IBOutlet UITableViewCell *step3_cell;
 
 @property (nonatomic, assign) id<ConnectionMethodDelegate>delegate;
 @property (nonatomic) NSInteger cameraType;

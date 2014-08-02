@@ -14,13 +14,13 @@
 #import "define.h"
 
 @interface UICircularSlider()
+
 #define Rgb2UIColor(r, g, b)  [UIColor colorWithRed:((r) / 255.0) green:((g) / 255.0) blue:((b) / 255.0) alpha:1.0]
 
 /** Helper Functions **/
 #define ToRad(deg) 		( (M_PI * (deg)) / 180.0 )
 #define ToDeg(rad)		( (180.0 * (rad)) / M_PI )
 #define SQR(x)			( (x) * (x) )
-
 
 @property (nonatomic) CGPoint thumbCenterPoint;
 
@@ -39,11 +39,11 @@
 @end
 
 #pragma mark -
+
 @implementation UICircularSlider
 
-@synthesize value = _value;
-@synthesize textField = _textField;
-- (void)setValue:(float)value {
+- (void)setValue:(float)value
+{
 	if (value != _value) {
 		if (value > self.maximumValue) { value = self.maximumValue; }
 		if (value < self.minimumValue) { value = self.minimumValue; }
@@ -55,16 +55,18 @@
 //        }
 	}
 }
-@synthesize minimumValue = _minimumValue;
-- (void)setMinimumValue:(float)minimumValue {
+
+- (void)setMinimumValue:(float)minimumValue
+{
 	if (minimumValue != _minimumValue) {
 		_minimumValue = minimumValue;
 		if (self.maximumValue < self.minimumValue)	{ self.maximumValue = self.minimumValue; }
 		if (self.value < self.minimumValue)			{ self.value = self.minimumValue; }
 	}
 }
-@synthesize maximumValue = _maximumValue;
-- (void)setMaximumValue:(float)maximumValue {
+
+- (void)setMaximumValue:(float)maximumValue
+{
 	if (maximumValue != _maximumValue) {
 		_maximumValue = maximumValue;
 		if (self.minimumValue > self.maximumValue)	{ self.minimumValue = self.maximumValue; }
@@ -72,56 +74,57 @@
 	}
 }
 
-@synthesize minimumTrackTintColor = _minimumTrackTintColor;
-- (void)setMinimumTrackTintColor:(UIColor *)minimumTrackTintColor {
+- (void)setMinimumTrackTintColor:(UIColor *)minimumTrackTintColor
+{
 	if (![minimumTrackTintColor isEqual:_minimumTrackTintColor]) {
 		_minimumTrackTintColor = minimumTrackTintColor;
 		[self setNeedsDisplay];
 	}
 }
 
-@synthesize maximumTrackTintColor = _maximumTrackTintColor;
-- (void)setMaximumTrackTintColor:(UIColor *)maximumTrackTintColor {
+- (void)setMaximumTrackTintColor:(UIColor *)maximumTrackTintColor
+{
 	if (![maximumTrackTintColor isEqual:_maximumTrackTintColor]) {
 		_maximumTrackTintColor = maximumTrackTintColor;
 		[self setNeedsDisplay];
 	}
 }
 
-@synthesize thumbTintColor = _thumbTintColor;
-- (void)setThumbTintColor:(UIColor *)thumbTintColor {
+- (void)setThumbTintColor:(UIColor *)thumbTintColor
+{
 	if (![thumbTintColor isEqual:_thumbTintColor]) {
 		_thumbTintColor = thumbTintColor;
 		[self setNeedsDisplay];
 	}
 }
 
-@synthesize continuous = _continuous;
-
-@synthesize sliderStyle = _sliderStyle;
-- (void)setSliderStyle:(UICircularSliderStyle)sliderStyle {
+- (void)setSliderStyle:(UICircularSliderStyle)sliderStyle
+{
 	if (sliderStyle != _sliderStyle) {
 		_sliderStyle = sliderStyle;
 		[self setNeedsDisplay];
 	}
 }
 
-@synthesize thumbCenterPoint = _thumbCenterPoint;
-
 /** @name Init and Setup methods */
 #pragma mark - Init and Setup methods
-- (id)initWithFrame:(CGRect)frame {
+
+- (id)initWithFrame:(CGRect)frame
+{
     self = [super initWithFrame:frame];
     if (self) {
         [self setup];
     } 
     return self;
 }
-- (void)awakeFromNib {
+
+- (void)awakeFromNib
+{
 	[self setup];
 }
 
-- (void)setup {
+- (void)setup
+{
 	self.value = 0.0;
 	self.minimumValue = 0.0;
 	self.maximumValue = 180.0;
@@ -131,11 +134,12 @@
 	self.continuous = YES;
     self.thumbTintColor = Rgb2UIColor(223, 237, 244);
 	self.thumbCenterPoint = CGPointZero;
+
     //Add label
     //Define the Font
-
     UIFont *font = [UIFont lightLarge75Font];
     UIFont *font1 = [UIFont regularMedium23Font];
+    
     //Calculate font size needed to display 3 numbers
     NSString *str = @"0000";
     NSString *minites = @"minutes";
@@ -154,7 +158,6 @@
     _textField.font = font;
     _textField.enabled = NO;
     
-    
     _minuteTField = [[UITextField alloc]initWithFrame:CGRectMake((self.frame.size.width  - fontSize1.width) /2,
                                                                        (self.frame.size.height - fontSize1.height) /2 + fontSize1.height + 5 ,
                                                                        fontSize1.width,
@@ -169,11 +172,8 @@
     
     [self addSubview:_textField];
     [self addSubview:_minuteTField];
-
     
-    /**
-     * This tapGesture isn't used yet but will allow to jump to a specific location in the circle
-     */
+    // This tapGesture isn't used yet but will allow to jump to a specific location in the circle
 	UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGestureHappened:)];
 	[self addGestureRecognizer:tapGestureRecognizer];
 	
@@ -195,21 +195,17 @@
                                              selector: @selector(becomeActive)
                                                  name: UIApplicationDidBecomeActiveNotification
                                                object: nil];
-    
-
 }
 
--(void) handleEnteredBackground
+- (void)handleEnteredBackground
 {
-    //save value to handle later
-    //NSTimeInterval nowInterval =
-    [[NSDate date] timeIntervalSince1970];
-    
+    // save value to handle later
+    //NSTimeInterval nowInterval = [[NSDate date] timeIntervalSince1970];
 }
 
--(void) becomeActive
+- (void)becomeActive
 {
-    //load from save value and update UI
+    // load from save value and update UI
     [self updateCustomSlider];
 }
 
@@ -217,15 +213,18 @@
 {
     self.value = 90;
 }
+
 #pragma mark - Timer to udpate text
-- (void)updateProgress: (UICircularSlider *) sender
+
+- (void)updateProgress:(UICircularSlider *)sender
 {
     [self setValue:self.value];
 }
 
-- (void)updateLabel:(NSTimer *)exp{
+- (void)updateLabel:(NSTimer *)exp
+{
     NSInteger value = (int)round(self.value);
-	if((int)self.value == 0 || self.value > 180 || !self.userInteractionEnabled){
+	if ((int)self.value == 0 || self.value > 180 || !self.userInteractionEnabled) {
 		[self killTimer];
 	}
 	self.textField.text = [self timeFormat:value];
@@ -233,46 +232,45 @@
 	self.value = value;
 }
 
-- (void)killTimer{
+- (void)killTimer
+{
 	if(_timer && [_timer isValid]){
 		[_timer invalidate];
 		_timer = nil;
 	}
 }
 
-- (NSString *) timeFormat: (int) minutes {
-    
-    if (minutes < 60)
-    {
+- (NSString *)timeFormat:(int)minutes
+{
+    if (minutes < 60) {
         NSString *cm = minutes <= 9 ? @"0": @"";
         return [NSString stringWithFormat:@"%@%d",cm, minutes];
     }
-    else
-    {
+    else {
         int hours = minutes / 60;
         NSString *cm = minutes <= 9 ? @"0": @"";
         int newMinutes = fabs(round((int)minutes % 60));
         
-        
-        
         NSString *cs = newMinutes <= 9 ? @"0": @"";
-        
         return [NSString stringWithFormat:@"%@%ih%@%i",cm, hours, cs, newMinutes];
     }
-
-    
 }
 
 /** @name Drawing methods */
 #pragma mark - Drawing methods
+
 #define kLineWidth 10.0
 #define kThumbRadius 15.0
-- (CGFloat)sliderRadius {
+
+- (CGFloat)sliderRadius
+{
 	CGFloat radius = MIN(self.bounds.size.width/2, self.bounds.size.height/2);
 	radius -= MAX(kLineWidth, kThumbRadius);	
 	return radius;
 }
-- (void)drawThumbAtPoint:(CGPoint)sliderButtonCenterPoint inContext:(CGContextRef)context {
+
+- (void)drawThumbAtPoint:(CGPoint)sliderButtonCenterPoint inContext:(CGContextRef)context
+{
 	UIGraphicsPushContext(context);
 	CGContextBeginPath(context);
 	
@@ -283,7 +281,8 @@
 	UIGraphicsPopContext();
 }
 
-- (CGPoint)drawCircularTrack:(float)track atPoint:(CGPoint)center withRadius:(CGFloat)radius inContext:(CGContextRef)context {
+- (CGPoint)drawCircularTrack:(float)track atPoint:(CGPoint)center withRadius:(CGFloat)radius inContext:(CGContextRef)context
+{
 	UIGraphicsPushContext(context);
 	CGContextBeginPath(context);
 	
@@ -301,7 +300,8 @@
 	return arcEndPoint;
 }
 
-- (CGPoint)drawPieTrack:(float)track atPoint:(CGPoint)center withRadius:(CGFloat)radius inContext:(CGContextRef)context {
+- (CGPoint)drawPieTrack:(float)track atPoint:(CGPoint)center withRadius:(CGFloat)radius inContext:(CGContextRef)context
+{
 	UIGraphicsPushContext(context);
 	
 	float angleFromTrack = translateValueFromSourceIntervalToDestinationInterval(track, self.minimumValue, self.maximumValue, 0, 2*M_PI);
@@ -320,7 +320,8 @@
 	return arcEndPoint;
 }
 
-- (void)drawRect:(CGRect)rect {
+- (void)drawRect:(CGRect)rect
+{
     CGContextRef context = UIGraphicsGetCurrentContext();
 	
 	CGPoint middlePoint;
@@ -354,17 +355,22 @@
 
 /** @name Thumb management methods */
 #pragma mark - Thumb management methods
-- (BOOL)isPointInThumb:(CGPoint)point {
+
+- (BOOL)isPointInThumb:(CGPoint)point
+{
 	CGRect thumbTouchRect = CGRectMake(self.thumbCenterPoint.x - kThumbRadius, self.thumbCenterPoint.y - kThumbRadius, kThumbRadius*2, kThumbRadius*2);
 	return CGRectContainsPoint(thumbTouchRect, point);
 }
+
 BOOL isReachLimit = NO;
 int previousSweepAngle, storeAngle;
 int finalAngle;
 
 /** @name UIGestureRecognizer management methods */
 #pragma mark - UIGestureRecognizer management methods
-- (void)panGestureHappened:(UIPanGestureRecognizer *)panGestureRecognizer {
+
+- (void)panGestureHappened:(UIPanGestureRecognizer *)panGestureRecognizer
+{
 	CGPoint tapLocation = [panGestureRecognizer locationInView:self];
 	switch (panGestureRecognizer.state) {
 		case UIGestureRecognizerStateChanged: {
@@ -472,10 +478,12 @@ int finalAngle;
                                             userInfo:nil
                                              repeats:YES ];
 }
+
 - (void)cancelAllLocalNotification
 {
     [[UIApplication sharedApplication] cancelAllLocalNotifications];
 }
+
 - (void)registerLocalNotification
 {
     // Get the current date
@@ -503,11 +511,12 @@ int finalAngle;
     
     [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
     
-    //
-//    [[NSNotificationCenter defaultCenter] postNotificationName:@"reloadData" object:self];
+    //[[NSNotificationCenter defaultCenter] postNotificationName:@"reloadData" object:self];
     [localNotification release];
 }
-- (void)tapGestureHappened:(UITapGestureRecognizer *)tapGestureRecognizer {
+
+- (void)tapGestureHappened:(UITapGestureRecognizer *)tapGestureRecognizer
+{
 	if (tapGestureRecognizer.state == UIGestureRecognizerStateEnded) {
 		CGPoint tapLocation = [tapGestureRecognizer locationInView:self];
 		if ([self isPointInThumb:tapLocation]) {
@@ -519,7 +528,9 @@ int finalAngle;
 
 /** @name Touches Methods */
 #pragma mark - Touches Methods
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
     [super touchesBegan:touches withEvent:event];
     
     UITouch *touch = [touches anyObject];
@@ -533,7 +544,9 @@ int finalAngle;
 
 /** @name Utility Functions */
 #pragma mark - Utility Functions
-float translateValueFromSourceIntervalToDestinationInterval(float sourceValue, float sourceIntervalMinimum, float sourceIntervalMaximum, float destinationIntervalMinimum, float destinationIntervalMaximum) {
+
+float translateValueFromSourceIntervalToDestinationInterval(float sourceValue, float sourceIntervalMinimum, float sourceIntervalMaximum, float destinationIntervalMinimum, float destinationIntervalMaximum)
+{
 	float a, b, destinationValue;
 	
 	a = (destinationIntervalMaximum - destinationIntervalMinimum) / (sourceIntervalMaximum - sourceIntervalMinimum);
@@ -544,7 +557,8 @@ float translateValueFromSourceIntervalToDestinationInterval(float sourceValue, f
 	return destinationValue;
 }
 
-CGFloat angleBetweenThreePoints(CGPoint centerPoint, CGPoint p1, CGPoint p2) {
+CGFloat angleBetweenThreePoints(CGPoint centerPoint, CGPoint p1, CGPoint p2)
+{
 	CGPoint v1 = CGPointMake(p1.x - centerPoint.x, p1.y - centerPoint.y);
 	CGPoint v2 = CGPointMake(p2.x - centerPoint.x, p2.y - centerPoint.y);
 	

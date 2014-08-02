@@ -3,7 +3,7 @@
 //  BlinkHD_ios
 //
 //  Created by Jason Lee on 30/12/13.
-//  Copyright (c) 2013 eBuyNow eCommerce Limited. All rights reserved.
+//  Copyright (c) 2013 Hubble Connected Ltd. All rights reserved.
 //
 
 #import "DisplayWifiList_VController.h"
@@ -137,7 +137,7 @@
      * The selected is HOME or not doesn't mater, just check to confirm.
      */
     
-    if ([_selectedWifiEntry.auth_mode isEqualToString:@"open"]) {
+    if ([_selectedWifiEntry.authMode isEqualToString:@"open"]) {
         [[[[UIAlertView alloc] initWithTitle:@"SSID without password is not supported due to security concern. Please add password to your router."
                                      message:nil
                                     delegate:nil
@@ -145,8 +145,8 @@
                            otherButtonTitles:@"OK", nil] autorelease] show];
     }
     else {
-        NSRange noQoute = NSMakeRange(1, _selectedWifiEntry.ssid_w_quote.length - 2);
-        NSString *wifiName = [_selectedWifiEntry.ssid_w_quote substringWithRange:noQoute];
+        NSRange noQoute = NSMakeRange(1, _selectedWifiEntry.ssidWithQuotes.length - 2);
+        NSString *wifiName = [_selectedWifiEntry.ssidWithQuotes substringWithRange:noQoute];
         NSString *homeWifi = [[NSUserDefaults standardUserDefaults] stringForKey:HOME_SSID];
         
         if ([wifiName isEqualToString:homeWifi]) {
@@ -201,11 +201,11 @@
 {
     WifiEntry * other = [[WifiEntry alloc]initWithSSID:@"\"Other Network\""];
     other.bssid = @"Other";
-    other.auth_mode = @"None";
-    other.signal_level = 0;
-    other.noise_level = 0;
+    other.authMode = @"None";
+    other.signalLevel = 0;
+    other.noiseLevel = 0;
     other.quality = nil;
-    other.encrypt_type = @"None";
+    other.encryptType = @"None";
     
     [self.listOfWifi addObject:other];
     [self filterCameraList];
@@ -218,15 +218,15 @@
     //Load the next xib
     NetworkInfoToCamera_VController *netWorkInfoViewController = [[NetworkInfoToCamera_VController alloc] initWithNibName:@"NetworkInfoToCamera_VController" bundle:nil];
     
-    NSRange noQoute = NSMakeRange(1, _selectedWifiEntry.ssid_w_quote.length - 2);
-    NSString *wifiName = [_selectedWifiEntry.ssid_w_quote substringWithRange:noQoute];
+    NSRange noQoutes = NSMakeRange(1, _selectedWifiEntry.ssidWithQuotes.length - 2);
+    NSString *wifiName = [_selectedWifiEntry.ssidWithQuotes substringWithRange:noQoutes];
     
     [[NSUserDefaults standardUserDefaults] setObject:wifiName forKey:HOST_SSID];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
     netWorkInfoViewController.isOtherNetwork = [wifiName isEqualToString:@"Other Network"];
     netWorkInfoViewController.ssid = wifiName;
-    netWorkInfoViewController.security = _selectedWifiEntry.auth_mode;
+    netWorkInfoViewController.security = _selectedWifiEntry.authMode;
     
     [self.navigationController pushViewController:netWorkInfoViewController animated:NO];
     [netWorkInfoViewController release];
@@ -314,9 +314,9 @@
     NSMutableArray *wifiList = [@[] mutableCopy];
     for (int i = 0; i < _listOfWifi.count; i++) {
         WifiEntry *wifi = _listOfWifi[i];
-        if (![wifi.ssid_w_quote hasPrefix:@"\"Camera-"]
-            &&![wifi.ssid_w_quote isEqualToString:@"\"\""]
-            && ![wifi.ssid_w_quote hasPrefix:@"\"CameraHD-"])
+        if (![wifi.ssidWithQuotes hasPrefix:@"\"Camera-"]
+            &&![wifi.ssidWithQuotes isEqualToString:@"\"\""]
+            && ![wifi.ssidWithQuotes hasPrefix:@"\"CameraHD-"])
         {
             [wifiList addObject:wifi];
         }
@@ -358,7 +358,7 @@
             }
             
             WifiEntry *entry = [_listOfWifi objectAtIndex:indexPath.row];
-            cell.lblName.text = [entry.ssid_w_quote substringWithRange:NSMakeRange(1, entry.ssid_w_quote.length - 2)]; // Remove " & "
+            cell.lblName.text = [entry.ssidWithQuotes substringWithRange:NSMakeRange(1, entry.ssidWithQuotes.length - 2)]; // Remove " & "
             
             return cell;
         }
@@ -576,7 +576,7 @@
     for (int i =0; i< wifiList.count; i++)
     {
         entry = [wifiList objectAtIndex:i];
-        NSLog(@"entry: %d, ssid_w_quote: %@, bssid: %@, auth_mode: %@, quality: %@", i, entry.ssid_w_quote, entry.bssid, entry.auth_mode, entry.quality);
+        NSLog(@"entry: %d, ssid_w_quote: %@, bssid: %@, auth_mode: %@, quality: %@", i, entry.ssidWithQuotes, entry.bssid, entry.authMode, entry.quality);
     }
     
     self.isAlreadyWifiList = TRUE;

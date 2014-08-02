@@ -3,10 +3,11 @@
 //  BlinkHD_ios
 //
 //  Created by Jason Lee on 14/12/13.
-//  Copyright (c) 2013 Smart Panda Ltd. All rights reserved.
+//  Copyright (c) 2013 Hubble Connected Ltd. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
+
 @class ScrollHorizontalMenu;
 
 @protocol ScrollHorizontalMenuDataSource <NSObject>
@@ -39,12 +40,15 @@
     id <ScrollHorizontalMenuDataSource> dataSource;
     id <ScrollHorizontalMenuDelegate> itemSelectedDelegate;
 }
+
 @property (nonatomic, retain) NSMutableArray *imageMenu;
 @property (nonatomic, retain) UIImage *selectedImage;
 @property (nonatomic, assign) IBOutlet id <ScrollHorizontalMenuDelegate> itemSelectedDelegate;
 @property (nonatomic, retain) IBOutlet id <ScrollHorizontalMenuDataSource> dataSource;
 @property (nonatomic, assign) int itemCount;
 @property (nonatomic, assign) BOOL isAllButtonDeselected;
+
 -(void) reloadData:(BOOL)isLand;
 -(void) setSelectedIndex:(int) index animated:(BOOL) animated;
+
 @end

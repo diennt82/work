@@ -3,7 +3,7 @@
 //  BlinkHD_ios
 //
 //  Created by Jason Lee on 21/10/13.
-//  Copyright (c) 2013 Smart Panda Ltd. All rights reserved.
+//  Copyright (c) 2013 Hubble Connected Ltd. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
@@ -19,10 +19,6 @@
 
 @interface ZoneViewController : UIViewController
 {
-    
-    
-    
-    
     int enabledZones[9];
 }
 
@@ -38,11 +34,7 @@
 
 
 @property(nonatomic, retain) IBOutlet UIActivityIndicatorView * progress; 
-
-
 @property (nonatomic, retain)  NSMutableArray * zoneMap ;
-
-
 
 @property (nonatomic, retain) NSMutableArray *zoneArray ;
 @property (nonatomic, retain) NSMutableArray *oldZoneArray;
@@ -50,11 +42,7 @@
 
 @property (nonatomic, assign) id<ZoneViewControlerDeleate> zoneVCDelegate;
 
-//- (void)resetButtonImage;
 - (NSArray *)zoneSelectedList;
-
-
--(void) parseZoneStrings:(NSArray * )zoneStrings;
-
+- (void)parseZoneStrings:(NSArray *)zoneStrings;
 
 @end

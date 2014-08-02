@@ -3,7 +3,7 @@
 //  BlinkHD_ios
 //
 //  Created by Developer on 12/17/13.
-//  Copyright (c) 2013 eBuyNow eCommerce Limited. All rights reserved.
+//  Copyright (c) 2013 Hubble Connected Ltd. All rights reserved.
 //
 
 #define SENSITIVITY_MOTION_LOW      10
@@ -228,11 +228,11 @@
     [userDefaults synchronize];
 }
 
-/*
 #pragma mark - Sensitivity deletate
 
 - (void)reportSwitchValue:(BOOL)value andRowIndex:(NSInteger)rowIndex
 {
+    /*
     //valueSwitchs[rowIndex] = value;
     
     NSString *cmd = @"action=command&command=";
@@ -265,10 +265,12 @@
     }
     
     [self performSelectorInBackground:@selector(sendToServerTheCommand:) withObject:cmd];
+     */
 }
 
 - (void)reportChangedSettingsValue:(NSInteger)value atRow:(NSInteger)rowIndx
 {
+    /*
     //valueSettings[rowIndx] = value;
     NSString *cmd = @"action=command&command=";
     
@@ -316,54 +318,66 @@
     }
     
     [self performSelectorInBackground:@selector(sendToServerTheCommand:) withObject:cmd];
+     */
 }
 
 #pragma  mark - Sensitivity temperature cell delegate
 
 - (void)valueChangedTypeTemperaure:(BOOL)isFahrenheit // NOT need to receive
 {
+    /*
     self.sensitivityInfo.tempIsFahrenheit = isFahrenheit;
+     */
 }
 
 - (void)valueChangedTempLowValue:(NSInteger)tempValue
 {
+    /*
     self.sensitivityInfo.tempLowValue = tempValue;
     NSString *cmd = [NSString stringWithFormat:@"action=command&command=set_temp_lo_threshold&value=%d", tempValue];
     
     [self performSelectorInBackground:@selector(sendToServerTheCommand:) withObject:cmd];
     
     NSLog(@"%d", tempValue);
+     */
 }
 
 - (void)valueChangedTempLowOn:(BOOL)isOn
 {
+    /*
     self.sensitivityInfo.tempLowOn = isOn;
     NSString *cmd = [NSString stringWithFormat:@"action=command&command=set_temp_lo_enable&value=%d", isOn];
     
     [self performSelectorInBackground:@selector(sendToServerTheCommand:) withObject:cmd];
+     */
 }
 
 - (void)valueChangedTempHighValue:(NSInteger)tempValue
 {
+    /*
     self.sensitivityInfo.tempHighValue = tempValue;
     NSString *cmd = [NSString stringWithFormat:@"action=command&command=set_temp_hi_threshold&value=%d", tempValue];
     
     [self performSelectorInBackground:@selector(sendToServerTheCommand:) withObject:cmd];
     NSLog(@"%d", tempValue);
+     */
 }
 
 - (void)valueChangedTempHighOn:(BOOL)isOn
 {
+    /*
     self.sensitivityInfo.tempHighOn = isOn;
     NSString *cmd = [NSString stringWithFormat:@"action=command&command=set_temp_hi_enable&value=%d", isOn];
     
     [self performSelectorInBackground:@selector(sendToServerTheCommand:) withObject:cmd];
+     */
 }
 
 #pragma mark - Scheduler Delegate
 
 - (void)reportSchedulerSwitchState:(BOOL)state atRow:(NSInteger)rowIdx
 {
+    /*
     valueSchedulerSwitchs[rowIdx][0] = state;
     
     if (state == TRUE)
@@ -377,10 +391,12 @@
     
     //[self.tableView reloadSections:[NSIndexSet indexSetWithIndex:3] withRowAnimation:UITableViewRowAnimationAutomatic];
     [self.tableView reloadData];
+     */
 }
 
 - (void)reportByDaySwitchState:(BOOL)state atRow:(NSInteger)rowIdx
 {
+    /*
     valueSchedulerSwitchs[rowIdx][1] = state;
     
 //    if (state == TRUE)
@@ -396,12 +412,14 @@
     self.schedulingVC.everydayFlag = state;
     
     [self.schedulingVC.collectionViewMap reloadData];
+     */
 }
 
 #pragma mark - BMS_JSON Comm
 
 - (void)sendToServerTheCommand:(NSString *) command
 {
+    /*
     if (_jsonComm == nil)
     {
         self.jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
@@ -423,8 +441,8 @@
     {
         NSLog(@"SettingsVC - sendCommand failed responseDict = nil: %@", command);
     }
+     */
 }
-*/
 
 #pragma mark - Table view data source
 

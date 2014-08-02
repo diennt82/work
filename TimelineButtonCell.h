@@ -3,7 +3,7 @@
 //  BlinkHD_ios
 //
 //  Created by Developer on 12/20/13.
-//  Copyright (c) 2013 Smart Panda Ltd. All rights reserved.
+//  Copyright (c) 2013 Hubble Connected Ltd. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
@@ -16,10 +16,8 @@
 
 @interface TimelineButtonCell : UITableViewCell
 
-@property (retain, nonatomic) IBOutlet UIButton *timelineCellButtn;
-
-@property (assign, nonatomic) id<TimelineButtonCellDelegate> timelineBtnDelegate;
-
+@property (nonatomic, retain) IBOutlet UIButton *timelineCellButtn;
+@property (nonatomic, assign) id<TimelineButtonCellDelegate> timelineBtnDelegate;
 @property (nonatomic) NSInteger rowIndex;
 
 @end

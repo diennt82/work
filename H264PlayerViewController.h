@@ -3,7 +3,7 @@
 //  MBP_ios
 //
 //  Created by NxComm on 3/9/13.
-//  Copyright (c) 2013 eBuyNow eCommerce Limited. All rights reserved.
+//  Copyright (c) 2013 Hubble Connected Ltd. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
@@ -13,14 +13,15 @@
 #import <MonitorCommunication/MonitorCommunication.h>
 #import <AudioToolbox/AudioToolbox.h>
 
-#import "PlaylistInfo.h"
 #import "PlaybackViewController.h"
+#import "H264PlayerVCDelegate.h"
+#import "PlaylistInfo.h"
 #import "PlaylistCell.h"
 #import "H264PlayerListener.h"
 #import "PlayerCallbackHandler.h"
 #import "MelodyViewController.h"
-//for scrollHorizontalMenu
 #import "ScrollHorizontalMenu.h"
+
 //control panel menu
 #import "AudioOutStreamer.h"
 
@@ -51,12 +52,6 @@
 #define VIEW_NXCOMM_WOWZA @"nxcomm_wowza"
 
 #define LOCAL_VIDEO_STOPPED_UNEXPECTEDLY 0x1001
-
-@protocol H264PlayerVCDelegate <NSObject>
-
-- (void)stopStreamFinished: (CamChannel *)camChannel;
-
-@end
 
 @interface H264PlayerViewController: GAITrackedViewController
 <PlayerCallbackHandler, ScanForCameraNotifier, StunClientDelegate, MelodyVCDelegate, UIScrollViewDelegate, ScrollHorizontalMenuDelegate, AudioOutStreamerDelegate>

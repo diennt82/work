@@ -3,7 +3,7 @@
 //  BlinkHD_ios
 //
 //  Created by Developer on 12/20/13.
-//  Copyright (c) 2013 eBuyNow eCommerce Limited. All rights reserved.
+//  Copyright (c) 2013 Hubble Connected Ltd. All rights reserved.
 //
 
 #import <MonitorCommunication/MonitorCommunication.h>
@@ -22,20 +22,19 @@
 #import "NSString+UrlEncode.h"
 #import "define.h"
 
-#define TEST 0
-
 @interface TimelineViewController () <PlaybackDelegate>
 
 @property (nonatomic, retain) NSArray *aryDatePrefix;
 @property (nonatomic, retain) NSMutableArray *events;
 @property (nonatomic, retain) NSMutableArray *clipsInEachEvent;
 @property (nonatomic, retain) NSMutableArray *playlists;
-@property (nonatomic, retain) NSString *stringIntelligentMessage;
-@property (nonatomic, retain) NSString *stringCurrentDate;
-@property (nonatomic, retain) NSDate* currentDate;
-@property (nonatomic, retain) NSString *alertsString;
+@property (nonatomic, retain) NSDate *currentDate;
 @property (nonatomic, retain) BMS_JSON_Communication *jsonComm;
 @property (nonatomic, retain) NSTimer *timerRefreshData;
+
+@property (nonatomic, copy) NSString *stringIntelligentMessage;
+@property (nonatomic, copy) NSString *stringCurrentDate;
+@property (nonatomic, copy) NSString *alertsString;
 
 @property (nonatomic) NSInteger eventPage;
 @property (nonatomic) BOOL shouldLoadMore;
@@ -50,20 +49,11 @@
 
 #pragma mark - UIViewController methods
 
-- (id)initWithStyle:(UITableViewStyle)style
-{
-    self = [super initWithStyle:style];
-    if (self) {
-        // Custom initialization
-        self.title = @"Timeline";
-    }
-    return self;
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
+    self.title = @"Timeline";
     self.aryDatePrefix = [[NSArray alloc] initWithObjects:@"th", @"st", @"nd", @"rd",@"th",@"th", @"th", @"th", @"th", @"th",nil];
     [_aryDatePrefix release];
     
@@ -222,7 +212,7 @@
             NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
             [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
             [dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
-            NSDate *eventDate = [dateFormatter dateFromString:eventInfo.time_stamp]; //2013-12-31 07:38:35 +0000
+            NSDate *eventDate = [dateFormatter dateFromString:eventInfo.timeStamp]; //2013-12-31 07:38:35 +0000
             [dateFormatter release];
             
             NSTimeInterval diff = [self.currentDate timeIntervalSinceDate:eventDate];
@@ -303,18 +293,6 @@
             // work
             // 1. Deletes old data from database
             // 2. Inserts new data to database
-#if 0
-            NSCalendar *cal = [NSCalendar currentCalendar];
-            NSDateComponents *components = [cal components:( NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit ) fromDate:_currentDate];
-            
-            [components setHour:-24];
-            [components setMinute:0];
-            [components setSecond:0];
-            
-            NSDate *yesterday = [cal dateByAddingComponents:components toDate: _currentDate options:0];
-            
-            NSInteger limitedDate = [yesterday timeIntervalSince1970];
-#endif
             TimelineDatabase *mDatabase = [ TimelineDatabase getSharedInstance];
             [mDatabase deleteEventsForCamera:camChannel.profile.registrationID limitedDate:0];
             
@@ -323,36 +301,36 @@
             if ( events.count > 0 ) {
                 for (NSDictionary *event in events) {
                     EventInfo *eventInfo = [[EventInfo alloc] init];
-                    eventInfo.alert_name = [event objectForKey:@"alert_name"];
+                    eventInfo.alertName = [event objectForKey:@"alert_name"];
                     eventInfo.value      = [event objectForKey:@"value"];
-                    eventInfo.time_stamp = [event objectForKey:@"time_stamp"];
+                    eventInfo.timeStamp = [event objectForKey:@"time_stamp"];
                     eventInfo.alert      = [[event objectForKey:@"alert"] integerValue];
                     
-                    NSString * data_str1  = nil;
+                    NSString * dataStr1  = nil;
                     if (event[@"data"] != [NSNull null]) {
-                        NSArray  *data  = (NSArray *)event[@"data"] ;
+                        NSArray *data  = (NSArray *)event[@"data"] ;
                         NSError *error = nil;
                         NSData *jsonData = [NSJSONSerialization dataWithJSONObject:data options:NSJSONWritingPrettyPrinted error:&error];
                         
-                        data_str1 =  [jsonData base64EncodedString];
+                        dataStr1 =  [jsonData base64EncodedString];
                         //NSLog(@"datais: %@", data_str1);
                     }
                     
                     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
                     [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
                     [dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
-                    NSDate *eventDate = [dateFormatter dateFromString:eventInfo.time_stamp]; //2013-12-31 07:38:35 +0000
+                    NSDate *eventDate = [dateFormatter dateFromString:eventInfo.timeStamp]; //2013-12-31 07:38:35 +0000
                     [dateFormatter release];
                     
-                    NSString *event_id = event[@"id"];
+                    NSString *eventId = event[@"id"];
                     
                     int eventTimeInMs = [eventDate timeIntervalSince1970];
-                    int status =  [mDatabase saveEventWithId:event_id
+                    int status =  [mDatabase saveEventWithId:eventId
                                                   event_text:[event objectForKey:@"alert"]
                                                  event_value:eventInfo.value
-                                                  event_name:eventInfo.alert_name
+                                                  event_name:eventInfo.alertName
                                                     event_ts:eventTimeInMs
-                                                  event_data:data_str1
+                                                  event_data:dataStr1
                                                  camera_udid:camChannel.profile.registrationID
                                                     owner_id:userName];
                     if ( status == 0 ) {
@@ -486,9 +464,9 @@
         if ( events.count > 0 ) {
             for (NSDictionary *event in events) {
                 EventInfo *eventInfo = [[EventInfo alloc] init];
-                eventInfo.alert_name = [event objectForKey:@"alert_name"];
+                eventInfo.alertName = [event objectForKey:@"alert_name"];
                 eventInfo.value      = [event objectForKey:@"value"];
-                eventInfo.time_stamp = [event objectForKey:@"time_stamp"];
+                eventInfo.timeStamp = [event objectForKey:@"time_stamp"];
                 eventInfo.alert      = [[event objectForKey:@"alert"] integerValue];
                 
                 NSArray *clipsInEvent = [event objectForKey:@"data"];
@@ -1035,12 +1013,12 @@
         
         EventInfo *eventInfo = (EventInfo *)[_events objectAtIndex:indexPath.row];
         
-        cell.eventLabel.text = eventInfo.alert_name;
+        cell.eventLabel.text = eventInfo.alertName;
         
         NSDateFormatter *dateFormater = [[NSDateFormatter alloc] init];
         [dateFormater setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
         [dateFormater setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
-        NSDate *eventDate = [dateFormater dateFromString:eventInfo.time_stamp]; //2013-12-31 07:38:35 +0000
+        NSDate *eventDate = [dateFormater dateFromString:eventInfo.timeStamp]; //2013-12-31 07:38:35 +0000
         [dateFormater release];
         
         NSDateFormatter* df_local = [[NSDateFormatter alloc] init] ;
@@ -1166,10 +1144,11 @@
                 break;
             }
         }
-        [cell.ib_labelDayPremium setFont:[UIFont semiBold12Font]];
-        [cell.ib_labelPremium setFont:[UIFont bold20Font]];
-        cell.ib_labelPremium.textColor = [UIColor whiteColor];
-        cell.ib_labelDayPremium.textColor = [UIColor whiteColor];
+        
+        [cell.titleLabel setFont:[UIFont bold20Font]];
+        cell.titleLabel.textColor = [UIColor whiteColor];
+        [cell.subtitleLabel setFont:[UIFont semiBold12Font]];
+        cell.subtitleLabel.textColor = [UIColor whiteColor];
         
         return cell;
     }
@@ -1212,7 +1191,7 @@
             clipInfo.urlFile = urlFile;
             clipInfo.alertType = alertString;
             clipInfo.alertVal = event.value;
-            clipInfo.mac_addr = [Util strip_colon_fr_mac:_camChannel.profile.mac_address];
+            clipInfo.macAddr = [Util strip_colon_fr_mac:_camChannel.profile.mac_address];
             clipInfo.registrationID = _camChannel.profile.registrationID;
             
             playbackViewController.clipInfo = clipInfo;

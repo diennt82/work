@@ -3,31 +3,36 @@
 //  BlinkHD_ios
 //
 //  Created by Nxcomm Developer on 22/11/13.
-//  Copyright (c) 2013 eBuyNow eCommerce Limited. All rights reserved.
+//  Copyright (c) 2013 Hubble Connected Ltd. All rights reserved.
 //
-
-#define NUM_MELODY 6
 
 #import "MelodyViewController.h"
 #import <MonitorCommunication/MonitorCommunication.h>
 #import "define.h"
 #import "KISSMetricsAPI.h"
 
-#define GAI_CATEGORY    @"Melody view"
-
 @interface MelodyViewController ()
 {
     BOOL valueMelodiesMap[6];
-    UIFont *semiBoldFont, *regularFont;
 }
+
+@property (nonatomic, retain) IBOutlet UITableViewCell *cellMelody;
+@property (nonatomic, retain) IBOutlet UITableViewCell *cellMelody_land;
+@property (nonatomic, retain) IBOutlet UITableViewCell *cellMelody_iPad;
 
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *melodyTitle;
 @property (nonatomic, retain) IBOutlet UISwitch *musicSwitch;
 @property (nonatomic, retain) NSArray *melodies;
 
+@property (nonatomic, retain) UIFont *semiBoldFont;
+@property (nonatomic, retain) UIFont *regularFont;
+
 @end
 
 @implementation MelodyViewController
+
+#define GAI_CATEGORY @"Melody view"
+#define NUM_MELODY 6
 
 #pragma mark - UIViewController methods
 
@@ -44,7 +49,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
     
     NSString *mel1 = LocStr(@"melody_I");
     NSString *mel2 = LocStr(@"melody_II");
@@ -52,17 +56,16 @@
     NSString *mel4 = LocStr(@"melody_IV");
     NSString *mel5 = LocStr(@"melody_V");
                             
-    //if (self.selectedChannel.profile.modelID == 6) // SharedCam
-    if ([self isSharedCam:self.selectedChannel.profile.registrationID]) {
+    if ([self isSharedCam:_selectedChannel.profile.registrationID]) {
         // SharedCam
         NSString *mel6 = LocStr(@"melody_VI");
         
         //All Melodies
-        self.melodies = [[NSArray alloc] initWithObjects:mel1,mel2,mel3,mel4, mel5, mel6,nil];
+        self.melodies = @[mel1, mel2, mel3, mel4, mel5, mel6];
     }
     else {
         // Expect CameraHD
-        self.melodies = [[NSArray alloc] initWithObjects:mel1,mel2,mel3,mel4, mel5,nil];
+        self.melodies = @[mel1, mel2, mel3, mel4, mel5];
     }
     
     [_melodies release];
@@ -78,22 +81,23 @@
 
 - (void)updateUIMelody:(NSInteger)playingIndex
 {
-    if (playingIndex == -1)
+    if (playingIndex == -1) {
         return;
+    }
     valueMelodiesMap[playingIndex] = YES;
     [self.melodyTableView reloadData];
 }
 
-- (void)setMelodyState_fg:(NSInteger)melodyIndex
+- (void)setMelodyState:(NSInteger)melodyIndex
 {
     self.melodyIndex = melodyIndex - 1;
     
     if (melodyIndex == 0) {
-        [self.musicSwitch setOn:FALSE];
+        _musicSwitch.on = NO;
     }
     else {
-        [self.musicSwitch setOn:TRUE];
-        [self.melodyTableView reloadData];
+        _musicSwitch.on = YES;
+        [_melodyTableView reloadData];
     }
 }
 
@@ -101,18 +105,18 @@
 
 - (void)loadFont
 {
-    if (isiPhone5) {
-        semiBoldFont = [UIFont applyHubbleFontName:PN_SEMIBOLD_FONT withSize:19];
-        regularFont = [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:19];
+    if ( isiPhone5 ) {
+        self.semiBoldFont = [UIFont applyHubbleFontName:PN_SEMIBOLD_FONT withSize:19];
+        self.regularFont = [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:19];
     }
     else if (isiPhone4) {
-        semiBoldFont = [UIFont applyHubbleFontName:PN_SEMIBOLD_FONT withSize:17];
-        regularFont = [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:17];
+        self.semiBoldFont = [UIFont applyHubbleFontName:PN_SEMIBOLD_FONT withSize:17];
+        self.regularFont = [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:17];
     }
     else {
         //maybe iPad
-        semiBoldFont = [UIFont applyHubbleFontName:PN_SEMIBOLD_FONT withSize:30];
-        regularFont = [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:30];
+        self.semiBoldFont = [UIFont applyHubbleFontName:PN_SEMIBOLD_FONT withSize:30];
+        self.regularFont = [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:30];
     }
 }
 
@@ -123,11 +127,10 @@
             return YES;
         }
     }
-    
     return NO;
 }
 
-- (void)setMelodyStatus_fg: (NSNumber *)melodyIndex
+- (void)setMelodyStatus:(NSNumber *)melodyIndex
 {
     NSInteger melodyIdx = [melodyIndex integerValue];
     
@@ -135,20 +138,20 @@
     if (melodyIdx == 0 ) {
         //mute
 		command = @"melodystop";
-		[self.musicSwitch setOn:FALSE];
+		[_musicSwitch setOn:NO];
 	}
 	else {
 		command = [NSString stringWithFormat:@"melody%d", melodyIdx];
-		[self.musicSwitch setOn:TRUE];
+		[_musicSwitch setOn:YES];
         
 	}
     
     [self.melodyVcDelegate setMelodyWithIndex:melodyIdx];
     
-    if (self.selectedChannel.profile .isInLocal == TRUE) {
+    if ( _selectedChannel.profile.isInLocal ) {
         HttpCommunication *httpCommunication = [[HttpCommunication alloc] init];
-        httpCommunication.device_ip = self.selectedChannel.profile.ip_address;
-        httpCommunication.device_port = self.selectedChannel.profile.port;
+        httpCommunication.device_ip = _selectedChannel.profile.ip_address;
+        httpCommunication.device_port = _selectedChannel.profile.port;
         
         [httpCommunication sendCommandAndBlock_raw:command];
         [httpCommunication release];
@@ -170,7 +173,7 @@
         [jsonCommunication release];
     }
     
-    [self.melodyTableView reloadData];
+    [_melodyTableView reloadData];
 }
 
 #pragma mark - Action
@@ -186,8 +189,8 @@
     UISwitch *aSwtich = (UISwitch *)sender;
     if (!aSwtich.isOn) {
         self.melodyIndex = -1;
-        [self.melodyTableView reloadData];
-        [self setMelodyStatus_fg:[NSNumber numberWithInteger:_melodyIndex + 1]];
+        [_melodyTableView reloadData];
+        [self setMelodyStatus:[NSNumber numberWithInteger:_melodyIndex + 1]];
     }
 }
 
@@ -195,25 +198,22 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	//return _melodies.count;
     return 1;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    //tableView.separatorColor = [UIColor clearColor];
     [tableView setBackgroundColor:[UIColor clearColor]];
-	//return 1;
     return _melodies.count;
 }
 
 -(void) tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (isPhoneLandscapeMode) {
-        cell.alpha = 0.6; //0.6;
+        cell.alpha = 0.6;
     }
     else {
-        cell.alpha = 1.0; //1.0;
+        cell.alpha = 1.0;
     }
 }
 
@@ -226,8 +226,8 @@
         cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         if (cell == nil) {
             [[NSBundle mainBundle] loadNibNamed:@"CellMelody_land" owner:self options:nil];
-            cell = cellMelody_land;
-            cellMelody_land = nil;
+            cell = _cellMelody_land;
+            _cellMelody_land = nil;
         }
         cell.backgroundColor = [UIColor cellMelodyColor];
         
@@ -238,12 +238,12 @@
         //update font
         ((CellMelody *)cell).labelCellMelody.textColor = [UIColor blackColor];
         if ( valueMelodiesMap[indexPath.section] ) {
-            ((CellMelody *)cell).labelCellMelody.font = semiBoldFont;
-            ((CellMelody *)cell).imageCellMelody.image = [UIImage imageNamed:@"camera_action_pause.png"];;
+            ((CellMelody *)cell).labelCellMelody.font = _semiBoldFont;
+            ((CellMelody *)cell).imageCellMelody.image = [UIImage imageNamed:@"camera_action_pause"];;
         }
         else {
-            ((CellMelody *)cell).labelCellMelody.font = regularFont;
-            ((CellMelody *)cell).imageCellMelody.image = [UIImage imageNamed:@"camera_action_play.png"];
+            ((CellMelody *)cell).labelCellMelody.font = _regularFont;
+            ((CellMelody *)cell).imageCellMelody.image = [UIImage imageNamed:@"camera_action_play"];
         }
     }
     else {
@@ -253,8 +253,8 @@
             cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
             if (cell == nil) {
                 [[NSBundle mainBundle] loadNibNamed:@"CellMelody_Portrait_iPad" owner:self options:nil];
-                cell = cellMelody_iPad;
-                cellMelody_iPad = nil;
+                cell = _cellMelody_iPad;
+                _cellMelody_iPad = nil;
             }
         }
         else {
@@ -263,24 +263,23 @@
             cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
             if (cell == nil) {
                 [[NSBundle mainBundle] loadNibNamed:@"CellMelody" owner:self options:nil];
-                cell = cellMelody;
-                cellMelody = nil;
+                cell = _cellMelody;
+                _cellMelody = nil;
             }
         }
 
         cell.backgroundColor = [UIColor clearColor];
-        // Configure the cell...
-        ((CellMelody *)cell).labelCellMelody.text = (NSString *) [_melodies objectAtIndex:indexPath.section];
-        
+
+        ((CellMelody *)cell).labelCellMelody.text = (NSString *)_melodies[indexPath.section];
         
         //update font
         ((CellMelody *)cell).labelCellMelody.textColor = [UIColor blackColor];
         if ( valueMelodiesMap[indexPath.section] ) {
-            ((CellMelody *)cell).labelCellMelody.font = semiBoldFont;
+            ((CellMelody *)cell).labelCellMelody.font = _semiBoldFont;
             ((CellMelody *)cell).imageCellMelody.image = [UIImage imageCameraActionPause];;
         }
         else {
-            ((CellMelody *)cell).labelCellMelody.font = regularFont;
+            ((CellMelody *)cell).labelCellMelody.font = _regularFont;
             ((CellMelody *)cell).imageCellMelody.image = [UIImage imageCameraActionPlay];
         }
     }
@@ -327,7 +326,7 @@
         _melodyIndex = -1;
     }
     
-	[self performSelector:@selector(setMelodyStatus_fg:)
+	[self performSelector:@selector(setMelodyStatus:)
                withObject:[NSNumber numberWithInt:(_melodyIndex + 1)]
                afterDelay:0.1];
 }

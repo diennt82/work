@@ -3,7 +3,7 @@
 //  BlinkHD_ios
 //
 //  Created by Developer on 2/11/14.
-//  Copyright (c) 2014 eBuyNow eCommerce Limited. All rights reserved.
+//  Copyright (c) 2014 Hubble Connected Ltd. All rights reserved.
 //
 
 #import "CameraMenuViewController.h"
@@ -40,13 +40,21 @@
 #define ENABLE_CHANGE_IMAGE 0
 
 @interface CameraMenuViewController () <UITableViewDataSource, UITableViewDelegate,SensitivityCellDelegate,SensitivityTemperaureCellDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
-{
-    int intTableSectionStatus; // 0 No open, 1 = 0 section open , 2 = 1 section open
-    
-    IBOutlet UIView *vwSnapshot;
-    IBOutlet UIImageView *imgVSnapshot;
-    IBOutlet UIButton *btnSnapshotRefresh,*btnSnapshotOK;
-}
+
+@property (nonatomic, retain) IBOutlet UITableView *tableViewSettings;
+@property (nonatomic, retain) IBOutlet UIButton *btnRmoveCamera;
+@property (nonatomic, retain) IBOutlet UIView *viewProgress;
+@property (nonatomic, retain) IBOutlet UIView *vwHeaderCamDetail,*vwHeaderNotSens;
+
+@property (nonatomic, assign) IBOutlet UIView *vwSnapshot;
+@property (nonatomic, assign) IBOutlet UIImageView *imgVSnapshot;
+@property (nonatomic, assign) IBOutlet UIButton *btnSnapshotRefresh,*btnSnapshotOK;
+
+@property (nonatomic, retain) UIImage *imageSelected;
+@property (nonatomic, retain) UIAlertView *alertViewRename;
+
+@property (nonatomic, retain) SensitivityInfo *sensitivityInfo;
+@property (nonatomic, retain) BMS_JSON_Communication *jsonComm;
 
 @property (nonatomic, copy) NSString *selectedReg;
 @property (nonatomic, copy) NSString *sensitivityMessage;
@@ -54,16 +62,7 @@
 @property (nonatomic, copy) NSString *stringFW_Version;
 @property (nonatomic, copy) NSString *apiKey;
 
-@property (nonatomic, retain) SensitivityInfo *sensitivityInfo;
-@property (nonatomic, retain) BMS_JSON_Communication *jsonComm;
-
-@property (nonatomic, retain) IBOutlet UITableView *tableViewSettings;
-@property (nonatomic, retain) IBOutlet UIButton *btnRmoveCamera;
-@property (nonatomic, retain) IBOutlet UIView *viewProgress;
-@property (nonatomic, retain) IBOutlet UIView *vwHeaderCamDetail,*vwHeaderNotSens;
-
-@property (nonatomic, retain) UIImage *imageSelected;
-@property (nonatomic, retain) UIAlertView *alertViewRename;
+@property (nonatomic, assign) int intTableSectionStatus; // 0 No open, 1 = 0 section open , 2 = 1 section open
 
 @property (nonatomic) BOOL isLoading;
 @property (nonatomic) BOOL isChangingName;
@@ -74,20 +73,12 @@
 
 #pragma mark - ViewController methods
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-        self.title = @"Camera Settings";
-    }
-    return self;
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    intTableSectionStatus = 0;
+    
+    self.title = @"Camera Settings";
+    self.intTableSectionStatus = 0;
     
     self.tableViewSettings.delegate = self;
     self.tableViewSettings.dataSource = self;
@@ -116,9 +107,9 @@
     }
     
     //Snapshot View
-    vwSnapshot.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-    vwSnapshot.hidden = YES;
-    [self.view addSubview:vwSnapshot];
+    _vwSnapshot.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+    _vwSnapshot.hidden = YES;
+    [self.view addSubview:_vwSnapshot];
     
     UIBarButtonItem *removeCamButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash
                                                                                      target:self
@@ -349,15 +340,15 @@
     
     return 45;*/
     
-    if (intTableSectionStatus==0) {
+    if ( _intTableSectionStatus == 0 ) {
         return 0;
     }
     else {
-        if (indexPath.section==0 && intTableSectionStatus==1) {
+        if (indexPath.section == 0 && _intTableSectionStatus == 1) {
             return 198;
         }
-        else if (indexPath.section==1 && intTableSectionStatus==2) {
-            if (indexPath.row==0 || indexPath.row==1) {
+        else if (indexPath.section == 1 && _intTableSectionStatus == 2) {
+            if (indexPath.row == 0 || indexPath.row == 1) {
                 return 120;
             }
             else {
@@ -855,11 +846,11 @@
 
 - (IBAction)btnCameraDetailPressed:(id)sender
 {
-    if (intTableSectionStatus!=1) {
-        intTableSectionStatus = 1;
+    if ( _intTableSectionStatus != 1 ) {
+        self.intTableSectionStatus = 1;
     }
     else {
-        intTableSectionStatus = 0;
+        self.intTableSectionStatus = 0;
     }
     [self.tableViewSettings beginUpdates];
     [self.tableViewSettings reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, 1)] withRowAnimation:UITableViewRowAnimationAutomatic];
@@ -872,11 +863,11 @@
         return;
     }
     
-    if (intTableSectionStatus!=2) {
-        intTableSectionStatus = 2;
+    if ( _intTableSectionStatus != 2) {
+        self.intTableSectionStatus = 2;
     }
     else {
-        intTableSectionStatus = 0;
+        self.intTableSectionStatus = 0;
     }
     
     //[self.tableViewSettings reloadData];
@@ -884,7 +875,7 @@
     [self.tableViewSettings reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, 1)] withRowAnimation:UITableViewRowAnimationAutomatic];
     [self.tableViewSettings endUpdates];
     
-    if (intTableSectionStatus==2) {
+    if ( _intTableSectionStatus == 2 ) {
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         [hud setLabelText:@"Loading..."];
         [self performSelector:@selector(getSensitivityInfoFromServer) withObject:nil afterDelay:0.1];
@@ -1164,10 +1155,10 @@
 
 - (void)openViewForSetCameraFromURL
 {
-    vwSnapshot.alpha = 0.0;
-    vwSnapshot.hidden = NO;
+    _vwSnapshot.alpha = 0.0;
+    _vwSnapshot.hidden = NO;
     [UIView animateWithDuration:0.3 animations:^{
-        vwSnapshot.alpha = 1.0;
+        _vwSnapshot.alpha = 1.0;
     }];
     
     [self btnSnapshotRefreshPressed:nil];
@@ -1175,15 +1166,15 @@
 
 - (IBAction)btnSnapshotRefreshPressed:(id)sender
 {
-    imgVSnapshot.animationImages =[NSArray arrayWithObjects:
+    _imgVSnapshot.animationImages =[NSArray arrayWithObjects:
                                    [UIImage imageNamed:@"loader_big_a"],
                                    [UIImage imageNamed:@"loader_big_b"],
                                    [UIImage imageNamed:@"loader_big_c"],
                                    [UIImage imageNamed:@"loader_big_d"],
                                    [UIImage imageNamed:@"loader_big_e"],
                                    nil];
-    imgVSnapshot.animationDuration = 1.5;
-    [imgVSnapshot startAnimating];
+    _imgVSnapshot.animationDuration = 1.5;
+    [_imgVSnapshot startAnimating];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
         NSString *strURL = [self getSnapImageFromCamera];
@@ -1193,9 +1184,9 @@
         
         NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:strURL]];
         dispatch_async(dispatch_get_main_queue(), ^{
-            [imgVSnapshot stopAnimating];
+            [_imgVSnapshot stopAnimating];
             self.imageSelected = [UIImage imageWithData:data];
-            imgVSnapshot.image = _imageSelected;
+            _imgVSnapshot.image = _imageSelected;
         });
     });
 }
@@ -1204,10 +1195,10 @@
 {
     [UIView animateWithDuration:0.3
                      animations:^{
-                         vwSnapshot.alpha = 0.0;
+                         _vwSnapshot.alpha = 0.0;
                      }
                      completion:^(BOOL finished) {
-                         vwSnapshot.hidden = YES;
+                         _vwSnapshot.hidden = YES;
                      }
      ];
     
@@ -1284,7 +1275,7 @@
         NSString *body = [[responseDict[@"data"] objectForKey:@"device_response"] objectForKey:@"body"];
         if ( [body hasPrefix:@"error"] ) {
             //numOfRows[indexPath.section] = 2;
-            intTableSectionStatus=0;
+            self.intTableSectionStatus = 0;
             self.sensitivityMessage = body;
         }
         else {
@@ -1333,21 +1324,21 @@
             }
             else {
                 //numOfRows[indexPath.section] = 2;
-                intTableSectionStatus=0;
+                self.intTableSectionStatus = 0;
                 self.sensitivityMessage = @"Error -Load Sensitivity Settings!";
             }
         }
     }
     else {
         //numOfRows[indexPath.section] = 2;
-        intTableSectionStatus=0;
+        self.intTableSectionStatus=0;
         self.sensitivityMessage = @"Error -Load Sensitivity Settings error!";
     }
     
     [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
     [self.tableViewSettings reloadData];
     
-    if (intTableSectionStatus==0) {
+    if ( _intTableSectionStatus == 0 ) {
         MBProgressHUD *showError = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         [showError setLabelText:self.sensitivityMessage];
         [showError setMode:MBProgressHUDModeText];

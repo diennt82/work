@@ -3,7 +3,7 @@
 //  BlinkHD_ios
 //
 //  Created by Developer on 2/11/14.
-//  Copyright (c) 2014 eBuyNow eCommerce Limited. All rights reserved.
+//  Copyright (c) 2014 Hubble Connected Ltd. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>

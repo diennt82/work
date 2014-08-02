@@ -3,7 +3,7 @@
 //  BlinkHD_ios
 //
 //  Created by Jason Lee on 30/12/13.
-//  Copyright (c) 2013 Smart Panda Ltd. All rights reserved.
+//  Copyright (c) 2013 Hubble Connected Ltd. All rights reserved.
 //
 
 #import "CreateBLEConnection_VController.h"

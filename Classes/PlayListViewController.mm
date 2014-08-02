@@ -3,12 +3,13 @@
 //  MBP_ios
 //
 //  Created by NxComm on 6/9/13.
-//  Copyright (c) 2013 eBuyNow eCommerce Limited. All rights reserved.
+//  Copyright (c) 2013 Hubble Connected Limited. All rights reserved.
 //
 
 #import "PlayListViewController.h"
-#import "PlaylistInfo.h"
 #import "PlaybackViewController.h"
+#import "PlaylistCell.h"
+#import "PlaylistInfo.h"
 
 @interface PlayListViewController ()
 

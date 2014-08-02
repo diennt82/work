@@ -3,7 +3,7 @@
 //  BlinkHD_ios
 //
 //  Created by Developer on 12/16/13.
-//  Copyright (c) 2013 eBuyNow eCommerce Limited. All rights reserved.
+//  Copyright (c) 2013 Hubble Connected Ltd. All rights reserved.
 //
 
 #import "CamerasViewController.h"
@@ -19,24 +19,25 @@
 #import "UIDeviceHardware.h"
 #import "MBP_iosViewController.h"
 
+@interface CamerasViewController () <H264PlayerVCDelegate, CamerasCellDelegate, AddCameraVCDelegate, UIAlertViewDelegate>
+
+@property (nonatomic, retain) NSArray *snapshotImages;
+@property (nonatomic, copy) NSString *strDocDirPath;
+@property (nonatomic) BOOL isFirttime;
+
+@end
+
+@implementation CamerasViewController
+
 #define MAX_CAM_ALLOWED 4
 #define CAMERA_TAG_66 566
 #define CAMERA_TAG_83 583 //83/ 836
 #define CAMERA_STATUS_OFFLINE   -1
 #define CAMERA_STATUS_UPGRADING  0
 #define CAMERA_STATUS_ONLINE     1
+#define DIALOG_CANT_ADD_CAM 955
 
-@interface CamerasViewController () <H264PlayerVCDelegate, CamerasCellDelegate, AddCameraVCDelegate, UIAlertViewDelegate>
-{
-    NSString *strDocDirPath;
-}
-
-@property (nonatomic, retain) NSArray *snapshotImages;
-@property (nonatomic) BOOL isFirttime;
-
-@end
-
-@implementation CamerasViewController
+#pragma mark - Initialization methods
 
 - (id)initWithDelegate:(id<ConnectionMethodDelegate>)delegate parentVC:(id)parentVC
 {
@@ -58,6 +59,8 @@
     return self;
 }
 
+#pragma mark - UIViewController methods
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -68,7 +71,7 @@
     self.snapshotImages = @[@"mountain", @"garden", @"desk", @"bridge"];
     
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    strDocDirPath = [[paths firstObject] retain];
+    self.strDocDirPath = [paths firstObject];
         
     // Setup a table refresh control
     UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
@@ -94,7 +97,7 @@
         // We have a camera to view... so show it!
         NSString *camRegID = [userDefaults objectForKey:REG_ID];
         CamChannel *ch = nil;
-        for ( CamChannel *obj in self.camChannels ) {
+        for ( CamChannel *obj in _camChannels ) {
             if ( [obj.profile.registrationID isEqualToString:camRegID] ) {
                 ch = obj;
                 break;
@@ -131,7 +134,7 @@
 - (void)sendTouchSettingsActionWithRowIndex:(NSInteger)rowIdx
 {
     CameraMenuViewController *cameraMenuCV = [[CameraMenuViewController alloc] init];
-    cameraMenuCV.camChannel = (CamChannel *)[self.camChannels objectAtIndex:rowIdx];
+    cameraMenuCV.camChannel = (CamChannel *)_camChannels[rowIdx];
     
     MenuViewController *menuVC = (MenuViewController *)self.parentVC;
     cameraMenuCV.cameraMenuDelegate = menuVC.menuDelegate;
@@ -145,7 +148,7 @@
 - (void)continueWithAddCameraAction
 {
     MenuViewController *menuViewController = (MenuViewController *)self.parentVC;
-    menuViewController.notUpdateCameras = FALSE;
+    menuViewController.notUpdateCameras = NO;
     [menuViewController.menuDelegate sendStatus:SETUP_CAMERA]; //initial setup
 }
 
@@ -161,7 +164,7 @@
 
 - (void)stopStreamFinished:(CamChannel *)camChannel
 {
-    for (CamChannel *obj in self.camChannels) {
+    for (CamChannel *obj in _camChannels) {
         if ([obj.profile.mac_address isEqualToString:camChannel.profile.mac_address]) {
             obj.waitingForStreamerToClose = NO;
         }
@@ -183,7 +186,7 @@
 
 - (void)updateCameraInfo
 {
-    if (self.isViewLoaded && self.view.window) {
+    if ( self.isViewLoaded && self.view.window ) {
         [self.parentVC refreshCameraList];
         [self.tableView reloadData];
     }
@@ -217,7 +220,7 @@
     }
     else {
         MenuViewController *menuViewController = (MenuViewController *)self.parentVC;
-        menuViewController.notUpdateCameras = TRUE;
+        menuViewController.notUpdateCameras = YES;
         
         //IF this is Iphone4 - Go directly to WIFI setup , as there is no BLE on IPHON4
         NSString *platformString = [UIDeviceHardware platformString];
@@ -228,7 +231,7 @@
             NSLog(@"**** IPHONE 4  / IPAD 2 *** use wifi setup for all");
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
             [userDefaults setInteger:WIFI_SETUP forKey:SET_UP_CAMERA];
-            [userDefaults setBool:FALSE forKey:FIRST_TIME_SETUP];
+            [userDefaults setBool:NO forKey:FIRST_TIME_SETUP];
             [userDefaults synchronize];
             
             [menuViewController dismissViewControllerAnimated:NO completion:^{
@@ -357,7 +360,7 @@
         camerasCell.backgroundColor = [UIColor blackColor];
         
         CamChannel *ch = (CamChannel *)[_camChannels objectAtIndex:indexPath.row];
-        NSString *strPath = [strDocDirPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.jpg",ch.profile.registrationID]];
+        NSString *strPath = [_strDocDirPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.jpg",ch.profile.registrationID]];
         
         UIImage *img = [UIImage imageWithContentsOfFile:strPath];
         if (img) {
@@ -437,7 +440,7 @@
             }
         }
         else {
-            ch.profile.isSelected = TRUE;
+            ch.profile.isSelected = YES;
             
             [CameraAlert clearAllAlertForCamera:ch.profile.mac_address];
             [UIApplication sharedApplication].idleTimerDisabled = YES;
@@ -461,6 +464,7 @@
 - (void)dealloc
 {
     [_camChannels release];
+    [_strDocDirPath release];
     [super dealloc];
 }
 

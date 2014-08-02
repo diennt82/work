@@ -3,14 +3,11 @@
  *  MBP_ios
  *
  *  Created by NxComm on 4/24/12.
- *  Copyright 2012 Smart Panda Ltd. All rights reserved.
+ *  Copyright 2012 Hubble Connected Ltd. All rights reserved.
  *
  */
 
-
 #import <UIKit/UIKit.h>
-
-
 
 /// sendStatus:
 #define SETUP_CAMERA            1
@@ -25,8 +22,10 @@
 #define SCAN_BONJOUR_CAMERA     9
 
 #define SHOW_CAMERA_LIST        10
-#define SHOW_CAMERA_LIST2      11
+#define SHOW_CAMERA_LIST2       11
 
 @protocol ConnectionMethodDelegate
-- (void)sendStatus:(int) status;
+
+- (void)sendStatus:(int)status;
+
 @end

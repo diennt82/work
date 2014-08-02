@@ -3,7 +3,7 @@
 //  MBP_ios
 //
 //  Created by NxComm on 7/25/12.
-//  Copyright (c) 2012 eBuyNow eCommerce Limited. All rights reserved.
+//  Copyright (c) 2012 Hubble Connected Ltd. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
@@ -17,7 +17,7 @@
     IBOutlet UITableView * mTableView;
 }
 
-@property (nonatomic, retain) NSMutableArray * listOfWifi;
+@property (nonatomic, retain) NSMutableArray *listOfWifi;
 @property (nonatomic, assign) IBOutlet UITableViewCell *cellView;
 
 @end

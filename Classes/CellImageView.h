@@ -3,14 +3,14 @@
 //  BlinkHD_ios
 //
 //  Created by Developer on 12/21/13.
-//  Copyright (c) 2013 Smart Panda Ltd. All rights reserved.
+//  Copyright (c) 2013 Hubble Connected Ltd. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 
 @protocol CellImageViewDelegate <NSObject>
 
-- (void)tapOnImageAtRow: (NSInteger)row lolumn: (NSInteger)col state: (BOOL)selected;
+- (void)tapOnImageAtRow:(NSInteger)row column:(NSInteger)col state:(BOOL)selected;
 
 @end
 

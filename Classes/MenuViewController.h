@@ -3,15 +3,13 @@
 //  BlinkHD_ios
 //
 //  Created on 12/16/13.
-//  Copyright (c) 2013 eBuyNow eCommerce Limited. All rights reserved.
+//  Copyright (c) 2013 Hubble Connected Ltd. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 #import "ConnectionMethodDelegate.h"
 #import "CamerasViewController.h"
 #import "SettingsViewController.h"
-
-#define DIALOG_CANT_ADD_CAM 955
 
 @protocol MenuViewControllerDelegate <NSObject>
 
@@ -28,7 +26,7 @@
 @property (nonatomic, assign) id<ConnectionMethodDelegate>menuDelegate;
 @property (nonatomic) BOOL notUpdateCameras;
 
-- (id)initWithNibName:(NSString *)nibNameOrNil withConnDelegate:(id<ConnectionMethodDelegate>)caller;
+- (id)initWithNibName:(NSString *)nibNameOrNil withConnDelegate:(id<ConnectionMethodDelegate>)delegate;
 - (void)refreshCameraList;
 
 @end

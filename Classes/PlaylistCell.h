@@ -3,15 +3,16 @@
 //  MBP_ios
 //
 //  Created by NxComm on 6/9/13.
-//  Copyright (c) 2013 Smart Panda Ltd. All rights reserved.
+//  Copyright (c) 2013 Hubble Connected Ltd. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 
 @interface PlaylistCell : UITableViewCell
 
-@property (retain, nonatomic) IBOutlet UIImageView *imgViewSnapshot;
-@property (retain, nonatomic) IBOutlet UILabel *labelTitle;
-@property (retain, nonatomic) IBOutlet UILabel *labelDate;
-@property (retain, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
+@property (nonatomic, retain) IBOutlet UIImageView *imgViewSnapshot;
+@property (nonatomic, retain) IBOutlet UILabel *labelTitle;
+@property (nonatomic, retain) IBOutlet UILabel *labelDate;
+@property (nonatomic, retain) IBOutlet UIActivityIndicatorView *activityIndicator;
+
 @end

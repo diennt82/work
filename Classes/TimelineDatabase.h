@@ -3,7 +3,7 @@
 //  BlinkHD_ios
 //
 //  Created by Admin on 24/4/14.
-//  Copyright (c) 2014 eBuyNow eCommerce Limited. All rights reserved.
+//  Copyright (c) 2014 Hubble Connected Ltd. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>

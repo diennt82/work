@@ -3,7 +3,7 @@
 //  BlinkHD_ios
 //
 //  Created by openxcell on 5/19/14.
-//  Copyright (c) 2014 eBuyNow eCommerce Limited. All rights reserved.
+//  Copyright (c) 2014 Hubble Connected Ltd. All rights reserved.
 //
 
 #import "CameraDetailCell.h"

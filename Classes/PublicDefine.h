@@ -149,8 +149,8 @@
 #define HOST_SSID   @"host_ssid"
 #define HOST_ROUTER @"host_router"
 
-#define _OfflineMode @"offlineMode"
-#define _AutoLogin @"shouldAutoLoginIfPossible"
+#define OFFLINE_MODE_KEY @"offlineMode"
+#define AUTO_LOGIN_KEY @"shouldAutoLoginIfPossible"
 
 #define CAM_IN_VEW      @"string_Camera_Mac_Being_Viewed"
 #define HANDLE_PN @"HANDLE_PN_NOW"

@@ -3,7 +3,7 @@
 //  MBP_ios
 //
 //  Created by NxComm on 9/26/11.
-//  Copyright 2011 eBuyNow eCommerce Limited. All rights reserved.
+//  Copyright 2011 Hubble Connected Ltd. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>

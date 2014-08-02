@@ -3,7 +3,7 @@
 //  BlinkHD_ios
 //
 //  Created by Developer on 12/17/13.
-//  Copyright (c) 2013 eBuyNow eCommerce Limited. All rights reserved.
+//  Copyright (c) 2013 Hubble Connected Ltd. All rights reserved.
 //
 
 #import "NotifViewController.h"
@@ -28,6 +28,9 @@
 
 @property (nonatomic, retain) NSDictionary *event;
 @property (nonatomic, retain) NSMutableArray *clipsInEvent;
+@property (nonatomic, retain) BMS_JSON_Communication *jsonComm;
+
+@property (nonatomic) BOOL isBackgroundTaskRunning;
 @property (nonatomic) BOOL eventsListAlready;
 @property (nonatomic) BOOL isFreeUser;
 @property (nonatomic) BOOL isReturnFrmPlayback;
@@ -47,62 +50,62 @@
                                     options:nil];
     }
     
-    [self.playEnventBtn setImage:[UIImage imageNamed:@"alert_play"] forState:UIControlStateNormal];
-    [self.playEnventBtn setImage:[UIImage imageNamed:@"alert_play_pressed"] forState:UIControlEventTouchDown];
+    [_playEnventBtn setImage:[UIImage imageNamed:@"alert_play"] forState:UIControlStateNormal];
+    [_playEnventBtn setImage:[UIImage imageNamed:@"alert_play_pressed"] forState:UIControlEventTouchDown];
     
-    //[self layoutImageAndTextForButton:self.playEnventBtn];
+    //[self layoutImageAndTextForButton:_playEnventBtn];
     
     
-    [self.goToCameraBtn setImage:[UIImage imageNamed:@"alert_camera"] forState:UIControlStateNormal];
-    [self.goToCameraBtn setImage:[UIImage imageNamed:@"alert_camera_pressed"] forState:UIControlEventTouchDown];
+    [_goToCameraBtn setImage:[UIImage imageNamed:@"alert_camera"] forState:UIControlStateNormal];
+    [_goToCameraBtn setImage:[UIImage imageNamed:@"alert_camera_pressed"] forState:UIControlEventTouchDown];
     
-    //[self layoutImageAndTextForButton:self.goToCameraBtn];
+    //[self layoutImageAndTextForButton:_goToCameraBtn];
     
-    [self.changeSettingsBtn setImage:[UIImage imageNamed:@"alert_settings"] forState:UIControlStateNormal];
-    [self.changeSettingsBtn setImage:[UIImage imageNamed:@"alert_settings_pressed"] forState:UIControlEventTouchDown];
+    [_changeSettingsBtn setImage:[UIImage imageNamed:@"alert_settings"] forState:UIControlStateNormal];
+    [_changeSettingsBtn setImage:[UIImage imageNamed:@"alert_settings_pressed"] forState:UIControlEventTouchDown];
     
-    //[self layoutImageAndTextForButton:self.changeSettingsBtn];
+    //[self layoutImageAndTextForButton:_changeSettingsBtn];
     
-    [self.choosePlanBtn setImage:[UIImage imageNamed:@"alert_upgrade"] forState:UIControlStateNormal];
-    [self.choosePlanBtn setImage:[UIImage imageNamed:@"alert_upgrade_pressed"] forState:UIControlEventTouchDown];
+    [_choosePlanBtn setImage:[UIImage imageNamed:@"alert_upgrade"] forState:UIControlStateNormal];
+    [_choosePlanBtn setImage:[UIImage imageNamed:@"alert_upgrade_pressed"] forState:UIControlEventTouchDown];
     
-    //[self layoutImageAndTextForButton:self.choosePlanBtn];
+    //[self layoutImageAndTextForButton:_choosePlanBtn];
     
-    [self.learnMoreBtn setImage:[UIImage imageNamed:@"alert_learn"] forState:UIControlStateNormal];
-    [self.learnMoreBtn setImage:[UIImage imageNamed:@"alert_learn_pressed"] forState:UIControlEventTouchDown];
+    [_learnMoreBtn setImage:[UIImage imageNamed:@"alert_learn"] forState:UIControlStateNormal];
+    [_learnMoreBtn setImage:[UIImage imageNamed:@"alert_learn_pressed"] forState:UIControlEventTouchDown];
     
-    //[self layoutImageAndTextForButton:self.learnMoreBtn];
+    //[self layoutImageAndTextForButton:_learnMoreBtn];
     
     self.isFreeUser = NO; // Registered User
     [_playEnventBtn setEnabled:NO];
     _isReturnFrmPlayback = FALSE;
     
-    jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                     Selector:nil
-                                                 FailSelector:nil
-                                                    ServerErr:nil];
+    self.jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                          Selector:nil
+                                                      FailSelector:nil
+                                                         ServerErr:nil];
     
     NSDateFormatter *dateFormater = [[NSDateFormatter alloc] init];
     [dateFormater setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
     [dateFormater setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
-    NSDate *eventDate = [dateFormater dateFromString:self.alertTime]; //2013-12-31 07:38:35 +0000
+    NSDate *eventDate = [dateFormater dateFromString:_alertTime]; //2013-12-31 07:38:35 +0000
     [dateFormater release];
     
     NSDateFormatter* df_local = [[NSDateFormatter alloc] init];
     [df_local setTimeZone:[NSTimeZone localTimeZone]];
     df_local.dateFormat = @"hh:mm a, dd-MM-yyyy";
     
-    self.timeLabel.text = [df_local stringFromDate:eventDate];
-    self.messageLabel.text = [NSString stringWithFormat:@"There was some movement at %@.",self.cameraName];
+    _timeLabel.text = [df_local stringFromDate:eventDate];
+    _messageLabel.text = [NSString stringWithFormat:@"There was some movement at %@.",_cameraName];
     
-    NSLog(@"notif view timelable is %@",self.timeLabel.text); 
+    NSLog(@"notif view timelable is %@",_timeLabel.text); 
     
-    if (self.camChannel) {
-        self.lblChangeSetting.hidden = NO;
-        self.changeSettingsBtn.hidden = NO;
+    if (_camChannel) {
+        _lblChangeSetting.hidden = NO;
+        _changeSettingsBtn.hidden = NO;
     }
     
-    [self performSelectorInBackground:@selector(getEventSnapshot_bg) withObject:nil];
+    [self performSelectorInBackground:@selector(getEventSnapshot) withObject:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -113,7 +116,7 @@
     self.navigationController.navigationBarHidden = YES;
     
     if (_isReturnFrmPlayback) {
-        _isReturnFrmPlayback = FALSE;
+        _isReturnFrmPlayback = NO;
         [self ignoreTouchAction:nil]; // Fake to go to Camera list.
     }
     else {
@@ -121,15 +124,11 @@
     }
     
 #if 0
-    if (_eventsListAlready == FALSE) {
+    if (_eventsListAlready == NO) {
         //load events from server
         // 1. Load latest snapshot event & events list
-        [self performSelectorInBackground:@selector(getEventSnapshot_bg) withObject:nil];
-        self.eventsListAlready = TRUE;
-    }
-    else
-    {
-        //do nothing
+        [self performSelectorInBackground:@selector(getEventSnapshot) withObject:nil];
+        self.eventsListAlready = YES;
     }
 #endif
 }
@@ -142,20 +141,17 @@
     // lower the text and push it left so it appears centered
     //  below the image
     CGSize imageSize = button.imageView.frame.size;
-    button.titleEdgeInsets = UIEdgeInsetsMake(
-                                              0.0, - imageSize.width, - (imageSize.height + spacing), 0.0);
+    button.titleEdgeInsets = UIEdgeInsetsMake(0.0, - imageSize.width, - (imageSize.height + spacing), 0.0);
     
     // raise the image and push it right so it appears centered
     //  above the text
     CGSize titleSize = button.titleLabel.frame.size;
-    button.imageEdgeInsets = UIEdgeInsetsMake(
-                                              - (titleSize.height + spacing), 0.0, 0.0, - titleSize.width);
+    button.imageEdgeInsets = UIEdgeInsetsMake(-(titleSize.height + spacing), 0.0, 0.0, -titleSize.width);
 }
 
 - (void)showDialogToConfirm
 {
-    NSString * msg = [NSString stringWithFormat:@"Video clip is not ready, please try again later."];
-    
+    NSString *msg = [NSString stringWithFormat:@"Video clip is not ready, please try again later."];
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Notice"
                                                         message:msg
                                                        delegate:self
@@ -176,7 +172,7 @@
             if (![urlFile isEqual:[NSNull null]] && ![urlFile isEqualToString:@""]) {
                 PlaylistInfo *clipInfo = [[PlaylistInfo alloc] init];
                 clipInfo.urlFile = urlFile;
-                clipInfo.mac_addr = _cameraMacNoColon;
+                clipInfo.macAddr = _cameraMacNoColon;
                 clipInfo.alertType = _alertType;
                 clipInfo.alertVal = _alertVal;
                 clipInfo.registrationID = _registrationID;
@@ -210,23 +206,13 @@
 {
     [self cancelTaskDoInBackground];
 
-    if (sender == self.goToCameraBtn) {
+    if (sender == _goToCameraBtn) {
          NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        [userDefaults setObject:self.registrationID forKey:REG_ID];
+        [userDefaults setObject:_registrationID forKey:REG_ID];
         [userDefaults synchronize];
-#if 1
+        
         [self.navigationController popToRootViewControllerAnimated:YES];
         [_notifDelegate sendStatus:SHOW_CAMERA_LIST];
-#else
-        // Will call dismiss eventually
-        
-        if (![self.presentedViewController isBeingDismissed]) {
-            [self dismissViewControllerAnimated:YES completion:^{
-                //[_notifDelegate sendStatus:SCAN_BONJOUR_CAMERA];
-                [_notifDelegate sendStatus:SHOW_CAMERA_LIST];
-            }];
-        }
-#endif
     }
 }
 
@@ -235,15 +221,13 @@
     [self cancelTaskDoInBackground];
     
     CameraMenuViewController *cameraMenuCV = [[CameraMenuViewController alloc] init];
-    cameraMenuCV.camChannel = self.camChannel;
-    if(self.parentVC)
-    {
-        MenuViewController *menuVC = (MenuViewController *)self.parentVC;
+    cameraMenuCV.camChannel = _camChannel;
+    if (_parentVC) {
+        MenuViewController *menuVC = (MenuViewController *)_parentVC;
         cameraMenuCV.cameraMenuDelegate = menuVC.menuDelegate;
     }
-    else if(self.notifDelegate)
-    {
-        cameraMenuCV.cameraMenuDelegate = self.notifDelegate;
+    else if (_notifDelegate) {
+        cameraMenuCV.cameraMenuDelegate = _notifDelegate;
     }
     [self.navigationController pushViewController:cameraMenuCV animated:YES];
     [cameraMenuCV release];
@@ -262,41 +246,29 @@
 - (IBAction)ignoreTouchAction:(id)sender
 {
     NSLog(@"%s _notifDelegate:%@", __FUNCTION__, _notifDelegate);
-#if 1
+
     [self cancelTaskDoInBackground];
     [self.navigationController popToRootViewControllerAnimated:NO];
     [_notifDelegate sendStatus:SHOW_CAMERA_LIST2];
-#else
-    [self.navigationController popToRootViewControllerAnimated:NO];
-    
-    // Will call dismiss eventually
-    
-    if (![self.presentedViewController isBeingDismissed]) {
-        [self dismissViewControllerAnimated:YES completion:^{
-            //[_notifDelegate sendStatus:SCAN_BONJOUR_CAMERA];
-            [_notifDelegate sendStatus:SHOW_CAMERA_LIST2];
-        }];
-    }
-#endif
 }
 
 #pragma mark - Methods
 
-- (void)getEventSnapshot_bg
+- (void)getEventSnapshot
 {
     //2013-12-20 20:10:18 (yyyy-MM-dd HH:mm:ss).
     // eventcode: 44334C7FA03C_04_20140310101412000
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
-    NSString *event_timecode = [NSString stringWithFormat:@"%@_0%@_%@", self.cameraMacNoColon, self.alertType, self.alertVal];
-    NSDictionary *responseDict = [jsonComm getListOfEventsBlockedWithRegisterId:_registrationID
-                                                                beforeStartTime:nil//@"2013-12-28 20:10:18"
-                                                                      eventCode:event_timecode//event_code // temp
-                                                                         alerts:nil
-                                                                           page:nil
-                                                                         offset:nil
-                                                                           size:nil
-                                                                         apiKey:apiKey];
+    NSString *event_timecode = [NSString stringWithFormat:@"%@_0%@_%@", _cameraMacNoColon, _alertType, _alertVal];
+    NSDictionary *responseDict = [_jsonComm getListOfEventsBlockedWithRegisterId:_registrationID
+                                                                 beforeStartTime:nil//@"2013-12-28 20:10:18"
+                                                                       eventCode:event_timecode//event_code // temp
+                                                                          alerts:nil
+                                                                            page:nil
+                                                                          offset:nil
+                                                                            size:nil
+                                                                          apiKey:apiKey];
     NSLog(@"Notif - responseDict: %@", responseDict);
     
     if ( responseDict ) {
@@ -323,9 +295,9 @@
                                 UIImage *tmpImage = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:urlImgString]]];
                                 
                                 if ( tmpImage ) {
-                                    [self.imageViewSnapshot performSelectorOnMainThread:@selector(setImage:)
-                                                                             withObject:tmpImage
-                                                                          waitUntilDone:YES];
+                                    [_imageViewSnapshot performSelectorOnMainThread:@selector(setImage:)
+                                                                         withObject:tmpImage
+                                                                      waitUntilDone:YES];
                                 }
                             }
                             else {
@@ -352,11 +324,11 @@
         NSLog(@"responseDict is nil");
     }
     
-    [self.activityIndicatorViewLoading stopAnimating];
+    [_activityIndicatorViewLoading stopAnimating];
     
     if ( !_imageViewSnapshot.image ) {
         // No snapshot image from server
-        [self.imageViewSnapshot performSelectorOnMainThread:@selector(setImage:)
+        [_imageViewSnapshot performSelectorOnMainThread:@selector(setImage:)
                                                  withObject:[UIImage imageNamed:@"ImgNotAvailable"]
                                               waitUntilDone:NO];
     }
@@ -364,7 +336,7 @@
     NSString *urlFile = [_clipsInEvent[0] objectForKey:@"file"];
     
     if (([urlFile isEqual:[NSNull null]] || [urlFile isEqualToString:@""] || urlFile == nil) && _isBackgroundTaskRunning) {
-        [self performSelectorInBackground:@selector(getEventSnapshot_bg) withObject:nil];
+        [self performSelectorInBackground:@selector(getEventSnapshot) withObject:nil];
     }
     else {
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -378,10 +350,11 @@
 - (void)cancelTaskDoInBackground
 {
     _isBackgroundTaskRunning = NO;
-    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(getEventSnapshot_bg) object:nil];
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(getEventSnapshot) object:nil];
 }
 
-- (void)dealloc {
+- (void)dealloc
+{
     [_playEnventBtn release];
     [_goToCameraBtn release];
     [_changeSettingsBtn release];
@@ -394,7 +367,7 @@
     [_activityIndicatorViewLoading release];
     [_viewFront release];
     [_viewBehide release];
-    [jsonComm release];
+    [_jsonComm release];
     [super dealloc];
 }
 

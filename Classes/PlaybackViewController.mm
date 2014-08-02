@@ -3,20 +3,18 @@
 //  MBP_ios
 //
 //  Created by NxComm on 6/9/13.
-//  Copyright (c) 2013 eBuyNow eCommerce Limited. All rights reserved.
+//  Copyright (c) 2013 Hubble Connected Ltd. All rights reserved.
 //
-
-#import "PlaybackViewController.h"
 
 #import <MonitorCommunication/MonitorCommunication.h>
 #import <objc/message.h>
 
-#include "PlaybackListener.h"
-
-#import "define.h"
+#import "PlaybackViewController.h"
 #import "NotifViewController.h"
+#import "PlaybackListener.h"
 #import "TimelineDatabase.h"
 #import "MBProgressHUD.h"
+#import "define.h"
 
 #define START 0
 #define END   100.0
@@ -802,7 +800,7 @@
                                                                              Selector:nil
                                                                          FailSelector:nil
                                                                             ServerErr:nil];
-    NSString *mac = _clipInfo.mac_addr;
+    NSString *mac = _clipInfo.macAddr;
     NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
     NSString *event_timecode = [NSString stringWithFormat:@"%@_0%@_%@", mac,_clipInfo.alertType, _clipInfo.alertVal];
     
@@ -833,7 +831,7 @@
                 
                 for (NSDictionary *clipInfo in clipInEvents) {
                     PlaylistInfo *playlistInfo = [[[PlaylistInfo alloc] init]autorelease];
-                    playlistInfo.mac_addr = _clipInfo.mac_addr;
+                    playlistInfo.macAddr = _clipInfo.macAddr;
                     
                     playlistInfo.urlImage = [clipInfo objectForKey:@"image"];
                     playlistInfo.titleString = [clipInfo objectForKey:@"title"];

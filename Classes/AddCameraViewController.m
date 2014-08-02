@@ -3,12 +3,8 @@
 //  BlinkHD_ios
 //
 //  Created by Developer on 3/6/14.
-//  Copyright (c) 2014 eBuyNow eCommerce Limited. All rights reserved.
+//  Copyright (c) 2014 Hubble Connected Ltd. All rights reserved.
 //
-
-#define MAX_CAM_ALLOWED 4
-#define CAMERA_TAG_66 566
-#define CAMERA_TAG_83 583 //83/ 836
 
 #import "AddCameraViewController.h"
 #import "define.h"
@@ -21,6 +17,10 @@
 @end
 
 @implementation AddCameraViewController
+
+#define MAX_CAM_ALLOWED 4
+#define CAMERA_TAG_66 566
+#define CAMERA_TAG_83 583 //83/ 836
 
 #pragma mark - UIViewController methods
 
@@ -87,4 +87,5 @@
     [_btnCancel release];
     [super dealloc];
 }
+
 @end

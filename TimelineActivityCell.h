@@ -3,17 +3,19 @@
 //  BlinkHD_ios
 //
 //  Created by Developer on 12/20/13.
-//  Copyright (c) 2013 Smart Panda Ltd. All rights reserved.
+//  Copyright (c) 2013 Hubble Connected Ltd. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 
 @interface TimelineActivityCell : UITableViewCell
-@property (retain, nonatomic) IBOutlet UIImageView *snapshotImage;
-@property (retain, nonatomic) IBOutlet UILabel *eventLabel;
-@property (retain, nonatomic) IBOutlet UILabel *eventTimeLabel;
-@property (retain, nonatomic) IBOutlet UIImageView *feedImageVideo;
-@property (retain, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicatorLoading;
-@property (retain, nonatomic) IBOutlet UIImageView *lineImage;
-@property (retain, nonatomic) IBOutlet UILabel *lblToHideLine;
+
+@property (nonatomic, retain) IBOutlet UIImageView *snapshotImage;
+@property (nonatomic, retain) IBOutlet UILabel *eventLabel;
+@property (nonatomic, retain) IBOutlet UILabel *eventTimeLabel;
+@property (nonatomic, retain) IBOutlet UIImageView *feedImageVideo;
+@property (nonatomic, retain) IBOutlet UIActivityIndicatorView *activityIndicatorLoading;
+@property (nonatomic, retain) IBOutlet UIImageView *lineImage;
+@property (nonatomic, retain) IBOutlet UILabel *lblToHideLine;
+
 @end

@@ -3,12 +3,13 @@
 //  BlinkHD_ios
 //
 //  Created by Jason Lee on 23/1/14.
-//  Copyright (c) 2014 Smart Panda Ltd. All rights reserved.
+//  Copyright (c) 2014 Hubble Connected Ltd. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 
 @interface UIFont (Hubble)
+
 + (id)applyHubbleFontName:(NSString *)font withSize:(CGFloat)size;
 + (UIFont *)lightLarge75Font;
 + (UIFont *)semiBold17Font;
@@ -26,4 +27,5 @@
 + (UIFont *)semiBold12Font;
 + (UIFont *)regular11Font;
 + (UIFont *)regular17Font;
+
 @end

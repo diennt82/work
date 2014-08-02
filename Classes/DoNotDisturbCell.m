@@ -3,7 +3,7 @@
 //  BlinkHD_ios
 //
 //  Created by Jason Lee on 12/3/14.
-//  Copyright (c) 2014 Smart Panda Ltd. All rights reserved.
+//  Copyright (c) 2014 Hubble Connected Ltd. All rights reserved.
 //
 
 #import "DoNotDisturbCell.h"
@@ -11,23 +11,13 @@
 #import "UIImage+Hubble.h"
 #import "define.h"
 
+@interface DoNotDisturbCell ()
+
+@property (nonatomic) BOOL isEnableDoNotDisturb;
+
+@end
+
 @implementation DoNotDisturbCell
-
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
-{
-    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
-    if (self) {
-        //Create the Circular Slider
-
-    }
-    return self;
-}
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated
-{
-    [super setSelected:selected animated:animated];
-
-    // Configure the view for the selected state
-}
 
 - (void)drawRect:(CGRect)rect
 {
@@ -37,28 +27,26 @@
         
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     _isEnableDoNotDisturb = [userDefaults boolForKey:@"EnableDoNotDisturb"];
-    if (_isEnableDoNotDisturb)
-    {
-        self.imgViewEnableDisable.hidden = YES;
+    if (_isEnableDoNotDisturb) {
+        _imgViewEnableDisable.hidden = YES;
         //enable
         [[UIApplication sharedApplication] unregisterForRemoteNotifications];
-        [self.ib_enableDoNotDisturb setImage:[UIImage imageSwitchOn] forState:UIControlStateNormal];
-        [self.ib_circleSliderCustom setUserInteractionEnabled:YES];
-        self.ib_circleSliderCustom.value = [self updateValueCustomSlider];
-        [self.ib_circleSliderCustom startTimerUpdateLabel];
-        [self.ib_circleSliderCustom.textField setTextColor:[UIColor colorWithWhite:1.0 alpha:1.0]];
-        [self.ib_circleSliderCustom.minuteTField setTextColor:[UIColor colorWithWhite:1.0 alpha:1.0]];
+        [_ienableDoNotDisturbButton setImage:[UIImage imageSwitchOn] forState:UIControlStateNormal];
+        [_icircleSliderCustom setUserInteractionEnabled:YES];
+        _icircleSliderCustom.value = [self updateValueCustomSlider];
+        [_icircleSliderCustom startTimerUpdateLabel];
+        [_icircleSliderCustom.textField setTextColor:[UIColor colorWithWhite:1.0 alpha:1.0]];
+        [_icircleSliderCustom.minuteTField setTextColor:[UIColor colorWithWhite:1.0 alpha:1.0]];
     }
-    else
-    {
-        self.imgViewEnableDisable.hidden = NO;
+    else {
+        _imgViewEnableDisable.hidden = NO;
 
         //disable
         [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
-        [self.ib_enableDoNotDisturb setImage:[UIImage imageSwitchOff] forState:UIControlStateNormal];
-        [self.ib_circleSliderCustom setUserInteractionEnabled:NO];
-        [self.ib_circleSliderCustom.textField setTextColor:[UIColor lightGrayColor]];
-        [self.ib_circleSliderCustom.minuteTField setTextColor:[UIColor lightGrayColor]];
+        [_ienableDoNotDisturbButton setImage:[UIImage imageSwitchOff] forState:UIControlStateNormal];
+        [_icircleSliderCustom setUserInteractionEnabled:NO];
+        [_icircleSliderCustom.textField setTextColor:[UIColor lightGrayColor]];
+        [_icircleSliderCustom.minuteTField setTextColor:[UIColor lightGrayColor]];
     }
 }
 
@@ -68,54 +56,50 @@
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSInteger timeExpire = [userDefaults integerForKey:TIME_TO_EXPIRED];
     NSInteger deltaTime = nowInterval - timeExpire;
-    if (deltaTime >= 0)
-    {
+    if (deltaTime >= 0) {
         return 0;
     }
-    else
-    {
+    else {
         return round(abs(deltaTime)/60.0);
     }
 }
-- (void)dealloc {
-    [_ib_enableDoNotDisturb release];
-    [_ib_circleSliderCustom release];
+
+- (void)dealloc
+{
+    [_ienableDoNotDisturbButton release];
+    [_icircleSliderCustom release];
     [super dealloc];
 }
 
 - (IBAction)didEnableDisturb:(id)sender {
     _isEnableDoNotDisturb = !_isEnableDoNotDisturb;
     
-    if(_isEnableDoNotDisturb)
-    {
-        self.imgViewEnableDisable.hidden = YES;
+    if (_isEnableDoNotDisturb) {
+        _imgViewEnableDisable.hidden = YES;
     }
-    else
-    {
-        self.imgViewEnableDisable.hidden = NO;
+    else {
+        _imgViewEnableDisable.hidden = NO;
     }
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setBool:_isEnableDoNotDisturb forKey:@"EnableDoNotDisturb"];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
-    if (_isEnableDoNotDisturb)
-    {
+    if (_isEnableDoNotDisturb) {
         //enable
         [[UIApplication sharedApplication] unregisterForRemoteNotifications];
-        [self.ib_enableDoNotDisturb setImage:[UIImage imageSwitchOn] forState:UIControlStateNormal];
-        [self.ib_circleSliderCustom setUserInteractionEnabled:YES];
-        [self.ib_circleSliderCustom.textField setTextColor:[UIColor colorWithWhite:1.0 alpha:1.0]];
-        [self.ib_circleSliderCustom.minuteTField setTextColor:[UIColor colorWithWhite:1.0 alpha:1.0]];
+        [_ienableDoNotDisturbButton setImage:[UIImage imageSwitchOn] forState:UIControlStateNormal];
+        [_icircleSliderCustom setUserInteractionEnabled:YES];
+        [_icircleSliderCustom.textField setTextColor:[UIColor colorWithWhite:1.0 alpha:1.0]];
+        [_icircleSliderCustom.minuteTField setTextColor:[UIColor colorWithWhite:1.0 alpha:1.0]];
     }
-    else
-    {
+    else {
         //disable
         [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
-        [self.ib_enableDoNotDisturb setImage:[UIImage imageSwitchOff] forState:UIControlStateNormal];
-        [self.ib_circleSliderCustom setUserInteractionEnabled:NO];
-        [self.ib_circleSliderCustom.textField setTextColor:[UIColor lightGrayColor]];
-        [self.ib_circleSliderCustom.minuteTField setTextColor:[UIColor lightGrayColor]];
+        [_ienableDoNotDisturbButton setImage:[UIImage imageSwitchOff] forState:UIControlStateNormal];
+        [_icircleSliderCustom setUserInteractionEnabled:NO];
+        [_icircleSliderCustom.textField setTextColor:[UIColor lightGrayColor]];
+        [_icircleSliderCustom.minuteTField setTextColor:[UIColor lightGrayColor]];
     }
 }
 

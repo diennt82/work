@@ -3,7 +3,7 @@
 //  BlinkHD_ios
 //
 //  Created by Developer on 1/15/14.
-//  Copyright (c) 2014 Smart Panda Ltd. All rights reserved.
+//  Copyright (c) 2014 Hubble Connected Ltd. All rights reserved.
 //
 
 #import "SchedulingViewController.h"
@@ -14,24 +14,14 @@
     BOOL valueMap[25][8];
 }
 
-@property (retain, nonatomic) NSIndexPath *lastAccessed;
+@property (nonatomic, retain) NSIndexPath *lastAccessed;
+@property (nonatomic, retain) NSArray *arrayDays;
 @property (nonatomic) NSInteger cellSize;
 @property (nonatomic) NSInteger cellSizeMax;
-@property (nonatomic, retain) NSArray *arrayDays;
-
 
 @end
 
 @implementation SchedulingViewController
-
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
 
 - (void)viewDidLoad
 {
@@ -57,8 +47,7 @@
         self.cellSize = UIScreen.mainScreen.bounds.size.width / 9;
         self.cellSizeMax = UIScreen.mainScreen.bounds.size.width - _cellSize * 2;
     }
-    else
-    {
+    else {
         self.cellSize = UIScreen.mainScreen.bounds.size.width / 8;
         self.cellSizeMax = UIScreen.mainScreen.bounds.size.width - _cellSize;
     }
@@ -76,74 +65,60 @@
 }
 
 #pragma mark - UICollectionViewDataSource
-//1
+
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    if (_everydayFlag == TRUE)
-    {
+    if (_everydayFlag == YES) {
         return 2;
     }
-    
     return 8;
 }
 
-//2
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
     return 26;
 }
 
-//3
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     SchedulingCell *cell = (SchedulingCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"SchedulingCell" forIndexPath:indexPath];
     CGSize sizeScale = CGSizeZero;
     
-    if (_everydayFlag == TRUE)
-    {
+    if (_everydayFlag == YES) {
         sizeScale = CGSizeMake(_cellSizeMax, _cellSize);
     }
-    else
-    {
+    else {
         sizeScale = CGSizeMake(_cellSize, _cellSize);
     }
     
     UIImage *imageBg = [self imageWithStringName:@"DotCell" scaledToSize:sizeScale];
     UIImage *imageSelected = [self imageWithStringName:@"selected-img" scaledToSize:sizeScale];
     
-    if (indexPath.section == 0)
-    {
-        if (indexPath.item == 0)
-        {
+    if (indexPath.section == 0) {
+        if (indexPath.item == 0) {
             UIImage *imageHour = [self imageWithStringName:@"DotCell" scaledToSize:CGSizeMake(_cellSize, _cellSize)];
             cell.backgroundColor = [UIColor colorWithPatternImage:imageHour];;
             
-            for (id obj in cell.contentView.subviews)
-            {
+            for (id obj in cell.contentView.subviews) {
                 if ([obj isKindOfClass:[UILabel class]]) {
                     [obj removeFromSuperview];
                 }
             }
         }
-        else
-        {
+        else {
             UILabel *labelTitle = cell.labelTitle;
-            
-            if (labelTitle == nil)
-            {
+            if ( !labelTitle ) {
                 labelTitle = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, sizeScale.width, sizeScale.height)];
             }
             
-            if (_everydayFlag == TRUE)
-            {
+            if (_everydayFlag == YES) {
                 labelTitle.text = @"Everyday";
             }
-            else
-            {
+            else {
                 labelTitle.text = _arrayDays[indexPath.item - 1];
             }
-            labelTitle.textColor = [UIColor whiteColor];
             
+            labelTitle.textColor = [UIColor whiteColor];
             labelTitle.backgroundColor = [UIColor colorWithPatternImage:imageBg];
             labelTitle.textAlignment = NSTextAlignmentCenter;
             
@@ -151,35 +126,32 @@
             cell.labelTitle.hidden = NO;
         }
     }
-    else if (indexPath.item == 0)
-    {
+    else if (indexPath.item == 0) {
         UILabel *labelTitle = cell.labelTitle;
-        
-        if (labelTitle == nil)
+        if ( !labelTitle )
         {
             labelTitle = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, _cellSize, _cellSize)];
         }
         
-        if (indexPath.section == 1) // Midnight
-        {
+        if (indexPath.section == 1) {
+            // Midnight
             labelTitle.text = @"MN";
         }
-        else
-        {
-            if (indexPath.section < 13) // morning
-            {
+        else {
+            if (indexPath.section < 13) {
+                // morning
                 labelTitle.text = [NSString stringWithFormat:@"%ld am", (long)indexPath.section - 1];
             }
-            else if (indexPath.section == 13) // Noon
-            {
+            else if (indexPath.section == 13) {
+                // Noon
                 labelTitle.text = @"Noon";
             }
-            else if (indexPath.section < 25) // Afternoon
-            {
+            else if (indexPath.section < 25) {
+                // Afternoon
                 labelTitle.text = [NSString stringWithFormat:@"%ld pm", ((long)indexPath.section - 1) % 12];
             }
-            else // Midnight
-            {
+            else {
+                // Midnight
                 labelTitle.text = @"MN";
             }
         }
@@ -191,21 +163,17 @@
         [cell.contentView addSubview:labelTitle];
         cell.labelTitle.hidden = NO;
     }
-    else
-    {
+    else {
         
         cell.backgroundColor = [UIColor colorWithPatternImage:imageBg];
         cell.selectedBackgroundView = [[UIImageView alloc] initWithImage:imageSelected] ;
         
-        for (id obj in cell.contentView.subviews)
-        {
+        for (id obj in cell.contentView.subviews) {
             if ([obj isKindOfClass:[UILabel class]]) {
                 [obj removeFromSuperview];
             }
         }
-        
     }
-    
     
     return cell;
 }
@@ -231,39 +199,35 @@
         float cellSY = cell.frame.origin.y;
         float cellEY = cell.frame.origin.y + cell.frame.size.height;
         
-        
-        
-        if (pointerX >= cellSX && pointerX <= cellEX && pointerY >= cellSY && pointerY <= cellEY)
-        {
+        if (pointerX >= cellSX && pointerX <= cellEX && pointerY >= cellSY && pointerY <= cellEY) {
             NSIndexPath *touchOver = [self.collectionViewMap indexPathForCell:cell];
             
-            if (_lastAccessed != touchOver)
-            {
-                if (cell.selected)
+            if (_lastAccessed != touchOver) {
+                if (cell.selected) {
                     [self deselectCellForCollectionView:self.collectionViewMap atIndexPath:touchOver];
-                else
+                }
+                else {
                     [self selectCellForCollectionView:self.collectionViewMap atIndexPath:touchOver];
-                //NSLog(@"x = %f, y = %f", cellSX, cellSY);
+                }
             }
             
             self.lastAccessed = touchOver;
         }
     }
     
-    if (gestureRecognizer.state == UIGestureRecognizerStateEnded)
-    {
+    if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
         self.lastAccessed = nil;
         self.collectionViewMap.scrollEnabled = YES;
     }
 }
 
-- (void) selectCellForCollectionView:(UICollectionView *)collection atIndexPath:(NSIndexPath *)indexPath
+- (void)selectCellForCollectionView:(UICollectionView *)collection atIndexPath:(NSIndexPath *)indexPath
 {
     [collection selectItemAtIndexPath:indexPath animated:YES scrollPosition:UICollectionViewScrollPositionNone];
     [self collectionView:collection didSelectItemAtIndexPath:indexPath];
 }
 
-- (void) deselectCellForCollectionView:(UICollectionView *)collection atIndexPath:(NSIndexPath *)indexPath
+- (void)deselectCellForCollectionView:(UICollectionView *)collection atIndexPath:(NSIndexPath *)indexPath
 {
     [collection deselectItemAtIndexPath:indexPath animated:YES];
     [self collectionView:collection didDeselectItemAtIndexPath:indexPath];
@@ -275,35 +239,31 @@
 {
     //UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
     //cell.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"selected-img"]];
-    valueMap[indexPath.section - 1][indexPath.item] = TRUE;
+    valueMap[indexPath.section - 1][indexPath.item] = YES;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     //UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
     //cell.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"DotCell"]];
-    valueMap[indexPath.section - 1][indexPath.item] = FALSE;
+    valueMap[indexPath.section - 1][indexPath.item] = NO;
 }
 
 #pragma mark – UICollectionViewDelegateFlowLayout
-//1
+
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.item == 0)
-    {
+    if (indexPath.item == 0) {
         return CGSizeMake(_cellSize, _cellSize);
     }
-    else if (_everydayFlag == TRUE)
-    {
+    else if (_everydayFlag == YES) {
         return CGSizeMake(_cellSizeMax, _cellSize);
     }
-    else
-    {
+    else {
         return CGSizeMake(_cellSize, _cellSize);
     }
 }
 
-//2
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
 {
     return UIEdgeInsetsMake(0, 0, 0, 0);
@@ -311,14 +271,10 @@
 
 #pragma mark -
 
-- (void)didReceiveMemoryWarning
+- (void)dealloc
 {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-- (void)dealloc {
     [_collectionViewMap release];
     [super dealloc];
 }
+
 @end

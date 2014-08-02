@@ -3,59 +3,52 @@
 //  BlinkHD_ios
 //
 //  Created by Developer on 2/10/14.
-//  Copyright (c) 2014 Smart Panda Ltd. All rights reserved.
+//  Copyright (c) 2014 Hubble Connected Ltd. All rights reserved.
 //
+
+#import <MonitorCommunication/MonitorCommunication.h>
 
 #import "LoginViewController.h"
 #import "StunClient.h"
-//#import "Reachability.h"
 #import "ForgotPwdViewController.h"
 #import "UserAccount.h"
 #import "PublicDefine.h"
-#import <MonitorCommunication/MonitorCommunication.h>
 #import "KISSMetricsAPI.h"
 #import "TimelineDatabase.h"
 #import "RegistrationViewController.h"
 #import "MBP_iosViewController.h"
 
-#define MOVEMENT_DURATION   0.3 //movementDuration
-#define _Use3G              @"use3GToConnect"
-#define GAI_CATEGORY        @"Login view"
-
 @interface LoginViewController ()  <UITextFieldDelegate, StunClientDelegate, UserAccountDelegate>
 
-@property (retain, nonatomic) IBOutlet UIView *viewProgress;
-@property (retain, nonatomic) IBOutlet UITextField *tfEmail;
-@property (retain, nonatomic) IBOutlet UITextField *tfPassword;
-@property (retain, nonatomic) IBOutlet UIButton *buttonEnter;
+@property (nonatomic, retain) IBOutlet UIView *viewProgress;
+@property (nonatomic, retain) IBOutlet UITextField *tfEmail;
+@property (nonatomic, retain) IBOutlet UITextField *tfPassword;
+@property (nonatomic, retain) IBOutlet UIButton *buttonEnter;
+@property (nonatomic, retain) IBOutlet UIImageView *imgViewLoading;
 
+@property (nonatomic, retain) StunClient *client;
 @property (nonatomic, assign) id<ConnectionMethodDelegate> delegate;
-@property (nonatomic, retain) NSString *stringUsername;
-@property (nonatomic, retain) NSString *stringUserEmail;
-@property (nonatomic, retain) NSString *stringPassword;
+@property (nonatomic, copy) NSString *stringUsername;
+@property (nonatomic, copy) NSString *stringUserEmail;
+@property (nonatomic, copy) NSString *stringPassword;
 @property (nonatomic) BOOL buttonEnterPressedFlag;
-@property (nonatomic,retain) StunClient *client;
 
-@property (retain, nonatomic) IBOutlet UIImageView *imgViewLoading;
 @end
 
 @implementation LoginViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
+#define MOVEMENT_DURATION   0.3 //movementDuration
+#define _Use3G              @"use3GToConnect"
+#define GAI_CATEGORY        @"Login view"
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil delegate: (id<ConnectionMethodDelegate>) d
+#pragma mark - UIViewController methods
+
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil delegate:(id<ConnectionMethodDelegate>)delegate
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
-        self.delegate = d;
+        self.delegate = delegate;
     }
     return self;
 }
@@ -67,9 +60,7 @@
     
     if (UIScreen.mainScreen.bounds.size.height < 568)
     {
-        [[NSBundle mainBundle] loadNibNamed:@"LoginViewController_35"
-                                      owner:self
-                                    options:nil];
+        [[NSBundle mainBundle] loadNibNamed:@"LoginViewController_35" owner:self options:nil];
     }
     
     [self.view addSubview:self.viewProgress];
@@ -97,8 +88,7 @@
     
     
 #if !TARGET_IPHONE_SIMULATOR
-    if ([self isConnectingToCameraNetwork])
-    {
+    if ([self isConnectingToCameraNetwork]) {
         NSString * msg = NSLocalizedStringWithDefaultValue(@"phone_is_connected_to_camera" ,nil, [NSBundle mainBundle],
                                                            @"You are connecting to a Camera network which does not have internet access.Please go to wifi settings and switch to another WIFI." ,nil);
         
@@ -120,9 +110,8 @@
     else
 #endif
     {
-    
         //load user/pass
-        [self performSelectorInBackground:@selector(loadUserInfo_bg) withObject:nil];
+        [self performSelectorInBackground:@selector(startLoadUserInfo) withObject:nil];
     }
 }
 
@@ -136,16 +125,15 @@
     MBP_iosViewController *mainVC = (MBP_iosViewController *)[self.navigationController.viewControllers objectAtIndex:0];
     mainVC.app_stage = APP_STAGE_LOGGING_IN;
     
-    NSString * msg = NSLocalizedStringWithDefaultValue(@"Logging_in_to_server" ,nil, [NSBundle mainBundle],
+    NSString *msg = NSLocalizedStringWithDefaultValue(@"Logging_in_to_server" ,nil, [NSBundle mainBundle],
                                                        @"Logging in to server..." , nil);
     UILabel *labelMessage = (UILabel *)[_viewProgress viewWithTag:509];
     [labelMessage setText:msg];
     
-    NSString * old_usr = (NSString *) [[NSUserDefaults standardUserDefaults] objectForKey:@"PortalUsername"];
+    NSString *old_usr = (NSString *) [[NSUserDefaults standardUserDefaults] objectForKey:@"PortalUsername"];
     self.tfEmail.text = old_usr;
     
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-    {
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         UIButton *btnForgotPassword = (UIButton *)[self.view viewWithTag:955];
         btnForgotPassword.frame = CGRectMake(_buttonEnter.frame.origin.x, btnForgotPassword.frame.origin.y, btnForgotPassword.frame.size.width, btnForgotPassword.frame.size.height);
     }
@@ -169,7 +157,7 @@
     [super viewWillDisappear:animated];
 }
 
-- (void)loadUserInfo_bg
+- (void)startLoadUserInfo
 {
     [self performSelectorOnMainThread:@selector(loadUserInfo) withObject:nil waitUntilDone:NO];
 }
@@ -180,26 +168,23 @@
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
 	//can be user email or user name here --
-	NSString * old_usr = (NSString *) [userDefaults objectForKey:@"PortalUsername"];
-	NSString * old_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
-    NSString * old_api_key = (NSString *) [userDefaults objectForKey:@"PortalApiKey"];
+	NSString *old_usr = (NSString *) [userDefaults objectForKey:@"PortalUsername"];
+	NSString *old_pass = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
+    NSString *old_api_key = (NSString *) [userDefaults objectForKey:@"PortalApiKey"];
     
     self.stringUserEmail  = (NSString*) [userDefaults objectForKey:@"PortalUseremail"];
-    BOOL shouldAutoLogin = [userDefaults boolForKey:_AutoLogin];
+    BOOL shouldAutoLogin = [userDefaults boolForKey:AUTO_LOGIN_KEY];
     
     /* Reset SYM NAT status here */
     [userDefaults setInteger:TYPE_UNKNOWN forKey:APP_IS_ON_SYMMETRIC_NAT];
     [userDefaults synchronize];
     
-    if (old_usr != nil)
-    {
+    if ( old_usr ) {
         self.stringUsername = [NSString stringWithString:old_usr];
         self.tfEmail.text = old_usr;
         
-        if (shouldAutoLogin &&
-            old_api_key != nil && old_pass != nil )
-        {
-            /* Don't need to go thru the login query again */
+        if (shouldAutoLogin && old_api_key && old_pass ) {
+            // Don't need to go thru the login query again
             NSLog(@" Use old api key");
             self.stringPassword = [NSString stringWithString:old_pass];
             self.viewProgress.hidden = NO;
@@ -209,9 +194,7 @@
             [self moveOnAfterLoginOk:old_api_key];
             
         }
-        else if (shouldAutoLogin &&
-                 old_pass != nil)
-        {
+        else if ( shouldAutoLogin && old_pass ) {
             self.stringPassword = [NSString stringWithString:old_pass];
             self.viewProgress.hidden = NO;
             self.tfPassword.text = old_pass;
@@ -219,60 +202,40 @@
             self.buttonEnterPressedFlag = YES;
             [self check3GConnectionAndPopup];
         }
-        else
-        {
-            
-            
+        else {
             [userDefaults removeObjectForKey:CAM_IN_VEW];
             [userDefaults synchronize];
             self.viewProgress.hidden = YES;
             self.buttonEnter.enabled = NO;
             
-            if ( old_pass != nil)
-            {
+            if ( old_pass ) {
                 self.tfPassword.text = old_pass;
                 self.buttonEnterPressedFlag = NO;
                 self.buttonEnter.enabled = YES;
             }
-            
         }
     }
-    else
-    {
+    else {
         [userDefaults removeObjectForKey:CAM_IN_VEW];
         [userDefaults synchronize];
         self.viewProgress.hidden = YES;
         self.buttonEnter.enabled = NO;
         NSLog(@"LoginVC - No login");
     }
-    
-    //self.viewProgress.hidden = NO;
-    
-    
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 #pragma mark - UserAccount delegate
 
 - (void)finishStoreCameraListData:(NSMutableArray *)arrayCamProfile success:(BOOL)success
 {
-    if (success)
-    {
+    if (success) {
         [self.navigationController popToRootViewControllerAnimated:YES];
         
-        if (_delegate)
-        {
+        if (_delegate) {
             [_delegate sendStatus:SHOW_CAMERA_LIST];
         }
     }
-    else
-    {
-      //  [self logout];
+    else {
         [self performSelectorInBackground:@selector(logout) withObject:nil];
     }
 }
@@ -283,8 +246,7 @@
 {
     NSLog(@"Load fpwd");
     //Load the next xib
-    ForgotPwdViewController *forgotPwdController = [[ForgotPwdViewController alloc]
-                                                    initWithNibName:@"ForgotPwdViewController" bundle:nil];
+    ForgotPwdViewController *forgotPwdController = [[ForgotPwdViewController alloc] initWithNibName:@"ForgotPwdViewController" bundle:nil];
     
     [self.navigationController pushViewController:forgotPwdController animated:YES];
     [forgotPwdController release];
@@ -329,12 +291,10 @@
     [userDefaults setInteger:result forKey:APP_IS_ON_SYMMETRIC_NAT];
     [userDefaults synchronize];
     
-    dispatch_async(dispatch_get_main_queue(),
-                   ^{
-                       [_client shutdown];
-                       // [self.client release];
-                   }
-                   );
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [_client shutdown];
+        // [self.client release];
+    });
 }
 
 #pragma mark - Methods
@@ -380,40 +340,39 @@
         
         [NSThread sleepForTimeInterval:0.10];
 #endif
-        
-        
     }
     
     self.buttonEnterPressedFlag = NO;
     self.buttonEnter.enabled = YES;
 	self.viewProgress.hidden = YES;
 }
-/* check if phone is connected to 3g network 
-   Also check if phone is connected to camera network (!!#@!#) 
+
+/**
+ * Check if phone is connected to 3g network
+ * Also check if phone is connected to camera network (!!#@!#)
  */
 - (void)check3GConnectionAndPopup
 {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    BOOL skip_3g_popup = [userDefaults boolForKey:_Use3G];
+    BOOL skip3GPopup = [userDefaults boolForKey:_Use3G];
     
-    if (  (skip_3g_popup ==FALSE)  && [self isCurrentConnection3G])
-    {
+    if (  !skip3GPopup  && [self isCurrentConnection3G] ) {
         //Popup now..
         self.buttonEnter.enabled = YES;
         
         NSLog(@"Wifi is not available ");
         self.viewProgress.hidden = YES;
         
-        NSString * msg = NSLocalizedStringWithDefaultValue(@"wifi_not_available" ,nil, [NSBundle mainBundle],
+        NSString *msg = NSLocalizedStringWithDefaultValue(@"wifi_not_available" ,nil, [NSBundle mainBundle],
                                                            @"Mobile data is enabled. If you continue to connect, you may incur air time charges. Do you want to proceed?" ,nil);
         
-        NSString * no = NSLocalizedStringWithDefaultValue(@"No" ,nil, [NSBundle mainBundle],
+        NSString *no = NSLocalizedStringWithDefaultValue(@"No" ,nil, [NSBundle mainBundle],
                                                           @"No", nil);
         
-        NSString * yes = NSLocalizedStringWithDefaultValue(@"Yes" ,nil, [NSBundle mainBundle],
+        NSString *yes = NSLocalizedStringWithDefaultValue(@"Yes" ,nil, [NSBundle mainBundle],
                                                            @"Yes", nil);
         
-        NSString * yes1 = NSLocalizedStringWithDefaultValue(@"Yes_n" ,nil, [NSBundle mainBundle],
+        NSString *yes1 = NSLocalizedStringWithDefaultValue(@"Yes_n" ,nil, [NSBundle mainBundle],
                                                             @"Yes and don't ask again", nil);
         
         //ERROR condition
@@ -427,10 +386,8 @@
         [alert show];
         [alert release];
     }
-    
-    else
-    {
-        NSString * msg = NSLocalizedStringWithDefaultValue(@"Logging_in_to_server" ,nil, [NSBundle mainBundle],@"Logging in to server..." , nil);
+    else {
+        NSString *msg = NSLocalizedStringWithDefaultValue(@"Logging_in_to_server" ,nil, [NSBundle mainBundle],@"Logging in to server..." , nil);
                
         self.viewProgress.hidden = NO;
         UILabel *labelMessage = (UILabel *)[_viewProgress viewWithTag:509];
@@ -446,7 +403,7 @@
     }
 }
 
--(BOOL) isCurrentConnection3G
+- (BOOL)isCurrentConnection3G
 {
     Reachability *reachability = [Reachability reachabilityForInternetConnection];
     [reachability startNotifier];
@@ -456,27 +413,27 @@
     if (status == ReachableViaWWAN)
     {
         //3G
-        return TRUE;
+        return YES;
     }
     
-    return FALSE;
+    return NO;
 }
--(BOOL) isConnectingToCameraNetwork
+
+- (BOOL)isConnectingToCameraNetwork
 {
-    NSString * current_ssid = [CameraPassword fetchSSIDInfo] ;
+    NSString *current_ssid = [CameraPassword fetchSSIDInfo] ;
 
     if ([current_ssid hasPrefix:DEFAULT_SSID_HD_PREFIX] ||
         [current_ssid hasPrefix:DEFAULT_SSID_PREFIX]
         )
     {
-        return TRUE;
-        
+        return YES;
     }
     
-    return FALSE;
+    return NO;
 }
 
-- (void)doSignIn:(NSTimer *) exp
+- (void)doSignIn:(NSTimer *)exp
 {
     self.navigationController.navigationBarHidden = YES;
     
@@ -491,14 +448,12 @@
 #if 1
     // Ignore symmetric nath value nat. Force app to it
 #else
-    if (_client == nil)
-    {
+    if ( !_client ) {
         _client = [StunClient alloc]; //init];
     }
     
     //If we have not checked -- then start checking, else just skip this step
-    if ( [_client isCheckingForSymmetrictNat]  == FALSE )
-    {
+    if ( ![_client isCheckingForSymmetrictNat] ) {
         //init
         [_client init];
         [_client test_start_async:self];
@@ -510,12 +465,11 @@
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
-    if (textField == _tfEmail) // Username
-    {
+    if (textField == _tfEmail) {
+        // Username
         [self.tfPassword becomeFirstResponder];
     }
-    else
-    {
+    else {
         [textField resignFirstResponder];
     }
     
@@ -524,14 +478,11 @@
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
-    if (textField == _tfPassword)
-    {
-        if ( ([textField.text length] + [string length] ) >2)
-        {
+    if (textField == _tfPassword) {
+        if ( (textField.text.length + string.length) > 2 ) {
             self.buttonEnter.enabled = YES;
         }
-        else
-        {
+        else {
             self.buttonEnter.enabled = NO;
         }
     }
@@ -546,20 +497,18 @@
 
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
-    [self animateTextField: textField up: NO];
+    [self animateTextField:textField up:NO];
 }
 
-- (void) animateTextField: (UITextField*) textField up: (BOOL) up
+- (void)animateTextField:(UITextField *)textField up:(BOOL)up
 {
     NSInteger movementDistance = 216; // tweak as needed
     
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-    {
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         movementDistance = 264;
     }
     
-    if (UIScreen.mainScreen.bounds.size.height < 568)
-    {
+    if (UIScreen.mainScreen.bounds.size.height < 568) {
         movementDistance = 200;
     }
     //const float movementDuration = 0.3f; // tweak as needed
@@ -573,13 +522,13 @@
     [UIView commitAnimations];
 }
 
-#pragma mark -
-#pragma mark Alertview delegate
-- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
-	
+#pragma mark - Alertview delegate
+
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
 	int tag = alertView.tag;
-	if (tag == 112) //OFFLINE mode ??
-    {
+	if (tag == 112) {
+        //OFFLINE mode ??
         switch (buttonIndex) {
             case 0:
                 break;
@@ -587,7 +536,7 @@
             case 1://Yes - go offline mode
             {
                 NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-                [userDefaults setBool:YES forKey:_OfflineMode];
+                [userDefaults setBool:YES forKey:OFFLINE_MODE_KEY];
                 [userDefaults synchronize];
                 
                 //Show Camera list
@@ -595,8 +544,7 @@
 
                 [self.navigationController popToRootViewControllerAnimated:YES];
                 
-                if (_delegate)
-                {
+                if (_delegate) {
                     [_delegate sendStatus:SHOW_CAMERA_LIST];
                 }
             }
@@ -606,8 +554,8 @@
                 break;
         }
     }
-    else if (tag == 113) // 3g check
-    {
+    else if (tag == 113) {
+        // 3g check
         switch (buttonIndex)
         {
             case 0:
@@ -652,18 +600,17 @@
             }
         }
     }
-    else if (tag == 114) // camera network check
-    {
+    else if (tag == 114) {
+        // camera network check
         switch (buttonIndex)
         {
             case 0:
             {
                 //Stay at this screen.
                 NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-                [userDefaults setBool:NO forKey:_AutoLogin];
+                [userDefaults setBool:NO forKey:AUTO_LOGIN_KEY];
                 [userDefaults synchronize];
                 
-
                 [self loadUserInfo];
                 break;
             }
@@ -671,8 +618,8 @@
     }
 }
 
-#pragma mark -
-#pragma mark Login Callbacks
+#pragma mark -  Login Callbacks
+
 - (void) loginSuccessWithResponse:(NSDictionary *)responseDict
 {
     //reset it here
@@ -680,21 +627,21 @@
     self.buttonEnter.enabled = YES;
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setBool:NO forKey:_OfflineMode];
+    [userDefaults setBool:NO forKey:OFFLINE_MODE_KEY];
     [userDefaults synchronize];
     
 	if (responseDict) {
         NSInteger statusCode = [[responseDict objectForKey:@"status"] intValue];
         
-        if (statusCode == 200) // success
-        {
+        if (statusCode == 200) {
+            // success
             NSString *apiKey = [[responseDict objectForKey:@"data"] objectForKey:@"authentication_token"];
             
             //Store user/pass for later use
             [userDefaults setObject:_stringUsername forKey:@"PortalUsername"];
             [userDefaults setObject:_stringPassword forKey:@"PortalPassword"];
             [userDefaults setObject:apiKey forKey:@"PortalApiKey"];
-            [userDefaults setBool:TRUE forKey:_AutoLogin];
+            [userDefaults setBool:TRUE forKey:AUTO_LOGIN_KEY];
             
             [userDefaults synchronize];
             
@@ -704,18 +651,17 @@
             NSLog(@"Login success! 1");
             [self moveOnAfterLoginOk:apiKey];
         }
-        else
-        {
+        else {
             NSLog(@"Invalid response: %@", responseDict);
             //ERROR condition
             self.viewProgress.hidden = YES;
             
-            NSString * title = NSLocalizedStringWithDefaultValue(@"Login_Error" ,nil, [NSBundle mainBundle],
+            NSString *title = NSLocalizedStringWithDefaultValue(@"Login_Error" ,nil, [NSBundle mainBundle],
                                                                  @"Login Error", nil);
-            NSString * msg = NSLocalizedStringWithDefaultValue(@"Login_Error_msg" ,nil, [NSBundle mainBundle],
+            NSString *msg = NSLocalizedStringWithDefaultValue(@"Login_Error_msg" ,nil, [NSBundle mainBundle],
                                                                @"Server response invalid, please try again!", nil);
             
-            NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok" ,nil, [NSBundle mainBundle],
+            NSString *ok = NSLocalizedStringWithDefaultValue(@"Ok" ,nil, [NSBundle mainBundle],
                                                               @"OK", nil);
             [[KISSMetricsAPI sharedAPI] recordEvent:@"Login Failed" withProperties:nil];
             
@@ -734,8 +680,7 @@
             [alert release];
         }
     }
-    else
-    {
+    else {
         NSLog(@"Error - loginSuccessWithResponse: reponseDict = nil");
     }
 }
@@ -744,9 +689,7 @@
     NSUserDefaults *userDefalts = [NSUserDefaults standardUserDefaults];
     NSString * userEmail = (NSString *)[userDefalts objectForKey:@"PortalUseremail"];
     
-    if (userEmail == nil)
-    {
-        
+    if ( !userEmail ) {
         NSLog(@"No Useremail, query for once now");
         
         // Get user info (email)
@@ -768,7 +711,7 @@
     UserAccount *account = [[UserAccount alloc] initWithUser:_stringUsername
                                                     password:_stringPassword
                                                       apiKey:apiKey
-                                                    listener:self];
+                                             accountDelegate:self];
     
     [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Login successfully - user: %@", _stringUsername] withProperties:nil];
     
@@ -797,16 +740,14 @@
 	self.viewProgress.hidden = YES;
 	
     
-    NSString * title = NSLocalizedStringWithDefaultValue(@"Login_Error" ,nil, [NSBundle mainBundle],
+    NSString *title = NSLocalizedStringWithDefaultValue(@"Login_Error" ,nil, [NSBundle mainBundle],
                                                          @"Login Error", nil);
-    NSString * msg = NSLocalizedStringWithDefaultValue(@"Login_Error_msg2" ,nil, [NSBundle mainBundle],
+    NSString *msg = NSLocalizedStringWithDefaultValue(@"Login_Error_msg2" ,nil, [NSBundle mainBundle],
                                                        @"Server error: %@", nil);
     msg = [NSString stringWithFormat:msg, [responseError objectForKey:@"message"]];
     
-    NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok" ,nil, [NSBundle mainBundle],
+    NSString *ok = NSLocalizedStringWithDefaultValue(@"Ok" ,nil, [NSBundle mainBundle],
                                                       @"OK", nil);
-    
-    
 	//ERROR condition
 	UIAlertView *alert = [[UIAlertView alloc]
 						  initWithTitle:title
@@ -834,15 +775,15 @@
 	NSLog(@"Loging failed : server unreachable");
 	self.viewProgress.hidden = YES;
     
-    NSString * title = NSLocalizedStringWithDefaultValue(@"Login_Error" ,nil, [NSBundle mainBundle],
+    NSString *title = NSLocalizedStringWithDefaultValue(@"Login_Error" ,nil, [NSBundle mainBundle],
                                                          @"Login Error", nil);
-    NSString * msg = NSLocalizedStringWithDefaultValue(@"Login_Error_msg3" ,nil, [NSBundle mainBundle],
+    NSString *msg = NSLocalizedStringWithDefaultValue(@"Login_Error_msg3" ,nil, [NSBundle mainBundle],
                                                        @"Server is unreachable. Do you want to access your cameras offline?" ,nil);
     
-    NSString * no = NSLocalizedStringWithDefaultValue(@"No" ,nil, [NSBundle mainBundle],
+    NSString *no = NSLocalizedStringWithDefaultValue(@"No" ,nil, [NSBundle mainBundle],
                                                       @"No", nil);
     
-    NSString * yes = NSLocalizedStringWithDefaultValue(@"Yes" ,nil, [NSBundle mainBundle],
+    NSString *yes = NSLocalizedStringWithDefaultValue(@"Yes" ,nil, [NSBundle mainBundle],
                                                        @"Yes", nil);
     
 	//ERROR condition
@@ -879,10 +820,9 @@
 {
     NSLog(@"%s responseDict: %@", __FUNCTION__, responseDict);
     
-    NSString * title = @"Get User info failed!";
-    NSString * msg = [responseDict objectForKey:@"message"];
-    
-    NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok" ,nil, [NSBundle mainBundle],
+    NSString *title = @"Get User info failed!";
+    NSString *msg = [responseDict objectForKey:@"message"];
+    NSString *ok = NSLocalizedStringWithDefaultValue(@"Ok" ,nil, [NSBundle mainBundle],
                                                       @"OK", nil);
     
 	//ERROR condition
@@ -906,11 +846,13 @@
      show];
 }
 
-- (void)dealloc {
+- (void)dealloc
+{
     [_viewProgress release];
     [_tfEmail release];
     [_tfPassword release];
     [_buttonEnter release];
     [super dealloc];
 }
+
 @end

@@ -3,40 +3,32 @@
 //  BlinkHD_ios
 //
 //  Created by Nxcomm Developer on 21/11/13.
-//  Copyright (c) 2013 Smart Panda Ltd. All rights reserved.
+//  Copyright (c) 2013 Hubble Connected Ltd. All rights reserved.
 //
 
+#import <MonitorCommunication/MonitorCommunication.h>
 #import "NotificationSettingsViewController.h"
 #import "NotificationSettingsCell.h"
-#import <MonitorCommunication/MonitorCommunication.h>
 
 @interface NotificationSettingsViewController () <UITableViewDataSource, UITableViewDelegate, NotifSettingsCellDelegate>
 {
     BOOL enableAlert[4];
 }
 
-@property (retain, nonatomic) IBOutlet UIView *processView;
-@property (retain, nonatomic) IBOutlet UITableView *listNotifTableView;
+@property (nonatomic, retain) IBOutlet UIView *processView;
+@property (nonatomic, retain) IBOutlet UITableView *listNotifTableView;
 
 @end
 
 @implementation NotificationSettingsViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-        self.title = @"Notification Settings";
-    }
-    return self;
-}
+#pragma mark - UIViewController methods
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
-    
+
+    self.title = @"Notification Settings";
     [self performSelectorInBackground:@selector(getNotificationSettings) withObject:nil];
     
     self.navigationItem.leftBarButtonItem  = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
@@ -54,13 +46,8 @@
     NSLog(@"camProfileID: %d", _camProfile.camProfileID);
 }
 
-- (void)didReceiveMemoryWarning
+- (void)dealloc
 {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-- (void)dealloc {
     [_processView release];
     [_listNotifTableView release];
     [super dealloc];
@@ -112,49 +99,40 @@
     
     [jsonComm release];
     
-    if (responseDict != nil)
-    {
-        NSInteger statusCode = [[responseDict objectForKey:@"status"] integerValue];
+    if ( responseDict) {
+        NSInteger statusCode = [responseDict[@"status"] integerValue];
         
-        if (statusCode == 200)
-        {
-            NSArray *apps = [responseDict objectForKey:@"data"];
-            
+        if ( statusCode == 200 ) {
+            NSArray *apps = responseDict[@"data"];
             NSString *appId = [userDefaults stringForKey:@"APP_ID"];
             
-            for (NSDictionary *app in apps)
-            {
-                if ([appId isEqualToString:[[app objectForKey:@"id"] stringValue]])
-                {
-                    NSArray *deviceAppNotificationSettings = [app objectForKey:@"device_app_notification_settings"];
+            for ( NSDictionary *app in apps ) {
+                if ( [appId isEqualToString:[app[@"id"] stringValue]] ) {
+                    NSArray *deviceAppNotificationSettings = app[@"device_app_notification_settings"];
                     
-                    if (deviceAppNotificationSettings.count == 0)
-                    {
+                    if ( deviceAppNotificationSettings.count == 0 ) {
                         self.processView.hidden = YES;
                         return;
                     }
                     
-                    for (NSDictionary *device in deviceAppNotificationSettings)
-                    {
-                        if ([[device objectForKey:@"device_id"] integerValue] == _camProfile.camProfileID)
-                        {
-                            if (![[device objectForKey:@"is_enabled"] isEqual:[NSNull null]])
-                            {
+                    for (NSDictionary *device in deviceAppNotificationSettings) {
+                        if ( [device[@"device_id"] integerValue] == _camProfile.camProfileID ) {
+                            if ( ![device[@"is_enabled"] isEqual:[NSNull null]] ) {
                                 switch ([[device objectForKey:@"alert"] integerValue]) {
                                     case 1:
-                                        self.camProfile.soundAlertEnabled = [[device objectForKey:@"is_enabled"] boolValue];
+                                        self.camProfile.soundAlertEnabled = [device[@"is_enabled"] boolValue];
                                         break;
                                         
                                     case 2:
-                                        self.camProfile.tempHiAlertEnabled = [[device objectForKey:@"is_enabled"] boolValue];
+                                        self.camProfile.tempHiAlertEnabled = [device[@"is_enabled"] boolValue];
                                         break;
                                         
                                     case 3:
-                                        self.camProfile.tempLoAlertEnabled = [[device objectForKey:@"is_enabled"] boolValue];
+                                        self.camProfile.tempLoAlertEnabled = [device[@"is_enabled"] boolValue];
                                         break;
                                         
                                     case 4:
-                                        self.camProfile.motionDetectionEnabled = [[device objectForKey:@"is_enabled"] boolValue];
+                                        self.camProfile.motionDetectionEnabled = [device[@"is_enabled"] boolValue];
                                         break;
                                         
                                     default:
@@ -164,8 +142,7 @@
                         }
                     }
                     
-                    [self.listNotifTableView reloadData];
-                    
+                    [_listNotifTableView reloadData];
                     break;
                 }
             }
@@ -185,30 +162,23 @@
     
     NSString *deviceID = [NSString stringWithFormat:@"%d", _camProfile.camProfileID];
     
-    for (int i = 0; i < 4; i++)
-    {
+    for (int i = 0; i < 4; i++) {
         NSString *alertType = [NSString stringWithFormat:@"%d", i + 1];
-        
         NSString *valueAlert = @"";
         
-        if (enableAlert[i])
-        {
+        if (enableAlert[i]) {
             valueAlert = @"true";
         }
-        else
-        {
+        else {
             valueAlert = @"false";
         }
         
-        NSDictionary *settingDict = [NSDictionary dictionaryWithObjectsAndKeys:
-                                     deviceID,   @"device_id",
-                                     alertType,  @"alert",
-                                     valueAlert, @"is_enabled",
-                                     nil];
+        NSDictionary *settingDict = @{ @"device_id":deviceID,
+                                       @"alert": alertType,
+                                       @"is_enabled": valueAlert };
+
         [settingsArray addObject:settingDict];
     }
-    
-    //NSLog(@"settingsArray: %@", settingsArray);
     
     BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
                                                                               Selector:@selector(settingsAppNotifSuccessWithResponse:)
@@ -219,91 +189,83 @@
                       andSettings:settingsArray];
 }
 
-- (void)settingsAppNotifSuccessWithResponse: (NSDictionary *)responseDict
+- (void)settingsAppNotifSuccessWithResponse:(NSDictionary *)responseDict
 {
     NSLog(@"settingsAppNotifSuccessWithResponse: %@", responseDict);
-    self.camProfile.soundAlertEnabled = enableAlert[0];
-    self.camProfile.tempHiAlertEnabled = enableAlert[1];
-    self.camProfile.tempLoAlertEnabled = enableAlert[2];
-    self.camProfile.motionDetectionEnabled = enableAlert[3];
-    self.processView.hidden = YES;
-    //[self.navigationController popViewControllerAnimated:YES];
-    [self dismissViewControllerAnimated:YES completion:^{}];
+    _camProfile.soundAlertEnabled = enableAlert[0];
+    _camProfile.tempHiAlertEnabled = enableAlert[1];
+    _camProfile.tempLoAlertEnabled = enableAlert[2];
+    _camProfile.motionDetectionEnabled = enableAlert[3];
+    _processView.hidden = YES;
+
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)settingsAppNotifFailedWithResponse: (NSDictionary *)responseDict
 {
      NSLog(@"settingsAppNotifFailedWithResponse: %@", responseDict);
-    //[self.listNotifTableView reloadData];
-    self.processView.hidden = YES;
-    //[self.navigationController popViewControllerAnimated:YES];
-    [self dismissViewControllerAnimated:YES completion:^{}];
+    _processView.hidden = YES;
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)settingsAppNotifFailedServerUnreachable
 {
     NSLog(@"settingsAppNotifFailedServerUnreachable");
-    //[self.listNotifTableView reloadData];
+
     self.processView.hidden = YES;
-    //[self.navigationController popViewControllerAnimated:YES];
-    [self dismissViewControllerAnimated:YES completion:^{}];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark Table view delegates & datasource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    
     return 1;
 }
 
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
     return 4;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
     static NSString *CellIdentifier = @"NotificationSettingsCell";
     NotificationSettingsCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
     NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"NotificationSettingsCell" owner:nil options:nil];
-    
-    for (id curObj in objects)
-    {
-        
-        if([curObj isKindOfClass:[UITableViewCell class]])
-        {
+    for (id curObj in objects) {
+        if([curObj isKindOfClass:[UITableViewCell class]]) {
             cell = (NotificationSettingsCell *)curObj;
             break;
         }
     }
-    
-    // Configure the cell...
     
     cell.rowIndex = indexPath.row;
     cell.notifSettingsDelegate = self;
     
     switch (indexPath.row) {
         case 0:
-            [cell.settingSwitch setOn:_camProfile.soundAlertEnabled];
+            cell.settingSwitch.on = _camProfile.soundAlertEnabled;
             cell.settingsLabel.text = @"Sound Alert";
             break;
             
         case 1:
-            [cell.settingSwitch setOn:_camProfile.tempHiAlertEnabled];
+            cell.settingSwitch.on = _camProfile.tempHiAlertEnabled;
             cell.settingsLabel.text = @"High Temperature Alert";
             break;
             
         case 2:
-            [cell.settingSwitch setOn:_camProfile.tempLoAlertEnabled];
+            cell.settingSwitch.on = _camProfile.tempLoAlertEnabled;
             cell.settingsLabel.text = @"Low Temperature Alert";
             break;
             
         case 3:
-            [cell.settingSwitch setOn:_camProfile.motionDetectionEnabled];
+            cell.settingSwitch.on = _camProfile.motionDetectionEnabled;
             cell.settingsLabel.text = @"Motion Detection Alert";
+            break;
+            
         default:
             break;
     }
@@ -314,7 +276,7 @@
 
 - (void)tableView: (UITableView *)tableView didSelectRowAtIndexPath: (NSIndexPath *)indexPath
 {
-    [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow]
-                             animated:NO];
+    [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow] animated:NO];
 }
+
 @end

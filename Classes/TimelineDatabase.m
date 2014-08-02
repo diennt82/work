@@ -3,7 +3,7 @@
 //  BlinkHD_ios
 //
 //  Created by Admin on 24/4/14.
-//  Copyright (c) 2014 eBuyNow eCommerce Limited. All rights reserved.
+//  Copyright (c) 2014 Hubble Connected Ltd. All rights reserved.
 //
 
 #import "TimelineDatabase.h"
@@ -123,7 +123,7 @@ static TimelineDatabase *sharedInstance = nil;
                 //NSLog(@"%s: event_unix_ts: %d", __FUNCTION__, event_unix_ts);
                 
                 EventInfo *eventInfo = [[EventInfo alloc] init];
-                eventInfo.alert_name = [[[NSString alloc] initWithUTF8String:event_alert_name] autorelease];
+                eventInfo.alertName = [[[NSString alloc] initWithUTF8String:event_alert_name] autorelease];
                 eventInfo.value      = [[[NSString alloc] initWithUTF8String:event_value] autorelease];
                 eventInfo.eventID = [[[[NSString alloc] initWithUTF8String:event_id] autorelease] integerValue];
                 
@@ -135,7 +135,7 @@ static TimelineDatabase *sharedInstance = nil;
                 NSString *eventDate_str = [dateFormatter stringFromDate:eventDate];
                 [dateFormatter release];
                 
-                eventInfo.time_stamp = eventDate_str;
+                eventInfo.timeStamp = eventDate_str;
                 eventInfo.alert = [[[[NSString alloc] initWithUTF8String:event_alert] autorelease] integerValue];
                 
                 NSString *event_data_str = [[[NSString alloc] initWithUTF8String:event_data] autorelease];

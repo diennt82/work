@@ -3,7 +3,7 @@
 //  MBP_ios
 //
 //  Created by NxComm on 2/26/13.
-//  Copyright (c) 2013 Smart Panda Ltd. All rights reserved.
+//  Copyright (c) 2013 Hubble Connected Ltd. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>

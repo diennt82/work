@@ -10,24 +10,24 @@
 #import <CoreBluetooth/CoreBluetooth.h>
 
 @protocol UARTPeripheralDelegate
-- (void) didReceiveData:(NSString *) string;
-- (void) didReceiveRawData:(NSData *) data;
-- (void) onReceiveDataError:(int)error_code forCommand:(NSString *)commandToCamera;
+
+- (void) didReceiveData:(NSString *)string;
+- (void) didReceiveRawData:(NSData *)data;
+- (void) onReceiveDataError:(int)errorCode forCommand:(NSString *)commandToCamera;
 
 @optional
-- (void) didReadHardwareRevisionString:(NSString *) string;
--(void) readyToTxRx;
+- (void)didReadHardwareRevisionString:(NSString *)string;
+- (void)readyToTxRx;
+
 @end
 
 #define SEQUENCE_MAX 0x7f
 #define SEQUENCE_MIN 0x01
 
-
 typedef enum response_ {
     WRITE_SUCCESS = 0,
     WRITE_ERROR_OTHER_TRANSACTION_IN_PLACE,
 
-    
     READ_SUCCESS = 100,
     READ_ERROR_ZERO_LEN = 101,
     READ_ON_GOING = 102,
@@ -35,32 +35,32 @@ typedef enum response_ {
     
 } ble_response_t;
 
-
 @interface UARTPeripheral : NSObject <CBPeripheralDelegate>
 {
-    char sequence ;
-    NSMutableData  * rx_buff;
-    NSString * commandToCamera;
+    char sequence;
+    NSMutableData *rx_buff;
+    NSString *commandToCamera;
     ble_response_t read_error;
     int retry_count;
-    NSTimer *_timeOutCommand;
-    NSTimer * hello_timer;
     float timeout;
-    
 }
+
 @property (nonatomic, strong) CBPeripheral *peripheral;
-@property (assign) id<UARTPeripheralDelegate> delegate;
+@property (nonatomic, retain) NSTimer *helloTimer;
+@property (nonatomic, retain) NSTimer *timeOutCommand;
+
+@property (nonatomic, assign) id<UARTPeripheralDelegate> delegate;
 @property BOOL isBusy, isFlushing, isDisconnected;
-@property (nonatomic) NSTimer * hello_timer; 
 
 + (CBUUID *) uartServiceUUID;
 
-- (UARTPeripheral *) initWithPeripheral:(CBPeripheral*)peripheral delegate:(id<UARTPeripheralDelegate>) delegate;
+- (UARTPeripheral *) initWithPeripheral:(CBPeripheral*)peripheral delegate:(id<UARTPeripheralDelegate>)delegate;
 
-- (ble_response_t) writeString:(NSString *) string;
-- (ble_response_t) writeString:(NSString *) string withTimeOut:(NSTimeInterval) time;
-- (ble_response_t) flush;
-- (ble_response_t) flush:(NSTimeInterval) time;
-- (void) didConnect;
-- (void) didDisconnect;
+- (ble_response_t)writeString:(NSString *)string;
+- (ble_response_t)writeString:(NSString *)string withTimeOut:(NSTimeInterval)time;
+- (ble_response_t)flush;
+- (ble_response_t)flush:(NSTimeInterval) time;
+- (void)didConnect;
+- (void)didDisconnect;
+
 @end

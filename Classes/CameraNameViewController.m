@@ -3,7 +3,7 @@
 //  BlinkHD_ios
 //
 //  Created by Developer on 12/12/13.
-//  Copyright (c) 2013 Smart Panda Ltd. All rights reserved.
+//  Copyright (c) 2013 Hubble Connected Ltd. All rights reserved.
 //
 
 #import "CameraNameViewController.h"
@@ -12,33 +12,20 @@
 
 @interface CameraNameViewController () <UITextFieldDelegate, UIAlertViewDelegate>
 
-@property (retain, nonatomic) IBOutlet UITableViewCell *nameCell;
-@property (retain, nonatomic) IBOutlet UIView *viewPorgress;
+@property (nonatomic, retain) IBOutlet UITableViewCell *nameCell;
+@property (nonatomic, retain) IBOutlet UIView *viewPorgress;
 
 @end
 
 @implementation CameraNameViewController
 
-- (id)initWithStyle:(UITableViewStyle)style
-{
-    self = [super initWithStyle:style];
-    if (self) {
-        // Custom initialization
-        self.title = @"Name";
-    }
-    return self;
-}
+#pragma mark - UIViewController methods
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
- 
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    
+    self.title = @"Name";
     UIBarButtonItem *doneBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
                                                                                        target:self
                                                                                        action:@selector(doneAction:)];
@@ -49,7 +36,6 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     UITextField *nameTF = (UITextField *) [self.nameCell viewWithTag:59];
-    
     [nameTF becomeFirstResponder];
     nameTF.clearButtonMode = UITextFieldViewModeWhileEditing;
 }
@@ -69,23 +55,19 @@
                                                                              Selector:nil
                                                                          FailSelector:nil
                                                                             ServerErr:nil];
+    
     NSDictionary *responseDict = [jsonComm updateDeviceBasicInfoBlockedWithRegistrationId:self.parentVC.camChannel.profile.registrationID
                                                                                deviceName:cameraName
                                                                                  timeZone:nil
                                                                                      mode:nil
                                                                           firmwareVersion:nil
                                                                                 andApiKey:apiKey];
-    if (responseDict != nil)
-    {
-        if ([[responseDict objectForKey:@"status"] integerValue] == 200)
-        {
-            self.parentVC.camChannel.profile.name = cameraName;
+    if ( responseDict ) {
+        if ([responseDict[@"status"] integerValue] == 200) {
+            _parentVC.camChannel.profile.name = cameraName;
             [self.navigationController popViewControllerAnimated:YES];
         }
-        else
-        {
-            NSLog(@"CameraNameVC - Change cameraname failed!");
-            
+        else {
             [[[[UIAlertView alloc] initWithTitle:@"Change Camera Name"
                                        message:[responseDict objectForKey:@"message"]
                                       delegate:self
@@ -93,10 +75,7 @@
                                otherButtonTitles:@"OK", nil] autorelease] show];
         }
     }
-    else
-    {
-        NSLog(@"CameraNameVC - doneAction - responseDict == nil");
-        
+    else {
         [[[[UIAlertView alloc] initWithTitle:@"Change Camera Name"
                                      message:@"Server Error"
                                     delegate:self
@@ -105,12 +84,10 @@
     }
 }
 
--(BOOL) isCamNameValidated:(NSString *) cameraNames
+- (BOOL)isCamNameValidated:(NSString *)cameraNames
 {
-    if (cameraNames.length < MIN_LENGTH_CAMERA_NAME ||
-        MAX_LENGTH_CAMERA_NAME < cameraNames.length)
-    {
-        return FALSE;
+    if (cameraNames.length < MIN_LENGTH_CAMERA_NAME || MAX_LENGTH_CAMERA_NAME < cameraNames.length) {
+        return NO;
     }
     
     NSString * regex = @"[a-zA-Z0-9._-]+";
@@ -118,12 +95,6 @@
     BOOL isValidatedName = [validatedName evaluateWithObject:cameraNames];
     
     return isValidatedName;
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 #pragma mark - Alert dialog delegat
@@ -139,8 +110,6 @@
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
 	[textField resignFirstResponder];
-    //[textField becomeFirstResponder];
-    
     return YES;
 }
 
@@ -148,12 +117,10 @@
 {
     NSString *nameString = [NSString stringWithFormat:@"%@%@", textField.text, string];
     
-    if ([self isCamNameValidated:nameString])
-    {
+    if ([self isCamNameValidated:nameString]) {
         self.navigationItem.rightBarButtonItem.enabled = YES;
     }
-    else
-    {
+    else {
         self.navigationItem.rightBarButtonItem.enabled = NO;
     }
     
@@ -164,32 +131,18 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    //#warning Potentially incomplete method implementation.
-    // Return the number of sections.
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    //#warning Incomplete method implementation.
-    // Return the number of rows in the section.
     return 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-//    static NSString *CellIdentifier = @"Cell";
-//    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-//    if (cell == nil) {
-//        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-//    }
-//    
-//    // Configure the cell...
-//    
-//    return cell;
-    
-    UITextField *nameTF = (UITextField *) [self.nameCell viewWithTag:59];
-    nameTF.text = self.cameraName;
+    UITextField *nameTF = (UITextField *)[_nameCell viewWithTag:59];
+    nameTF.text = _cameraName;
     nameTF.delegate = self;
     
     return _nameCell;
@@ -200,66 +153,11 @@
     return NO;
 }
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)dealloc
 {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-/*
-#pragma mark - Table view delegate
-
-// In a xib-based application, navigation from a table can be handled in -tableView:didSelectRowAtIndexPath:
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Navigation logic may go here, for example:
-    // Create the next view controller.
-    <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-
-    // Pass the selected object to the new view controller.
-    
-    // Push the view controller.
-    [self.navigationController pushViewController:detailViewController animated:YES];
-}
- 
- */
-
-- (void)dealloc {
     [_nameCell release];
     [_viewPorgress release];
     [super dealloc];
 }
+
 @end

@@ -3,7 +3,7 @@
 //  MBP_ios
 //
 //  Created by NxComm on 3/9/13.
-//  Copyright (c) 2013 eBuyNow eCommerce Limited. All rights reserved.
+//  Copyright (c) 2013 Hubble Connected Ltd. All rights reserved.
 //
 
 #import "H264PlayerViewController.h"
@@ -1829,7 +1829,7 @@ double _ticks = 0;
 	//Store some of the info for used in menu  --
     
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-	BOOL isOffline = [userDefaults boolForKey:_OfflineMode];
+	BOOL isOffline = [userDefaults boolForKey:OFFLINE_MODE_KEY];
     
 	[userDefaults setBool:!(isOffline) forKey:_is_Loggedin];
     
@@ -3899,16 +3899,15 @@ double _ticks = 0;
     
 	if (UIInterfaceOrientationIsLandscape(orientation)) {
         _isLandScapeMode = YES;
+
         //load new nib for landscape iPad
+        [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController_land" owner:self options:nil];
+        self.melodyViewController = [[[MelodyViewController alloc] initWithNibName:@"MelodyViewController_land" bundle:nil] autorelease];
+        
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController_land_iPad" owner:self options:nil];
-            self.melodyViewController = [[[MelodyViewController alloc] initWithNibName:@"MelodyViewController_land" bundle:nil] autorelease];
             [_earlierVC.view setFrame:CGRectMake(0, 0, SCREEN_HEIGHT, SCREEN_WIDTH)];
         }
         else {
-            [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController_land" owner:self options:nil];
-            self.melodyViewController = [[[MelodyViewController alloc] initWithNibName:@"MelodyViewController_land" bundle:nil] autorelease];
-            
             if (isiOS7AndAbove) {
                 self.melodyViewController.view.frame = CGRectMake(393, 78, 175, 165);
             }
@@ -3948,19 +3947,15 @@ double _ticks = 0;
         [self addGesturesPichInAndOut];
 	}
 	else if ( UIInterfaceOrientationIsPortrait(orientation) ) {
-        //load new nib
-        //remove pinch in, out (zoom for portrait)
+        // remove pinch in, out (zoom for portrait)
         [self removeGestureRecognizerAtPortraitMode];
+
+        // load new nib
+        [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController" owner:self options:nil];
+        self.melodyViewController = [[[MelodyViewController alloc] initWithNibName:@"MelodyViewController" bundle:nil] autorelease];
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController_ipad" owner:self options:nil];
-            self.melodyViewController = [[[MelodyViewController alloc] initWithNibName:@"MelodyViewController_iPad" bundle:nil] autorelease];
             [_earlierVC.view setFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT - 64)];
-        }
-        else
-        {
-            [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController" owner:self options:nil];
-            self.melodyViewController = [[[MelodyViewController alloc] initWithNibName:@"MelodyViewController" bundle:nil] autorelease];
         }
         
         if ( !_isHorizeShow ) {

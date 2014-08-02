@@ -3,7 +3,7 @@
 //  MBP_ios
 //
 //  Created by NxComm on 7/27/12.
-//  Copyright (c) 2012 Smart Panda Ltd. All rights reserved.
+//  Copyright (c) 2012 Hubble Connected Ltd. All rights reserved.
 //
 
 #define TAG_IMAGE_VIEW_ANIMATION 595
@@ -239,7 +239,7 @@
         self.userAccount = [[UserAccount alloc] initWithUser:userEmail
                                                     password:userPass
                                                       apiKey:userApiKey
-                                                    listener:nil];
+                                             accountDelegate:nil];
     }
 
 #if 1
@@ -318,26 +318,12 @@
     // Try to update host ssid to server
     [self updatesBasicInfoForCamera];
     
-    //Load step 12
+    // Load step 12
     NSLog(@"Load step 12");
     
-    //Load the next xib
-    Step_12_ViewController *step12ViewController = nil;
-    
-    //    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-    //    {
-    //
-    //        step12ViewController = [[Step_12_ViewController alloc]
-    //                                initWithNibName:@"Step_12_ViewController_ipad" bundle:nil];
-    //    }
-    //    else
-    {
-        step12ViewController = [[Step_12_ViewController alloc]
-                                initWithNibName:@"Step_12_ViewController" bundle:nil];
-    }
-    
+    // Load the next xib
+    Step_12_ViewController *step12ViewController = [[Step_12_ViewController alloc] initWithNibName:@"Step_12_ViewController" bundle:nil];
     [self.navigationController pushViewController:step12ViewController animated:NO];
-    
     [step12ViewController release];
 }
 
@@ -361,25 +347,11 @@
     
     //Load the next xib
     Step_11_ViewController *step11ViewController = nil;
-    
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-    {
-        step11ViewController = [[Step_11_ViewController alloc]
-                                initWithNibName:@"Step_11_ViewController_ipad" bundle:nil];
-    }
-    else
-    {
-        step11ViewController = [[Step_11_ViewController alloc]
-                                initWithNibName:@"Step_11_ViewController" bundle:nil];
-    }
-    
+    step11ViewController = [[Step_11_ViewController alloc] initWithNibName:@"Step_11_ViewController" bundle:nil];
     step11ViewController.errorCode = self.errorCode;
     [self.navigationController pushViewController:step11ViewController animated:NO];
-    
     [step11ViewController release];
 }
-
-
 
 -(void) removeCamSuccessWithResponse:(NSDictionary *)responseData
 {

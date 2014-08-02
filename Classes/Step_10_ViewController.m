@@ -195,21 +195,11 @@
     }
     
     [self.progressView setHidden:YES];
-    //Load step 12
+    
+    // Load step 12
     NSLog(@"Load step 12");
-    
-    //Load the next xib
-    Step_12_ViewController *step12ViewController = nil;
-    
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        step12ViewController = [[Step_12_ViewController alloc] initWithNibName:@"Step_12_ViewController_ipad" bundle:nil];
-    }
-    else {
-        step12ViewController = [[Step_12_ViewController alloc] initWithNibName:@"Step_12_ViewController" bundle:nil];
-    }
-    
+    Step_12_ViewController *step12ViewController = [[Step_12_ViewController alloc] initWithNibName:@"Step_12_ViewController" bundle:nil];
     [self.navigationController pushViewController:step12ViewController animated:NO];
-    
     [step12ViewController release];
 }
 
@@ -247,18 +237,9 @@
         NSLog(@"Load step 11");
         
         //Load the next xib
-        Step_11_ViewController *step11ViewController = nil;
-        
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            step11ViewController = [[Step_11_ViewController alloc] initWithNibName:@"Step_11_ViewController_ipad" bundle:nil];
-        }
-        else {
-            step11ViewController = [[Step_11_ViewController alloc] initWithNibName:@"Step_11_ViewController" bundle:nil];
-        }
-        
+        Step_11_ViewController *step11ViewController = [[Step_11_ViewController alloc] initWithNibName:@"Step_11_ViewController" bundle:nil];
         step11ViewController.errorCode = self.errorCode;
         [self.navigationController pushViewController:step11ViewController animated:NO];
-        
         [step11ViewController release];
     }
 }
@@ -736,7 +717,7 @@
         self.userAccount = [[UserAccount alloc] initWithUser:userEmail
                                                     password:userPass
                                                       apiKey:userApiKey
-                                                    listener:nil];
+                                             accountDelegate:nil];
     }
     
     NSInteger cameraStatus = [_userAccount checkAvailableAndFWUpgradingWithCamera:self.cameraMac];
@@ -782,7 +763,7 @@
         self.userAccount = [[UserAccount alloc] initWithUser:userEmail
                                                     password:userPass
                                                       apiKey:userApiKey
-                                                    listener:nil];
+                                             accountDelegate:nil];
     }
     
     if ([_userAccount checkCameraIsAvailable:self.cameraMac])
@@ -812,7 +793,7 @@
         self.userAccount = [[UserAccount alloc] initWithUser:userEmail
                                                     password:userPass
                                                       apiKey:userApiKey
-                                                    listener:nil];
+                                             accountDelegate:nil];
     }
 #if 1
     if ([_userAccount checkCameraIsAvailable:self.cameraMac]) {

@@ -27,12 +27,10 @@ typedef enum {
 } UICircularSliderStyle;
 
 @interface UICircularSlider : UIControl
-{
-    UITextField *_textField;
-}
-@property(nonatomic, retain) UITextField *textField;
 
+@property(nonatomic, retain) UITextField *textField;
 @property(nonatomic, retain) UITextField *minuteTField;
+
 /**
  * The current value of the receiver.
  *
@@ -96,9 +94,8 @@ typedef enum {
 @property (nonatomic) UICircularSliderStyle sliderStyle;
 
 - (void)startTimerUpdateLabel;
--(void)setEnableView:(BOOL)isEnable;
-@end
 
+@end
 
 /** @name Utility Functions */
 #pragma mark - Utility Functions
@@ -116,6 +113,7 @@ typedef enum {
  *				b = dMax - a*sMax = dMin - a*sMin
  */
 float translateValueFromSourceIntervalToDestinationInterval(float sourceValue, float sourceIntervalMinimum, float sourceIntervalMaximum, float destinationIntervalMinimum, float destinationIntervalMaximum);
+
 /**
  * Returns the smallest angle between three points, one of them clearly indicated as the "junction point" or "center point".
  * @param centerPoint	The "center point" or "junction point"
@@ -126,4 +124,3 @@ float translateValueFromSourceIntervalToDestinationInterval(float sourceValue, f
  * This function uses the properties of the triangle and arctan (atan2f) function to calculate the angle.
  */
 CGFloat angleBetweenThreePoints(CGPoint centerPoint, CGPoint p1, CGPoint p2);
-

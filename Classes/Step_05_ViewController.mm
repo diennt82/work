@@ -3,7 +3,7 @@
 //  MBP_ios
 //
 //  Created by NxComm on 7/25/12.
-//  Copyright (c) 2012 eBuyNow eCommerce Limited. All rights reserved.
+//  Copyright (c) 2012 Hubble Connected Ltd. All rights reserved.
 //
 
 #import "Step_05_ViewController.h"
@@ -18,13 +18,13 @@
 
 @interface Step_05_ViewController () <UIAlertViewDelegate>
 
-@property (retain, nonatomic) IBOutlet UIButton *btnContinue;
-@property (retain, nonatomic) IBOutlet UITableViewCell *cellOtherNetwork;
-@property (retain, nonatomic) IBOutlet UITableViewCell *cellRefresh;
-@property (retain, nonatomic) IBOutlet UIView *viewProgress;
+@property (nonatomic, retain) IBOutlet UIButton *btnContinue;
+@property (nonatomic, retain) IBOutlet UITableViewCell *cellOtherNetwork;
+@property (nonatomic, retain) IBOutlet UITableViewCell *cellRefresh;
+@property (nonatomic, retain) IBOutlet UIView *viewProgress;
 
-@property (retain, nonatomic) WifiEntry *selectedWifiEntry;
-@property (retain, nonatomic) WifiEntry *otherWiFi;
+@property (nonatomic, retain) WifiEntry *selectedWifiEntry;
+@property (nonatomic, retain) WifiEntry *otherWiFi;
 
 @end
 
@@ -65,24 +65,18 @@
     [imageView startAnimating];
     
     //Create an entry for "Other.."
-    self.otherWiFi = [[WifiEntry alloc]initWithSSID:@"\"Other Network\""];
+    self.otherWiFi = [[WifiEntry alloc] initWithSSID:@"\"Other Network\""];
     _otherWiFi.bssid = @"Other";
-    _otherWiFi.auth_mode = @"None";
-    _otherWiFi.signal_level = 0;
-    _otherWiFi.noise_level = 0;
+    _otherWiFi.authMode = @"None";
+    _otherWiFi.signalLevel = 0;
+    _otherWiFi.noiseLevel = 0;
     _otherWiFi.quality = nil;
-    _otherWiFi.encrypt_type = @"None";
+    _otherWiFi.encryptType = @"None";
     
     [self.view addSubview:_viewProgress];
     [self.view bringSubviewToFront:_viewProgress];
     
     [self performSelector:@selector(queryWifiList) withObject:nil afterDelay:0.001];
-}
-
-- (void)viewDidUnload
-{
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
 }
 
 -(void)dealloc
@@ -100,13 +94,13 @@
 
 - (void)filterCameraList
 {
-    NSMutableArray * wifiList = [[NSMutableArray alloc] init];
+    NSMutableArray *wifiList = [[NSMutableArray alloc] init];
     
     for (int i = 0; i < _listOfWifi.count; i++) {
         WifiEntry *wifi = _listOfWifi[i];
-        if (![wifi.ssid_w_quote hasPrefix:@"\"Camera-"] &&
-            ![wifi.ssid_w_quote isEqualToString:@"\"\""] &&
-            ![wifi.ssid_w_quote hasPrefix:@"\"CameraHD-"])
+        if (![wifi.ssidWithQuotes hasPrefix:@"\"Camera-"] &&
+            ![wifi.ssidWithQuotes isEqualToString:@"\"\""] &&
+            ![wifi.ssidWithQuotes hasPrefix:@"\"CameraHD-"])
         {
             [wifiList addObject:wifi];
         }
@@ -134,7 +128,7 @@
      * The selected is HOME or not doesn't mater, just check to confirm.
      */
     
-    if ([_selectedWifiEntry.auth_mode isEqualToString:@"open"]) {
+    if ([_selectedWifiEntry.authMode isEqualToString:@"open"]) {
         [[[[UIAlertView alloc] initWithTitle:@"SSID without password is not supported due to security concern. Please add password to your router."
                                    message:nil
                                   delegate:nil
@@ -144,8 +138,8 @@
     else {
         [[KISSMetricsAPI sharedAPI] recordEvent:@"Step05 - Touch continue button" withProperties:nil];
         
-        NSRange noQoute = NSMakeRange(1, _selectedWifiEntry.ssid_w_quote.length - 2);
-        NSString *wifiName = [_selectedWifiEntry.ssid_w_quote substringWithRange:noQoute];
+        NSRange noQoute = NSMakeRange(1, _selectedWifiEntry.ssidWithQuotes.length - 2);
+        NSString *wifiName = [_selectedWifiEntry.ssidWithQuotes substringWithRange:noQoute];
         NSString *homeWifi = [[NSUserDefaults standardUserDefaults] stringForKey:HOME_SSID];
     
         if ([wifiName isEqualToString:homeWifi]) {
@@ -163,35 +157,25 @@
 {
     NSLog(@"Load step 6");
     //Load the next xib
-    Step_06_ViewController *step06ViewController = nil;
+    Step_06_ViewController *step06ViewController = [[Step_06_ViewController alloc] initWithNibName:@"Step_06_ViewController" bundle:nil];
     
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        step06ViewController = [[Step_06_ViewController alloc] initWithNibName:@"Step_06_ViewController_ipad" bundle:nil];
-    }
-    else {
-        step06ViewController = [[Step_06_ViewController alloc] initWithNibName:@"Step_06_ViewController" bundle:nil];
-    }
-    
-    NSRange noQoute = NSMakeRange(1, _selectedWifiEntry.ssid_w_quote.length - 2);
-
-    NSString *wifiName = [_selectedWifiEntry.ssid_w_quote substringWithRange:noQoute];
+    NSRange noQoute = NSMakeRange(1, _selectedWifiEntry.ssidWithQuotes.length - 2);
+    NSString *wifiName = [_selectedWifiEntry.ssidWithQuotes substringWithRange:noQoute];
     
     [[NSUserDefaults standardUserDefaults] setObject:wifiName forKey:HOST_SSID];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
     step06ViewController.isOtherNetwork = [wifiName isEqualToString:@"Other Network"];
-    
     step06ViewController.ssid = wifiName;
-    step06ViewController.security = _selectedWifiEntry.auth_mode;
+    step06ViewController.security = _selectedWifiEntry.authMode;
     
     [self.navigationController pushViewController:step06ViewController animated:NO];
-    
     [step06ViewController release];
 }
 
 - (void)showDialogToConfirm:(NSString *)homeWifi selectedWifi:(NSString *)selectedWifi
 {
-    NSString * msg = [NSString stringWithFormat:@"You have selected wifi %@ which is not the same as your Home wifi, %@. If you choose to continue, there will more steps to setup your camera. Do you want to proceed?", selectedWifi, homeWifi];
+    NSString *msg = [NSString stringWithFormat:@"You have selected wifi %@ which is not the same as your Home wifi, %@. If you choose to continue, there will more steps to setup your camera. Do you want to proceed?", selectedWifi, homeWifi];
     
     UIAlertView *alertViewNotice = [[UIAlertView alloc] initWithTitle:@"Notice"
                                                         message:msg
@@ -208,7 +192,7 @@
     NSLog(@"Step_05_VC - queryWifiList. Waiting...");
     self.navigationController.navigationBar.userInteractionEnabled = NO;
     
-    NSData * router_list_raw;
+    NSData *router_list_raw;
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString *fwVersion = [userDefaults stringForKey:FW_VERSION]; // 01.12.58
     
@@ -302,17 +286,16 @@
 
 #pragma mark - WifiListParse delegate
 
--(void)setWifiResult:(NSArray *)wifiList
+- (void)setWifiResult:(NSArray *)wifiList
 {
     NSLog(@"GOT WIFI RESULT: numentries: %d", wifiList.count);
     //hide progressView
     [_viewProgress removeFromSuperview];
 
-    WifiEntry * entry;
-
+    WifiEntry *entry;
     for (int i = 0; i < wifiList.count; i++) {
         entry = [wifiList objectAtIndex:i];
-        NSLog(@"entry: %d, ssid_w_quote: %@, bssid: %@, auth_mode: %@, quality: %@", i, entry.ssid_w_quote, entry.bssid, entry.auth_mode, entry.quality);
+        NSLog(@"entry: %d, ssid_w_quote: %@, bssid: %@, auth_mode: %@, quality: %@", i, entry.ssidWithQuotes, entry.bssid, entry.authMode, entry.quality);
     }
     
     self.listOfWifi = [NSMutableArray arrayWithArray:wifiList];
@@ -334,7 +317,6 @@
     if (section == 1) {
         return 1;
     }
-    
     return _listOfWifi.count;
 }
 
@@ -354,7 +336,7 @@
             }
             
             WifiEntry *entry = _listOfWifi[indexPath.row];
-            cell.lblName.text = [entry.ssid_w_quote substringWithRange:NSMakeRange(1, entry.ssid_w_quote.length - 2)]; // Remove " & "
+            cell.lblName.text = [entry.ssidWithQuotes substringWithRange:NSMakeRange(1, entry.ssidWithQuotes.length - 2)]; // Remove " & "
             
             return cell;
         }
@@ -375,7 +357,6 @@
                                                     withAction:@"Select Wifi entry"
                                                      withLabel:@"Row"
                                                      withValue:[NSNumber numberWithInteger:indexPath.row]];
-    
     if (indexPath.section == 0) {
         _btnContinue.enabled = YES;
         self.selectedWifiEntry = (WifiEntry *)_listOfWifi[indexPath.row];

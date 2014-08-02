@@ -3,12 +3,8 @@
 //  MBP_ios
 //
 //  Created by NxComm on 4/24/12.
-//  Copyright 2012 eBuyNow eCommerce Limited. All rights reserved.
+//  Copyright 2012 Hubble Connected Ltd. All rights reserved.
 //
-
-#import <CameraScanner/CameraScanner.h>
-#import <MonitorCommunication/MonitorCommunication.h>
-#import "SetupData.h"
 
 #define API_KEY @"API_KEY"
 #define CAMERA_STATE_UNKNOWN       -1
@@ -18,35 +14,25 @@
 
 @protocol UserAccountDelegate <NSObject>
 
-- (void)finishStoreCameraListData: (NSMutableArray *)arrayCamProfile success: (BOOL)success;
-//- (void)getCameraListError;
+- (void)finishStoreCameraListData:(NSMutableArray *)arrayCamProfile success:(BOOL)success;
 
 @end
 
 @interface UserAccount : NSObject
 
-//@property (nonatomic,assign) id <ConnectionMethodDelegate> delegate;
-@property (nonatomic,retain) NSString *userName;
-@property (nonatomic,retain) NSString *userPass;
-@property (nonatomic, retain) NSString *apiKey;
-//@property (nonatomic, assign) id<UserAccountLoginDelegate> uaLoginDelegate;
+@property (nonatomic, copy) NSString *userName;
+@property (nonatomic, copy) NSString *userPass;
+@property (nonatomic, copy) NSString *apiKey;
 
-//- (id) initWithUser:(NSString *)user andPass:(NSString *)pass andApiKey: (NSString *)apiKey andListener:(id <ConnectionMethodDelegate>) d;
 - (id)initWithUser:(NSString *)user
           password:(NSString *)pass
             apiKey:(NSString *)apiKey
-          listener:(id<UserAccountDelegate> ) d;
-
-//Get cam list callbacks
-//- (void)getCamListSuccess:(NSDictionary *)raw_data;
-//-(void) getCamListFailure:(NSHTTPURLResponse*) error_response; 
-//- (void)getCamListServerUnreachable; 
+   accountDelegate:(id<UserAccountDelegate>)delegate;
 
 - (NSMutableArray *)parse_camera_list:(NSArray *)raw;
 - (void)sync_online_and_offline_data:(NSMutableArray *)online_list;
 - (void)query_snapshot_from_server:(NSArray *)cam_profiles;
 
-//-(void) query_disabled_alert_list:(NSArray *) cam_profiles;
 - (NSString *)query_cam_ip_online:(NSString *)mac_no_colon;
 - (void)readCameraListAndUpdate;
 - (BOOL)checkCameraIsAvailable:(NSString *)mac_w_colon;

@@ -3,7 +3,7 @@
 //  MBP_ios
 //
 //  Created by NxComm on 7/26/12.
-//  Copyright (c) 2012 Smart Panda Ltd. All rights reserved.
+//  Copyright (c) 2012 Hubble Connected Ltd. All rights reserved.
 //
 
 #import "NetworkInfoToCamera_VController.h"
@@ -517,43 +517,15 @@
     }
 }
 
-#pragma  mark -
+#pragma mark -
 
-
--(void) changeSecurityType
+- (void)changeSecurityType
 {
     //load step 07
     NSLog(@"Load step 7");
-    
-    
-    //Load the next xib
-    //    Step_07_ViewController *step07ViewController = nil;
-    //
-    //    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-    //    {
-    //
-    //
-    //        step07ViewController = [[Step_07_ViewController alloc]
-    //                                initWithNibName:@"Step_07_ViewController_ipad" bundle:nil];
-    //
-    //    }
-    //    else
-    //    {
-    //        step07ViewController = [[Step_07_ViewController alloc]
-    //                                initWithNibName:@"Step_07_ViewController" bundle:nil];
-    //
-    //    }
-    //
-    //    step07ViewController.step06 = self;
-    //    [self.navigationController pushViewController:step07ViewController animated:NO];
-    //
-    //    [step07ViewController release];
-    
 }
 
-
-
--(void) handleNextButton:(id) sender
+- (void)handleNextButton:(id)sender
 {
     //check if password is ok?
     

@@ -3,7 +3,7 @@
 //  MBP_ios
 //
 //  Created by NxComm on 4/25/12.
-//  Copyright 2012 eBuyNow eCommerce Limited. All rights reserved.
+//  Copyright 2012 Hubble Connected Ltd. All rights reserved.
 //
 
 #import <CameraScanner/CameraScanner.h>
