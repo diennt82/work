@@ -13,15 +13,15 @@
 #import "Step_05_ViewController.h"
 #import "MBProgressHUD.h"
 #import "Step_10_ViewController.h"
-#import "CustomIOS7AlertView.h"
+//#import "CustomIOS7AlertView.h"
 
-@interface Step_04_ViewController () <UITextFieldDelegate, UIAlertViewDelegate, CustomIOS7AlertViewDelegate>
+@interface Step_04_ViewController () <UITextFieldDelegate, UIAlertViewDelegate>
 
 @property (retain, nonatomic) IBOutlet UITextField *tfCamName;
 @property (retain, nonatomic) IBOutlet UIButton *btnContinue;
 @property (retain, nonatomic) IBOutlet UIButton *btnSkipWIFISetup;
 
-@property (retain, nonatomic) CustomIOS7AlertView *alertView;
+//@property (retain, nonatomic) CustomIOS7AlertView *alertView;
 
 @end
 
@@ -105,6 +105,8 @@
         step05ViewController =  [[Step_05_ViewController alloc]
                                  initWithNibName:@"Step_05_ViewController" bundle:nil];
     }
+    
+    step05ViewController.camProfile = _camProfile;
 
     [self.navigationController pushViewController:step05ViewController animated:NO];
     
@@ -112,170 +114,7 @@
     
     self.btnContinue.enabled = YES;
     
-    [self customIOS7dialogButtonTouchUpInside:_alertView clickedButtonAtIndex:0];
-}
-
-- (void)configureCameraAndMoveToFinalStep
-{
-    [self configureCamera];
-    
-    [[NSUserDefaults standardUserDefaults] setObject:[CameraPassword fetchSSIDInfo] forKey:HOST_SSID];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-    
-    [self performSelectorOnMainThread:@selector(moveToFinalStep) withObject:nil waitUntilDone:NO];
-}
-
-- (void)moveToFinalStep
-{
-    //[MBProgressHUD hideHUDForView:self.view animated:NO];
-    [self customIOS7dialogButtonTouchUpInside:_alertView clickedButtonAtIndex:0];
-    
-    Step_10_ViewController *step10ViewController = nil;
-    
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-    {
-        
-        
-        step10ViewController = [[Step_10_ViewController alloc]
-                                initWithNibName:@"Step_10_ViewController_ipad" bundle:nil];
-    }
-    else
-    {
-        
-        step10ViewController = [[Step_10_ViewController alloc]
-                                initWithNibName:@"Step_10_ViewController" bundle:nil];
-    }
-    
-    [self.navigationController pushViewController:step10ViewController animated:NO];
-    [step10ViewController release];
-}
-
-- (void)configureCamera
-{
-    /*
-     * 1. Set Auth.
-     * 2. Default on all of PN.
-     * 3. Get UDID
-     * 4. Restart systems.
-     */
-    
-    // 1.
-    NSDate *now = [NSDate date];
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"ZZZ"];
-    
-    NSMutableString *stringFromDate = [NSMutableString stringWithString:[formatter stringFromDate:now]];
-    [formatter release];
-    [stringFromDate insertString:@"." atIndex:3];
-    
-    NSString * set_auth_cmd = [NSString stringWithFormat:@"%@%@%@%@%@",
-                               SET_SERVER_AUTH,
-                               SET_SERVER_AUTH_PARAM1, [[NSUserDefaults standardUserDefaults] stringForKey:@"PortalApiKey"],
-                               SET_SERVER_AUTH_PARAM2, stringFromDate];
-    
-    NSString *response = [[HttpCom instance].comWithDevice sendCommandAndBlock:set_auth_cmd
-                                                                   withTimeout:10.0];
-    NSLog(@"set auth -set_auth_cmd: %@, -response: %@ ", set_auth_cmd, response);
-    
-    // 2.
-    [self defaultOnAllPNToCamera];
-    
-    // 3.
-#if 1
-    NSString *stringUDID = @"";
-    NSString *stringMac = @"00:00:00:00:00";
-    
-    response = [[HttpCom instance].comWithDevice sendCommandAndBlock:GET_UDID
-                                                                   withTimeout:5.0];
-    
-    NSString *pattern = [NSString stringWithFormat:@"^%@: [0-9A-Z]{26}$", GET_UDID];
-    NSError *error = NULL;
-    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:pattern
-                                                                           options:NSRegularExpressionAnchorsMatchLines
-                                                                             error:&error];
-    if (!regex)
-    {
-        NSLog(@"%s error:%@", __FUNCTION__, error.description);
-    }
-    else
-    {
-        NSLog(@"%s respone:%@", __FUNCTION__, response);
-        
-        if (response)
-        {
-            //get_udid: 01008344334C32B0A0VFFRBSVA
-            NSUInteger numberOfMatches = [regex numberOfMatchesInString:response
-                                                                options:0
-                                                                  range:NSMakeRange(0, [response length])];
-            NSLog(@"%s numberOfMatches:%lu", __FUNCTION__, (unsigned long)numberOfMatches);
-            
-            if (numberOfMatches == 1)
-            {
-                stringUDID = [response substringFromIndex:GET_UDID.length + 2];
-                stringMac = [Util add_colon_to_mac:[stringUDID substringWithRange:NSMakeRange(6, 12)]];
-            }
-        }
-    }
-    //save mac address for used later
-    
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setObject:stringMac forKey:@"CameraMacWithQuote"];
-    [userDefaults setObject:stringUDID forKey:CAMERA_UDID];
-    [userDefaults synchronize];
-#else
-    NSString *stringUDID = @"";
-    
-    stringUDID = [[HttpCom instance].comWithDevice sendCommandAndBlock:GET_UDID
-                                                           withTimeout:5.0];
-    NSLog(@"%s stringUDID:%@", __FUNCTION__, stringUDID);
-    
-    //get_udid: 01008344334C32B0A0VFFRBSVA
-    NSRange range = [stringUDID rangeOfString:@": "];
-    
-    if (range.location != NSNotFound)
-    {
-        //01008344334C32B0A0VFFRBSVA
-        stringUDID = [stringUDID substringFromIndex:range.location + 2];
-    }
-    else
-    {
-        NSLog(@"Error - Received UDID wrong format - UDID: %@", stringUDID);
-    }
-    
-    //save mac address for used later
-    
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setObject:_camProfile.mac_address forKey:@"CameraMacWithQuote"];
-    [userDefaults setObject:stringUDID forKey:CAMERA_UDID];
-    [userDefaults synchronize];
-#endif
-    
-    // 4.
-    response = [[HttpCom instance].comWithDevice sendCommandAndBlock:RESTART_HTTP_CMD];
-    
-    NSLog(@"%s RESTART_HTTP_CMD: %@", __FUNCTION__, response);
-}
-
-- (void)defaultOnAllPNToCamera
-{
-    NSString *result = @"";
-    
-    NSString *response = [[HttpCom instance].comWithDevice sendCommandAndBlock:@"set_motion_area&grid=1x1&zone=00"];
-    result = [result stringByAppendingString:response];
-    
-    if (!_camProfile) // Meaning this is not a Focus73 model!
-    {
-        response = [[HttpCom instance].comWithDevice sendCommandAndBlock:@"vox_enable"];
-        result = [result stringByAppendingFormat:@", %@", response];
-        
-        response = [[HttpCom instance].comWithDevice sendCommandAndBlock:@"set_temp_lo_enable&value=1"];
-        result = [result stringByAppendingFormat:@", %@", response];
-        
-        response = [[HttpCom instance].comWithDevice sendCommandAndBlock:@"set_temp_hi_enable&value=1"];
-        result = [result stringByAppendingFormat:@", %@", response];
-    }
-    
-    NSLog(@"%s respnse:%@", __FUNCTION__, result);
+    //[self customIOS7dialogButtonTouchUpInside:_alertView clickedButtonAtIndex:0];
 }
 
 #pragma mark - Text field delegate
@@ -409,7 +248,7 @@
     else if (tag == CONF_CAM_BTN_TAG)
     {
         //show progress view
-#if 1
+#if 0
         [self createHubbleAlertView];
 #else
         [self.progressView setHidden:NO];
@@ -425,7 +264,46 @@
         
         //[self performSelectorInBackground:@selector(queryWifiList) withObject:nil];
         self.btnContinue.enabled = NO;
+#if 1
         
+        if (_camProfile) // This is a Focus73 model!
+        {
+            NSString *response = [[HttpCom instance].comWithDevice sendCommandAndBlock:GET_VERSION];
+            NSLog(@"%s response: %@", __FUNCTION__, response);
+            
+            NSError *error = NULL;
+            NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"^get_version: \\d{2}.\\d{2}.\\d{2}$"
+                                                                                   options:NSRegularExpressionAnchorsMatchLines
+                                                                                     error:&error];
+            if (!regex)
+            {
+                NSLog(@"%s error:%@", __FUNCTION__, error.description);
+            }
+            else
+            {
+                if (response)
+                {
+                    //NSString *string = @"get_version: 01.56.78";
+                    //NSString *string = nil; Exception!
+                    NSUInteger numberOfMatches = [regex numberOfMatchesInString:response
+                                                                        options:0
+                                                                          range:NSMakeRange(0, [response length])];
+                    NSLog(@"%s numberOfMatches:%d", __FUNCTION__, numberOfMatches);
+                    
+                    if (numberOfMatches == 1)
+                    {
+                        NSString *fwVersion = [[response componentsSeparatedByString:@": "] objectAtIndex:1];
+                        
+                        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+                        [userDefaults setObject:fwVersion forKey:FW_VERSION];
+                        [userDefaults synchronize];
+                    }
+                }
+            }
+        }
+        
+        [self moveToNextStep];
+#else
         if (_camProfile) // This is a Focus73 model!
         {
             [self performSelectorInBackground:@selector(configureCameraAndMoveToFinalStep) withObject:NO];
@@ -434,6 +312,7 @@
         {
             [self moveToNextStep];
         }
+#endif
     }
 #if 0
     // As far as,this flow will be terminated!
@@ -453,6 +332,170 @@
 }
 
 #pragma mark - Hubble alert view & delegate
+
+#if 0
+- (void)configureCameraAndMoveToFinalStep
+{
+    [self configureCamera];
+    
+    [[NSUserDefaults standardUserDefaults] setObject:[CameraPassword fetchSSIDInfo] forKey:HOST_SSID];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    [self performSelectorOnMainThread:@selector(moveToFinalStep) withObject:nil waitUntilDone:NO];
+}
+
+- (void)moveToFinalStep
+{
+    //[MBProgressHUD hideHUDForView:self.view animated:NO];
+    //[self customIOS7dialogButtonTouchUpInside:_alertView clickedButtonAtIndex:0];
+    
+    Step_10_ViewController *step10ViewController = nil;
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        
+        
+        step10ViewController = [[Step_10_ViewController alloc]
+                                initWithNibName:@"Step_10_ViewController_ipad" bundle:nil];
+    }
+    else
+    {
+        
+        step10ViewController = [[Step_10_ViewController alloc]
+                                initWithNibName:@"Step_10_ViewController" bundle:nil];
+    }
+    
+    [self.navigationController pushViewController:step10ViewController animated:NO];
+    [step10ViewController release];
+}
+
+- (void)configureCamera
+{
+    /*
+     * 1. Set Auth.
+     * 2. Default on all of PN.
+     * 3. Get UDID
+     * 4. Restart systems.
+     */
+    
+    // 1.
+    NSDate *now = [NSDate date];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"ZZZ"];
+    
+    NSMutableString *stringFromDate = [NSMutableString stringWithString:[formatter stringFromDate:now]];
+    [formatter release];
+    [stringFromDate insertString:@"." atIndex:3];
+    
+    NSString * set_auth_cmd = [NSString stringWithFormat:@"%@%@%@%@%@",
+                               SET_SERVER_AUTH,
+                               SET_SERVER_AUTH_PARAM1, [[NSUserDefaults standardUserDefaults] stringForKey:@"PortalApiKey"],
+                               SET_SERVER_AUTH_PARAM2, stringFromDate];
+    
+    NSString *response = [[HttpCom instance].comWithDevice sendCommandAndBlock:set_auth_cmd
+                                                                   withTimeout:10.0];
+    NSLog(@"set auth -set_auth_cmd: %@, -response: %@ ", set_auth_cmd, response);
+    
+    // 2.
+    [self defaultOnAllPNToCamera];
+    
+    // 3.
+#if 1
+    NSString *stringUDID = @"";
+    NSString *stringMac = @"00:00:00:00:00";
+    
+    response = [[HttpCom instance].comWithDevice sendCommandAndBlock:GET_UDID
+                                                         withTimeout:5.0];
+    
+    NSString *pattern = [NSString stringWithFormat:@"^%@: [0-9A-Z]{26}$", GET_UDID];
+    NSError *error = NULL;
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:pattern
+                                                                           options:NSRegularExpressionAnchorsMatchLines
+                                                                             error:&error];
+    if (!regex)
+    {
+        NSLog(@"%s error:%@", __FUNCTION__, error.description);
+    }
+    else
+    {
+        NSLog(@"%s respone:%@", __FUNCTION__, response);
+        
+        if (response)
+        {
+            //get_udid: 01008344334C32B0A0VFFRBSVA
+            NSUInteger numberOfMatches = [regex numberOfMatchesInString:response
+                                                                options:0
+                                                                  range:NSMakeRange(0, [response length])];
+            NSLog(@"%s numberOfMatches:%lu", __FUNCTION__, (unsigned long)numberOfMatches);
+            
+            if (numberOfMatches == 1)
+            {
+                stringUDID = [response substringFromIndex:GET_UDID.length + 2];
+                stringMac = [Util add_colon_to_mac:[stringUDID substringWithRange:NSMakeRange(6, 12)]];
+            }
+        }
+    }
+    //save mac address for used later
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setObject:stringMac forKey:@"CameraMacWithQuote"];
+    [userDefaults setObject:stringUDID forKey:CAMERA_UDID];
+    [userDefaults synchronize];
+#else
+    NSString *stringUDID = @"";
+    
+    stringUDID = [[HttpCom instance].comWithDevice sendCommandAndBlock:GET_UDID
+                                                           withTimeout:5.0];
+    NSLog(@"%s stringUDID:%@", __FUNCTION__, stringUDID);
+    
+    //get_udid: 01008344334C32B0A0VFFRBSVA
+    NSRange range = [stringUDID rangeOfString:@": "];
+    
+    if (range.location != NSNotFound)
+    {
+        //01008344334C32B0A0VFFRBSVA
+        stringUDID = [stringUDID substringFromIndex:range.location + 2];
+    }
+    else
+    {
+        NSLog(@"Error - Received UDID wrong format - UDID: %@", stringUDID);
+    }
+    
+    //save mac address for used later
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setObject:_camProfile.mac_address forKey:@"CameraMacWithQuote"];
+    [userDefaults setObject:stringUDID forKey:CAMERA_UDID];
+    [userDefaults synchronize];
+#endif
+    
+    // 4.
+    response = [[HttpCom instance].comWithDevice sendCommandAndBlock:RESTART_HTTP_CMD];
+    
+    NSLog(@"%s RESTART_HTTP_CMD: %@", __FUNCTION__, response);
+}
+
+- (void)defaultOnAllPNToCamera
+{
+    NSString *result = @"";
+    
+    NSString *response = [[HttpCom instance].comWithDevice sendCommandAndBlock:@"set_motion_area&grid=1x1&zone=00"];
+    result = [result stringByAppendingString:response];
+    
+    if (!_camProfile) // Meaning this is not a Focus73 model!
+    {
+        response = [[HttpCom instance].comWithDevice sendCommandAndBlock:@"vox_enable"];
+        result = [result stringByAppendingFormat:@", %@", response];
+        
+        response = [[HttpCom instance].comWithDevice sendCommandAndBlock:@"set_temp_lo_enable&value=1"];
+        result = [result stringByAppendingFormat:@", %@", response];
+        
+        response = [[HttpCom instance].comWithDevice sendCommandAndBlock:@"set_temp_hi_enable&value=1"];
+        result = [result stringByAppendingFormat:@", %@", response];
+    }
+    
+    NSLog(@"%s respnse:%@", __FUNCTION__, result);
+}
 
 - (void)createHubbleAlertView
 {
@@ -519,7 +562,7 @@
     return demoView;
 }
 
-#if 0
+//#if 0
 {
 -(void) queryWifiList
 {

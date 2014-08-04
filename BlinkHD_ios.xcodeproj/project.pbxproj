@@ -1813,7 +1813,6 @@
 				A118C19C187E4643009176F5 /* HttpCommunication_Model */,
 				8B9CE1F818C81DBA00B1B7F9 /* HubbleAlertView */,
 				A1ABF19C187536A00014FCB4 /* BLE Setup */,
-				8B90BA5A18717F22007BAF09 /* PlayEventVC */,
 				8B9112D3186033B5004301C5 /* HubbleNotifView */,
 				8B9C7DFE185F22090038B3A8 /* MenuHubble */,
 				8BA18CA8184870330097D1AF /* DeviceSettings */,
@@ -2733,13 +2732,6 @@
 			name = Stream;
 			sourceTree = "<group>";
 		};
-		8B90BA5A18717F22007BAF09 /* PlayEventVC */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = PlayEventVC;
-			sourceTree = "<group>";
-		};
 		8B9112C718601041004301C5 /* General */ = {
 			isa = PBXGroup;
 			children = (
@@ -3373,16 +3365,8 @@
 			isa = PBXGroup;
 			children = (
 				8BB7EA96196E37B900FDD674 /* Focus73ListVc */,
-				8BB7EA95196E37A400FDD674 /* LANSeupInstructionVC */,
 			);
 			name = Focus73;
-			sourceTree = "<group>";
-		};
-		8BB7EA95196E37A400FDD674 /* LANSeupInstructionVC */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = LANSeupInstructionVC;
 			sourceTree = "<group>";
 		};
 		8BB7EA96196E37B900FDD674 /* Focus73ListVc */ = {
