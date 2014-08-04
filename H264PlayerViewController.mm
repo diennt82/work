@@ -542,6 +542,19 @@ double _ticks = 0;
                                             NSForegroundColorAttributeName: [UIColor barItemSelectedColor]
                                             } forState:UIControlStateNormal];
     
+    if ([[NSUserDefaults standardUserDefaults] integerForKey:EVENT_DELETED_ID] != -1)
+    {
+        // At least a event has been deleted.
+        NSLog(@"%s At least a event has been deleted.", __FUNCTION__);
+        
+        // Reset state.
+        [[NSUserDefaults standardUserDefaults] setInteger:-1 forKey:EVENT_DELETED_ID];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        
+        // Reload events.
+        [self.timelineVC loadEvents:self.selectedChannel];
+    }
+    
     self.earlierNavi.isEarlierView = NO;
     
     if (_wantToShowTimeLine)
@@ -581,8 +594,6 @@ double _ticks = 0;
     [self.customIndicator setHidden:YES];
     self.earlierNavi.isEarlierView = YES;
     
-    //_wantToShowTimeLine = YES;
-    
     if (_earlierVC == nil)
     {
         EarlierViewController *vc = [[EarlierViewController alloc] initWithParentVC:self camChannel:self.selectedChannel];
@@ -590,6 +601,21 @@ double _ticks = 0;
         [vc release];
         self.earlierVC.nav = self.navigationController;
         _earlierVC.view.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+    }
+    else
+    {
+        if ([[NSUserDefaults standardUserDefaults] integerForKey:EVENT_DELETED_ID] != -1)
+        {
+            // At least a event has been deleted.
+            NSLog(@"%s At least a event has been deleted.", __FUNCTION__);
+            
+            // Reset state.
+            [[NSUserDefaults standardUserDefaults] setInteger:-1 forKey:EVENT_DELETED_ID];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+            
+            // Reload events.
+            [_earlierVC reloadEvents];
+        }
     }
     
     [self.view addSubview:_earlierVC.view];
