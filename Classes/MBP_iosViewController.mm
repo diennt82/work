@@ -32,7 +32,7 @@
 #import "CameraMenuViewController.h"
 
 @interface MBP_iosViewController () <MFMailComposeViewControllerDelegate>
-
+@property (nonatomic) BOOL changePasswordReady;
 @end
 
 @implementation MBP_iosViewController
@@ -71,7 +71,7 @@
                                         [UIImage imageNamed:@"loader_big_e"],
                                         //[UIImage imageNamed:@"loader_big_f"],
                                         nil];
-    
+    self.changePasswordReady = YES;
 }
 
 /**/
@@ -303,6 +303,7 @@
     [bonjourThread release];
     [_menuVC release];
     [_latestCamAlert release];
+    [_pushAlert release];
 	[super dealloc];
 }
 
@@ -488,6 +489,15 @@
     
 }
 
+- (void)startPasswordChanged {
+    self.changePasswordReady = NO;
+}
+
+- (void)finishPasswordChanged {
+    self.changePasswordReady = YES;
+}
+#pragma mark - 
+
 - (void)createAccount
 {
     NSLog(@"MBP_iosVC - Load RegistrationVC");
@@ -642,7 +652,7 @@
     
     NSString * msg =[ NSString stringWithFormat:@"%@ %@",custom_message,custom_url];
     
-    pushAlert = [[AlertPrompt alloc]
+    _pushAlert = [[AlertPrompt alloc]
                  initWithTitle:title
                  message:msg
                  delegate:self
@@ -650,17 +660,17 @@
                  otherButtonTitles:details, nil];
     
     
-    pushAlert.tag = ALERT_PUSH_SERVER_ANNOUNCEMENT;
+    self.pushAlert.tag = ALERT_PUSH_SERVER_ANNOUNCEMENT;
     
     [self playSound];
-    [pushAlert show];
+    [self.pushAlert show];
     
     
     return TRUE;
 }
 
 
-- (void)pushNotificationRcvedInForeground:(CameraAlert *) camAlert
+- (void)pushNotificationRcvedInForeground:(CameraAlert *)camAlert
 {
     //Check if we should popup
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -719,7 +729,7 @@
         }
     }
     
-    if (pushAlert != nil && pushAlert.tag == ALERT_PUSH_RECVED_MULTIPLE)
+    if (self.pushAlert != nil && self.pushAlert.tag == ALERT_PUSH_RECVED_MULTIPLE)
     {
         NSLog(@"already shown the aggregation message");
         return;
@@ -798,9 +808,9 @@
         NSTimeInterval oldestTimestamp = [CameraAlert getOldestAlertTimestampOfCamera:camAlert.cameraMacNoColon];
         NSDate * oldestDate = [NSDate dateWithTimeIntervalSince1970:oldestTimestamp];
         
-        if (pushAlert != nil && [pushAlert isVisible])
+        if (self.pushAlert != nil && [self.pushAlert isVisible])
         {
-            NSLog(@"Dialog exist, don't popup, current msg:%@, title: %@", pushAlert.message, pushAlert.title);
+            NSLog(@"Dialog exist, don't popup, current msg:%@, title: %@", self.pushAlert.message, self.pushAlert.title);
             if ([camAlert.alertType isEqualToString:ALERT_TYPE_SOUND] ||
                 [camAlert.alertType isEqualToString:ALERT_TYPE_TEMP_HI]  ||
                 [camAlert.alertType isEqualToString:ALERT_TYPE_TEMP_LO] ||
@@ -824,10 +834,10 @@
         
     }
     
-    NSLog(@"pushAlert : %@",pushAlert);
-    if (pushAlert != nil && [pushAlert isVisible])
+    NSLog(@"pushAlert : %@", self.pushAlert);
+    if (self.pushAlert != nil && [self.pushAlert isVisible])
     {
-        [pushAlert dismissWithClickedButtonIndex:autoDissmisAlertIndex animated:NO];
+        [self.pushAlert dismissWithClickedButtonIndex:autoDissmisAlertIndex animated:NO];
     }
     
     NSLog(@"camAlert : %@",camAlert);
@@ -844,7 +854,7 @@
     [self playSound];
     
     NSLog(@"show  alert");
-    [pushAlert show];
+    [self.pushAlert show];
 }
 
 - (NSString *)formatDetectedDate:(NSString *)alertTime andAlertMess:(NSString *)alertMess {
@@ -982,7 +992,27 @@
             [CameraAlert clearAllAlertForCamera:self.latestCamAlert.cameraMacNoColon];
         }
     }
-	if (tag == ALERT_PUSH_RECVED_RESCAN_AFTER)
+    else if (tag == ALERT_PUSH_RECVED_PASSWORD_CHANGED)
+    {
+        NSLog(@"%s alert: ALERT_PUSH_RECVED_PASSWORD_CHANGED", __FUNCTION__);
+        switch(buttonIndex)
+        {
+			case 0:
+                [self dismissMenuHubbleView];
+                [self sendStatus:LOGIN_FAILED_OR_LOGOUT];
+				break;
+                
+			default:
+				break;
+                
+		}
+        
+        if (self.latestCamAlert != nil)
+        {
+            [CameraAlert clearAllAlertForCamera:self.latestCamAlert.cameraMacNoColon];
+        }
+    }
+	else if (tag == ALERT_PUSH_RECVED_RESCAN_AFTER)
 	{
         NSLog(@"%s alert: ALERT_PUSH_RECVED_RESCAN_AFTER", __FUNCTION__);
         
@@ -1006,6 +1036,10 @@
 				break;
                 
 		}
+        if (self.latestCamAlert != nil)
+        {
+            [CameraAlert clearAllAlertForCamera:self.latestCamAlert.cameraMacNoColon];
+        }
 	}
 	else if (tag == ALERT_PUSH_RECVED_RELOGIN_AFTER)
 	{
@@ -1014,10 +1048,6 @@
 		switch(buttonIndex)
         {
 			case 0:
-                if ([self.latestCamAlert.alertType isEqualToString:ALERT_TYPE_PASSWORD_CHANGED]) {
-                    [self dismissMenuHubbleView];
-                    [self sendStatus:LOGIN_FAILED_OR_LOGOUT];
-                }
 				break;
 			case 1:
             {
@@ -1111,8 +1141,8 @@
         }
     }
     
-    [pushAlert release];
-    pushAlert = nil;
+    self.pushAlert = nil;
+    self.latestCamAlert = nil;
 }
 
 - (void)gotoCamerasListPage {
@@ -1124,7 +1154,6 @@
     [userDefaults synchronize];
     
     [self sendStatus:SHOW_CAMERA_LIST2];
-    self.latestCamAlert = nil;
 }
 
 - (void)gotoSelectedCameraPage {
@@ -1145,7 +1174,6 @@
             [self sendStatus:SHOW_CAMERA_LIST];
         });
     });
-    self.latestCamAlert = nil;
 }
 
 - (void)showMFMailComposeView
@@ -1868,6 +1896,7 @@
     
     if ([self.camAlert.alertType isEqualToString:ALERT_TYPE_REMOVED_CAM])
     {
+        BOOL needShowElert = NO;
         if ([self isStayingCamerasListPage])
         {
             if (![self isStayingCameraSettingsPage])
@@ -1876,28 +1905,28 @@
             }
             else
             {
-                [self showPushNotificationAlert:@""
-                                     andMessage:[NSString stringWithFormat:@"%@ %@", self.camAlert.cameraName, NSLocalizedStringWithDefaultValue( @"camera_removed",nil, [NSBundle mainBundle], @"has been removed on a different terminal. Please check and add camera again to continue to view.", nil)]
-                                andCancelButton:NSLocalizedStringWithDefaultValue(@"ok",nil, [NSBundle mainBundle], @"OK", nil)
-                                 andOtherButton:nil
-                                    andAlertTag:ALERT_PUSH_RECVED_REMOVE_CAM];
+                needShowElert = YES;
             }
         }
         else if ([self isStayingSelectedCamaraPage])
         {
             if ([self playingCameraEqualCamera:self.camAlert.cameraMacNoColon]) {
-                if (pushAlert && ![pushAlert isVisible])
-                {
-                    pushAlert.tag = 0;
-                    [pushAlert dismissWithClickedButtonIndex:-1 animated:NO];
-                }
-                [self showPushNotificationAlert:@""
-                                     andMessage:[NSString stringWithFormat:@"%@ %@", self.camAlert.cameraName, NSLocalizedStringWithDefaultValue( @"camera_removed",nil, [NSBundle mainBundle], @"has been removed on a different terminal. Please check and add camera again to continue to view.", nil)]
-                                andCancelButton:NSLocalizedStringWithDefaultValue(@"ok",nil, [NSBundle mainBundle], @"OK", nil)
-                                 andOtherButton:nil
-                                    andAlertTag:ALERT_PUSH_RECVED_REMOVE_CAM];
-                self.latestCamAlert = self.camAlert;
+                needShowElert = YES;
             }
+        }
+        if (needShowElert)
+        {
+            if (self.pushAlert != nil && [self.pushAlert isVisible])
+            {
+                self.pushAlert.tag = 0;
+                [self.pushAlert dismissWithClickedButtonIndex:-1 animated:NO];
+            }
+            [self showPushNotificationAlert:@""
+                                 andMessage:[NSString stringWithFormat:@"%@ %@", self.camAlert.cameraName, NSLocalizedStringWithDefaultValue( @"camera_removed",nil, [NSBundle mainBundle], @"has been removed on a different terminal. Please check and add camera again to continue to view.", nil)]
+                            andCancelButton:NSLocalizedStringWithDefaultValue(@"ok",nil, [NSBundle mainBundle], @"OK", nil)
+                             andOtherButton:nil
+                                andAlertTag:ALERT_PUSH_RECVED_REMOVE_CAM];
+            self.latestCamAlert = self.camAlert;
         }
         return;
     }
@@ -2067,21 +2096,29 @@
 }
 
 - (void)verifyPasswordChangedPushNotification {
-    BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
-                                                                              Selector:@selector(verifyApikeySuccessWithResponse:)
-                                                                          FailSelector:@selector(verifyApikeyFailedWithResponse:)
-                                                                             ServerErr:@selector(verifyApikeyFailedServerUnreachable:)] autorelease];
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
-    [jsonComm getUserInfoWithApiKey:apiKey];
+    if (self.changePasswordReady)
+    {
+        BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
+                                                                                  Selector:@selector(verifyApikeySuccessWithResponse:)
+                                                                              FailSelector:@selector(verifyApikeyFailedWithResponse:)
+                                                                                 ServerErr:@selector(verifyApikeyFailedServerUnreachable:)] autorelease];
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
+        [jsonComm getUserInfoWithApiKey:apiKey];
+    }
+    else
+    {
+         NSLog(@"%s passsword changed not ready yet", __FUNCTION__);
+    }
 }
 
 - (void)verifyApikeySuccessWithResponse: (NSDictionary *)responseDict
 {
     if (responseDict)
     {
+        NSLog(@"%s Verify passsword changed success %@", __FUNCTION__, [responseDict description]);
+        
         NSInteger status = [[responseDict objectForKey:@"status"] integerValue];
-        NSLog(@"%s status:%d", __FUNCTION__, status);
         if (status != 200)
         {
             [self showAlertPasswordChanged];
@@ -2091,37 +2128,45 @@
 
 - (void)verifyApikeyFailedWithResponse: (NSDictionary *)responseDict
 {
+    NSLog(@"%s Verify passsword changed failed", __FUNCTION__);
     [self showAlertPasswordChanged];
 }
 
 - (void)verifyApikeyFailedServerUnreachable: (NSDictionary *)responseDict
 {
+    NSLog(@"%s Verify passsword changed unreachable", __FUNCTION__);
     [self showAlertPasswordChanged];
 }
 
 - (void)showAlertPasswordChanged {
-    if (pushAlert && ![pushAlert isVisible])
+    if (self.pushAlert != nil && [self.pushAlert isVisible])
     {
-        pushAlert.tag = 0;
-        [pushAlert dismissWithClickedButtonIndex:-1 animated:NO];
+        if (self.pushAlert.tag != ALERT_PUSH_RECVED_PASSWORD_CHANGED)
+        {
+            self.pushAlert.tag = 0;
+            [self.pushAlert dismissWithClickedButtonIndex:-1 animated:NO];
+        }
     }
-    [self showPushNotificationAlert:@""
-                         andMessage:NSLocalizedStringWithDefaultValue( @"reset_password",nil, [NSBundle mainBundle],
-                                                                      @"Your credentials has changed. Please re-login to continue.", nil)
-                    andCancelButton:NSLocalizedStringWithDefaultValue(@"ok",nil, [NSBundle mainBundle], @"OK", nil)
-                     andOtherButton:nil
-                        andAlertTag:ALERT_PUSH_RECVED_RELOGIN_AFTER];
-    self.latestCamAlert = self.camAlert;
+    else
+    {
+        [self showPushNotificationAlert:@""
+                             andMessage:NSLocalizedStringWithDefaultValue( @"reset_password",nil, [NSBundle mainBundle],
+                                                                          @"Your credentials has changed. Please re-login to continue.", nil)
+                        andCancelButton:NSLocalizedStringWithDefaultValue(@"ok",nil, [NSBundle mainBundle], @"OK", nil)
+                         andOtherButton:nil
+                            andAlertTag:ALERT_PUSH_RECVED_PASSWORD_CHANGED];
+        self.latestCamAlert = self.camAlert;
+    }
 }
 
 - (void)showPushNotificationAlert:(NSString *)title andMessage:(NSString *)message andCancelButton:(NSString *)cancel andOtherButton:(NSString *)other andAlertTag:(NSInteger)tag {
-    pushAlert = [[UIAlertView alloc]
+    _pushAlert = [[UIAlertView alloc]
                  initWithTitle:title
                  message:message
                  delegate:self
                  cancelButtonTitle:cancel
                  otherButtonTitles:other, nil];
-    pushAlert.tag = tag;
-    [pushAlert show];
+    self.pushAlert.tag = tag;
+    [self.pushAlert show];
 }
 @end

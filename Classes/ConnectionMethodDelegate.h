@@ -29,4 +29,6 @@
 
 @protocol ConnectionMethodDelegate
 - (void)sendStatus:(int) status;
+- (void)startPasswordChanged;
+- (void)finishPasswordChanged;
 @end

@@ -45,7 +45,7 @@
 #define ALERT_PUSH_RECVED_SOUND_TEMP_HI_TEMP_LO     204
 #define ALERT_PUSH_RECVED_MULTIPLE                  205
 #define ALERT_PUSH_RECVED_REMOVE_CAM                206
-
+#define ALERT_PUSH_RECVED_PASSWORD_CHANGED          207
 
 
 #define _triggeredByVox @"bool_Vox_Trigger"
@@ -99,9 +99,6 @@
     IBOutlet UIView * statusDialogView;
     IBOutlet UILabel * statusDialogLabel;
     IBOutlet UITextView * statusDialogText;
-
-    
-    UIAlertView * pushAlert;
     
     DashBoard_ViewController * dashBoard;
     
@@ -113,10 +110,6 @@
     BOOL isRebinded;
     NSArray * bonjourList;
     NSThread * bonjourThread;
-    
-
-    
-
 }
 
 @property (nonatomic, retain) IBOutlet UIView * progressView;
@@ -136,7 +129,7 @@
 @property (nonatomic) int app_stage;
 
 @property (nonatomic, retain) CameraAlert *camAlert;
-
+@property (nonatomic, retain) UIAlertView * pushAlert;
 @property (nonatomic, retain) MenuViewController *menuVC;
 
 
