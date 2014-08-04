@@ -302,7 +302,6 @@
     
     [bonjourThread release];
     [_menuVC release];
-    [_latestCamAlert release];
     [_pushAlert release];
 	[super dealloc];
 }
@@ -652,7 +651,7 @@
     
     NSString * msg =[ NSString stringWithFormat:@"%@ %@",custom_message,custom_url];
     
-    _pushAlert = [[AlertPrompt alloc]
+    _pushAlert = [[PushNotificationAlert alloc]
                  initWithTitle:title
                  message:msg
                  delegate:self
@@ -724,7 +723,7 @@
     {
         if ([camAlert.alertType isEqualToString:ALERT_TYPE_REMOVED_CAM] && ![self isStayingCameraSettingsPage])
         {
-            [self gotoCamerasListPage];
+            [self gotoCamerasListPage:camAlert.registrationID];
             return;
         }
     }
@@ -801,37 +800,33 @@
         }
     }
     
-    if (self.latestCamAlert != nil && [self.latestCamAlert.cameraMacNoColon isEqualToString:camAlert.cameraMacNoColon])
+    if (self.pushAlert != nil && [self.pushAlert isVisible] && [self.pushAlert.camAlert.cameraMacNoColon isEqualToString:camAlert.cameraMacNoColon])
     {
         NSLog(@"Same cam alert is currenlty shown.");
         
         NSTimeInterval oldestTimestamp = [CameraAlert getOldestAlertTimestampOfCamera:camAlert.cameraMacNoColon];
         NSDate * oldestDate = [NSDate dateWithTimeIntervalSince1970:oldestTimestamp];
         
-        if (self.pushAlert != nil && [self.pushAlert isVisible])
+        NSLog(@"Dialog exist, don't popup, current msg:%@, title: %@", self.pushAlert.message, self.pushAlert.title);
+        if ([camAlert.alertType isEqualToString:ALERT_TYPE_SOUND] ||
+            [camAlert.alertType isEqualToString:ALERT_TYPE_TEMP_HI]  ||
+            [camAlert.alertType isEqualToString:ALERT_TYPE_TEMP_LO] ||
+            [camAlert.alertType isEqualToString:ALERT_TYPE_MOTION])
         {
-            NSLog(@"Dialog exist, don't popup, current msg:%@, title: %@", self.pushAlert.message, self.pushAlert.title);
-            if ([camAlert.alertType isEqualToString:ALERT_TYPE_SOUND] ||
-                [camAlert.alertType isEqualToString:ALERT_TYPE_TEMP_HI]  ||
-                [camAlert.alertType isEqualToString:ALERT_TYPE_TEMP_LO] ||
-                [camAlert.alertType isEqualToString:ALERT_TYPE_MOTION])
-            {
-                NSDateFormatter* df_local = [[NSDateFormatter alloc] init];
-                [df_local setTimeZone:[NSTimeZone localTimeZone]];
-                df_local.dateFormat = @"hh:mm a, dd-MM-yyyy";
-                alertMess = [NSString stringWithFormat:@"Multiple detections at camera since %@",
-                             [df_local stringFromDate:oldestDate]];
-                
-                [df_local release];
-                
-                alertLeftButtonText = NSLocalizedStringWithDefaultValue(@"cancel",nil, [NSBundle mainBundle],
-                                                                        @"Cancel", nil);
-                alertOtherButtonText = NSLocalizedStringWithDefaultValue(@"Go_to_camera",nil, [NSBundle mainBundle],
-                                                                         @"Go to camera", nil);
-                tag = ALERT_PUSH_RECVED_MULTIPLE;
-            }
+            NSDateFormatter* df_local = [[NSDateFormatter alloc] init];
+            [df_local setTimeZone:[NSTimeZone localTimeZone]];
+            df_local.dateFormat = @"hh:mm a, dd-MM-yyyy";
+            alertMess = [NSString stringWithFormat:@"Multiple detections at camera since %@",
+                         [df_local stringFromDate:oldestDate]];
+            
+            [df_local release];
+            
+            alertLeftButtonText = NSLocalizedStringWithDefaultValue(@"cancel",nil, [NSBundle mainBundle],
+                                                                    @"Cancel", nil);
+            alertOtherButtonText = NSLocalizedStringWithDefaultValue(@"Go_to_camera",nil, [NSBundle mainBundle],
+                                                                     @"Go to camera", nil);
+            tag = ALERT_PUSH_RECVED_MULTIPLE;
         }
-        
     }
     
     NSLog(@"pushAlert : %@", self.pushAlert);
@@ -841,14 +836,12 @@
     }
     
     NSLog(@"camAlert : %@",camAlert);
-    NSLog(@"latestCamAlert is: %@", self.latestCamAlert);
     
     [self showPushNotificationAlert:alertTitle
                          andMessage:alertMess
                     andCancelButton:alertLeftButtonText
                      andOtherButton:alertOtherButtonText
-                        andAlertTag:tag];
-    self.latestCamAlert = camAlert;
+                        andAlertTag:tag andCameraAlert:camAlert];
     
     NSLog(@"play sound");
     [self playSound];
@@ -943,183 +936,176 @@
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
-	int tag = alertView.tag ;
-    
-    if (tag == ALERT_PUSH_RECVED_SOUND_TEMP_HI_TEMP_LO || tag == ALERT_PUSH_RECVED_MULTIPLE)
+    int tag = alertView.tag ;
+    if ([alertView isKindOfClass:[PushNotificationAlert class]])
     {
-        NSLog(@"%s alert ALERT_PUSH_RECVED_NON_MOTION", __FUNCTION__);
-        
-        switch(buttonIndex)
+        PushNotificationAlert *pushNotiAlert = (PushNotificationAlert *)alertView;
+        if (tag == ALERT_PUSH_RECVED_SOUND_TEMP_HI_TEMP_LO || tag == ALERT_PUSH_RECVED_MULTIPLE)
         {
-			case 0:
+            NSLog(@"%s alert ALERT_PUSH_RECVED_NON_MOTION", __FUNCTION__);
+            
+            switch(buttonIndex)
             {
-            }
-				break;
-			case 1:
-            {
-				[self gotoSelectedCameraPage];
-            }
-                break;
-			default:
-				break;
-		}
-        if (self.latestCamAlert != nil)
-        {
-            [CameraAlert clearAllAlertForCamera:self.latestCamAlert.cameraMacNoColon];
-        }
-    }
-    else if (tag == ALERT_PUSH_RECVED_REMOVE_CAM)
-    {
-        NSLog(@"%s alert ALERT_PUSH_RECVED_REMOVE_CAM", __FUNCTION__);
-        
-        switch(buttonIndex)
-        {
-			case 0:
-            {
-                [self gotoCamerasListPage];
-            }
-				break;
-			case 1:
-            {
-            }
-                break;
-                
-			default:
-				break;
-		}
-        if (self.latestCamAlert != nil)
-        {
-            [CameraAlert clearAllAlertForCamera:self.latestCamAlert.cameraMacNoColon];
-        }
-    }
-    else if (tag == ALERT_PUSH_RECVED_PASSWORD_CHANGED)
-    {
-        NSLog(@"%s alert: ALERT_PUSH_RECVED_PASSWORD_CHANGED", __FUNCTION__);
-        switch(buttonIndex)
-        {
-			case 0:
-                [self dismissMenuHubbleView];
-                [self sendStatus:LOGIN_FAILED_OR_LOGOUT];
-				break;
-                
-			default:
-				break;
-                
-		}
-        
-        if (self.latestCamAlert != nil)
-        {
-            [CameraAlert clearAllAlertForCamera:self.latestCamAlert.cameraMacNoColon];
-        }
-    }
-	else if (tag == ALERT_PUSH_RECVED_RESCAN_AFTER)
-	{
-        NSLog(@"%s alert: ALERT_PUSH_RECVED_RESCAN_AFTER", __FUNCTION__);
-        
-		switch(buttonIndex)
-        {
-			case 0:
-                
-				break;
-			case 1:
-            {
-                NSLog(@"%s, %d", __FUNCTION__, self.navigationController.viewControllers.count);
-                
-                [self dismissMenuHubbleView];
-                [self dismissNotificationViewController];
-                [self showNotifViewController:self.latestCamAlert];
-                self.latestCamAlert = nil;
-                //NSLog(@"alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex: %p, %p", self, latestCamAlert);
-            }
-                break;
-			default:
-				break;
-                
-		}
-        if (self.latestCamAlert != nil)
-        {
-            [CameraAlert clearAllAlertForCamera:self.latestCamAlert.cameraMacNoColon];
-        }
-	}
-	else if (tag == ALERT_PUSH_RECVED_RELOGIN_AFTER)
-	{
-        NSLog(@"%s alert ALERT_PUSH_RECVED_RELOGIN_AFTER", __FUNCTION__);
-        
-		switch(buttonIndex)
-        {
-			case 0:
-				break;
-			case 1:
-            {
-                [self dismissMenuHubbleView];
-				[self sendStatus:LOGIN];
-            }
-				break;
-                
-			default:
-				break;
-                
-		}
-  
-        if (self.latestCamAlert != nil)
-        {
-            [CameraAlert clearAllAlertForCamera:self.latestCamAlert.cameraMacNoColon];
-        }
-	}
-    else if (tag == ALERT_PUSH_SERVER_ANNOUNCEMENT)
-    {
-        NSLog(@"%s alert ALERT_PUSH_SERVER_ANNOUNCEMENT", __FUNCTION__);
-        
-        switch(buttonIndex)
-        {
-			case 0://IGNORE
-				break;
-			case 1://Detail
-            {
-                // Open the web browser now..
-                NSArray * texts = [alertView.message componentsSeparatedByString:@" "];
-                NSString * url = nil;
-                BOOL found = FALSE;
-                
-                for (int i = texts.count-1; i > 0; i --)
+                case 0:
                 {
-                    url =(NSString *) [texts objectAtIndex:i];
-                    if ((url != nil) &&
-                        [url hasPrefix:@"http://"] == TRUE)
+                }
+                    break;
+                case 1:
+                {
+                    [self gotoSelectedCameraPage:pushNotiAlert.camAlert.registrationID];
+                }
+                    break;
+                default:
+                    break;
+            }
+        }
+        else if (tag == ALERT_PUSH_RECVED_REMOVE_CAM)
+        {
+            NSLog(@"%s alert ALERT_PUSH_RECVED_REMOVE_CAM", __FUNCTION__);
+            
+            switch(buttonIndex)
+            {
+                case 0:
+                {
+                    [self gotoCamerasListPage:pushNotiAlert.camAlert.registrationID];
+                }
+                    break;
+                case 1:
+                {
+                }
+                    break;
+                    
+                default:
+                    break;
+            }
+        }
+        else if (tag == ALERT_PUSH_RECVED_PASSWORD_CHANGED)
+        {
+            NSLog(@"%s alert: ALERT_PUSH_RECVED_PASSWORD_CHANGED", __FUNCTION__);
+            switch(buttonIndex)
+            {
+                case 0:
+                    [self dismissMenuHubbleView];
+                    [self sendStatus:LOGIN_FAILED_OR_LOGOUT];
+                    break;
+                    
+                default:
+                    break;
+                    
+            }
+        }
+        else if (tag == ALERT_PUSH_RECVED_RESCAN_AFTER)
+        {
+            NSLog(@"%s alert: ALERT_PUSH_RECVED_RESCAN_AFTER", __FUNCTION__);
+            
+            switch(buttonIndex)
+            {
+                case 0:
+                    
+                    break;
+                case 1:
+                {
+                    NSLog(@"%s, %d", __FUNCTION__, self.navigationController.viewControllers.count);
+                    
+                    [self dismissMenuHubbleView];
+                    [self dismissNotificationViewController];
+                    [self showNotifViewController:pushNotiAlert.camAlert];
+                }
+                    break;
+                default:
+                    break;
+                    
+            }
+        }
+        else if (tag == ALERT_PUSH_RECVED_RELOGIN_AFTER)
+        {
+            NSLog(@"%s alert ALERT_PUSH_RECVED_RELOGIN_AFTER", __FUNCTION__);
+            
+            switch(buttonIndex)
+            {
+                case 0:
+                    break;
+                case 1:
+                {
+                    [self dismissMenuHubbleView];
+                    [self sendStatus:LOGIN];
+                }
+                    break;
+                    
+                default:
+                    break;
+                    
+            }
+        }
+        [CameraAlert clearAllAlertForCamera:pushNotiAlert.camAlert.cameraMacNoColon];
+    }
+    else
+    {
+        if (tag == ALERT_PUSH_SERVER_ANNOUNCEMENT)
+        {
+            NSLog(@"%s alert ALERT_PUSH_SERVER_ANNOUNCEMENT", __FUNCTION__);
+            
+            switch(buttonIndex)
+            {
+                case 0://IGNORE
+                    break;
+                case 1://Detail
+                {
+                    // Open the web browser now..
+                    NSArray * texts = [alertView.message componentsSeparatedByString:@" "];
+                    NSString * url = nil;
+                    BOOL found = FALSE;
+                    
+                    for (int i = texts.count-1; i > 0; i --)
                     {
-                        found = TRUE;
-                        break;
+                        url =(NSString *) [texts objectAtIndex:i];
+                        if ((url != nil) &&
+                            [url hasPrefix:@"http://"] == TRUE)
+                        {
+                            found = TRUE;
+                            break;
+                        }
                     }
-                }
-                
-                if (url != nil && found == TRUE)
-                {
-                    NSLog(@"server url:%@ ",url);
                     
-                    NSURL *ns_url = [NSURL URLWithString:url];
-                    
-                    [[UIApplication sharedApplication] openURL:ns_url];
+                    if (url != nil && found == TRUE)
+                    {
+                        NSLog(@"server url:%@ ",url);
+                        
+                        NSURL *ns_url = [NSURL URLWithString:url];
+                        
+                        [[UIApplication sharedApplication] openURL:ns_url];
+                    }
+                    break;
                 }
-                break;
+                default:
+                    break;
             }
-            default:
-                break;
         }
-    }
-    else if (tag == 11)
-    {
-        NSLog(@"%s alert Send Email", __FUNCTION__);
-        
-        if (buttonIndex == 1)
+        else if (tag == 11)
         {
-            if ([MFMailComposeViewController canSendMail])
+            NSLog(@"%s alert Send Email", __FUNCTION__);
+            
+            if (buttonIndex == 1)
             {
-                [self showMFMailComposeView];
+                if ([MFMailComposeViewController canSendMail])
+                {
+                    [self showMFMailComposeView];
+                }
+                else
+                {
+                    NSLog(@"Can not send email from this device...");
+                    // Cancel
+                    /*
+                     * 1. Try to remove crashed log file.
+                     * 2. Force show login view, do not check again
+                     */
+                    
+                    [self show_login_or_reg:nil];
+                    [self removeCrashedLogFile];
+                }
             }
             else
             {
-                NSLog(@"Can not send email from this device...");
-                // Cancel
                 /*
                  * 1. Try to remove crashed log file.
                  * 2. Force show login view, do not check again
@@ -1129,39 +1115,28 @@
                 [self removeCrashedLogFile];
             }
         }
-        else
-        {
-            /*
-             * 1. Try to remove crashed log file.
-             * 2. Force show login view, do not check again
-             */
-            
-            [self show_login_or_reg:nil];
-            [self removeCrashedLogFile];
-        }
     }
     
     self.pushAlert = nil;
-    self.latestCamAlert = nil;
 }
 
-- (void)gotoCamerasListPage {
+- (void)gotoCamerasListPage:(NSString *)registrationId {
     [self dismissMenuHubbleView];
     [self dismissNotificationViewController];
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setObject:self.latestCamAlert.registrationID forKey:REG_ID];
+    [userDefaults setObject:registrationId forKey:REG_ID];
     [userDefaults synchronize];
     
     [self sendStatus:SHOW_CAMERA_LIST2];
 }
 
-- (void)gotoSelectedCameraPage {
+- (void)gotoSelectedCameraPage:(NSString *)registrationId {
     [self dismissMenuHubbleView];
     [self dismissNotificationViewController];
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setObject:self.latestCamAlert.registrationID forKey:REG_ID];
+    [userDefaults setObject:registrationId forKey:REG_ID];
     [userDefaults synchronize];
     
     // Put a slight wait of 1sec here - to alow Previous H264Player (if any) to clean up
@@ -1901,7 +1876,7 @@
         {
             if (![self isStayingCameraSettingsPage])
             {
-                [self gotoCamerasListPage];
+                [self gotoCamerasListPage:self.camAlert.registrationID];
             }
             else
             {
@@ -1925,8 +1900,7 @@
                                  andMessage:[NSString stringWithFormat:@"%@ %@", self.camAlert.cameraName, NSLocalizedStringWithDefaultValue( @"camera_removed",nil, [NSBundle mainBundle], @"has been removed on a different terminal. Please check and add camera again to continue to view.", nil)]
                             andCancelButton:NSLocalizedStringWithDefaultValue(@"ok",nil, [NSBundle mainBundle], @"OK", nil)
                              andOtherButton:nil
-                                andAlertTag:ALERT_PUSH_RECVED_REMOVE_CAM];
-            self.latestCamAlert = self.camAlert;
+                                andAlertTag:ALERT_PUSH_RECVED_REMOVE_CAM andCameraAlert:self.camAlert];
         }
         return;
     }
@@ -2154,19 +2128,19 @@
                                                                           @"Your credentials has changed. Please re-login to continue.", nil)
                         andCancelButton:NSLocalizedStringWithDefaultValue(@"ok",nil, [NSBundle mainBundle], @"OK", nil)
                          andOtherButton:nil
-                            andAlertTag:ALERT_PUSH_RECVED_PASSWORD_CHANGED];
-        self.latestCamAlert = self.camAlert;
+                            andAlertTag:ALERT_PUSH_RECVED_PASSWORD_CHANGED andCameraAlert:self.camAlert];
     }
 }
 
-- (void)showPushNotificationAlert:(NSString *)title andMessage:(NSString *)message andCancelButton:(NSString *)cancel andOtherButton:(NSString *)other andAlertTag:(NSInteger)tag {
-    _pushAlert = [[UIAlertView alloc]
+- (void)showPushNotificationAlert:(NSString *)title andMessage:(NSString *)message andCancelButton:(NSString *)cancel andOtherButton:(NSString *)other andAlertTag:(NSInteger)tag andCameraAlert:(CameraAlert *)camAlert{
+    _pushAlert = [[PushNotificationAlert alloc]
                  initWithTitle:title
                  message:message
                  delegate:self
                  cancelButtonTitle:cancel
                  otherButtonTitles:other, nil];
     self.pushAlert.tag = tag;
+    self.pushAlert.camAlert = camAlert;
     [self.pushAlert show];
 }
 @end

@@ -19,6 +19,7 @@
 #import "MenuViewController.h"
 #import "TimelineDatabase.h"
 #import "NotifViewController.h"
+#import "PushNotificationAlert.h"
 
 #define DIRECTION_V_NON  0x01
 #define DIRECTION_V_UP   0x02
@@ -115,11 +116,6 @@
 @property (nonatomic, retain) IBOutlet UIView * progressView;
 @property (nonatomic, retain) IBOutlet UIImageView * splashScreen;
 @property (nonatomic, assign) id<BonjourDelegate> bonjourDelegate;
-@property (nonatomic, retain) CameraAlert * latestCamAlert;
-//@property (nonatomic,retain) IBOutlet MBP_MainMenuView * mainMenuView;
-
-//@property (nonatomic,retain) HttpCommunication *comm;
-
 
 @property (nonatomic) BOOL toTakeSnapShot, recordInProgress;
 @property (nonatomic, retain) NSString * bc_addr, *own_addr;
@@ -129,7 +125,7 @@
 @property (nonatomic) int app_stage;
 
 @property (nonatomic, retain) CameraAlert *camAlert;
-@property (nonatomic, retain) UIAlertView * pushAlert;
+@property (nonatomic, retain) PushNotificationAlert * pushAlert;
 @property (nonatomic, retain) MenuViewController *menuVC;
 
 
