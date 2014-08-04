@@ -9,7 +9,7 @@
 #import "Step_06_ViewController.h"
 #import "HttpCom.h"
 #import "Step_10_ViewController.h"
-#import "KISSMetricsAPI.h"
+//#import "KISSMetricsAPI.h"
 #import "HoldOnCamWifi.h"
 
 #define TIME_INPUT_PASSWORD_AGAIN   60.0
@@ -571,7 +571,7 @@
 {
     [[HoldOnCamWifi shareInstance] stopHolder];
     
-    [[KISSMetricsAPI sharedAPI] recordEvent:@"Step06 - next button" withProperties:nil];
+    //[[KISSMetricsAPI sharedAPI] recordEvent:@"Step06 - next button" withProperties:nil];
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:@"Touch Next button"
                                                      withLabel:@"Next"
@@ -816,7 +816,8 @@
      [self loopSetupWifiSending:setup_cmd retryTimes:0];
     
     // >12.82 we can move on with new flow
-    if ([fwVersion compare:FW_MILESTONE_F66_NEW_FLOW] >= NSOrderedSame) // fw >= FW_MILESTONE_F66_NEW_FLOW
+    if ([fwVersion compare:FW_MILESTONE_F66_NEW_FLOW] >= NSOrderedSame ||
+        [userDefaults integerForKey:SET_UP_CAMERA] == SETUP_CAMERA_FOCUS73) // fw >= FW_MILESTONE_F66_NEW_FLOW
     {
         //Should check connect to camera here(after send command setup http)
         //Check app is already connected to camera which is setup or not, call once
@@ -834,7 +835,7 @@
         // popup force waiting..
         [NSTimer scheduledTimerWithTimeInterval: 3.0
                                          target:self
-                                       selector:@selector(checkAppConnectToCameraAtStep03)
+                                       selector:@selector(checkAppConnectToCameraAtStep06)
                                        userInfo:nil
                                         repeats:NO];
     }
@@ -866,14 +867,17 @@
     NSString *response = [[HttpCom instance].comWithDevice sendCommandAndBlock:@"set_motion_area&grid=1x1&zone=00"];
     result = [result stringByAppendingString:response];
     
-    response = [[HttpCom instance].comWithDevice sendCommandAndBlock:@"vox_enable"];
-    result = [result stringByAppendingFormat:@", %@", response];
-    
-    response = [[HttpCom instance].comWithDevice sendCommandAndBlock:@"set_temp_lo_enable&value=1"];
-    result = [result stringByAppendingFormat:@", %@", response];
-    
-    response = [[HttpCom instance].comWithDevice sendCommandAndBlock:@"set_temp_hi_enable&value=1"];
-    result = [result stringByAppendingFormat:@", %@", response];
+    if ([[NSUserDefaults standardUserDefaults] integerForKey:SET_UP_CAMERA] != SETUP_CAMERA_FOCUS73)
+    {
+        response = [[HttpCom instance].comWithDevice sendCommandAndBlock:@"vox_enable"];
+        result = [result stringByAppendingFormat:@", %@", response];
+        
+        response = [[HttpCom instance].comWithDevice sendCommandAndBlock:@"set_temp_lo_enable&value=1"];
+        result = [result stringByAppendingFormat:@", %@", response];
+        
+        response = [[HttpCom instance].comWithDevice sendCommandAndBlock:@"set_temp_hi_enable&value=1"];
+        result = [result stringByAppendingFormat:@", %@", response];
+    }
     
     NSLog(@"%s respnse:%@", __FUNCTION__, result);
 }
@@ -887,12 +891,13 @@
     [self.progressView setHidden:YES];
 }
 
-- (void)checkAppConnectToCameraAtStep03
+- (void)checkAppConnectToCameraAtStep06
 {
     [self.view bringSubviewToFront:self.progressView];
     [self.progressView setHidden:NO];
     NSString *currentSSID = [CameraPassword fetchSSIDInfo];
-    NSLog(@"check App Connect To Camera At Step03 after sending wifi info");
+    NSLog(@"%s", __FUNCTION__);
+    
     if (currentSSID == nil)
     {
         // check again
@@ -905,7 +910,7 @@
         {
             [NSTimer scheduledTimerWithTimeInterval: 3//
                                              target:self
-                                           selector:@selector(checkAppConnectToCameraAtStep03)
+                                           selector:@selector(checkAppConnectToCameraAtStep06)
                                            userInfo:nil
                                             repeats:NO];
             
@@ -940,7 +945,7 @@
     NSLog(@"getstatusOfCamera again");
     [NSTimer scheduledTimerWithTimeInterval:0.5
                                      target:self
-                                   selector:@selector(checkAppConnectToCameraAtStep03)
+                                   selector:@selector(checkAppConnectToCameraAtStep06)
                                    userInfo:nil
                                     repeats:NO];
 }
