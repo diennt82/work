@@ -971,7 +971,14 @@ double _ticks = 0;
                     self.imgViewDrectionPad.image = [UIImage imageNamed:@"camera_action_pan_bg@5.png"];
                 }
                 
-                [self performSelectorInBackground:@selector(getCameraTemperature_bg:) withObject:nil];
+                if (![_cameraModel isEqualToString:CP_MODEL_0073])
+                {
+                    [self performSelectorInBackground:@selector(getCameraTemperature_bg:) withObject:nil];
+                }
+                else
+                {
+                    NSLog(@"%s There is no Temperature sensor on Focus73", __FUNCTION__);
+                }
                 
                 self.horizMenu.userInteractionEnabled = YES;
             }
@@ -1971,7 +1978,9 @@ double _ticks = 0;
     h264StreamerListener = new H264PlayerListener(self);
     MediaPlayer::Instance()->setListener(h264StreamerListener);
     MediaPlayer::Instance()->setPlaybackAndSharedCam(false, [_cameraModel isEqualToString:CP_MODEL_SHARED_CAM]);
-    //self.mediaProcessStatus = 2;
+    
+    MediaPlayer::Instance()->setDisableAudioStream([_cameraModel isEqualToString:CP_MODEL_0073]);
+    
     [self performSelectorInBackground:@selector(startStream_bg) withObject:nil];
 }
 
