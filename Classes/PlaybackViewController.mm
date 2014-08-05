@@ -243,6 +243,18 @@
     {
         MediaPlayer::Instance()->setListener(listener);
         MediaPlayer::Instance()->setPlaybackAndSharedCam(true, false);
+        
+        NSString *cameraModel = CP_MODEL_NA;
+        
+        if (clip_info.registrationID != nil && clip_info.registrationID.length == 26)
+        {
+            cameraModel = [clip_info.registrationID substringWithRange:NSMakeRange(2, 4)];
+        }
+        
+        NSLog(@"%s cameraModel:%@", __FUNCTION__, cameraModel);
+        
+        MediaPlayer::Instance()->setDisableAudioStream([cameraModel isEqualToString:CP_MODEL_0073]);
+        
         [self performSelectorInBackground:@selector(startStream_bg) withObject:nil];
         
         [self enableOverlayView];
