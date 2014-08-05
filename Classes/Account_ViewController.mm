@@ -582,6 +582,9 @@
 
 - (void)doChangePassword:(NSString *)newPassword
 {
+    MenuViewController *tabBarController = (MenuViewController *)self.parentVC;
+    [tabBarController.menuDelegate startPasswordChanged];
+    
     NSString *apiKey = [[NSUserDefaults standardUserDefaults] stringForKey:@"PortalApiKey"];
     
     BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
@@ -594,7 +597,7 @@
 #pragma mark - JSON call back
 
 - (void)changePasswordSuccessWithResponse:(NSDictionary *)responseData
-{    
+{
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setObject:self.strNewChangedPass forKey:@"PortalPassword"];
     [userDefaults synchronize];
@@ -642,6 +645,7 @@
 - (void) reloginSuccessWithResponse:(NSDictionary *)responseDict
 {
    	if (responseDict) {
+        NSLog(@"%s Relogin after changed password %@", __FUNCTION__, [responseDict description]);
         NSInteger statusCode = [[responseDict objectForKey:@"status"] intValue];
         
         if (statusCode == 200) // success
@@ -656,7 +660,6 @@
                                         delegate:nil
                                cancelButtonTitle:nil
                                otherButtonTitles:NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil), nil] autorelease] show];
-
         }
         else
         {
@@ -674,6 +677,8 @@
         [MBProgressHUD hideAllHUDsForView:self.view animated:NO];
         NSLog(@"Error - loginSuccessWithResponse: reponseDict = nil");
     }
+    MenuViewController *tabBarController = (MenuViewController *)self.parentVC;
+    [tabBarController.menuDelegate finishPasswordChanged];
 }
 
 - (void) reloginFailedWithError:(NSDictionary *) responseError
@@ -684,6 +689,8 @@
                                 delegate:nil
                        cancelButtonTitle:nil
                        otherButtonTitles:NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil), nil] autorelease] show];
+    MenuViewController *tabBarController = (MenuViewController *)self.parentVC;
+    [tabBarController.menuDelegate finishPasswordChanged];
 }
 
 - (void)reloginFailedServerUnreachable
@@ -694,7 +701,8 @@
                                 delegate:nil
                        cancelButtonTitle:nil
                        otherButtonTitles:NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil), nil] autorelease] show];
-    
+    MenuViewController *tabBarController = (MenuViewController *)self.parentVC;
+    [tabBarController.menuDelegate finishPasswordChanged];
 }
 
 

@@ -14,7 +14,6 @@
                 <outlet property="ib_scollViewGuide" destination="bu3-Pi-rng" id="vQH-24-kfN"/>
                 <outlet property="ib_viewGuild" destination="VO0-zj-eKX" id="BJI-vl-QVM"/>
                 <outlet property="lblWordAddition" destination="g5K-fF-NzV" id="R1P-l6-47H"/>
-                <outlet property="progressView" destination="gHa-0y-0aV" id="yrG-YJ-TIu"/>
                 <outlet property="view" destination="gHa-0y-0aV" id="w7F-2a-wM7"/>
                 <outlet property="viewFwOtaUpgrading" destination="YDl-Wb-nmB" id="6KQ-cV-Bue"/>
             </connections>
@@ -58,6 +57,7 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="18"/>
                     <state key="normal" title="Cancel" backgroundImage="cancel_btn.png">
+                        <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>

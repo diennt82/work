@@ -22,4 +22,6 @@
 @property (nonatomic, retain) NSMutableArray * listOfWifi;
 @property (nonatomic, assign) IBOutlet UITableViewCell *cellView;
 
+@property (nonatomic, retain) CamProfile *camProfile;
+
 @end

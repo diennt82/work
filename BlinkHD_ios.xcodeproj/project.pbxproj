@@ -660,6 +660,7 @@
 		8BC0A02F1844A87700A5FD52 /* temp_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BC0A02E1844A87700A5FD52 /* temp_bg.png */; };
 		8BC0A0461844B31700A5FD52 /* mbp_icon57x57.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BC0A0421844B31700A5FD52 /* mbp_icon57x57.png */; };
 		8BC0A0491844B31700A5FD52 /* mbp_icon144x144.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BC0A0451844B31700A5FD52 /* mbp_icon144x144.png */; };
+		8BCE3096198F98B7006C386C /* PushNotificationAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BCE3095198F98B7006C386C /* PushNotificationAlert.m */; };
 		8BE896B31845CB3B00674E01 /* bb_motion_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BE896B21845CB3B00674E01 /* bb_motion_icon.png */; };
 		8BE9D32019653D0C00D3DE8D /* AddCameraViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8BE9D31F19653D0C00D3DE8D /* AddCameraViewController_iPad.xib */; };
 		8BE9D32319653F3E00D3DE8D /* wifisetup_scout85.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BE9D32119653F3E00D3DE8D /* wifisetup_scout85.png */; };
@@ -1553,6 +1554,8 @@
 		8BC0A02E1844A87700A5FD52 /* temp_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = temp_bg.png; sourceTree = "<group>"; };
 		8BC0A0421844B31700A5FD52 /* mbp_icon57x57.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mbp_icon57x57.png; sourceTree = "<group>"; };
 		8BC0A0451844B31700A5FD52 /* mbp_icon144x144.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mbp_icon144x144.png; sourceTree = "<group>"; };
+		8BCE3094198F98B7006C386C /* PushNotificationAlert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PushNotificationAlert.h; sourceTree = "<group>"; };
+		8BCE3095198F98B7006C386C /* PushNotificationAlert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PushNotificationAlert.m; sourceTree = "<group>"; };
 		8BE896B21845CB3B00674E01 /* bb_motion_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bb_motion_icon.png; sourceTree = "<group>"; };
 		8BE9D31F19653D0C00D3DE8D /* AddCameraViewController_iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AddCameraViewController_iPad.xib; sourceTree = "<group>"; };
 		8BE9D32119653F3E00D3DE8D /* wifisetup_scout85.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wifisetup_scout85.png; sourceTree = "<group>"; };
@@ -1813,7 +1816,6 @@
 				A118C19C187E4643009176F5 /* HttpCommunication_Model */,
 				8B9CE1F818C81DBA00B1B7F9 /* HubbleAlertView */,
 				A1ABF19C187536A00014FCB4 /* BLE Setup */,
-				8B90BA5A18717F22007BAF09 /* PlayEventVC */,
 				8B9112D3186033B5004301C5 /* HubbleNotifView */,
 				8B9C7DFE185F22090038B3A8 /* MenuHubble */,
 				8BA18CA8184870330097D1AF /* DeviceSettings */,
@@ -2733,13 +2735,6 @@
 			name = Stream;
 			sourceTree = "<group>";
 		};
-		8B90BA5A18717F22007BAF09 /* PlayEventVC */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = PlayEventVC;
-			sourceTree = "<group>";
-		};
 		8B9112C718601041004301C5 /* General */ = {
 			isa = PBXGroup;
 			children = (
@@ -3175,6 +3170,8 @@
 				28D7ACF60DDB3853001CB0EB /* MBP_iosViewController.h */,
 				28D7ACF70DDB3853001CB0EB /* MBP_iosViewController.mm */,
 				5EBA45651940598000695155 /* MBP_iosViewController.xib */,
+				8BCE3094198F98B7006C386C /* PushNotificationAlert.h */,
+				8BCE3095198F98B7006C386C /* PushNotificationAlert.m */,
 			);
 			name = MBP_iosViewController;
 			sourceTree = "<group>";
@@ -3373,16 +3370,8 @@
 			isa = PBXGroup;
 			children = (
 				8BB7EA96196E37B900FDD674 /* Focus73ListVc */,
-				8BB7EA95196E37A400FDD674 /* LANSeupInstructionVC */,
 			);
 			name = Focus73;
-			sourceTree = "<group>";
-		};
-		8BB7EA95196E37A400FDD674 /* LANSeupInstructionVC */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = LANSeupInstructionVC;
 			sourceTree = "<group>";
 		};
 		8BB7EA96196E37B900FDD674 /* Focus73ListVc */ = {
@@ -4358,6 +4347,7 @@
 				8BA5C4801818DCC1006B4BB8 /* ZoneViewController.m in Sources */,
 				84A66259195C0C2500EF7DB5 /* SDWebImageDownloaderOperation.m in Sources */,
 				8B9C7E15185F268C0038B3A8 /* CamerasViewController.mm in Sources */,
+				8BCE3096198F98B7006C386C /* PushNotificationAlert.m in Sources */,
 				97987E421546AF2C0066C49B /* UserAccount.mm in Sources */,
 				A1ABF1C2187538550014FCB4 /* EditCamera_VController.mm in Sources */,
 				84A66260195C0C2500EF7DB5 /* UIImageView+WebCache.m in Sources */,

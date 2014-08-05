@@ -24,5 +24,6 @@
 - (id)initWithCamChannel: (CamChannel *)camChannel;
 - (id)initWithParentVC: (id)parentVC camChannel: (CamChannel *)camChannel;
 - (void)removeSubviews;
+- (void)reloadEvents;
 
 @end

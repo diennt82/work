@@ -13,9 +13,13 @@
 #import "Camera.h"
 #import "Step_04_ViewController.h"
 #import "MBProgressHUD.h"
+#import "define.h"
 
 #define BTN_CONTINUE_TAG    599
 #define BLE_TIMEOUT_PROCESS 1.5*60
+#define SETUP_UNKNOW        0
+#define SETUP_BLE           1
+#define SETUP_LAN           2
 
 @interface CreateBLEConnection_VController () <CustomIOS7AlertViewDelegate, BonjourDelegate>
 
@@ -36,9 +40,9 @@
 @property (nonatomic) BOOL isNotFirstTime;
 @property (nonatomic, retain) NSMutableArray *arrayFocus73;
 @property (nonatomic) BOOL isScanning;
-@property (nonatomic) BOOL isLANSetup;
 @property (nonatomic, retain) CamProfile *selectedCamProfile;
 @property (retain, nonatomic) NSThread *threadBonjour;
+@property (nonatomic) NSInteger setupType;
 
 @end
 
@@ -172,7 +176,7 @@
 
 - (IBAction)btnConnectTouchUpInsideAction:(id)sender
 {
-    if (_isLANSetup)
+    if (_setupType == SETUP_LAN)
     {
         NSLog(@"Load step 4");
         //Load the next xib
@@ -220,6 +224,7 @@
     NSLog(@"CreateBLE VC - btnContinueTouchUpInsideAction - refreshCamBLE");
     [self.viewError removeFromSuperview];
     self.shouldTimeoutProcessing = FALSE;
+    self.setupType = SETUP_UNKNOW;
     
     [self createBLEConnectionRescan:_rescanFlag];
     
@@ -288,6 +293,8 @@
     self.selectedPeripheral = nil;
     self.selectedCamProfile = nil;
     self.btnConnect.enabled = NO;
+    self.setupType = SETUP_UNKNOW;
+    self.shouldTimeoutProcessing = FALSE;
     
     [self createBLEConnectionRescan:TRUE];
     
@@ -395,10 +402,10 @@
 {
     NSLog(@"%s rescanFlag %d", __FUNCTION__, rescanFlag);
     
-    if (rescanFlag)
+    //if (rescanFlag)
     {
     }
-    else
+    //else
     {
         [self.view addSubview:_viewPairNDetecting];
         [self.view bringSubviewToFront:_viewPairNDetecting];
@@ -462,7 +469,9 @@
 {
     NSLog(@"%s - task_cancelled: %d, - _currentBLEList.count: %d, - shouldTimeoutProcessing: %d, isMT:%d", __FUNCTION__, task_cancelled, _currentBLEList.count, _shouldTimeoutProcessing, [NSThread currentThread].isMainThread);
     
-    if (task_cancelled == TRUE || _shouldTimeoutProcessing)
+    if (task_cancelled == TRUE   ||
+        _shouldTimeoutProcessing ||
+        _setupType != SETUP_UNKNOW)
     {
         return;
     }
@@ -506,7 +515,7 @@
                 {
                     self.btnConnect.enabled = YES;
                     self.selectedCamProfile = _arrayFocus73[0];
-                    self.isLANSetup = TRUE;
+                    self.setupType = SETUP_LAN;
                     [self btnConnectTouchUpInsideAction:nil];
                     
                     NSLog(@"%s Got a Bonjour service.", __FUNCTION__);
@@ -559,9 +568,9 @@
             
             //[[BLEConnectionManager getInstanceBLE] connectToBLEWithPeripheral:_selectedPeripheral];
             //[self createHubbleAlertView];
-            self.shouldTimeoutProcessing = TRUE;
+            //self.shouldTimeoutProcessing = TRUE;
+            self.setupType = SETUP_BLE;
             self.btnConnect.enabled = YES;
-            self.isLANSetup = FALSE;
             [self btnConnectTouchUpInsideAction:nil];
         }
         else //more than 2
@@ -1032,12 +1041,12 @@
         
         if (indexPath.section == 0)
         {
-            self.isLANSetup = FALSE;
+            self.setupType = SETUP_BLE;
             self.selectedPeripheral = (CBPeripheral *)[BLEConnectionManager getInstanceBLE].listBLEs[indexPath.row];
         }
         else
         {
-            self.isLANSetup = TRUE;
+            self.setupType = SETUP_LAN;
             self.selectedCamProfile = _arrayFocus73[indexPath.row];
         }
     }
@@ -1099,16 +1108,22 @@
         
         [bonjour release];
         
-        [NSThread exit];
+        //[NSThread exit];
     }
     
-    //[NSThread exit];
+    [NSThread exit];
 }
 
 - (void)rescanBonjour
 {
     if (!_isScanning)
     {
+        if (_arrayFocus73 && _arrayFocus73.count > 0)
+        {
+            [_arrayFocus73 removeAllObjects];
+            [self.ib_tableListBLE reloadData];
+        }
+        
         [self startScanningWithBonjour];
     }
 }

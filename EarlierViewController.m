@@ -205,6 +205,11 @@
     }
 }
 
+- (void)reloadEvents
+{
+    [_timelineVC loadEvents:_camChannel];
+}
+
 - (BOOL)shouldAutorotate
 {
     return NO;

@@ -12,8 +12,25 @@
 #import "UserAccount.h"
 #import "HttpCom.h"
 #import "MBP_iosViewController.h"
-#import "KISSMetricsAPI.h"
+//#import "KISSMetricsAPI.h"
 #import "HubbleProgressView.h"
+#import "MBProgressHUD.h"
+#import <MonitorCommunication/MonitorCommunication.h>
+
+#import "define.h"
+#import "Step_12_ViewController.h"
+#import "Step_11_ViewController.h"
+#import "Step_02_ViewController.h"
+
+#define SEND_CONF_SUCCESS 1
+#define SEND_CONF_ERROR 2
+
+#define SETUP_CAMERAS_UNCOMPLETE 0
+#define SETUP_CAMERAS_COMPLETE 1
+#define SETUP_CAMERAS_FAIL 2
+
+//Master_key=BC0B87B2832B67FF58F11749F19C4915D4B876C2505D9CC7D0D06F79653C8B11
+#define MASTER_KEY @"Master_key="
 
 #define TAG_IMAGE_VIEW_ANIMATION 595
 #define PROXY_HOST @"192.168.193.1"
@@ -42,13 +59,17 @@
 #define TAG_VIEW_FW_UPGRADE_MESSAGE      5993
 
 @interface Step_10_ViewController () <UIAlertViewDelegate>
-
+#if 0
 @property (nonatomic, retain) IBOutlet UIView * progressView;
+#endif
 @property (retain, nonatomic) IBOutlet UIView *viewFwOtaUpgrading;
 @property (retain, nonatomic) IBOutlet UILabel *lblWordAddition;
 @property (retain, nonatomic) IBOutlet UIButton *btnCancel;
 @property (retain, nonatomic) IBOutlet UIButton *btnContinue;
 @property (retain, nonatomic) IBOutlet UIButton *btnCancelFirmware;
+@property (retain, nonatomic) IBOutlet UIView *ib_viewGuild;
+@property (retain, nonatomic) IBOutlet UIScrollView *ib_scollViewGuide;
+@property (retain, nonatomic) IBOutlet UIButton *ib_resumeSetup;
 
 @property (retain, nonatomic) UserAccount *userAccount;
 @property (nonatomic, retain) BMS_JSON_Communication *jsonCommBlocked;
@@ -61,13 +82,19 @@
 @property (nonatomic) NSInteger fwUpgradeStatus;
 
 @property (nonatomic, retain) NSTimer *timerAdditionalOption;
+@property (nonatomic) BOOL should_stop_scanning;
+@property (nonatomic) BOOL should_retry_silently;
+@property (nonatomic, retain) NSString *cameraMac;
+@property (nonatomic, retain) NSString *errorCode;
+@property (nonatomic, retain) NSString *stringUDID;
+@property (nonatomic, retain) NSString *stringAuth_token;
 
 @end
 
 @implementation Step_10_ViewController
 
 
-@synthesize  cameraMac, master_key;
+//@synthesize  cameraMac, master_key;
 //@synthesize delegate;
 
 
@@ -85,10 +112,12 @@
     NSLog(@"%s", __FUNCTION__);
 
     [_timerAdditionalOption release];
+#if 0
     [_progressView release];
-    [_userAccount release];
     [cameraMac release];
     [master_key release];
+#endif
+    [_userAccount release];
     [_ib_scollViewGuide release];
     [_ib_viewGuild release];
     [_ib_resumeSetup release];
@@ -97,7 +126,7 @@
     [_btnCancel release];
     [_lblWordAddition release];
     [_btnContinue release];
-    [_btnCancel release];
+    [_btnCancelFirmware release];
     [super dealloc];
 }
 
@@ -118,11 +147,7 @@
                                                object: nil];
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    
 
-
-  
-    
     self.cameraMac = (NSString *) [userDefaults objectForKey:@"CameraMacWithQuote"];
     self.stringUDID = [userDefaults stringForKey:CAMERA_UDID];
     
@@ -147,8 +172,11 @@
     //Add view guild first and hide it
     [self.view addSubview:self.ib_viewGuild];
     [self.ib_viewGuild setHidden:YES];
-    
+#if 1
+    UIImageView *imageView = (UIImageView *)[self.view viewWithTag:595];
+#else
     UIImageView *imageView = (UIImageView *)[_progressView viewWithTag:595];
+#endif
     imageView.animationImages =[NSArray arrayWithObjects:
                                 [UIImage imageNamed:@"setup_camera_c1"],
                                 [UIImage imageNamed:@"setup_camera_c2"],
@@ -161,7 +189,9 @@
     //[self.view addSubview:self.progressView];
     
     [imageView startAnimating];
+#if 0
     [self showProgress:nil];
+#endif
     
 #if 1
     self.timerAdditionalOption = [NSTimer scheduledTimerWithTimeInterval:57
@@ -188,7 +218,11 @@
                                                     @"Note: Your camera may be upgraded to latest software. This may take about 5 minutes. During this time, you will not be able to access the camera.", nil);
     }
     
+#if 1
+    UILabel *lblProgress = (UILabel *)[self.view viewWithTag:695];
+#else
     UILabel *lblProgress = (UILabel *)[_progressView viewWithTag:695];
+#endif
     lblProgress.text = message;
 
     // >12.82 we can move on with new flow
@@ -224,6 +258,7 @@
     _btnCancel.hidden = NO;
 }
 
+#if 0
 -(void) showProgress:(NSTimer *) exp
 {
     NSLog(@"show progress ");
@@ -235,6 +270,16 @@
     }
 }
 
+- (void) hideProgess
+{
+    NSLog(@"hide progress");
+    if (self.progressView != nil)
+    {
+        self.progressView.hidden = YES;
+    }
+}
+#endif
+
 - (void)sendCommandRebootCamera
 {
     NSLog(@"%s", __FUNCTION__);
@@ -243,15 +288,6 @@
     //NSLog(@"[HttpCom instance]: %p", [HttpCom instance]);
     
     [[HttpCom instance].comWithDevice sendCommandAndBlock_raw:RESTART_HTTP_CMD];
-}
-
-- (void) hideProgess
-{
-    NSLog(@"hide progress");
-    if (self.progressView != nil)
-    {
-        self.progressView.hidden = YES;
-    }
 }
 
 #pragma mark - Actions
@@ -270,6 +306,13 @@
 
 - (IBAction)btnCancelTouchUpInsideAction:(id)sender
 {
+    self.btnCancel.enabled = NO;
+    self.navigationItem.leftBarButtonItem.enabled = NO;
+    
+    MBProgressHUD *hub = [MBProgressHUD showHUDAddedTo:self.view animated:NO];
+    NSString *cancel = NSLocalizedStringWithDefaultValue(@"cancel", nil, [NSBundle mainBundle], @"Cancel", nil);
+    hub.labelText = [cancel stringByAppendingString:@"..."];
+    
     if (_timeOut)
     {
         [_timeOut invalidate];
@@ -278,7 +321,6 @@
     
     [self setStopScanning:nil];
     
-    [_btnCancel setHidden:YES];
     [_lblWordAddition setHidden:YES];
     
     self.forceSetupFailed = TRUE;
@@ -317,8 +359,10 @@
 
 - (IBAction)registerCamera:(id)sender
 {
+#if 0
     self.progressView.hidden = NO;
     [self.view bringSubviewToFront:self.progressView];
+#endif
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString *fwVersion = [userDefaults stringForKey:FW_VERSION]; // 01.12.58
@@ -455,9 +499,9 @@
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString *udid      = [userDefaults objectForKey:CAMERA_UDID];
  
-    if (should_stop_scanning == TRUE || !udid || [udid isEqualToString:@""])
+    if (_should_stop_scanning == TRUE || !udid || [udid isEqualToString:@""])
     {
-        NSLog(@"%s should_stop_scanning:%d", __FUNCTION__, should_stop_scanning);
+        NSLog(@"%s should_stop_scanning:%d", __FUNCTION__, _should_stop_scanning);
         return ;
     }
     
@@ -732,7 +776,9 @@
         
         
 		[self.ib_viewGuild setHidden:YES];
+#if 0
         [self showProgress:nil];
+#endif
 		NSString * bc = @"";
 		NSString * own = @"";
 		[MBP_iosViewController getBroadcastAddress:&bc AndOwnIp:&own];
@@ -771,7 +817,9 @@
 
 - (void)connectToWifiHomeByHand
 {
+#if 0
     [self.progressView setHidden:YES];
+#endif
     [self.ib_viewGuild setHidden:NO];
     [self.view bringSubviewToFront:self.ib_viewGuild];
 }
@@ -779,7 +827,9 @@
 -(void)becomeActive
 {
     [self.ib_viewGuild setHidden:YES];
+#if 0
     [self showProgress:nil];
+#endif
     [NSTimer scheduledTimerWithTimeInterval: 3.0//
                                      target:self
                                    selector:@selector(step10CheckConnectionToHomeWifi:)
@@ -834,7 +884,9 @@
 - (void)waitingCameraRebootAndForceToWifiHome
 {
     //show progress
+#if 0
     [self showProgress:nil];
+#endif
     //After sending reboot camera commmand
     //check connection to wifi home after 3 seconds
     [NSTimer scheduledTimerWithTimeInterval:3
@@ -849,14 +901,14 @@
 
 -(void) setStopScanning:(NSTimer *) exp
 {
-    should_stop_scanning = TRUE;
+    self.should_stop_scanning = TRUE;
 }
 
 - (void) wait_for_camera_to_reboot:(NSTimer *)exp
 {
-    if (should_stop_scanning == TRUE)
+    if (_should_stop_scanning == TRUE)
     {
-        NSLog(@"%s Step_10VC - stop scanning now.. should be 4 mins.", __FUNCTION__);
+        NSLog(@"%s Stop scanning now.. should be 4 mins.", __FUNCTION__);
         
         [self setupFailed];
         return ;
@@ -871,9 +923,9 @@
 
 - (NSInteger )checkCameraAvailableAndFWUpgrading
 {
-    if (should_stop_scanning == TRUE)
+    if (_should_stop_scanning == TRUE)
     {
-        NSLog(@"%s Step_10VC - stop scanning now.. should be 4 mins.", __FUNCTION__);
+        NSLog(@"%s Stop scanning now.. should be 4 mins.", __FUNCTION__);
         
         [self setupFailed];
         return CAMERA_STATE_UNKNOWN;
@@ -894,7 +946,7 @@
         [user release];
     }
     
-    NSInteger cameraStatus = [_userAccount checkAvailableAndFWUpgradingWithCamera:self.cameraMac];
+    NSInteger cameraStatus = [_userAccount checkAvailableAndFWUpgradingWithCamera:_cameraMac];
     
     NSLog(@"checkCameraAvailableAndFWUpgrading: %d", cameraStatus);
     
@@ -924,9 +976,9 @@
 
 - (BOOL)checkCameraIsAvailable
 {
-    if (should_stop_scanning == TRUE)
+    if (_should_stop_scanning == TRUE)
     {
-        NSLog(@"%s Step_10VC - stop scanning now.. should be 4 mins.", __FUNCTION__);
+        NSLog(@"%s Stop scanning now.. should be 4 mins.", __FUNCTION__);
         
         [self setupFailed];
         return FALSE;
@@ -949,7 +1001,7 @@
         [user release];
     }
     
-    if ([_userAccount checkCameraIsAvailable:self.cameraMac])
+    if ([_userAccount checkCameraIsAvailable:_cameraMac])
     {
         self.errorCode = @"NoErr";
         NSLog(@"Found it online");
@@ -964,7 +1016,7 @@
     return FALSE;
 }
 
-
+#if 0
 -(BOOL) checkItOnline
 {
     NSLog(@"--> Try to search IP online...");
@@ -983,7 +1035,7 @@
         [user release];
     }
 #if 1
-    if ([_userAccount checkCameraIsAvailable:self.cameraMac])
+    if ([_userAccount checkCameraIsAvailable:_cameraMac])
     {
         self.errorCode = @"NoErr";
         return TRUE;
@@ -1002,10 +1054,11 @@
     self.errorCode =@"NotAvail";
     return FALSE;
 }
+#endif
 
 - (void) setupCompleted
 {
-    [[KISSMetricsAPI sharedAPI] recordEvent:@"Add camera success" withProperties:nil];
+    //[[KISSMetricsAPI sharedAPI] recordEvent:@"Add camera success" withProperties:nil];
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:@"Add camera succeeded"
                                                      withLabel:nil
@@ -1025,8 +1078,9 @@
         [_timeOut invalidate];
         self.timeOut = nil;
     }
-    
+#if 0
     [self.progressView setHidden:YES];
+#endif
     //Load step 12
     NSLog(@"Load step 12");
     
@@ -1035,7 +1089,6 @@
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
-        
         step12ViewController = [[Step_12_ViewController alloc]
                                 initWithNibName:@"Step_12_ViewController_ipad" bundle:nil];
     }
@@ -1080,10 +1133,11 @@
 #endif
     if (_forceSetupFailed)
     {
-        NSLog(@"%s restarting setup immediately", __FUNCTION__);
+        NSLog(@"%s Restarting setup immediately", __FUNCTION__);
         
         // Disable Keep screen on
         [UIApplication sharedApplication].idleTimerDisabled=  NO;
+        [MBProgressHUD hideHUDForView:self.view animated:NO];
         [self.navigationController popToRootViewControllerAnimated:YES];
     }
     else
@@ -1139,7 +1193,7 @@
             
         case ALERT_ADD_CAM_UNREACH:
         {
-            if (should_stop_scanning)
+            if (_should_stop_scanning)
             {
                 // Need not to popup anymore
                 return;
@@ -1202,7 +1256,7 @@
 {
     NSLog(@"addcam failed : server unreachable");
     
-    if (should_retry_silently == TRUE)
+    if (_should_retry_silently == TRUE)
     {
         NSLog(@"addcam failed : Retry without popup");
         [self registerCamera:nil];
@@ -1384,7 +1438,9 @@
 
 - (void)checkCameraStatusAgain
 {
+#if 0
     [self.view bringSubviewToFront:_progressView];
+#endif
     
     if (_timeOut)
     {
