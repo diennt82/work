@@ -13,6 +13,7 @@
 #import "Camera.h"
 #import "Step_04_ViewController.h"
 #import "MBProgressHUD.h"
+#import "define.h"
 
 #define BTN_CONTINUE_TAG    599
 #define BLE_TIMEOUT_PROCESS 1.5*60

@@ -7,7 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "GAI.h"
 
+@interface Step_10_ViewController : GAITrackedViewController
+
+@end
+
+#if 0
 #import <MonitorCommunication/MonitorCommunication.h>
 
 #import "define.h"
@@ -29,13 +35,15 @@
 //Master_key=BC0B87B2832B67FF58F11749F19C4915D4B876C2505D9CC7D0D06F79653C8B11
 #define MASTER_KEY @"Master_key="
 
-//#define 
+//#define
+//#endif
 
 @interface Step_10_ViewController : GAITrackedViewController
+//#if 0
 {
 
     int num_scan_time;
-    BOOL should_stop_scanning; 
+    BOOL should_stop_scanning;
 
 
     NSString *cameraMac, *master_key;
@@ -43,19 +51,16 @@
     BOOL should_retry_silently ;
     
     //member to dismiss when disDisAppearView
-    UIAlertView *_alertChooseConfig;    
+    UIAlertView *_alertChooseConfig;
     
     //id<ConnectionMethodDelegate> delegate;
 }
 
-@property (retain, nonatomic) IBOutlet UIView *ib_viewGuild;
-@property (retain, nonatomic) IBOutlet UIScrollView *ib_scollViewGuide;
-@property (retain, nonatomic) IBOutlet UIButton *ib_resumeSetup;
 
-//@property (nonatomic, assign)  id<ConnectionMethodDelegate> delegate;
+@property (nonatomic, assign)  id<ConnectionMethodDelegate> delegate;
 @property (nonatomic, retain) NSString *cameraMac,  *master_key;
 
-@property (nonatomic, retain) NSString * errorCode;
+@property (nonatomic, retain) NSString *errorCode;
 @property (nonatomic, retain) NSString *stringUDID;
 @property (nonatomic, retain) NSString *stringAuth_token;
 
@@ -70,3 +75,4 @@
 - (void)  setupFailed;
 
 @end
+#endif

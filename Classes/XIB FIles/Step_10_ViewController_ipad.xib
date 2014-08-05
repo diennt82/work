@@ -14,7 +14,6 @@
                 <outlet property="ib_scollViewGuide" destination="p2e-Nk-gY8" id="Vp8-9Y-z0P"/>
                 <outlet property="ib_viewGuild" destination="xzm-JP-PBf" id="Nyr-fN-D68"/>
                 <outlet property="lblWordAddition" destination="xSz-fC-B7G" id="TgL-sh-J3Q"/>
-                <outlet property="progressView" destination="6n4-4U-2gC" id="hjr-uU-EEq"/>
                 <outlet property="view" destination="6n4-4U-2gC" id="uy5-fO-bzB"/>
                 <outlet property="viewFwOtaUpgrading" destination="kyV-g8-e9y" id="glc-9O-IEw"/>
             </connections>

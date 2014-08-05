@@ -14,6 +14,7 @@
 #import "KISSMetricsAPI.h"
 #import "UIFont+Hubble.h"
 #import "Camera.h"
+#import "define.h"
 
 #define GAI_CATEGORY    @"Step 03 view"
 

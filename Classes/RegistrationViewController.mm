@@ -11,8 +11,9 @@
 #import "KISSMetricsAPI.h"
 #import "Step_10_ViewController.h"
 #import "UserAccount.h"
-//#import "TermsCondController.h"
+#import "PublicDefine.h"
 #import "ToUViewController.h"
+#import "define.h"
 
 #define GAI_CATEGORY            @"Registration view"
 #define ERROR_MESSAGE_TEXT      @"error_message_text"

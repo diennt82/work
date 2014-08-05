@@ -15,6 +15,7 @@
 #import "BLEConnectionManager.h"
 #import "KISSMetricsAPI.h"
 #import "Focus73TableViewController.h"
+#import "define.h"
 
 #define GAI_CATEGORY    @"Step 02 view"
 
