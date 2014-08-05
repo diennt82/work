@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5053" systemVersion="12F45" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5053" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
         <deployment defaultVersion="1792" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
@@ -8,6 +8,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="Step_05_ViewController">
             <connections>
                 <outlet property="btnContinue" destination="6pf-07-oSx" id="pVZ-Nb-eoU"/>
+                <outlet property="btnSkipWifiSetup" destination="q7k-zu-5St" id="lb9-9L-wxM"/>
                 <outlet property="cellOtherNetwork" destination="rJk-JZ-ebm" id="tiP-2k-GAF"/>
                 <outlet property="cellRefresh" destination="Gc4-ua-ngP" id="njC-Nw-4Dx"/>
                 <outlet property="mTableView" destination="13" id="25"/>
@@ -53,7 +54,7 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <tableView clipsSubviews="YES" tag="11" contentMode="scaleToFill" bounces="NO" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="13">
-                    <rect key="frame" x="0.0" y="234" width="320" height="264"/>
+                    <rect key="frame" x="0.0" y="234" width="320" height="206"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <color key="sectionIndexTrackingBackgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -70,7 +71,18 @@
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
-                        <action selector="btnContinueTouchUpInsideAction:" destination="-1" eventType="touchUpInside" id="SbK-Na-kOv"/>
+                        <action selector="btnContinueTouchUpInsideAction:" destination="-1" eventType="touchUpInside" id="CL1-oe-STi"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="q7k-zu-5St">
+                    <rect key="frame" x="20" y="448" width="280" height="50"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="20"/>
+                    <state key="normal" title="Skip WIFI Setup" backgroundImage="green_btn.png">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="btnSkipWifiSetupTouchUpInsideAction:" destination="-1" eventType="touchUpInside" id="rcc-5H-dbE"/>
                     </connections>
                 </button>
             </subviews>

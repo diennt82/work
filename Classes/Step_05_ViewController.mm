@@ -10,22 +10,27 @@
 #import "Step05Cell.h"
 #import "HttpCom.h"
 #import "Step_04_ViewController.h"
-#import "KISSMetricsAPI.h"
+//#import "KISSMetricsAPI.h"
 #import "HoldOnCamWifi.h"
+#import "CustomIOS7AlertView.h"
+#import "Step_10_ViewController.h"
 
 #define ALERT_CONFIRM_TAG       555
 #define ALERT_RETRY_WIFI_TAG    559
 #define GAI_CATEGORY            @"Step 05 view"
 
-@interface Step_05_ViewController () <UIAlertViewDelegate>
+@interface Step_05_ViewController () <UIAlertViewDelegate, CustomIOS7AlertViewDelegate>
 
 @property (retain, nonatomic) IBOutlet UIButton *btnContinue;
 @property (retain, nonatomic) IBOutlet UITableViewCell *cellOtherNetwork;
 @property (retain, nonatomic) IBOutlet UITableViewCell *cellRefresh;
 @property (retain, nonatomic) IBOutlet UIView *viewProgress;
+@property (retain, nonatomic) IBOutlet UIButton *btnSkipWifiSetup;
 
 @property (retain, nonatomic) WifiEntry *selectedWifiEntry;
 @property (retain, nonatomic) WifiEntry *otherWiFi;
+@property (retain, nonatomic) CustomIOS7AlertView *alertView;
+
 @end
 
 @implementation Step_05_ViewController
@@ -52,8 +57,10 @@
     [_cellRefresh release];
     [_viewProgress release];
     [_otherWiFi release];
+    [_btnSkipWifiSetup release];
     [super dealloc];
 }
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -103,6 +110,14 @@
     [self performSelector:@selector(queryWifiList) withObject:nil afterDelay:0.001];
     
     [[HoldOnCamWifi shareInstance] startHolder];
+    
+    if (_camProfile) // Focus73
+    {
+        self.btnSkipWifiSetup.titleLabel.text = NSLocalizedStringWithDefaultValue(@"skip_wifi_setup",
+                                                                                  nil, [NSBundle mainBundle],
+                                                                                  @"Skip WIFI Setup", nil);
+        self.btnSkipWifiSetup.hidden = NO;
+    }
 }
 
 - (void)viewDidUnload
@@ -161,7 +176,7 @@
     }
     else
     {
-        [[KISSMetricsAPI sharedAPI] recordEvent:@"Step05 - Touch continue button" withProperties:nil];
+        //[[KISSMetricsAPI sharedAPI] recordEvent:@"Step05 - Touch continue button" withProperties:nil];
         
         NSRange noQoute = NSMakeRange(1, _selectedWifiEntry.ssid_w_quote.length - 2);
         
@@ -177,6 +192,13 @@
             [self showDialogToConfirm:homeWifi selectedWifi:wifiName];
         }
     }
+}
+
+- (IBAction)btnSkipWifiSetupTouchUpInsideAction:(id)sender
+{
+    [self createHubbleAlertView];
+    
+    [self performSelectorInBackground:@selector(configureCameraAndMoveToFinalStep) withObject:NO];
 }
 
 #pragma mark - Methods
@@ -240,9 +262,12 @@
     
     BOOL newCmdFlag = TRUE;
     
-   // [HttpCom instance].comWithDevice.device_port = 80;
+   /*
+    * 1. Using RT command if fw >= FW_MILESTONE
+    * 2. Using RT command if this camera is Focus73 model.
+    */
     
-    if ([fwVersion compare:FW_MILESTONE] >= NSOrderedSame) // fw >= FW_MILESTONE
+    if ([fwVersion compare:FW_MILESTONE] >= NSOrderedSame || _camProfile) // fw >= FW_MILESTONE
     {
         router_list_raw = [[HttpCom instance].comWithDevice sendCommandAndBlock_raw:GET_ROUTER_LIST2
                                                                         withTimeout:2*DEFAULT_TIME_OUT];
@@ -292,11 +317,146 @@
     [myAlert release];
 }
 
+- (void)configureCameraAndMoveToFinalStep
+{
+    [self configureCamera];
+    
+    [[NSUserDefaults standardUserDefaults] setObject:[CameraPassword fetchSSIDInfo] forKey:HOST_SSID];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    [self performSelectorOnMainThread:@selector(moveToFinalStep) withObject:nil waitUntilDone:NO];
+}
+
+- (void)configureCamera
+{
+    /*
+     * 1. Set Auth.
+     * 2. Default on all of PN.
+     * 3. Get UDID
+     * 4. Restart systems.
+     */
+    
+    // 1.
+    NSDate *now = [NSDate date];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"ZZZ"];
+    
+    NSMutableString *stringFromDate = [NSMutableString stringWithString:[formatter stringFromDate:now]];
+    [formatter release];
+    [stringFromDate insertString:@"." atIndex:3];
+    
+    NSString * set_auth_cmd = [NSString stringWithFormat:@"%@%@%@%@%@",
+                               SET_SERVER_AUTH,
+                               SET_SERVER_AUTH_PARAM1, [[NSUserDefaults standardUserDefaults] stringForKey:@"PortalApiKey"],
+                               SET_SERVER_AUTH_PARAM2, stringFromDate];
+    
+    NSString *response = [[HttpCom instance].comWithDevice sendCommandAndBlock:set_auth_cmd
+                                                                   withTimeout:10.0];
+    NSLog(@"set auth -set_auth_cmd: %@, -response: %@ ", set_auth_cmd, response);
+    
+    // 2.
+    [self defaultOnAllPNToCamera];
+    
+    // 3.
+    NSString *stringUDID = @"";
+    NSString *stringMac = @"00:00:00:00:00";
+    
+    response = [[HttpCom instance].comWithDevice sendCommandAndBlock:GET_UDID
+                                                         withTimeout:5.0];
+    
+    NSString *pattern = [NSString stringWithFormat:@"^%@: [0-9A-Z]{26}$", GET_UDID];
+    NSError *error = NULL;
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:pattern
+                                                                           options:NSRegularExpressionAnchorsMatchLines
+                                                                             error:&error];
+    if (!regex)
+    {
+        NSLog(@"%s error:%@", __FUNCTION__, error.description);
+    }
+    else
+    {
+        NSLog(@"%s respone:%@", __FUNCTION__, response);
+        
+        if (response)
+        {
+            //get_udid: 01008344334C32B0A0VFFRBSVA
+            NSUInteger numberOfMatches = [regex numberOfMatchesInString:response
+                                                                options:0
+                                                                  range:NSMakeRange(0, [response length])];
+            NSLog(@"%s numberOfMatches:%lu", __FUNCTION__, (unsigned long)numberOfMatches);
+            
+            if (numberOfMatches == 1)
+            {
+                stringUDID = [response substringFromIndex:GET_UDID.length + 2];
+                stringMac = [Util add_colon_to_mac:[stringUDID substringWithRange:NSMakeRange(6, 12)]];
+            }
+        }
+    }
+    //save mac address for used later
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setObject:stringMac forKey:@"CameraMacWithQuote"];
+    [userDefaults setObject:stringUDID forKey:CAMERA_UDID];
+    [userDefaults synchronize];
+    
+    // 4.
+    response = [[HttpCom instance].comWithDevice sendCommandAndBlock:RESTART_HTTP_CMD];
+    
+    NSLog(@"%s RESTART_HTTP_CMD: %@", __FUNCTION__, response);
+}
+
+- (void)defaultOnAllPNToCamera
+{
+    NSString *result = @"";
+    
+    NSString *response = [[HttpCom instance].comWithDevice sendCommandAndBlock:@"set_motion_area&grid=1x1&zone=00"];
+    result = [result stringByAppendingString:response];
+    
+    if (!_camProfile) // Meaning this is not a Focus73 model!
+    {
+        response = [[HttpCom instance].comWithDevice sendCommandAndBlock:@"vox_enable"];
+        result = [result stringByAppendingFormat:@", %@", response];
+        
+        response = [[HttpCom instance].comWithDevice sendCommandAndBlock:@"set_temp_lo_enable&value=1"];
+        result = [result stringByAppendingFormat:@", %@", response];
+        
+        response = [[HttpCom instance].comWithDevice sendCommandAndBlock:@"set_temp_hi_enable&value=1"];
+        result = [result stringByAppendingFormat:@", %@", response];
+    }
+    
+    NSLog(@"%s respnse:%@", __FUNCTION__, result);
+}
+
+- (void)moveToFinalStep
+{
+    //[MBProgressHUD hideHUDForView:self.view animated:NO];
+    [self customIOS7dialogButtonTouchUpInside:_alertView clickedButtonAtIndex:0];
+    
+    Step_10_ViewController *step10ViewController = nil;
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        
+        
+        step10ViewController = [[Step_10_ViewController alloc]
+                                initWithNibName:@"Step_10_ViewController_ipad" bundle:nil];
+    }
+    else
+    {
+        
+        step10ViewController = [[Step_10_ViewController alloc]
+                                initWithNibName:@"Step_10_ViewController" bundle:nil];
+    }
+    
+    [self.navigationController pushViewController:step10ViewController animated:NO];
+    [step10ViewController release];
+}
+
 #pragma mark - Alert view delegate
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex  // after animation
 {
-    [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Step05 - dismiss dialog with button index: %d", buttonIndex] withProperties:nil];
+    //[[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Step05 - dismiss dialog with button index: %d", buttonIndex] withProperties:nil];
     
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:[NSString stringWithFormat:@"Dismiss alert: %d", alertView.tag]
@@ -418,7 +578,7 @@
 
 - (void)tableView: (UITableView *)tableView didSelectRowAtIndexPath: (NSIndexPath *)indexPath
 {
-    [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Step05 - table view select row: %d in section: %d", indexPath.row, indexPath.section] withProperties:nil];
+    //[[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Step05 - table view select row: %d in section: %d", indexPath.row, indexPath.section] withProperties:nil];
     
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:@"Select Wifi entry"
@@ -438,4 +598,70 @@
         [self performSelectorInBackground:@selector(queryWifiList) withObject:nil];
     }
 }
+
+- (void)createHubbleAlertView
+{
+    // Here we need to pass a full frame
+    
+    if (_alertView == nil)
+    {
+        self.alertView = [[CustomIOS7AlertView alloc] init];
+        // Add some custom content to the alert view
+        [_alertView setContainerView:[self createDemoView]];
+        
+        // Modify the parameters
+        [_alertView setButtonTitles:NULL];
+        [_alertView setDelegate:self];
+        
+        // You may use a Block, rather than a delegate.
+        [_alertView setOnButtonTouchUpInside:^(CustomIOS7AlertView *alertView, int buttonIndex) {
+            NSLog(@"Block: Button at position %d is clicked on alertView %d.", buttonIndex, [alertView tag]);
+            [alertView close];
+        }];
+        
+        [_alertView setUseMotionEffects:true];
+    }
+    
+    // And launch the dialog
+    [_alertView show];
+}
+
+- (void)customIOS7dialogButtonTouchUpInside: (CustomIOS7AlertView *)alertView clickedButtonAtIndex: (NSInteger)buttonIndex
+{
+    NSLog(@"Delegate: Button at position %d is clicked on alertView %d.", buttonIndex, [alertView tag]);
+    [alertView close];
+}
+
+- (UIView *)createDemoView
+{
+    UIView *demoView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 230, 140)] autorelease];
+    
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(100, 35, 30, 30)];// autorelease];
+    [imageView setImage:[UIImage imageNamed:@"loader_a"]];
+    
+    imageView.animationImages = @[[UIImage imageNamed:@"loader_a"],
+                                  [UIImage imageNamed:@"loader_b"],
+                                  [UIImage imageNamed:@"loader_c"],
+                                  [UIImage imageNamed:@"loader_d"],
+                                  [UIImage imageNamed:@"loader_e"],
+                                  [UIImage imageNamed:@"loader_f"]];
+    imageView.animationRepeatCount = 0;
+    imageView.animationDuration = 1.5f;
+    [imageView startAnimating];
+    
+    [demoView addSubview:imageView];
+    
+    [imageView release];
+    
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(20, 85, 200, 41)];// autorelease];
+    label.textAlignment = NSTextAlignmentCenter;
+    label.numberOfLines = 2;
+    label.text = @"Waiting for configure camera...";
+    [demoView addSubview:label];
+    [label release];
+    
+    return demoView;
+}
+
+
 @end

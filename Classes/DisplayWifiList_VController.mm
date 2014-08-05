@@ -92,9 +92,8 @@
         
         NSString *skipWIFISetup = NSLocalizedStringWithDefaultValue(@"skip_wifi_setup", nil, [NSBundle mainBundle], @"Skip WIFI Setup", nil);
         self.btnSkipWIFISetup.titleLabel.text = skipWIFISetup;
-        //self.btnSkipWIFISetup.hidden = NO; //Need not to show anymore. As far as, this flow will be terminated!
+        self.btnSkipWIFISetup.hidden = NO;
     }
-    
     
     self.newCmdFlag = TRUE;
     
@@ -613,8 +612,13 @@
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString *fwVersion = [userDefaults stringForKey:FW_VERSION]; // 01.12.58
     
+    /*
+     * 1. Checking fw version for normal camera.
+     * 2. Need not to check fw version if this is Focus73 model.
+     */
     
-    if ([fwVersion compare:FW_MILESTONE] >= NSOrderedSame) // fw >= FW_MILESTONE
+    if ([fwVersion compare:FW_MILESTONE] >= NSOrderedSame ||
+        [userDefaults integerForKey:SET_UP_CAMERA] == SETUP_CAMERA_FOCUS73) // fw >= FW_MILESTONE
     {
         self.newCmdFlag = TRUE;
         [[BLEConnectionManager getInstanceBLE].uartPeripheral writeString:GET_ROUTER_LIST2
