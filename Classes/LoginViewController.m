@@ -38,6 +38,7 @@
 @property (nonatomic) BOOL buttonEnterPressedFlag;
 @property (nonatomic,retain) StunClient *client;
 @property (nonatomic) BOOL isUsingOldApiKey;
+@property (nonatomic) BOOL keyBoardShowing;
 
 @property (retain, nonatomic) IBOutlet UIImageView *imgViewLoading;
 @end
@@ -173,12 +174,20 @@
 
 - (void)keyboardWasShown:(NSNotification*)aNotification
 {
-    [self animateTextFieldWithUp:YES];
+    if (self.keyBoardShowing == NO) // must checking because has an error on chineses keyboard
+    {
+        [self animateTextFieldWithUp:YES];
+    }
+    self.keyBoardShowing = YES;
 }
 
 - (void)keyboardWillBeHidden:(NSNotification*)aNotification
 {
-    [self animateTextFieldWithUp:NO];
+    if (self.keyBoardShowing == YES) // must checking because has an error on chineses keyboard
+    {
+        [self animateTextFieldWithUp:NO];
+    }
+    self.keyBoardShowing = NO;
 }
 
 - (void)loadUserInfo_bg
@@ -610,7 +619,7 @@
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
-        movementDistance = 270;
+        movementDistance = 290;
     }
     
     if (UIScreen.mainScreen.bounds.size.height < 568)

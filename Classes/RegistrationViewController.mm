@@ -40,6 +40,7 @@
 @property (retain, nonatomic) NSString *stringCPassword;
 @property (retain, nonatomic) NSString *stringEmail;
 @property (retain, nonatomic) NSMutableDictionary *errorMessageDict;
+@property (nonatomic) BOOL keyBoardShowing;
 
 - (IBAction)handleUserNameErrorButton:(id)sender;
 - (IBAction)handleEmailErrorButton:(id)sender;
@@ -159,12 +160,20 @@
 
 - (void)keyboardWasShown:(NSNotification*)aNotification
 {
-    [self animateTextFieldWithUp:YES];
+    if (self.keyBoardShowing == NO) // must checking because has an error on chineses keyboard
+    {
+        [self animateTextFieldWithUp:YES];
+    }
+    self.keyBoardShowing = YES;
 }
 
 - (void)keyboardWillBeHidden:(NSNotification*)aNotification
 {
-    [self animateTextFieldWithUp:NO];
+    if (self.keyBoardShowing == YES) // must checking because has an error on chineses keyboard
+    {
+        [self animateTextFieldWithUp:NO];
+    }
+    self.keyBoardShowing = NO;
 }
 
 #pragma mark - Action
@@ -299,7 +308,7 @@
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
-        movementDistance = 270;
+        movementDistance = 290;
     }
     else if (UIScreen.mainScreen.bounds.size.height < 568)// iphone 4s and before
     {
