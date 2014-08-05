@@ -11,6 +11,7 @@
 #import "Step_10_ViewController.h"
 //#import "KISSMetricsAPI.h"
 #import "HoldOnCamWifi.h"
+#import "define.h"
 
 #define TIME_INPUT_PASSWORD_AGAIN   60.0
 #define RETRY_SETUP_WIFI_TIMES      5
