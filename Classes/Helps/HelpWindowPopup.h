@@ -10,6 +10,6 @@
 
 @interface HelpWindowPopup : UIView
 
-- (id)initWithTitle:(NSString *)title andContent:(NSString *)content;
+- (id)initWithTitle:(NSString *)title andMessage:(NSString *)message;
 - (void)show;
 @end
