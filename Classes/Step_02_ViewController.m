@@ -55,7 +55,7 @@
     [imageView startAnimating];
     
     if (_cameraType == BLUETOOTH_SETUP) {
-        NSLog(@"Step_02_VC - viewDidLoad: - isOnBLE: %d", [BLEConnectionManager getInstanceBLE].isOnBLE);
+        NSLog(@"Step_02_VC - viewDidLoad: - isOnBLE: %d", BLEConnectionManager.instanceBLE.isOnBLE);
     }
 }
 

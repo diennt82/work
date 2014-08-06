@@ -9,9 +9,6 @@
 #import <UIKit/UIKit.h>
 #import <CameraScanner/CameraScanner.h>
 
-#import "Util.h"
-#import "Step_08_ViewController.h"
-#import "Step_07_ViewController.h"
 #import "BLEConnectionManager.h"
 
 #define INIT 0
@@ -21,25 +18,16 @@
 #define CHECKING_WIFI_PASSED  4
 
 @interface NetworkInfoToCamera_VController : UIViewController<UIAlertViewDelegate, BLEConnectionManagerDelegate>
-{
-    IBOutlet UITableViewCell *ssidCell;
-    IBOutlet UITableViewCell *securityCell;
-    IBOutlet UITableViewCell *passwordCell;
-    IBOutlet UITableViewCell *confPasswordCell;
 
-    NSString *_statusNetworkCamString;
-    int stage;
-}
-
-@property (retain, nonatomic) IBOutlet UIView *ib_dialogVerifyNetwork;
+@property (nonatomic, retain) IBOutlet UIView *ib_dialogVerifyNetwork;
 @property (nonatomic, assign) IBOutlet UITableViewCell *ssidCell;
 @property (nonatomic, assign) IBOutlet UITableViewCell *securityCell;
 @property (nonatomic, assign) IBOutlet UITableViewCell *passwordCell;
 @property (nonatomic, assign) IBOutlet UITableViewCell *confPasswordCell;
 
-@property (nonatomic, retain) NSString *ssid, *security, *password;
 @property (nonatomic, retain) DeviceConfiguration *deviceConf;
-@property (nonatomic, assign) BOOL isOtherNetwork; 
+@property (nonatomic, copy) NSString *ssid, *security, *password;
+@property (nonatomic, assign) BOOL isOtherNetwork;
 
 - (void)handleNextButton:(id)sender;
 - (void)sendWifiInfoToCamera;

@@ -9,11 +9,8 @@
 #import <MonitorCommunication/MonitorCommunication.h>
 #import "SavedEventViewController.h"
 #import "SavedEventCell.h"
-//#import "TimelineInfo.h"
 #import "EventInfo.h"
 #import "UIFont+Hubble.h"
-
-#define DEMO_SAVED_TIMELINE 1
 
 @interface SavedEventViewController ()
 
@@ -33,6 +30,7 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
     [self.tableView reloadData];
 }
 
@@ -45,12 +43,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-#if DEMO_SAVED_TIMELINE
-    return 2;
-#else
     return _eventArray.count;
-#endif
-    
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -60,25 +53,6 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-#if DEMO_SAVED_TIMELINE
-    static NSString *CellIdentifier = @"SavedEventCell";
-    SavedEventCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    
-    NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"SavedEventCell" owner:nil options:nil];
-    for (id curObj in objects) {
-        if([curObj isKindOfClass:[UITableViewCell class]]) {
-            cell = (SavedEventCell *)curObj;
-            break;
-        }
-    }
-    NSDateFormatter *dFormater = [[NSDateFormatter alloc]init];
-    NSDate *dateNow = [NSDate date];
-    dFormater.dateFormat = @"MMM dd'th' yyyy";
-    cell.timeLabel.font = [UIFont semiBold17Font];
-    cell.timeLabel.text = [dFormater stringFromDate:dateNow];
-    cell.placeEventLabel.text = [NSString stringWithFormat:@"Back Yard\n %d Videos", 0];
-    return cell;
-#else
     static NSString *CellIdentifier = @"SavedEventCell";
     SavedEventCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
@@ -105,7 +79,6 @@
     cell.snapshotImage.image = info.clipInfo.imgSnapshot;
     
     return cell;
-#endif
 }
 
 #pragma mark - Saved Events

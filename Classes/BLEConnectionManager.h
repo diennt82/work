@@ -6,6 +6,9 @@
 //  Copyright (c) 2013 Hubble Connected Ltd. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
+#import "UARTPeripheral.h"
+
 typedef enum
 {
     IDLE = 0,
@@ -15,7 +18,6 @@ typedef enum
     DISCONNECTED,
 } ConnectionState;
 
-
 typedef enum
 {
     LOGGING,
@@ -23,69 +25,47 @@ typedef enum
     TX,
 } ConsoleDataType;
 
-#import <Foundation/Foundation.h>
-#import "UARTPeripheral.h"
 @protocol BLEConnectionManagerDelegate
-@required
-- (void) didReceiveData:(NSString *) string;
 
+@required
+- (void)didReceiveData:(NSString *)string;
 
 @optional
-- (void) didConnectToBle:(CBUUID*) service_id ;
-- (void) onReceiveDataError:(int)error_code forCommand:(NSString *)commandToCamera;
-- (void) didReceiveBLEList:(NSMutableArray *) bleLists;
-- (void) bleDisconnected;
+- (void)didConnectToBle:(CBUUID*)serviceId ;
+- (void)onReceiveDataError:(int)errorCode forCommand:(NSString *)commandToCamera;
+- (void)didReceiveBLEList:(NSMutableArray *)bleLists;
+- (void)bleDisconnected;
+
 @end
-
-
 
 #define SCAN_FOR_ANY_DEVICE 1
 #define SCAN_FOR_SINGLE_DEVICE 2
+
 @interface BLEConnectionManager : NSObject <CBCentralManagerDelegate, UARTPeripheralDelegate>
 
-{
-    
-    CBCentralManager *_cm;
-    
-    ConnectionState _state;
-    
-    UARTPeripheral *_uartPeripheral;
-    
-    BOOL _isOnBLE;
-    CBPeripheral *_myPeripheral;
-    NSMutableArray *_listBLEs;
-  
-    BOOL needReconnect; 
-    int scanMode;
-    
-}
-@property (nonatomic) BOOL needReconnect;
-@property (retain, nonatomic) CBCentralManager *cm;
-
+@property (nonatomic, strong) CBCentralManager *cm;
 @property (nonatomic, strong) CBPeripheral *myPeripheral;
 @property (nonatomic, strong) NSMutableArray *listBLEs;
-@property (assign) ConnectionState state;
+@property (nonatomic, strong) UARTPeripheral *uartPeripheral;
 
-@property (retain, nonatomic) UARTPeripheral *uartPeripheral;
+@property (nonatomic, assign) id<BLEConnectionManagerDelegate> delegate;
 
-@property (nonatomic,assign) BOOL isOnBLE;
-@property (assign) id<BLEConnectionManagerDelegate> delegate;
+@property (nonatomic) ConnectionState state;
+@property (nonatomic) BOOL needReconnect;
+@property (nonatomic) BOOL isOnBLE;
 
-
++ (BLEConnectionManager *)instanceBLE;
 + (ConnectionState)checkStatusConnectBLE;
-+ (BLEConnectionManager *) getInstanceBLE;
-- (id) init;
-- (void) reinit;
+
+- (id)init;
+- (void)reinit;
 - (void)scan;
 - (void)reScan;
 - (void)stopScanBLE;
--(void) disconnect;
+- (void)disconnect;
 - (void)connectToBLEWithPeripheral:(CBPeripheral *)peripheral;
--(void) reScanForPeripheral:(CBUUID *) dev_service_id;
-
-- (void) didConnect;
-//- (void) didDisconnect;
-
+- (void)reScanForPeripheral:(CBUUID *)devServiceId;
+- (void)didConnect;
 
 @end
 

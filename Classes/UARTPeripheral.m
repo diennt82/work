@@ -9,6 +9,7 @@
 #import "UARTPeripheral.h"
 
 @interface UARTPeripheral ()
+
 @property CBService *uartService;
 @property CBCharacteristic *rxCharacteristic;
 @property CBCharacteristic *txCharacteristic;
@@ -252,7 +253,7 @@
     return WRITE_SUCCESS;
 }
 
--(void) receiveDataTimeOut:(NSTimer *) timer
+- (void)receiveDataTimeOut:(NSTimer *)timer
 {
     // when timeout - just simply resend
     NSLog(@"retrying with timeout :%f & cmd is %@", timeout, commandToCamera);
@@ -420,7 +421,6 @@
     
     return -1;
 }
-
 
 - (int)checkBufferFor02char:(NSData *)dataBuff
 {

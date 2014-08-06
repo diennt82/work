@@ -7,17 +7,16 @@
 //
 
 #import "CamerasViewController.h"
-#import <CameraScanner/CameraScanner.h>
-#import "CamerasCell.h"
-#import "H264PlayerViewController.h"
-#import "CameraAlert.h"
 #import "MenuViewController.h"
+#import "H264PlayerViewController.h"
 #import "CameraMenuViewController.h"
 #import "AddCameraViewController.h"
-#import "define.h"
-#import "EarlierViewController.h"
-#import "UIDeviceHardware.h"
+#import "TimelineViewController.h"
 #import "MBP_iosViewController.h"
+#import "UIDeviceHardware.h"
+#import "CamerasCell.h"
+#import "CameraAlert.h"
+#import "define.h"
 
 @interface CamerasViewController () <H264PlayerVCDelegate, CamerasCellDelegate, AddCameraVCDelegate, UIAlertViewDelegate>
 

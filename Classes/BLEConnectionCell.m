@@ -10,27 +10,14 @@
 
 @implementation BLEConnectionCell
 
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
-{
-    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
-    if (self) {
-        // Initialization code
-    }
-    return self;
-}
-
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {
     [super setSelected:selected animated:animated];
 
-    // Configure the view for the selected state
-    
-    if (selected)
-    {
+    if (selected) {
         self.accessoryView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"setup_check"]] autorelease];
     }
-    else
-    {
+    else {
         self.accessoryView = nil;
     }
 }
@@ -41,8 +28,10 @@
     imageViewBottomLine.frame = CGRectMake(0, rect.size.height - 0.5, rect.size.width, 0.5);
 }
 
-- (void)dealloc {
+- (void)dealloc
+{
     [_lblName release];
     [super dealloc];
 }
+
 @end

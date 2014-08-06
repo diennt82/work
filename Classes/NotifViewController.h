@@ -7,12 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <MonitorCommunication/MonitorCommunication.h>
 #import <CameraScanner/CameraScanner.h>
 
 #import "ConnectionMethodDelegate.h"
-#import "CameraMenuViewController.h"
-#import "MenuViewController.h"
 
 @interface NotifViewController : UIViewController
 

@@ -115,7 +115,7 @@
     }
 }
 
--(void) viewWillAppear:(BOOL)animated
+- (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     self.navigationController.navigationBarHidden = YES;
@@ -139,7 +139,7 @@
     }
 }
 
--(void) viewDidAppear:(BOOL)animated
+- (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
     [[KISSMetricsAPI sharedAPI] recordEvent:@"Login Screen" withProperties:nil];
@@ -164,7 +164,6 @@
 
 - (void)loadUserInfo
 {
-    
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
 	//can be user email or user name here --

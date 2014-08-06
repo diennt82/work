@@ -13,7 +13,7 @@
 @interface CameraNameViewController () <UITextFieldDelegate, UIAlertViewDelegate>
 
 @property (nonatomic, retain) IBOutlet UITableViewCell *nameCell;
-@property (nonatomic, retain) IBOutlet UIView *viewPorgress;
+@property (nonatomic, retain) IBOutlet UIView *viewProgress;
 
 @end
 
@@ -44,8 +44,8 @@
 {
     self.navigationItem.rightBarButtonItem.enabled = NO;
     self.navigationItem.hidesBackButton = YES;
-    [self.view addSubview:_viewPorgress];
-    [self.view bringSubviewToFront:_viewPorgress];
+    [self.view addSubview:_viewProgress];
+    [self.view bringSubviewToFront:_viewProgress];
     NSString *cameraName = ((UITextField *)[self.nameCell viewWithTag:59]).text;
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -102,7 +102,7 @@
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
     self.navigationItem.hidesBackButton = NO;
-    [_viewPorgress removeFromSuperview];
+    [_viewProgress removeFromSuperview];
 }
 
 #pragma mark - Text field delegate
@@ -156,7 +156,7 @@
 - (void)dealloc
 {
     [_nameCell release];
-    [_viewPorgress release];
+    [_viewProgress release];
     [super dealloc];
 }
 

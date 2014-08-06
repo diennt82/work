@@ -14,13 +14,13 @@
 
 @implementation MBPNavController
 
-- (BOOL) shouldAutorotate
+- (BOOL)shouldAutorotate
 {
     UIViewController *vc = self.viewControllers[(self.viewControllers.count -1)];
     return [vc shouldAutorotate];
 }
 
--(NSUInteger)supportedInterfaceOrientations
+- (NSUInteger)supportedInterfaceOrientations
 {
     return UIInterfaceOrientationMaskAllButUpsideDown;
 }

@@ -16,6 +16,6 @@
 @property (nonatomic, assign) CamChannel *camChannel;
 
 - (id)initWithCamChannel:(CamChannel *)camChannel;
-- (id)initWithParentVC:(UIViewController *)parentVC camChannel: (CamChannel *)camChannel;
+- (id)initWithParentVC:(UIViewController *)parentVC camChannel:(CamChannel *)camChannel;
 
 @end

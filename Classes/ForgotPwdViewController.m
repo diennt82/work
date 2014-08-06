@@ -46,8 +46,8 @@
 
 - (void)viewWillDisappear:(BOOL)animated
 {
-    [_userEmailTF resignFirstResponder];
     [super viewWillDisappear:animated];
+    [_userEmailTF resignFirstResponder];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -57,27 +57,26 @@
               (interfaceOrientation == UIInterfaceOrientationLandscapeRight));
 }
 
--(BOOL) shouldAutorotate
+- (BOOL)shouldAutorotate
 {
     return NO;
 }
 
 
--(NSUInteger) supportedInterfaceOrientations
+- (NSUInteger)supportedInterfaceOrientations
 {
     return UIInterfaceOrientationMaskAllButUpsideDown;
 }
 
--(void)btnBackPressed
+- (void)btnBackPressed
 {
     [self.navigationController popViewControllerAnimated:YES];
 }
 
--(BOOL)checkEmailValidation:(NSString*)strEmail{
+- (BOOL)checkEmailValidation:(NSString*)strEmail {
     
-    strEmail  = [strEmail stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] ;
-    if(strEmail.length==0)
-    {
+    strEmail = [strEmail stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    if (strEmail.length == 0) {
         return NO;
     }
     
@@ -86,11 +85,9 @@
     return [emailTest evaluateWithObject:strEmail];
 }
 
-
--(IBAction)handleNextButton:(id) sender
+- (IBAction)handleNextButton:(id)sender
 {
-    if(![self checkEmailValidation:_userEmailTF.text])
-    {
+    if(![self checkEmailValidation:_userEmailTF.text]) {
         NSString *strMsg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg3",nil, [NSBundle mainBundle], @"Create_Account_Failed_msg3", nil);
         //NSString *strMsg = @"Please enter valid email.";
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:strMsg delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
@@ -102,7 +99,6 @@
     [_userEmailTF resignFirstResponder];
     
     self.userEmail = _userEmailTF.text;
-    
     self.navigationItem.leftBarButtonItem.enabled = NO;
     self.navigationItem.rightBarButtonItem.enabled = NO;
     
@@ -113,7 +109,7 @@
     [jsonComm forgotPasswordWithLogin:_userEmail];
 }
 
--(void)handleLoginButton:(id)sender
+- (void)handleLoginButton:(id)sender
 {
     [self.navigationController popViewControllerAnimated:NO];
 }
@@ -124,7 +120,7 @@
 	return NO;
 }
 
--(void) forgotSuccessWithResponse:(NSDictionary *)responseData
+- (void)forgotSuccessWithResponse:(NSDictionary *)responseData
 {
     _passwordLinkSent.hidden  = NO;
     [self.view bringSubviewToFront:_passwordLinkSent];
@@ -145,7 +141,7 @@
     [loginButton release];
 }
 
-- (void) forgotFailedWithError:(NSDictionary *)errorResponse
+- (void)forgotFailedWithError:(NSDictionary *)errorResponse
 {
     self.navigationItem.leftBarButtonItem.enabled = YES ;
     self.navigationItem.rightBarButtonItem.enabled = YES;
@@ -169,9 +165,8 @@
                      otherButtonTitles:nil] autorelease] show];
 }
 
-- (void) forgotFailedServerUnreachable
+- (void)forgotFailedServerUnreachable
 {
-    
     self.navigationItem.leftBarButtonItem.enabled = YES ;
     self.navigationItem.rightBarButtonItem.enabled = YES;
     

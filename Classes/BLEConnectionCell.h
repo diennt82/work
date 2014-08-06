@@ -10,5 +10,6 @@
 
 @interface BLEConnectionCell : UITableViewCell
 
-@property (retain, nonatomic) IBOutlet UILabel *lblName;
+@property (nonatomic, retain) IBOutlet UILabel *lblName;
+
 @end

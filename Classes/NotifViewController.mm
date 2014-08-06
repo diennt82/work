@@ -6,8 +6,12 @@
 //  Copyright (c) 2013 Hubble Connected Ltd. All rights reserved.
 //
 
+#import <MonitorCommunication/MonitorCommunication.h>
+
 #import "NotifViewController.h"
 #import "PlaybackViewController.h"
+#import "CameraMenuViewController.h"
+#import "MenuViewController.h"
 #import "PlaylistInfo.h"
 
 @interface NotifViewController ()
