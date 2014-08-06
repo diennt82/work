@@ -630,6 +630,7 @@
 		8B9CE20518C848A000B1B7F9 /* AddCameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9CE20318C848A000B1B7F9 /* AddCameraViewController.m */; };
 		8B9CE20618C848A000B1B7F9 /* AddCameraViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9CE20418C848A000B1B7F9 /* AddCameraViewController.xib */; };
 		8B9DC60A190B7ED7005B4210 /* KISSMetricsAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9DC609190B7ED7005B4210 /* KISSMetricsAPI.m */; };
+		8B9E214F1991CBF60026B0CE /* HelpWindowPopup.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9E214E1991CBF60026B0CE /* HelpWindowPopup.m */; };
 		8BA17EFA18B7399100129FE7 /* LoginViewController_35.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8BA17EF918B7399100129FE7 /* LoginViewController_35.xib */; };
 		8BA17EFC18B73E2400129FE7 /* RegistrationViewController_35.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8BA17EFB18B73E2400129FE7 /* RegistrationViewController_35.xib */; };
 		8BA18CB0184879720097D1AF /* DeviceSettingsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BA18CAF184879720097D1AF /* DeviceSettingsCell.m */; };
@@ -1515,6 +1516,8 @@
 		8B9CE20418C848A000B1B7F9 /* AddCameraViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AddCameraViewController.xib; sourceTree = "<group>"; };
 		8B9DC608190B7ED7005B4210 /* KISSMetricsAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KISSMetricsAPI.h; sourceTree = "<group>"; };
 		8B9DC609190B7ED7005B4210 /* KISSMetricsAPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KISSMetricsAPI.m; sourceTree = "<group>"; };
+		8B9E214D1991CBF60026B0CE /* HelpWindowPopup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelpWindowPopup.h; sourceTree = "<group>"; };
+		8B9E214E1991CBF60026B0CE /* HelpWindowPopup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelpWindowPopup.m; sourceTree = "<group>"; };
 		8BA17EF918B7399100129FE7 /* LoginViewController_35.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoginViewController_35.xib; sourceTree = "<group>"; };
 		8BA17EFB18B73E2400129FE7 /* RegistrationViewController_35.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RegistrationViewController_35.xib; sourceTree = "<group>"; };
 		8BA18CAE184879720097D1AF /* DeviceSettingsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceSettingsCell.h; sourceTree = "<group>"; };
@@ -1786,6 +1789,7 @@
 			isa = PBXGroup;
 			children = (
 				8BC2235A199219AC00130294 /* OpenUDID */,
+				8B9E214C1991CBA60026B0CE /* Helps */,
 				8B3E0EE41988FF8A00BF5788 /* TheTimeNow */,
 				8BB7EA94196E337200FDD674 /* Focus73 */,
 				8412C98A195D26F7000FEA1C /* CrittercismSDK */,
@@ -3283,6 +3287,15 @@
 			name = KM;
 			sourceTree = "<group>";
 		};
+		8B9E214C1991CBA60026B0CE /* Helps */ = {
+			isa = PBXGroup;
+			children = (
+				8B9E214D1991CBF60026B0CE /* HelpWindowPopup.h */,
+				8B9E214E1991CBF60026B0CE /* HelpWindowPopup.m */,
+			);
+			path = Helps;
+			sourceTree = "<group>";
+		};
 		8BA18CA8184870330097D1AF /* DeviceSettings */ = {
 			isa = PBXGroup;
 			children = (
@@ -4323,6 +4336,7 @@
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
 				8B92A0901863E68B005923D2 /* TimelineCell.m in Sources */,
 				8B92A0951863E9DC005923D2 /* TimelineActivityCell.m in Sources */,
+				8B9E214F1991CBF60026B0CE /* HelpWindowPopup.m in Sources */,
 				1D3623260D0F684500981E51 /* MBP_iosAppDelegate.mm in Sources */,
 				8B9ABB6518A9F8EF0079F4A3 /* UIFont+IBCustomFonts.m in Sources */,
 				8B92A0A11863F655005923D2 /* SavedEventViewController.m in Sources */,
