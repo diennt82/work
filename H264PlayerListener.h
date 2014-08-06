@@ -17,7 +17,7 @@ class H264PlayerListener: public MediaPlayerListener
 
 public:
     ~H264PlayerListener();
-   H264PlayerListener(id<PlayerCallbackHandler> handler);
+    H264PlayerListener(id<PlayerCallbackHandler> handler);
     
     void notify(int msg, int ext1, int ext2);
     int getNextClip(char**);
