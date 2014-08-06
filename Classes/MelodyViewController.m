@@ -14,6 +14,7 @@
 
 #define NUM_MELODY 6
 #define GAI_CATEGORY    @"Melody view"
+#define MELODY          @"melody"
 
 @interface MelodyViewController ()
 {
@@ -173,7 +174,8 @@
                 
                 if (melodyIndex != -1)
                 {
-                    valueMelodiesMap[melodyIndex]  = YES;
+                    valueMelodiesMap[melodyIndex]  = TRUE;
+                    self.playing = YES;
                 }
                 
                 if (self.isViewLoaded && self.view.window) {
@@ -201,7 +203,7 @@
 	}
 	else
 	{
-		command = [NSString stringWithFormat:@"melody%d", melodyIdx];
+		command = [NSString stringWithFormat:@"%@%d", MELODY, melodyIdx];
 	}
     
     NSString *responseString = @"";
@@ -256,11 +258,21 @@
                 if ([[tokens objectAtIndex:0] isEqualToString:command] && [[tokens lastObject] integerValue] == 0)
                 {
                     if (self.isViewLoaded && self.view.window) {
-                        [_melodyTableView performSelectorOnMainThread:@selector(reloadData)
-                                                           withObject:nil
-                                                        waitUntilDone:NO];
+                        
+                        dispatch_async(dispatch_get_main_queue(), ^(void) {
+                            [_melodyTableView reloadData];
+                            for (int i = 0; i < _melodies.count; i++)
+                            {
+                                valueMelodiesMap[i] = FALSE;
+                                if ([[NSString stringWithFormat:@"%@%d", MELODY, i + 1] isEqualToString:[tokens objectAtIndex:0]])
+                                {
+                                    valueMelodiesMap[i] = TRUE;
+                                    self.playing = YES;
+                                }
+                            }
+                            NSLog(@"%s _reload table from back ground", __func__);
+                        });
                         success = YES;
-                        NSLog(@"%s _reload table from back ground", __func__);
                     }
                 }
             }
@@ -404,26 +416,15 @@
                                                      withValue:[NSNumber numberWithInteger:indexPath.row]];
     
 	[tableView deselectRowAtIndexPath:indexPath animated:NO];
-    
-    valueMelodiesMap[indexPath.section] = !valueMelodiesMap[indexPath.section];
-    
     if (valueMelodiesMap[indexPath.section] == TRUE)
-    {
-        _melodyIndex = indexPath.section;
-        
-        for (int i = 0; i < _melodies.count; i++)
-        {
-            if (i != indexPath.section)
-            {
-                valueMelodiesMap[i] = FALSE;
-            }
-        }
-        self.playing = YES;
-    }
-    else
     {
         self.playing = NO;
         _melodyIndex = -1;
+    }
+    else
+    {
+        _melodyIndex = indexPath.section;
+        self.playing = YES;
     }
     [self performSelectorInBackground:@selector(setMelodyStatus_bg:) withObject:[NSNumber numberWithInt:(_melodyIndex + 1)]];
 }

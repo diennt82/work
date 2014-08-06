@@ -5940,6 +5940,16 @@ double _ticks = 0;
                                 }
                                 
                                 NSLog(@"H264VC -enableRemotePTT - data: %@, -length: %lu, -ip: %@, -port: %d", data, (unsigned long)data.length, _audioOutStreamRemote.relayServerIP, _audioOutStreamRemote.relayServerPort);
+                                
+                                dispatch_async(dispatch_get_main_queue(), ^{
+                                    if (self.melodyViewController) {
+                                        if (self.melodyViewController.playing) {
+                                            self.melodyViewController.playing = NO;
+                                            [self.melodyViewController resetStatus];
+                                            [self showToat:NSLocalizedStringWithDefaultValue(@"stop_melody_toat", nil, [NSBundle mainBundle], @"Melody will be stopped", nil)];
+                                        }
+                                    }
+                                });
                             }
                             else
                             {
@@ -7199,7 +7209,7 @@ double _ticks = 0;
 {
     if (!success)
     {
-        dispatch_async(dispatch_get_main_queue(), ^{
+        dispatch_async(dispatch_get_main_queue(), ^(void) {
             [self showToat:NSLocalizedStringWithDefaultValue(@"update_melody_failed", nil, [NSBundle mainBundle], @"Update melody failed", nil)];
         });
     }
