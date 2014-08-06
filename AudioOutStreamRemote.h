@@ -10,8 +10,6 @@
 #import <CameraScanner/CameraScanner.h>
 #import <H264MediaPlayer/PCMPlayer.h>
 
-#define SOCKET_ID_SEND    200
-
 @protocol AudioOutStreamRemoteDelegate <NSObject>
 
 - (void)closeTalkbackSession;
@@ -21,23 +19,16 @@
 @end
 
 @interface AudioOutStreamRemote : NSObject
-{
-	//AsyncSocket * sendingSocket;
-	NSMutableData * _pcm_data;
-	PCMPlayer * pcmPlayer;
-	
-    BOOL hasStartRecordingSound;
-}
 
-@property (nonatomic, retain) NSString * relayServerIP;
-@property (nonatomic) NSInteger relayServerPort;
-@property (nonatomic, strong) NSMutableData *pcm_data;
-@property (nonatomic, retain) PCMPlayer * pcmPlayer;
-@property (nonatomic) NSInteger bufferLength;
+@property (nonatomic, strong) NSMutableData *pcmData;
+@property (nonatomic, strong) PCMPlayer *pcmPlayer;
+@property (nonatomic, strong) NSMutableData *dataRequest;
+
+@property (nonatomic, copy) NSString *relayServerIP;
 @property (nonatomic, assign) id<AudioOutStreamRemoteDelegate> audioOutStreamRemoteDelegate;
 
-@property (nonatomic, retain) NSMutableData *dataRequest;
-
+@property (nonatomic) NSInteger relayServerPort;
+@property (nonatomic) NSInteger bufferLength;
 @property (nonatomic) BOOL isDisconnected;
 @property (nonatomic) BOOL isHandshakeSuccess;
 

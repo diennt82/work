@@ -6,34 +6,33 @@
 //  Copyright (c) 2014 Hubble Connected Ltd. All rights reserved.
 //
 
-#define SENDING_SOCKET_TAG 1009
-#define REMOTE_TIMEOUT 30
-
 #import "AudioOutStreamRemote.h"
 
 @interface AudioOutStreamRemote()
 
-@property (retain, nonatomic) NSFileManager *fileManager;
-@property (retain, nonatomic) NSFileHandle *fileHandle;
-@property (retain, nonatomic) NSString *sentPath;
-@property (retain, nonatomic) NSTimer *timerVoiceData;
-@property (retain, nonatomic) AsyncSocket *sendingSocket;
+@property (nonatomic, retain) NSFileManager *fileManager;
+@property (nonatomic, retain) NSFileHandle *fileHandle;
+@property (nonatomic, retain) NSString *sentPath;
+@property (nonatomic, retain) NSTimer *timerVoiceData;
+@property (nonatomic, retain) AsyncSocket *sendingSocket;
+
+@property (nonatomic) BOOL hasStartRecordingSound;
 
 @end
 
 @implementation AudioOutStreamRemote
 
-@synthesize pcmPlayer;
-@synthesize pcm_data = _pcm_data;
+#define SENDING_SOCKET_TAG 1009
+#define REMOTE_TIMEOUT 30
+#define SOCKET_ID_SEND 200
 
 - (id)initWithRemoteMode
 {
     self = [super init];
     
-    if (self)
-    {
-        hasStartRecordingSound = FALSE;
-        self.isDisconnected = TRUE;
+    if (self) {
+        self.hasStartRecordingSound = NO;
+        self.isDisconnected = YES;
         
         NSLog(@"Create AudioOutStreamer & start recording now");
         NSLog(@"PTT remote -IP: %@,  Port: %d", _relayServerIP, _relayServerPort);
@@ -42,50 +41,47 @@
     return self;
 }
 
--(void) dealloc
+- (void)dealloc
 {
-    [pcmPlayer release];
+    [_pcmPlayer release];
     [_fileManager release];
     [_fileHandle release];
     [_sendingSocket release];
     [super dealloc];
 }
 
-- (void) startRecordingSound
+- (void)startRecordingSound
 {
     @synchronized(self)
     {
-        if (self.pcmPlayer == nil)
-        {
+        if ( !_pcmPlayer ) {
             NSLog(@"Start recording!!!.******");
             /* Start the player to playback & record */
             self.pcmPlayer = [[PCMPlayer alloc] init];
-            _pcm_data = [[NSMutableData alloc] init];
+            self.pcmData = [[NSMutableData alloc] init];
             
-            [self.pcmPlayer Play:TRUE];//initialize
-            NSLog(@"Check self.pcmPlayer is %@", self.pcmPlayer);
-            [[self.pcmPlayer player] setPlay_now:FALSE];//disable playback
-            NSLog(@"check self.pcmPlayer.recorder %@", self.pcmPlayer.recorder);
+            [_pcmPlayer Play:YES]; // initialize
+            NSLog(@"Check self.pcmPlayer is %@", _pcmPlayer);
+            
+            [[_pcmPlayer player] setPlay_now:NO]; // disable playback
+            NSLog(@"check self.pcmPlayer.recorder %@", _pcmPlayer.recorder);
+            
             [self.pcmPlayer.recorder startRecord];
             
-            hasStartRecordingSound = TRUE;
+            self.hasStartRecordingSound = YES;
         }
     }
-    
 }
 
-/* Connect to the audio streaming socket to stream recorded data TO device */
-- (void) connectToAudioSocketRemote
+// Connect to the audio streaming socket to stream recorded data TO device
+- (void)connectToAudioSocketRemote
 {
-	if (hasStartRecordingSound == FALSE)
-    {
+	if ( !_hasStartRecordingSound ) {
         [self startRecordingSound];
     }
     
-    if (_sendingSocket != nil)
-    {
-        if ([_sendingSocket isConnected] == YES)
-        {
+    if ( _sendingSocket ) {
+        if ( [_sendingSocket isConnected] ) {
             [_sendingSocket setDelegate:nil];
             [_sendingSocket disconnect];
         }
@@ -97,62 +93,52 @@
     self.sendingSocket = [[AsyncSocket alloc] initWithDelegate:self];
     [_sendingSocket setUserData:SOCKET_ID_SEND];
 	
-	NSString* ip = _relayServerIP;
+	NSString *ip = _relayServerIP;
 	NSInteger port = _relayServerPort;
     
     NSLog(@"pTT to: %@:%d", ip, port);
     
-	//Non-blocking connect
+	// Non-blocking connect
     [_sendingSocket connectToHost:ip onPort:port withTimeout:REMOTE_TIMEOUT error:nil];
 }
 
-- (void) sendAudioPacket:(NSTimer *) timer_exp
+- (void)sendAudioPacket:(NSTimer *)timerExp
 {
-	
 	// read 4kb everytime
-	self.bufferLength = [self.pcmPlayer.recorder.inMemoryAudioFile readBytesPCM:_pcm_data
+	self.bufferLength = [self.pcmPlayer.recorder.inMemoryAudioFile readBytesPCM:_pcmData
                                                                      withLength:4*1024]; //2*1024
 
-    [_sendingSocket writeData:_pcm_data withTimeout:2 tag:SENDING_SOCKET_TAG];
+    [_sendingSocket writeData:_pcmData withTimeout:2 tag:SENDING_SOCKET_TAG];
 	
-    //NSLog(@"AudioOutStreamer - sendAudioPacket: %@", _pcm_data);
-
-    if (_sentPath == nil)
-    {
+    if ( !_sentPath ) {
         NSString *cachesDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
         self.sentPath = [cachesDirectory stringByAppendingPathComponent:@"sent_data.bat"];
     }
     
-    if (_fileManager == nil)
-    {
+    if ( !_fileManager ) {
         self.fileManager = [NSFileManager defaultManager];
         [_fileManager removeItemAtPath:_sentPath error:nil];
     }
     
-    if ([_fileManager fileExistsAtPath:_sentPath] == NO)
-    {
+    if ( ![_fileManager fileExistsAtPath:_sentPath] ) {
         NSLog (@"File not found");
         [_fileManager createFileAtPath:_sentPath contents:nil attributes:nil];
     }
     
-    if (_fileHandle == nil)
-    {
+    if ( !_fileHandle  ) {
         self.fileHandle = [NSFileHandle fileHandleForWritingAtPath:_sentPath];
     }
     
     [_fileHandle seekToEndOfFile];
-    
-    [_fileHandle writeData:_pcm_data];
+    [_fileHandle writeData:_pcmData];
 }
-
-
 
 #pragma mark TCP socket delegate funcs
 
 - (void)onSocket:(AsyncSocket *)sock didConnectToHost:(NSString *)host port:(UInt16)port
 {
 	NSLog(@"didConnectToHost Finished");
-    self.isDisconnected = FALSE;
+    self.isDisconnected = NO;
     
     // Start handshake
     [self startHandshaking];
@@ -160,31 +146,28 @@
 
 - (void)onSocket:(AsyncSocket *)sock willDisconnectWithError:(NSError *)err
 {
-    self.isDisconnected = TRUE;
+    self.isDisconnected = YES;
     
-    if (_fileHandle != nil)
-    {
+    if ( _fileHandle ) {
         [_fileHandle closeFile];
-        _fileHandle = nil;
+        self.fileHandle = nil;
     }
     
-	NSLog(@"AudioOutStreamer- connection failed with error: %@, : %d, : %@", [sock unreadData],
-		  [err code], err);
+	NSLog(@"AudioOutStreamer- connection failed with error: %@, : %d, : %@", [sock unreadData], [err code], err);
     
-    UIAlertView *_alert = [[UIAlertView alloc]
-                           initWithTitle:@"Initializing Push-to-talk failed"
-                           message:err.localizedDescription
-                           delegate:self
-                           cancelButtonTitle:@"OK"
-                           otherButtonTitles:nil];
-    [_alert show];
-    [_alert release];
+    UIAlertView *alert = [[UIAlertView alloc]
+                          initWithTitle:@"Initializing Push-to-talk failed"
+                          message:err.localizedDescription
+                          delegate:self
+                          cancelButtonTitle:@"OK"
+                          otherButtonTitles:nil];
+    [alert show];
+    [alert release];
 }
 
 - (void)onSocketDidDisconnect:(AsyncSocket *)sock
 {
-	if (_sendingSocket != nil && [_sendingSocket isConnected] == NO)
-	{
+	if ( _sendingSocket && ![_sendingSocket isConnected] ) {
         [self disconnectFromAudioSocketRemote];
 	}
 }
@@ -208,11 +191,9 @@
     NSData *unexpectedData = [NSData dataWithBytes:bytes2 length:sizeof(bytes2)];
     NSLog(@"%@", unexpectedData);
     
-    if ([data isEqualToData:expectedData])
-    {
+    if ([data isEqualToData:expectedData]) {
         NSLog(@"Equal Expected data");
-        self.isHandshakeSuccess = TRUE;
-        
+        self.isHandshakeSuccess = YES;
         self.timerVoiceData = [NSTimer scheduledTimerWithTimeInterval: 0.125//0.04
                                                             target:self
                                                           selector:@selector(sendAudioPacket:)
@@ -220,21 +201,19 @@
                                                            repeats:YES];
     }
     
-    if ([data isEqualToData:unexpectedData])
-    {
+    if ([data isEqualToData:unexpectedData]) {
         NSLog(@"Equal Unexpected data");
         
-        self.isHandshakeSuccess = FALSE;
+        self.isHandshakeSuccess = NO;
         NSLog(@"AudioOutStreamRemote - handshake failed with error");
         
-        UIAlertView *_alert = [[UIAlertView alloc]
-                               initWithTitle:@"Handshake"
-                               message:@"Handshake failed!"
-                               delegate:nil
-                               cancelButtonTitle:@"OK"
-                               otherButtonTitles:nil];
-        [_alert show];
-        [_alert release];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Handshake"
+                                                        message:@"Handshake failed!"
+                                                       delegate:nil
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+        [alert show];
+        [alert release];
     }
     
     [_audioOutStreamRemoteDelegate reportHandshakeFaild:!_isHandshakeSuccess];
@@ -245,43 +224,40 @@
 - (void)startHandshaking
 {
     NSLog(@"Start handshaking: %d", _dataRequest.length);// Start handshaking
-    self.isDisconnected = FALSE;
+    self.isDisconnected = NO;
     [_sendingSocket writeData:_dataRequest withTimeout:REMOTE_TIMEOUT tag:SENDING_SOCKET_TAG];
     [_sendingSocket readDataToLength:7 withTimeout:REMOTE_TIMEOUT tag:SENDING_SOCKET_TAG];
 
 }
 
-- (void)cleanDataUp: (NSTimer *)timer
+- (void)cleanDataUp:(NSTimer *)timer
 {
     NSLog(@"-- clean data up ....");
     
-    if (self.bufferLength == 0)
-    {
-        [self.pcmPlayer release];
+    if ( _bufferLength == 0 ) {
+        [_pcmPlayer.recorder.inMemoryAudioFile flush];
+        [_pcmPlayer release];
         self.pcmPlayer = nil;
         
-        [self.pcmPlayer.recorder.inMemoryAudioFile flush];
         
-        if (_timerVoiceData != nil)
-        {
+        if ( _timerVoiceData ) {
             [_timerVoiceData invalidate];
             self.timerVoiceData = nil;
         }
         
-        if (_sendingSocket != nil)
-        {
-            if ([_sendingSocket isConnected] == YES)
-            {
+        if ( _sendingSocket ) {
+            if ( [_sendingSocket isConnected] ) {
                 [_sendingSocket setDelegate:nil];
                 [_sendingSocket disconnect];
             }
+            
             [_sendingSocket release];
-            _sendingSocket = nil;
+            self.sendingSocket = nil;
         }
         
-        if(_pcm_data != nil) {
-            [_pcm_data release];
-            _pcm_data = nil;
+        if ( _pcmData ) {
+            [_pcmData release];
+            _pcmData = nil;
         }
         
         [timer invalidate];
@@ -292,13 +268,11 @@
 
 - (void)disconnectFromAudioSocketRemote
 {
-    //disconnect
-	if (self.pcmPlayer != nil)
-	{
+	if ( _pcmPlayer ) {
         NSLog(@"pcmPlayer stop & release ");
-        [[self.pcmPlayer player] setPlay_now:FALSE];
-		[self.pcmPlayer.recorder stopRecord];
-		[self.pcmPlayer Stop];
+        [[_pcmPlayer player] setPlay_now:NO];
+		[_pcmPlayer.recorder stopRecord];
+		[_pcmPlayer Stop];
 	}
     
 	[NSTimer scheduledTimerWithTimeInterval:0.5f
@@ -307,57 +281,49 @@
                                    userInfo:nil
                                     repeats:YES];
     
-    self.isDisconnected = TRUE;
+    self.isDisconnected = YES;
 }
 
-- (void)disconnectSocketRemote: (NSTimer *)timer
+- (void)disconnectSocketRemote:(NSTimer *)timer
 {
     NSLog(@"disconnectSocketRemoteRemote, bufLen: %d", self.bufferLength);
     
-    if (self.bufferLength == 0)
-    {
+    if ( _bufferLength == 0 ) {
         [timer invalidate];
         
-        [self.pcmPlayer release];
+        [_pcmPlayer.recorder.inMemoryAudioFile flush];
+        [_pcmPlayer release];
         self.pcmPlayer = nil;
         
-        [self.pcmPlayer.recorder.inMemoryAudioFile flush];
-        
-        if (_timerVoiceData != nil)
-        {
+        if ( _timerVoiceData ) {
             [_timerVoiceData invalidate];
             self.timerVoiceData = nil;
         }
         
-        if (_sendingSocket != nil)
-        {
-            if ([_sendingSocket isConnected] == YES)
-            {
+        if ( _sendingSocket ) {
+            if ( [_sendingSocket isConnected] ) {
                 [_sendingSocket setDelegate:nil];
                 [_sendingSocket disconnect];
             }
             
             [_sendingSocket release];
-            _sendingSocket = nil;
+            self.sendingSocket = nil;
         }
         
-        if(_pcm_data != nil) {
-            [_pcm_data release];
-            _pcm_data = nil;
+        if( _pcmData ) {
+            [_pcmData release];
+            self.pcmData = nil;
         }
         
-        if (_fileHandle != nil)
-        {
+        if ( _fileHandle ) {
             [_fileHandle closeFile];
-            _fileHandle = nil;
+            self.fileHandle = nil;
         }
         
-        if (_audioOutStreamRemoteDelegate)
-        {
+        if (_audioOutStreamRemoteDelegate) {
             [_audioOutStreamRemoteDelegate didDisconnecteSocket];
         }
-        else
-        {
+        else {
             NSLog(@"%s _audioOutStreamRemoteDelegate == nil", __FUNCTION__);
         }
     }

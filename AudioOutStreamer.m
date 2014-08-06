@@ -6,92 +6,93 @@
 //  Copyright 2012 Hubble Connected Ltd. All rights reserved.
 //
 
-#define SENDING_SOCKET_TAG 1009
-
+#import <CameraScanner/CameraScanner.h>
 #import "AudioOutStreamer.h"
 
 @interface AudioOutStreamer()
 
+@property (nonatomic, retain) AsyncSocket *sendingSocket;
+@property (nonatomic, retain) NSTimer *voiceDataTimer;
+@property (nonatomic, copy) NSString *deviceIp;
+@property (nonatomic) int devicePort;
+@property (nonatomic) BOOL hasStartRecordingSound;
+
 @end
 
 @implementation AudioOutStreamer
-@synthesize pcmPlayer;
-@synthesize pcm_data = _pcm_data;
 
+#define SENDING_SOCKET_TAG 1009
+#define SOCKET_ID_SEND 200
 
--(id) initWithDeviceIp:(NSString *) ip andPTTport: (int) port
+- (id)initWithDeviceIp:(NSString *)ip andPTTport:(int)port
 {
 	self = [super init];
     if (self)
     {
-        device_ip = [NSString stringWithString:ip];
-        device_port = port;
+        self.deviceIp = [NSString stringWithString:ip];
+        self.devicePort = port;
         
-        hasStartRecordingSound = FALSE;
+        self.hasStartRecordingSound = NO;
     }
     
 	return self; 
 }
 
--(void) dealloc
+- (void)dealloc
 {
-    [pcmPlayer release];
+    [_voiceDataTimer invalidate];
+    [_pcmPlayer release];
     [super dealloc]; 
 }
 
-- (void) startRecordingSound
+- (void)startRecordingSound
 {
     @synchronized(self)
     {
-        if (self.pcmPlayer == nil)
-        {
+        if ( !_pcmPlayer ) {
             NSLog(@"Start recording!!!.******");
+            
             /* Start the player to playback & record */
             self.pcmPlayer = [[PCMPlayer alloc] init];
-            _pcm_data = [[NSMutableData alloc] init];
+            self.pcmData = [[NSMutableData alloc] init];
             
-            [self.pcmPlayer Play:TRUE];//initialize
-            NSLog(@"Check self.pcmPlayer is %@", self.pcmPlayer);
-            [[self.pcmPlayer player] setPlay_now:FALSE];//disable playback
-            NSLog(@"check self.pcmPlayer.recorder %@", self.pcmPlayer.recorder);
-            [self.pcmPlayer.recorder startRecord];
+            [_pcmPlayer Play:YES]; //initialize
+            NSLog(@"Check self.pcmPlayer is %@", _pcmPlayer);
             
-            hasStartRecordingSound = TRUE;
+            [[_pcmPlayer player] setPlay_now:NO]; // disable playback
+            NSLog(@"check self.pcmPlayer.recorder %@", _pcmPlayer.recorder);
+            
+            [_pcmPlayer.recorder startRecord];
+            
+            self.hasStartRecordingSound = YES;
         }
     }
-    
 }
 
-/* Connect to the audio streaming socket to stream recorded data TO device */
-- (void) connectToAudioSocket 
+// Connect to the audio streaming socket to stream recorded data TO device
+- (void)connectToAudioSocket
 {
-	if (hasStartRecordingSound == FALSE)
-    {
+	if ( !_hasStartRecordingSound) {
         [self startRecordingSound];
     }
-	sendingSocket = [[AsyncSocket alloc] initWithDelegate:self];
-	[sendingSocket setUserData:SOCKET_ID_SEND];
-	
-	NSString* ip = device_ip;
-	
-	int port = device_port;
-	
     
-    NSLog(@"pTT to: %@:%d",device_ip, port);
+	self.sendingSocket = [[AsyncSocket alloc] initWithDelegate:self];
+	[_sendingSocket setUserData:SOCKET_ID_SEND];
+	
+    NSLog(@"pTT to: %@:%d", _deviceIp, _devicePort);
     
-	//Non-blocking connect
-    [sendingSocket connectToHost:ip onPort:port withTimeout:5 error:nil];
+	// Non-blocking connect
+    [_sendingSocket connectToHost:_deviceIp onPort:_devicePort withTimeout:5 error:nil];
 }
 
-- (void) disconnectFromAudioSocket
+- (void)disconnectFromAudioSocket
 {   
-	//disconnect 
-	if (self.pcmPlayer != nil)
-	{
+	// disconnect
+	if ( _pcmPlayer ) {
          NSLog(@"pcmPlayer stop & release "); 
-        [[self.pcmPlayer player] setPlay_now:FALSE];
-		[self.pcmPlayer.recorder stopRecord];
-		[self.pcmPlayer Stop];
+        [[_pcmPlayer player] setPlay_now:NO];
+		[_pcmPlayer.recorder stopRecord];
+		[_pcmPlayer Stop];
 	}
 
 	[NSTimer scheduledTimerWithTimeInterval:0.5f
@@ -99,92 +100,78 @@
                                     selector:@selector(disconnectSocket:)
                                     userInfo:nil
                                      repeats:YES];
-    //[self disconnectSocket:nil];
 }
 
-- (void)disconnectSocket: (NSTimer *)timer
+- (void)disconnectSocket:(NSTimer *)timer
 {
-    NSLog(@"disconnectSocket, bufLen: %d", self.bufferLength);
+    NSLog(@"disconnectSocket, bufLen: %d", _bufferLength);
     
-    if (self.bufferLength == 0)
-    {
-        [self.pcmPlayer release];
+    if ( _bufferLength == 0 ) {
+        [_pcmPlayer.recorder.inMemoryAudioFile flush];
+        [_pcmPlayer release];
         self.pcmPlayer = nil;
         
-        [self.pcmPlayer.recorder.inMemoryAudioFile flush];
-        
-        if (voice_data_timer != nil)
-        {
-            [voice_data_timer invalidate];
-            voice_data_timer = nil;
+        if ( _voiceDataTimer) {
+            [_voiceDataTimer invalidate];
+            self.voiceDataTimer = nil;
         }
         
-        if (sendingSocket != nil)
-        {
-            if ([sendingSocket isConnected] == YES)
-            {
-                [sendingSocket setDelegate:nil];
-                [sendingSocket disconnect];
+        if ( _sendingSocket ) {
+            if ( [_sendingSocket isConnected] ) {
+                [_sendingSocket setDelegate:nil];
+                [_sendingSocket disconnect];
             }
-            [sendingSocket release];
-            sendingSocket = nil;
+            
+            [_sendingSocket release];
+            self.sendingSocket = nil;
         }
         
-        if(_pcm_data != nil) {
-            [_pcm_data release];
-            _pcm_data = nil;
+        if( _pcmData ) {
+            [_pcmData release];
+            self.pcmData = nil;
         }
         
         [timer invalidate];
         [self.audioOutStreamerDelegate cleanup];
     }
-    
-    //[self.audioOutStreamerDelegate cleanup];
 }
 
-- (void) sendAudioPacket:(NSTimer *) timer_exp
+- (void)sendAudioPacket:(NSTimer *)timerExp
 {
-	
-	/* read 2kb everytime */
-	self.bufferLength = [self.pcmPlayer.recorder.inMemoryAudioFile readBytesPCM:_pcm_data
-											withLength:3*1024]; //2*1024
-	[sendingSocket writeData:_pcm_data withTimeout:2 tag:SENDING_SOCKET_TAG];
+	// read 2kb everytime
+	self.bufferLength = [_pcmPlayer.recorder.inMemoryAudioFile readBytesPCM:_pcmData withLength:3*1024]; //2*1024
+	[_sendingSocket writeData:_pcmData withTimeout:2 tag:SENDING_SOCKET_TAG];
 }
 
-
-
-#pragma mark TCP socket delegate funcs
+#pragma mark - TCP socket delegate funcs
 
 - (void)onSocket:(AsyncSocket *)sock didConnectToHost:(NSString *)host port:(UInt16)port
 {
-
 	NSLog(@"didConnectToHost Finished");
     
     //Start sending the first 2Kb of data per 0.128 sec
-    voice_data_timer = [NSTimer scheduledTimerWithTimeInterval: 0.125//0.04
-                                                        target:self
-                                                      selector:@selector(sendAudioPacket:)
-                                                      userInfo:nil
-                                                       repeats:YES];
+    self.voiceDataTimer = [NSTimer scheduledTimerWithTimeInterval:0.125
+                                                           target:self
+                                                         selector:@selector(sendAudioPacket:)
+                                                         userInfo:nil
+                                                          repeats:YES];
 }
+
 - (void)onSocket:(AsyncSocket *)sock willDisconnectWithError:(NSError *)err
 {
-	NSLog(@"AudioOutStreamer- connection failed with error: %@, : %d, : %@", [sock unreadData],
-		  [err code], err);
-    UIAlertView *_alert = [[UIAlertView alloc]
-                           initWithTitle:@"Initializing Push-to-talk failed"
-                           message:err.localizedDescription 
-                           delegate:self
-                           cancelButtonTitle:@"OK"
-                           otherButtonTitles:nil];
-    [_alert show];
-    [_alert release];
+	NSLog(@"AudioOutStreamer- connection failed with error: %@, : %d, : %@", [sock unreadData], [err code], err);
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Initializing Push-to-talk failed"
+                                                    message:err.localizedDescription
+                                                   delegate:self
+                                          cancelButtonTitle:@"OK"
+                                          otherButtonTitles:nil];
+    [alert show];
+    [alert release];
 }
 
 - (void)onSocketDidDisconnect:(AsyncSocket *)sock
 {
-	if ( sendingSocket != nil && [sendingSocket isConnected] == NO)
-	{
+	if ( _sendingSocket && ![_sendingSocket isConnected] ) {
 		[self disconnectFromAudioSocket];
 	}
 }

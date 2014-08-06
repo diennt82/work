@@ -6,10 +6,7 @@
 //  Copyright 2012 Hubble Connected Ltd. All rights reserved.
 //
 
-#import <CameraScanner/CameraScanner.h>
 #import <H264MediaPlayer/PCMPlayer.h>
-
-#define SOCKET_ID_SEND    200
 
 @protocol AudioOutStreamerDelegate <NSObject>
 
@@ -17,27 +14,17 @@
 
 @end
 
-@interface AudioOutStreamer : NSObject  {
-	AsyncSocket * sendingSocket; 
-	NSMutableData * _pcm_data;
-	PCMPlayer * pcmPlayer; 
-	NSTimer * voice_data_timer; 
-	
-	NSString * device_ip;
-	int device_port;
-    BOOL hasStartRecordingSound; 
-}
+@interface AudioOutStreamer : NSObject
 
-@property (nonatomic, strong) NSMutableData *pcm_data;
+@property (nonatomic, strong) NSMutableData *pcmData;
 @property (nonatomic, retain) PCMPlayer * pcmPlayer;
-@property (nonatomic) NSInteger bufferLength;
 @property (nonatomic, assign) id<AudioOutStreamerDelegate> audioOutStreamerDelegate;
+@property (nonatomic) NSInteger bufferLength;
 
--(id) initWithDeviceIp:(NSString *) ip andPTTport: (int) port;
-
-- (void) connectToAudioSocket;
-- (void) disconnectFromAudioSocket;
-- (void) sendAudioPacket:(NSTimer *) timer_exp;
-- (void) startRecordingSound;
+- (id)initWithDeviceIp:(NSString *)ip andPTTport:(int)port;
+- (void)connectToAudioSocket;
+- (void)disconnectFromAudioSocket;
+- (void)sendAudioPacket:(NSTimer *)timerExp;
+- (void)startRecordingSound;
 
 @end
