@@ -21,9 +21,7 @@ H264PlayerListener::~H264PlayerListener()
 void H264PlayerListener::notify(int msg, int ext1, int ext2)
 {
     if (mHandler != nil) {
-        [mHandler handleMessage:msg
-                          ext1:ext1
-                          ext2:ext2];
+        [mHandler handleMessage:msg ext1:ext1 ext2:ext2];
     }
 }
 
