@@ -23,7 +23,7 @@
 @interface HelpWindowPopup()
 @property (nonatomic, retain) MBP_PopupOverlayWindow    *overlayWindow;
 @property (nonatomic, retain) NSString                  *title;
-@property (nonatomic, retain) NSString                  *content;
+@property (nonatomic, retain) NSString                  *message;
 @end
 
 @implementation HelpWindowPopup
@@ -37,13 +37,13 @@
     return self;
 }
 
-- (id)initWithTitle:(NSString *)title andContent:(NSString *)content
+- (id)initWithTitle:(NSString *)title andMessage:(NSString *)message
 {
     self = [self initWithFrame:[self frame]];
     if (self)
     {
         self.title = title;
-        self.content = content;
+        self.message = message;
         [self initUIComponents];
     }
     return self;
@@ -65,7 +65,7 @@
 {
     [_overlayWindow release];
     [_title release];
-    [_content release];
+    [_message release];
     [super dealloc];
 }
 
@@ -123,9 +123,9 @@
     contentLabel.textColor = [UIColor colorWithRed:(128/255.f) green:(128/255.f) blue:(128/255.f) alpha:1];
     contentLabel.numberOfLines = 0;
     rect = contentLabel.frame;
-    rect.size.height = ceilf([self calculateHeightForString:self.content withWidthFrame:contentLabel.frame.size.width andFont:font]);
+    rect.size.height = ceilf([self calculateHeightForString:self.message withWidthFrame:contentLabel.frame.size.width andFont:font]);
     contentLabel.frame = rect;
-    contentLabel.text = self.content;
+    contentLabel.text = self.message;
     [scrollView addSubview:contentLabel];
     scrollView.contentSize = CGSizeMake(scrollView.frame.size.width, contentLabel.frame.size.height + 10);
     
