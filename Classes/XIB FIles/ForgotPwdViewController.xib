@@ -8,6 +8,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ForgotPwdViewController">
             <connections>
                 <outlet property="passwordLinkSent" destination="7" id="17"/>
+                <outlet property="resetPassWordButton" destination="kXa-h0-uAY" id="A0l-qD-ja8"/>
                 <outlet property="toEmail" destination="11" id="13"/>
                 <outlet property="userEmailTF" destination="lvf-63-iVM" id="Vki-zf-PcV"/>
                 <outlet property="view" destination="1" id="3"/>

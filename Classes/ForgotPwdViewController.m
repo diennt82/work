@@ -8,11 +8,12 @@
 
 #import "ForgotPwdViewController.h"
 #import <MonitorCommunication/MonitorCommunication.h>
+#import "define.h"
 
 @interface ForgotPwdViewController ()
 
 @property (nonatomic, retain)  NSString *userEmail;
-
+@property (nonatomic, assign) IBOutlet UIButton  *resetPassWordButton;
 @end
 
 @implementation ForgotPwdViewController
@@ -28,6 +29,7 @@
 
 -(void) dealloc
 {
+    [_userEmail release];
     [super dealloc];
 }
 
@@ -59,6 +61,11 @@
     
     passwordLinkSent.hidden = YES;
     [self.view addSubview:passwordLinkSent];
+    
+    if (isiPhone4)
+    {
+        self.resetPassWordButton.frame = CGRectOffset(self.resetPassWordButton.frame, 0, -40);
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
