@@ -1014,15 +1014,17 @@
     [finalResult release];
 }
 
+#pragma mark - ScanForCameraNotifier protocol methods
+
 - (void)scan_done:(NSArray *)scanResults
 {
-    //limit value of nextCameraToScanIndex
+    // limit value of nextCameraToScanIndex
     if ( _nextCameraToScanIndex < 0 ) {
         return;
     }
     
     CamProfile *cp =(CamProfile *)_restoredProfilesArray[_nextCameraToScanIndex];
-    //scan Done. read scan result
+    // scan Done. read scan result
     
     if ( !scanResults  || scanResults.count == 0 ) {
         // Empty ..not found & also can't use the current IP?

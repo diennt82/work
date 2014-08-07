@@ -68,8 +68,6 @@
         self.melodies = @[mel1, mel2, mel3, mel4, mel5];
     }
     
-    [_melodies release];
-    
     self.melodyTableView.delegate = self;
     self.melodyTableView.dataSource = self;
     [self loadFont];
