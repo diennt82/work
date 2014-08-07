@@ -840,7 +840,7 @@ typedef enum _WAIT_FOR_UPDATING {
 
 - (IBAction)handleCameraDetailHelp:(id)sender
 {
-    HelpWindowPopup *popup = [[HelpWindowPopup alloc] initWithTitle:@"" andMessage:@""];
+    HelpWindowPopup *popup = [[HelpWindowPopup alloc] initWithTitle:@"Help Title" andMessage:@"Help text"];
     [popup show];
     [popup release];
 }

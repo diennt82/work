@@ -76,7 +76,7 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="V8i-4R-CY1">
-                    <rect key="frame" x="0.0" y="0.0" width="278" height="50"/>
+                    <rect key="frame" x="0.0" y="0.0" width="275" height="50"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <size key="titleShadowOffset" width="0.0" height="4"/>
                     <state key="normal">
@@ -97,9 +97,9 @@
                     <size key="shadowOffset" width="0.0" height="0.0"/>
                 </label>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Cbb-d5-Nrf">
-                    <rect key="frame" x="282" y="8" width="35" height="35"/>
+                    <rect key="frame" x="280" y="7" width="35" height="35"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <state key="normal">
+                    <state key="normal" backgroundImage="alert_learn.png">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
@@ -126,7 +126,7 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="b3F-hO-dyQ">
-                    <rect key="frame" x="0.0" y="0.0" width="278" height="50"/>
+                    <rect key="frame" x="0.0" y="0.0" width="275" height="50"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <state key="normal">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -146,9 +146,9 @@
                     <size key="shadowOffset" width="0.0" height="0.0"/>
                 </label>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="lun-Gd-6Tl">
-                    <rect key="frame" x="282" y="8" width="35" height="35"/>
+                    <rect key="frame" x="280" y="7" width="35" height="35"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <state key="normal">
+                    <state key="normal" backgroundImage="alert_learn.png">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
@@ -234,6 +234,7 @@
         </view>
     </objects>
     <resources>
+        <image name="alert_learn.png" width="60" height="60"/>
         <image name="general.png" width="25" height="25"/>
         <image name="sensitivity.png" width="25" height="25"/>
     </resources>

@@ -26,11 +26,13 @@
 #import "MenuViewController.h"
 #import "PublicDefine.h"
 #import "define.h"
+#import "SettingHeaderCell.h"
+#import "Helps/HelpWindowPopup.h"
 
 #import <MonitorCommunication/MonitorCommunication.h>
 #import <CameraScanner/CameraScanner.h>
 
-@interface SettingsViewController () <SchedulerCellDelegate, GeneralCellDelegate>
+@interface SettingsViewController () <SchedulerCellDelegate, GeneralCellDelegate, SettingHeaderCellDelegate>
 {
     NSInteger numOfRows[4];
     BOOL valueGeneralSettings[2];
@@ -229,15 +231,14 @@
     [_schedulingVC release];
     [super dealloc];
 }
-#pragma mark - Method
 
+#pragma mark - Method
 - (void)settingsBackAction: (id)sender
 {
     
 }
 
 #pragma mark - GeneralCell delegate
-
 - (void)clockValueChanged:(BOOL)is12hr
 {
     valueGeneralSettings[0] = is12hr;
@@ -256,7 +257,6 @@
 }
 
 #pragma mark - Scheduler delegate
-
 - (void)reportByDaySwitchState:(BOOL)state atRow:(NSInteger)rowIdx
 {
     //TODO:Enable scheduling settings.
@@ -267,8 +267,24 @@
     //TODO:Enable scheduling settings.
 }
 
-#pragma mark - Table view data source
+#pragma mark - SettingHeaderCellDelegate
+- (void)helpButtonOnTouchUpInside:(SETTING_HELP)helpType
+{
+    if (helpType == GENERAL_SETTING)
+    {
+        HelpWindowPopup *popup = [[HelpWindowPopup alloc] initWithTitle:@"" andMessage:@""];
+        [popup show];
+        [popup release];
+    }
+    else if (helpType == DO_NOT_DISTURB)
+    {
+        HelpWindowPopup *popup = [[HelpWindowPopup alloc] initWithTitle:@"" andMessage:@""];
+        [popup show];
+        [popup release];
+    }
+}
 
+#pragma mark - Table view data source
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     //#warning Potentially incomplete method implementation.
@@ -415,9 +431,10 @@
                 case 0:
                 {
                     static NSString *CellIdentifier = @"Cell1";
-                    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+                    SettingHeaderCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
                     if (cell == nil) {
-                        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+                        cell = [[[SettingHeaderCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+                        cell.delegate = self;
                     }
                     
                     // Configure the cell...
@@ -477,9 +494,10 @@
                 case 0:
                 {
                     static NSString *CellIdentifier = @"CellDonot";
-                    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+                    SettingHeaderCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
                     if (cell == nil) {
-                        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+                        cell = [[[SettingHeaderCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+                        cell.delegate = self;
                     }
                     
                     // Configure the cell...
