@@ -33,6 +33,8 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.backgroundColor = [UIColor whiteColor];
+        self.title = @"";
+        self.message = @"";
     }
     return self;
 }
