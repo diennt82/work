@@ -18,6 +18,7 @@
 #import "EarlierViewController.h"
 #import "UIDeviceHardware.h"
 #import "MBP_iosViewController.h"
+#import "Camera.h"
 
 #define MAX_CAM_ALLOWED 4
 #define CAMERA_TAG_66 566
@@ -158,6 +159,7 @@
             NSLog(@"**** IPHONE 4  / IPAD 2 *** use wifi setup for all");
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
             [userDefaults setInteger:WIFI_SETUP forKey:SET_UP_CAMERA];
+            [userDefaults setObject:@(FORCUS_66_TAG) forKey:SET_UP_CAMERA_TAG];
             [userDefaults setBool:FALSE forKey:FIRST_TIME_SETUP];
             [userDefaults synchronize];
             
@@ -165,7 +167,6 @@
                 [tabBarController.menuDelegate sendStatus:SETUP_CAMERA]; //initial setup
                 tabBarController.menuDelegate = nil;
             }];
-            
         }
         else
         {
