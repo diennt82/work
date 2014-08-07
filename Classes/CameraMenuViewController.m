@@ -21,6 +21,7 @@
 #import "PublicDefine.h"
 #import "UIImageView+WebCache.h"
 #import "UIView+Custom.h"
+#import "HelpWindowPopup.h"
 
 
 #define ALERT_REMOVE_CAM        5
@@ -76,13 +77,15 @@ typedef enum _WAIT_FOR_UPDATING {
 @property (nonatomic) BOOL isChangingName;
 @property (nonatomic, retain) UIAlertView *alertViewRename;
 
-@property (retain, nonatomic) IBOutlet UIView *vwHeaderCamDetail,*vwHeaderNotSens;
+@property (assign, nonatomic) IBOutlet UIView *vwHeaderCamDetail,*vwHeaderNotSens;
 @property (nonatomic) BOOL shouldWaitForUpdateSettings;
 @property (nonatomic) WAIT_FOR_UPDATING shoulfWaitForUpdatingType;
 @property (nonatomic) BOOL backGroundUpdateExecuting;
 @property (retain, nonatomic) SensitivityTemperatureCell *sensitivityTemperatureCell;
 @property (nonatomic) BOOL isNewDeviceSettingsCommand;
 
+- (IBAction)handleCameraDetailHelp:(id)sender;
+- (IBAction)handleNotiSensityHelp:(id)sender;
 @end
 
 @implementation CameraMenuViewController
@@ -175,6 +178,11 @@ typedef enum _WAIT_FOR_UPDATING {
     [_alertViewRename release];
     [_jsonCommBlock release];
     [_sensitivityTemperatureCell release];
+    [_selectedReg release];
+    [_sensitivityInfo release];
+    [_sensitivityMessage release];
+    [_stringFW_Version release];
+    [_apiKey release];
     
     [super dealloc];
 }
@@ -565,45 +573,7 @@ typedef enum _WAIT_FOR_UPDATING {
 // In a xib-based application, navigation from a table can be handled in -tableView:didSelectRowAtIndexPath:
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Navigation logic may go here, for example:
-    // Create the next view controller.
     
-   /* if (indexPath.row == 0)
-    {
-        _cameraName = self.camChannel.profile.name;
-        
-        if (_alertViewRename == nil)
-        {
-            self.alertViewRename = [[UIAlertView alloc] initWithTitle:@"Enter the new Camera name"
-                                                              message:nil
-                                                             delegate:self
-                                                    cancelButtonTitle:NSLocalizedStringWithDefaultValue(@"cancel", nil, [NSBundle mainBundle], @"Cancel", nil)
-                                                    otherButtonTitles:NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil), nil];
-            self.alertViewRename.alertViewStyle = UIAlertViewStylePlainTextInput;
-            UITextField *textField = [_alertViewRename textFieldAtIndex:0];
-            [textField setText:_cameraName];
-            self.alertViewRename.tag = ALERT_RENAME_CAMERA;
-        }
-        
-        [_alertViewRename show];
-    }
-#if ENABLE_CHANGE_IMAGE
-    else if (indexPath.row == 1)
-    {
-        //change Image
-        ChangeImageViewController *changeImageVC = [[ChangeImageViewController alloc] initWithNibName:@"ChangeImageViewController" bundle:nil];
-        [UIView transitionWithView:self.view
-                          duration:1.0
-                           options:UIViewAnimationOptionTransitionFlipFromBottom
-                        animations:^{
-                            [self.view addSubview:changeImageVC.view];
-                        }
-                        completion:NULL];
-        
-        
-    }
-#endif
-    */
 }
 
 #pragma mark - Server methods
@@ -865,6 +835,20 @@ typedef enum _WAIT_FOR_UPDATING {
         [hud setLabelText:NSLocalizedStringWithDefaultValue(@"loading", nil, [NSBundle mainBundle], @"Loading...", nil)];
         [self performSelector:@selector(getSensitivityInfoFromServer) withObject:nil afterDelay:0.1];
     }
+}
+
+- (IBAction)handleCameraDetailHelp:(id)sender
+{
+    HelpWindowPopup *popup = [[HelpWindowPopup alloc] initWithTitle:@"" andMessage:@""];
+    [popup show];
+    [popup release];
+}
+
+- (IBAction)handleNotiSensityHelp:(id)sender
+{
+    HelpWindowPopup *popup = [[HelpWindowPopup alloc] initWithTitle:@"" andMessage:@""];
+    [popup show];
+    [popup release];
 }
 
 - (void)showUpdatingProgressHUD {
