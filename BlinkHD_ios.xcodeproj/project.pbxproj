@@ -10,6 +10,7 @@
 		1D3623260D0F684500981E51 /* MBP_iosAppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* MBP_iosAppDelegate.mm */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
+		266D2A361993F0930086E055 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		26977A411951E7E5005D45B9 /* CamerasViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 26977A401951E7E5005D45B9 /* CamerasViewController.xib */; };
 		26977A431951EAF2005D45B9 /* SettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 26977A421951EAF2005D45B9 /* SettingsViewController.xib */; };
 		26B2D8BE193F6B74005E5F2E /* 29.png in Resources */ = {isa = PBXBuildFile; fileRef = 26B2D8B4193F6B74005E5F2E /* 29.png */; };
@@ -5643,6 +5644,7 @@
 				A13AD83D18D0691E0009F0E5 /* UICircularSlider.m in Sources */,
 				8B9112D71860341C004301C5 /* NotifViewController.mm in Sources */,
 				5EAFC05E192A3DCA001FB3AA /* MBProgressHUD.m in Sources */,
+				266D2A361993F0930086E055 /* main.m in Sources */,
 				8BA5C4801818DCC1006B4BB8 /* ZoneViewController.m in Sources */,
 				8B9C7E15185F268C0038B3A8 /* CamerasViewController.mm in Sources */,
 				97987E421546AF2C0066C49B /* UserAccount.m in Sources */,
