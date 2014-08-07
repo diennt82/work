@@ -23,6 +23,7 @@
         [self.helpButton setBackgroundImage:[UIImage imageNamed:@"alert_play_pressed.png"] forState:UIControlStateSelected];
         [self.helpButton addTarget:self action:@selector(handleHelpButton:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:self.helpButton];
+        [self.helpButton setHidden:YES];
     }
     return self;
 }
