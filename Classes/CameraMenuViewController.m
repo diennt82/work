@@ -77,7 +77,7 @@ typedef enum _WAIT_FOR_UPDATING {
 @property (nonatomic) BOOL isChangingName;
 @property (nonatomic, retain) UIAlertView *alertViewRename;
 
-@property (assign, nonatomic) IBOutlet UIView *vwHeaderCamDetail,*vwHeaderNotSens;
+@property (retain, nonatomic) IBOutlet UIView *vwHeaderCamDetail,*vwHeaderNotSens;
 @property (nonatomic) BOOL shouldWaitForUpdateSettings;
 @property (nonatomic) WAIT_FOR_UPDATING shoulfWaitForUpdatingType;
 @property (nonatomic) BOOL backGroundUpdateExecuting;
@@ -182,7 +182,8 @@ typedef enum _WAIT_FOR_UPDATING {
     [_sensitivityMessage release];
     [_stringFW_Version release];
     [_apiKey release];
-    
+    [_vwHeaderCamDetail release];
+    [_vwHeaderNotSens release];
     [super dealloc];
 }
 
