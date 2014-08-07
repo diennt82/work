@@ -11,6 +11,6 @@
 
 @interface Step_11_ViewController : GAITrackedViewController
 
-@property (nonatomic, retain) NSString * errorCode;
+@property (nonatomic, copy) NSString *errorCode;
 
 @end

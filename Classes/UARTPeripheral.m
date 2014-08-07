@@ -10,9 +10,9 @@
 
 @interface UARTPeripheral ()
 
-@property CBService *uartService;
-@property CBCharacteristic *rxCharacteristic;
-@property CBCharacteristic *txCharacteristic;
+@property (weak) CBService *uartService;
+@property (weak) CBCharacteristic *rxCharacteristic;
+@property (weak) CBCharacteristic *txCharacteristic;
 
 @end
 

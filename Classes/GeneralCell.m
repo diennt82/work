@@ -39,13 +39,4 @@
     [_generalCellDelegate temperatureValueChanged:_isFahrenheit];
 }
 
-- (void)dealloc
-{
-    [_labelClock release];
-    [_btnClock release];
-    [_labelTemperature release];
-    [_btnTemperature release];
-    [super dealloc];
-}
-
 @end

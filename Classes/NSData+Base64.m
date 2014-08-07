@@ -285,11 +285,6 @@ char *NewBase64Encode(
 	return result;
 }
 
-
-
-
-
-
 //
 // base64EncodedString
 //
@@ -302,15 +297,11 @@ char *NewBase64Encode(
 - (NSString *)base64EncodedString
 {
 	size_t outputLength = 0;
-	char *outputBuffer =
-		NewBase64Encode([self bytes], [self length], true, &outputLength);
+	char *outputBuffer = NewBase64Encode([self bytes], [self length], true, &outputLength);
 	
-	NSString *result =
-		[[[NSString alloc]
-			initWithBytes:outputBuffer
-			length:outputLength
-			encoding:NSASCIIStringEncoding]
-		autorelease];
+	NSString *result = [[NSString alloc] initWithBytes:outputBuffer
+                                                length:outputLength
+                                              encoding:NSASCIIStringEncoding];
 	free(outputBuffer);
 	return result;
 }

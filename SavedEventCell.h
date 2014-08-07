@@ -10,8 +10,8 @@
 
 @interface SavedEventCell : UITableViewCell
 
-@property (nonatomic, retain) IBOutlet UIImageView *snapshotImage;
-@property (nonatomic, retain) IBOutlet UILabel *timeLabel;
-@property (nonatomic, retain) IBOutlet UILabel *placeEventLabel;
+@property (nonatomic, weak) IBOutlet UIImageView *snapshotImage;
+@property (nonatomic, weak) IBOutlet UILabel *timeLabel;
+@property (nonatomic, weak) IBOutlet UILabel *placeEventLabel;
 
 @end

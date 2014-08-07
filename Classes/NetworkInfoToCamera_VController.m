@@ -20,16 +20,16 @@
 
 @interface NetworkInfoToCamera_VController () <UITextFieldDelegate>
 
-@property (nonatomic, retain) IBOutlet UIView *viewProgress;
-@property (nonatomic, retain) IBOutlet UIView *viewError;
+@property (nonatomic, weak) IBOutlet UIView *viewProgress;
+@property (nonatomic, weak) IBOutlet UIView *viewError;
 
-@property (nonatomic, retain) UITextField *tfSSID;
-@property (nonatomic, retain) UITextField *tfPassword;
-@property (nonatomic, retain) UITextField *tfConfirmPass;
+@property (nonatomic, strong) UITextField *tfSSID;
+@property (nonatomic, strong) UITextField *tfPassword;
+@property (nonatomic, strong) UITextField *tfConfirmPass;
 
-@property (nonatomic, retain) NSTimer *timerTimeoutConnectBLE;
-@property (nonatomic, retain) UIButton *btnContinue;
-@property (nonatomic, retain) UIButton *btnTryAgain;
+@property (nonatomic, strong) NSTimer *timerTimeoutConnectBLE;
+@property (nonatomic, strong) UIButton *btnContinue;
+@property (nonatomic, strong) UIButton *btnTryAgain;
 
 @property (nonatomic, copy) NSString *statusNetworkCamString;
 @property (nonatomic) BOOL shouldTimeoutProcessing;
@@ -48,11 +48,11 @@
                                                                   @"Enter Network Information" , nil);
     
     self.navigationItem.backBarButtonItem =
-    [[[UIBarButtonItem alloc] initWithTitle: NSLocalizedStringWithDefaultValue(@"Back",nil, [NSBundle mainBundle],
+    [[UIBarButtonItem alloc] initWithTitle: NSLocalizedStringWithDefaultValue(@"Back",nil, [NSBundle mainBundle],
                                                                                @"Back" , nil)
                                       style:UIBarButtonItemStyleBordered
                                      target:nil
-                                     action:nil] autorelease];
+                                     action:nil];
     self.navigationItem.hidesBackButton = NO;
     
     self.btnContinue = (UIButton *)[_viewError viewWithTag:BTN_CONTINUE_TAG];
@@ -101,7 +101,6 @@
                                     action:@selector(handleNextButton:)];
     self.navigationItem.rightBarButtonItem = nextButton;
     self.navigationItem.rightBarButtonItem.enabled = NO;
-    [nextButton release];
     
     self.tfSSID = (UITextField *)[_ssidCell viewWithTag:202];
     
@@ -116,7 +115,7 @@
     _tfConfirmPass.delegate = self;
     
     /* initialize transient object here */
-	self.deviceConf = [[[DeviceConfiguration alloc] init] autorelease];
+	self.deviceConf = [[DeviceConfiguration alloc] init];
 	
     if ( ![self restoreDataIfPossible] ) {
 		//Try to read the ssid from preference:
@@ -173,20 +172,6 @@
     [BLEConnectionManager.instanceBLE setDelegate:nil];
 }
 
--(void) dealloc
-{
-    [_tfSSID release];
-    [_tfPassword release];
-    [_tfConfirmPass release];
-    
-    [_ssid release];
-    [_security release];
-    [_password release];
-    [_deviceConf release];
-    [_ib_dialogVerifyNetwork release];
-    [_viewProgress release];
-    [super dealloc];
-}
 
 #pragma mark - Actions
 
@@ -354,7 +339,7 @@
     static NSString *CellIdentifier = @"Cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
     
     int tag = tableView.tag;
@@ -473,7 +458,6 @@
                                    cancelButtonTitle:@"OK"
                                    otherButtonTitles:nil];
             [_alert show];
-            [_alert release];
             
             return;
         }
@@ -514,7 +498,6 @@
                                    cancelButtonTitle:@"OK"
                                    otherButtonTitles:nil];
             [alert show];
-            [alert release];
             return;
         }
         else {
@@ -549,10 +532,10 @@
         [self disconnectToBLE];
     }
     else {
-        BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
+        BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
                                                                                   Selector:@selector(removeCamSuccessWithResponse:)
                                                                               FailSelector:@selector(removeCamFailedWithError:)
-                                                                                 ServerErr:@selector(removeCamFailedServerUnreachable)] autorelease];
+                                                                                 ServerErr:@selector(removeCamFailedServerUnreachable)];
         
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         NSString *stringUDID = [userDefaults stringForKey:CAMERA_UDID];
@@ -798,7 +781,6 @@
     //send cmd to Device
     BLEConnectionManager.instanceBLE.delegate = self;
     [BLEConnectionManager.instanceBLE.uartPeripheral writeString:cmd withTimeOut:SHORT_TIME_OUT_SEND_COMMAND];
-    [sentConf release];
     
     while (BLEConnectionManager.instanceBLE.uartPeripheral.isBusy) {
         date = [NSDate dateWithTimeInterval:1.5 sinceDate:[NSDate date]];
@@ -986,9 +968,7 @@
     //Load the next xib
     Step_10_ViewController_ble *step10ViewController = [[Step_10_ViewController_ble alloc] initWithNibName:@"Step_10_ViewController_ble" bundle:nil];
     [self.navigationController pushViewController:step10ViewController animated:NO];
-    [step10ViewController release];
     
-    [sentConf release];
 }
 
 - (BOOL)restoreDataIfPossible

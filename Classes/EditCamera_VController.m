@@ -18,9 +18,9 @@
 
 @interface EditCamera_VController () <UITextFieldDelegate>
 
-@property (nonatomic, retain) IBOutlet UITextField *tfCamName;
-@property (nonatomic, retain) IBOutlet UIButton *btnContinue;
-@property (nonatomic, retain) IBOutlet UIView *viewProgress;
+@property (nonatomic, weak) IBOutlet UITextField *tfCamName;
+@property (nonatomic, weak) IBOutlet UIButton *btnContinue;
+@property (nonatomic, weak) IBOutlet UIView *viewProgress;
 
 @property (nonatomic, copy) NSString *authToken;
 @property (nonatomic, copy) NSString *homeWifiSSID;
@@ -86,16 +86,6 @@
     [BLEConnectionManager.instanceBLE setDelegate:nil];
 }
 
--(void) dealloc
-{
-    [_cameraName release];
-    [_cameraMac release];
-    [_tfCamName release];
-    [_btnContinue release];
-    [_viewProgress release];
-    [super dealloc];
-}
-
 #pragma mark - Actions
 
 - (IBAction)btnContinueTouchUpInsideAction:(id)sender
@@ -118,7 +108,6 @@
                                                cancelButtonTitle:ok
                                                otherButtonTitles:nil];
         [alert show];
-        [alert release];
     }
     else if (![self isCameraNameValidated:cameraName_text]) {
         NSString *title = NSLocalizedStringWithDefaultValue(@"Invalid_Camera_Name", nil, [NSBundle mainBundle],
@@ -136,7 +125,6 @@
                                                cancelButtonTitle:ok
                                                otherButtonTitles:nil];
         [alert show];
-        [alert release];
     }
     else {
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -165,7 +153,6 @@
     indicator.center = CGPointMake(_alertView.bounds.size.width/2, _alertView.bounds.size.height-45);
     [indicator startAnimating];
     [_alertView addSubview:indicator];
-    [indicator release];
     
     [_alertView setBackgroundColor:[UIColor blackColor]];
     [_alertView show];
@@ -257,7 +244,6 @@
                                                otherButtonTitles:nil];
         
         [alert show];
-        [alert release];
     }
     else if ( ![self isCameraNameValidated:cameraName] ) {
         NSString *title = NSLocalizedStringWithDefaultValue(@"Invalid_Camera_Name", nil, [NSBundle mainBundle],
@@ -276,7 +262,6 @@
                                                otherButtonTitles:nil];
         
         [alert show];
-        [alert release];
     }
     else {
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -296,7 +281,6 @@
                             initWithNibName:@"DisplayWifiList_VController" bundle:nil];
     [self.navigationController pushViewController:wifiListVController animated:NO];
     
-    [wifiListVController release];
 }
 
 #pragma mark -   Timer
@@ -363,7 +347,6 @@
         alert.tag = ALERT_ASK_FOR_RETRY_BLE;
         
         [alert show];
-        [alert release];
     }
 }
 
@@ -437,7 +420,6 @@
 						  cancelButtonTitle:ok
 						  otherButtonTitles:nil];
 	[alert show];
-	[alert release];
 	return;
 }
 
@@ -465,9 +447,6 @@
     alert.tag = ALERT_ASK_FOR_RETRY;
     
     [alert show];
-    [alert release];
-    
-    //Todo: handle retry
 }
 
 - (IBAction)registerCamera:(id)sender
@@ -490,12 +469,11 @@
     
     NSLog(@"%@", stringFromDate);
     
-    [formatter release];
     
-    BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
+    BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
                                                                               Selector:@selector(addCamSuccessWithResponse:)
                                                                           FailSelector:@selector(addCamFailedWithError:)
-                                                                             ServerErr:@selector(addCamFailedServerUnreachable)] autorelease];
+                                                                             ServerErr:@selector(addCamFailedServerUnreachable)];
     
     NSString *stringCameraName = (NSString *) [userDefaults objectForKey:@"CameraName"];
     [jsonComm registerDeviceWithDeviceName:stringCameraName

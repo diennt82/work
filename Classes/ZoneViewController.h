@@ -22,27 +22,24 @@
     int enabledZones[9];
 }
 
-@property (nonatomic, retain) IBOutlet UIButton * zone1;
-@property (nonatomic, retain) IBOutlet UIButton * zone2;
-@property (nonatomic, retain) IBOutlet UIButton * zone3;
-@property (nonatomic, retain) IBOutlet UIButton * zone4;
-@property (nonatomic, retain) IBOutlet UIButton * zone5;
-@property (nonatomic, retain) IBOutlet UIButton * zone6;
-@property (nonatomic, retain) IBOutlet UIButton * zone7;
-@property (nonatomic, retain) IBOutlet UIButton * zone8;
-@property (nonatomic, retain) IBOutlet UIButton * zone9;
+@property (nonatomic, weak) IBOutlet UIButton *zone1;
+@property (nonatomic, weak) IBOutlet UIButton *zone2;
+@property (nonatomic, weak) IBOutlet UIButton *zone3;
+@property (nonatomic, weak) IBOutlet UIButton *zone4;
+@property (nonatomic, weak) IBOutlet UIButton *zone5;
+@property (nonatomic, weak) IBOutlet UIButton *zone6;
+@property (nonatomic, weak) IBOutlet UIButton *zone7;
+@property (nonatomic, weak) IBOutlet UIButton *zone8;
+@property (nonatomic, weak) IBOutlet UIButton *zone9;
+@property (nonatomic, weak) IBOutlet UIActivityIndicatorView *progress;
 
+@property (nonatomic, strong) NSMutableArray *zoneMap;
+@property (nonatomic, strong) NSMutableArray *zoneArray;
+@property (nonatomic, strong) NSMutableArray *oldZoneArray;
+@property (nonatomic, strong) CamChannel *selectedChannel;
 
-@property(nonatomic, retain) IBOutlet UIActivityIndicatorView * progress; 
-@property (nonatomic, retain)  NSMutableArray * zoneMap ;
+@property (nonatomic, weak) id<ZoneViewControlerDeleate> zoneVCDelegate;
 
-@property (nonatomic, retain) NSMutableArray *zoneArray ;
-@property (nonatomic, retain) NSMutableArray *oldZoneArray;
-@property (nonatomic, retain) CamChannel *selectedChannel;
-
-@property (nonatomic, assign) id<ZoneViewControlerDeleate> zoneVCDelegate;
-
-- (NSArray *)zoneSelectedList;
 - (void)parseZoneStrings:(NSArray *)zoneStrings;
 
 @end

@@ -10,7 +10,7 @@
 
 @interface ClipInfo : NSObject
 
-@property (nonatomic, retain) UIImage *imgSnapshot;
+@property (nonatomic, strong) UIImage *imgSnapshot;
 @property (nonatomic, copy) NSString *urlImage;
 @property (nonatomic, copy) NSString *titleString;
 @property (nonatomic, copy) NSString *urlFile;

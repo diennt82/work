@@ -10,7 +10,7 @@
 
 @interface TimelineInfo : NSObject
 
-@property (nonatomic, retain) UIImage *snapshotImage;
+@property (nonatomic, strong) UIImage *snapshotImage;
 @property (nonatomic, copy) NSString *eventMessage;
 @property (nonatomic, copy) NSString *eventTime;
 @property (nonatomic) NSInteger numberVideos;

@@ -16,8 +16,8 @@
 
 @interface SetupData : NSObject
 
-@property (nonatomic, retain) NSMutableArray *channels;
-@property (nonatomic, retain) NSMutableArray *configuredCams;
+@property (nonatomic, strong) NSMutableArray *channels;
+@property (nonatomic, strong) NSMutableArray *configuredCams;
 
 - (id)initWithChannels:(NSMutableArray *)channs andProfiles:(NSMutableArray *)cps;
 - (BOOL)saveSessionData;

@@ -10,6 +10,6 @@
 
 @interface SchedulingCell : UICollectionViewCell
 
-@property (nonatomic, retain) IBOutlet UILabel *labelTitle;
+@property (nonatomic, weak) IBOutlet UILabel *labelTitle;
 
 @end

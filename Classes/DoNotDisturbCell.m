@@ -64,13 +64,6 @@
     }
 }
 
-- (void)dealloc
-{
-    [_ienableDoNotDisturbButton release];
-    [_icircleSliderCustom release];
-    [super dealloc];
-}
-
 - (IBAction)didEnableDisturb:(id)sender {
     _isEnableDoNotDisturb = !_isEnableDoNotDisturb;
     

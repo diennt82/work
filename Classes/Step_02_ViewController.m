@@ -19,7 +19,7 @@
 
 @interface Step_02_ViewController ()
 
-@property (nonatomic, retain) IBOutlet UIButton *btnContinue;
+@property (nonatomic, weak) IBOutlet UIButton *btnContinue;
 
 @end
 
@@ -81,7 +81,7 @@
 - (void)presentModallyOn:(UIViewController *)parent
 {
     //setup nav controller
-    MBPNavController *navController = [[[MBPNavController alloc] initWithRootViewController:self] autorelease];
+    MBPNavController *navController = [[MBPNavController alloc] initWithRootViewController:self];
     
     // Create a navigation controller with us as its root.
     assert(navController != nil);
@@ -111,13 +111,11 @@
         NSLog(@"Load step Create BLE Connection");
         CreateBLEConnection_VController *step03ViewController = [[CreateBLEConnection_VController alloc] initWithNibName:@"CreateBLEConnection_VController" bundle:nil];
         [self.navigationController pushViewController:step03ViewController animated:NO];
-        [step03ViewController release];
     }
     else {
         NSLog(@"Load step 3 Concurrent");
         Step_03_ViewController *step03ViewController = [[Step_03_ViewController alloc] initWithNibName:@"Step_03_ViewController" bundle:nil];
         [self.navigationController pushViewController:step03ViewController animated:YES];
-        [step03ViewController release];
     }
 }
 
@@ -141,7 +139,6 @@
     //Load the next xib
     Step_03_ViewController *step03ViewController = [[Step_03_ViewController alloc] initWithNibName:@"Step_03_ViewController" bundle:nil];
     [self.navigationController pushViewController:step03ViewController animated:NO];
-    [step03ViewController release];
 }
 
 #pragma  mark -
@@ -155,12 +152,6 @@
 	UIGraphicsEndImageContext();
     
 	return newImage;
-}
-
-- (void)dealloc
-{
-    [_btnContinue release];
-    [super dealloc];
 }
 
 @end

@@ -16,8 +16,8 @@
 
 @interface PlayListViewController : UITableViewController
 
-@property (nonatomic, retain) id<PlaylistDelegate> playlistDelegate;
-@property (nonatomic, retain) NSMutableArray *playlistArray;
-@property (nonatomic, assign) UINavigationController *navController;
+@property (nonatomic, strong) NSMutableArray *playlistArray;
+@property (nonatomic, strong) UINavigationController *navController;
+@property (nonatomic, weak) id<PlaylistDelegate> playlistDelegate;
 
 @end

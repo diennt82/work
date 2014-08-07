@@ -20,7 +20,7 @@
 
 @interface CamerasViewController () <H264PlayerVCDelegate, CamerasCellDelegate, AddCameraVCDelegate, UIAlertViewDelegate>
 
-@property (nonatomic, retain) NSArray *snapshotImages;
+@property (nonatomic, strong) NSArray *snapshotImages;
 @property (nonatomic, copy) NSString *strDocDirPath;
 @property (nonatomic) BOOL isFirttime;
 
@@ -51,9 +51,6 @@
         imageview.frame = CGRectMake(0, 0, 120, 30);
         imageview.contentMode = UIViewContentModeScaleAspectFit;
         self.navigationItem.titleView = imageview;
-        
-        [image release];
-        [imageview release];
     }
     return self;
 }
@@ -77,7 +74,6 @@
     [refreshControl addTarget:self action:@selector(updateCameraInfo) forControlEvents:UIControlEventValueChanged];
     
     self.refreshControl = refreshControl;
-    [refreshControl release];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -110,7 +106,6 @@
                 h264PlayerViewController.h264PlayerVCDelegate = self;
                 
                 [self.navigationController pushViewController:h264PlayerViewController animated:YES];
-                [h264PlayerViewController release];
             }
         }
         else {
@@ -138,8 +133,6 @@
     MenuViewController *menuVC = (MenuViewController *)self.parentVC;
     cameraMenuCV.cameraMenuDelegate = menuVC.menuDelegate;
     [self.navigationController pushViewController:cameraMenuCV animated:YES];
-    
-    [cameraMenuCV release];
 }
 
 #pragma mark - AddCameraVCDelegate protocol methods
@@ -203,7 +196,6 @@
                                                   cancelButtonTitle:LocStr(@"OK")
                                                   otherButtonTitles:nil];
 			[alert show];
-			[alert release];
 			break;
 		}
             
@@ -312,7 +304,6 @@
                 UIWebView *webView = [[UIWebView alloc] initWithFrame:rect];
                 webView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin;
                 [cell.contentView addSubview:webView];
-                [webView release];
                 
                 NSString *videoUrl = @"http://www.youtube.com/embed/LMcSrQyRI-U?rel=0";
                 NSString *htmlString = [NSString stringWithFormat:
@@ -435,7 +426,6 @@
                 [timelineVC loadEvents:ch];
                 
                 [self.navigationController pushViewController:timelineVC animated:YES];
-                [timelineVC release];
             }
         }
         else {
@@ -453,18 +443,8 @@
             h264PlayerViewController.h264PlayerVCDelegate = self;
             
             [self.navigationController pushViewController:h264PlayerViewController animated:YES];
-            [h264PlayerViewController release];
         }
     }
-}
-
-#pragma mark - Memory management methods
-
-- (void)dealloc
-{
-    [_camChannels release];
-    [_strDocDirPath release];
-    [super dealloc];
 }
 
 @end

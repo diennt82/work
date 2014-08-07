@@ -25,7 +25,7 @@
 @property (nonatomic, strong) NSMutableData *dataRequest;
 
 @property (nonatomic, copy) NSString *relayServerIP;
-@property (nonatomic, assign) id<AudioOutStreamRemoteDelegate> audioOutStreamRemoteDelegate;
+@property (nonatomic, weak) id<AudioOutStreamRemoteDelegate> audioOutStreamRemoteDelegate;
 
 @property (nonatomic) NSInteger relayServerPort;
 @property (nonatomic) NSInteger bufferLength;

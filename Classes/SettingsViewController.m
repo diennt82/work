@@ -39,20 +39,21 @@
     BOOL valueSchedulerSwitchs[1][2];
 }
 
-@property (retain, nonatomic) SensitivityInfo *sensitivityInfo;
-@property (nonatomic, retain) NSString *selectedReg;
-@property (nonatomic) BOOL isLoading;
+@property (nonatomic, strong) SensitivityInfo *sensitivityInfo;
+@property (nonatomic, strong) BMS_JSON_Communication *jsonComm;
+@property (nonatomic, strong) CamChannel *selectedCamChannel;
+@property (nonatomic, strong) SchedulerViewController *schedulerVC;
+@property (nonatomic, strong) SchedulingViewController *schedulingVC;
+
+@property (nonatomic, copy) NSString *selectedReg;
+@property (nonatomic, copy) NSString *sensitivityMessage;
+@property (nonatomic, copy) NSString *apiKey;
+
 @property (nonatomic) BOOL isExistSensitivityData;
-@property (nonatomic, retain) NSString *sensitivityMessage;
-@property (nonatomic, assign) CamChannel *selectedCamChannel;
-@property (nonatomic, retain) BMS_JSON_Communication *jsonComm;
-@property (nonatomic, assign) NSString *apiKey;
+@property (nonatomic) BOOL isLoading;
 @property (nonatomic) NSInteger numberOfSections;
 @property (nonatomic) CGFloat lowerValue;
 @property (nonatomic) CGFloat upperValue;
-
-@property (retain, nonatomic) SchedulerViewController *schedulerVC;
-@property (retain, nonatomic) SchedulingViewController *schedulingVC;
 
 @end
 
@@ -96,104 +97,11 @@
     
     valueSwitchs[0] = FALSE;
     valueSwitchs[1] = TRUE;
-    
-   /* self.sensitivityInfo = [[SensitivityInfo alloc] init];
-    
-    self.sensitivityInfo.motionOn = TRUE;
-    self.sensitivityInfo.motionValue = 0;
-    
-    self.sensitivityInfo.soundOn = FALSE;
-    self.sensitivityInfo.soundValue = 1;
-    
-    self.sensitivityInfo.tempIsFahrenheit = FALSE;
-    self.sensitivityInfo.tempLowValue = 15.f;
-    self.sensitivityInfo.tempLowOn = YES;
-    self.sensitivityInfo.tempHighValue = 25.f;
-    self.sensitivityInfo.tempHighOn = NO;
-    
-    self.jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                          Selector:nil
-                                                      FailSelector:nil
-                                                         ServerErr:nil];
-    
-    self.lowerValue = 07.00;
-    self.upperValue = 19.99;
-    
-    self.schedulerVC = [[SchedulerViewController alloc] init];
-    //[self.schedulerVC setContentSizeForViewInPopover:CGSizeMake(UIScreen.mainScreen.bounds.size.width, 320)];
-    [self.schedulerVC setPreferredContentSize:CGSizeMake(SCREEN_WIDTH, 320)];
-    self.schedulingVC = [[SchedulingViewController alloc] init];
-    //self.schedulingVC.view.frame = CGRectMake(0, 0, UIScreen.mainScreen.bounds.size.width, 320);
-    //[self.schedulingVC setContentSizeForViewInPopover:CGSizeMake(UIScreen.mainScreen.bounds.size.width, 220)];
-    [self.schedulerVC setPreferredContentSize:CGSizeMake(SCREEN_WIDTH, 220)];
-    if (valueSchedulerSwitchs[0][1] == TRUE)
-    {
-        self.schedulerVC.numberOfColumn = 8;
-    }
-    else if(valueSchedulerSwitchs[0][0] == TRUE)
-    {
-        self.schedulerVC.numberOfColumn = 2;
-    }
-    else
-    {
-        self.schedulerVC.numberOfColumn = 0;
-    }
-    
-    //self.isLoading = TRUE;
-    self.sensitivityMessage = @"Loading...";
-    */
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
-    //MenuViewController *menuVC = (MenuViewController *)self.parentVC;
-    
-   // BOOL shouldReloadData = FALSE;
-    
-   /* if (menuVC.cameras != nil &&
-        menuVC.cameras.count > 0)
-    {
-        for (CamChannel *ch in menuVC.cameras)
-        {
-            if ([ch.profile.registrationID isEqualToString:[[NSUserDefaults standardUserDefaults] stringForKey:REG_ID]])
-            {
-                self.isExistSensitivityData = FALSE;
-                numOfRows[1] = 1;
-                shouldReloadData = TRUE;
-                self.selectedCamChannel = ch;
-                
-                if (self.selectedCamChannel == nil ||
-                     [self.selectedCamChannel.profile isSharedCam] ||
-                     [self.selectedCamChannel.profile isNotAvailable])
-                {
-                    self.numberOfSections = 1;
-                }
-                else
-                {
-                    
-                    //For CUE start hide Notification Scheduler, so number of section = 3
-                    //For full feature app has Notification, so number of section = 4
-                    
-                    if (CUE_RELEASE_FLAG)
-                    {
-                        self.numberOfSections = 3;
-                    }
-                    else
-                    {
-                        self.numberOfSections = 4;
-                    }
-                }
-                
-                break;
-            }
-        }
-    }
-    else
-    {
-        self.selectedCamChannel = nil;
-    }*/
     
     self.numberOfSections = 2;
     self.selectedCamChannel = nil;
@@ -586,7 +494,7 @@
                     static NSString *CellIdentifier = @"Cell";
                     cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
                     if (cell == nil) {
-                        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+                        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
                     }
                     
                     // Configure the cell...
@@ -620,7 +528,7 @@
                     static NSString *CellIdentifier = @"Cell";
                     cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
                     if (cell == nil) {
-                        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+                        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
                     }
                     break;
                 }
@@ -780,7 +688,7 @@
                     static NSString *CellIdentifier = @"CellDonot";
                     cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
                     if (cell == nil) {
-                        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+                        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
                     }
                     
                     // Configure the cell...
@@ -826,7 +734,7 @@
                     static NSString *CellIdentifier = @"Cell";
                     cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
                     if (cell == nil) {
-                        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+                        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
                     }
                     
                     // Configure the cell...
@@ -866,7 +774,7 @@
                     static NSString *CellIdentifier = @"Cell";
                     cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
                     if (cell == nil) {
-                        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+                        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
                     }
                     
                     // Configure the cell...
@@ -882,7 +790,7 @@
                     static NSString *CellIdentifier = @"Cell";
                     cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
                     if (cell == nil) {
-                        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+                        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
                     }
                     
                     break;
@@ -897,7 +805,7 @@
             static NSString *CellIdentifier = @"Cell";
             cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
             if (cell == nil) {
-                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
             }
             
             break;
@@ -1166,11 +1074,5 @@
     }
 }
 */
-
-- (void)dealloc
-{
-    [_jsonComm release];
-    [super dealloc];
-}
 
 @end

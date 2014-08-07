@@ -11,44 +11,36 @@
 @class ScrollHorizontalMenu;
 
 @protocol ScrollHorizontalMenuDataSource <NSObject>
-@required
-- (UIImage *) selectedItemImageForMenu:(ScrollHorizontalMenu *) tabMenu withIndexItem:(NSInteger)index;
-- (UIColor *) backgroundColorForMenu:(ScrollHorizontalMenu*) tabView;
-- (int) numberOfItemsForMenu:(ScrollHorizontalMenu *) tabView;
 
-- (NSString *) horizMenu:(ScrollHorizontalMenu *) horizMenu titleForItemAtIndex:(NSUInteger) index;
-- (NSString*) horizMenu:(ScrollHorizontalMenu *)horizMenu nameImageForItemAtIndex:(NSUInteger)index;
-- (NSString*) horizMenu:(ScrollHorizontalMenu *)horizMenu nameImageSelectedForItemAtIndex:(NSUInteger)index;
+@required
+- (UIImage *)selectedItemImageForMenu:(ScrollHorizontalMenu *)tabMenu withIndexItem:(NSInteger)index;
+- (UIColor *)backgroundColorForMenu:(ScrollHorizontalMenu*)tabView;
+- (int)numberOfItemsForMenu:(ScrollHorizontalMenu *)tabView;
+
+- (NSString *)horizMenu:(ScrollHorizontalMenu *)horizMenu titleForItemAtIndex:(NSUInteger)index;
+- (NSString*)horizMenu:(ScrollHorizontalMenu *)horizMenu nameImageForItemAtIndex:(NSUInteger)index;
+- (NSString*)horizMenu:(ScrollHorizontalMenu *)horizMenu nameImageSelectedForItemAtIndex:(NSUInteger)index;
+
 @end
 
 @protocol ScrollHorizontalMenuDelegate <NSObject>
+
 @required
-- (void)horizMenu:(ScrollHorizontalMenu *) horizMenu itemSelectedAtIndex:(NSUInteger) index;
+
+- (void)horizMenu:(ScrollHorizontalMenu *)horizMenu itemSelectedAtIndex:(NSUInteger)index;
+
 @end
 
-@interface ScrollHorizontalMenu : UIScrollView {
-    
-    int _itemCount;
-    UIImage *_selectedImage;
-    //image for menu scroll
-    NSMutableArray *_imageMenu;
-    BOOL _isOddTapButton;
-    NSInteger currentTappedButtonIndex;
-    
-    //check if all button deselect
-    BOOL _isAllButtonDeselected;
-    id <ScrollHorizontalMenuDataSource> dataSource;
-    id <ScrollHorizontalMenuDelegate> itemSelectedDelegate;
-}
+@interface ScrollHorizontalMenu : UIScrollView
 
-@property (nonatomic, retain) NSMutableArray *imageMenu;
-@property (nonatomic, retain) UIImage *selectedImage;
-@property (nonatomic, assign) IBOutlet id <ScrollHorizontalMenuDelegate> itemSelectedDelegate;
-@property (nonatomic, retain) IBOutlet id <ScrollHorizontalMenuDataSource> dataSource;
+@property (nonatomic, weak) IBOutlet id <ScrollHorizontalMenuDelegate> itemSelectedDelegate;
+@property (nonatomic, weak) IBOutlet id <ScrollHorizontalMenuDataSource> dataSource;
+@property (nonatomic, strong) NSMutableArray *imageMenu;
+@property (nonatomic, strong) UIImage *selectedImage;
 @property (nonatomic, assign) int itemCount;
 @property (nonatomic, assign) BOOL isAllButtonDeselected;
 
--(void) reloadData:(BOOL)isLand;
--(void) setSelectedIndex:(int) index animated:(BOOL) animated;
+- (void)reloadData:(BOOL)isLand;
+- (void)setSelectedIndex:(int)index animated:(BOOL)animated;
 
 @end

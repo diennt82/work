@@ -19,14 +19,14 @@
 
 @interface MenuViewController () <H264PlayerVCDelegate, UserAccountDelegate>
 
-@property (nonatomic, retain) AccountViewController *accountVC;
-@property (nonatomic, retain) NSMutableArray *restoredProfiles;
-@property (nonatomic, retain) NSMutableArray *arrayChannel;
-@property (nonatomic, retain) NSDictionary *buttonTitleTextAttrs;
+@property (nonatomic, strong) AccountViewController *accountVC;
+@property (nonatomic, strong) NSMutableArray *restoredProfiles;
+@property (nonatomic, strong) NSMutableArray *arrayChannel;
+@property (nonatomic, strong) NSDictionary *buttonTitleTextAttrs;
 
-@property (nonatomic, assign) UIBarButtonItem *cameraBarButton;
-@property (nonatomic, assign) UIBarButtonItem *settingsBarButton;
-@property (nonatomic, assign) UIBarButtonItem *accountBarButton;
+@property (nonatomic, strong) UIBarButtonItem *cameraBarButton;
+@property (nonatomic, strong) UIBarButtonItem *settingsBarButton;
+@property (nonatomic, strong) UIBarButtonItem *accountBarButton;
 
 @property (nonatomic) BOOL initialView;
 
@@ -83,10 +83,6 @@
     NSArray *viewControllers = @[camerasNavContoller, settingsNavContoller, accountNavContoller];
     self.viewControllers = viewControllers;
     self.selectedViewController = camerasNavContoller;
-    
-    [camerasNavContoller release];
-    [settingsNavContoller release];
-    [accountNavContoller release];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -212,7 +208,6 @@
                 
                 EarlierViewController *earlierVC = [[EarlierViewController alloc] initWithCamChannel:camChannel];
                 [self.navigationController pushViewController:earlierVC animated:YES];
-                [earlierVC release];
             }
         }
         else {
@@ -221,16 +216,6 @@
             
             [userDefaults setObject:camChannel.profile.mac_address forKey:CAM_IN_VEW];
             [userDefaults synchronize];
-            
-//            H264PlayerViewController *h264PlayerViewController = [[H264PlayerViewController alloc] init];
-//            
-//            h264PlayerViewController.selectedChannel = camChannel;
-//            h264PlayerViewController.h264PlayerVCDelegate = self;
-//            
-//            NSLog(@"%@, %@", self.parentViewController.description, self.parentViewController.parentViewController);
-//            
-//            [self.navigationController pushViewController:h264PlayerViewController animated:YES];
-//            [h264PlayerViewController release];
         }
     }
     else {
@@ -263,7 +248,6 @@
                                                       apiKey:apiKey
                                              accountDelegate:self];
     [account readCameraListAndUpdate];
-    [account release];
 }
 
 #pragma mark - UserAccount delegate
@@ -305,7 +289,6 @@
 	}
     
 	self.cameras = validChannels;
-    [validChannels release];
 }
 
 - (BOOL)rebindCamerasResource
@@ -344,17 +327,8 @@
 		self.restoredProfiles = savedData.configuredCams;
 	}
     
-    [savedData release];
     
 	return YES;
-}
-
-#pragma mark - Memory management methods
-
-- (void)dealloc
-{
-    [_accountVC release];
-    [super dealloc];
 }
 
 @end

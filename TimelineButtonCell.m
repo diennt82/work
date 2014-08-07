@@ -15,10 +15,4 @@
     [_timelineBtnDelegate sendTouchBtnStateWithIndex:_rowIndex];
 }
 
-- (void)dealloc
-{
-    [_timelineCellButtn release];
-    [super dealloc];
-}
-
 @end

@@ -16,8 +16,8 @@
 
 @interface SlideSettingsCell : UITableViewCell
 
-@property (nonatomic, retain) IBOutlet UISlider *slideSettings;
-@property (nonatomic, assign) id<SlideSettingsCellDelegate> slideSettingsDelegate;
+@property (nonatomic, weak) IBOutlet UISlider *slideSettings;
+@property (nonatomic, weak) id<SlideSettingsCellDelegate> slideSettingsDelegate;
 @property (nonatomic) NSInteger rowIndex;
 
 @end

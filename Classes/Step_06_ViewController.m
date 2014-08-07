@@ -13,15 +13,15 @@
 
 @interface Step_06_ViewController () <UIAlertViewDelegate, UITextFieldDelegate>
 
-@property (nonatomic, retain) UITextField *tfSSID;
-@property (nonatomic, retain) UITextField *tfPassword;
-@property (nonatomic, retain) UITextField *tfConfirmPass;
+@property (nonatomic, strong) UITextField *tfSSID;
+@property (nonatomic, strong) UITextField *tfPassword;
+@property (nonatomic, strong) UITextField *tfConfirmPass;
 
 // timeout input password
-@property (nonatomic, retain) NSTimer *inputPasswordTimer;
-@property (nonatomic, retain) NSTimer *timeOut;
+@property (nonatomic, strong) NSTimer *inputPasswordTimer;
+@property (nonatomic, strong) NSTimer *timeOut;
 
-@property (nonatomic, retain) DeviceConfiguration * deviceConf;
+@property (nonatomic, strong) DeviceConfiguration * deviceConf;
 @property (nonatomic, copy) NSString *currentStateCamera;
 @property (nonatomic, copy) NSString *password;
 
@@ -33,11 +33,9 @@
 
 @implementation Step_06_ViewController
 
-
-#define TIME_INPUT_PASSWORD_AGAIN   60.0
-#define RETRY_SETUP_WIFI_TIMES      5
-#define GAI_CATEGORY    @"Step 06 view"
-
+#define TIME_INPUT_PASSWORD_AGAIN 60.0
+#define RETRY_SETUP_WIFI_TIMES 5
+#define GAI_CATEGORY @"Step 06 view"
 
 #pragma mark - UIViewController methods
 
@@ -81,7 +79,6 @@
     
     self.navigationItem.rightBarButtonItem = nextButton;
     self.navigationItem.rightBarButtonItem.enabled = NO;
-    [nextButton release];
     
     UIImageView *imageView = (UIImageView *)[_progressView viewWithTag:595];
     imageView.animationImages =[NSArray arrayWithObjects:
@@ -121,7 +118,7 @@
     self.tfConfirmPass = (UITextField *)[_confPasswordCell viewWithTag:201];
     
     // Initialize transient object here
-	self.deviceConf = [[[DeviceConfiguration alloc] init] autorelease];
+	self.deviceConf = [[DeviceConfiguration alloc] init];
 	
     if ( ![self restoreDataIfPossible] ) {
 		// Try to read the ssid from preference:
@@ -177,21 +174,6 @@
     [self resetAllTimer];
 }
 
-- (void)dealloc
-{
-    [_tfSSID release];
-    [_tfPassword release];
-    [_tfConfirmPass release];
-    
-    [_ssid release];
-    [_security release];
-    [_password release];
-    [_deviceConf release];
-    [_progressView release];
-    [_infoSelectCameView release];
-    [_scrollViewGuide release];
-    [super dealloc];
-}
 
 #pragma mark - Actions
 
@@ -443,7 +425,6 @@
     Step_07_ViewController *step07ViewController = [[Step_07_ViewController alloc] initWithNibName:@"Step_07_ViewController" bundle:nil];
     step07ViewController.step06 = self;
     [self.navigationController pushViewController:step07ViewController animated:NO];
-    [step07ViewController release];
 }
 
 - (void)handleNextButton:(id)sender
@@ -481,7 +462,6 @@
                                                    cancelButtonTitle:@"OK"
                                                    otherButtonTitles:nil];
             [_alert show];
-            [_alert release];
             return;
         }
         else {
@@ -511,7 +491,6 @@
                                                    cancelButtonTitle:@"OK"
                                                    otherButtonTitles:nil];
             [_alert show];
-            [_alert release];
             return;
         }
         else {
@@ -752,7 +731,6 @@
     //Load the next xib
     Step_10_ViewController *step10ViewController = [[Step_10_ViewController alloc] initWithNibName:@"Step_10_ViewController" bundle:nil];
     [self.navigationController pushViewController:step10ViewController animated:NO];
-    [step10ViewController release];
 }
 
 - (void)getStatusOfCameraToWifi:(NSTimer *)info
@@ -835,7 +813,6 @@
     
     alertViewPassword.tag = 101;
     [alertViewPassword show];
-    [alertViewPassword release];
 }
 
 - (void)resetAllTimer
@@ -898,20 +875,20 @@
 - (void)upgradeFwReboot
 {
 	//percentageProgress.
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	@autoreleasepool {
     
-	float sleepPeriod = 120.0 / 100; // 100 cycles
-	int percentage = 0;
-	while (percentage++ < 100) {
-		[self performSelectorOnMainThread:@selector(upgradeFwProgress:)
+		float sleepPeriod = 120.0 / 100; // 100 cycles
+		int percentage = 0;
+		while (percentage++ < 100) {
+			[self performSelectorOnMainThread:@selector(upgradeFwProgress:)
                                withObject:[NSNumber numberWithInt:percentage]
                             waitUntilDone:YES];
         
-		[NSThread sleepForTimeInterval:sleepPeriod];
-	}
+			[NSThread sleepForTimeInterval:sleepPeriod];
+		}
     
-	[self performSelectorOnMainThread:@selector(goBackAndReaddCamera) withObject:nil waitUntilDone:NO];
-	[pool release];
+		[self performSelectorOnMainThread:@selector(goBackAndReaddCamera) withObject:nil waitUntilDone:NO];
+	}
 }
 
 - (void)goBackAndReaddCamera
@@ -924,7 +901,6 @@
                                                   otherButtonTitles:nil];
     alertViewBack.tag = 100;
     [alertViewBack show];
-    [alertViewBack release];
 }
 
 - (void)upgradeFwProgress:(NSNumber *)number

@@ -20,10 +20,10 @@
 
 @interface MenuViewController : UITabBarController
 
-@property (nonatomic, retain) CamerasViewController *camerasVC;
-@property (nonatomic, retain) SettingsViewController *settingsVC;
-@property (nonatomic, retain) NSMutableArray *cameras;
-@property (nonatomic, assign) id<ConnectionMethodDelegate>menuDelegate;
+@property (nonatomic, strong) CamerasViewController *camerasVC;
+@property (nonatomic, strong) SettingsViewController *settingsVC;
+@property (nonatomic, strong) NSMutableArray *cameras;
+@property (nonatomic, weak) id<ConnectionMethodDelegate>menuDelegate;
 @property (nonatomic) BOOL notUpdateCameras;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil withConnDelegate:(id<ConnectionMethodDelegate>)delegate;

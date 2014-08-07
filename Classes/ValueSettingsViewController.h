@@ -11,8 +11,8 @@
 
 @interface ValueSettingsViewController : UITableViewController
 
-@property (nonatomic, retain) NSArray *valueArray;
-@property (nonatomic, assign) CameraSettingsViewController *parentVC;
+@property (nonatomic, strong) NSArray *valueArray;
+@property (nonatomic, weak) CameraSettingsViewController *parentVC;
 @property (nonatomic) NSInteger selectedValue;
 @property (nonatomic) NSInteger parentIndex;
 

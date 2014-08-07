@@ -20,15 +20,15 @@
 
 @interface DisplayWifiList_VController () <UIAlertViewDelegate>
 
-@property (nonatomic, retain) IBOutlet UITableViewCell *cellOtherNetwork;
-@property (nonatomic, retain) IBOutlet UITableViewCell *cellRefresh;
-@property (nonatomic, retain) IBOutlet UIButton *btnContinue;
-@property (nonatomic, retain) IBOutlet UITableView *mTableView;
-@property (nonatomic, retain) IBOutlet UIView *viewProgress;
-@property (nonatomic, retain) IBOutlet UIView *viewError;
+@property (nonatomic, weak) IBOutlet UITableViewCell *cellOtherNetwork;
+@property (nonatomic, weak) IBOutlet UITableViewCell *cellRefresh;
+@property (nonatomic, weak) IBOutlet UIButton *btnContinue;
+@property (nonatomic, weak) IBOutlet UITableView *mTableView;
+@property (nonatomic, weak) IBOutlet UIView *viewProgress;
+@property (nonatomic, weak) IBOutlet UIView *viewError;
 
-@property (nonatomic, retain) WifiEntry *selectedWifiEntry;
-@property (nonatomic, retain) NSTimer *timerTimeoutConnectBLE;
+@property (nonatomic, strong) WifiEntry *selectedWifiEntry;
+@property (nonatomic, strong) NSTimer *timerTimeoutConnectBLE;
 @property (nonatomic) BOOL newCmdFlag;
 @property (nonatomic) BOOL shouldTimeoutProcessing;
 @property (nonatomic) BOOL isAlreadyWifiList;
@@ -119,20 +119,6 @@
     [BLEConnectionManager.instanceBLE setDelegate:nil];
 }
 
-- (void)dealloc
-{
-    [_listOfWifi release];
-    [_ib_Indicator release];
-    [_ib_LabelState release];
-    [_cellOtherNetwork release];
-    [_btnContinue release];
-    [_mTableView release];
-    [_viewProgress release];
-    [_cellRefresh release];
-    [_viewError release];
-    [super dealloc];
-}
-
 #pragma mark - Actions
 
 - (IBAction)btnContinueTouchUpInsideAction:(id)sender
@@ -141,13 +127,12 @@
      * Stopped setup proccess if selected wifi is open. DO NOT support anymore!
      * The selected is HOME or not doesn't mater, just check to confirm.
      */
-    
     if ([_selectedWifiEntry.authMode isEqualToString:@"open"]) {
-        [[[[UIAlertView alloc] initWithTitle:@"SSID without password is not supported due to security concern. Please add password to your router."
+        [[[UIAlertView alloc] initWithTitle:@"SSID without password is not supported due to security concern. Please add password to your router."
                                      message:nil
                                     delegate:nil
                            cancelButtonTitle:nil
-                           otherButtonTitles:@"OK", nil] autorelease] show];
+                           otherButtonTitles:@"OK", nil] show];
     }
     else {
         NSRange noQoute = NSMakeRange(1, _selectedWifiEntry.ssidWithQuotes.length - 2);
@@ -214,7 +199,6 @@
     
     [_listOfWifi addObject:other];
     [self filterCameraList];
-    [other release];
 }
 
 - (void)moveToNextStep
@@ -235,7 +219,6 @@
     netWorkInfoViewController.security = _selectedWifiEntry.authMode;
     
     [self.navigationController pushViewController:netWorkInfoViewController animated:NO];
-    [netWorkInfoViewController release];
 }
 
 - (void)showDialogToConfirm: (NSString *)homeWifi selectedWifi: (NSString *)selectedWifi
@@ -249,7 +232,6 @@
                                               otherButtonTitles:@"Continue", nil];
     alertView.tag = 555;
     [alertView show];
-    [alertView release];
 }
 
 - (void)timeoutBLESetupProcessing:(NSTimer *)timer
@@ -259,10 +241,10 @@
     [BLEConnectionManager.instanceBLE.uartPeripheral didDisconnect];
     [BLEConnectionManager.instanceBLE setDelegate:nil];
     
-    BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
+    BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
                                                                               Selector:@selector(removeCamSuccessWithResponse:)
                                                                           FailSelector:@selector(removeCamFailedWithError:)
-                                                                             ServerErr:@selector(removeCamFailedServerUnreachable)] autorelease];
+                                                                             ServerErr:@selector(removeCamFailedServerUnreachable)];
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString *stringUDID = [userDefaults stringForKey:CAMERA_UDID];
@@ -328,7 +310,6 @@
     }
     
     self.listOfWifi = wifiList;
-    [wifiList release];
 }
 
 #pragma mark - Table view delegates & datasource
@@ -430,17 +411,10 @@
     CGAffineTransform myTransform = CGAffineTransformMakeTranslation(0.0, 0.0);
     [_myAlert setTransform:myTransform];
     [_myAlert show];
-    [_myAlert release];
 }
 
 - (void)queryWifiList
 {
-    //after 60s will display for user get list wifi again
-    //_timeout = [NSTimer scheduledTimerWithTimeInterval:3*60.0 target:self selector:@selector(showDialog:) userInfo:nil repeats:NO];
-    /*
-     * handle timeout: catch from uart and display time out at delegate returned.
-     */
-    
     //delay send command to camera BLE 1s.
     [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(sendCommandGetWifiList) userInfo:nil repeats:NO];
 }

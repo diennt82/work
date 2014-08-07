@@ -10,7 +10,7 @@
 
 @interface CameraStngsCell : UITableViewCell
 
-@property (nonatomic, retain) IBOutlet UILabel *nameLabel;
-@property (nonatomic, retain) IBOutlet UISwitch *valueSwitch;
+@property (nonatomic, weak) IBOutlet UILabel *nameLabel;
+@property (nonatomic, weak) IBOutlet UISwitch *valueSwitch;
 
 @end

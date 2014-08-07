@@ -10,12 +10,12 @@
 
 @interface TimelineActivityCell : UITableViewCell
 
-@property (nonatomic, retain) IBOutlet UIImageView *snapshotImage;
-@property (nonatomic, retain) IBOutlet UILabel *eventLabel;
-@property (nonatomic, retain) IBOutlet UILabel *eventTimeLabel;
-@property (nonatomic, retain) IBOutlet UIImageView *feedImageVideo;
-@property (nonatomic, retain) IBOutlet UIActivityIndicatorView *activityIndicatorLoading;
-@property (nonatomic, retain) IBOutlet UIImageView *lineImage;
-@property (nonatomic, retain) IBOutlet UILabel *lblToHideLine;
+@property (nonatomic, weak) IBOutlet UIImageView *snapshotImage;
+@property (nonatomic, weak) IBOutlet UILabel *eventLabel;
+@property (nonatomic, weak) IBOutlet UILabel *eventTimeLabel;
+@property (nonatomic, weak) IBOutlet UIImageView *feedImageVideo;
+@property (nonatomic, weak) IBOutlet UIActivityIndicatorView *activityIndicatorLoading;
+@property (nonatomic, weak) IBOutlet UIImageView *lineImage;
+@property (nonatomic, weak) IBOutlet UILabel *lblToHideLine;
 
 @end

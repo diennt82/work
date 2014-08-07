@@ -10,6 +10,6 @@
 
 @interface SavedEventViewController : UITableViewController
 
-@property (nonatomic, retain) NSMutableArray *eventArray;
+@property (nonatomic, strong) NSMutableArray *eventArray;
 
 @end

@@ -10,12 +10,4 @@
 
 @implementation TimeLinePremiumCell
 
-- (void)dealloc
-{
-    [_titleLabel release];
-    [_subtitleLabel release];
-    [_timelineImage release];
-    [super dealloc];
-}
-
 @end

@@ -7,6 +7,7 @@
 //
 
 #import "Step_12_ViewController.h"
+#import "StartMonitorCallback.h"
 #import "KISSMetricsAPI.h"
 #import "define.h"
 #import "PublicDefine.h"
@@ -15,7 +16,7 @@
 
 @interface Step_12_ViewController()
 
-@property (retain, nonatomic) IBOutlet UIButton *btnWatchLiveCamera;
+@property (nonatomic, weak) IBOutlet UIButton *btnWatchLiveCamera;
 
 @end
 
@@ -44,20 +45,16 @@
     self.cameraName.text =  (NSString *) [userDefaults objectForKey:@"CameraName"];
     
     NSString *stringModel = @"";
-    
     NSInteger model = [[NSUserDefaults standardUserDefaults] integerForKey:SET_UP_CAMERA];
     
-    if (model == BLUETOOTH_SETUP)
-    {
+    if (model == BLUETOOTH_SETUP) {
         stringModel = @"Mbp83";
     }
-    else if(model == WIFI_SETUP)
-    {
+    else if(model == WIFI_SETUP) {
         stringModel = @"Focus66";
     }
     
     NSString *fwVersion = [[NSUserDefaults standardUserDefaults] stringForKey:FW_VERSION];
-    
     NSDictionary *info = [NSDictionary dictionaryWithObjectsAndKeys:
                           stringModel,   @"Camera model",
                           fwVersion,     @"FW",
@@ -76,8 +73,7 @@
     self.navigationItem.leftBarButtonItem.enabled = NO;
 }
 
-#pragma mark -
-#pragma mark Btn handling 
+#pragma mark - Btn handling 
 
 -(IBAction)startMonitor:(id)sender
 {
@@ -105,8 +101,4 @@
     [delegate startMonitorCallBack];
 }
 
-- (void)dealloc {
-    [_btnWatchLiveCamera release];
-    [super dealloc];
-}
 @end

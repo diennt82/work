@@ -15,24 +15,22 @@
 
 @interface SensitivityTemperatureCell()
 
-@property (nonatomic, retain) IBOutlet UIButton *btnTypeTemperature;
-@property (nonatomic, retain) IBOutlet UILabel *lblTempValueLeft;
-@property (nonatomic, retain) IBOutlet UILabel *lblTemperatureValueRight;
-@property (nonatomic, retain) IBOutlet UILabel *lblTypeTempLeft;
-@property (nonatomic, retain) IBOutlet UILabel *lblTypeTempRight;
+@property (nonatomic, weak) IBOutlet UIButton *btnTypeTemperature;
+@property (nonatomic, weak) IBOutlet UILabel *lblTempValueLeft;
+@property (nonatomic, weak) IBOutlet UILabel *lblTemperatureValueRight;
+@property (nonatomic, weak) IBOutlet UILabel *lblTypeTempLeft;
+@property (nonatomic, weak) IBOutlet UILabel *lblTypeTempRight;
+@property (nonatomic, weak) IBOutlet UIButton *btnSwitchLeft;
+@property (nonatomic, weak) IBOutlet UIButton *btnSwitchRight;
+@property (nonatomic, weak) IBOutlet UIButton *btnMinusLeft;
+@property (nonatomic, weak) IBOutlet UIButton *btnPlusLeft;
+@property (nonatomic, weak) IBOutlet UIButton *btnMinusRight;
+@property (nonatomic, weak) IBOutlet UIButton *btnPlusRight;
+@property (nonatomic, weak) IBOutlet UIImageView *imgViewLeft;
+@property (nonatomic, weak) IBOutlet UIImageView *imgViewRight;
 
-@property (nonatomic, retain) IBOutlet UIButton *btnSwitchLeft;
-@property (nonatomic, retain) IBOutlet UIButton *btnSwitchRight;
-@property (nonatomic, retain) IBOutlet UIButton *btnMinusLeft;
-@property (nonatomic, retain) IBOutlet UIButton *btnPlusLeft;
-@property (nonatomic, retain) IBOutlet UIButton *btnMinusRight;
-@property (nonatomic, retain) IBOutlet UIButton *btnPlusRight;
-
-@property (nonatomic, retain) IBOutlet UIImageView *imgViewLeft;
-@property (nonatomic, retain) IBOutlet UIImageView *imgViewRight;
-
-@property (nonatomic, retain) NSTimer *timerTempLowValueChanged;
-@property (nonatomic, retain) NSTimer *timerTempHighValueChanged;
+@property (nonatomic, strong) NSTimer *timerTempLowValueChanged;
+@property (nonatomic, strong) NSTimer *timerTempHighValueChanged;
 @property (nonatomic) BOOL isStopTouching;
 
 @end
@@ -322,19 +320,4 @@
     [_sensitivityTempCellDelegate valueChangedTempHighOn:_isSwitchOnRight];
 }
 
-- (void)dealloc
-{
-    [_btnTypeTemperature release];
-    [_lblTempValueLeft release];
-    [_lblTemperatureValueRight release];
-    [_lblTypeTempLeft release];
-    [_lblTypeTempRight release];
-    [_btnSwitchLeft release];
-    [_btnSwitchRight release];
-    [_btnMinusLeft release];
-    [_btnPlusLeft release];
-    [_btnMinusRight release];
-    [_btnPlusRight release];
-    [super dealloc];
-}
 @end

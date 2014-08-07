@@ -23,16 +23,9 @@
     imageViewLine.frame = CGRectMake(imageViewLine.frame.origin.x, y, imageViewLine.frame.size.width, self.bounds.size.height - y);
    // imageViewLine.center = CGPointMake(imageViewLine.center.x, imageViewLine.center.y + _eventDetailLabel.frame.size.height / 2);
     */
-    CGRect frm = self.eventLabel.frame;
+    CGRect frm = _eventLabel.frame;
     frm.size.width = SCREEN_WIDTH-20;
-    [self.eventLabel setFrame:frm];
-}
-
-- (void)dealloc
-{
-    [_eventLabel release];
-    [_eventDetailLabel release];
-    [super dealloc];
+    [_eventLabel setFrame:frm];
 }
 
 @end

@@ -22,10 +22,11 @@
 
 @interface Step_10_ViewController_ble ()
 
-@property (nonatomic, retain) UserAccount *userAccount;
+@property (nonatomic, weak) IBOutlet UIView *cameraAddedView;
 
-@property (nonatomic, retain) IBOutlet UIView *cameraAddedView;
-@property (nonatomic, assign) ScanForCamera *scanner;
+@property (nonatomic, strong) UserAccount *userAccount;
+@property (nonatomic, strong) ScanForCamera *scanner;
+
 @property (nonatomic) BOOL shouldStopScanning;
 @property (nonatomic) BOOL shouldRetrySilently;
 
@@ -94,14 +95,6 @@
     
     // 2 of 3. no need to schedule timer here
     [self waitForCameraToReboot:nil];
-}
-
-- (void)dealloc
-{
-    [_cameraMac release];
-    [_masterKey release];
-    [_userAccount release];
-    [super dealloc];
 }
 
 - (void)hubbleItemAction:(id)sender
@@ -232,7 +225,6 @@
                                                                                          hostSSID:hostSSID
                                                                                        hostRouter:nil
                                                                                         andApiKey:apiKey];
-    [jsonCommBlocked release];
     BOOL updateFailed = YES;
     
     if (responseDict) {
@@ -265,7 +257,6 @@
     // Load the next xib
     Step_12_ViewController *step12ViewController = [[Step_12_ViewController alloc] initWithNibName:@"Step_12_ViewController" bundle:nil];
     [self.navigationController pushViewController:step12ViewController animated:NO];
-    [step12ViewController release];
 }
 
 - (void)  setupFailed
@@ -274,10 +265,10 @@
 	// send a command to remove camera
 	//NSString *mac = [Util strip_colon_fr_mac:self.cameraMac];
 	
-    BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
+    BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
                                                                               Selector:@selector(removeCamSuccessWithResponse:)
                                                                           FailSelector:@selector(removeCamFailedWithError:)
-                                                                             ServerErr:@selector(removeCamFailedServerUnreachable)] autorelease];
+                                                                             ServerErr:@selector(removeCamFailedServerUnreachable)];
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [jsonComm deleteDeviceWithRegistrationId:_stringUDID
@@ -291,7 +282,6 @@
     step11ViewController = [[Step_11_ViewController alloc] initWithNibName:@"Step_11_ViewController" bundle:nil];
     step11ViewController.errorCode = self.errorCode;
     [self.navigationController pushViewController:step11ViewController animated:NO];
-    [step11ViewController release];
 }
 
 - (void)removeCamSuccessWithResponse:(NSDictionary *)responseData

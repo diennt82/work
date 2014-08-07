@@ -17,8 +17,8 @@
 @interface AudioOutStreamer : NSObject
 
 @property (nonatomic, strong) NSMutableData *pcmData;
-@property (nonatomic, retain) PCMPlayer * pcmPlayer;
-@property (nonatomic, assign) id<AudioOutStreamerDelegate> audioOutStreamerDelegate;
+@property (nonatomic, strong) PCMPlayer *pcmPlayer;
+@property (nonatomic, weak) id<AudioOutStreamerDelegate> audioOutStreamerDelegate;
 @property (nonatomic) NSInteger bufferLength;
 
 - (id)initWithDeviceIp:(NSString *)ip andPTTport:(int)port;

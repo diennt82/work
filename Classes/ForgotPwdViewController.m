@@ -11,7 +11,7 @@
 
 @interface ForgotPwdViewController ()
 
-@property (nonatomic, copy)  NSString *userEmail;
+@property (nonatomic, copy) NSString *userEmail;
 
 @end
 
@@ -92,7 +92,6 @@
         //NSString *strMsg = @"Please enter valid email.";
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:strMsg delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [alertView show];
-        [alertView release];
         return;
     }
     
@@ -102,10 +101,10 @@
     self.navigationItem.leftBarButtonItem.enabled = NO;
     self.navigationItem.rightBarButtonItem.enabled = NO;
     
-    BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
+    BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
                                                                              Selector:@selector(forgotSuccessWithResponse:)
                                                                          FailSelector:@selector(forgotFailedWithError:)
-                                                                            ServerErr:@selector(forgotFailedServerUnreachable)] autorelease];
+                                                                            ServerErr:@selector(forgotFailedServerUnreachable)];
     [jsonComm forgotPasswordWithLogin:_userEmail];
 }
 
@@ -138,7 +137,6 @@
                                     target:self
                                     action:@selector(handleLoginButton:)];
     self.navigationItem.rightBarButtonItem = loginButton;
-    [loginButton release];
 }
 
 - (void)forgotFailedWithError:(NSDictionary *)errorResponse
@@ -156,13 +154,12 @@
     
     NSString *ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
                                                       @"Ok", nil);
-    
 	//ERROR condition
-	[[[[UIAlertView alloc] initWithTitle:msg1
+	[[[UIAlertView alloc] initWithTitle:msg1
                                message:[NSString stringWithFormat:msg, [errorResponse objectForKey:@"message"]]
                               delegate:nil
                      cancelButtonTitle:ok
-                     otherButtonTitles:nil] autorelease] show];
+                     otherButtonTitles:nil] show];
 }
 
 - (void)forgotFailedServerUnreachable
@@ -188,7 +185,6 @@
 						  cancelButtonTitle:ok
 						  otherButtonTitles:nil];
 	[alert show];
-	[alert release];
 }
 
 @end

@@ -37,13 +37,15 @@ static KISSMetricsAPI *sharedAPI = nil;
 
 @interface KISSMetricsAPI() 
 
-@property (nonatomic, retain) NSMutableArray *sendQueue;
-@property (nonatomic, retain) NSTimer *timer;
-@property (nonatomic, retain) NSURLConnection *existingConnection;
-@property (nonatomic, retain) NSString *key;
-@property (nonatomic, retain) NSString *lastIdentity;
-@property (nonatomic, retain) NSDictionary *propsToSend;
-@property (nonatomic, readwrite) NSInteger failureStatus;
+@property (nonatomic, strong) NSMutableArray *sendQueue;
+@property (nonatomic, strong) NSTimer *timer;
+@property (nonatomic, strong) NSURLConnection *existingConnection;
+@property (nonatomic, strong) NSDictionary *propsToSend;
+
+@property (nonatomic, copy) NSString *key;
+@property (nonatomic, copy) NSString *lastIdentity;
+
+@property (nonatomic) NSInteger failureStatus;
 
 -(void) initializeAPIWithKey:(NSString *)apiKey;
 -(void) send;
@@ -208,6 +210,7 @@ static KISSMetricsAPI *sharedAPI = nil;
     return self;
 }
 
+/*
 - (id)retain {
     return self;
 }
@@ -223,7 +226,7 @@ static KISSMetricsAPI *sharedAPI = nil;
 - (id)autorelease {
     return self;
 }
-
+*/
 
 - (id)init
 {
@@ -323,7 +326,6 @@ static KISSMetricsAPI *sharedAPI = nil;
         
         self.existingConnection = [NSURLConnection connectionWithRequest:request delegate:self];
         [self.existingConnection start];
-        [request release];
         
         // If called from a background thread
         if(![NSThread isMainThread]){
@@ -398,10 +400,8 @@ static KISSMetricsAPI *sharedAPI = nil;
         if ([self.sendQueue count] > 1)
         {
             NSString *failedURL = [self.sendQueue objectAtIndex:0];
-            [failedURL retain];
             [self.sendQueue removeObjectAtIndex:0];
             [self.sendQueue addObject:failedURL];
-            [failedURL release];
         }
         [self archiveData];
         
@@ -554,8 +554,8 @@ static KISSMetricsAPI *sharedAPI = nil;
 //the NSString method doesn't work right, so..
 - (NSString *)urlEncode:(NSString *)prior
 {
-    NSString * after = (NSString *)CFURLCreateStringByAddingPercentEscapes( NULL,(CFStringRef)prior, NULL,(CFStringRef)@"!*'();:@&=+$,/?%#[]", kCFStringEncodingUTF8 );
-    return [after autorelease];
+    NSString * after = (NSString *)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes( NULL,(CFStringRef)prior, NULL,(CFStringRef)@"!*'();:@&=+$,/?%#[]", kCFStringEncodingUTF8 ));
+    return after;
     
 }
 
@@ -702,7 +702,7 @@ static KISSMetricsAPI *sharedAPI = nil;
     CFUUIDRef theUUID = CFUUIDCreate(NULL);
     CFStringRef string = CFUUIDCreateString(NULL, theUUID);
     CFRelease(theUUID);
-    self.lastIdentity = [(NSString *)string autorelease];
+    self.lastIdentity = (__bridge NSString *)string;
     if (![NSKeyedArchiver archiveRootObject:self.lastIdentity toFile:IDENTITY_PATH])
     {
         InfoLog(@"KISSMetricsAPI: WARNING - Unable to archive identity!!!");

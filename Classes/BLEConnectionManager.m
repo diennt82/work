@@ -52,22 +52,10 @@
     return self;
 }
 
-- (void)dealloc
-{
-    [_myPeripheral release];
-    _myPeripheral = nil;
-    [_cm release];
-    _cm = nil;
-    [_listBLEs release];
-    _listBLEs = nil;
-    [super dealloc];
-}
-
 #pragma mark - Public instance methods
 
 - (void)reinit
 {
-    [_cm release];
     _cm = [[CBCentralManager alloc] initWithDelegate:self queue:nil];
 }
 
@@ -99,7 +87,6 @@
 {
     [self.uartPeripheral didDisconnect];
     if (_cm) {
-        [_cm release];
         _cm = nil;
         _cm = [[CBCentralManager alloc] initWithDelegate:self queue:nil];
     }

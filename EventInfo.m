@@ -10,13 +10,4 @@
 
 @implementation EventInfo
 
-- (void)dealloc
-{
-    [_value release];
-    [_alertName release];
-    [_timeStamp release];
-    [_clipInfo release];
-    [super dealloc];
-}
-
 @end

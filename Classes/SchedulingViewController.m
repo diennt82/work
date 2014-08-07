@@ -14,8 +14,8 @@
     BOOL valueMap[25][8];
 }
 
-@property (nonatomic, retain) NSIndexPath *lastAccessed;
-@property (nonatomic, retain) NSArray *arrayDays;
+@property (nonatomic, strong) NSIndexPath *lastAccessed;
+@property (nonatomic, strong) NSArray *arrayDays;
 @property (nonatomic) NSInteger cellSize;
 @property (nonatomic) NSInteger cellSizeMax;
 
@@ -51,15 +51,6 @@
         self.cellSize = UIScreen.mainScreen.bounds.size.width / 8;
         self.cellSizeMax = UIScreen.mainScreen.bounds.size.width - _cellSize;
     }
-    
-//    for (int row = 0; row < 25; row++) {
-//        for (int col = 0; col < 8; col++) {
-//            if (row == col + 1) {
-//                //valueMap[row][col] = TRUE;
-//            }
-//            
-//        }
-//    }
     
     self.arrayDays = [NSArray arrayWithObjects:@"M", @"T", @"W", @"Th", @"F", @"S", @"Su", nil];
 }
@@ -267,14 +258,6 @@
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
 {
     return UIEdgeInsetsMake(0, 0, 0, 0);
-}
-
-#pragma mark -
-
-- (void)dealloc
-{
-    [_collectionViewMap release];
-    [super dealloc];
 }
 
 @end

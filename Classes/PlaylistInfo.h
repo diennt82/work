@@ -17,7 +17,7 @@
 @property (nonatomic, copy) NSString *alertType;
 @property (nonatomic, copy) NSString *alertVal;
 @property (nonatomic, copy) NSString *registrationID;
-@property (nonatomic, retain) UIImage *imgSnapshot;
+@property (nonatomic, strong) UIImage *imgSnapshot;
 
 - (NSDate *)getTimeCode;
 - (BOOL)isLastClip;

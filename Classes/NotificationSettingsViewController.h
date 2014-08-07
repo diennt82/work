@@ -11,6 +11,6 @@
 
 @interface NotificationSettingsViewController : UIViewController
 
-@property (nonatomic, assign) CamProfile *camProfile;
+@property (nonatomic, strong) CamProfile *camProfile;
 
 @end

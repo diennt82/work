@@ -10,7 +10,7 @@
 
 @interface TimelineCell : UITableViewCell
 
-@property (nonatomic, retain) IBOutlet UILabel *eventLabel;
-@property (nonatomic, retain) IBOutlet UILabel *eventDetailLabel;
+@property (nonatomic, weak) IBOutlet UILabel *eventLabel;
+@property (nonatomic, weak) IBOutlet UILabel *eventDetailLabel;
 
 @end

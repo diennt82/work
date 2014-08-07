@@ -16,8 +16,8 @@
 
 @interface EditCamera_VController : UIViewController <BLEConnectionManagerDelegate>
 
-@property (nonatomic, retain) NSTimer *timerTimeoutConnectBLE;
-@property (nonatomic, retain) UIAlertView *alertView;
+@property (nonatomic, strong) NSTimer *timerTimeoutConnectBLE;
+@property (nonatomic, strong) UIAlertView *alertView;
 @property (nonatomic, copy) NSString *cameraMac;
 @property (nonatomic, copy) NSString *cameraName;
 

@@ -20,14 +20,14 @@
 
 @interface LoginViewController ()  <UITextFieldDelegate, StunClientDelegate, UserAccountDelegate>
 
-@property (nonatomic, retain) IBOutlet UIView *viewProgress;
-@property (nonatomic, retain) IBOutlet UITextField *tfEmail;
-@property (nonatomic, retain) IBOutlet UITextField *tfPassword;
-@property (nonatomic, retain) IBOutlet UIButton *buttonEnter;
-@property (nonatomic, retain) IBOutlet UIImageView *imgViewLoading;
+@property (nonatomic, weak) IBOutlet UIView *viewProgress;
+@property (nonatomic, weak) IBOutlet UITextField *tfEmail;
+@property (nonatomic, weak) IBOutlet UITextField *tfPassword;
+@property (nonatomic, weak) IBOutlet UIButton *buttonEnter;
+@property (nonatomic, weak) IBOutlet UIImageView *imgViewLoading;
 
-@property (nonatomic, retain) StunClient *client;
-@property (nonatomic, assign) id<ConnectionMethodDelegate> delegate;
+@property (nonatomic, strong) StunClient *client;
+@property (nonatomic, weak) id<ConnectionMethodDelegate> delegate;
 @property (nonatomic, copy) NSString *stringUsername;
 @property (nonatomic, copy) NSString *stringUserEmail;
 @property (nonatomic, copy) NSString *stringPassword;
@@ -89,10 +89,10 @@
     
 #if !TARGET_IPHONE_SIMULATOR
     if ([self isConnectingToCameraNetwork]) {
-        NSString * msg = NSLocalizedStringWithDefaultValue(@"phone_is_connected_to_camera" ,nil, [NSBundle mainBundle],
+        NSString *msg = NSLocalizedStringWithDefaultValue(@"phone_is_connected_to_camera" ,nil, [NSBundle mainBundle],
                                                            @"You are connecting to a Camera network which does not have internet access.Please go to wifi settings and switch to another WIFI." ,nil);
         
-        NSString * ok = NSLocalizedStringWithDefaultValue(@"ok" ,nil, [NSBundle mainBundle],
+        NSString *ok = NSLocalizedStringWithDefaultValue(@"ok" ,nil, [NSBundle mainBundle],
                                                           @"OK", nil);
         
         //ERROR condition
@@ -104,8 +104,6 @@
                               otherButtonTitles: nil];
         alert.tag = 114;
         [alert show];
-        [alert release];
-        
     }
     else
 #endif
@@ -248,7 +246,6 @@
     ForgotPwdViewController *forgotPwdController = [[ForgotPwdViewController alloc] initWithNibName:@"ForgotPwdViewController" bundle:nil];
     
     [self.navigationController pushViewController:forgotPwdController animated:YES];
-    [forgotPwdController release];
 }
 
 - (IBAction)buttnEnterTouchUpInsideAction:(id)sender
@@ -277,7 +274,6 @@
     MBP_iosViewController *mainVC = (MBP_iosViewController *)[self.navigationController.viewControllers objectAtIndex:0];
     mainVC.app_stage = SETUP_CAMERA;
     
-    [registrationVC release];
 }
 
 #pragma mark - PJNATH Callbacks
@@ -334,7 +330,7 @@
         
         NSDictionary *responseDict = [jsonComm deleteAppBlockedWithAppId:appId
                                                                andApiKey:apiKey];
-        [jsonComm release];
+
         NSLog(@"logout --> delete app status = %d", [[responseDict objectForKey:@"status"] intValue]);
         
         [NSThread sleepForTimeInterval:0.10];
@@ -383,7 +379,6 @@
                               otherButtonTitles:yes,yes1, nil];
         alert.tag = 113;
         [alert show];
-        [alert release];
     }
     else {
         NSString *msg = NSLocalizedStringWithDefaultValue(@"Logging_in_to_server" ,nil, [NSBundle mainBundle],@"Logging in to server..." , nil);
@@ -436,10 +431,10 @@
 {
     self.navigationController.navigationBarHidden = YES;
     
-    BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
+    BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
                                                                               Selector:@selector(loginSuccessWithResponse:)
                                                                           FailSelector:@selector(loginFailedWithError:)
-                                                                             ServerErr:@selector(loginFailedServerUnreachable)] autorelease];
+                                                                             ServerErr:@selector(loginFailedServerUnreachable)];
     
     [jsonComm loginWithLogin:_stringUsername andPassword:_stringPassword];
     
@@ -676,7 +671,6 @@
                                   cancelButtonTitle:ok
                                   otherButtonTitles:nil];
             [alert show];
-            [alert release];
         }
     }
     else {
@@ -692,10 +686,10 @@
         NSLog(@"No Useremail, query for once now");
         
         // Get user info (email)
-        BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
+        BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
                                                                                   Selector:@selector(getUserInfoSuccessWithResponse:)
                                                                               FailSelector:@selector(getUserInfoFailedWithResponse:)
-                                                                                 ServerErr:@selector(getUserInfoFailedServerUnreachable)] autorelease];
+                                                                                 ServerErr:@selector(getUserInfoFailedServerUnreachable)];
         [jsonComm getUserInfoWithApiKey:apiKey];
     }
     
@@ -720,7 +714,6 @@
                                                      withValue:nil];
     //BLOCKED method
     [account readCameraListAndUpdate];
-    [account release];
     
     //[self dismissViewControllerAnimated:NO completion:^{}];
     
@@ -755,7 +748,6 @@
 						  cancelButtonTitle:ok
 						  otherButtonTitles:nil];
 	[alert show];
-	[alert release];
     
     [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Login failed - user: %@, error: %@", _stringUsername, msg] withProperties:nil];
     
@@ -794,7 +786,6 @@
 						  otherButtonTitles:yes, nil];
     alert.tag = 112;
 	[alert show];
-	[alert release];
     
     [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Login failed - user: %@, error: Server unreachable", _stringUsername] withProperties:nil];
     
@@ -825,33 +816,23 @@
                                                       @"OK", nil);
     
 	//ERROR condition
-	[[[[UIAlertView alloc] initWithTitle:title
+	[[[UIAlertView alloc] initWithTitle:title
                                  message:msg
                                 delegate:nil
                        cancelButtonTitle:ok
                        otherButtonTitles:nil]
-      autorelease]
      show];
 }
 
 - (void)getUserInfoFailedServerUnreachable
 {
-    [[[[UIAlertView alloc] initWithTitle:@"Server Unreachable"
+    [[[UIAlertView alloc] initWithTitle:@"Server Unreachable"
                                  message:@"Server Unreachable"
                                 delegate:nil
                        cancelButtonTitle:nil
                        otherButtonTitles:@"OK", nil]
-      autorelease]
      show];
 }
 
-- (void)dealloc
-{
-    [_viewProgress release];
-    [_tfEmail release];
-    [_tfPassword release];
-    [_buttonEnter release];
-    [super dealloc];
-}
 
 @end

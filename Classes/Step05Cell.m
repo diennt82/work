@@ -16,10 +16,4 @@
     imageViewBottomLine.frame = CGRectMake(0, rect.size.height - 0.5, rect.size.width, 0.5);
 }
 
-- (void)dealloc
-{
-    [_lblName release];
-    [super dealloc];
-}
-
 @end

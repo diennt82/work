@@ -34,16 +34,16 @@
 
 @interface Step_10_ViewController () <UIAlertViewDelegate>
 
-@property (nonatomic, retain) IBOutlet UIView * progressView;
-@property (nonatomic, retain) IBOutlet UIView *viewFwOtaUpgrading;
-@property (nonatomic, retain) IBOutlet UILabel *lblWordAddition;
-@property (nonatomic, retain) IBOutlet UIButton *btnCancel;
+@property (nonatomic, weak) IBOutlet UIView *progressView;
+@property (nonatomic, weak) IBOutlet UIView *viewFwOtaUpgrading;
+@property (nonatomic, weak) IBOutlet UILabel *lblWordAddition;
+@property (nonatomic, weak) IBOutlet UIButton *btnCancel;
 
-@property (nonatomic, retain) UserAccount *userAccount;
-@property (nonatomic, retain) BMS_JSON_Communication *jsonCommBlocked;
-@property (nonatomic, retain) NSString *statusMessage;
-@property (nonatomic, retain) UIProgressView *otaDummyProgressBar;
-@property (nonatomic, retain) NSTimer *timeOut;
+@property (nonatomic, strong) UserAccount *userAccount;
+@property (nonatomic, strong) BMS_JSON_Communication *jsonCommBlocked;
+@property (nonatomic, strong) NSString *statusMessage;
+@property (nonatomic, strong) UIProgressView *otaDummyProgressBar;
+@property (nonatomic, strong) NSTimer *timeOut;
 
 @property (nonatomic) BOOL forceSetupFailed;
 @property (nonatomic) BOOL shouldSendMasterKeyAgain;
@@ -129,22 +129,6 @@
     }
 }
 
-- (void)dealloc
-{
-    [_userAccount release];
-    [_cameraMac release];
-    [_master_key release];
-    [_ib_scollViewGuide release];
-    [_ib_viewGuild release];
-    [_ib_resumeSetup release];
-    [_jsonCommBlocked release];
-    
-    [_viewFwOtaUpgrading release];
-    [_btnCancel release];
-    [_lblWordAddition release];
-    [super dealloc];
-}
-
 #pragma mark - Public methods
 
 - (void) wait_for_camera_to_reboot:(NSTimer *)exp
@@ -158,23 +142,7 @@
     else {
         NSLog(@"Step_10VC - Continue scan...");
     }
-    
-    //    if ([self checkItOnline])
-    //    {
-    //        //Found it online
-    //        NSLog(@"Found it online");
-    //        [self setupCompleted];
-    //        return;
-    //    }
-    //    else
-    //    {
-    //        //retry scannning..
-    //        [NSTimer scheduledTimerWithTimeInterval: 0.01
-    //                                         target:self
-    //                                       selector:@selector(wait_for_camera_to_reboot:)
-    //                                       userInfo:nil
-    //                                        repeats:NO];
-    //    }
+
     [self checkCameraAvailableAndFWUpgrading];
 }
 
@@ -200,7 +168,6 @@
     NSLog(@"Load step 12");
     Step_12_ViewController *step12ViewController = [[Step_12_ViewController alloc] initWithNibName:@"Step_12_ViewController" bundle:nil];
     [self.navigationController pushViewController:step12ViewController animated:NO];
-    [step12ViewController release];
 }
 
 
@@ -214,17 +181,7 @@
                                                     withAction:[NSString stringWithFormat:@"Add camera failed:%@", _errorCode]
                                                      withLabel:nil
                                                      withValue:nil];
-    // Dont remove camera anymore as we don't add it,
-#if 0
-    BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
-                                                                              Selector:@selector(removeCamSuccessWithResponse:)
-                                                                          FailSelector:@selector(removeCamFailedWithError:)
-                                                                             ServerErr:@selector(removeCamFailedServerUnreachable)] autorelease];
-    
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [jsonComm deleteDeviceWithRegistrationId:_stringUDID
-                                   andApiKey:[userDefaults objectForKey:@"PortalApiKey"]];
-#endif
+    // Dont remove camera anymore as we don't add it
     if (_forceSetupFailed) {
         NSLog(@"%s restarting setup immediately", __FUNCTION__);
         
@@ -240,7 +197,6 @@
         Step_11_ViewController *step11ViewController = [[Step_11_ViewController alloc] initWithNibName:@"Step_11_ViewController" bundle:nil];
         step11ViewController.errorCode = self.errorCode;
         [self.navigationController pushViewController:step11ViewController animated:NO];
-        [step11ViewController release];
     }
 }
 
@@ -342,12 +298,11 @@
     
     NSMutableString *stringFromDate = [NSMutableString stringWithString:[formatter stringFromDate:now]];
     [stringFromDate insertString:@"." atIndex:3];
-    [formatter release];
     
-    BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
+    BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
                                                                               Selector:@selector(addCamSuccessWithResponse:)
                                                                           FailSelector:@selector(addCamFailedWithError:)
-                                                                             ServerErr:@selector(addCamFailedServerUnreachable)] autorelease];
+                                                                             ServerErr:@selector(addCamFailedServerUnreachable)];
     //NSString *mac = [Util strip_colon_fr_mac:self.cameraMac];
     NSString *camName = (NSString *) [userDefaults objectForKey:@"CameraName"];
     
@@ -383,7 +338,6 @@
     
     NSMutableString *stringFromDate = [NSMutableString stringWithString:[formatter stringFromDate:now]];
     [stringFromDate insertString:@"." atIndex:3];
-    [formatter release];
     
     if ( !_jsonCommBlocked ) {
         self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
@@ -749,7 +703,7 @@
         NSLog(@"Step_10VC - stop scanning now.. should be 4 mins");
         
         [self setupFailed];
-        return FALSE;
+        return NO;
     }
     
     NSLog(@"--> Try to search IP online...");
@@ -758,27 +712,24 @@
     NSString * userPass   = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
     NSString * userApiKey = (NSString *) [userDefaults objectForKey:@"PortalApiKey"];
     
-    if (_userAccount == nil)
-    {
+    if (_userAccount == nil) {
         self.userAccount = [[UserAccount alloc] initWithUser:userEmail
                                                     password:userPass
                                                       apiKey:userApiKey
                                              accountDelegate:nil];
     }
     
-    if ([_userAccount checkCameraIsAvailable:self.cameraMac])
-    {
+    if ([_userAccount checkCameraIsAvailable:self.cameraMac]) {
         self.errorCode = @"NoErr";
         NSLog(@"Found it online");
         [self setupCompleted];
-        return TRUE;
+        return YES;
     }
-    else
-    {
+    else {
         [self performSelector:@selector(checkCameraIsAvailable) withObject:nil afterDelay:0.001];
     }
     
-    return FALSE;
+    return NO;
 }
 
 - (BOOL)checkItOnline
@@ -795,24 +746,14 @@
                                                       apiKey:userApiKey
                                              accountDelegate:nil];
     }
-#if 1
+
     if ([_userAccount checkCameraIsAvailable:self.cameraMac]) {
         self.errorCode = @"NoErr";
-        return TRUE;
+        return YES;
     }
     
-#else
-    NSString *localIp = [_userAccount query_cam_ip_online:self.cameraMac];
-    
-    if ( localIp != nil ) {
-        NSLog(@"Found a local ip: %@", localIp);
-        [self setupCompleted];
-        return TRUE;
-    }
-#endif
-    
-    self.errorCode =@"NotAvail";
-    return FALSE;
+    self.errorCode = @"NotAvail";
+    return NO;
 }
 
 - (void)showDialogWithTag:(NSInteger)tag message: (NSString *)msg
@@ -837,7 +778,6 @@
                                   otherButtonTitles:nil];
             alert.tag = tag;
             [alert show];
-            [alert release];
             break;
         }
             
@@ -865,7 +805,6 @@
             alert.tag = ALERT_ADD_CAM_UNREACH;
             
             [alert show];
-            [alert release];
             break;
         }
             

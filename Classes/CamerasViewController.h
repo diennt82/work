@@ -11,8 +11,8 @@
 
 @interface CamerasViewController : UITableViewController
 
-@property (nonatomic, retain) NSMutableArray *camChannels;
-@property (nonatomic, assign) id parentVC;
+@property (nonatomic, strong) NSMutableArray *camChannels;
+@property (nonatomic, weak) id parentVC;
 @property (nonatomic) BOOL waitingForUpdateData;
 
 - (id)initWithDelegate:(id<ConnectionMethodDelegate>)delegate parentVC:(id)parentVC;

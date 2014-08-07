@@ -16,14 +16,13 @@
 
 @interface CreateBLEConnection_VController : UIViewController<BLEConnectionManagerDelegate, UITableViewDelegate, UITableViewDataSource>
 
-@property (retain, nonatomic) IBOutlet UIButton *ib_RefreshBLE;
+@property (nonatomic, weak) IBOutlet UIButton *ib_RefreshBLE;
+@property (nonatomic, weak) IBOutlet UIActivityIndicatorView *ib_Indicator;
+@property (nonatomic, weak) IBOutlet UITableView *ib_tableListBLE;
+@property (nonatomic, weak) IBOutlet UILabel *ib_lableStage;
+@property (nonatomic, weak) IBOutlet UIView *inProgress;
 
-@property (retain, nonatomic) IBOutlet UIActivityIndicatorView *ib_Indicator;
-@property (retain, nonatomic) IBOutlet UITableView *ib_tableListBLE;
-@property (retain, nonatomic) IBOutlet UILabel *ib_lableStage;
-@property (nonatomic, retain) IBOutlet UIView * inProgress;
-
-@property (nonatomic, retain) NSMutableArray *currentBLEList;
+@property (nonatomic, strong) NSMutableArray *currentBLEList;
 @property (nonatomic, copy) NSString *cameraMac;
 @property (nonatomic, copy) NSString *cameraName;
 @property (nonatomic, copy) NSString *homeWifiSSID;

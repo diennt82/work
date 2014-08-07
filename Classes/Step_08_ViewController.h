@@ -12,9 +12,9 @@
 
 @interface Step_08_ViewController : UIViewController
 
-@property (nonatomic, retain) IBOutlet UILabel *ssidView;
-@property (nonatomic, retain) IBOutlet UILabel *ssidView_1;
-@property (nonatomic, retain) IBOutlet UIButton *createAccount;
+@property (nonatomic, weak) IBOutlet UILabel *ssidView;
+@property (nonatomic, weak) IBOutlet UILabel *ssidView_1;
+@property (nonatomic, weak) IBOutlet UIButton *createAccount;
 
 - (IBAction)handleButtonPress:(id)sender;
 

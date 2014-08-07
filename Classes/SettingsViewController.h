@@ -10,6 +10,6 @@
 
 @interface SettingsViewController : UITableViewController
 
-@property (nonatomic, assign) id parentVC;
+@property (nonatomic, weak) id parentVC;
 
 @end

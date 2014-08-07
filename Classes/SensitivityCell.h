@@ -17,10 +17,10 @@
 
 @interface SensitivityCell : UITableViewCell
 
-@property (nonatomic, retain) IBOutlet UISwitch *valueSwitch;
-@property (nonatomic, retain) IBOutlet UILabel *nameLabel;
+@property (nonatomic, weak) IBOutlet UISwitch *valueSwitch;
+@property (nonatomic, weak) IBOutlet UILabel *nameLabel;
 
-@property (nonatomic, assign) id<SensitivityCellDelegate> sensitivityCellDelegate;
+@property (nonatomic, weak) id<SensitivityCellDelegate> sensitivityCellDelegate;
 @property (nonatomic) NSInteger rowIndex;
 @property (nonatomic) NSInteger settingsValue;
 @property (nonatomic) BOOL switchValue;

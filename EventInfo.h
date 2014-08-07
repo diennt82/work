@@ -11,7 +11,7 @@
 
 @interface EventInfo : NSObject
 
-@property (nonatomic, retain) ClipInfo *clipInfo;
+@property (nonatomic, strong) ClipInfo *clipInfo;
 @property (nonatomic, copy) NSString *value;//: "20131231112818000",
 @property (nonatomic, copy) NSString *alertName;//: "motion detected",
 @property (nonatomic, copy) NSString *timeStamp;//: "2013-12-31T04:30:15Z",

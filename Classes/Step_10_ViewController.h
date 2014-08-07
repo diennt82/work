@@ -29,11 +29,11 @@
 
 @interface Step_10_ViewController : GAITrackedViewController
 
-@property (nonatomic, retain) IBOutlet UIView *ib_viewGuild;
-@property (nonatomic, retain) IBOutlet UIScrollView *ib_scollViewGuide;
-@property (nonatomic, retain) IBOutlet UIButton *ib_resumeSetup;
+@property (nonatomic, weak) IBOutlet UIView *ib_viewGuild;
+@property (nonatomic, weak) IBOutlet UIScrollView *ib_scollViewGuide;
+@property (nonatomic, weak) IBOutlet UIButton *ib_resumeSetup;
 
-@property (nonatomic, assign)  id<ConnectionMethodDelegate> delegate;
+@property (nonatomic, weak)  id<ConnectionMethodDelegate> delegate;
 
 @property (nonatomic, copy) NSString *cameraMac;
 @property (nonatomic, copy) NSString *master_key;

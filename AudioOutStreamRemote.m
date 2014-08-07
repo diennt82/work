@@ -10,11 +10,11 @@
 
 @interface AudioOutStreamRemote()
 
-@property (nonatomic, retain) NSFileManager *fileManager;
-@property (nonatomic, retain) NSFileHandle *fileHandle;
-@property (nonatomic, retain) NSString *sentPath;
-@property (nonatomic, retain) NSTimer *timerVoiceData;
-@property (nonatomic, retain) AsyncSocket *sendingSocket;
+@property (nonatomic, strong) NSFileManager *fileManager;
+@property (nonatomic, strong) NSFileHandle *fileHandle;
+@property (nonatomic, strong) NSTimer *timerVoiceData;
+@property (nonatomic, strong) AsyncSocket *sendingSocket;
+@property (nonatomic, copy) NSString *sentPath;
 
 @property (nonatomic) BOOL hasStartRecordingSound;
 
@@ -39,15 +39,6 @@
     }
     
     return self;
-}
-
-- (void)dealloc
-{
-    [_pcmPlayer release];
-    [_fileManager release];
-    [_fileHandle release];
-    [_sendingSocket release];
-    [super dealloc];
 }
 
 - (void)startRecordingSound
@@ -86,7 +77,6 @@
             [_sendingSocket disconnect];
         }
         
-        [_sendingSocket release];
         _sendingSocket = nil;
     }
     
@@ -162,7 +152,6 @@
                           cancelButtonTitle:@"OK"
                           otherButtonTitles:nil];
     [alert show];
-    [alert release];
 }
 
 - (void)onSocketDidDisconnect:(AsyncSocket *)sock
@@ -213,7 +202,6 @@
                                               cancelButtonTitle:@"OK"
                                               otherButtonTitles:nil];
         [alert show];
-        [alert release];
     }
     
     [_audioOutStreamRemoteDelegate reportHandshakeFaild:!_isHandshakeSuccess];
@@ -236,7 +224,6 @@
     
     if ( _bufferLength == 0 ) {
         [_pcmPlayer.recorder.inMemoryAudioFile flush];
-        [_pcmPlayer release];
         self.pcmPlayer = nil;
         
         
@@ -251,12 +238,10 @@
                 [_sendingSocket disconnect];
             }
             
-            [_sendingSocket release];
             self.sendingSocket = nil;
         }
         
         if ( _pcmData ) {
-            [_pcmData release];
             _pcmData = nil;
         }
         
@@ -292,7 +277,6 @@
         [timer invalidate];
         
         [_pcmPlayer.recorder.inMemoryAudioFile flush];
-        [_pcmPlayer release];
         self.pcmPlayer = nil;
         
         if ( _timerVoiceData ) {
@@ -306,12 +290,10 @@
                 [_sendingSocket disconnect];
             }
             
-            [_sendingSocket release];
             self.sendingSocket = nil;
         }
         
         if( _pcmData ) {
-            [_pcmData release];
             self.pcmData = nil;
         }
         

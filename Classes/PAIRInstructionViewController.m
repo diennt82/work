@@ -11,7 +11,7 @@
 
 @interface PAIRInstructionViewController ()
 
-@property (nonatomic, retain) IBOutlet UIButton *btnSearchCamera;
+@property (nonatomic, weak) IBOutlet UIButton *btnSearchCamera;
 
 @end
 
@@ -47,18 +47,11 @@
     //Load the next xib
     CreateBLEConnection_VController *step03ViewController = [[CreateBLEConnection_VController alloc] initWithNibName:@"CreateBLEConnection_VController" bundle:nil];
     [self.navigationController pushViewController:step03ViewController animated:NO];
-    [step03ViewController release];
 }
 
 - (void)hubbleItemAction: (id)sender
 {
     [self.navigationController popViewControllerAnimated:YES];
-}
-
-- (void)dealloc
-{
-    [_btnSearchCamera release];
-    [super dealloc];
 }
 
 @end

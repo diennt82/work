@@ -28,8 +28,8 @@ typedef enum {
 
 @interface UICircularSlider : UIControl
 
-@property(nonatomic, retain) UITextField *textField;
-@property(nonatomic, retain) UITextField *minuteTField;
+@property (nonatomic, strong) UITextField *textField;
+@property (nonatomic, strong) UITextField *minuteTField;
 
 /**
  * The current value of the receiver.
@@ -58,22 +58,22 @@ typedef enum {
 /**
  * The color shown for the portion of the slider that is filled.
  */
-@property(nonatomic, retain) UIColor *minimumTrackTintColor;
+@property (nonatomic, strong) UIColor *minimumTrackTintColor;
 
 /**
  * The color shown for the portion of the slider that is not filled.
  */
-@property(nonatomic, retain) UIColor *maximumTrackTintColor;
+@property (nonatomic, strong) UIColor *maximumTrackTintColor;
 
 /**
  * The color used to tint the standard thumb.
  */
-@property(nonatomic, retain) UIColor *thumbTintColor;
+@property (nonatomic, strong) UIColor *thumbTintColor;
 
 /**
  * The color used to tint the standard thumb.
  */
-@property(nonatomic, retain) NSTimer *timer;
+@property (nonatomic, strong) NSTimer *timer;
 
 /**
  * Contains a Boolean value indicating whether changes in the sliders value generate continuous update events.
@@ -82,7 +82,7 @@ typedef enum {
  * If NO, the slider only sends an action event when the user releases the slider’s thumb control to set the final value.
  * The default value of this property is YES.
  */
-@property(nonatomic, getter=isContinuous) BOOL continuous;
+@property (nonatomic, getter=isContinuous) BOOL continuous;
 
 /**
  * The current graphical style of the receiver.

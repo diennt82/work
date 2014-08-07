@@ -19,7 +19,7 @@
 
 @interface AccountViewController () <MFMailComposeViewControllerDelegate, UIAlertViewDelegate>
 
-@property (nonatomic, retain) IBOutlet UITableViewCell *tableViewCellChangePassword;
+@property (nonatomic, strong) IBOutlet UITableViewCell *tableViewCellChangePassword;
 @property (nonatomic, copy) NSString *strNewChangedPass;
 @property (nonatomic) NSInteger screenWidth;
 
@@ -32,11 +32,20 @@
 
 #pragma mark - UIViewController methods
 
+- (id)init
+{
+    self = [super init];
+    if (self) {
+        // Set title here and not in viewDidLoad otherwise problem occurs in a tabbedViewController parent.
+        self.title = LocStr(@"Account_");
+    }
+    return self;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
-    self.title = LocStr(@"Account_");
     self.screenWidth = [UIScreen mainScreen].bounds.size.width;
     UILabel *lblVersion = (UILabel *)[self.view viewWithTag:559];
     
@@ -47,7 +56,6 @@
                                                                     target:self
                                                                     action:@selector(confirmUserLogout)];
     self.navigationItem.rightBarButtonItem = logoutButton;
-    [logoutButton release];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -61,12 +69,6 @@
         // iOS 7+
         self.navigationItem.rightBarButtonItem.tintColor = [UIApplication sharedApplication].keyWindow.tintColor;
     }
-}
-
-- (void)dealloc
-{
-    [_tableViewCellChangePassword release];
-    [super dealloc];
 }
 
 #pragma mark - Private methods
@@ -103,7 +105,6 @@
                                           otherButtonTitles:LocStr(@"OK"), nil];
     alert.tag = LOGOUT_DIALOG_TAG;
     [alert show];
-    [alert release];
 }
 
 - (void)userLogout
@@ -159,9 +160,6 @@
         
         // Show email view
         [self presentViewController:picker animated:YES completion:NULL];
-        
-        // Release picker
-        [picker release];
     }
     else {
         NSLog(@"%s Can not send Email from this device", __FUNCTION__);
@@ -232,7 +230,7 @@
         }
     }
     
-    UIView *lineView = [[[UIView alloc] initWithFrame:CGRectMake(0, cell.contentView.frame.size.height - 0.5f, _screenWidth, 0.5f)] autorelease];
+    UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0, cell.contentView.frame.size.height - 0.5f, _screenWidth, 0.5f)];
     if (indexPath.row == 2 || indexPath.section == 2) {
         cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:17];
         cell.textLabel.textColor = [UIColor colorWithRed:(128/255.f) green:(128/255.f) blue:(128/255.f) alpha:1];
@@ -262,7 +260,7 @@
             static NSString *CellIdentifier = @"Cell";
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
             if (cell == nil) {
-                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
             }
             
             cell.textLabel.text = @"Logout";
@@ -304,7 +302,7 @@
         static NSString *CellIdentifier = @"Cell";
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         if (cell == nil) {
-            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         }
         
         cell.textLabel.text = @"Send app log";
@@ -367,12 +365,10 @@
     
     [alert setButtonTitles:[NSMutableArray arrayWithObjects:@"Cancel", @"OK", nil]];
     
-    [alert setOnButtonTouchUpInside:^(CustomIOS7AlertView *alertView, int buttonIndex)
-    {
+    [alert setOnButtonTouchUpInside:^(CustomIOS7AlertView *alertView, int buttonIndex) {
         [alertView close];
         
-        if(buttonIndex==1)
-        {
+        if( buttonIndex==1 ) {
             NSString *password = tfNewPass.text;
             NSString *passwordConfrm = tfConfPass.text;
             NSString *oldPass = tfOldPass.text;
@@ -381,97 +377,81 @@
                 (passwordConfrm && passwordConfrm.length > 0) &&
                 (oldPass && oldPass.length > 0) &&
                 [password isEqualToString:passwordConfrm])
-                
             {
                 self.strNewChangedPass = password;
-                //[self doChangePassword:password];
                 [self checkOldPass:oldPass NewPass:password];
             }
-            else
-            {
-                if(tfOldPass.text.length == 0)
-                {
+            else {
+                if (tfOldPass.text.length == 0) {
                     NSDictionary *dictError = [NSDictionary dictionaryWithObjectsAndKeys:@"Please enter correct  old password", @"message", nil];
                     [self changePasswordFialedWithError:dictError];
                 }
-                else
-                {
+                else {
                     NSDictionary *dictError = [NSDictionary dictionaryWithObjectsAndKeys:@"Validation failed: Password is not match or empty", @"message", nil];
                     [self changePasswordFialedWithError:dictError];
                 }
             }
         }
-        [tfOldPass release];
-        [tfNewPass release];
-        [tfConfPass release];
-        [alertView release];
     }];
+    
     [alert show];
 }
 
-
-
--(void)checkOldPass:(NSString *)strOldPass NewPass:(NSString *)strNewPass
+- (void)checkOldPass:(NSString *)strOldPass NewPass:(NSString *)strNewPass
 {
-    BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
+    BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
                                                                               Selector:@selector(loginSuccessWithResponse:)
                                                                           FailSelector:@selector(loginFailedWithError:)
-                                                                             ServerErr:@selector(loginFailedServerUnreachable)] autorelease];
-    
+                                                                             ServerErr:@selector(loginFailedServerUnreachable)];
     
     NSString *strUserId = [[NSUserDefaults standardUserDefaults] objectForKey:@"PortalUsername"];
     [jsonComm loginWithLogin:strUserId andPassword:strOldPass];
-    
 }
 
 #pragma mark Login Callbacks
-- (void) loginSuccessWithResponse:(NSDictionary *)responseDict
+- (void)loginSuccessWithResponse:(NSDictionary *)responseDict
 {
    	if (responseDict) {
         NSInteger statusCode = [[responseDict objectForKey:@"status"] intValue];
         
-        if (statusCode == 200) // success
-        {
+        if (statusCode == 200) {
+            // success
             NSString *apiKey = [[responseDict objectForKey:@"data"] objectForKey:@"authentication_token"];
             [[NSUserDefaults standardUserDefaults] setObject:apiKey forKey:@"PortalApiKey"];
             [[NSUserDefaults standardUserDefaults] synchronize];
             [self doChangePassword:self.strNewChangedPass];
-            
         }
-        else
-        {
+        else {
             NSLog(@"Invalid response: %@", responseDict);
             
-            [[[[UIAlertView alloc] initWithTitle:@"Change Password Failed"
+            [[[UIAlertView alloc] initWithTitle:@"Change Password Failed"
                                          message:@"Enter correct old password."
                                         delegate:nil
                                cancelButtonTitle:nil
-                               otherButtonTitles:@"OK", nil] autorelease] show];
+                               otherButtonTitles:@"OK", nil] show];
         }
     }
-    else
-    {
+    else {
         NSLog(@"Error - loginSuccessWithResponse: reponseDict = nil");
     }
 }
 
-- (void) loginFailedWithError:(NSDictionary *) responseError
+- (void)loginFailedWithError:(NSDictionary *)responseError
 {
-    
-    [[[[UIAlertView alloc] initWithTitle:@"Change Password Failed"
+    [[[UIAlertView alloc] initWithTitle:@"Change Password Failed"
                                  message:@"Enter correct old password."
                                 delegate:nil
                        cancelButtonTitle:nil
-                       otherButtonTitles:@"OK", nil] autorelease] show];
+                       otherButtonTitles:@"OK", nil] show];
 }
 
 - (void)loginFailedServerUnreachable
 {
-    [[[[UIAlertView alloc] initWithTitle:@"Failed: Server is unreachable"
+    [[[UIAlertView alloc] initWithTitle:@"Failed: Server is unreachable"
                                  message:nil
                                 delegate:nil
                        cancelButtonTitle:nil
-                       otherButtonTitles:@"OK", nil] autorelease] show];
+                       otherButtonTitles:@"OK", nil] show];
     
 }
 
@@ -479,10 +459,10 @@
 {
     NSString *apiKey = [[NSUserDefaults standardUserDefaults] stringForKey:@"PortalApiKey"];
     
-    BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
+    BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
                                                                               Selector:@selector(changePasswordSuccessWithResponse:)
                                                                           FailSelector:@selector(changePasswordFialedWithError:)
-                                                                             ServerErr:@selector(changePasswordFailedServerUnreachable)] autorelease];
+                                                                             ServerErr:@selector(changePasswordFailedServerUnreachable)];
     [jsonComm changePasswordWithNewPassword:newPassword andPasswordConfirm:newPassword andApiKey:apiKey];
 }
 
@@ -494,30 +474,29 @@
     [userDefaults setObject:self.strNewChangedPass forKey:@"PortalPassword"];
     [userDefaults synchronize];
     
-    [[[[UIAlertView alloc] initWithTitle:@"Change Password"
+    [[[UIAlertView alloc] initWithTitle:@"Change Password"
                                  message:@"Successful"
                                 delegate:nil
                        cancelButtonTitle:nil
-                       otherButtonTitles:@"OK", nil] autorelease] show];
-    
+                       otherButtonTitles:@"OK", nil] show];
 }
 
 - (void)changePasswordFialedWithError:(NSDictionary *)error_response
 {
-    [[[[UIAlertView alloc] initWithTitle:@"Change Password Failed"
+    [[[UIAlertView alloc] initWithTitle:@"Change Password Failed"
                                  message:[error_response objectForKey:@"message"]
                                 delegate:nil
                        cancelButtonTitle:nil
-                       otherButtonTitles:@"OK", nil] autorelease] show];
+                       otherButtonTitles:@"OK", nil] show];
 }
 
 - (void)changePasswordFailedServerUnreachable
 {
-    [[[[UIAlertView alloc] initWithTitle:@"Failed: Server is unreachable"
+    [[[UIAlertView alloc] initWithTitle:@"Failed: Server is unreachable"
                                  message:nil
                                 delegate:nil
                        cancelButtonTitle:nil
-                       otherButtonTitles:@"OK", nil] autorelease] show];
+                       otherButtonTitles:@"OK", nil] show];
 }
 
 #pragma mark - UIAlert view delegate

@@ -15,9 +15,9 @@
 
 @interface EarlierViewController () <MHTabBarControllerDelegate>
 
-@property (nonatomic, retain) UIControl *backCover;
-@property (nonatomic, assign) MHTabBarController *tabBarController;
-@property (nonatomic, assign) UIViewController *parentVC;
+@property (nonatomic, strong) UIControl *backCover;
+@property (nonatomic, strong) MHTabBarController *tabBarController;
+@property (nonatomic, weak) UIViewController *parentVC;
 @property (nonatomic) BOOL isDidLoad;
 
 @end
@@ -71,8 +71,6 @@
         [savedViewController setTitle:@"Saved"];
         viewControllers = @[_timelineVC, savedViewController];
     }
-
-    [_timelineVC release];
     
     _tabBarController = [[MHTabBarController alloc] init];
 	_tabBarController.delegate = self;
@@ -113,7 +111,6 @@
         [_backCover addTarget:self action:@selector(goBackToHubble:) forControlEvents:UIControlEventTouchUpInside];
         UINavigationBar *navBar = self.navigationController.navigationBar;
         [navBar addSubview:_backCover];
-        [_backCover release];
     }
 }
 
@@ -122,21 +119,10 @@
     return NO;
 }
 
-- (void)dealloc
-{
-    NSLog(@"%s retain:%d", __FUNCTION__, self.retainCount);
-    [_timelineVC release];
-    [_tabBarController release];
-    [_backCover release];
-    [super dealloc];
-}
-
 #pragma mark - Private Methods
 
 - (void)goBackToHubble:(id)sender
 {
-    NSLog(@"%s retain:%d", __FUNCTION__, self.retainCount);
-    
     if (_tabBarController) {
         _tabBarController.delegate = nil;
     }

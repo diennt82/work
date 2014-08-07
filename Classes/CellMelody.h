@@ -10,7 +10,7 @@
 
 @interface CellMelody : UITableViewCell
 
-@property (nonatomic, retain) IBOutlet UIImageView *imageCellMelody;
-@property (nonatomic, retain) IBOutlet UILabel *labelCellMelody;
+@property (nonatomic, weak) IBOutlet UIImageView *imageCellMelody;
+@property (nonatomic, weak) IBOutlet UILabel *labelCellMelody;
 
 @end

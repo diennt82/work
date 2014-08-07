@@ -10,13 +10,4 @@
 
 @implementation PlaylistCell
 
-- (void)dealloc
-{
-    [_imgViewSnapshot release];
-    [_labelTitle release];
-    [_labelDate release];
-    [_activityIndicator release];
-    [super dealloc];
-}
-
 @end

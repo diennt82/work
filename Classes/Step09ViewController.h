@@ -11,6 +11,6 @@
 
 @interface Step09ViewController : UIViewController
 
-@property (nonatomic, assign)  id<ConnectionMethodDelegate> delegate;
+@property (nonatomic, weak)  id<ConnectionMethodDelegate> delegate;
 
 @end

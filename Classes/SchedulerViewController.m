@@ -14,8 +14,8 @@
     BOOL selectedImageCell[25][8];
 }
 
-@property (nonatomic, retain) UIImage *image;
-@property (nonatomic, retain) NSArray *dayArray;
+@property (nonatomic, strong) UIImage *image;
+@property (nonatomic, strong) NSArray *dayArray;
 @property (nonatomic) NSInteger imageCellWidth;
 
 @end
@@ -105,7 +105,7 @@
     static NSString *CellIdentifier = @"Cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
     
     for (int i = 0; i < _numberOfColumn; i++) {

@@ -512,7 +512,6 @@ int finalAngle;
     [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
     
     //[[NSNotificationCenter defaultCenter] postNotificationName:@"reloadData" object:self];
-    [localNotification release];
 }
 
 - (void)tapGestureHappened:(UITapGestureRecognizer *)tapGestureRecognizer

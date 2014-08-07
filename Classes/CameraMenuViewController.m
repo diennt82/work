@@ -41,20 +41,20 @@
 
 @interface CameraMenuViewController () <UITableViewDataSource, UITableViewDelegate,SensitivityCellDelegate,SensitivityTemperaureCellDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 
-@property (nonatomic, retain) IBOutlet UITableView *tableViewSettings;
-@property (nonatomic, retain) IBOutlet UIButton *btnRmoveCamera;
-@property (nonatomic, retain) IBOutlet UIView *viewProgress;
-@property (nonatomic, retain) IBOutlet UIView *vwHeaderCamDetail,*vwHeaderNotSens;
+@property (nonatomic, weak) IBOutlet UITableView *tableViewSettings;
+@property (nonatomic, weak) IBOutlet UIButton *btnRmoveCamera;
+@property (nonatomic, weak) IBOutlet UIView *viewProgress;
+@property (nonatomic, weak) IBOutlet UIView *vwHeaderCamDetail,*vwHeaderNotSens;
 
-@property (nonatomic, assign) IBOutlet UIView *vwSnapshot;
-@property (nonatomic, assign) IBOutlet UIImageView *imgVSnapshot;
-@property (nonatomic, assign) IBOutlet UIButton *btnSnapshotRefresh,*btnSnapshotOK;
+@property (nonatomic, weak) IBOutlet UIView *vwSnapshot;
+@property (nonatomic, weak) IBOutlet UIImageView *imgVSnapshot;
+@property (nonatomic, weak) IBOutlet UIButton *btnSnapshotRefresh,*btnSnapshotOK;
 
-@property (nonatomic, retain) UIImage *imageSelected;
-@property (nonatomic, retain) UIAlertView *alertViewRename;
+@property (nonatomic, strong) UIImage *imageSelected;
+@property (nonatomic, strong) UIAlertView *alertViewRename;
 
-@property (nonatomic, retain) SensitivityInfo *sensitivityInfo;
-@property (nonatomic, retain) BMS_JSON_Communication *jsonComm;
+@property (nonatomic, strong) SensitivityInfo *sensitivityInfo;
+@property (nonatomic, strong) BMS_JSON_Communication *jsonComm;
 
 @property (nonatomic, copy) NSString *selectedReg;
 @property (nonatomic, copy) NSString *sensitivityMessage;
@@ -93,12 +93,6 @@
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     self.apiKey = [userDefaults stringForKey:@"PortalApiKey"];
     
-//    if (![self.camChannel.profile isNotAvailable])
-//    {
-//        self.isLoading = TRUE;
-//        [self performSelectorInBackground:@selector(updateFWVersion_bg) withObject:nil];
-//    }
-    
     self.tableViewSettings.backgroundColor = [UIColor colorWithRed:249/255.0 green:249/255.0 blue:249/255.0 alpha:1];
     
     UIImageView *imgView = (UIImageView*)[self.vwHeaderNotSens viewWithTag:500];
@@ -115,7 +109,6 @@
                                                                                      target:self
                                                                                      action:@selector(removeCameraAction:)];
     self.navigationItem.rightBarButtonItem = removeCamButton;
-    [removeCamButton release];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -123,16 +116,6 @@
     [super viewWillAppear:animated];
     self.navigationController.navigationBarHidden = NO;
     [self.navigationController.view setUserInteractionEnabled:YES];
-}
-
-- (void)dealloc
-{
-    [_tableViewSettings release];
-    [_btnRmoveCamera release];
-    [_viewProgress release];
-    [_alertViewRename release];
-    [_imageSelected release];
-    [super dealloc];
 }
 
 #pragma mark - Action methods
@@ -212,7 +195,6 @@
                                               otherButtonTitles:ok, nil];
         alert.tag = tag;
         [alert show];
-        [alert release];
     }
 }
 
@@ -283,32 +265,10 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-/*
-    // Return the number of rows in the section.
-#if ENABLE_CHANGE_IMAGE
-    return 3;
-#else
-    return 2;
-#endif
-*/
-   
-    /*if(intTableSectionStatus==0)
-    {
-        return 0;
-    }
-    else{
-        if(section==0 && intTableSectionStatus==1){
-            return 1;
-        }
-        else if(section==1 && intTableSectionStatus==2){
-            return 3;
-        }
-    }*/
-    
-    if(section==0){
+    if ( section==0 ) {
         return 1;
     }
-    else if(section==1){
+    else if ( section==1 ) {
         return 3;
     }
     return 0;
@@ -332,14 +292,6 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-   /* if (self.camChannel.profile.name.length > 10 &&
-        indexPath.row == 0)
-    {
-        return 66;
-    }
-    
-    return 45;*/
-    
     if ( _intTableSectionStatus == 0 ) {
         return 0;
     }
@@ -359,185 +311,6 @@
 
     return 0;
 }
-
-/*- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    cell.backgroundColor = [UIColor colorWithRed:249/255.0 green:249/255.0 blue:249/255.0 alpha:1];
-}*/
-
-/*
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-#if ENABLE_CHANGE_IMAGE
-    if (indexPath.row == 0 ||
-        indexPath.row == 2)
-    {
-        static NSString *CellIdentifier = @"CameraSettingsCell";
-        CameraSettingsCell *cell = [self.tableViewSettings dequeueReusableCellWithIdentifier:CellIdentifier];
-        
-        NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"CameraSettingsCell" owner:nil options:nil];
-        
-        for (id curObj in objects)
-        {
-            
-            if([curObj isKindOfClass:[UITableViewCell class]])
-            {
-                cell = (CameraSettingsCell *)curObj;
-                break;
-            }
-        }
-        
-        if (indexPath.row == 0)
-        {
-            if (self.camChannel.profile.name.length > 10)
-            {
-                cell.valueLabel.frame = CGRectMake(cell.valueLabel.frame.origin.x, cell.valueLabel.frame.origin.y, cell.valueLabel.frame.size.width, cell.valueLabel.frame.size.height * 2);
-                cell.nameLabel.frame = CGRectMake(cell.nameLabel.frame.origin.x, cell.valueLabel.center.y - cell.nameLabel.frame.size.height / 2, cell.nameLabel.frame.size.width, cell.nameLabel.frame.size.height);
-            }
-            
-            cell.nameLabel.text = @"Name";
-            cell.valueLabel.text = self.camChannel.profile.name;
-        }
-        else
-        {
-            cell.nameLabel.text = _stringFW_Version;
-            cell.valueLabel.text = self.camChannel.profile.fw_version;
-        }
-        
-        return cell;
-    }
-    else // indexPath.row == 1
-    {
-        static NSString *CellIdentifier = @"Cell";
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        if (cell == nil) {
-            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-        }
-        
-        // Configure the cell...
-        cell.textLabel.text = @"Change Image";
-        cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:17];
-        cell.textLabel.textColor = [UIColor colorWithRed:128/255.0 green:128/255.0 blue:128/255.0 alpha:1];
-        
-        return cell;
-    }
-#else
-    if (indexPath.row == 0 ||
-        indexPath.row == 1)
-    {
-        static NSString *CellIdentifier = @"CameraSettingsCell";
-        CameraSettingsCell *cell = [self.tableViewSettings dequeueReusableCellWithIdentifier:CellIdentifier];
-        
-        NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"CameraSettingsCell" owner:nil options:nil];
-        
-        for (id curObj in objects)
-        {
-            
-            if([curObj isKindOfClass:[UITableViewCell class]])
-            {
-                cell = (CameraSettingsCell *)curObj;
-                break;
-            }
-        }
-        
-        if (indexPath.row == 0)
-        {
-            if (_isChangingName)
-            {
-                static NSString *CellIdentifier = @"Cell";
-                UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-                if (cell == nil) {
-                    cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-                }
-                
-                // Configure the cell...
-                cell.textLabel.text = @"Name";
-                
-                UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc]
-                                                    initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-                // Spacer is a 1x1 transparent png
-                UIImage *spacer = [UIImage imageNamed:@"spacer"];
-                
-                UIGraphicsBeginImageContext(spinner.frame.size);
-                
-                [spacer drawInRect:CGRectMake(0, 0, spinner.frame.size.width, spinner.frame.size.height)];
-                UIImage* resizedSpacer = UIGraphicsGetImageFromCurrentImageContext();
-                
-                UIGraphicsEndImageContext();
-                cell.imageView.image = resizedSpacer;
-                spinner.frame = CGRectMake(UIScreen.mainScreen.bounds.size.width - spinner.frame.size.width - 30, 0, spinner.frame.size.width, spinner.frame.size.height);
-                [cell.imageView addSubview:spinner];
-                [spinner startAnimating];
-                
-                return cell;
-            }
-            else
-            {
-                if (self.camChannel.profile.name.length > 10)
-                {
-                    cell.valueLabel.frame = CGRectMake(cell.valueLabel.frame.origin.x, cell.valueLabel.frame.origin.y, cell.valueLabel.frame.size.width, cell.valueLabel.frame.size.height * 2);
-                    cell.nameLabel.frame = CGRectMake(cell.nameLabel.frame.origin.x, cell.valueLabel.center.y - cell.nameLabel.frame.size.height / 2, cell.nameLabel.frame.size.width, cell.nameLabel.frame.size.height);
-                }
-                
-                cell.nameLabel.text = @"Name";
-                cell.valueLabel.text = self.camChannel.profile.name;
-            }
-        }
-        else
-        {
-            if (_isLoading)
-            {
-                static NSString *CellIdentifier = @"Cell";
-                UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-                if (cell == nil) {
-                    cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-                }
-                
-                // Configure the cell...
-                cell.textLabel.text = _stringFW_Version;
-                
-                UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc]
-                                                    initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-                // Spacer is a 1x1 transparent png
-                UIImage *spacer = [UIImage imageNamed:@"spacer"];
-                
-                UIGraphicsBeginImageContext(spinner.frame.size);
-                
-                [spacer drawInRect:CGRectMake(0, 0, spinner.frame.size.width, spinner.frame.size.height)];
-                UIImage* resizedSpacer = UIGraphicsGetImageFromCurrentImageContext();
-                
-                UIGraphicsEndImageContext();
-                cell.imageView.image = resizedSpacer;
-                spinner.frame = CGRectMake(UIScreen.mainScreen.bounds.size.width - spinner.frame.size.width - 30, 0, spinner.frame.size.width, spinner.frame.size.height);
-                [cell.imageView addSubview:spinner];
-                [spinner startAnimating];
-                
-                return cell;
-            }
-            else
-            {
-                cell.nameLabel.text = _stringFW_Version;
-                cell.valueLabel.text = self.camChannel.profile.fw_version;
-            }
-        }
-        
-        return cell;
-    }
-    else
-    {
-        static NSString *CellIdentifier = @"Cell";
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        if (cell == nil) {
-            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-        }
-        
-        // Configure the cell...
-        
-        return cell;
-    }
-#endif
-}
- */
 
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -680,8 +453,6 @@
     NSDictionary *responseDict = [jsonComm sendCommandBlockedWithRegistrationId:self.camChannel.profile.registrationID
                                                                      andCommand:@"action=command&command=get_version"
                                                                       andApiKey:_apiKey];
-    [jsonComm release];
-    
     if (responseDict) {
         if ([[responseDict objectForKey:@"status"] integerValue] == 200) {
             NSString *bodykey = [[responseDict[@"data"] objectForKey:@"device_response"] objectForKey:@"body"];//get_version: 01.12.84
@@ -725,7 +496,6 @@
 	
 	command = RESTART_HTTP_CMD;
 	[dev_comm sendCommandAndBlock:command];
-    [dev_comm release];
     
     [self removeRemoteCamera];
 }
@@ -735,10 +505,10 @@
     self.navigationItem.rightBarButtonItem.enabled = NO;
     self.tabBarController.tabBar.userInteractionEnabled = NO;
 
-    BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
+    BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
                                                                               Selector:@selector(removeCameraSuccessWithResponse:)
                                                                           FailSelector:@selector(removeCameraFailedWithError:)
-                                                                             ServerErr:@selector(removeCameraFailedServerUnreachable)] autorelease];
+                                                                             ServerErr:@selector(removeCameraFailedServerUnreachable)];
     
     [jsonComm deleteDeviceWithRegistrationId:_camChannel.profile.registrationID andApiKey:_apiKey];
 }
@@ -767,8 +537,6 @@
                                                                                      mode:nil
                                                                           firmwareVersion:nil
                                                                                 andApiKey:_apiKey];
-    [jsonComm release];
-    
     if ( responseDict ) {
         if ([responseDict[@"status"] integerValue] == 200) {
             self.camChannel.profile.name = _cameraNewName;
@@ -776,24 +544,22 @@
         else {
             NSLog(@"CameraNameVC - Change cameraname failed!");
             
-            [[[[UIAlertView alloc] initWithTitle:@"Change Camera Name"
+            [[[UIAlertView alloc] initWithTitle:@"Change Camera Name"
                                          message:responseDict[@"message"]
                                         delegate:self
                                cancelButtonTitle:nil
-                               otherButtonTitles:@"OK", nil] autorelease] show];
+                               otherButtonTitles:@"OK", nil] show];
         }
     }
     else {
         NSLog(@"CameraNameVC - doneAction - responseDict == nil");
         
-        [[[[UIAlertView alloc] initWithTitle:@"Change Camera Name"
+        [[[UIAlertView alloc] initWithTitle:@"Change Camera Name"
                                      message:@"Server Error"
                                     delegate:self
                            cancelButtonTitle:nil
-                           otherButtonTitles:@"OK", nil] autorelease] show];
+                           otherButtonTitles:@"OK", nil] show];
     }
-    
-    //[self performSelectorOnMainThread:@selector(updateUIRow:) withObject:[NSNumber numberWithInt:0] waitUntilDone:NO];
     
     [self.tableViewSettings reloadData];
     [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
@@ -820,11 +586,11 @@
 {
 	NSLog(@"CameraMenuVC - removeCam failed errorcode:");
     
-    [[[[UIAlertView alloc] initWithTitle:@"Remove Camera"
+    [[[UIAlertView alloc] initWithTitle:@"Remove Camera"
                                  message:[errorResponse objectForKey:@"message"]
                                 delegate:self
                        cancelButtonTitle:nil
-                       otherButtonTitles:@"OK", nil] autorelease] show];
+                       otherButtonTitles:@"OK", nil] show];
     
     self.navigationItem.rightBarButtonItem.enabled = YES;
     self.tabBarController.tabBar.userInteractionEnabled = YES;
@@ -834,11 +600,11 @@
 {
 	NSLog(@"CameraMenuVC - removeCam server unreachable");
     
-    [[[[UIAlertView alloc] initWithTitle:@"Remove Camera"
+    [[[UIAlertView alloc] initWithTitle:@"Remove Camera"
                                  message:@"Server is unreachable"
                                 delegate:self
                        cancelButtonTitle:nil
-                       otherButtonTitles:@"OK", nil] autorelease] show];
+                       otherButtonTitles:@"OK", nil] show];
     
     self.navigationItem.rightBarButtonItem.enabled = YES;
     self.tabBarController.tabBar.userInteractionEnabled = YES;
@@ -870,7 +636,6 @@
         self.intTableSectionStatus = 0;
     }
     
-    //[self.tableViewSettings reloadData];
     [self.tableViewSettings beginUpdates];
     [self.tableViewSettings reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, 1)] withRowAnimation:UITableViewRowAnimationAutomatic];
     [self.tableViewSettings endUpdates];
@@ -886,8 +651,6 @@
 
 - (void)reportSwitchValue:(BOOL)value andRowIndex:(NSInteger)rowIndex
 {
-    //valueSwitchs[rowIndex] = value;
-    
     NSString *cmd = @"action=command&command=";
     
     if (rowIndex == 0) {
@@ -918,7 +681,6 @@
 
 - (void)reportChangedSettingsValue:(NSInteger)value atRow:(NSInteger)rowIndx
 {
-    //valueSettings[rowIndx] = value;
     NSString *cmd = @"action=command&command=";
     
     if (rowIndx == 0) {
@@ -1018,8 +780,6 @@
     NSDictionary *responseDict = [_jsonComm sendCommandBlockedWithRegistrationId:self.camChannel.profile.registrationID
                                                                       andCommand:command
                                                                        andApiKey:_apiKey];
-    //NSLog(@"SettingsVC - sendCommand: %@, response: %@", command, responseDict);
-    
     if (responseDict) {
         NSLog(@"SettingsVC - sendCommand successfully: %@, status: %@", command, [responseDict objectForKey:@"status"]);
     }
@@ -1097,9 +857,8 @@
     self.imageSelected = [info valueForKey:UIImagePickerControllerOriginalImage];
    
     [self dismissViewControllerAnimated:YES completion:^{
-        //[self openViewForSetCamera:imageSelected];
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-        NSString *strPath = [[paths firstObject] retain];
+        NSString *strPath = [paths firstObject];
         strPath = [strPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.jpg",self.camChannel.profile.registrationID]];
         
         if ([[NSFileManager defaultManager] fileExistsAtPath:strPath]) {
@@ -1128,7 +887,6 @@
         UIImageView *imageV = [[UIImageView alloc] initWithImage:image];
         imageV.frame = CGRectMake(35, -300, 250, 250);
         [as addSubview:imageV];
-        [imageV release];
     }
     
     as.tapBlock = ^(UIActionSheet *actionSheet, NSInteger buttonIndex){
@@ -1138,7 +896,7 @@
             //self.camChannel.profile.registrationID
             
             NSArray *paths = NSSearchPathForDirectoriesInDomains (NSDocumentDirectory, NSUserDomainMask, YES);
-            NSString  *strPath = [[paths firstObject] retain];
+            NSString  *strPath = [paths firstObject];
             strPath = [strPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.jpg",self.camChannel.profile.registrationID]];
             
             if ([[NSFileManager defaultManager] fileExistsAtPath:strPath]) {
@@ -1204,7 +962,7 @@
     
     if (_imageSelected) {
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-        NSString *strPath = [[paths firstObject] retain];
+        NSString *strPath = [paths firstObject];
         strPath = [strPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.jpg",self.camChannel.profile.registrationID]];
         
         if ([[NSFileManager defaultManager] fileExistsAtPath:strPath]) {
@@ -1225,7 +983,6 @@
     NSDictionary *responseDict = [jsonComm sendCommandBlockedWithRegistrationId:self.camChannel.profile.registrationID
                                                                      andCommand:@"action=command&command=get_image_snapshot"
                                                                       andApiKey:_apiKey];
-    [jsonComm release];
     
     if (responseDict) {
         if ([responseDict[@"status"] integerValue] == 200) {
@@ -1248,12 +1005,8 @@
 
 - (void)getSensitivityInfoFromServer
 {
-    //self.selectedReg = [[NSUserDefaults standardUserDefaults] stringForKey:@"REG"];
-    //NSString *apiKey = [[NSUserDefaults standardUserDefaults] stringForKey:@"PortalApiKey"];
-    
     if ( !_sensitivityInfo) {
         self.sensitivityInfo = [[SensitivityInfo alloc] init];
-        [_sensitivityInfo release];
     }
     
     if ( !_jsonComm ) {
@@ -1261,7 +1014,6 @@
                                                               Selector:nil
                                                           FailSelector:nil
                                                              ServerErr:nil];
-        [_jsonComm release];
     }
     
     NSDictionary *responseDict = [_jsonComm sendCommandBlockedWithRegistrationId:self.camChannel.profile.registrationID
@@ -1271,10 +1023,9 @@
     
     if ( [responseDict[@"status"] integerValue] == 200 ) {
         // "body": "error_in_control_command : 701"
-        // "body:: "device_setting: ms=1,me=70,vs=1,vt=80,hs=0,ls=1,ht=30,lt=18"
+        // "body : "device_setting: ms=1,me=70,vs=1,vt=80,hs=0,ls=1,ht=30,lt=18"
         NSString *body = [[responseDict[@"data"] objectForKey:@"device_response"] objectForKey:@"body"];
         if ( [body hasPrefix:@"error"] ) {
-            //numOfRows[indexPath.section] = 2;
             self.intTableSectionStatus = 0;
             self.sensitivityMessage = body;
         }
@@ -1318,19 +1069,14 @@
                 
                 self.sensitivityInfo.tempLowValue  = [settingsArray[7] integerValue];
                 self.sensitivityInfo.tempHighValue = [settingsArray[6] integerValue];
-                
-                //numOfRows[indexPath.section] = 4;
-                //self.isExistSensitivityData = TRUE;
             }
             else {
-                //numOfRows[indexPath.section] = 2;
                 self.intTableSectionStatus = 0;
                 self.sensitivityMessage = @"Error -Load Sensitivity Settings!";
             }
         }
     }
     else {
-        //numOfRows[indexPath.section] = 2;
         self.intTableSectionStatus=0;
         self.sensitivityMessage = @"Error -Load Sensitivity Settings error!";
     }

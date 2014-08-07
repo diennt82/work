@@ -68,10 +68,8 @@ static TimelineDatabase *sharedInstance = nil;
                                event_id,udid, username, etext, eValue,eName, eTimeStamp, eData];
         
         const char *stmt = [insertSQL UTF8String];
+        sqlite3_stmt *statement;
         
-        // NSLog(@"statement: %s",stmt);
-        
-        sqlite3_stmt *statement ;
         if (sqlite3_prepare_v2(database, stmt, -1, &statement, NULL) == SQLITE_OK) {
             int ret =sqlite3_step(statement);
             if ( ret == SQLITE_DONE ) {
@@ -101,7 +99,7 @@ static TimelineDatabase *sharedInstance = nil;
     sqlite3 *database;
     sqlite3_stmt *statement;
     
-    NSMutableArray *retval = [[[NSMutableArray alloc] init] autorelease];
+    NSMutableArray *retval = [[NSMutableArray alloc] init];
     const char *dbpath = [_databasePath UTF8String];
 
     NSString *insertSQL = [NSString stringWithFormat:@"select * from  camera_events where camera_udid='%@' ORDER BY event_ts DESC", camera_udid];
@@ -123,9 +121,9 @@ static TimelineDatabase *sharedInstance = nil;
                 //NSLog(@"%s: event_unix_ts: %d", __FUNCTION__, event_unix_ts);
                 
                 EventInfo *eventInfo = [[EventInfo alloc] init];
-                eventInfo.alertName = [[[NSString alloc] initWithUTF8String:event_alert_name] autorelease];
-                eventInfo.value      = [[[NSString alloc] initWithUTF8String:event_value] autorelease];
-                eventInfo.eventID = [[[[NSString alloc] initWithUTF8String:event_id] autorelease] integerValue];
+                eventInfo.alertName = [[NSString alloc] initWithUTF8String:event_alert_name];
+                eventInfo.value      = [[NSString alloc] initWithUTF8String:event_value];
+                eventInfo.eventID = [[[NSString alloc] initWithUTF8String:event_id] integerValue];
                 
                 NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
                 [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
@@ -133,12 +131,11 @@ static TimelineDatabase *sharedInstance = nil;
                 
                 NSDate *eventDate = [NSDate dateWithTimeIntervalSince1970:event_unix_ts];
                 NSString *eventDate_str = [dateFormatter stringFromDate:eventDate];
-                [dateFormatter release];
                 
                 eventInfo.timeStamp = eventDate_str;
-                eventInfo.alert = [[[[NSString alloc] initWithUTF8String:event_alert] autorelease] integerValue];
+                eventInfo.alert = [[[NSString alloc] initWithUTF8String:event_alert] integerValue];
                 
-                NSString *event_data_str = [[[NSString alloc] initWithUTF8String:event_data] autorelease];
+                NSString *event_data_str = [[NSString alloc] initWithUTF8String:event_data];
                 NSData *event_data_d = [NSData dataFromBase64String:event_data_str];
                 
                 NSError *e;
@@ -151,11 +148,9 @@ static TimelineDatabase *sharedInstance = nil;
                     clipInfo.urlFile = [clipsInEvent[0] objectForKey:@"file"];
                     
                     eventInfo.clipInfo = clipInfo;
-                    [clipInfo release];
                 }
                 
                 [retval addObject:eventInfo];
-                [eventInfo release];
             }
             
             sqlite3_finalize(statement);
@@ -173,12 +168,8 @@ static TimelineDatabase *sharedInstance = nil;
     const char *dbpath = [_databasePath UTF8String];
     
     if (sqlite3_open(dbpath, &database) == SQLITE_OK) {
-        //NSString *delSQL = [NSString stringWithFormat:@"delete from  camera_events where camera_udid='%@' AND event_ts < %d", camera_udid, limitedDate];
         NSString *delSQL = [NSString stringWithFormat:@"delete from  camera_events where camera_udid='%@'", camera_udid];
-        
         const char *stmt = [delSQL UTF8String];
-        NSLog(@"statement: %s", stmt);
-        
         sqlite3_stmt *statement;
         
         if (sqlite3_prepare_v2(database, stmt, -1, &statement, NULL) == SQLITE_OK) {
@@ -206,12 +197,9 @@ static TimelineDatabase *sharedInstance = nil;
     const char *dbpath = [_databasePath UTF8String];
     if (sqlite3_open(dbpath, &database) == SQLITE_OK) {
         NSString *insertSQL = [NSString stringWithFormat:@"delete from  camera_events where camera_owner_id='%@'", username];
-        
         const char *stmt = [insertSQL UTF8String];
-        
-        //NSLog(@"statement: %s",stmt);
-        
         sqlite3_stmt *statement;
+        
         if (sqlite3_prepare_v2(database, stmt, -1, &statement, NULL) == SQLITE_OK) {
             int ret =sqlite3_step(statement);
             if ( ret != SQLITE_DONE ) {
@@ -235,10 +223,9 @@ static TimelineDatabase *sharedInstance = nil;
     const char *dbpath = [_databasePath UTF8String];
     if (sqlite3_open(dbpath, &database) == SQLITE_OK) {
         NSString *insertSQL = [NSString stringWithFormat:@"delete from  camera_events where event_id='%@'", strEventId];
-        
         const char *stmt = [insertSQL UTF8String];
-        
         sqlite3_stmt *statement;
+        
         if (sqlite3_prepare_v2(database, stmt, -1, &statement, NULL) == SQLITE_OK) {
             int ret = sqlite3_step(statement);
             if ( ret != SQLITE_DONE ) {

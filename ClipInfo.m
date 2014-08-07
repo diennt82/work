@@ -10,13 +10,4 @@
 
 @implementation ClipInfo
 
-- (void)dealloc
-{
-    [_imgSnapshot release];
-    [_urlImage release];
-    [_titleString release];
-    [_urlFile release];
-    [super dealloc];
-}
-
 @end

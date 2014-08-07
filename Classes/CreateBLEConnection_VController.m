@@ -19,21 +19,21 @@
 
 @interface CreateBLEConnection_VController () <CustomIOS7AlertViewDelegate>
 
-@property (nonatomic, retain) IBOutlet UIButton *btnConnect;
-@property (nonatomic, retain) IBOutlet UIView *viewProgress;
-@property (nonatomic, retain) IBOutlet UITableViewCell *searchAgainCell;
-@property (nonatomic, retain) IBOutlet UIView *viewError;
-@property (nonatomic, retain) IBOutlet UIView *viewPairNDetecting;
+@property (nonatomic, weak) IBOutlet UIButton *btnConnect;
+@property (nonatomic, weak) IBOutlet UIView *viewProgress;
+@property (nonatomic, weak) IBOutlet UITableViewCell *searchAgainCell;
+@property (nonatomic, weak) IBOutlet UIView *viewError;
+@property (nonatomic, weak) IBOutlet UIView *viewPairNDetecting;
 
-@property (nonatomic, retain) UIButton *btnContinue;
-@property (nonatomic, retain) UIView *viewSearching;
+@property (nonatomic, strong) UIButton *btnContinue;
+@property (nonatomic, strong) UIView *viewSearching;
 
-@property (nonatomic, retain) CBPeripheral *selectedPeripheral;
-@property (nonatomic, retain) CustomIOS7AlertView *alertView;
+@property (nonatomic, strong) CBPeripheral *selectedPeripheral;
+@property (nonatomic, strong) CustomIOS7AlertView *alertView;
 
-@property (nonatomic, retain) NSTimer *timerTimeoutConnectBLE;
-@property (nonatomic, retain) NSTimer *timerScanCameraBLEDone;
-@property (nonatomic, retain) NSTimer *macAddressTimer;
+@property (nonatomic, strong) NSTimer *timerTimeoutConnectBLE;
+@property (nonatomic, strong) NSTimer *timerScanCameraBLEDone;
+@property (nonatomic, strong) NSTimer *macAddressTimer;
 
 @property (nonatomic) BOOL shouldTimeoutProcessing;
 @property (nonatomic) BOOL rescanFlag;
@@ -255,7 +255,7 @@
 
 - (UIView *)createDemoView
 {
-    UIView *demoView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 230, 140)] autorelease];
+    UIView *demoView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 230, 140)];
     UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(100, 35, 30, 30)];// autorelease];
     [imageView setImage:[UIImage imageNamed:@"loader_a"]];
     
@@ -271,13 +271,10 @@
     
     [demoView addSubview:imageView];
     
-    [imageView release];
-    
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(20, 85, 200, 21)];// autorelease];
     label.textAlignment = NSTextAlignmentCenter;
     label.text = @"Connecting to Camera";
     [demoView addSubview:label];
-    [label release];
     
     return demoView;
 }
@@ -427,20 +424,6 @@
 
 #pragma mark -
 
-- (void)dealloc
-{
-    [_homeWifiSSID release];
-    [_ib_tableListBLE release];
-    [_btnConnect release];
-    [_viewProgress release];
-    [_searchAgainCell release];
-    [_alertView release];
-    [_viewError release];
-    [_timerTimeoutConnectBLE release];
-    [_viewPairNDetecting release];
-    [super dealloc];
-}
-
 - (void)handleEnteredBackground
 {
     self.showProgressNextTime = YES;
@@ -578,7 +561,6 @@
         
         NSLog(@"Load step 41 - EditCamera_VC");
         [self.navigationController pushViewController:step04ViewController animated:NO];
-        [step04ViewController release];
         
         [[NSNotificationCenter defaultCenter] removeObserver:self];
         

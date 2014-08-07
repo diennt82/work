@@ -12,9 +12,9 @@
 
 @interface Step_08_ViewController ()
 
+@property (nonatomic, strong) NSTimer *timeOut;
+@property (nonatomic, copy) NSString *ssid;
 @property (nonatomic) BOOL shouldStopScanning;
-@property (nonatomic, retain) NSString *ssid;
-@property (nonatomic, retain) NSTimer *timeOut;
 
 @end
 
@@ -36,10 +36,10 @@
     self.navigationItem.hidesBackButton = YES;
     
     NSString *title = NSLocalizedStringWithDefaultValue(@"Back",nil, [NSBundle mainBundle], @"Back" , nil);
-    UIBarButtonItem *backButton = [[[UIBarButtonItem alloc] initWithTitle:title
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:title
                                                                     style:UIBarButtonItemStyleBordered
                                                                    target:nil
-                                                                   action:nil] autorelease];
+                                                                   action:nil];
     self.navigationItem.backBarButtonItem = backButton;
     
     //check back later..
@@ -63,13 +63,6 @@
     [super viewWillAppear:animated];
     UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
     [self adjustViewsForOrientations:interfaceOrientation];
-}
-
-- (void)dealloc
-{
-    [_ssid release];
-    [_timeOut release];
-    [super dealloc];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -117,7 +110,6 @@
     // Load RegistrationVC
     RegistrationViewController *registrationVC = [[RegistrationViewController alloc] init];
     [self.navigationController pushViewController:registrationVC animated:NO];
-    [registrationVC release];
 }
 
 #pragma mark - Private methods
@@ -131,7 +123,6 @@
     Step_11_ViewController *step11ViewController = [[Step_11_ViewController alloc] initWithNibName:@"Step_11_ViewController" bundle:nil];
     step11ViewController.errorCode = @"Time Out";
     [self.navigationController pushViewController:step11ViewController animated:NO];
-    [step11ViewController release];
 }
 
 #pragma mark - Timer callbacks
@@ -179,7 +170,6 @@
                                    selector:@selector(checkConnectionToHomeWifi:)
                                    userInfo:nil
                                     repeats:NO];
-	
 }
 
 @end

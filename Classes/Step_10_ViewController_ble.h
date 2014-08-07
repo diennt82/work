@@ -24,13 +24,13 @@
 
 @interface Step_10_ViewController_ble : UIViewController
 
-@property (nonatomic, assign) IBOutlet UIView *progressView;
-@property (nonatomic, assign) IBOutlet UILabel *homeSSID;
-@property (nonatomic, assign) IBOutlet UILabel *userNameLabel;
-@property (nonatomic, assign) IBOutlet UILabel *userEmailLabel;
-@property (nonatomic, assign) IBOutlet UILabel *cameraName;
+@property (nonatomic, weak) IBOutlet UIView *progressView;
+@property (nonatomic, weak) IBOutlet UILabel *homeSSID;
+@property (nonatomic, weak) IBOutlet UILabel *userNameLabel;
+@property (nonatomic, weak) IBOutlet UILabel *userEmailLabel;
+@property (nonatomic, weak) IBOutlet UILabel *cameraName;
 
-@property (nonatomic, retain) NSTimer *timeOut;
+@property (nonatomic, strong) NSTimer *timeOut;
 @property (nonatomic, copy) NSString *cameraMac;
 @property (nonatomic, copy) NSString *masterKey;
 @property (nonatomic, copy) NSString *errorCode;

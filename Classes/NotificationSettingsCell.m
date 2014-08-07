@@ -16,11 +16,4 @@
     [_notifSettingsDelegate reportSwitchValue:((UISwitch *)sender).isOn andRowIndex:_rowIndex];
 }
 
-- (void)dealloc
-{
-    [_settingSwitch release];
-    [_settingsLabel release];
-    [super dealloc];
-}
-
 @end

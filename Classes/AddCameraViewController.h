@@ -16,8 +16,8 @@
 
 @interface AddCameraViewController : UIViewController
 
-@property (nonatomic, retain) IBOutlet UIButton *buyCameraButton;
-@property (nonatomic, assign) id<AddCameraVCDelegate>delegate;
+@property (nonatomic, weak) IBOutlet UIButton *buyCameraButton;
+@property (nonatomic, weak) id<AddCameraVCDelegate>delegate;
 
 - (IBAction)buyCameraButtonAction:(id)sender;
 

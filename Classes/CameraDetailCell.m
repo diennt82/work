@@ -19,13 +19,4 @@
     return self;
 }
 
-- (void)dealloc
-{
-    [_btnChangeName release];
-    [_btnChangeImage release];
-    [_lblCameraName release];
-    [_lblCamVer release];
-    [super dealloc];
-}
-
 @end

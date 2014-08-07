@@ -7,9 +7,6 @@
     #import <UIKit/UIKit.h>
     #import "TestFlight.h"
 
-//Does not work very well
-//Switch to TFLog for remote loging
-    //#define NSLog TFLog
 
 #define Alert(title,msg){UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:title message:msg delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil]; [alertView show]; }
 
@@ -18,3 +15,11 @@
 
 // Shorthand for getting localized strings, used in formats below for readability
 #define LocStr(key) [[NSBundle mainBundle] localizedStringForKey:(key) value:@"" table:nil]
+
+// http://www.cimgf.com/2009/01/24/dropping-nslog-in-release-builds/
+#ifdef DEBUG
+#    define DLog(...) NSLog(__VA_ARGS__)
+#else
+#    define DLog(...) /* */
+#endif
+#define ALog(...) NSLog(__VA_ARGS__)

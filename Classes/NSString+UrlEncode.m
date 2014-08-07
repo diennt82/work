@@ -18,8 +18,7 @@
                                                                     (CFStringRef)@"!*'\"();:@=+$,?%#[]% ",
                                                                     CFStringConvertNSStringEncodingToEncoding(encoding));
     // Create an NSString so we can call release on the CFStringRef.
-    // TODO: --> will have to cast as follows after ARC conversion: (__bridge NSString *)
-    NSString *encodedStr = [NSString stringWithString:(NSString *)stringRef];
+    NSString *encodedStr = [NSString stringWithString:(__bridge NSString *)stringRef];
     CFRelease(stringRef);
     
     return encodedStr;

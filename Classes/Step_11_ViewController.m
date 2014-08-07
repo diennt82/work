@@ -14,22 +14,12 @@
 
 @interface Step_11_ViewController ()
 
-@property (nonatomic, retain) IBOutlet UILabel *error_code;
-@property (retain, nonatomic) IBOutlet UIButton *btnTestCamera;
+@property (nonatomic, weak) IBOutlet UILabel *error_code;
+@property (nonatomic, weak) IBOutlet UIButton *btnTestCamera;
 
 @end
 
 @implementation Step_11_ViewController
-
-
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
 
 - (void)viewDidLoad
 {
@@ -49,31 +39,24 @@
     [self.btnTestCamera setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
     [self.btnTestCamera setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
 
-
-    if (_errorCode != nil)
-    {
-        [self.error_code setText:_errorCode];
+    if ( _errorCode ) {
+        [_error_code setText:_errorCode];
     }
-    else
-    {
-        self.error_code.hidden = YES;
+    else {
+        _error_code.hidden = YES;
     }
     
     NSString *stringModel = @"";
-    
     NSInteger model = [[NSUserDefaults standardUserDefaults] integerForKey:SET_UP_CAMERA];
     
-    if (model == BLUETOOTH_SETUP)
-    {
+    if (model == BLUETOOTH_SETUP) {
         stringModel = @"Mbp83";
     }
-    else if(model == WIFI_SETUP)
-    {
+    else if(model == WIFI_SETUP) {
         stringModel = @"Focus66";
     }
     
     NSString *fwVersion = [[NSUserDefaults standardUserDefaults] stringForKey:FW_VERSION];
-    
     NSDictionary *info = [NSDictionary dictionaryWithObjectsAndKeys:
                          stringModel,   @"Camera model",
                          fwVersion,     @"FW",
@@ -87,15 +70,7 @@
                                                      withValue:nil];
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-
-#pragma  mark -
-#pragma mark button handlers
+#pragma mark - button handlers
 
 -(IBAction)tryAddCameraAgain:(id)sender
 {
@@ -109,13 +84,6 @@
     // Disable Keep screen on
     [UIApplication sharedApplication].idleTimerDisabled=  NO;
     [self.navigationController popToRootViewControllerAnimated:NO];
-    //NSString * msgLabel = [NSString stringWithFormat:@"Add Camera Failed with errorCode:%@", self.errorCode];
 }
 
-
-
-- (void)dealloc {
-    [_btnTestCamera release];
-    [super dealloc];
-}
 @end

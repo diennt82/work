@@ -10,8 +10,8 @@
 
 @interface CameraSettingsCell : UITableViewCell
 
-@property (nonatomic, retain) IBOutlet UILabel *nameLabel;
-@property (nonatomic, retain) IBOutlet UILabel *valueLabel;
-@property (nonatomic, retain) IBOutlet UIView *processView;
+@property (nonatomic, weak) IBOutlet UILabel *nameLabel;
+@property (nonatomic, weak) IBOutlet UILabel *valueLabel;
+@property (nonatomic, weak) IBOutlet UIView *processView;
 
 @end

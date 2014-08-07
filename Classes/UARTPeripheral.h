@@ -46,10 +46,10 @@ typedef enum response_ {
 }
 
 @property (nonatomic, strong) CBPeripheral *peripheral;
-@property (nonatomic, retain) NSTimer *helloTimer;
-@property (nonatomic, retain) NSTimer *timeOutCommand;
+@property (nonatomic, strong) NSTimer *helloTimer;
+@property (nonatomic, strong) NSTimer *timeOutCommand;
 
-@property (nonatomic, assign) id<UARTPeripheralDelegate> delegate;
+@property (nonatomic, weak) id<UARTPeripheralDelegate> delegate;
 @property BOOL isBusy, isFlushing, isDisconnected;
 
 + (CBUUID *) uartServiceUUID;

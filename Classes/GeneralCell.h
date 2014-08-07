@@ -17,12 +17,12 @@
 
 @interface GeneralCell : UITableViewCell
 
-@property (nonatomic, retain) IBOutlet UILabel *labelClock;
-@property (nonatomic, retain) IBOutlet UIButton *btnClock;
-@property (nonatomic, retain) IBOutlet UILabel *labelTemperature;
-@property (nonatomic, retain) IBOutlet UIButton *btnTemperature;
+@property (nonatomic, weak) IBOutlet UILabel *labelClock;
+@property (nonatomic, weak) IBOutlet UIButton *btnClock;
+@property (nonatomic, weak) IBOutlet UILabel *labelTemperature;
+@property (nonatomic, weak) IBOutlet UIButton *btnTemperature;
 
-@property (nonatomic, assign) id<GeneralCellDelegate> generalCellDelegate;
+@property (nonatomic, weak) id<GeneralCellDelegate> generalCellDelegate;
 @property (nonatomic) BOOL is12hr;
 @property (nonatomic) BOOL isFahrenheit;
 

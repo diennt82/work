@@ -16,16 +16,15 @@
     BOOL valueMelodiesMap[6];
 }
 
-@property (nonatomic, retain) IBOutlet UITableViewCell *cellMelody;
-@property (nonatomic, retain) IBOutlet UITableViewCell *cellMelody_land;
-@property (nonatomic, retain) IBOutlet UITableViewCell *cellMelody_iPad;
+@property (nonatomic, weak) IBOutlet UITableViewCell *cellMelody;
+@property (nonatomic, weak) IBOutlet UITableViewCell *cellMelody_land;
+@property (nonatomic, weak) IBOutlet UITableViewCell *cellMelody_iPad;
+@property (nonatomic, weak) IBOutlet UIBarButtonItem *melodyTitle;
+@property (nonatomic, weak) IBOutlet UISwitch *musicSwitch;
 
-@property (nonatomic, retain) IBOutlet UIBarButtonItem *melodyTitle;
-@property (nonatomic, retain) IBOutlet UISwitch *musicSwitch;
-@property (nonatomic, retain) NSArray *melodies;
-
-@property (nonatomic, retain) UIFont *semiBoldFont;
-@property (nonatomic, retain) UIFont *regularFont;
+@property (nonatomic, strong) NSArray *melodies;
+@property (nonatomic, strong) UIFont *semiBoldFont;
+@property (nonatomic, strong) UIFont *regularFont;
 
 @end
 
@@ -152,7 +151,6 @@
         httpCommunication.device_port = _selectedChannel.profile.port;
         
         [httpCommunication sendCommandAndBlock_raw:command];
-        [httpCommunication release];
     }
     else {
         BMS_JSON_Communication *jsonCommunication = [[BMS_JSON_Communication alloc] initWithObject:self
@@ -168,7 +166,6 @@
         [jsonCommunication sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
                                                      andCommand:[NSString stringWithFormat:@"action=command&command=%@", command]
                                                       andApiKey:apiKey];
-        [jsonCommunication release];
     }
     
     [_melodyTableView reloadData];
@@ -327,19 +324,6 @@
 	[self performSelector:@selector(setMelodyStatus:)
                withObject:[NSNumber numberWithInt:(_melodyIndex + 1)]
                afterDelay:0.1];
-}
-
-#pragma mark - Memory management methods
-
-- (void)dealloc
-{
-    [_melodyTableView release];
-    [_melodyTitle release];
-    [_musicSwitch release];
-    [_selectedChannel release];
-    [_melodies release];
-    
-    [super dealloc];
 }
 
 @end

@@ -10,8 +10,8 @@
 
 @interface TimeLinePremiumCell : UITableViewCell
 
-@property (nonatomic, retain) IBOutlet UIImageView *timelineImage;
-@property (nonatomic, retain) IBOutlet UILabel *titleLabel;
-@property (nonatomic, retain) IBOutlet UILabel *subtitleLabel;
+@property (nonatomic, weak) IBOutlet UIImageView *timelineImage;
+@property (nonatomic, weak) IBOutlet UILabel *titleLabel;
+@property (nonatomic, weak) IBOutlet UILabel *subtitleLabel;
 
 @end

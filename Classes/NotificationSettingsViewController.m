@@ -15,8 +15,8 @@
     BOOL enableAlert[4];
 }
 
-@property (nonatomic, retain) IBOutlet UIView *processView;
-@property (nonatomic, retain) IBOutlet UITableView *listNotifTableView;
+@property (nonatomic, weak) IBOutlet UIView *processView;
+@property (nonatomic, weak) IBOutlet UITableView *listNotifTableView;
 
 @end
 
@@ -31,13 +31,13 @@
     self.title = @"Notification Settings";
     [self performSelectorInBackground:@selector(getNotificationSettings) withObject:nil];
     
-    self.navigationItem.leftBarButtonItem  = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
+    self.navigationItem.leftBarButtonItem  = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
                                                                                             target:self
-                                                                                            action:@selector(cancelTouchAction:)] autorelease];
+                                                                                            action:@selector(cancelTouchAction:)];
     assert(self.navigationItem.leftBarButtonItem != nil);
-    self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
                                                                                             target:self
-                                                                                            action:@selector(doneTouchAction:)] autorelease];
+                                                                                            action:@selector(doneTouchAction:)];
     assert(self.navigationItem.rightBarButtonItem != nil);
     
     self.listNotifTableView.dataSource = self;
@@ -46,12 +46,6 @@
     NSLog(@"camProfileID: %d", _camProfile.camProfileID);
 }
 
-- (void)dealloc
-{
-    [_processView release];
-    [_listNotifTableView release];
-    [super dealloc];
-}
 
 #pragma mark - Action
 
@@ -97,7 +91,6 @@
                                                                              ServerErr:nil];
     NSDictionary *responseDict = [jsonComm getListOfAllAppsBlockedWithApiKey:apiKey];
     
-    [jsonComm release];
     
     if ( responseDict) {
         NSInteger statusCode = [responseDict[@"status"] integerValue];
@@ -180,10 +173,10 @@
         [settingsArray addObject:settingDict];
     }
     
-    BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
+    BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
                                                                               Selector:@selector(settingsAppNotifSuccessWithResponse:)
                                                                           FailSelector:@selector(settingsAppNotifFailedWithResponse:)
-                                                                             ServerErr:@selector(settingsAppNotifFailedServerUnreachable)] autorelease];
+                                                                             ServerErr:@selector(settingsAppNotifFailedServerUnreachable)];
     [jsonComm settingAppWithAppId:appId
                         andApiKey:apiKey
                       andSettings:settingsArray];

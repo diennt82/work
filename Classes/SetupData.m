@@ -28,10 +28,6 @@
         [channel.profile setChannel:nil];
         [channel setCamProfile:nil];
     }
-    
-	[_channels release];
-	[_configuredCams release];
-    [super dealloc];
 }
 
 - (BOOL)saveSessionData
@@ -145,13 +141,11 @@
 		free(buff);
 		
 		self.channels = [[NSMutableArray alloc] initWithObjects:channel1, channel2, channel3, channel4, nil];
-        [_channels release];
 		
 		// restore cam profiles
 		int numOfProfile = -1;
 		fread(&numOfProfile, sizeof(int), 1, fd);
 		self.configuredCams = [[NSMutableArray alloc] initWithCapacity:numOfProfile];
-        [_configuredCams release];
         
 		int cp_count = 0;
         int profile_len = -1 ;
@@ -189,7 +183,6 @@
     }
 	
     fclose(fd);
-    [channelData release];
     
 	return YES;
 }

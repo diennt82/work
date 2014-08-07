@@ -176,7 +176,7 @@
     static NSString *CellIdentifier = @"Cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
     
     cell.textLabel.text = @"Default";
@@ -228,8 +228,6 @@
         
         // Push the view controller.
         [self.navigationController pushViewController:valuesViewController animated:YES];
-        
-        [valuesViewController release];
     }
 }
 

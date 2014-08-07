@@ -10,7 +10,7 @@
 
 @interface SchedulingViewController : UIViewController
 
-@property (nonatomic, retain) IBOutlet UICollectionView *collectionViewMap;
+@property (nonatomic, weak) IBOutlet UICollectionView *collectionViewMap;
 @property (nonatomic) BOOL everydayFlag;
 
 @end

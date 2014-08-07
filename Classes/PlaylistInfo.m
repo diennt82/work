@@ -29,7 +29,7 @@
             NSString *timecode = tokens[2];
             NSLog(@"timecode: %@", timecode);
             
-            NSDateFormatter *formatter = [[[NSDateFormatter alloc] init] autorelease];
+            NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
             [formatter setDateFormat:@"yyyyMMddHHmmssSSS"];
             [formatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]]; // GMT +00:00
             
@@ -125,7 +125,7 @@
         }
     }
     
-    return FALSE;
+    return NO;
 }
 
 @end

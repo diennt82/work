@@ -13,9 +13,10 @@
 
 @interface SensitivityCell()
 
-@property (nonatomic, retain) IBOutlet UIImageView *imageViewCircleWhite;
-@property (nonatomic, retain) IBOutlet UIButton *btnSwitch;
-@property (nonatomic, retain) NSArray *imageViewCircleArray;
+@property (nonatomic, weak) IBOutlet UIImageView *imageViewCircleWhite;
+@property (nonatomic, weak) IBOutlet UIButton *btnSwitch;
+
+@property (nonatomic, strong) NSArray *imageViewCircleArray;
 
 @end
 
@@ -60,7 +61,6 @@
         imageView.center = CGPointMake(imageView.center.x, imageViewLine.center.y);
         UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTap:)];
         [imageView addGestureRecognizer:tapGesture];
-        [tapGesture release];
         
         if (!_switchValue) {
             imageView.image = [UIImage imageNamed:@"settings_circle_disable"];
@@ -108,16 +108,6 @@
     }
     
     [_sensitivityCellDelegate reportSwitchValue:_switchValue andRowIndex:_rowIndex];
-}
-
-- (void)dealloc
-{
-    [_nameLabel release];
-    [_valueSwitch release];
-    [_imageViewCircleWhite release];
-    [_btnSwitch release];
-    [_imageViewCircleArray release];
-    [super dealloc];
 }
 
 @end

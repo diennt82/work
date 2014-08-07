@@ -11,8 +11,8 @@
 
 @interface AudioOutStreamer()
 
-@property (nonatomic, retain) AsyncSocket *sendingSocket;
-@property (nonatomic, retain) NSTimer *voiceDataTimer;
+@property (nonatomic, strong) AsyncSocket *sendingSocket;
+@property (nonatomic, strong) NSTimer *voiceDataTimer;
 @property (nonatomic, copy) NSString *deviceIp;
 @property (nonatomic) int devicePort;
 @property (nonatomic) BOOL hasStartRecordingSound;
@@ -31,7 +31,6 @@
     {
         self.deviceIp = [NSString stringWithString:ip];
         self.devicePort = port;
-        
         self.hasStartRecordingSound = NO;
     }
     
@@ -41,8 +40,6 @@
 - (void)dealloc
 {
     [_voiceDataTimer invalidate];
-    [_pcmPlayer release];
-    [super dealloc]; 
 }
 
 - (void)startRecordingSound
@@ -108,7 +105,6 @@
     
     if ( _bufferLength == 0 ) {
         [_pcmPlayer.recorder.inMemoryAudioFile flush];
-        [_pcmPlayer release];
         self.pcmPlayer = nil;
         
         if ( _voiceDataTimer) {
@@ -122,12 +118,10 @@
                 [_sendingSocket disconnect];
             }
             
-            [_sendingSocket release];
             self.sendingSocket = nil;
         }
         
         if( _pcmData ) {
-            [_pcmData release];
             self.pcmData = nil;
         }
         
@@ -166,7 +160,6 @@
                                           cancelButtonTitle:@"OK"
                                           otherButtonTitles:nil];
     [alert show];
-    [alert release];
 }
 
 - (void)onSocketDidDisconnect:(AsyncSocket *)sock

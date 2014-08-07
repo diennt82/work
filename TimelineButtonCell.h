@@ -10,14 +10,14 @@
 
 @protocol TimelineButtonCellDelegate <NSObject>
 
-- (void)sendTouchBtnStateWithIndex: (NSInteger)rowIdx;
+- (void)sendTouchBtnStateWithIndex:(NSInteger)rowIdx;
 
 @end
 
 @interface TimelineButtonCell : UITableViewCell
 
-@property (nonatomic, retain) IBOutlet UIButton *timelineCellButtn;
-@property (nonatomic, assign) id<TimelineButtonCellDelegate> timelineBtnDelegate;
+@property (nonatomic, weak) IBOutlet UIButton *timelineCellButtn;
+@property (nonatomic, weak) id<TimelineButtonCellDelegate> timelineBtnDelegate;
 @property (nonatomic) NSInteger rowIndex;
 
 @end

@@ -10,7 +10,7 @@
 
 @interface Step_07_ViewController ()
 
-@property (nonatomic, retain) NSArray * securityTypes;
+@property (nonatomic, strong) NSArray *securityTypes;
 @property (nonatomic, assign) int sec_index;
 
 @end
@@ -29,12 +29,6 @@
     self.sec_index = -1;
 }
 
--(void)dealloc
-{
-    [_cellView release];
-    [_securityTypes release];
-    [super dealloc];
-}
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
@@ -55,35 +49,16 @@
 
 #pragma  mark - Table View delegate & datasource
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-#if 1
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
     static NSString *CellIdentifier = @"Cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
     
     cell.textLabel.text = (NSString *)_securityTypes[indexPath.row];
     return cell;
-#else
-    int tag = tableView.tag;
-    UITableViewCell *cell = nil;
-    if (_tag == 12) {
-        static NSString *CellIdentifier = @"Cell";
-        cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        if (cell == nil) {
-            [[NSBundle mainBundle] loadNibNamed:@"Step_07_tableViewCell" owner:self options:nil];
-            cell = self.cellView;
-            self.cellView = nil; 
-        }
-        [cell setBackgroundColor:[UIColor whiteColor]];
-        
-        UITextField *secType = (UITextField *)[cell viewWithTag:200];
-        secType.text = (NSString *)_securityTypes[indexPath.row];
-        secType.backgroundColor = [UIColor clearColor];
-    }
-    return cell;
-#endif
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section

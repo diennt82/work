@@ -17,14 +17,4 @@
 	return self;
 }
 
-- (void)dealloc
-{
-	[_ssidWithQuotes release];
-	[_bssid release];
-	[_authMode release];
-    [_encryptType release];
-	[_quality release];
-	[super dealloc];
-}
-
 @end

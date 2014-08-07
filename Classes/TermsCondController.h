@@ -10,7 +10,7 @@
 
 @interface TermsCondController : UIViewController<UIWebViewDelegate>
 
-@property (nonatomic, retain) IBOutlet UIWebView *webViewTC;
-@property (nonatomic, retain) IBOutlet UINavigationBar *navBar;
+@property (nonatomic, weak) IBOutlet UIWebView *webViewTC;
+@property (nonatomic, weak) IBOutlet UINavigationBar *navBar;
 
 @end

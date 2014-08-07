@@ -25,16 +25,4 @@
     [_camerasCellDelegate sendTouchSettingsActionWithRowIndex:_rowIndex];
 }
 
-- (void)dealloc
-{
-    [_snapshotImage release];
-    [_photoItemImage release];
-    [_ibCameraNameLabel release];
-    [_settingsButton release];
-    [_ibIconStatusCamera release];
-    [_ibTextStatusCamera release];
-    [_ibBGColorCameraSelected release];
-    [super dealloc];
-}
-
 @end

@@ -16,16 +16,16 @@
 
 @interface CamerasCell : UITableViewCell
 
-@property (nonatomic, retain) IBOutlet UIView *ibBGColorCameraSelected;
-@property (nonatomic, retain) IBOutlet UIImageView *snapshotImage;
-@property (nonatomic, retain) IBOutlet UIImageView *ibIconStatusCamera;
-@property (nonatomic, retain) IBOutlet UILabel *ibTextStatusCamera;
+@property (nonatomic, weak) IBOutlet UIView *ibBGColorCameraSelected;
+@property (nonatomic, weak) IBOutlet UIImageView *snapshotImage;
+@property (nonatomic, weak) IBOutlet UIImageView *ibIconStatusCamera;
+@property (nonatomic, weak) IBOutlet UILabel *ibTextStatusCamera;
 
-@property (nonatomic, retain) IBOutlet UIImageView *photoItemImage;
-@property (nonatomic, retain) IBOutlet UILabel *ibCameraNameLabel;
-@property (nonatomic, retain) IBOutlet UIButton *settingsButton;
+@property (nonatomic, weak) IBOutlet UIImageView *photoItemImage;
+@property (nonatomic, weak) IBOutlet UILabel *ibCameraNameLabel;
+@property (nonatomic, weak) IBOutlet UIButton *settingsButton;
 
-@property (nonatomic, assign) id<CamerasCellDelegate> camerasCellDelegate;
+@property (nonatomic, weak) id<CamerasCellDelegate> camerasCellDelegate;
 @property (nonatomic) NSInteger rowIndex;
 
 @end

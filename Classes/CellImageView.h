@@ -16,7 +16,7 @@
 
 @interface CellImageView : UIImageView
 
-@property (assign, nonatomic) id<CellImageViewDelegate> cellImgViewDelegate;
+@property (nonatomic, weak) id<CellImageViewDelegate> cellImgViewDelegate;
 
 @property (nonatomic) NSInteger rowIndex;
 @property (nonatomic) NSInteger colomnIndex;

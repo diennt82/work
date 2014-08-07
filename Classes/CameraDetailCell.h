@@ -10,9 +10,9 @@
 
 @interface CameraDetailCell : UITableViewCell
 
-@property(nonatomic, retain) IBOutlet UIButton *btnChangeName;
-@property(nonatomic, retain) IBOutlet UIButton *btnChangeImage;
-@property(nonatomic, retain) IBOutlet UILabel *lblCameraName;
-@property(nonatomic, retain) IBOutlet UILabel *lblCamVer;
+@property(nonatomic, weak) IBOutlet UIButton *btnChangeName;
+@property(nonatomic, weak) IBOutlet UIButton *btnChangeImage;
+@property(nonatomic, weak) IBOutlet UILabel *lblCameraName;
+@property(nonatomic, weak) IBOutlet UILabel *lblCamVer;
 
 @end

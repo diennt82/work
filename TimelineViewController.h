@@ -21,10 +21,9 @@
 
 @interface TimelineViewController : UITableViewController
 
-@property (nonatomic, retain) NSMutableArray *eventArrayTestData;
-@property (nonatomic, assign) id<TimelineVCDelegate> timelineVCDelegate;
-@property (nonatomic, assign) CamChannel *camChannel;
-@property (nonatomic, assign) UIViewController *parentVC;
+@property (nonatomic, weak) id<TimelineVCDelegate> timelineVCDelegate;
+@property (nonatomic, weak) UIViewController *parentVC;
+@property (nonatomic, strong) CamChannel *camChannel;
 
 - (void)loadEvents:(CamChannel *)camChannel;
 

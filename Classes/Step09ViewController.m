@@ -22,13 +22,13 @@
 
 @interface Step09ViewController () <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate>
 
-@property (nonatomic, retain) IBOutlet UITableView *tableViewInfo;
-@property (nonatomic, retain) IBOutlet UITableViewCell *cellUsername;
-@property (nonatomic, retain) IBOutlet UITableViewCell *cellPassword;
-@property (nonatomic, retain) IBOutlet UITableViewCell *cellConfirmPassword;
-@property (nonatomic, retain) IBOutlet UITableViewCell *cellEmail;
-@property (nonatomic, retain) IBOutlet UIButton *buttonCheckbox;
-@property (nonatomic, retain) IBOutlet UIButton *buttonCreate;
+@property (nonatomic, weak) IBOutlet UITableView *tableViewInfo;
+@property (nonatomic, weak) IBOutlet UITableViewCell *cellUsername;
+@property (nonatomic, weak) IBOutlet UITableViewCell *cellPassword;
+@property (nonatomic, weak) IBOutlet UITableViewCell *cellConfirmPassword;
+@property (nonatomic, weak) IBOutlet UITableViewCell *cellEmail;
+@property (nonatomic, weak) IBOutlet UIButton *buttonCheckbox;
+@property (nonatomic, weak) IBOutlet UIButton *buttonCreate;
 
 @property (nonatomic, copy) NSString *stringUsername;
 @property (nonatomic, copy) NSString *stringPassword;
@@ -163,7 +163,6 @@
                                cancelButtonTitle:ok
                                otherButtonTitles:nil];
         [_alert show];
-        [_alert release];
     }
     else if (!isValidateUsername)
     {
@@ -173,10 +172,10 @@
                                                 @"Username should not contain special characters except for - _ and ."  , nil);
         
         //ERROR condition
-        [[[[UIAlertView alloc] initWithTitle:title message:msg
+        [[[UIAlertView alloc] initWithTitle:title message:msg
                                     delegate:self
                            cancelButtonTitle:ok
-                           otherButtonTitles:nil] autorelease] show];
+                           otherButtonTitles:nil] show];
     }
     else if (([tfPass.text length] < 8) ||
              ([tfPass.text length] > 12) ) {
@@ -192,7 +191,6 @@
                                                cancelButtonTitle:ok
                                                otherButtonTitles:nil];
         [_alert show];
-        [_alert release];
     }
     else if ( ![tfPass.text isEqualToString:tfCPass.text]) {
         //error
@@ -208,7 +206,6 @@
                                                cancelButtonTitle:ok
                                                otherButtonTitles:nil];
         [_alert show];
-        [_alert release];
     }
     else if(![self isValidEmail:tfEmail.text]) {
         //error
@@ -224,7 +221,6 @@
                                                cancelButtonTitle:ok
                                                otherButtonTitles:nil];
         [_alert show];
-        [_alert release];
     }
     else if (![Step09ViewController isWifiConnectionAvailable] ) {
         title = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed",nil, [NSBundle mainBundle],
@@ -240,7 +236,6 @@
                                                   cancelButtonTitle:msg1
                                                   otherButtonTitles:nil];
         [alertView show];
-        [alertView release];
     }
     else //Good info now..
     {
@@ -252,10 +247,10 @@
         
         NSLog(@"Start registration");
         
-        BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
+        BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
                                                                                   Selector:@selector(regSuccessWithResponse:)
                                                                               FailSelector:@selector(regFailedWithError:)
-                                                                                 ServerErr:@selector(regFailedServerUnreachable)] autorelease];
+                                                                                 ServerErr:@selector(regFailedServerUnreachable)];
         [jsonComm registerAccountWithUsername:_stringUsername
                                      andEmail:_stringEmail
                                   andPassword:_stringPassword
@@ -364,7 +359,6 @@
     Step_10_ViewController *step10ViewController = [[Step_10_ViewController alloc] initWithNibName:@"Step_10_ViewController" bundle:nil];
     step10ViewController.delegate = self.delegate;
     [self.navigationController pushViewController:step10ViewController animated:NO];
-    [step10ViewController release];
 }
 
 - (void)regFailedWithError:(NSDictionary *)errorResponse
@@ -379,7 +373,6 @@
                                           cancelButtonTitle:ok
                                           otherButtonTitles:nil];
     [alert show];
-    [alert release];
 }
 
 - (void)regFailedServerUnreachable
@@ -401,7 +394,6 @@
                                           cancelButtonTitle:ok
                                           otherButtonTitles:nil];
 	[alert show];
-	[alert release];
 }
 
 #pragma mark - Table view data source
@@ -443,18 +435,6 @@
     }
     
     return cell;
-}
-
-- (void)dealloc
-{
-    [_tableViewInfo release];
-    [_cellUsername release];
-    [_cellPassword release];
-    [_cellConfirmPassword release];
-    [_cellEmail release];
-    [_buttonCheckbox release];
-    [_buttonCreate release];
-    [super dealloc];
 }
 
 @end

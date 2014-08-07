@@ -88,7 +88,7 @@
         //set date
         NSDate *date = [playlistInfo getTimeCode];
         if ( date ) {
-            NSDateFormatter* formatter = [[[NSDateFormatter alloc] init] autorelease];
+            NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
             [formatter setDateFormat:@"dd-MM-yyyy 'at' HH:mm"];
             NSTimeZone *gmt = [NSTimeZone systemTimeZone];
             [formatter setTimeZone:gmt];
@@ -138,15 +138,14 @@
         }
         
         [self.navController pushViewController:playbackViewController animated:NO];
-        [playbackViewController release];
     }
     else {
         NSLog(@"urlFile nil");
-        [[[[UIAlertView alloc] initWithTitle:@""
+        [[[UIAlertView alloc] initWithTitle:@""
                                      message:@"There is no clip associated with this snapshot"
                                     delegate:self
                            cancelButtonTitle:nil
-                           otherButtonTitles:@"OK", nil] autorelease] show];
+                           otherButtonTitles:@"OK", nil] show];
     }
 }
 

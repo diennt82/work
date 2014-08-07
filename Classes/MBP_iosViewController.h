@@ -54,15 +54,15 @@
 
 @interface MBP_iosViewController : UIViewController <BonjourDelegate,ConnectionMethodDelegate,UIActionSheetDelegate,ScanForCameraNotifier>
 
-@property (nonatomic, retain) IBOutlet UIView *progressView;
-@property (nonatomic, retain) IBOutlet UIImageView *splashScreen;
+@property (nonatomic, weak) IBOutlet UIView *progressView;
+@property (nonatomic, weak) IBOutlet UIImageView *splashScreen;
 
-@property (nonatomic, retain) NSArray *channelArray;
-@property (nonatomic, retain) NSMutableArray *restoredProfilesArray;
-@property (nonatomic, retain) CameraAlert *camAlert;
-@property (nonatomic, retain) MenuViewController *menuVC;
+@property (nonatomic, strong) NSArray *channelArray;
+@property (nonatomic, strong) NSMutableArray *restoredProfilesArray;
+@property (nonatomic, strong) CameraAlert *camAlert;
+@property (nonatomic, strong) MenuViewController *menuVC;
 
-@property (nonatomic, assign) id<BonjourDelegate> bonjourDelegate;
+@property (nonatomic, weak) id<BonjourDelegate> bonjourDelegate;
 @property (nonatomic, copy) NSString *bcAddr;
 @property (nonatomic, copy) NSString *ownAddr;
 @property (nonatomic) BOOL toTakeSnapShot;

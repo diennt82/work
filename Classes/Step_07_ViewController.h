@@ -13,7 +13,7 @@
 
 @interface Step_07_ViewController : UIViewController
 
-@property (nonatomic, retain) IBOutlet UITableViewCell * cellView;
-@property (nonatomic, assign) Step_06_ViewController * step06;
+@property (nonatomic, weak) IBOutlet UITableViewCell * cellView;
+@property (nonatomic, weak) Step_06_ViewController * step06;
 
 @end

@@ -17,7 +17,7 @@
 
 @interface Step_04_ViewController : UIViewController
 
-@property (retain, nonatomic) IBOutlet UIView *progressView;
+@property (nonatomic, weak) IBOutlet UIView *progressView;
 @property (nonatomic, copy) NSString *cameraMac;
 @property (nonatomic, copy) NSString *cameraName;
 

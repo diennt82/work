@@ -12,8 +12,8 @@
 
 @interface CameraNameViewController () <UITextFieldDelegate, UIAlertViewDelegate>
 
-@property (nonatomic, retain) IBOutlet UITableViewCell *nameCell;
-@property (nonatomic, retain) IBOutlet UIView *viewProgress;
+@property (nonatomic, weak) IBOutlet UITableViewCell *nameCell;
+@property (nonatomic, weak) IBOutlet UIView *viewProgress;
 
 @end
 
@@ -68,19 +68,19 @@
             [self.navigationController popViewControllerAnimated:YES];
         }
         else {
-            [[[[UIAlertView alloc] initWithTitle:@"Change Camera Name"
+            [[[UIAlertView alloc] initWithTitle:@"Change Camera Name"
                                        message:[responseDict objectForKey:@"message"]
                                       delegate:self
                              cancelButtonTitle:nil
-                               otherButtonTitles:@"OK", nil] autorelease] show];
+                               otherButtonTitles:@"OK", nil] show];
         }
     }
     else {
-        [[[[UIAlertView alloc] initWithTitle:@"Change Camera Name"
+        [[[UIAlertView alloc] initWithTitle:@"Change Camera Name"
                                      message:@"Server Error"
                                     delegate:self
                            cancelButtonTitle:nil
-                           otherButtonTitles:@"OK", nil] autorelease] show];
+                           otherButtonTitles:@"OK", nil] show];
     }
 }
 
@@ -153,11 +153,5 @@
     return NO;
 }
 
-- (void)dealloc
-{
-    [_nameCell release];
-    [_viewProgress release];
-    [super dealloc];
-}
 
 @end

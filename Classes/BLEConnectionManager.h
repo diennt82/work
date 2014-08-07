@@ -48,7 +48,7 @@ typedef enum
 @property (nonatomic, strong) NSMutableArray *listBLEs;
 @property (nonatomic, strong) UARTPeripheral *uartPeripheral;
 
-@property (nonatomic, assign) id<BLEConnectionManagerDelegate> delegate;
+@property (nonatomic, weak) id<BLEConnectionManagerDelegate> delegate;
 
 @property (nonatomic) ConnectionState state;
 @property (nonatomic) BOOL needReconnect;

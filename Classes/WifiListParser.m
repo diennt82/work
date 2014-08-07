@@ -10,16 +10,16 @@
 
 @interface WifiListParser ()
 
-@property (nonatomic, retain) NSMutableArray *wifiLists;
+@property (nonatomic, strong) NSMutableArray *wifiLists;
 @property (nonatomic, assign) BOOL isErrorParser;
 
 @property (nonatomic) SEL callback;
 @property (nonatomic) SEL callbackError;
-@property (nonatomic) id  caller;
+@property (nonatomic, weak) id  caller;
 
-@property (nonatomic, retain) NSXMLParser *xmlParser;
-@property (nonatomic, retain) NSMutableString *currentStringValue;
-@property (nonatomic, retain) WifiEntry *currentEntry;
+@property (nonatomic, strong) NSXMLParser *xmlParser;
+@property (nonatomic, strong) NSMutableString *currentStringValue;
+@property (nonatomic, strong) WifiEntry *currentEntry;
 @property (nonatomic, copy) NSString *listVersion;
 
 @end
@@ -79,21 +79,11 @@ NSString *WIFI_ENTRY_CHANNEL = @"channel";
     return self;
 }
 
--(void) dealloc
-{
-	[_wifiLists release];
-	[_xmlParser release];
-    [_currentEntry release];
-    [_listVersion release];
-    [super dealloc];
-}
-
 - (void)parseData:(NSData *) xmlWifiList whenDoneCall:(SEL) _parserCallback target:(id) obj
 {
     self.callback = _parserCallback;
     self.caller = obj;
 	self.xmlParser = [[NSXMLParser alloc] initWithData:xmlWifiList];
-    [_xmlParser release];
     
 	[_xmlParser setDelegate:self];
     [_xmlParser setShouldProcessNamespaces:NO];
@@ -109,7 +99,6 @@ NSString *WIFI_ENTRY_CHANNEL = @"channel";
     self.callbackError = _parserErrorCallback;
     
 	self.xmlParser = [[NSXMLParser alloc] initWithData:xmlWifiList];
-    [_xmlParser release];
     
 	[_xmlParser setDelegate:self];
     [_xmlParser setShouldProcessNamespaces:NO];
@@ -181,7 +170,6 @@ NSString *WIFI_ENTRY_CHANNEL = @"channel";
     
     if ([elementName isEqualToString:WIFI_ENTRY]) {
         self.currentEntry = [[WifiEntry alloc] init];
-        [_currentEntry release];
     }
     
     if ([elementName isEqualToString:WIFI_ENTRY_SSID]) {
@@ -223,7 +211,6 @@ NSString *WIFI_ENTRY_CHANNEL = @"channel";
         if ( _currentStringValue ) {
             int numEntry = [_currentStringValue intValue];
             self.wifiLists = [[NSMutableArray alloc] initWithCapacity:numEntry];
-            [_wifiLists release];
         }
     }
     

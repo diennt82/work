@@ -10,11 +10,4 @@
 
 @implementation CameraStngsCell
 
-- (void)dealloc
-{
-    [_nameLabel release];
-    [_valueSwitch release];
-    [super dealloc];
-}
-
 @end

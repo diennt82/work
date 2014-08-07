@@ -16,10 +16,10 @@
 
 @interface DeviceSettingsCell : UITableViewCell
 
-@property (nonatomic, retain) IBOutlet UILabel *nameLabel;
-@property (nonatomic, retain) IBOutlet UISlider *valueSlider;
+@property (nonatomic, weak) IBOutlet UILabel *nameLabel;
+@property (nonatomic, weak) IBOutlet UISlider *valueSlider;
 
-@property (nonatomic, assign) id<DeviceSettingsCellDelegate> deviceStgsCellDelegate;
+@property (nonatomic, weak) id<DeviceSettingsCellDelegate> deviceStgsCellDelegate;
 @property (nonatomic) NSInteger rowIndex;
 
 @end

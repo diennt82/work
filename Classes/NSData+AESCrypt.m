@@ -100,7 +100,6 @@ static char encodingTable[64] =
                 break;
         }
         NSLog(@"%s: deflateInit2() Error: \"%@\" Message: \"%s\"", __func__, errorMsg, zlibStreamStruct.msg);
-        [errorMsg release];
         return nil;
     }
     
@@ -160,7 +159,6 @@ static char encodingTable[64] =
                 break;
         }
         NSLog(@"%s: zlib error while attempting compression: \"%@\" Message: \"%s\"", __func__, errorMsg, zlibStreamStruct.msg);
-        [errorMsg release];
         
         // Free data structures that were dynamically created for the stream.
         deflateEnd(&zlibStreamStruct);
@@ -264,6 +262,5 @@ static char encodingTable[64] =
    
    return [NSString stringWithString:result];
 }
-
 
 @end

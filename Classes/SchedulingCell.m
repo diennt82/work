@@ -10,10 +10,4 @@
 
 @implementation SchedulingCell
 
-- (void)dealloc
-{
-    [_labelTitle release];
-    [super dealloc];
-}
-
 @end

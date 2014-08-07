@@ -8,20 +8,17 @@
 
 #import <UIKit/UIKit.h>
 
-
 @interface AlertPrompt : UIAlertView
-{
-    UITextField *textField;
-    NSString * otherInfo; 
-}
-@property (nonatomic, retain) UITextField *textField;
-@property (readonly) NSString *enteredText;
-@property (nonatomic, retain) NSString * otherInfo;
 
--(id) initWithTitle:(NSString *)title
-              message:(NSString *)message
-         promptholder:(NSString *) placeHolder
-             delegate:(id)delegate
-    cancelButtonTitle:(NSString *)cancelButtonTitle
-        okButtonTitle:(NSString *)okayButtonTitle;
+@property (nonatomic, strong) UITextField *textField;
+@property (nonatomic, copy, readonly) NSString *enteredText;
+@property (nonatomic, copy) NSString *otherInfo;
+
+- (id)initWithTitle:(NSString *)title
+            message:(NSString *)message
+       promptholder:(NSString *)placeHolder
+           delegate:(id)delegate
+  cancelButtonTitle:(NSString *)cancelButtonTitle
+      okButtonTitle:(NSString *)okayButtonTitle;
+
 @end

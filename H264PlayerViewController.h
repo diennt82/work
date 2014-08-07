@@ -55,43 +55,43 @@
 
 @interface H264PlayerViewController: GAITrackedViewController <PlayerCallbackHandler, ScanForCameraNotifier, StunClientDelegate, MelodyVCDelegate, UIScrollViewDelegate, ScrollHorizontalMenuDelegate, AudioOutStreamerDelegate>
 
-@property (nonatomic, retain) IBOutlet ScrollHorizontalMenu *horizMenu;
-@property (nonatomic, retain) IBOutlet UIView *menuBackgroundView;
+@property (nonatomic, weak) IBOutlet ScrollHorizontalMenu *horizMenu;
+@property (nonatomic, weak) IBOutlet UIView *menuBackgroundView;
 
 //ib for Touch to talk
-@property (nonatomic, retain) IBOutlet UIView *ib_ViewTouchToTalk;
-@property (nonatomic, retain) IBOutlet UIButton *ib_buttonTouchToTalk;
-@property (nonatomic, retain) IBOutlet UILabel *ib_labelTouchToTalk;
+@property (nonatomic, weak) IBOutlet UIView *ib_ViewTouchToTalk;
+@property (nonatomic, weak) IBOutlet UIButton *ib_buttonTouchToTalk;
+@property (nonatomic, weak) IBOutlet UILabel *ib_labelTouchToTalk;
 
 //ib for recording
-@property (nonatomic, retain) IBOutlet UIView *ib_viewRecordTTT;
-@property (nonatomic, retain) IBOutlet UIButton *ib_processRecordOrTakePicture;
-@property (nonatomic, retain) IBOutlet UIButton *ib_buttonChangeAction;
+@property (nonatomic, weak) IBOutlet UIView *ib_viewRecordTTT;
+@property (nonatomic, weak) IBOutlet UIButton *ib_processRecordOrTakePicture;
+@property (nonatomic, weak) IBOutlet UIButton *ib_buttonChangeAction;
 
 //button for replacing image take picture when recording
-@property (nonatomic, retain) IBOutlet UIButton *ib_changeToMainRecording;
-@property (nonatomic, retain) IBOutlet UILabel *ib_labelRecordVideo;
-@property (nonatomic, retain) IBOutlet UILabel *ib_temperature;
-@property (nonatomic, retain) IBOutlet UIScrollView *scrollView;
-@property (nonatomic, retain) IBOutlet UIImageView *imgViewDrectionPad;
-@property (nonatomic, retain) IBOutlet UIActivityIndicatorView *activityIndicator;
-@property (nonatomic, retain) IBOutlet UIActivityIndicatorView *activityStopStreamingProgress;
-@property (nonatomic, retain) IBOutlet UIImageView *customIndicator;
-@property (nonatomic, retain) IBOutlet UILabel *ib_lbCameraNotAccessible;
-@property (nonatomic, retain) IBOutlet UILabel *ib_lbCameraName;
+@property (nonatomic, weak) IBOutlet UIButton *ib_changeToMainRecording;
+@property (nonatomic, weak) IBOutlet UILabel *ib_labelRecordVideo;
+@property (nonatomic, weak) IBOutlet UILabel *ib_temperature;
+@property (nonatomic, weak) IBOutlet UIScrollView *scrollView;
+@property (nonatomic, weak) IBOutlet UIImageView *imgViewDrectionPad;
+@property (nonatomic, weak) IBOutlet UIActivityIndicatorView *activityIndicator;
+@property (nonatomic, weak) IBOutlet UIActivityIndicatorView *activityStopStreamingProgress;
+@property (nonatomic, weak) IBOutlet UIImageView *customIndicator;
+@property (nonatomic, weak) IBOutlet UILabel *ib_lbCameraNotAccessible;
+@property (nonatomic, weak) IBOutlet UILabel *ib_lbCameraName;
 
-@property (nonatomic, retain) IBOutlet UIButton *ib_btShowDebugInfo;
-@property (nonatomic, retain) IBOutlet UIButton *sendLogButton;
-@property (nonatomic, retain) IBOutlet UIImageView *imageViewVideo;
+@property (nonatomic, weak) IBOutlet UIButton *ib_btShowDebugInfo;
+@property (nonatomic, weak) IBOutlet UIButton *sendLogButton;
+@property (nonatomic, weak) IBOutlet UIImageView *imageViewVideo;
 
-@property (nonatomic, retain) NSMutableArray *itemImages;
-@property (nonatomic, retain) NSMutableArray *itemSelectedImages;
-@property (nonatomic, retain) NSTimer *alertTimer;
-@property (nonatomic, retain) NSTimer *probeTimer;
-@property (nonatomic, retain) StunClient *client;
-@property (nonatomic, retain) MelodyViewController *melodyViewController;
-@property (nonatomic, assign) id<H264PlayerVCDelegate> h264PlayerVCDelegate;
-@property (nonatomic, assign) CamChannel *selectedChannel;
+@property (nonatomic, strong) NSMutableArray *itemImages;
+@property (nonatomic, strong) NSMutableArray *itemSelectedImages;
+@property (nonatomic, strong) NSTimer *alertTimer;
+@property (nonatomic, strong) NSTimer *probeTimer;
+@property (nonatomic, strong) StunClient *client;
+@property (nonatomic, strong) MelodyViewController *melodyViewController;
+@property (nonatomic, strong) CamChannel *selectedChannel;
+@property (nonatomic, weak) id<H264PlayerVCDelegate> h264PlayerVCDelegate;
 
 @property (nonatomic) int selectedItemMenu;
 @property (nonatomic) int currentMediaStatus;

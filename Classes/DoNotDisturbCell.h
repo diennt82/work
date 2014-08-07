@@ -11,9 +11,9 @@
 
 @interface DoNotDisturbCell : UITableViewCell
 
-@property (nonatomic, retain) IBOutlet UIButton *ienableDoNotDisturbButton;
-@property (nonatomic, retain) IBOutlet UICircularSlider *icircleSliderCustom;
-@property (nonatomic, retain) IBOutlet UIImageView *imgViewEnableDisable;
+@property (nonatomic, weak) IBOutlet UIButton *ienableDoNotDisturbButton;
+@property (nonatomic, weak) IBOutlet UICircularSlider *icircleSliderCustom;
+@property (nonatomic, weak) IBOutlet UIImageView *imgViewEnableDisable;
 
 - (IBAction)didEnableDisturb:(id)sender;
 

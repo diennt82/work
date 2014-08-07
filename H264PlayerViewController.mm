@@ -25,39 +25,39 @@
 
 @interface H264PlayerViewController () <TimelineVCDelegate, BonjourDelegate, AudioOutStreamRemoteDelegate>
 
-@property (nonatomic, retain) IBOutlet UIButton *ib_switchDegree;
-@property (nonatomic, retain) IBOutlet UIImageView *imageViewHandle;
-@property (nonatomic, retain) IBOutlet UIImageView *imageViewKnob;
-@property (nonatomic, retain) IBOutlet UIView *viewDebugInfo;
+@property (nonatomic, weak) IBOutlet UIButton *ib_switchDegree;
+@property (nonatomic, weak) IBOutlet UIImageView *imageViewHandle;
+@property (nonatomic, weak) IBOutlet UIImageView *imageViewKnob;
+@property (nonatomic, weak) IBOutlet UIView *viewDebugInfo;
 
-@property (nonatomic, retain) NSThread *threadBonjour;
-@property (nonatomic, retain) UIControl *backCover;
-@property (nonatomic, retain) UIAlertView *alertViewTimoutRemote;
-@property (nonatomic, retain) UIImageView *imageViewStreamer;
-@property (nonatomic, retain) NSMutableArray *bonjourList;
-@property (nonatomic, retain) EarlierViewController *earlierVC;
-@property (nonatomic, retain) TimelineViewController *timelineVC;
-@property (nonatomic, retain) AudioOutStreamRemote *audioOutStreamRemote;
-@property (nonatomic, retain) BMS_JSON_Communication *jsonCommBlocked;
-@property (nonatomic, retain) NSTimer *timerIncreaseBitRate;
-@property (nonatomic, retain) NSTimer *timerBufferingTimeout;
-@property (nonatomic, retain) NSTimer *timerRemoteStreamTimeOut;
-@property (nonatomic, retain) NSTimer *timerRemoteStreamKeepAlive;
-@property (nonatomic, retain) NSTimer *timerHideMenu;
-@property (nonatomic, retain) NSDate *timeStartingStageTwo;
-@property (nonatomic, retain) NSDate *timeStartPlayerView;
+@property (nonatomic, strong) NSThread *threadBonjour;
+@property (nonatomic, strong) UIControl *backCover;
+@property (nonatomic, strong) UIAlertView *alertViewTimoutRemote;
+@property (nonatomic, strong) UIImageView *imageViewStreamer;
+@property (nonatomic, strong) NSMutableArray *bonjourList;
+@property (nonatomic, strong) EarlierViewController *earlierVC;
+@property (nonatomic, strong) TimelineViewController *timelineVC;
+@property (nonatomic, strong) AudioOutStreamRemote *audioOutStreamRemote;
+@property (nonatomic, strong) BMS_JSON_Communication *jsonCommBlocked;
+@property (nonatomic, strong) NSTimer *timerIncreaseBitRate;
+@property (nonatomic, strong) NSTimer *timerBufferingTimeout;
+@property (nonatomic, strong) NSTimer *timerRemoteStreamTimeOut;
+@property (nonatomic, strong) NSTimer *timerRemoteStreamKeepAlive;
+@property (nonatomic, strong) NSTimer *timerHideMenu;
+@property (nonatomic, strong) NSDate *timeStartingStageTwo;
+@property (nonatomic, strong) NSDate *timeStartPlayerView;
 
-@property (nonatomic, retain) ScanForCamera *scanner;
-@property (nonatomic, retain) NSTimer *timerRecording; // display time when recording
-@property (nonatomic, retain) NSTimer *timerStopStreamAfter30s; // timer display text Camera is not accessible
-@property (nonatomic, retain) NSTimer *send_UD_dir_req_timer;
-@property (nonatomic, retain) NSTimer *send_LR_dir_req_timer;
+@property (nonatomic, strong) ScanForCamera *scanner;
+@property (nonatomic, strong) NSTimer *timerRecording; // display time when recording
+@property (nonatomic, strong) NSTimer *timerStopStreamAfter30s; // timer display text Camera is not accessible
+@property (nonatomic, strong) NSTimer *send_UD_dir_req_timer;
+@property (nonatomic, strong) NSTimer *send_LR_dir_req_timer;
 
 @property (nonatomic, assign) H264PlayerListener *h264StreamerListener;
-@property (nonatomic, assign) EarlierNavigationController *earlierNavi;
+@property (nonatomic, weak) EarlierNavigationController *earlierNavi;
 
-@property (nonatomic, assign) UIBarButtonItem *nowButton;
-@property (nonatomic, assign) UIBarButtonItem *earlierButton;
+@property (nonatomic, strong) UIBarButtonItem *nowButton;
+@property (nonatomic, strong) UIBarButtonItem *earlierButton;
 
 @property (nonatomic, copy) NSString *stringTemperature;
 @property (nonatomic, copy) NSString *cameraModel;
@@ -116,7 +116,7 @@
 
 // processing for hold to talk
 @property (nonatomic) BOOL ptt_enabled;
-@property (nonatomic, retain) AudioOutStreamer *audioOut;
+@property (nonatomic, strong) AudioOutStreamer *audioOut;
 
 // processing for recording
 @property (nonatomic) int iMaxRecordSize;
@@ -244,7 +244,6 @@
     singleTap.numberOfTapsRequired = 1;
     singleTap.numberOfTouchesRequired = 1;
     [self.imageViewStreamer addGestureRecognizer:singleTap];
-    [singleTap release];
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
@@ -492,13 +491,11 @@
     doubleTapRecognizer.numberOfTapsRequired = 2;
     doubleTapRecognizer.numberOfTouchesRequired = 1;
     [_imageViewStreamer addGestureRecognizer:doubleTapRecognizer];
-    [doubleTapRecognizer release];
     
     UITapGestureRecognizer *twoFingerTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(scrollViewTwoFingerTapped:)];
     twoFingerTapRecognizer.numberOfTapsRequired = 1;
     twoFingerTapRecognizer.numberOfTouchesRequired = 2;
     [_imageViewStreamer addGestureRecognizer:twoFingerTapRecognizer];
-    [twoFingerTapRecognizer release];
 }
 
 /**
@@ -530,7 +527,6 @@
         titleView.textColor = [UIColor blueColor]; // Change to desired color
         
         self.navigationItem.titleView = titleView;
-        [titleView release];
     }
     titleView.text = title;
     [titleView sizeToFit];
@@ -558,7 +554,10 @@
                                                 NSForegroundColorAttributeName:[UIColor barItemSelectedColor]
                                                 } forState:UIControlStateNormal];
         _nowButton.enabled = NO;
-        self.navigationItem.rightBarButtonItems = @[_earlierButton, _nowButton];
+        
+        // Dropping now and earlier buttons to see what folks think.
+        // Have to clean up related actions if this sticks.
+        //self.navigationItem.rightBarButtonItems = @[_earlierButton, _nowButton];
     }
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
@@ -708,7 +707,6 @@
     [alertViewSendingLog textFieldAtIndex:0].keyboardType = UIKeyboardTypeNumberPad;
     [alertViewSendingLog textFieldAtIndex:0].placeholder = @"Password";
     [alertViewSendingLog show];
-    [alertViewSendingLog release];
 }
 
 #pragma mark - Delegate Stream callback
@@ -1380,7 +1378,6 @@
     if ( _timelineVC ) {
         self.timelineVC.view.hidden = YES;
     }
-    [_timerHideMenu release];
     _timerHideMenu = nil;
     
 }
@@ -1838,17 +1835,11 @@
     
     NSLog(@"%s _mediaProcessStatus: %d", __FUNCTION__, _mediaProcessStatus);
     
-    if (_earlierVC){
-        [_earlierVC release];
-    }
     
     if (_timelineVC) {
         _timelineVC.timelineVCDelegate = nil;
     }
     
-    if (_jsonCommBlocked) {
-        [_jsonCommBlocked release];
-    }
     
     if (_mediaProcessStatus == 0) {
         [self goBack];
@@ -2006,14 +1997,13 @@
                 NSLog(@"waiting for close STUN stream from server");
             }
             
-            H264PlayerViewController *vc = (H264PlayerViewController *)[self retain];
+            H264PlayerViewController *vc = (H264PlayerViewController *)self;
             [self performSelectorInBackground:@selector(closeStunStream_bg:) withObject:vc];
         }
     }
     
     if ( _client ) {
         [_client shutdown];
-        [_client release];
         _client = nil;
     }
 }
@@ -2046,7 +2036,6 @@
         _selectedChannel.waitingForStreamerToClose = NO;
     }
     
-    [thisVC release];
 }
 
 - (void)stopStream
@@ -2141,7 +2130,7 @@
         
         if (responseData != nil)
         {
-            bodyKey = [[[NSString alloc] initWithData:responseData encoding: NSUTF8StringEncoding] autorelease];
+            bodyKey = [[NSString alloc] initWithData:responseData encoding: NSUTF8StringEncoding];
             
             NSLog(@"getVQ_bg response string: %@", bodyKey);
         }
@@ -2207,7 +2196,7 @@
         
         NSData *responseData = [[HttpCom instance].comWithDevice sendCommandAndBlock_raw:@"get_recording_stat"];
         if ( responseData ) {
-            responseString = [[[NSString alloc] initWithData:responseData encoding: NSUTF8StringEncoding] autorelease];
+            responseString = [[NSString alloc] initWithData:responseData encoding: NSUTF8StringEncoding];
             NSLog(@"getTriggerRecording_bg response string: %@", responseString);
         }
     }
@@ -2260,7 +2249,7 @@
         
         NSData *responseData = [[HttpCom instance].comWithDevice sendCommandAndBlock_raw:[NSString stringWithFormat:@"set_recording_stat&mode=%@", modeRecording]];
         if ( responseData ) {
-            responseString = [[[NSString alloc] initWithData:responseData encoding: NSUTF8StringEncoding] autorelease];
+            responseString = [[NSString alloc] initWithData:responseData encoding: NSUTF8StringEncoding];
             NSLog(@"setTriggerRecording_bg response string: %@", responseString);
         }
     }
@@ -2318,7 +2307,7 @@
     if ( _selectedChannel.profile.isInLocal ) {
         NSData *responseData = [[HttpCom instance].comWithDevice sendCommandAndBlock_raw:@"value_melody"];
         if ( responseData ) {
-            responseString = [[[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding] autorelease];
+            responseString = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
         }
     }
     else {
@@ -2383,7 +2372,7 @@
         
         NSData *responseData = [[HttpCom instance].comWithDevice sendCommandAndBlock_raw:@"value_temperature"];
         if ( responseData ) {
-            responseString = [[[NSString alloc] initWithData:responseData encoding: NSUTF8StringEncoding] autorelease];
+            responseString = [[NSString alloc] initWithData:responseData encoding: NSUTF8StringEncoding];
         }
     }
     else {
@@ -2577,7 +2566,6 @@
         [_ib_temperature addSubview:degreeCelsius];
     }
     
-    [degreeCelsius release];
 }
 
 #pragma mark - Stun probe timer
@@ -2829,7 +2817,6 @@
         }
     });
     
-    dispatch_release(qt);
     
     if ( isBehindSymmetricNat ) {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
@@ -2841,7 +2828,7 @@
                 
                 NSData *responseData = [[HttpCom instance].comWithDevice sendCommandAndBlock_raw:@"get_resolution"];
                 if ( responseData ) {
-                    bodyKey = [[[NSString alloc] initWithData:responseData encoding: NSUTF8StringEncoding] autorelease];
+                    bodyKey = [[NSString alloc] initWithData:responseData encoding: NSUTF8StringEncoding];
                     NSLog(@"symmetric_check_result response string: %@", bodyKey);
                 }
             }
@@ -3614,7 +3601,7 @@
 
         //load new nib for landscape iPad
         [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController_land" owner:self options:nil];
-        self.melodyViewController = [[[MelodyViewController alloc] initWithNibName:@"MelodyViewController_land" bundle:nil] autorelease];
+        self.melodyViewController = [[MelodyViewController alloc] initWithNibName:@"MelodyViewController_land" bundle:nil];
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
             [_earlierVC.view setFrame:CGRectMake(0, 0, SCREEN_HEIGHT, SCREEN_WIDTH)];
@@ -3664,7 +3651,7 @@
 
         // load new nib
         [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController" owner:self options:nil];
-        self.melodyViewController = [[[MelodyViewController alloc] initWithNibName:@"MelodyViewController" bundle:nil] autorelease];
+        self.melodyViewController = [[MelodyViewController alloc] initWithNibName:@"MelodyViewController" bundle:nil];
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
             [_earlierVC.view setFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT - 64)];
@@ -3924,7 +3911,6 @@
             }
         }
         
-        [_bonjourList release];
         _bonjourList = nil;
         
         _selectedChannel.profile.hasUpdateLocalStatus = YES;
@@ -4520,48 +4506,15 @@
 
 - (void)dealloc
 {
-    [_imageViewVideo release];
-    [_imageViewStreamer release];
-    [_selectedChannel release];
-    [_imgViewDrectionPad release];
     [_send_UD_dir_req_timer invalidate];
-    [_send_UD_dir_req_timer release];
     [_send_LR_dir_req_timer invalidate];
-    [_send_LR_dir_req_timer release];
-    [_activityIndicator release];
-    [_activityStopStreamingProgress release];
-    [_probeTimer release];
     
-    [_scrollView release];
-    [_ib_temperature release];
-    [_ib_ViewTouchToTalk release];
     
-    [_ib_labelTouchToTalk release];
-    [_ib_viewRecordTTT release];
-    [_ib_labelRecordVideo release];
-    [_ib_buttonTouchToTalk release];
-    [_ib_processRecordOrTakePicture release];
-    [_ib_buttonChangeAction release];
     
-    [_timelineVC release];
-    [_earlierVC release];
     
-    [_imageViewHandle release];
-    [_imageViewKnob release];
-    [_ib_changeToMainRecording release];
-    [_ib_switchDegree release];
-    [_customIndicator release];
-    [_ib_lbCameraNotAccessible release];
-    [_ib_lbCameraName release];
-    [_ib_btShowDebugInfo release];
-    [_audioOutStreamRemote release];
-    [_jsonCommBlocked release];
-    [_viewDebugInfo release];
-    [_alertViewTimoutRemote release];
     
     NSLog(@"%s", __FUNCTION__);
     
-    [super dealloc];
 }
 
 #pragma mark -  PTT
@@ -4570,7 +4523,6 @@
 {
     [self performSelectorInBackground:@selector(set_Walkie_Talkie_bg:) withObject:@"0"];
     
-    [_audioOut release];
     _audioOut = nil;
 }
 
@@ -4620,7 +4572,6 @@
         
         [labelCrazy performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:3];
         
-        [labelCrazy release];
         
         //self.walkieTalkieEnabled = !_walkieTalkieEnabled;
         [self ib_buttonTouchToTalkTouchUpInside];
@@ -4661,7 +4612,6 @@
         // Init connectivity to Camera via socket & prevent loss of audio data
         _audioOut = [[AudioOutStreamer alloc] initWithDeviceIp:[HttpCom instance].comWithDevice.device_ip
                                                     andPTTport:self.selectedChannel.profile.ptt_port];  //IRABOT_AUDIO_RECORDING_PORT
-        [_audioOut retain];
         [_audioOut startRecordingSound];
         
         [self performSelectorInBackground:@selector(set_Walkie_Talkie_bg:)
@@ -4681,7 +4631,6 @@
         
         if ( _audioOut ) {
             [_audioOut disconnectFromAudioSocket];
-            [_audioOut release];
             _audioOut = nil;
         }
         else {
@@ -4796,7 +4745,6 @@
     if ( !_audioOutStreamRemote ) {
         self.audioOutStreamRemote = [[AudioOutStreamRemote alloc] initWithRemoteMode];
         
-        [_audioOutStreamRemote retain];
         // Start buffering sound from user at the moment they press down the button
         // This is to prevent loss of audio data
     }
@@ -4882,7 +4830,6 @@
                                 [data appendBytes:charHandshake length:strlen(charHandshake)];
                                 
                                 _audioOutStreamRemote.dataRequest = data;
-                                [data release];
                                 
                                 NSString *relayServerIP = (NSString *)[resDict objectForKey:@"relay_server_ip"];
                                 id relayServerPort = [resDict objectForKey:@"relay_server_port"];
@@ -5286,7 +5233,6 @@
                                               cancelButtonTitle:@"OK"
                                               otherButtonTitles:nil];
 	[alertInfo show];
-	[alertInfo release];
 }
 
 #ifdef SHOW_DEBUG_INFO
@@ -5530,7 +5476,6 @@
         }
     }
     
-    [finalResult release];
 }
 
 - (BOOL)isInTheSameNetworkAsCamera:(CamProfile *)cp

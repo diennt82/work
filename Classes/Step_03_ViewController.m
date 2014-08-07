@@ -12,8 +12,8 @@
 
 @interface Step_03_ViewController ()
 
-@property (nonatomic, retain) IBOutlet UIScrollView *scrollViewGuide;
-@property (nonatomic, retain) IBOutlet UIView *inProgress;
+@property (nonatomic, weak) IBOutlet UIScrollView *scrollViewGuide;
+@property (nonatomic, weak) IBOutlet UIView *inProgress;
 
 @property (nonatomic) BOOL taskCancelled;
 @property (nonatomic) BOOL showProgressNextTime;
@@ -92,16 +92,6 @@
 		self.taskCancelled = YES;
         [[NSNotificationCenter defaultCenter] removeObserver:self];
 	}
-}
-
--(void) dealloc
-{
-    [_homeWifiSSID release];
-    [_cameraName release];
-    [_cameraMac release];
-    [_scrollViewGuide release];
-    [_inProgress release];
-    [super dealloc];
 }
 
 #pragma mark - Actions
@@ -273,7 +263,6 @@
     step04ViewController.cameraMac = _cameraMac;
     step04ViewController.cameraName = _cameraName;
     [self.navigationController pushViewController:step04ViewController animated:NO];
-    [step04ViewController release];
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }

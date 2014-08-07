@@ -21,8 +21,8 @@
 
 @interface MBP_iosAppDelegate : NSObject <UIApplicationDelegate, UIAlertViewDelegate, MFMailComposeViewControllerDelegate>
 
-@property (nonatomic, retain) IBOutlet UIWindow *window;
-@property (nonatomic, retain) IBOutlet MBP_iosViewController *viewController;
+@property (nonatomic, strong) IBOutlet UIWindow *window;
+@property (nonatomic, weak) IBOutlet MBP_iosViewController *viewController;
 @property (nonatomic) BOOL becomeActiveByNotificationFlag;
 
 @end

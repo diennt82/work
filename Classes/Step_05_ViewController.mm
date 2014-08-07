@@ -18,13 +18,13 @@
 
 @interface Step_05_ViewController () <UIAlertViewDelegate>
 
-@property (nonatomic, retain) IBOutlet UIButton *btnContinue;
-@property (nonatomic, retain) IBOutlet UITableViewCell *cellOtherNetwork;
-@property (nonatomic, retain) IBOutlet UITableViewCell *cellRefresh;
-@property (nonatomic, retain) IBOutlet UIView *viewProgress;
+@property (nonatomic, weak) IBOutlet UIButton *btnContinue;
+@property (nonatomic, weak) IBOutlet UITableViewCell *cellOtherNetwork;
+@property (nonatomic, weak) IBOutlet UITableViewCell *cellRefresh;
+@property (nonatomic, weak) IBOutlet UIView *viewProgress;
 
-@property (nonatomic, retain) WifiEntry *selectedWifiEntry;
-@property (nonatomic, retain) WifiEntry *otherWiFi;
+@property (nonatomic, strong) WifiEntry *selectedWifiEntry;
+@property (nonatomic, strong) WifiEntry *otherWiFi;
 
 @end
 
@@ -79,16 +79,6 @@
     [self performSelector:@selector(queryWifiList) withObject:nil afterDelay:0.001];
 }
 
--(void)dealloc
-{
-    [_listOfWifi release];
-    [_cellOtherNetwork release];
-    [_btnContinue release];
-    [_cellRefresh release];
-    [_viewProgress release];
-    [_otherWiFi release];
-    [super dealloc];
-}
 
 #pragma mark - Private methods
 
@@ -107,7 +97,6 @@
     }
     
     self.listOfWifi = wifiList;
-    [wifiList release];
 }
 
 #pragma mark - Actions
@@ -129,11 +118,11 @@
      */
     
     if ([_selectedWifiEntry.authMode isEqualToString:@"open"]) {
-        [[[[UIAlertView alloc] initWithTitle:@"SSID without password is not supported due to security concern. Please add password to your router."
+        [[[UIAlertView alloc] initWithTitle:@"SSID without password is not supported due to security concern. Please add password to your router."
                                    message:nil
                                   delegate:nil
                          cancelButtonTitle:nil
-                           otherButtonTitles:@"OK", nil] autorelease] show];
+                           otherButtonTitles:@"OK", nil] show];
     }
     else {
         [[KISSMetricsAPI sharedAPI] recordEvent:@"Step05 - Touch continue button" withProperties:nil];
@@ -170,7 +159,6 @@
     step06ViewController.security = _selectedWifiEntry.authMode;
     
     [self.navigationController pushViewController:step06ViewController animated:NO];
-    [step06ViewController release];
 }
 
 - (void)showDialogToConfirm:(NSString *)homeWifi selectedWifi:(NSString *)selectedWifi
@@ -184,7 +172,6 @@
                                               otherButtonTitles:@"Continue", nil];
     alertViewNotice.tag = ALERT_CONFIRM_TAG;
     [alertViewNotice show];
-    [alertViewNotice release];
 }
 
 - (void)queryWifiList
@@ -215,7 +202,7 @@
     self.navigationController.navigationBar.userInteractionEnabled = YES;
     
     if ( router_list_raw ) {
-        WifiListParser *routerListParser = [[[WifiListParser alloc]initWithNewCmdFlag:newCmdFlag] autorelease];
+        WifiListParser *routerListParser = [[WifiListParser alloc]initWithNewCmdFlag:newCmdFlag];
         
         [routerListParser parseData:router_list_raw
                        whenDoneCall:@selector(setWifiResult:)
@@ -236,7 +223,6 @@
                                             otherButtonTitles:LocStr(@"Retry"), nil];
     myAlert.tag = ALERT_RETRY_WIFI_TAG;
     [myAlert show];
-    [myAlert release];
 }
 
 #pragma mark - Alert view delegate
@@ -302,7 +288,6 @@
     
     [_listOfWifi addObject:_otherWiFi];
     [self filterCameraList];
-    [mTableView reloadData];
 }
 
 #pragma mark - Table view delegates & datasource

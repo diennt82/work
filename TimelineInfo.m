@@ -10,12 +10,4 @@
 
 @implementation TimelineInfo
 
-- (void)dealloc
-{
-    [_snapshotImage release];
-    [_eventMessage release];
-    [_eventTime release];
-    [super dealloc];
-}
-
 @end

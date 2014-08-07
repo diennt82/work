@@ -16,10 +16,4 @@
     [_slideSettingsDelegate reportChangedSliderValue:aSlider.value andRowIndex:_rowIndex];
 }
 
-- (void)dealloc
-{
-    [_slideSettings release];
-    [super dealloc];
-}
-
 @end

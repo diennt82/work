@@ -16,16 +16,15 @@
 
 @interface Step_06_ViewController : GAITrackedViewController
 
-@property (nonatomic, retain) IBOutlet UIView *otaDummyProgress;
-@property (nonatomic, retain) IBOutlet UIProgressView *otaDummyProgressBar;
-@property (nonatomic, retain) IBOutlet UIView *progressView;
-@property (nonatomic, retain) IBOutlet UIScrollView *scrollViewGuide;
-@property (nonatomic, retain) IBOutlet UIView *infoSelectCameView;
-
-@property (nonatomic, assign) IBOutlet UITableViewCell * ssidCell;
-@property (nonatomic, assign) IBOutlet UITableViewCell * securityCell;
-@property (nonatomic, assign) IBOutlet UITableViewCell * passwordCell;
-@property (nonatomic, assign) IBOutlet UITableViewCell * confPasswordCell;
+@property (nonatomic, weak) IBOutlet UIView *otaDummyProgress;
+@property (nonatomic, weak) IBOutlet UIProgressView *otaDummyProgressBar;
+@property (nonatomic, weak) IBOutlet UIView *progressView;
+@property (nonatomic, weak) IBOutlet UIScrollView *scrollViewGuide;
+@property (nonatomic, weak) IBOutlet UIView *infoSelectCameView;
+@property (nonatomic, weak) IBOutlet UITableViewCell * ssidCell;
+@property (nonatomic, weak) IBOutlet UITableViewCell * securityCell;
+@property (nonatomic, weak) IBOutlet UITableViewCell * passwordCell;
+@property (nonatomic, weak) IBOutlet UITableViewCell * confPasswordCell;
 
 @property (nonatomic, copy) NSString *security;
 @property (nonatomic, copy) NSString *ssid;

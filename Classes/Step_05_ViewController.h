@@ -13,11 +13,8 @@
 #import "GAI.h"
 
 @interface Step_05_ViewController : GAITrackedViewController
-{
-    IBOutlet UITableView * mTableView;
-}
 
-@property (nonatomic, retain) NSMutableArray *listOfWifi;
-@property (nonatomic, assign) IBOutlet UITableViewCell *cellView;
+@property (nonatomic, weak) IBOutlet UITableViewCell *cellView;
+@property (nonatomic, strong) NSMutableArray *listOfWifi;
 
 @end

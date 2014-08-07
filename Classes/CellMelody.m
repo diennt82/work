@@ -10,11 +10,4 @@
 
 @implementation CellMelody
 
-- (void)dealloc
-{
-    [_imageCellMelody release];
-    [_labelCellMelody release];
-    [super dealloc];
-}
-
 @end

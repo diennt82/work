@@ -16,23 +16,23 @@
 
 @interface NotifViewController ()
 
-@property (nonatomic, retain) IBOutlet UIImageView *imageViewSnapshot;
-@property (nonatomic, retain) IBOutlet UILabel *messageLabel;
-@property (nonatomic, retain) IBOutlet UILabel *timeLabel;
-@property (nonatomic, retain) IBOutlet UIButton *playEnventBtn;
-@property (nonatomic, retain) IBOutlet UIButton *goToCameraBtn;
-@property (nonatomic, retain) IBOutlet UIButton *changeSettingsBtn;
-@property (nonatomic, retain) IBOutlet UILabel *lblChangeSetting;
-@property (nonatomic, retain) IBOutlet UIButton *ignoreBtn;
-@property (nonatomic, retain) IBOutlet UIButton *choosePlanBtn;
-@property (nonatomic, retain) IBOutlet UIButton *learnMoreBtn;
-@property (nonatomic, retain) IBOutlet UIActivityIndicatorView *activityIndicatorViewLoading;
-@property (nonatomic, retain) IBOutlet UIView *viewFront;
-@property (nonatomic, retain) IBOutlet UIView *viewBehide;
+@property (nonatomic, weak) IBOutlet UIImageView *imageViewSnapshot;
+@property (nonatomic, weak) IBOutlet UILabel *messageLabel;
+@property (nonatomic, weak) IBOutlet UILabel *timeLabel;
+@property (nonatomic, weak) IBOutlet UIButton *playEnventBtn;
+@property (nonatomic, weak) IBOutlet UIButton *goToCameraBtn;
+@property (nonatomic, weak) IBOutlet UIButton *changeSettingsBtn;
+@property (nonatomic, weak) IBOutlet UILabel *lblChangeSetting;
+@property (nonatomic, weak) IBOutlet UIButton *ignoreBtn;
+@property (nonatomic, weak) IBOutlet UIButton *choosePlanBtn;
+@property (nonatomic, weak) IBOutlet UIButton *learnMoreBtn;
+@property (nonatomic, weak) IBOutlet UIActivityIndicatorView *activityIndicatorViewLoading;
+@property (nonatomic, weak) IBOutlet UIView *viewFront;
+@property (nonatomic, weak) IBOutlet UIView *viewBehide;
 
-@property (nonatomic, retain) NSDictionary *event;
-@property (nonatomic, retain) NSMutableArray *clipsInEvent;
-@property (nonatomic, retain) BMS_JSON_Communication *jsonComm;
+@property (nonatomic, strong) NSDictionary *event;
+@property (nonatomic, strong) NSMutableArray *clipsInEvent;
+@property (nonatomic, strong) BMS_JSON_Communication *jsonComm;
 
 @property (nonatomic) BOOL isBackgroundTaskRunning;
 @property (nonatomic) BOOL eventsListAlready;
@@ -93,7 +93,6 @@
     [dateFormater setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
     [dateFormater setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
     NSDate *eventDate = [dateFormater dateFromString:_alertTime]; //2013-12-31 07:38:35 +0000
-    [dateFormater release];
     
     NSDateFormatter* df_local = [[NSDateFormatter alloc] init];
     [df_local setTimeZone:[NSTimeZone localTimeZone]];
@@ -162,7 +161,6 @@
                                               cancelButtonTitle:@"Cancel"
                                               otherButtonTitles:nil, nil];
     [alertView show];
-    [alertView release];
 }
 
 #pragma mark - Action
@@ -183,12 +181,10 @@
                 
                 PlaybackViewController *playbackViewController = [[PlaybackViewController alloc] init];
                 [playbackViewController setClipInfo:clipInfo];
-                [clipInfo release];
                 
                 NSLog(@"Push the view controller.- %@", self.parentViewController);
                 _isReturnFrmPlayback = TRUE;
                 [self.navigationController pushViewController:playbackViewController animated:YES];
-                [playbackViewController release];
             }
             else {
                 NSLog(@"URL file is not correct");
@@ -234,7 +230,6 @@
         cameraMenuCV.cameraMenuDelegate = _notifDelegate;
     }
     [self.navigationController pushViewController:cameraMenuCV animated:YES];
-    [cameraMenuCV release];
 }
 
 - (IBAction)choosePlanTouchAction:(id)sender
@@ -357,22 +352,5 @@
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(getEventSnapshot) object:nil];
 }
 
-- (void)dealloc
-{
-    [_playEnventBtn release];
-    [_goToCameraBtn release];
-    [_changeSettingsBtn release];
-    [_ignoreBtn release];
-    [_choosePlanBtn release];
-    [_learnMoreBtn release];
-    [_messageLabel release];
-    [_timeLabel release];
-    [_imageViewSnapshot release];
-    [_activityIndicatorViewLoading release];
-    [_viewFront release];
-    [_viewBehide release];
-    [_jsonComm release];
-    [super dealloc];
-}
 
 @end

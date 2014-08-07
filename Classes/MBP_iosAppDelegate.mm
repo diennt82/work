@@ -264,7 +264,6 @@ void checkingApplicationCrashed()
     
     [[NSUserDefaults standardUserDefaults] registerDefaults:defaultsToRegister];
     [[NSUserDefaults standardUserDefaults] synchronize];
-    [defaultsToRegister release];
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
@@ -411,7 +410,6 @@ void checkingApplicationCrashed()
         }
 	}
     
-    [savedData release];
     return shouldAlert;
 }
 
@@ -420,7 +418,7 @@ void checkingApplicationCrashed()
     CFUUIDRef theUUID = CFUUIDCreate(NULL);
     CFStringRef string = CFUUIDCreateString(NULL, theUUID);
     CFRelease(theUUID);
-    return [(NSString *)string autorelease];
+    return (__bridge NSString *)string;
 }
 
 - (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)devToken
@@ -443,10 +441,10 @@ void checkingApplicationCrashed()
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
     
-    BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
+    BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
                                                                              Selector:nil
                                                                          FailSelector:nil
-                                                                            ServerErr:nil] autorelease];
+                                                                            ServerErr:nil];
     
     NSDictionary *responseDict = [jsonComm registerAppBlockedWithName:applicationName
                                                         andDeviceCode:uuidString
@@ -496,7 +494,7 @@ void checkingApplicationCrashed()
     }
     
     // Workaround: MFMailComposeViewController does not dismiss keyboard when application enters background
-    UITextView *dummyTextView = [[[UITextView alloc] init] autorelease];
+    UITextView *dummyTextView = [[UITextView alloc] init];
     [self.window.rootViewController.presentedViewController.view addSubview:dummyTextView];
     [self.window endEditing:YES];
     [dummyTextView becomeFirstResponder];
@@ -602,13 +600,6 @@ void checkingApplicationCrashed()
      */
     
     NSLog(@"applicationDidReceiveMemoryWarning from app delegate");
-}
-
-- (void)dealloc
-{
-    [viewController release];
-    [_window release];
-    [super dealloc];
 }
 
 @end

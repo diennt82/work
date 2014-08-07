@@ -17,10 +17,10 @@
 
 @interface SchedulerCell : UITableViewCell
 
-@property (nonatomic, retain) IBOutlet UISwitch *schedulerSwitch;
-@property (nonatomic, retain) IBOutlet UISwitch *byDaySwitch;
+@property (nonatomic, weak) IBOutlet UISwitch *schedulerSwitch;
+@property (nonatomic, weak) IBOutlet UISwitch *byDaySwitch;
 
-@property (nonatomic, assign) id<SchedulerCellDelegate> schedulerCellDelegate;
+@property (nonatomic, weak) id<SchedulerCellDelegate> schedulerCellDelegate;
 @property (nonatomic) NSInteger rowIndex;
 
 @end

@@ -16,10 +16,10 @@
 
 @interface NotificationSettingsCell : UITableViewCell
 
-@property (nonatomic, retain) IBOutlet UISwitch *settingSwitch;
-@property (nonatomic, retain) IBOutlet UILabel *settingsLabel;
+@property (nonatomic, weak) IBOutlet UISwitch *settingSwitch;
+@property (nonatomic, weak) IBOutlet UILabel *settingsLabel;
 
-@property (nonatomic, assign) id<NotifSettingsCellDelegate> notifSettingsDelegate;
+@property (nonatomic, weak) id<NotifSettingsCellDelegate> notifSettingsDelegate;
 @property (nonatomic, assign) NSInteger rowIndex;
 
 @end

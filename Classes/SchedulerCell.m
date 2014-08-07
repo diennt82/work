@@ -20,11 +20,4 @@
     [_schedulerCellDelegate reportByDaySwitchState:_byDaySwitch.isOn atRow:_rowIndex];
 }
 
-- (void)dealloc
-{
-    [_schedulerSwitch release];
-    [_byDaySwitch release];
-    [super dealloc];
-}
-
 @end

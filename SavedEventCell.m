@@ -10,12 +10,4 @@
 
 @implementation SavedEventCell
 
-- (void)dealloc
-{
-    [_snapshotImage release];
-    [_timeLabel release];
-    [_placeEventLabel release];
-    [super dealloc];
-}
-
 @end

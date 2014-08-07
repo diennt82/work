@@ -10,8 +10,8 @@
 
 @interface ForgotPwdViewController : UIViewController
 
-@property (nonatomic, assign) IBOutlet UIView *passwordLinkSent;
-@property (nonatomic, assign) IBOutlet UILabel *toEmail;
-@property (nonatomic, assign) IBOutlet UITextField *userEmailTF;
+@property (nonatomic, weak) IBOutlet UIView *passwordLinkSent;
+@property (nonatomic, weak) IBOutlet UILabel *toEmail;
+@property (nonatomic, weak) IBOutlet UITextField *userEmailTF;
 
 @end

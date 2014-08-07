@@ -28,17 +28,15 @@
 }
 
 @property (nonatomic, assign, readonly) NSInteger rcvTimeStamp; 
-@property (nonatomic, retain)     NSString * cameraMacNoColon; 
-@property (nonatomic, retain)     NSString * cameraName; 
-@property (nonatomic, retain)     NSString * alertType; 
-@property (nonatomic, retain)     NSString * alertVal; 
-@property (nonatomic, retain)     NSString * alertTime;
-@property (nonatomic, retain)     NSString * server_url;
-@property (nonatomic, retain)     NSString * registrationID;
-
+@property (nonatomic, copy) NSString *cameraMacNoColon;
+@property (nonatomic, copy) NSString *cameraName;
+@property (nonatomic, copy) NSString *alertType;
+@property (nonatomic, copy) NSString *alertVal;
+@property (nonatomic, copy) NSString *alertTime;
+@property (nonatomic, copy) NSString *server_url;
+@property (nonatomic, copy) NSString *registrationID;
 
 -(id) initWithTimeStamp:(NSInteger) timeStamp database:(sqlite3 *) db; 
-
 -(id) initWithTimeStamp1:(NSInteger) timeStamp;
 
 +(void) reloadBlankTableIfNeeded;

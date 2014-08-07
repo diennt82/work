@@ -12,8 +12,8 @@
 
 @interface EarlierViewController : UIViewController
 
-@property (nonatomic, retain) TimelineViewController *timelineVC;
-@property (nonatomic, assign) CamChannel *camChannel;
+@property (nonatomic, strong) TimelineViewController *timelineVC;
+@property (nonatomic, strong) CamChannel *camChannel;
 
 - (id)initWithCamChannel:(CamChannel *)camChannel;
 - (id)initWithParentVC:(UIViewController *)parentVC camChannel:(CamChannel *)camChannel;

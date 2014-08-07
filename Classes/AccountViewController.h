@@ -10,11 +10,11 @@
 
 @interface AccountViewController : UIViewController
 
-@property (nonatomic, assign) IBOutlet UITableView *accountInfo;
-@property (nonatomic, assign) IBOutlet UITableViewCell *userEmailCell;
-@property (nonatomic, assign) IBOutlet UITableViewCell *versionCell;
-@property (nonatomic, assign) IBOutlet UIActivityIndicatorView *progress;
+@property (nonatomic, weak) IBOutlet UITableView *accountInfo;
+@property (nonatomic, weak) IBOutlet UITableViewCell *userEmailCell;
+@property (nonatomic, weak) IBOutlet UITableViewCell *versionCell;
+@property (nonatomic, weak) IBOutlet UIActivityIndicatorView *progress;
 
-@property (nonatomic, assign) id parentVC;
+@property (nonatomic, weak) id parentVC;
 
 @end

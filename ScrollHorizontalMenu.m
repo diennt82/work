@@ -18,18 +18,18 @@
 
 #define ITEMS_MAX 5
 
-@implementation ScrollHorizontalMenu
+@interface ScrollHorizontalMenu ()
 
-@synthesize imageMenu = _imageMenu;
-@synthesize selectedImage = _selectedImage;
-@synthesize itemSelectedDelegate;
-@synthesize dataSource;
-@synthesize itemCount = _itemCount;
-@synthesize isAllButtonDeselected = _isAllButtonDeselected;
+@property (nonatomic) BOOL isOddTapButton;
+@property (nonatomic) NSInteger currentTappedButtonIndex;
+
+@end
+
+@implementation ScrollHorizontalMenu
 
 -(void) awakeFromNib
 {
-    currentTappedButtonIndex = -1;
+    self.currentTappedButtonIndex = -1;
     self.bounces = YES;
     self.scrollEnabled = YES;
     self.alwaysBounceHorizontal = YES;
@@ -45,30 +45,27 @@
 	for (UIView *v in viewsToRemove) {
 		[v removeFromSuperview];
 	}
+    
     self.scrollEnabled = NO;
-    self.itemCount = [dataSource numberOfItemsForMenu:self];
-//    self.backgroundColor = [dataSource backgroundColorForMenu:self];
+    self.itemCount = [_dataSource numberOfItemsForMenu:self];
+    
     int tag = kButtonBaseTag;
     int xPos, marginLR;
     int buttonWidth;
     NSInteger paddingBetweenButton;
     
-    if (isLand)
-    {
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
+    if (isLand) {
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
             marginLR = kLeftOffset + 60; //padding left and right = 100
             buttonWidth = 60; //60 for iPad
             paddingBetweenButton = 65;
         }
-        else if (isiPhone4)
-        {
+        else if (isiPhone4) {
             marginLR = 0;
             buttonWidth = kButtonSize_iPhone - 2;
             paddingBetweenButton = kPaddingBetweenButton - 6;
         }
-        else
-        {
+        else {
             marginLR = 0;
             buttonWidth = kButtonSize_iPhone;
             paddingBetweenButton = kPaddingBetweenButton - 5;
@@ -76,17 +73,14 @@
         
         xPos = 0;
     }
-    else
-    {
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
+    else {
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
             marginLR = 100; //padding left and right = 100
             xPos = 30; //
             buttonWidth = 60; //60 for iPad
             paddingBetweenButton = 50;
         }
-        else
-        {
+        else {
             marginLR = kLeftOffset_iPhone;
             xPos = kLeftOffset_iPhone;
             buttonWidth = kButtonSize_iPhone;
@@ -103,10 +97,9 @@
     
     xPos += (ITEMS_MAX - _itemCount) * buttonWidth;
     
-    for(int i = 0 ; i < self.itemCount; i++)
-    {
-        NSString *imageName = [dataSource horizMenu:self nameImageForItemAtIndex:i];
-        NSString *imageSelected = [dataSource horizMenu:self nameImageSelectedForItemAtIndex:i];
+    for(int i = 0 ; i < _itemCount; i++) {
+        NSString *imageName = [_dataSource horizMenu:self nameImageForItemAtIndex:i];
+        NSString *imageSelected = [_dataSource horizMenu:self nameImageSelectedForItemAtIndex:i];
         
         UIButton *customButton = [UIButton buttonWithType:UIButtonTypeCustom];
         
@@ -127,70 +120,49 @@
     [self layoutSubviews];
 }
 
--(void) setSelectedIndex:(int) index animated:(BOOL) animated
+- (void)setSelectedIndex:(int)index animated:(BOOL)animated
 {
-    UIButton *thisButton = (UIButton*) [self viewWithTag:index + kButtonBaseTag];
+    UIButton *thisButton = (UIButton *)[self viewWithTag:index + kButtonBaseTag];
     thisButton.selected = YES;
-    //[self setContentOffset:CGPointMake(thisButton.frame.origin.x - kLeftOffset, 0) animated:animated];
-    [self.itemSelectedDelegate horizMenu:self itemSelectedAtIndex:index];
+    [_itemSelectedDelegate horizMenu:self itemSelectedAtIndex:index];
 }
 
--(void) buttonTapped:(id) sender
+- (void)buttonTapped:(id)sender
 {
-    UIButton *button = (UIButton*) sender;
+    UIButton *button = (UIButton*)sender;
     
-    for(int i = 0; i < self.itemCount; i++)
-    {
-        UIButton *thisButton = (UIButton*) [self viewWithTag:i + kButtonBaseTag];
+    for(int i = 0; i < _itemCount; i++) {
+        UIButton *thisButton = (UIButton *)[self viewWithTag:i + kButtonBaseTag];
         
-        if(i + kButtonBaseTag == button.tag)
-        {
-            _isOddTapButton = !_isOddTapButton;
+        if(i + kButtonBaseTag == button.tag) {
+            self.isOddTapButton = !_isOddTapButton;
+            
             //select one button
-            if (currentTappedButtonIndex == i)
-            {
+            if (_currentTappedButtonIndex == i) {
                 //select continue;
-                if (_isOddTapButton)
-                {
+                if (_isOddTapButton) {
                     thisButton.selected = YES;
-                    _isAllButtonDeselected = NO;
+                    self.isAllButtonDeselected = NO;
                 }
-                else
-                {
-                    _isAllButtonDeselected = YES;
+                else {
+                    self.isAllButtonDeselected = YES;
                     thisButton.selected = NO;
                 }
                 
-            } else
-            {
-                _isAllButtonDeselected = NO;
-                _isOddTapButton = YES;
+            }
+            else {
+                self.isAllButtonDeselected = NO;
+                self.isOddTapButton = YES;
                 thisButton.selected = YES;
             }
-            currentTappedButtonIndex = i;
+            self.currentTappedButtonIndex = i;
         }
-        else
-        {
+        else {
             thisButton.selected = NO;
         }
     }
     
-    [self.itemSelectedDelegate horizMenu:self itemSelectedAtIndex:button.tag - kButtonBaseTag];
+    [_itemSelectedDelegate horizMenu:self itemSelectedAtIndex:button.tag - kButtonBaseTag];
 }
 
-- (void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
-{
-	NSLog(@"abc");
-    
-}
-
-- (void)dealloc
-{
-    [_selectedImage release];
-    _selectedImage = nil;
-    [_imageMenu release];
-    _imageMenu = nil;
-    
-    [super dealloc];
-}
 @end

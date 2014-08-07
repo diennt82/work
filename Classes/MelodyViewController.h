@@ -23,9 +23,9 @@
 
 @interface MelodyViewController : GAITrackedViewController <UITableViewDataSource, UITableViewDelegate>
 
-@property (nonatomic, retain) IBOutlet UITableView *melodyTableView;
-@property (nonatomic, retain) CamChannel *selectedChannel;
-@property (nonatomic, assign) id<MelodyVCDelegate> melodyVcDelegate;
+@property (nonatomic, weak) IBOutlet UITableView *melodyTableView;
+@property (nonatomic, weak) id<MelodyVCDelegate> melodyVcDelegate;
+@property (nonatomic, strong) CamChannel *selectedChannel;
 @property (nonatomic, assign) NSInteger melodyIndex;
 
 - (void)setMelodyState:(NSInteger)melodyIndex;

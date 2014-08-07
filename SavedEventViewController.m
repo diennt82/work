@@ -91,11 +91,11 @@
     NSString *_registrationID = @"";
     NSString *alertsString = @"1,2,3,4";
     
-    alertsString = (NSString *)CFURLCreateStringByAddingPercentEscapes(NULL,
+    alertsString = (NSString *)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(NULL,
                                                                        (CFStringRef)alertsString,
                                                                        NULL,
                                                                        CFSTR("!*'();:@&=+$,/?%#[]\" "),
-                                                                       kCFStringEncodingUTF8);
+                                                                       kCFStringEncodingUTF8));
     
     BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
                                                                              Selector:nil
@@ -110,7 +110,6 @@
                                             offset:nil
                                               size:nil
                                             apiKey:apiKey];
-    [jsonComm release];
 }
 
 @end

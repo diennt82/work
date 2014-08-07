@@ -14,11 +14,11 @@
 
 @interface Step_02_ViewController : GAITrackedViewController <StartMonitorDelegate>
 
-@property (nonatomic, retain) IBOutlet UITableViewCell *step1_cell;
-@property (nonatomic, retain) IBOutlet UITableViewCell *step2_cell;
-@property (nonatomic, retain) IBOutlet UITableViewCell *step3_cell;
+@property (nonatomic, weak) IBOutlet UITableViewCell *step1_cell;
+@property (nonatomic, weak) IBOutlet UITableViewCell *step2_cell;
+@property (nonatomic, weak) IBOutlet UITableViewCell *step3_cell;
 
-@property (nonatomic, assign) id<ConnectionMethodDelegate>delegate;
+@property (nonatomic, weak) id<ConnectionMethodDelegate>delegate;
 @property (nonatomic) NSInteger cameraType;
 
 - (IBAction)handleButtonPress:(id)sender;

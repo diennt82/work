@@ -28,34 +28,30 @@
 
 @interface PlaybackViewController : UIViewController <PlayerCallbackHandler>
 
-@property (nonatomic, assign) id<PlaybackDelegate> playbackVCDelegate;
-@property (nonatomic, retain) NSMutableArray *clips;
+@property (nonatomic, weak) id<PlaybackDelegate> playbackVCDelegate;
+@property (nonatomic, strong) NSMutableArray *clips;
 
-@property (nonatomic, retain) IBOutlet UIToolbar *topToolbar;
-@property (nonatomic, retain) IBOutlet UIBarButtonItem *backBarBtnItem;
-@property (nonatomic, retain) IBOutlet UIView *progressView;
+@property (nonatomic, weak) IBOutlet UIImageView *imageVideo;
+@property (nonatomic, weak) IBOutlet UIActivityIndicatorView *activityIndicator;
+@property (nonatomic, weak) IBOutlet UIImageView *ib_bg_top_player;
 
-@property (nonatomic, retain) IBOutlet UIImageView *imageVideo;
-@property (nonatomic, retain) IBOutlet UIActivityIndicatorView *activityIndicator;
-@property (nonatomic, retain) IBOutlet UIImageView *ib_bg_top_player;
+@property (nonatomic, weak) IBOutlet UIView *ib_viewControlPlayer;
+@property (nonatomic, weak) IBOutlet UIButton *ib_closePlayBack;
+@property (nonatomic, weak) IBOutlet UIButton *ib_playPlayBack;
+@property (nonatomic, weak) IBOutlet UISlider *ib_sliderPlayBack;
+@property (nonatomic, weak) IBOutlet UILabel *ib_timerPlayBack;
+@property (nonatomic, weak) IBOutlet UIButton *ib_zoomingPlayBack;
 
-@property (nonatomic, retain) IBOutlet UIView *ib_viewControlPlayer;
-@property (nonatomic, retain) IBOutlet UIButton *ib_closePlayBack;
-@property (nonatomic, retain) IBOutlet UIButton *ib_playPlayBack;
-@property (nonatomic, retain) IBOutlet UISlider *ib_sliderPlayBack;
-@property (nonatomic, retain) IBOutlet UILabel *ib_timerPlayBack;
-@property (nonatomic, retain) IBOutlet UIButton *ib_zoomingPlayBack;
+@property (nonatomic, weak) IBOutlet UIView *ib_myOverlay;
+@property (nonatomic, weak) IBOutlet UIView *ib_viewOverlayVideo;
+@property (nonatomic, weak) IBOutlet UIButton *ib_delete;
+@property (nonatomic, weak) IBOutlet UIButton *ib_download;
+@property (nonatomic, weak) IBOutlet UIButton *ib_share;
 
-@property (nonatomic, retain) IBOutlet UIView *ib_myOverlay;
-@property (nonatomic, retain) IBOutlet UIView *ib_viewOverlayVideo;
-@property (nonatomic, retain) IBOutlet UIButton *ib_delete;
-@property (nonatomic, retain) IBOutlet UIButton *ib_download;
-@property (nonatomic, retain) IBOutlet UIButton *ib_share;
-
-@property (nonatomic, retain) NSTimer *list_refresher;
-@property (nonatomic, retain) PlaylistInfo *clipInfo;
-@property (nonatomic, retain) NSMutableArray *clipsInEvent;
-@property (nonatomic, retain) NSTimer *timerHideMenu;
+@property (nonatomic, strong) NSTimer *list_refresher;
+@property (nonatomic, strong) PlaylistInfo *clipInfo;
+@property (nonatomic, strong) NSMutableArray *clipsInEvent;
+@property (nonatomic, strong) NSTimer *timerHideMenu;
 @property (nonatomic, copy) NSString *camera_mac;
 @property (nonatomic, copy) NSString *urlVideo;
 @property (nonatomic) BOOL userWantToBack;

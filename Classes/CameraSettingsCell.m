@@ -10,11 +10,4 @@
 
 @implementation CameraSettingsCell
 
-- (void)dealloc
-{
-    [_nameLabel release];
-    [_valueLabel release];
-    [super dealloc];
-}
-
 @end

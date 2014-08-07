@@ -17,10 +17,9 @@
 #import "define.h"
 
 #define START 0
-#define END   100.0
+#define END 100.0
 #define HEIGHT_BG_CONTROL 45
-#define HEIGHT_SLIDER_DEFAULT   33
-//#define USE_H264PLAYER 0
+#define HEIGHT_SLIDER_DEFAULT 33
 
 @interface PlaybackViewController()
 
@@ -65,7 +64,6 @@
     singleTap.numberOfTapsRequired = 1;
     singleTap.numberOfTouchesRequired = 1;
     [self.view addGestureRecognizer:singleTap];
-    [singleTap release];
     
     self.startPositionMovieFile = 0;
     self.duration = 1;
@@ -113,7 +111,7 @@
 - (void)playbackEnteredBackground
 {
     NSLog(@"%s mediaCurrentState:%d", __FUNCTION__, _mediaCurrentState);
-#if 1
+
     if (self.mediaCurrentState == MEDIA_PLAYER_STARTED) {
         NSLog(@"Playback - playbackEnteredBackground - IF()");
         
@@ -133,25 +131,6 @@
     else {
         NSLog(@"Playback - playbackEnteredBackground - else{}");
     }
-#else
-    if (_playbackStreamer != NULL) {
-        if (self.mediaCurrentState == MEDIA_PLAYER_STARTED) {
-            NSLog(@"H264VC - handleEnteredBackground - IF()");
-            
-            if (_isPause) {
-                self.isPause = NO;
-                _playbackStreamer->resume();
-                self.ib_playPlayBack.selected = NO;
-            }
-            
-            [self stopStream:nil];
-        }
-        else {
-            NSLog(@"H264VC - handleEnteredBackground - else if(h264Streamer != nil)");
-            _playbackStreamer->sendInterrupt();
-        }
-    }
-#endif
     
     if (self.list_refresher != nil) {
         [self.list_refresher invalidate];
@@ -176,24 +155,7 @@
 #pragma mark - PLAY VIDEO
 - (void)becomeActive
 {
-    
-#if 0 // TEST Multiple clips
-    self.urlVideo = @"http://nxcomm:2013nxcomm@nxcomm-office.no-ip.info/app_release/sub_clips/48022A2CAC31_04_20130917065256730_00001.flv";
-    listener = new PlaybackListener(self);
-    //hardcode some data for test now:
-    self.clips = nil;
-    self.clips = [[NSMutableArray alloc] init];
-    self.clips = [NSMutableArray arrayWithObjects:
-                  @"http://nxcomm:2013nxcomm@nxcomm-office.no-ip.info/app_release/sub_clips/48022A2CAC31_04_20130917065256730_00001.flv",
-                  @"http://nxcomm:2013nxcomm@nxcomm-office.no-ip.info/app_release/sub_clips/48022A2CAC31_04_20130917065256730_00002.flv",
-                  @"http://nxcomm:2013nxcomm@nxcomm-office.no-ip.info/app_release/sub_clips/48022A2CAC31_04_20130917065256730_00003.flv",
-                  @"http://nxcomm:2013nxcomm@nxcomm-office.no-ip.info/app_release/sub_clips/48022A2CAC31_04_20130917065256730_00004.flv",
-                  @"http://nxcomm:2013nxcomm@nxcomm-office.no-ip.info/app_release/sub_clips/48022A2CAC31_04_20130917065256730_00005_last.flv", nil];
-    listener->updateClips(_clips);
-    listener->updateFinalClipCount(_clips.count);
-#else
-    
-    self.shouldRestartProcess = FALSE;
+    self.shouldRestartProcess = NO;
     self.mediaCurrentState = -1;
     _clips = [[NSMutableArray alloc]init];
     //Decide whether or not to start the background polling
@@ -220,86 +182,28 @@
         
         self.urlVideo = _clipInfo.urlFile;
     }
-#endif
     
     if ([UIApplication sharedApplication].applicationState != UIApplicationStateActive) {
         NSLog(@"%s. Inactive mode", __FUNCTION__);
     }
     else {
-        [self performSelector:@selector(startStream)
-                   withObject:nil
-                   afterDelay:0.1];
+        [self performSelector:@selector(startStream) withObject:nil afterDelay:0.1];
     }
 }
 
 - (void)startStream
 {
-#if 0
-    _playbackStreamer = new MediaPlayer(true, false);
-    self.shouldRestartProcess = TRUE;
-    _playbackStreamer->setListener(listener);
-    [self performSelectorInBackground:@selector(startStream_bg) withObject:nil];
-#else
-    self.shouldRestartProcess = TRUE;
+    self.shouldRestartProcess = YES;
     
     MediaPlayer::Instance()->setListener(_listener);
     MediaPlayer::Instance()->setPlaybackAndSharedCam(true, false);
     [self performSelectorInBackground:@selector(startStream_bg) withObject:nil];
-#endif
 }
 
 - (void)startStream_bg
 {
     status_t status = !NO_ERROR;
     NSString *url = _urlVideo;
-#if 0
-    status = _playbackStreamer->setDataSource([url UTF8String]);
-    printf("setDataSource return: %d\n", status);
-    
-    if (status != NO_ERROR) {
-        // NOT OK
-        printf("setDataSource error: %d\n", status);
-        [self handleMessage:MEDIA_ERROR_SERVER_DIED ext1:0 ext2:0];
-        return;
-    }
-    
-    _playbackStreamer->setVideoSurface(self.imageVideo);
-    
-    NSLog(@"Prepare the player");
-    status =  _playbackStreamer->prepare();
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.imageVideo setAlpha:1];
-        [self.activityIndicator setHidden:YES];
-        self.view.userInteractionEnabled = YES;
-        self.ib_myOverlay.hidden = NO;
-        [self.ib_sliderPlayBack setMinimumTrackTintColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"video_progress_green"]]];
-        [self watcher];
-    });
-    
-    printf("prepare return: %d\n", status);
-    
-    if (status != NO_ERROR) {
-        // NOT OK
-        printf("prepare() error: %d\n", status);
-        exit(1);
-    }
-    
-    status =  _playbackStreamer->start();
-    
-    printf("start() return: %d\n", status);
-    
-    if (status != NO_ERROR) {
-        // NOT OK
-        printf("start() error: %d\n", status);
-        [self handleMessage:MEDIA_ERROR_SERVER_DIED ext1:0 ext2:0];
-        return;
-    }
-    
-    if (status == NO_ERROR) {
-        [self handleMessage:MEDIA_PLAYER_STARTED ext1:0 ext2:0];
-    }
-#else
     
     self.mediaCurrentState = 0;
     status = MediaPlayer::Instance()->setDataSource([url UTF8String]);
@@ -349,7 +253,6 @@
     if (status == NO_ERROR) {
         [self handleMessage:MEDIA_PLAYER_STARTED ext1:0 ext2:0];
     }
-#endif
 }
 
 - (void)handleMessage:(int)msg ext1:(int)ext1 ext2:(int)ext2
@@ -400,7 +303,7 @@
 - (IBAction)stopStream:(id)sender
 {
     NSLog(@"Stop stream start ");
-#if 1
+
     if(MediaPlayer::Instance()->isPlaying()) {
         MediaPlayer::Instance()->suspend();
         MediaPlayer::Instance()->stop();
@@ -412,27 +315,7 @@
         MediaPlayer::Instance()->stop();
         MediaPlayer::Instance()->setListener(nil);
     }
-#else
-    if ( _playbackStreamer ) {
-        NSLog(@"Stop stream _playbackStreamer != NULL");
-        
-        if(_playbackStreamer->isPlaying()) {
-            _playbackStreamer->suspend();
-            _playbackStreamer->stop();
-            //_playbackStreamer->setListener(nil);
-            delete _playbackStreamer;
-            _playbackStreamer = NULL;
-        }
-        else {
-            // set Data source failed!
-            _playbackStreamer->suspend();
-            _playbackStreamer->stop();
-            _playbackStreamer->setListener(nil);
-            delete _playbackStreamer;
-            _playbackStreamer = NULL;
-        }
-    }
-#endif
+
     NSLog(@"Stop stream end");
 }
 
@@ -479,20 +362,7 @@
         
         [self.navigationController setNavigationBarHidden:NO animated:YES];
         [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationNone];
-#if 1
         [self.navigationController popViewControllerAnimated:YES];
-#else
-        NotifViewController *vc = [self.navigationController.viewControllers objectAtIndex:(self.navigationController.viewControllers.count - 2)];
-        
-        if ([vc isKindOfClass:[NotifViewController class]]) {
-            [self.navigationController popViewControllerAnimated:NO];
-            [vc ignoreTouchAction:nil];
-        }
-        else {
-            // Timeline
-            [self.navigationController popViewControllerAnimated:YES];
-        }
-#endif
     }
     else {
         [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
@@ -622,7 +492,6 @@
         
         BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self Selector:nil FailSelector:nil ServerErr:nil];
         NSDictionary *responseDict = [jsonComm deleteEventsBlockedWithRegistrationId:_clipInfo.registrationID eventIds:strEventID apiKey:apiKey];
-        [jsonComm release];
         
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         if ( responseDict ) {
@@ -718,7 +587,7 @@
 - (IBAction)playVideo:(id)sender
 {
     NSLog(@"%s wants to pause: %d", __FUNCTION__, _isPause);
-#if 1
+
     if (_isPause) {
         self.isPause = NO;
         MediaPlayer::Instance()->resume();
@@ -730,25 +599,10 @@
         MediaPlayer::Instance()->pause();
         self.ib_playPlayBack.selected = YES;
     }
-#else
-    if (_playbackStreamer) {
-        if (_isPause) {
-            self.isPause = NO;
-            _playbackStreamer->resume();
-            [self watcher];
-            self.ib_playPlayBack.selected = NO;
-        }
-        else if (_playbackStreamer->isPlaying()) {
-            self.isPause = YES;
-            _playbackStreamer->pause();
-            self.ib_playPlayBack.selected = YES;
-        }
-    }
-#endif
 }
 
+#pragma mark - Display Time
 
-#pragma mark Display Time
 - (void)watcher
 {
     if (MediaPlayer::Instance() == NULL || _isPause || _userWantToBack) {
@@ -758,10 +612,6 @@
     self.duration = MediaPlayer::Instance()->getDuration();
     self.timeStarting = MediaPlayer::Instance()->getTimeStarting();
     double timeCurrent = MediaPlayer::Instance()->getCurrentTime() - _timeStarting;
-    
-#if 0
-    NSLog(@"timeCurrent: %f, _timeStarting: %f", timeCurrent, _timeStarting);
-#endif
     
     self.ib_sliderPlayBack.value = timeCurrent / _duration;
     
@@ -783,11 +633,6 @@
     int sec     = fabs(round((int)seconds % 60));
     
     return [NSString stringWithFormat:@"%02d:%02d", minutes, sec];
-    
-//    NSString *cm = minutes <= 9 ? @"00": @"";
-//    NSString *cs = sec <= 9 ? @"00": @"";
-//    
-//    return [NSString stringWithFormat:@"%@%i:%@%i", cm, minutes, cs, sec];
 }
 
 #pragma mark - Poll camera events
@@ -812,14 +657,13 @@
                                                                          offset:nil
                                                                            size:nil
                                                                          apiKey:apiKey];
-    [jsonComm release];
     
     [self getPlaylistSuccessWithResponse:responseDic];
 }
 
 - (void)getPlaylistSuccessWithResponse:(NSDictionary *)responseDict
 {
-    BOOL got_last_clip = FALSE;
+    BOOL got_last_clip = NO;
     
     if ( responseDict ) {
         if ([responseDict[@"status"] intValue] == 200) {
@@ -830,7 +674,7 @@
                 NSArray *clipInEvents = [[eventArr objectAtIndex:0] objectForKey:@"data"];
                 
                 for (NSDictionary *clipInfo in clipInEvents) {
-                    PlaylistInfo *playlistInfo = [[[PlaylistInfo alloc] init]autorelease];
+                    PlaylistInfo *playlistInfo = [[PlaylistInfo alloc] init];
                     playlistInfo.macAddr = _clipInfo.macAddr;
                     
                     playlistInfo.urlImage = [clipInfo objectForKey:@"image"];
@@ -838,14 +682,14 @@
                     playlistInfo.urlFile = [clipInfo objectForKey:@"file"];
                     
                     //check if the clip is in our private array
-                    BOOL found = FALSE;
+                    BOOL found = NO;
                     
                     for ( NSString * one_clip in _clips) {
                         NSLog(@"one clip: *%@*", one_clip);
                         NSLog(@"playlistInfo.url: *%@*", playlistInfo.urlFile);
                         
                         if ([playlistInfo containsClip:one_clip]) {
-                            found = TRUE;
+                            found = YES;
                             break;
                         }
                     }
@@ -858,7 +702,7 @@
                     
                     if ([playlistInfo isLastClip]) {
                         NSLog(@"This is last");
-                        got_last_clip = TRUE;
+                        got_last_clip = YES;
                     }
                 }
                 
@@ -902,35 +746,9 @@
 
 - (void)dealloc
 {
-    NSLog(@"%s", __FUNCTION__);
-    
     _playbackVCDelegate = nil;
     _playbackStreamer = nil;
     _listener = nil;
-    
-    [_clips release];
-    [_imageVideo release];
-    [_activityIndicator release];
-    [_ib_bg_top_player release];
-    [_ib_viewControlPlayer release];
-    [_ib_closePlayBack release];
-    [_ib_playPlayBack release];
-    [_ib_sliderPlayBack release];
-    [_ib_timerPlayBack release];
-    [_ib_zoomingPlayBack release];
-    [_ib_myOverlay release];
-    [_ib_viewOverlayVideo release];
-    [_ib_delete release];
-    [_ib_download release];
-    [_ib_share release];
-    [_list_refresher release];
-    [_clipInfo release];
-    [_camera_mac release];
-    [_urlVideo release];
-    [_clipsInEvent release];
-    [_timerHideMenu release];
-    
-    [super dealloc];
 }
 
 @end

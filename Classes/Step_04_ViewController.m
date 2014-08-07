@@ -12,8 +12,8 @@
 
 @interface Step_04_ViewController () <UITextFieldDelegate, UIAlertViewDelegate>
 
-@property (nonatomic, retain) IBOutlet UITextField *tfCamName;
-@property (nonatomic, retain) IBOutlet UIButton *btnContinue;
+@property (nonatomic, weak) IBOutlet UITextField *tfCamName;
+@property (nonatomic, weak) IBOutlet UIButton *btnContinue;
 
 @property (nonatomic, copy) NSString *homeWifiSSID;
 
@@ -49,15 +49,6 @@
     [super viewWillDisappear:animated];
 }
 
--(void) dealloc
-{
-    [_cameraName release];
-    [_cameraMac release];
-    [_progressView release];
-    [_btnContinue release];
-    [_tfCamName release];
-    [super dealloc];
-}
 
 #pragma mark - Actions
 
@@ -75,7 +66,6 @@
     // Load the next xib
     Step_05_ViewController *step05ViewController =  [[Step_05_ViewController alloc] initWithNibName:@"Step_05_ViewController" bundle:nil];
     [self.navigationController pushViewController:step05ViewController animated:NO];
-    [step05ViewController release];
     
     _btnContinue.enabled = YES;
 }
@@ -165,7 +155,6 @@
                                                     cancelButtonTitle:ok
                                                     otherButtonTitles:nil];
         [alert show];
-        [alert release];
     }
     else if (![self isCameraNameValidated:cameraName_text]) {
         NSString *title = NSLocalizedStringWithDefaultValue(@"Invalid_Camera_Name", nil, [NSBundle mainBundle],
@@ -184,7 +173,6 @@
                                               cancelButtonTitle:ok
                                               otherButtonTitles:nil];
         [alert show];
-        [alert release];
     }
     else if (tag == CONF_CAM_BTN_TAG) {
         // Show progress view

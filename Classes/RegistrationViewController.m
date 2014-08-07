@@ -18,18 +18,18 @@
 
 @interface RegistrationViewController () <UITextFieldDelegate>
     
-@property (nonatomic, retain) IBOutlet UITextField *tfUsername;
-@property (nonatomic, retain) IBOutlet UITextField *tfEmail;
-@property (nonatomic, retain) IBOutlet UITextField *tfPassword;
-@property (nonatomic, retain) IBOutlet UITextField *tfConfirmPassword;
-@property (nonatomic, retain) IBOutlet UIButton *btnCheckbox;
-@property (nonatomic, retain) IBOutlet UIButton *btnCreate;
-@property (nonatomic, retain) IBOutlet UIView *viewProgress;
+@property (nonatomic, weak) IBOutlet UITextField *tfUsername;
+@property (nonatomic, weak) IBOutlet UITextField *tfEmail;
+@property (nonatomic, weak) IBOutlet UITextField *tfPassword;
+@property (nonatomic, weak) IBOutlet UITextField *tfConfirmPassword;
+@property (nonatomic, weak) IBOutlet UIButton *btnCheckbox;
+@property (nonatomic, weak) IBOutlet UIButton *btnCreate;
+@property (nonatomic, weak) IBOutlet UIView *viewProgress;
 
-@property (nonatomic, retain) NSString *stringUsername;
-@property (nonatomic, retain) NSString *stringPassword;
-@property (nonatomic, retain) NSString *stringCPassword;
-@property (nonatomic, retain) NSString *stringEmail;
+@property (nonatomic, strong) NSString *stringUsername;
+@property (nonatomic, strong) NSString *stringPassword;
+@property (nonatomic, strong) NSString *stringCPassword;
+@property (nonatomic, strong) NSString *stringEmail;
 @end
 
 @implementation RegistrationViewController
@@ -88,17 +88,6 @@
     [super viewWillDisappear:animated];
 }
 
-- (void)dealloc
-{
-    [_tfEmail release];
-    [_tfPassword release];
-    [_tfConfirmPassword release];
-    [_btnCheckbox release];
-    [_btnCreate release];
-    [_viewProgress release];
-    [_tfUsername release];
-    [super dealloc];
-}
 
 #pragma mark - Action
 
@@ -208,10 +197,10 @@
 
         NSLog(@"RegistrationVC - Start registration");
         
-        BMS_JSON_Communication *jsonComm = [[[BMS_JSON_Communication alloc] initWithObject:self
+        BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
                                                                                   Selector:@selector(registerSuccessWithResponse:)
                                                                               FailSelector:@selector(registerFailedWithError:)
-                                                                                 ServerErr:@selector(registerFailedServerUnreachable)] autorelease];
+                                                                                 ServerErr:@selector(registerFailedServerUnreachable)];
         [jsonComm registerAccountWithUsername:_stringUsername
                                      andEmail:_stringEmail
                                   andPassword:_stringPassword
@@ -226,7 +215,6 @@
                                                        cancelButtonTitle:nil
                                                        otherButtonTitles:LocStr(@"OK"), nil];
         [alertViewError show];
-        [alertViewError release];
     }
 }
 
@@ -325,7 +313,6 @@
                                                       apiKey:[userDefaults stringForKey:@"PortalApiKey"]
                                              accountDelegate:nil];
     [account sync_online_and_offline_data:nil];
-    [account release];
     
     [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Register successfully - user: %@", _stringUsername] withProperties:nil];
     
@@ -351,7 +338,6 @@
                                            cancelButtonTitle:LocStr(@"Ok")
                                            otherButtonTitles:nil];
     [alert show];
-    [alert release];
     
     [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Regsiter failed - user: %@, error: %@", _stringUsername, alert.message] withProperties:nil];
     
@@ -372,7 +358,6 @@
                                           cancelButtonTitle:LocStr(@"Ok")
                                           otherButtonTitles:nil];
 	[alert show];
-	[alert release];
     
     [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Register failed - user: %@, error: Server is unreachable", _stringUsername] withProperties:nil];
     
@@ -399,7 +384,6 @@
     }
     
     [self.navigationController pushViewController:vc animated:YES];
-    [vc release];
 }
 
 @end

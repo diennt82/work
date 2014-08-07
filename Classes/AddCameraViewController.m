@@ -12,7 +12,7 @@
 
 @interface AddCameraViewController ()
 
-@property (nonatomic, retain) IBOutlet UIButton *btnCancel;
+@property (nonatomic, weak) IBOutlet UIButton *btnCancel;
 
 @end
 
@@ -79,13 +79,6 @@
                                           cancelButtonTitle:LocStr(@"Ok")
                                           otherButtonTitles:nil];
     [alert show];
-    [alert release];
-}
-
-- (void)dealloc
-{
-    [_btnCancel release];
-    [super dealloc];
 }
 
 @end

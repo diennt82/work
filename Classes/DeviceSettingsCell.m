@@ -16,11 +16,4 @@
     [_deviceStgsCellDelegate reportChangedSliderValue:slider.value andRowIndex:_rowIndex];
 }
 
-- (void)dealloc
-{
-    [_nameLabel release];
-    [_valueSlider release];
-    [super dealloc];
-}
-
 @end

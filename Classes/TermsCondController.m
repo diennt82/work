@@ -18,11 +18,11 @@
 {
     [super viewDidLoad];
     
-   self.navigationController.navigationBarHidden = NO;
-    [self.navigationItem setTitle:@"Terms & Conditions"];
+    self.navigationController.navigationBarHidden = NO;
+    self.navigationItem.title = @"Terms & Conditions";
     
     NSURL *url = [[NSBundle mainBundle] URLForResource:@"terms_of_use" withExtension:@"html"];
-    NSURLRequest* request = [NSURLRequest requestWithURL:url];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
     [_webViewTC loadRequest:request];
 }
 
@@ -35,8 +35,6 @@
 -(void)dealloc
 {
     _webViewTC.delegate = nil;
-    [_webViewTC release];
-    [super dealloc];
 }
 
 -(void)btnBackPressed:(id)sender

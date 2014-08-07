@@ -10,9 +10,9 @@
 
 @interface PlaylistCell : UITableViewCell
 
-@property (nonatomic, retain) IBOutlet UIImageView *imgViewSnapshot;
-@property (nonatomic, retain) IBOutlet UILabel *labelTitle;
-@property (nonatomic, retain) IBOutlet UILabel *labelDate;
-@property (nonatomic, retain) IBOutlet UIActivityIndicatorView *activityIndicator;
+@property (nonatomic, weak) IBOutlet UIImageView *imgViewSnapshot;
+@property (nonatomic, weak) IBOutlet UILabel *labelTitle;
+@property (nonatomic, weak) IBOutlet UILabel *labelDate;
+@property (nonatomic, weak) IBOutlet UIActivityIndicatorView *activityIndicator;
 
 @end

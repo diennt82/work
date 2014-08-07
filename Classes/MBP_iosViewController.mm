@@ -33,17 +33,17 @@
 
 @interface MBP_iosViewController () <MFMailComposeViewControllerDelegate>
 
-@property (nonatomic, assign) IBOutlet UIView *backgroundView;
-@property (nonatomic, assign) IBOutlet UIView *statusDialogView;
-@property (nonatomic, assign) IBOutlet UILabel *statusDialogLabel;
-@property (nonatomic, assign) IBOutlet UITextView *statusDialogText;
+@property (nonatomic, weak) IBOutlet UIView *backgroundView;
+@property (nonatomic, weak) IBOutlet UIView *statusDialogView;
+@property (nonatomic, weak) IBOutlet UILabel *statusDialogLabel;
+@property (nonatomic, weak) IBOutlet UITextView *statusDialogText;
 
-@property (nonatomic, retain) UIAlertView *pushAlert;
-@property (nonatomic, retain) CameraAlert *latestCamAlert;
-@property (nonatomic, retain) DashBoard_ViewController *dashBoard;
-@property (nonatomic, retain) Bonjour *bonjourBrowser;
-@property (nonatomic, retain) NSArray *bonjourList;
-@property (nonatomic, retain) NSThread *bonjourThread;
+@property (nonatomic, strong) UIAlertView *pushAlert;
+@property (nonatomic, strong) CameraAlert *latestCamAlert;
+@property (nonatomic, strong) DashBoard_ViewController *dashBoard;
+@property (nonatomic, strong) Bonjour *bonjourBrowser;
+@property (nonatomic, strong) NSArray *bonjourList;
+@property (nonatomic, strong) NSThread *bonjourThread;
 
 @property (nonatomic, copy) NSString *iFileName;
 
@@ -177,7 +177,6 @@
 - (void)startShowingCameraList:(NSNumber *)option
 {
     if (_menuVC) {
-        [_menuVC release];
         self.menuVC = nil;
     }
     
@@ -203,8 +202,6 @@
     else {
         [self presentViewController:_menuVC animated:NO completion:nil];
     }
-    
-    [validChannels release];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -220,19 +217,6 @@
 - (NSUInteger)supportedInterfaceOrientations
 {
     return UIInterfaceOrientationMaskPortrait;
-}
-
-- (void)dealloc {
-    [_bonjourBrowser release];
-    [_splashScreen release];
-	[_bcAddr release];
-	[_ownAddr release];
-    
-	[_channelArray release];
-	[_restoredProfilesArray release];
-    
-    [_bonjourThread release];
-	[super dealloc];
 }
 
 #pragma mark -  ConnectionMethodDelegate - Views navigation
@@ -258,7 +242,6 @@
                 step02ViewController.delegate = self;
                 step02ViewController.cameraType = [userDefaults integerForKey:SET_UP_CAMERA];
                 UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:step02ViewController];
-                [step02ViewController release];
                 
                 if (self.presentedViewController) {
                     [self dismissViewControllerAnimated:YES completion:^{
@@ -390,7 +373,6 @@
     registrationVC.delegate = self;
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:registrationVC];
     [self presentViewController:nav animated:YES completion:^{}];
-    [registrationVC release];
 }
 
 - (BOOL)rebindCameraResource
@@ -436,7 +418,6 @@
         else {
             self.bonjourThread = [[NSThread alloc] initWithTarget:self selector:@selector(scan_with_bonjour) object:nil];
             [_bonjourThread start];
-            [_bonjourThread release];
         }
     }
 }
@@ -576,8 +557,6 @@
         if ([_pushAlert isVisible]) {
             [_pushAlert dismissWithClickedButtonIndex:0 animated:NO];
         }
-        
-        [_pushAlert release];
     }
     
     self.pushAlert = [[UIAlertView alloc] initWithTitle:camAlert.cameraName
@@ -586,21 +565,12 @@
                                       cancelButtonTitle:cancel
                                       otherButtonTitles:msg2, nil];
     
-    //if ([self isThisMacStoredOffline:camAlert.cameraMacNoColon])
-    {
-        _pushAlert.tag = ALERT_PUSH_RECVED_NON_MOTION;
-        
-        if ([camAlert.alertType isEqualToString:ALERT_TYPE_MOTION]) {
-            _pushAlert.tag = ALERT_PUSH_RECVED_RESCAN_AFTER;
-        }
-    }
-    //	else
-    //	{
-    //		NSLog(@"Relogin");
-    //		[self sendStatus:2];
-    //		pushAlert.tag = ALERT_PUSH_RECVED_RELOGIN_AFTER;
-    //	}
+    _pushAlert.tag = ALERT_PUSH_RECVED_NON_MOTION;
     
+    if ([camAlert.alertType isEqualToString:ALERT_TYPE_MOTION]) {
+        _pushAlert.tag = ALERT_PUSH_RECVED_RESCAN_AFTER;
+    }
+
     @synchronized(self) {
         self.latestCamAlert = camAlert;
     }
@@ -656,18 +626,12 @@
         
         NSDictionary *responseDict = [jsonComm deleteAppBlockedWithAppId:appId
                                                                andApiKey:apiKey];
-        [jsonComm release];
+        
         NSLog(@"logout --> delete app status = %d", [[responseDict objectForKey:@"status"] intValue]);
         
         [NSThread sleepForTimeInterval:0.10];
 #endif
-        
         [userDefaults synchronize];
-        
-        /*[self performSelectorOnMainThread:@selector(show_login_or_reg:)
-                               withObject:nil
-                            waitUntilDone:NO];*/
-        //[self show_login_or_reg:nil];
     }
 }
 
@@ -681,7 +645,6 @@
         switch(buttonIndex)
         {
 			case 0:
-                [_pushAlert release];
                 self.pushAlert = nil;
 				break;
 			case 1:
@@ -690,7 +653,7 @@
                  * Try to hide MFMailComposeViewController's keyboard first.
                  */
                 // Workaround: MFMailComposeViewController does not dismiss keyboard when application enters background or changes view screen.
-                UITextView *dummyTextView = [[[UITextView alloc] init] autorelease];
+                UITextView *dummyTextView = [[UITextView alloc] init];
                 [((UIWindow *)[[[UIApplication sharedApplication] windows] objectAtIndex:0]).rootViewController.presentedViewController.view addSubview:dummyTextView];
                 [dummyTextView becomeFirstResponder];
                 [dummyTextView resignFirstResponder];
@@ -809,7 +772,7 @@
                  */
                 
                 // Workaround: MFMailComposeViewController does not dismiss keyboard when application enters background or changes view screen.
-                UITextView *dummyTextView = [[[UITextView alloc] init] autorelease];
+                UITextView *dummyTextView = [[UITextView alloc] init];
                 [((UIWindow *)[[[UIApplication sharedApplication] windows] objectAtIndex:0]).rootViewController.presentedViewController.view addSubview:dummyTextView];
                 [dummyTextView becomeFirstResponder];
                 [dummyTextView resignFirstResponder];
@@ -923,12 +886,10 @@
                 
                 // Show email view
                 [self presentViewController:picker animated:YES completion:nil];
-                
-                // Release picker
-                [picker release];
             }
             else {
                 NSLog(@"Can not send email from this device...");
+
                 // Cancel
                 /*
                  * 1. Try to remove crashed log file.
@@ -1010,8 +971,6 @@
             [self performSelector:@selector(scan_done:) withObject:nil afterDelay:0.1];
         }
     }
-    
-    [finalResult release];
 }
 
 #pragma mark - ScanForCameraNotifier protocol methods
@@ -1170,7 +1129,6 @@
         dev_com.device_ip = cp.ip_address;
         
         NSString *mac = [dev_com sendCommandAndBlock:GET_MAC_ADDRESS withTimeout:3.0];
-        [dev_com release];
         
         if ( mac.length == 12 ) {
             mac = [Util add_colon_to_mac:mac];
@@ -1299,11 +1257,6 @@
                broadcast_addrs[i]];
 	}
     
-	//For Iphone4
-	//deviceBroadcastIP = [NSString stringWithFormat:@"%s", broadcast_addrs[i-1]];
-    
-	//NSLog(@"broadcast iP: %d %@",i, deviceBroadcastIP);
-	//NSLog(@"own iP: %d %@",i, deviceIP);
 	if ( deviceIP ) {
 		*ownip = [NSString stringWithString:deviceIP];
 	}
@@ -1336,7 +1289,6 @@
                                                otherButtonTitles:@"OK", nil];
             av.tag = 11;
             [av show];
-            [av release];
         }
     }
     
@@ -1357,7 +1309,6 @@
     [self dismissViewControllerAnimated:NO completion:nil];
     self.progressView.hidden = NO;
     
-    
     if ([self.camAlert.alertType isEqualToString:ALERT_TYPE_MOTION]) {
         NotifViewController *notifVC = [[NotifViewController alloc] initWithNibName:@"NotifViewController" bundle:Nil];
         notifVC.notifDelegate = self;
@@ -1371,8 +1322,8 @@
         
         [self presentViewController:[[UINavigationController alloc]initWithRootViewController:notifVC] animated:YES completion:^{}];
     }
-    else //Sound/Temphi/templo - go to camera
-    {
+    else {
+        // Sound/Temphi/templo - go to camera
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         [userDefaults setObject:_latestCamAlert.registrationID forKey:REG_ID];
         [userDefaults synchronize];
@@ -1393,7 +1344,6 @@
 		self.restoredProfilesArray = savedData.configuredCams;
 	}
     
-    [savedData release];
     
 	return YES;
 }

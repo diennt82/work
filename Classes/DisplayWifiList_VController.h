@@ -11,10 +11,10 @@
 
 @interface DisplayWifiList_VController : UIViewController<UIAlertViewDelegate, BLEConnectionManagerDelegate>
 
-@property (nonatomic, retain) IBOutlet UIView *ib_Indicator;
-@property (nonatomic, retain) IBOutlet UILabel *ib_LabelState;
-@property (nonatomic, assign) IBOutlet UITableViewCell *cellView;
+@property (nonatomic, weak) IBOutlet UIView *ib_Indicator;
+@property (nonatomic, weak) IBOutlet UILabel *ib_LabelState;
+@property (nonatomic, weak) IBOutlet UITableViewCell *cellView;
 
-@property (nonatomic, retain) NSMutableArray * listOfWifi;
+@property (nonatomic, strong) NSMutableArray *listOfWifi;
 
 @end

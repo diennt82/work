@@ -15,7 +15,7 @@
     [super setSelected:selected animated:animated];
 
     if (selected) {
-        self.accessoryView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"setup_check"]] autorelease];
+        self.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"setup_check"]];
     }
     else {
         self.accessoryView = nil;
@@ -26,12 +26,6 @@
 {
     UIImageView *imageViewBottomLine = (UIImageView *)[self viewWithTag:508];
     imageViewBottomLine.frame = CGRectMake(0, rect.size.height - 0.5, rect.size.width, 0.5);
-}
-
-- (void)dealloc
-{
-    [_lblName release];
-    [super dealloc];
 }
 
 @end

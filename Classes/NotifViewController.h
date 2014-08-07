@@ -13,9 +13,10 @@
 
 @interface NotifViewController : UIViewController
 
-@property (nonatomic, retain) id<ConnectionMethodDelegate> notifDelegate;
-@property (nonatomic, assign) CamChannel *camChannel;
-@property (nonatomic, assign) id parentVC;
+@property (nonatomic, strong) CamChannel *camChannel;
+@property (nonatomic, strong) id parentVC;
+@property (nonatomic, weak) id<ConnectionMethodDelegate> notifDelegate;
+
 @property (nonatomic, copy) NSString *cameraMacNoColon;
 @property (nonatomic, copy) NSString *cameraName;
 @property (nonatomic, copy) NSString *alertType;

@@ -10,30 +10,22 @@
 #include "nat_detect.h"
 #include "stun_sock.h"
 
-
 @interface StunClient ()
 
 @end
 
 @implementation StunClient
 
-
-
-
 extern int check_nat_type_async( pj_stun_nat_detect_cb *cb, void* user_data , char* stun_server);
 extern int cleanup_pj();
 
 @synthesize waiting_for_result, running;
-
 @synthesize natCheckThread;
 @synthesize mcallback;
 
 -(id) init
 {
     start_stun_client_async(STUN_SERVER);
-    
-    
-    
     return [super init];
 }
 
@@ -41,19 +33,14 @@ extern int cleanup_pj();
 {
     cleanup_pj();
 }
--(void) dealloc
+
+/* 
+ Blocking call return 0 on success
+    return != 0 on failure 
+ */
+- (int)create_stun_forwarder:(CamChannel *)channel;
 {
-    [super dealloc];
-}
-
-
-
-/* Blocking call return 0 on success
-    return != 0 on failure */
-
--(int) create_stun_forwarder:(CamChannel*) channel;
-{
-    int ret  =0;
+    int ret  = 0;
     
     if (ret == 0)
     {
@@ -70,29 +57,18 @@ extern int cleanup_pj();
             [runLoop runUntilDate:[NSDate date]];
             
             sleep(1);
-            
-           
             stun_global_data  = get_stun_data();
-            
-            
             
             aPeer1 = &stun_global_data->peer[0];
             port1 = htons(aPeer1->mapped_addr.ipv4.sin_port);
             
-            
-            
             aPeer2 = &stun_global_data->peer[1];
             port2 = htons(aPeer2->mapped_addr.ipv4.sin_port);
             
-            
-
-            if (port1 != 0 && port2 != 0)
-            {
+            if (port1 != 0 && port2 != 0) {
                 //Found port
-                
                 set_destination_for_peer(aPeer1, "127.0.0.1", 12000); //audio
                 set_destination_for_peer(aPeer2, "127.0.0.1", 13000); //video
-                
                 
                 channel.local_fwd_audio_port = 12000;
                 channel.local_fwd_video_port = 13000;
@@ -100,33 +76,18 @@ extern int cleanup_pj();
                 channel.local_stun_video_port = port2;
                 
                 pj_sockaddr_print(&aPeer1->mapped_addr, straddr, sizeof(straddr), 0);
-                
                 channel.public_ip = [NSString stringWithUTF8String:straddr];
                 
                 ret =0;
                 break;
             }
-            
         }
-        
-        
-        
-        
-        
-        
-        
-        
-
     }
     
-    
     return ret;
-    
 }
 
-
-
--(void) sendAudioProbesToIp:(NSString *) ip andPort:(int) port
+- (void)sendAudioProbesToIp:(NSString *)ip andPort:(int)port
 {
     struct global * stun_global_data;
     struct peer * aPeer;
@@ -136,10 +97,9 @@ extern int cleanup_pj();
     [self sendProbesFromPeer:aPeer
                         ToIp:ip
                      andPort:port];
-    
-    
 }
--(void) sendVideoProbesToIp:(NSString *) ip andPort:(int) port
+
+- (void)sendVideoProbesToIp:(NSString *)ip andPort:(int)port
 {
     struct global * stun_global_data;
     struct peer * aPeer;
@@ -151,20 +111,16 @@ extern int cleanup_pj();
                      andPort:port];
 }
 
+#pragma mark - Check SYMMETRIC NAT
 
-#pragma mark -
-#pragma mark Chek SYMMETRIC NAT
-
--(BOOL) isCheckingForSymmetrictNat
+- (BOOL)isCheckingForSymmetrictNat
 {
-    
     return self.waiting_for_result;
 
 }
 
--(BOOL) test_start_async: (id<StunClientDelegate>) callback
+- (BOOL)test_start_async:(id<StunClientDelegate>)callback
 {
-  
     self.mcallback = callback;
     self.waiting_for_result = true;
     self.running = true;
@@ -173,83 +129,62 @@ extern int cleanup_pj();
     
     int countWhile = 1;
     int status;
-    while (countWhile++ < 2 )
-    {
+    while (countWhile++ < 2 ) {
         NSLog(@"Stun server: %s", stunServer);
+        status = check_nat_type_async(&pj_callback_nat_type_set_res, (__bridge void*) self , stunServer);
         
-         status = check_nat_type_async(&pj_callback_nat_type_set_res, (__bridge void*) self , stunServer);
-        
-        if (status != 0)
-        {
-            if (status == PJ_ERESOLVE)
-            {
+        if (status != 0) {
+            if (status == PJ_ERESOLVE) {
                 //cleanup_pj();
                 stunServer = STUN_SERVER_SIPGATE;
                 continue;
             }
             
             NSLog(@"Error while init pj libs, status: %d\n ", status);
-            
             break;
         }
-        else
-        {
+        else {
             break;
         }
-        
     }
     
-    //[pool drain];
-    
     return (status == PJ_SUCCESS);
-    
-    
 }
 
--(BOOL) test_start_
+- (BOOL)test_start_
 {
-   //NSAutoreleasePool * pool = [[NSAutoreleasePool alloc]init];
-    
-    NSRunLoop* runLoop = [NSRunLoop currentRunLoop];
+    NSRunLoop *runLoop = [NSRunLoop currentRunLoop];
 
     self.waiting_for_result = true;
     self.running = true; 
     
-    char* stunServer = STUN_SERVER;
-    
+    char *stunServer = STUN_SERVER;
     int countWhile = 0;
     
-    while (countWhile++ < 2 )
-    {
+    while (countWhile++ < 2 ) {
         NSLog(@"Stun server: %s", stunServer);
-        
         int status = check_nat_type_async(&pj_callback_nat_type_set_res, (__bridge void*) self , stunServer);
         
-        if (status != 0)
-        {
-            if (status == PJ_ERESOLVE)
-            {
+        if (status != 0) {
+            if (status == PJ_ERESOLVE) {
                 //cleanup_pj();
                 stunServer = STUN_SERVER_SIPGATE;
                 continue;
             }
             
             NSLog(@"Error while init pj libs, status: %d\n ", status);
-            
             break;
         }
         
         NSDate *timeOut = [NSDate dateWithTimeIntervalSinceNow:24.0];
         
-        while (self.waiting_for_result )
-        {
+        while (self.waiting_for_result ) {
             //do a simple "yield()" ..
             [runLoop runUntilDate:[NSDate date]];
             
             sleep(1);
             
-            if ([[NSDate date] compare:timeOut] == NSOrderedDescending)
-            {
+            if ([[NSDate date] compare:timeOut] == NSOrderedDescending) {
                 self.nat_status = PJ_ECANCELLED;
                 self.nat_type = PJ_STUN_NAT_TYPE_ERR_UNKNOWN;
                 break;
@@ -257,72 +192,54 @@ extern int cleanup_pj();
         }
         
         ///RUN ON THREAD NOT ON UI
-
         //cleanup_pj();
         
-        if (self.nat_status == PJ_SUCCESS)
-        {
+        if (self.nat_status == PJ_SUCCESS) {
             break;
         }
     }
     
-    //[pool drain];
-    
-    if (self.nat_type == PJ_STUN_NAT_TYPE_SYMMETRIC)
-    {
+    if (self.nat_type == PJ_STUN_NAT_TYPE_SYMMETRIC) {
         NSLog(@"ARGG we are in SYM nat !!");
-        
-        return TRUE;
+        return YES;
     }
 
-    
-    return FALSE;
-
+    return NO;
 }
 
 
-
-
--(void) sendProbesFromPeer:(struct peer *)peer ToIp: (NSString *) ip_ andPort:(int) port_
+- (void)sendProbesFromPeer:(struct peer *)peer ToIp: (NSString *)ip_ andPort:(int)port_
 {
-    const char * sendline = "CMD:KICK_START";
+    const char *sendline = "CMD:KICK_START";
     
     memset(&peer->remote_peer,0,sizeof(peer->remote_peer));
     peer->remote_peer.sin_family = PJ_AF_INET;
     peer->remote_peer.sin_addr.s_addr=inet_addr([ip_ UTF8String]);
     peer->remote_peer.sin_port=htons(port_);
     
-    
     pj_status_t status;
     
     status = pj_stun_sock_sendto(peer->stun_sock , NULL, sendline, strlen(sendline)+1, 0,
                                  &peer->remote_peer, pj_sockaddr_get_len(&peer->remote_peer));
     
-    if (status == PJ_SUCCESS)
-    {
+    if (status == PJ_SUCCESS) {
         NSLog(@"Send Probe succeeded");
     }
-    else
-    {
+    else {
         NSLog(@"Send  Probe failed..");
         
     }
-    
 }
 
-
-#pragma mark -
-#pragma  mark  Callbacks
+#pragma mark - Callbacks
 
 static void pj_callback_nat_type_set_res(void *user_data, const pj_stun_nat_detect_result *res)
 {
-    
-    StunClient * vc = (__bridge StunClient*) user_data;
+    StunClient *vc = (__bridge StunClient*) user_data;
     
     vc.waiting_for_result = false;
 
-    if(res != NULL)
-    {
+    if( res != NULL) {
         NSLog(@"\n===================================\n");
         NSLog(@"Test status : %s, %d\n", res->status_text, res->status);
         
@@ -334,26 +251,16 @@ static void pj_callback_nat_type_set_res(void *user_data, const pj_stun_nat_dete
         vc.nat_status = res->status;
 
     }
-    else
-    {
+    else {
         return;
     }
 
-    
     [vc.mcallback symmetric_check_result: (res->nat_type == PJ_STUN_NAT_TYPE_SYMMETRIC)];
-    
-    
-    
-    
 }
-
-
 
 void ios_pj_log_func(int level, const char * data, int len)
 {
     NSLog(@"PJLog: %d: %s", level, data);
 }
-
-
 
 @end

@@ -7,18 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "StartMonitorCallback.h"
 #import "GAI.h"
-#import "PublicDefine.h"
 
 @interface Step_12_ViewController : GAITrackedViewController
-{
-      IBOutlet UILabel * cameraName;
-}
 
-@property (nonatomic, assign) IBOutlet UILabel  * cameraName;
+@property (nonatomic, weak) IBOutlet UILabel *cameraName;
 
-
--(IBAction)startMonitor:(id)sender;
+- (IBAction)startMonitor:(id)sender;
 
 @end
