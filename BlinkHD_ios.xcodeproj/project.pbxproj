@@ -651,6 +651,7 @@
 		8BA7F2821851C57200BE0145 /* blink11hd480p.sdp in Resources */ = {isa = PBXBuildFile; fileRef = 8BA7F27F1851C57100BE0145 /* blink11hd480p.sdp */; };
 		8BA7F2831851C57200BE0145 /* blink11hd720p.sdp in Resources */ = {isa = PBXBuildFile; fileRef = 8BA7F2801851C57100BE0145 /* blink11hd720p.sdp */; };
 		8BA8AE881821F3E900DC9E9F /* stream720p_10_926.sdp in Resources */ = {isa = PBXBuildFile; fileRef = 8BA8AE871821F3E900DC9E9F /* stream720p_10_926.sdp */; };
+		8BB46F8B1993250700E31A3D /* SettingHeaderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BB46F8A1993250700E31A3D /* SettingHeaderCell.m */; };
 		8BB53A83194826050078B58E /* NotifViewController~iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8BB53A82194826050078B58E /* NotifViewController~iPad.xib */; };
 		8BB7EA9A196E3F5000FDD674 /* Focus73TableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BB7EA98196E3F5000FDD674 /* Focus73TableViewController.m */; };
 		8BB7EA9B196E3F5000FDD674 /* Focus73TableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8BB7EA99196E3F5000FDD674 /* Focus73TableViewController.xib */; };
@@ -1543,6 +1544,8 @@
 		8BA7F27F1851C57100BE0145 /* blink11hd480p.sdp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = blink11hd480p.sdp; sourceTree = "<group>"; };
 		8BA7F2801851C57100BE0145 /* blink11hd720p.sdp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = blink11hd720p.sdp; sourceTree = "<group>"; };
 		8BA8AE871821F3E900DC9E9F /* stream720p_10_926.sdp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stream720p_10_926.sdp; sourceTree = "<group>"; };
+		8BB46F891993250700E31A3D /* SettingHeaderCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingHeaderCell.h; sourceTree = "<group>"; };
+		8BB46F8A1993250700E31A3D /* SettingHeaderCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingHeaderCell.m; sourceTree = "<group>"; };
 		8BB53A82194826050078B58E /* NotifViewController~iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "NotifViewController~iPad.xib"; sourceTree = "<group>"; };
 		8BB7EA97196E3F5000FDD674 /* Focus73TableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Focus73TableViewController.h; sourceTree = "<group>"; };
 		8BB7EA98196E3F5000FDD674 /* Focus73TableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Focus73TableViewController.m; sourceTree = "<group>"; };
@@ -3228,6 +3231,8 @@
 				8B9112C218600B7C004301C5 /* SettingsViewController.h */,
 				8B9112C318600B7C004301C5 /* SettingsViewController.m */,
 				8B9112C418600B7C004301C5 /* SettingsViewController.xib */,
+				8BB46F891993250700E31A3D /* SettingHeaderCell.h */,
+				8BB46F8A1993250700E31A3D /* SettingHeaderCell.m */,
 				8B9C7E11185F262D0038B3A8 /* Account */,
 			);
 			name = Settings;
@@ -4405,6 +4410,7 @@
 				A1ABF1A3187537170014FCB4 /* BLEConnectionManager.m in Sources */,
 				8B977B6A18C7025200A61115 /* BLEConnectionCell.m in Sources */,
 				8B9CCBA3183EF8B2007C0F65 /* MelodyViewController.m in Sources */,
+				8BB46F8B1993250700E31A3D /* SettingHeaderCell.m in Sources */,
 				8B9DC60A190B7ED7005B4210 /* KISSMetricsAPI.m in Sources */,
 				8B9C7E0D185F260A0038B3A8 /* MenuViewController.mm in Sources */,
 				844359ED1908F64D00148436 /* TimelineDatabase.m in Sources */,
