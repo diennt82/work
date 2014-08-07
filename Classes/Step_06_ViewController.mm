@@ -24,7 +24,7 @@
 @property (retain, nonatomic) UITextField *tfConfirmPass;
 @property (assign, nonatomic) IBOutlet UITableView *tableView;
 @property (retain, nonatomic) IBOutlet UIButton *btnContinue;
-
+@property (nonatomic) BOOL keyBoardShowing;
 @end
 
 @implementation Step_06_ViewController
@@ -195,6 +195,14 @@
     
     UILabel *lblProgress = (UILabel *)[_progressView viewWithTag:695];
     lblProgress.text = message;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWasShown:)
+                                                 name:UIKeyboardDidShowNotification object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillBeHidden:)
+                                                 name:UIKeyboardWillHideNotification object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -218,6 +226,24 @@
     [self resetAllTimer];
     
     [super viewWillDisappear:animated];
+}
+
+- (void)keyboardWasShown:(NSNotification*)aNotification
+{
+    if (self.keyBoardShowing == NO) // must checking because has an error on chineses keyboard
+    {
+        [self animateTextFieldWithUp:YES];
+    }
+    self.keyBoardShowing = YES;
+}
+
+- (void)keyboardWillBeHidden:(NSNotification*)aNotification
+{
+    if (self.keyBoardShowing == YES) // must checking because has an error on chineses keyboard
+    {
+        [self animateTextFieldWithUp:NO];
+    }
+    self.keyBoardShowing = NO;
 }
 
 #pragma mark - Actions
@@ -309,45 +335,36 @@
     return YES;
 }
 
-- (void)textFieldDidBeginEditing:(UITextField *)textField
+- (void)animateTextFieldWithUp:(BOOL) up
 {
-    if (textField.tag !=202 ) // Dont move if it's the SSID name
+    NSInteger movementDistance = 216; // tweak as needed
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
-        [self animateTextField: textField up: YES];
+        movementDistance = 290;
     }
-}
-
-- (void)textFieldDidEndEditing:(UITextField *)textField
-{
-    if (textField.tag !=202 ) // Dont move if it's the SSID name
+    
+    if (isiPhone4)
     {
-        [self animateTextField: textField up: NO];
+        movementDistance = 190;
     }
-}
-
-- (void) animateTextField: (UITextField*) textField up: (BOOL) up
-{
-    int movementDistance = 80; // tweak as needed
-    
-    const float movementDuration = 0.3f; // tweak as needed
-    
-    UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
-    
-    
-    if (textField.tag ==201 &&
-        (interfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
-         interfaceOrientation == UIInterfaceOrientationLandscapeRight)
-        ) //Confirm Password cell
-    {
-        movementDistance+= 40;
-    }
+    //const float movementDuration = 0.3f; // tweak as needed
     
     int movement = (up ? -movementDistance : movementDistance);
     
     [UIView beginAnimations: @"anim" context: nil];
     [UIView setAnimationBeginsFromCurrentState: YES];
-    [UIView setAnimationDuration: movementDuration];
-    self.view.frame = CGRectOffset(self.view.frame, 0, movement);
+    [UIView setAnimationDuration:0.3f];
+    if (isiPhone4)
+    {
+        int tableMove = (up ? -35 : 35);
+        self.tableView.frame = CGRectOffset(self.tableView.frame, 0, tableMove);
+        self.btnContinue.frame = CGRectOffset(self.btnContinue.frame, 0, movement);
+    }
+    else
+    {
+        self.btnContinue.frame = CGRectOffset(self.btnContinue.frame, 0, movement);
+    }
     [UIView commitAnimations];
 }
 

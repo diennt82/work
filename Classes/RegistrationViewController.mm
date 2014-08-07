@@ -310,9 +310,9 @@
     {
         movementDistance = 290;
     }
-    else if (UIScreen.mainScreen.bounds.size.height < 568)// iphone 4s and before
+    else if (isiPhone4)// iphone 4s and before
     {
-        movementDistance = 155;
+        movementDistance = 170;
     }
     
     int movement = (up ? -movementDistance : movementDistance);

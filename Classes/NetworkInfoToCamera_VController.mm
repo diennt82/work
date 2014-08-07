@@ -14,11 +14,12 @@
 #define BTN_TRY_AGAIN_TAG   559
 #define BLE_TIMEOUT_PROCESS 4*60.0
 
-@interface NetworkInfoToCamera_VController () <UITextFieldDelegate, SecurityChangingDelegate>
+@interface NetworkInfoToCamera_VController () <UITextFieldDelegate, SecurityChangingDelegate, UITableViewDataSource, UITableViewDelegate>
 
 @property (retain, nonatomic) IBOutlet UIView *viewProgress;
 @property (retain, nonatomic) IBOutlet UIView *viewError;
 @property (retain, nonatomic) IBOutlet UIButton *btnContinueMain;
+@property (assign, nonatomic) IBOutlet UITableView *tableView;
 
 @property (retain, nonatomic) UITextField *tfSSID;
 @property (retain, nonatomic) UITextField *tfPassword;
@@ -28,7 +29,7 @@
 @property (nonatomic) BOOL shouldTimeoutProcessing;
 @property (nonatomic, retain) UIButton *btnContinue;
 @property (nonatomic, retain) UIButton *btnTryAgain;
-
+@property (nonatomic) BOOL keyBoardShowing;
 @end
 
 @implementation NetworkInfoToCamera_VController
@@ -195,6 +196,14 @@
     lblProgress.text = message;
     
     [BLEConnectionManager getInstanceBLE].delegate = self;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWasShown:)
+                                                 name:UIKeyboardDidShowNotification object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillBeHidden:)
+                                                 name:UIKeyboardWillHideNotification object:nil];
 }
 
 - (void)viewDidUnload
@@ -232,6 +241,23 @@
     }
 }
 
+- (void)keyboardWasShown:(NSNotification*)aNotification
+{
+    if (self.keyBoardShowing == NO) // must checking because has an error on chineses keyboard
+    {
+        [self animateTextFieldWithUp:YES];
+    }
+    self.keyBoardShowing = YES;
+}
+
+- (void)keyboardWillBeHidden:(NSNotification*)aNotification
+{
+    if (self.keyBoardShowing == YES) // must checking because has an error on chineses keyboard
+    {
+        [self animateTextFieldWithUp:NO];
+    }
+    self.keyBoardShowing = NO;
+}
 #pragma mark - Actions
 
 
@@ -325,46 +351,36 @@
     return YES;
 }
 
-- (void)textFieldDidBeginEditing:(UITextField *)textField
+- (void)animateTextFieldWithUp:(BOOL) up
 {
-    if (textField.tag !=202 ) // Dont move if it's the SSID name
+    NSInteger movementDistance = 216; // tweak as needed
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
-        [self animateTextField: textField up: YES];
-    }
-}
-
-- (void)textFieldDidEndEditing:(UITextField *)textField
-{
-    if (textField.tag !=202 ) // Dont move if it's the SSID name
-    {
-        [self animateTextField: textField up: NO];
-    }
-}
-
-- (void) animateTextField: (UITextField*) textField up: (BOOL) up
-{
-    int movementDistance = 80; // tweak as needed
-    
-    const float movementDuration = 0.3f; // tweak as needed
-    
-    UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
-    
-    
-    if (textField.tag ==201 &&
-        (interfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
-         interfaceOrientation == UIInterfaceOrientationLandscapeRight)
-        ) //Confirm Password cell
-    {
-        movementDistance+= 40;
+        movementDistance = 290;
     }
     
+    if (isiPhone4)
+    {
+        movementDistance = 190;
+    }
+    //const float movementDuration = 0.3f; // tweak as needed
     
     int movement = (up ? -movementDistance : movementDistance);
     
     [UIView beginAnimations: @"anim" context: nil];
     [UIView setAnimationBeginsFromCurrentState: YES];
-    [UIView setAnimationDuration: movementDuration];
-    self.view.frame = CGRectOffset(self.view.frame, 0, movement);
+    [UIView setAnimationDuration:0.3f];
+    if (isiPhone4)
+    {
+        int tableMove = (up ? -35 : 35);
+        self.tableView.frame = CGRectOffset(self.tableView.frame, 0, tableMove);
+        self.btnContinueMain.frame = CGRectOffset(self.btnContinueMain.frame, 0, movement);
+    }
+    else
+    {
+        self.btnContinueMain.frame = CGRectOffset(self.btnContinueMain.frame, 0, movement);
+    }
     [UIView commitAnimations];
 }
 
