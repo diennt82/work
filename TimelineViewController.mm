@@ -610,7 +610,7 @@
     int numberOfMovement =0,numberOfVOX =0;
     
     //First update the time string
-#if 1
+#if 0
     self.currentDate = [NSDate networkDate];
 #else
     self.currentDate = [NSDate date];
