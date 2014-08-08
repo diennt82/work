@@ -121,7 +121,7 @@
                             <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                             <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         </imageView>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="XVB-g3-BPb">
+                        <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="XVB-g3-BPb">
                             <rect key="frame" x="3" y="0.0" width="42" height="41"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             <state key="normal" image="video_pause.png">
@@ -131,7 +131,7 @@
                                 <action selector="playVideo:" destination="-1" eventType="touchUpInside" id="w04-b2-7Fk"/>
                             </connections>
                         </button>
-                        <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.10000000000000001" minValue="0.0" maxValue="1" id="ACI-Hg-Dbr">
+                        <slider opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.10000000000000001" minValue="0.0" maxValue="1" id="ACI-Hg-Dbr">
                             <rect key="frame" x="44" y="5" width="159" height="34"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             <connections>

@@ -14,6 +14,7 @@
 #import "Crittercism.h"
 #import "SDWebImageManager.h"
 #import "ios-ntp.h"
+#include "OpenUDID.h"
 
 @interface MBP_iosAppDelegate()
 
@@ -530,6 +531,7 @@ void checkingApplicationCrashed()
     return FALSE;
 }
 
+#if 0
 + (NSString *)GetUUID {
     CFUUIDRef theUUID = CFUUIDCreate(NULL);
     CFStringRef string = CFUUIDCreateString(NULL, theUUID);
@@ -537,9 +539,14 @@ void checkingApplicationCrashed()
     return [(NSString *)string autorelease];
 }
 
+#endif
+
 - (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)devToken {
     self.devTokenStr = [devToken hexadecimalString];
-    
+#if 1
+    NSString *openUDID = [OpenUDID value];
+    //NSLog(@"openUDID: %@, isMT:%d", openUDID, [NSThread isMainThread]);
+#else
     UIPasteboard *appPasteBoard = [UIPasteboard pasteboardWithName:@"Monitoreverywhere_HD" create:YES];
 	appPasteBoard.persistent = YES;
     if ([appPasteBoard string] == nil) {
@@ -549,11 +556,12 @@ void checkingApplicationCrashed()
     
     NSString *uuidString = [appPasteBoard string];
     //NSString *uuidString = [MBP_iosAppDelegate GetUUID];
-    NSLog(@"uuidString: %@, isMT:%d", uuidString, [NSThread isMainThread]);
+#endif
+    //NSLog(@"openUDID: %@, isMT:%d", openUDID, [NSThread isMainThread]);
     
     NSString *applicationName = NSBundle.mainBundle.infoDictionary  [@"CFBundleDisplayName"];
     applicationName = [applicationName stringByAppendingFormat:@"-%@", [UIDevice currentDevice].name];
-    NSLog(@"Application name: %@", applicationName);
+    //NSLog(@"Application name: %@", applicationName);
     
     NSString *swVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
     
@@ -575,7 +583,7 @@ void checkingApplicationCrashed()
                                                              ServerErr:@selector(registerAppFailedServerUnreachable)];
         
         [_jsonComm registerAppWithName:applicationName
-                         andDeviceCode:uuidString
+                         andDeviceCode:openUDID
                     andSoftwareVersion:swVersion
                              andApiKey:apiKey];
     }

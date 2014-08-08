@@ -117,7 +117,7 @@
                             <rect key="frame" x="0.0" y="0.0" width="785" height="71"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                         </imageView>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="qPE-vB-tIh">
+                        <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="qPE-vB-tIh">
                             <rect key="frame" x="5" y="0.0" width="68" height="56"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             <state key="normal" image="video_pause.png">
@@ -127,7 +127,7 @@
                                 <action selector="playVideo:" destination="-1" eventType="touchUpInside" id="hfw-gE-aQW"/>
                             </connections>
                         </button>
-                        <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.01" minValue="0.0" maxValue="1" id="MMi-se-o4O">
+                        <slider opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.01" minValue="0.0" maxValue="1" id="MMi-se-o4O">
                             <rect key="frame" x="79" y="15" width="513" height="34"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             <connections>
