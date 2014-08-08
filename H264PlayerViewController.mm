@@ -703,7 +703,7 @@ double _ticks = 0;
         NSLog(@"%s ", __FUNCTION__);
         
         [self handleMessage:MEDIA_ERROR_SERVER_DIED ext1:-99 ext2:-1];
-        [self showTimelineView];
+//        [self showTimelineView];
         self.messageStreamingState = NSLocalizedStringWithDefaultValue(@"low_data_bandwidth_detected", nil, [NSBundle mainBundle], @"Low data bandwidth detected. Trying to connect...", nil);
     }
 }
@@ -2044,7 +2044,7 @@ double _ticks = 0;
                 
                 if (self.selectedChannel.profile.isInLocal)
                 {
-                    [self showTimelineView];
+//                    [self showTimelineView];
                     self.messageStreamingState = @"Camera is not accessible";
                 }
                 
@@ -6815,6 +6815,7 @@ double _ticks = 0;
         if (_isShowTextCameraIsNotAccesible)
         {
             [self.ib_lbCameraNotAccessible setHidden:NO];
+            [self showTimelineView];
         }
         else
         {
@@ -7174,7 +7175,7 @@ double _ticks = 0;
             [UIApplication sharedApplication].applicationState != UIApplicationStateBackground) // Testing this to decide using it or not
         {
             NSLog(@"SERVER unreachable (timeout) ");
-            [self showTimelineView];
+//            [self showTimelineView];
             self.messageStreamingState = NSLocalizedStringWithDefaultValue(@"camera_is_not_accessible", nil, [NSBundle mainBundle], @"Camera is not accessible", nil);
             _isShowTextCameraIsNotAccesible = YES;
             [self.ib_lbCameraNotAccessible setHidden:NO];
