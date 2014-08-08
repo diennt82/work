@@ -31,6 +31,7 @@
 @property (nonatomic) double duration;
 @property (nonatomic) double timeStarting;
 @property (nonatomic, assign) NSTimer *timerWatcher;
+@property (nonatomic) BOOL isSeekBackward;
 @end
 
 @implementation PlaybackViewController
@@ -90,7 +91,7 @@
     //Here is show indicator
     self.activityIndicator.hidden = NO;
     [self.activityIndicator startAnimating];
-    self.ib_sliderPlayBack.userInteractionEnabled = NO; // Disable it because it's featur not done yet!
+    self.ib_sliderPlayBack.userInteractionEnabled = NO; // Disabling it because its feature is not done yet!
     
     // Do any additional setup after loading the view.
 	[[NSNotificationCenter defaultCenter] addObserver: self
@@ -298,7 +299,8 @@
     if (status != NO_ERROR) // NOT OK
     {
         NSLog(@"prepare() error: %d\n", status);
-        exit(1); // Dangerous
+        //exit(1); // Dangerous
+        return;
     }
     
     status =  MediaPlayer::Instance()->start();
@@ -331,6 +333,11 @@
         case MEDIA_PLAYER_STARTED:
         {
             NSLog(@"%s msg: MEDIA_PLAYER_STARTED", __FUNCTION__);
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.ib_playPlayBack.enabled = YES;
+                self.ib_sliderPlayBack.enabled = YES;
+            });
             
             if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground)
             {
@@ -517,7 +524,7 @@
 
 - (void) adjustViewsForOrientation:(UIInterfaceOrientation)orientation
 {
-	if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight)
+    if(UIInterfaceOrientationIsLandscape(orientation))
 	{
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
             CGRect rect = CGRectMake(0, 0, SCREEN_HEIGHT, 576);
@@ -531,7 +538,7 @@
         [self.ib_closePlayBack setImage:[UIImage imageNamed:@"video_fullscreen_close_pressed"] forState:UIControlEventTouchDown];
         self.ib_bg_top_player.hidden = YES;
 	}
-	else if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
+    else if (UIInterfaceOrientationIsPortrait(orientation))
 	{
         if (isiPhone5 || isiPhone4)
         {
@@ -626,10 +633,12 @@
         NSString *apiKey = [[NSUserDefaults standardUserDefaults] stringForKey:@"PortalApiKey"];
         NSString *strEventID = [NSString stringWithFormat:@"%d",self.intEventId];
         
-        BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self Selector:nil  FailSelector:nil ServerErr:nil];
+        if (!_jsonComm)
+        {
+            self.jsonComm = [[BMS_JSON_Communication alloc] initWithCaller:self];
+        }
         
-        NSDictionary *responseDict = [jsonComm deleteEventsBlockedWithRegistrationId:clip_info.registrationID eventIds:strEventID apiKey:apiKey];
-        [jsonComm release];
+        NSDictionary *responseDict = [_jsonComm deleteEventsBlockedWithRegistrationId:clip_info.registrationID eventIds:strEventID apiKey:apiKey];
         
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         
@@ -682,7 +691,7 @@
 {
     NSLog(@"%s", __FUNCTION__);
     
-    if (_isPause &&
+    if (!_isPause &&
         MediaPlayer::Instance()->isPlaying())
     {
         self.isPause = YES;
@@ -818,10 +827,7 @@
     
     if (!_jsonComm)
     {
-        self.jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                              Selector:nil
-                                                          FailSelector:nil
-                                                             ServerErr:nil];
+        self.jsonComm = [[BMS_JSON_Communication alloc] initWithCaller:self];
     }
 
     NSString *mac = clip_info.mac_addr;
