@@ -45,6 +45,8 @@
 @property (nonatomic) BOOL hasUpdate;
 @property (nonatomic, retain) NSIndexPath *selectedIndexPath;
 @property (nonatomic) BOOL taskCancelled;
+@property (nonatomic, retain) NSDateFormatter *dateFormatterEvent;
+@property (nonatomic, retain) NSDateFormatter *dateFormatterDevice;
 
 @end
 
@@ -128,6 +130,8 @@
     [_clipsInEachEvent release];
     [_playlists release];
     [_jsonComm release];
+    [_dateFormatterEvent release];
+    [_dateFormatterDevice release];
     
     [super dealloc];
 }
@@ -148,6 +152,22 @@
 - (void)loadEvents: (CamChannel *)camChannel
 {
     self.camChannel = camChannel;
+    
+    if (!_dateFormatterEvent)
+    {
+        self.dateFormatterEvent = [[NSDateFormatter alloc] init];
+        [_dateFormatterEvent setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
+        self.dateFormatterEvent.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:0];
+        self.dateFormatterEvent.calendar = [[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar] autorelease];
+        self.dateFormatterEvent.locale = [[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"] autorelease];
+    }
+    
+    if (!_dateFormatterDevice)
+    {
+        self.dateFormatterDevice = [[NSDateFormatter alloc] init];
+        [_dateFormatterDevice setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+        [_dateFormatterDevice setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+    }
     
     [self performSelectorInBackground:@selector(getEventFromDbFirstTime:) withObject:camChannel];
     
@@ -181,7 +201,7 @@
 
 - (void)getEventFromDbFirstTime:(CamChannel *)camChannel
 {
-    self.events =[[TimelineDatabase getSharedInstance] getEventsForCamera:camChannel.profile.registrationID];
+    self.events =[[TimelineDatabase getSharedInstance] getEventsForCamera:camChannel.profile.registrationID dateFormmater:_dateFormatterEvent];
     
     NSLog(@"%s There are %d in databases ", __FUNCTION__, self.events.count );
     
@@ -230,7 +250,7 @@
     self.shouldLoadMore = TRUE;
     self.hasUpdate = NO;
     
-    self.events =[[TimelineDatabase getSharedInstance] getEventsForCamera:camChannel.profile.registrationID];
+    self.events =[[TimelineDatabase getSharedInstance] getEventsForCamera:camChannel.profile.registrationID dateFormmater:_dateFormatterEvent];
     
     NSLog(@"%s There are %d in databases ", __FUNCTION__, self.events.count );
     
@@ -279,7 +299,7 @@
 {
     self.isLoading = TRUE;
     
-    NSLog(@"%s", __FUNCTION__);
+    //NSLog(@"%s", __FUNCTION__);
     
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -288,16 +308,14 @@
     
     if (_jsonComm == nil)
     {
-        self.jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                              Selector:nil
-                                                          FailSelector:nil
-                                                             ServerErr:nil];
+        self.jsonComm = [[BMS_JSON_Communication alloc] initWithCaller:self];
     }
 #if 1
     self.currentDate = [NSDate networkDate];
+    NSString *dateInStringFormated = [_dateFormatterDevice stringFromDate:_currentDate];
 #else
     self.currentDate = [NSDate date];
-#endif
+//#endif
     
     // Calculate the time to anchor the loading of events
     
@@ -311,9 +329,9 @@
     NSString *dateInStringFormated = [dateFormatter stringFromDate:_currentDate];
     
     [dateFormatter release];
-    
+#endif
     dateInStringFormated = [self urlEncodeUsingEncoding:NSUTF8StringEncoding forString:dateInStringFormated];
-    NSLog(@"Loading page : %d before date: %@", self.eventPage, dateInStringFormated);
+    NSLog(@"%s Loading page : %d before date: %@", __FUNCTION__, self.eventPage, dateInStringFormated);
     
     //Load event from server
     NSDictionary *responseDict = [_jsonComm getListOfEventsBlockedWithRegisterId:camChannel.profile.registrationID
@@ -362,16 +380,18 @@
                         data_str1 =  [jsonData base64EncodedString];
                         //NSLog(@"datais: %@", data_str1);
                     }
-                    
-                    
+#if 1
+                    NSDate *eventDate = [_dateFormatterEvent dateFromString:eventInfo.time_stamp];
+#else
                     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
                     [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
                     [dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
                     NSDate *eventDate = [dateFormatter dateFromString:eventInfo.time_stamp]; //2013-12-31 07:38:35 +0000
                     [dateFormatter release];
+#endif
+                    //NSLog(@"%s eventDate:%@", __FUNCTION__, eventDate);
                     
                     NSString * event_id = [event objectForKey:@"id"];
-                    
                     
                     int eventTimeInMs = [eventDate timeIntervalSince1970];
                     int status =  [mDatabase saveEventWithId:event_id
@@ -443,17 +463,15 @@
     
     if (_jsonComm == nil)
     {
-        self.jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                              Selector:nil
-                                                          FailSelector:nil
-                                                             ServerErr:nil];
+        self.jsonComm = [[BMS_JSON_Communication alloc] initWithCaller:self];
     }
     
 #if 1
     self.currentDate = [NSDate networkDate];
+    NSString *dateInStringFormated = [_dateFormatterDevice stringFromDate:_currentDate];
 #else
     self.currentDate = [NSDate date];
-#endif
+//#endif
     
     // Calculate the time to anchor the loading of events
     
@@ -467,7 +485,7 @@
     NSString *dateInStringFormated = [dateFormatter stringFromDate:_currentDate];
     
     [dateFormatter release];
-    
+#endif
     dateInStringFormated = [self urlEncodeUsingEncoding:NSUTF8StringEncoding forString:dateInStringFormated];
     NSLog(@"%s Loading page : %d before date: %@",__FUNCTION__, self.eventPage, dateInStringFormated);
     
@@ -610,19 +628,11 @@
     int numberOfMovement =0,numberOfVOX =0;
     
     //First update the time string
-#if 0
-    self.currentDate = [NSDate networkDate];
-#else
     self.currentDate = [NSDate date];
-#endif
     
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     // Set the dateFormatter format
-#if 0
-    [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
-#else
     [dateFormatter setTimeZone:[NSTimeZone localTimeZone]];
-#endif
     
     if (_is12hr)
     {
@@ -634,16 +644,18 @@
     }
     
     self.stringCurrentDate = [dateFormatter stringFromDate:_currentDate];
-    
+    [dateFormatter release];
+#if 1
+    NSString *dateInStringFormated = [_dateFormatterDevice stringFromDate:_currentDate];
+#else
     // Get the date time in NSString
     [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-#if 1
     [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
-#endif
     NSString *dateInStringFormated = [dateFormatter stringFromDate:_currentDate];
-    NSLog(@"%@, %@", dateInStringFormated, _stringCurrentDate);
+#endif
+    NSLog(@"%s dateInStringFormated:%@, stringCurrentDate:%@", __FUNCTION__, dateInStringFormated, _stringCurrentDate);
     
-    [dateFormatter release];
+    //[dateFormatter release];
     
     if (_events && _events.count > 0)
     {
@@ -652,11 +664,16 @@
         {
             for (EventInfo *eventInfo in _events)
             {
+#if 1
+                NSDate *eventDate = [_dateFormatterEvent dateFromString:eventInfo.time_stamp]; //2013-12-31 07:38:35 +0000
+#else
                 NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
                 [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
                 [dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
                 NSDate *eventDate = [dateFormatter dateFromString:eventInfo.time_stamp]; //2013-12-31 07:38:35 +0000
                 [dateFormatter release];
+#endif
+                //NSLog(@"%s eventDate:%@", __FUNCTION__, eventDate);
                 
                 NSTimeInterval diff = [_currentDate timeIntervalSinceDate:eventDate];
                 
@@ -741,6 +758,9 @@
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
     
+#if 1
+    NSString *dateInStringFormated = [_dateFormatterDevice stringFromDate:_currentDate];
+#else
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     // Get the date time in NSString
     [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
@@ -749,15 +769,12 @@
     NSString *dateInStringFormated = [dateFormatter stringFromDate:_currentDate];
     
     [dateFormatter release];
-    
+#endif
     dateInStringFormated = [self urlEncodeUsingEncoding:NSUTF8StringEncoding forString:dateInStringFormated];
     
     if (_jsonComm == nil)
     {
-        self.jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                              Selector:nil
-                                                          FailSelector:nil
-                                                             ServerErr:nil];
+        self.jsonComm = [[BMS_JSON_Communication alloc] initWithCaller:self];
     }
     
     NSDictionary *responseDict = [_jsonComm getListOfEventsBlockedWithRegisterId:_camChannel.profile.registrationID
@@ -1445,6 +1462,7 @@
     [alertView show];
     [alertView release];
 }
+
 #pragma mark - Table view delegate
 
 // In a xib-based application, navigation from a table can be handled in -tableView:didSelectRowAtIndexPath:
@@ -1524,12 +1542,17 @@
 -(NSString *) formatTimeStringForEvent:(EventInfo *) eventInfo
 {
     NSString * str = nil;
-    
+#if 1
+    NSDate *eventDate = [_dateFormatterEvent dateFromString:eventInfo.time_stamp]; //2013-12-31 07:38:35 +0000
+#else
     NSDateFormatter *dateFormater = [[NSDateFormatter alloc] init];
     [dateFormater setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
     [dateFormater setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
     NSDate *eventDate = [dateFormater dateFromString:eventInfo.time_stamp]; //2013-12-31 07:38:35 +0000
     [dateFormater release];
+#endif
+    
+    //NSLog(@"%s eventDate:%@, time_stamp:%@", __FUNCTION__, eventDate, eventInfo.time_stamp);
     
     NSDateFormatter* df_local = [[NSDateFormatter alloc] init] ;
 #if 0
