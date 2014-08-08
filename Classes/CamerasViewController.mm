@@ -28,7 +28,7 @@
 
 @implementation CamerasViewController
 
-#define MAX_CAM_ALLOWED 4
+#define MAX_CAM_ALLOWED 8
 #define CAMERA_TAG_66 566
 #define CAMERA_TAG_83 583 //83/ 836
 #define CAMERA_STATUS_OFFLINE   -1
