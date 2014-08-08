@@ -260,16 +260,18 @@
                     if (self.isViewLoaded && self.view.window) {
                         
                         dispatch_async(dispatch_get_main_queue(), ^(void) {
-                            [_melodyTableView reloadData];
+                            BOOL playing = NO;
                             for (int i = 0; i < _melodies.count; i++)
                             {
                                 valueMelodiesMap[i] = FALSE;
                                 if ([[NSString stringWithFormat:@"%@%d", MELODY, i + 1] isEqualToString:[tokens objectAtIndex:0]])
                                 {
+                                    playing = YES;
                                     valueMelodiesMap[i] = TRUE;
-                                    self.playing = YES;
                                 }
                             }
+                            [_melodyTableView reloadData];
+                            self.playing = playing;
                             NSLog(@"%s _reload table from back ground", __func__);
                         });
                         success = YES;
