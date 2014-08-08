@@ -117,6 +117,102 @@ static TimelineDatabase *sharedInstance = nil;
     return retVal;
 }
 
+#if 1
+-(NSMutableArray *) getEventsForCamera:(NSString*)camera_udid dateFormmater:(NSDateFormatter *)f
+{
+    sqlite3 * database;
+    sqlite3_stmt * statement ;
+    
+    NSMutableArray *retval = [[[NSMutableArray alloc] init] autorelease];
+    const char *dbpath = [self.databasePath UTF8String];
+    
+    NSString *insertSQL = [NSString stringWithFormat:@"select * from  camera_events where camera_udid='%@' ORDER BY event_ts DESC", camera_udid];
+    
+    const char * stmt = [insertSQL UTF8String];
+    
+    if (sqlite3_open(dbpath, &database) == SQLITE_OK)
+    {
+        if (sqlite3_prepare_v2(database, stmt, -1, &statement, NULL) == SQLITE_OK)
+        {
+            while (sqlite3_step(statement) == SQLITE_ROW)
+            {
+                char * event_id = (char *) sqlite3_column_text(statement, 0);
+                //camera_udid : no need to get 1
+                // camera_owner_id: no need to get 2
+                char * event_alert = (char *)sqlite3_column_text(statement, 3);
+                char * event_value = (char *)sqlite3_column_text(statement, 4);
+                char * event_alert_name = (char *)sqlite3_column_text(statement, 5);
+                int event_unix_ts = sqlite3_column_int(statement,6);
+                char * event_data = (char *)sqlite3_column_text(statement, 7);
+                
+                //NSLog(@"%s: event_unix_ts: %d", __FUNCTION__, event_unix_ts);
+                
+                EventInfo *eventInfo = [[EventInfo alloc] init];
+                eventInfo.alert_name = [[[NSString alloc] initWithUTF8String:event_alert_name] autorelease];
+                eventInfo.value      = [[[NSString alloc] initWithUTF8String:event_value] autorelease];
+                eventInfo.eventID = [[[[NSString alloc] initWithUTF8String:event_id] autorelease] integerValue];
+                
+#if 1
+                NSDate * eventDate = [NSDate dateWithTimeIntervalSince1970:event_unix_ts];
+                
+                NSString * eventDate_str = [f stringFromDate:eventDate];
+#else
+                NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+                [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
+                [dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+                
+                
+                NSDate * eventDate = [NSDate dateWithTimeIntervalSince1970:event_unix_ts];
+                
+                NSString * eventDate_str = [dateFormatter stringFromDate:eventDate];
+                
+                [dateFormatter release];
+#endif
+                //NSLog(@"%s eventDate_str:%@", __FUNCTION__, eventDate_str);
+                eventInfo.time_stamp = eventDate_str;
+                
+                eventInfo.alert      = [[[[NSString alloc] initWithUTF8String:event_alert] autorelease] integerValue];
+                
+                NSString * event_data_str = [[[NSString alloc] initWithUTF8String:event_data] autorelease];
+                
+                NSData * event_data_d = [NSData dataFromBase64String:event_data_str];
+                
+                //NSData * event_data_d = [NSData dataWithBytes:event_data length:strlen(event_data)];
+                NSError *e;
+                
+                NSArray *clipsInEvent = [NSJSONSerialization JSONObjectWithData: event_data_d
+                                                                        options: NSJSONReadingMutableContainers
+                                                                          error: &e];
+                if (clipsInEvent != nil )
+                {
+                    ClipInfo *clipInfo = [[ClipInfo alloc] init];
+                    clipInfo.urlImage = [[clipsInEvent objectAtIndex:0] objectForKey:@"image"];
+                    clipInfo.urlFile = [[clipsInEvent objectAtIndex:0] objectForKey:@"file"];
+                    
+                    eventInfo.clipInfo = clipInfo;
+                    
+                    //NSLog(@"Event has clip: %@ ",clipInfo.urlImage);
+                    
+                    [clipInfo release];
+                }
+                else
+                {
+                    // NSLog(@"Event has no clips ");
+                }
+                
+                [retval addObject:eventInfo];
+                [eventInfo release];
+            } // while
+            
+            sqlite3_finalize(statement);
+        }
+    }
+    
+    sqlite3_close(database);
+    
+    return retval;
+}
+#else
 -(NSMutableArray *) getEventsForCamera:(NSString*) camera_udid
 {
     
@@ -217,6 +313,7 @@ static TimelineDatabase *sharedInstance = nil;
     
     return retval;
 }
+#endif
 
 - (BOOL)deleteEventsForCamera:(NSString *)camera_udid limitedDate: (NSInteger )limitedDate
 {
