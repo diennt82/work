@@ -66,7 +66,7 @@
 
 - (IBAction)buyCameraButtonAction:(id)sender
 {
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://hubblehome.com/hubble-products/"]];
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://hubbleconnected.com/hubble-products/"]];
 }
 
 #pragma mark - Methods
