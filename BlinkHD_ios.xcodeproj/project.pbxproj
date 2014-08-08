@@ -660,6 +660,7 @@
 		8BC0A02F1844A87700A5FD52 /* temp_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BC0A02E1844A87700A5FD52 /* temp_bg.png */; };
 		8BC0A0461844B31700A5FD52 /* mbp_icon57x57.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BC0A0421844B31700A5FD52 /* mbp_icon57x57.png */; };
 		8BC0A0491844B31700A5FD52 /* mbp_icon144x144.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BC0A0451844B31700A5FD52 /* mbp_icon144x144.png */; };
+		8BC2235D199219BE00130294 /* OpenUDID.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BC2235C199219BE00130294 /* OpenUDID.m */; };
 		8BCE3096198F98B7006C386C /* PushNotificationAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BCE3095198F98B7006C386C /* PushNotificationAlert.m */; };
 		8BE896B31845CB3B00674E01 /* bb_motion_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BE896B21845CB3B00674E01 /* bb_motion_icon.png */; };
 		8BE9D32019653D0C00D3DE8D /* AddCameraViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8BE9D31F19653D0C00D3DE8D /* AddCameraViewController_iPad.xib */; };
@@ -1554,6 +1555,8 @@
 		8BC0A02E1844A87700A5FD52 /* temp_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = temp_bg.png; sourceTree = "<group>"; };
 		8BC0A0421844B31700A5FD52 /* mbp_icon57x57.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mbp_icon57x57.png; sourceTree = "<group>"; };
 		8BC0A0451844B31700A5FD52 /* mbp_icon144x144.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mbp_icon144x144.png; sourceTree = "<group>"; };
+		8BC2235B199219BE00130294 /* OpenUDID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenUDID.h; sourceTree = "<group>"; };
+		8BC2235C199219BE00130294 /* OpenUDID.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenUDID.m; sourceTree = "<group>"; };
 		8BCE3094198F98B7006C386C /* PushNotificationAlert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PushNotificationAlert.h; sourceTree = "<group>"; };
 		8BCE3095198F98B7006C386C /* PushNotificationAlert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PushNotificationAlert.m; sourceTree = "<group>"; };
 		8BE896B21845CB3B00674E01 /* bb_motion_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bb_motion_icon.png; sourceTree = "<group>"; };
@@ -1790,6 +1793,7 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				8BC2235A199219AC00130294 /* OpenUDID */,
 				8B3E0EE41988FF8A00BF5788 /* TheTimeNow */,
 				8BB7EA94196E337200FDD674 /* Focus73 */,
 				8412C98A195D26F7000FEA1C /* CrittercismSDK */,
@@ -3384,6 +3388,15 @@
 			name = Focus73ListVc;
 			sourceTree = "<group>";
 		};
+		8BC2235A199219AC00130294 /* OpenUDID */ = {
+			isa = PBXGroup;
+			children = (
+				8BC2235B199219BE00130294 /* OpenUDID.h */,
+				8BC2235C199219BE00130294 /* OpenUDID.m */,
+			);
+			name = OpenUDID;
+			sourceTree = "<group>";
+		};
 		8BEDE2ED1861B73F00D3AE2B /* Disturb */ = {
 			isa = PBXGroup;
 			children = (
@@ -4336,6 +4349,7 @@
 				5E712D91192B3332000858F1 /* UIActionSheet+Blocks.m in Sources */,
 				8B9112CA186010F1004301C5 /* GeneralCell.m in Sources */,
 				84A6625C195C0C2500EF7DB5 /* UIButton+WebCache.m in Sources */,
+				8BC2235D199219BE00130294 /* OpenUDID.m in Sources */,
 				8B53659318B34DA80018671F /* SensitivityTemperatureCell.m in Sources */,
 				8B9384AF18570567009C4771 /* ValueSettingsViewController.m in Sources */,
 				A13AD81018D008110009F0E5 /* DoNotDisturbCell.m in Sources */,
@@ -4524,7 +4538,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = HubbleHome;
-				PROVISIONING_PROFILE = "6005205D-B6D0-404C-8272-0A61B5418CCB";
+				PROVISIONING_PROFILE = "BA6C3279-B01E-4434-A0D9-E0B53545C9C6";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
 				VALID_ARCHS = "armv6 armv7";
@@ -4574,7 +4588,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = HubbleHome;
-				PROVISIONING_PROFILE = "6005205D-B6D0-404C-8272-0A61B5418CCB";
+				PROVISIONING_PROFILE = "BA6C3279-B01E-4434-A0D9-E0B53545C9C6";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
 				VALIDATE_PRODUCT = YES;
@@ -4647,7 +4661,7 @@
 				);
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = HubbleHome;
-				PROVISIONING_PROFILE = "6005205D-B6D0-404C-8272-0A61B5418CCB";
+				PROVISIONING_PROFILE = "BA6C3279-B01E-4434-A0D9-E0B53545C9C6";
 				RAMEWORK_SEARCH_PATHS = "$(inherited) \"$(SRCROOT)\"";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
