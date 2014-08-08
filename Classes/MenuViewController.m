@@ -255,25 +255,13 @@
 - (void)finishStoreCameraListData:(NSMutableArray *)camProfiles success:(BOOL)success
 {
     if (self.isViewLoaded && self.view.window) {
-        if ([self rebindCamerasResource] == TRUE) {
-            [self updateCameraList];
-            self.camerasVC.camChannels = _cameras;
-        }
+        [self rebindCamerasResource];
+        [self updateCameraList];
         
+        self.camerasVC.camChannels = _cameras;
         self.camerasVC.waitingForUpdateData = NO;
-        [_camerasVC.tableView performSelectorInBackground:@selector(reloadData) withObject:nil];
         
-        if ( _cameras.count > 0 ) {
-            [self.navigationItem.rightBarButtonItems[1] setEnabled:YES];
-            self.navigationItem.rightBarButtonItems = @[_accountBarButton, _settingsBarButton, _cameraBarButton];
-            self.navigationItem.leftBarButtonItem.enabled = YES;
-        }
-        else {
-            self.navigationItem.rightBarButtonItems = @[_accountBarButton, _cameraBarButton];
-        }
-    }
-    else {
-        NSLog(@"%s view is invisible. Do nothing!", __FUNCTION__);
+        [_camerasVC.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
     }
 }
 
@@ -291,34 +279,29 @@
 	self.cameras = validChannels;
 }
 
-- (BOOL)rebindCamerasResource
+- (void)rebindCamerasResource
 {
-    BOOL restore_successful = [self restoreConfigData];
+    [self restoreConfigData];
     
-    if ( restore_successful ) {
-        for (int i = 0; i < _arrayChannel.count; i++) {
-            CamChannel *ch = (CamChannel *)_arrayChannel[i];
-            
-            if ( ch.profile ) {
-                for (int j = 0; j < _restoredProfiles.count; j++) {
-                    CamProfile *cp = (CamProfile *)_restoredProfiles[j];
-                    
-                    if ( !cp.isSelected ) {
-                        //Re-bind camera - channel
-                        [ch setCamProfile:cp];
-                        cp.isSelected = YES;
-                        [cp setChannel:ch];
-                        break;
-                    }
+    for (int i = 0; i < _arrayChannel.count; i++) {
+        CamChannel *ch = (CamChannel *)_arrayChannel[i];
+        
+        if ( ch.profile ) {
+            for (int j = 0; j < _restoredProfiles.count; j++) {
+                CamProfile *cp = (CamProfile *)_restoredProfiles[j];
+                if ( !cp.isSelected ) {
+                    // Re-bind camera - channel
+                    [ch setCamProfile:cp];
+                    cp.isSelected = YES;
+                    [cp setChannel:ch];
+                    break;
                 }
             }
         }
     }
-    
-    return restore_successful;
 }
 
-- (BOOL)restoreConfigData
+- (void)restoreConfigData
 {
 	SetupData *savedData = [[SetupData alloc] init];
     
@@ -326,9 +309,6 @@
 		self.arrayChannel = savedData.channels;
 		self.restoredProfiles = savedData.configuredCams;
 	}
-    
-    
-	return YES;
 }
 
 @end
