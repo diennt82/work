@@ -1,20 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5053" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
-        <deployment defaultVersion="1792" identifier="iOS"/>
+        <deployment defaultVersion="1552" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="RegistrationViewController">
             <connections>
-                <outlet property="btnCheckbox" destination="ocS-Bg-yE2" id="7Nt-Vw-lfu"/>
-                <outlet property="btnCreate" destination="9D7-qA-U7q" id="KTQ-Ar-8dc"/>
-                <outlet property="tfConfirmPassword" destination="fGI-yu-812" id="RJa-bE-4e4"/>
-                <outlet property="tfEmail" destination="evm-Vl-r3L" id="UnZ-Iw-lQJ"/>
-                <outlet property="tfPassword" destination="fL5-EF-5Rj" id="pn2-jC-Tbv"/>
-                <outlet property="tfUsername" destination="7fY-KZ-vmS" id="BiM-7Y-ljK"/>
+                <outlet property="accountExistsButton" destination="rgJ-KJ-WYW" id="osV-ZR-Dsx"/>
+                <outlet property="checkboxButton" destination="ocS-Bg-yE2" id="4l7-eG-7Z9"/>
+                <outlet property="confirmPasswordTextField" destination="fGI-yu-812" id="ddr-ow-Uk5"/>
+                <outlet property="createButton" destination="9D7-qA-U7q" id="Jjw-IT-gTr"/>
+                <outlet property="emailTextField" destination="evm-Vl-r3L" id="8ch-os-ZlK"/>
+                <outlet property="logoImageView" destination="Omk-8M-deI" id="esN-7y-izp"/>
+                <outlet property="passwordTextField" destination="fL5-EF-5Rj" id="Ydk-Xv-t0a"/>
+                <outlet property="progressView" destination="usq-UQ-6df" id="kao-dD-oWm"/>
+                <outlet property="termsAgreeButton" destination="R7Y-vB-JII" id="OUk-JU-igc"/>
+                <outlet property="usernameTextField" destination="7fY-KZ-vmS" id="yiu-K9-l5U"/>
                 <outlet property="view" destination="1" id="3"/>
-                <outlet property="viewProgress" destination="usq-UQ-6df" id="JW6-4W-ncK"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -23,7 +26,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="launch_logo.png" id="Omk-8M-deI">
-                    <rect key="frame" x="73" y="20" width="175" height="175"/>
+                    <rect key="frame" x="73" y="25" width="175" height="175"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
                 <view contentMode="scaleAspectFit" id="nkQ-fA-Joz">
@@ -39,7 +42,7 @@
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="17"/>
-                            <textInputTraits key="textInputTraits" keyboardType="emailAddress" returnKeyType="next"/>
+                            <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="next"/>
                         </textField>
                     </subviews>
                 </view>
@@ -56,7 +59,7 @@
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="17"/>
-                            <textInputTraits key="textInputTraits" keyboardType="emailAddress" returnKeyType="next"/>
+                            <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="emailAddress" returnKeyType="next"/>
                         </textField>
                     </subviews>
                 </view>
@@ -128,13 +131,6 @@
                         <action selector="btnCheckboxTouchUpInsideAction:" destination="-1" eventType="touchUpInside" id="90U-Bk-Hf3"/>
                     </connections>
                 </button>
-                <label hidden="YES" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="502" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="I agree with the Terms of Services" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="I7G-n3-MPs">
-                    <rect key="frame" x="49" y="393" width="251" height="21"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="13"/>
-                    <color key="textColor" red="0.062745098039215685" green="0.062745098039215685" blue="0.062745098039215685" alpha="1" colorSpace="calibratedRGB"/>
-                    <nil key="highlightedColor"/>
-                </label>
                 <button opaque="NO" tag="504" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="R7Y-vB-JII">
                     <rect key="frame" x="47" y="390" width="192" height="30"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>

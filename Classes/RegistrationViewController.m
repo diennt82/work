@@ -18,18 +18,24 @@
 
 @interface RegistrationViewController () <UITextFieldDelegate>
     
-@property (nonatomic, weak) IBOutlet UITextField *tfUsername;
-@property (nonatomic, weak) IBOutlet UITextField *tfEmail;
-@property (nonatomic, weak) IBOutlet UITextField *tfPassword;
-@property (nonatomic, weak) IBOutlet UITextField *tfConfirmPassword;
-@property (nonatomic, weak) IBOutlet UIButton *btnCheckbox;
-@property (nonatomic, weak) IBOutlet UIButton *btnCreate;
-@property (nonatomic, weak) IBOutlet UIView *viewProgress;
+@property (nonatomic, weak) IBOutlet UITextField *usernameTextField;
+@property (nonatomic, weak) IBOutlet UITextField *emailTextField;
+@property (nonatomic, weak) IBOutlet UITextField *passwordTextField;
+@property (nonatomic, weak) IBOutlet UITextField *confirmPasswordTextField;
+@property (nonatomic, weak) IBOutlet UIButton *checkboxButton;
+@property (nonatomic, weak) IBOutlet UIButton *createButton;
+@property (nonatomic, weak) IBOutlet UIButton *termsAgreeButton;
+@property (nonatomic, weak) IBOutlet UIButton *accountExistsButton;
+@property (nonatomic, weak) IBOutlet UIView *progressView;
+@property (nonatomic, weak) IBOutlet UIImageView *logoImageView;
 
-@property (nonatomic, strong) NSString *stringUsername;
-@property (nonatomic, strong) NSString *stringPassword;
-@property (nonatomic, strong) NSString *stringCPassword;
-@property (nonatomic, strong) NSString *stringEmail;
+@property (nonatomic, copy) NSString *username;
+@property (nonatomic, copy) NSString *password;
+@property (nonatomic, copy) NSString *passwordConfirmation;
+@property (nonatomic, copy) NSString *email;
+
+@property (nonatomic) BOOL isVisisble;
+
 @end
 
 @implementation RegistrationViewController
@@ -39,7 +45,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
     
     if (UIScreen.mainScreen.bounds.size.height < 568) {
         [[NSBundle mainBundle] loadNibNamed:@"RegistrationViewController_35"
@@ -48,48 +53,82 @@
     }
     
     self.navigationController.navigationBarHidden = YES;
-    _btnCreate.enabled = NO;
+    _createButton.enabled = NO;
     
-    [_btnCreate setBackgroundImage:[UIImage imageNamed:@"enter"] forState:UIControlStateNormal];
-    [_btnCreate setBackgroundImage:[UIImage imageNamed:@"enter_pressed"] forState:UIControlEventTouchDown];
+    [_createButton setBackgroundImage:[UIImage imageNamed:@"enter"] forState:UIControlStateNormal];
+    [_createButton setBackgroundImage:[UIImage imageNamed:@"enter_pressed"] forState:UIControlEventTouchDown];
     
-    [_btnCheckbox setImage:[UIImage imageNamed:@"checkbox"] forState:UIControlStateNormal];
-    [_btnCheckbox setImage:[UIImage imageNamed:@"checkbox_active"] forState:UIControlStateSelected];
-    [_btnCheckbox setImage:[UIImage imageNamed:@"checkbox_active"] forState:UIControlStateHighlighted];
+    [_checkboxButton setImage:[UIImage imageNamed:@"checkbox"] forState:UIControlStateNormal];
+    [_checkboxButton setImage:[UIImage imageNamed:@"checkbox_active"] forState:UIControlStateSelected];
+    [_checkboxButton setImage:[UIImage imageNamed:@"checkbox_active"] forState:UIControlStateHighlighted];
     
-    _tfUsername.delegate = self;
-    _tfEmail.delegate = self;
-    _tfPassword.delegate = self;
-    _tfConfirmPassword.delegate = self;
+    _usernameTextField.delegate = self;
+    _emailTextField.delegate = self;
+    _passwordTextField.delegate = self;
+    _confirmPasswordTextField.delegate = self;
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        UIButton *btnCheckbox = (UIButton *)[self.view viewWithTag:501];
+        
+        btnCheckbox.frame = CGRectMake(_createButton.frame.origin.x - 6, btnCheckbox.frame.origin.y, btnCheckbox.frame.size.width, btnCheckbox.frame.size.height);
+        UILabel *lblTermServices = (UILabel *)[self.view viewWithTag:502];
+        lblTermServices.frame = CGRectMake(btnCheckbox.frame.origin.x + btnCheckbox.frame.size.width, lblTermServices.frame.origin.y, lblTermServices.frame.size.width, lblTermServices.frame.size.height);
+        UIButton *btn = (UIButton *)[self.view viewWithTag:504];
+        btn.frame = lblTermServices.frame;
+        self.progressView.frame = CGRectMake(0, 0, UIScreen.mainScreen.bounds.size.width, UIScreen.mainScreen.bounds.size.height);
+    }
+    
+    // Set widgets to use localized string resources
+    _usernameTextField.placeholder = LocStr(@"Username");
+    _emailTextField.placeholder = LocStr(@"Email");
+    _passwordTextField.placeholder = LocStr(@"Password");
+    _confirmPasswordTextField.placeholder = LocStr(@"Confirm Password");
+    
+    [_createButton setTitle:LocStr(@"Create") forState:UIControlStateNormal];
+    [_accountExistsButton setTitle:LocStr(@"Already have an account?") forState:UIControlStateNormal];
+    
+    // Setup the Terms of Service button to look like it's hyper linked.
+    UIColor *tintColor = [UINavigationBar appearance].tintColor;
+    
+    NSDictionary *attrDict = @{ NSFontAttributeName : _termsAgreeButton.titleLabel.font,
+                                NSForegroundColorAttributeName : tintColor };
+    
+    NSString *titleStr = LocStr(@"I agree with the Terms of Service");
+    NSString *titleSubStr = LocStr(@"Terms of Service");
+    NSRange range = NSMakeRange([titleStr rangeOfString:titleSubStr].location, titleSubStr.length);
+    
+    NSMutableAttributedString *attrTitle = [[NSMutableAttributedString alloc] initWithString:titleStr attributes:attrDict];
+    [attrTitle addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInteger:NSUnderlineStyleSingle] range:range];
+    
+    [_termsAgreeButton setAttributedTitle:attrTitle forState:UIControlStateNormal];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+ 
     self.navigationController.navigationBarHidden = YES;
-    
     self.trackedViewName = GAI_CATEGORY;
-    
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        UIButton *btnCheckbox = (UIButton *)[self.view viewWithTag:501];
-        
-        btnCheckbox.frame = CGRectMake(_btnCreate.frame.origin.x - 6, btnCheckbox.frame.origin.y, btnCheckbox.frame.size.width, btnCheckbox.frame.size.height);
-        UILabel *lblTermServices = (UILabel *)[self.view viewWithTag:502];
-        lblTermServices.frame = CGRectMake(btnCheckbox.frame.origin.x + btnCheckbox.frame.size.width, lblTermServices.frame.origin.y, lblTermServices.frame.size.width, lblTermServices.frame.size.height);
-        UIButton *btn = (UIButton *)[self.view viewWithTag:504];
-        btn.frame = lblTermServices.frame;
-        self.viewProgress.frame = CGRectMake(0, 0, UIScreen.mainScreen.bounds.size.width, UIScreen.mainScreen.bounds.size.height);
-    }
+
+    // Ensure logo image is shown. View frame will be reset after having
+    // viewed a ToS view controller.
+    _logoImageView.hidden = NO;
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    self.isVisisble = YES;
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
-    [self.view endEditing:YES];
     [super viewWillDisappear:animated];
+    self.isVisisble = NO;
+    [self.view endEditing:YES];
 }
 
-
-#pragma mark - Action
+#pragma mark - Action methods
 
 - (IBAction)btnCheckboxTouchUpInsideAction:(UIButton *)sender
 {
@@ -107,46 +146,76 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-#pragma mark - Methods
+- (IBAction)btnTermsConditionPressed:(id)sender
+{
+    self.isVisisble = NO;
+    ToUViewController *vc= [[ToUViewController alloc] initWithNibName:@"ToUViewController" bundle:nil];
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+#pragma mark - Private methods
 
 - (void)validateAllFieldsAndEnableSignUp
 {
-    if ( _tfUsername.text.length > 0 &&
-        _tfEmail.text.length > 0 &&
-        _tfPassword.text.length > 0 &&
-        _tfConfirmPassword.text.length > 0 &&
-        _btnCheckbox.selected
+    if ( _usernameTextField.text.length > 0 &&
+        _emailTextField.text.length > 0 &&
+        _passwordTextField.text.length > 0 &&
+        _confirmPasswordTextField.text.length > 0 &&
+        _checkboxButton.selected
        )
     {
-        _btnCreate.enabled = YES;
+        _createButton.enabled = YES;
     }
     else {
-        _btnCreate.enabled = NO;
+        _createButton.enabled = NO;
     }
 }
 
 - (void)animateTextField:(UITextField *)textField withUp:(BOOL)up
 {
-    //const int movementDistance = 80; // tweak as needed
-    const float movementDuration = 0.3f; // tweak as needed
-    
-    NSInteger movementDistance = 180; // tweak as needed
-    
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        movementDistance = 190;
+    //if ( self.isViewLoaded && self.view.window ) {
+    if ( !_isVisisble ) {
+        // Do not do anything as view is not visible.
+        [textField resignFirstResponder];
+        return;
     }
     
-    if (UIScreen.mainScreen.bounds.size.height < 568) {
-        movementDistance = 155;
+    CGRect rect = self.view.frame;
+    BOOL doit = NO;
+    
+    // Sanity check if movement is really needed
+    if ( rect.origin.y == 0 && up ) {
+        // Can go up when y is zero.
+        doit = YES;
+    }
+    else if ( rect.origin.y != 0 && !up ) {
+        // Can go back down when y is not zero.
+        doit = YES;
     }
     
-    int movement = (up ? -movementDistance : movementDistance);
-    
-    [UIView beginAnimations: @"anim" context: nil];
-    [UIView setAnimationBeginsFromCurrentState: YES];
-    [UIView setAnimationDuration: movementDuration];
-    self.view.frame = CGRectOffset(self.view.frame, 0, movement);
-    [UIView commitAnimations];
+    if ( doit ) {
+        // Tweak as needed
+        const float movementDuration = 0.3f;
+        NSInteger movementDistance = 180;
+        
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+            movementDistance = 190;
+        }
+        else if (UIScreen.mainScreen.bounds.size.height < 568) {
+            movementDistance = 155;
+        }
+        
+        int movement = up ? -movementDistance : movementDistance;
+        
+        [UIView beginAnimations:@"anim" context:nil];
+        [UIView setAnimationBeginsFromCurrentState:YES];
+        [UIView setAnimationDuration:movementDuration];
+        
+        self.view.frame = CGRectOffset(rect, 0, movement);
+        _logoImageView.hidden = up;
+        
+        [UIView commitAnimations];
+    }
 }
 
 - (void)checkInputDataToLogin
@@ -155,12 +224,12 @@
     
     NSString *regex = @"[a-zA-Z0-9._-]+";
     NSPredicate *validatedUsername = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
-    BOOL isValidateUsername = [validatedUsername evaluateWithObject:_tfUsername.text];
+    BOOL isValidateUsername = [validatedUsername evaluateWithObject:_usernameTextField.text];
 
     NSString *msg = nil ;
 
     //UserName at least 5 chars and at most 20 characters
-    if ([_tfUsername.text length] < 5 || 20 < [_tfUsername.text length]) {
+    if ([_usernameTextField.text length] < 5 || 20 < [_usernameTextField.text length]) {
         msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg",nil, [NSBundle mainBundle],
                                                 @"User name has to be between 5-20 characters" , nil);
     }
@@ -168,15 +237,15 @@
         msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg5", nil, [NSBundle mainBundle],
                                                 @"Username should not contain special characters except for - _ and ."  , nil);
     }
-    else if (([_tfPassword.text length] < 8) || ([_tfPassword.text length] > 12) ) {
+    else if (([_passwordTextField.text length] < 8) || ([_passwordTextField.text length] > 12) ) {
         msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg1",nil, [NSBundle mainBundle],
                                                 @"Password has to be between 8-12 characters" , nil);
     }
-    else if ( ![_tfPassword.text isEqualToString:_tfConfirmPassword.text]) {
+    else if ( ![_passwordTextField.text isEqualToString:_confirmPasswordTextField.text]) {
         msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg2",nil, [NSBundle mainBundle],
                                                 @"Password does not match" , nil);
     }
-    else if (![self isValidEmail:_tfEmail.text]) {
+    else if (![self isValidEmail:_emailTextField.text]) {
         msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg3",nil, [NSBundle mainBundle],
                                                 @"Invalid email. Email address should be of the form somebody@somewhere.com"  , nil);
     }
@@ -188,27 +257,28 @@
         // Good info now ...
         checkFailed = NO;
         [self.view endEditing:YES];
-        [self.view addSubview:_viewProgress];
-        //Register user ...
-        self.stringUsername   = _tfUsername.text;
-        self.stringEmail      = _tfEmail.text;
-        self.stringPassword   = _tfPassword.text;
-        self.stringCPassword  = _tfConfirmPassword.text;
+        [self.view addSubview:_progressView];
 
-        NSLog(@"RegistrationVC - Start registration");
+        // Register user ...
+        self.username   = _usernameTextField.text;
+        self.email      = _emailTextField.text;
+        self.password   = _passwordTextField.text;
+        self.passwordConfirmation  = _confirmPasswordTextField.text;
+
+        DLog(@"RegistrationVC - Start registration");
         
         BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
                                                                                   Selector:@selector(registerSuccessWithResponse:)
                                                                               FailSelector:@selector(registerFailedWithError:)
                                                                                  ServerErr:@selector(registerFailedServerUnreachable)];
-        [jsonComm registerAccountWithUsername:_stringUsername
-                                     andEmail:_stringEmail
-                                  andPassword:_stringPassword
-                      andPasswordConfirmation:_stringCPassword];
+        [jsonComm registerAccountWithUsername:_username
+                                     andEmail:_email
+                                  andPassword:_password
+                      andPasswordConfirmation:_passwordConfirmation];
     }
 
     if (checkFailed) {
-        //ERROR condition
+        // ERROR condition
         UIAlertView *alertViewError = [[UIAlertView alloc] initWithTitle:LocStr(@"Create_Account_Failed")
                                                                  message:msg
                                                                 delegate:nil
@@ -227,20 +297,20 @@
     NSArray *array = [email componentsSeparatedByString:@"@"];
     
     if (array.count > 2) {
-        //qwe@uyt.uyt@dd - Too many @ characters
+        // qwe@uyt.uyt@dd - Too many @ characters
         return NO;
     }
     
     NSString *domain = array[1];
-    NSLog(@"Domain is : %@",domain);
+    DLog(@"Domain is : %@",domain);
     
     NSError *error = NULL;
     NSRegularExpression *regexExpr = [NSRegularExpression regularExpressionWithPattern:@"\\([^\\)]*\\)" options:NSRegularExpressionCaseInsensitive error:&error];
     NSString *modifiedString = [regexExpr stringByReplacingMatchesInString:domain options:0 range:NSMakeRange(0, domain.length) withTemplate:@""];
-    NSLog(@"modifiedString ------> %@", modifiedString);
+    DLog(@"modifiedString ------> %@", modifiedString);
     
-    NSString * regex = @"[_a-zA-Z0-9-]+(\\.[_a-zA-Z0-9-]+)+";
-    NSPredicate * validatedDomain = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
+    NSString *regex = @"[_a-zA-Z0-9-]+(\\.[_a-zA-Z0-9-]+)+";
+    NSPredicate *validatedDomain = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
     
     return [validatedDomain evaluateWithObject:modifiedString];
 }
@@ -261,7 +331,7 @@
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {
-    [self animateTextField: textField withUp:YES];
+    [self animateTextField:textField withUp:YES];
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField
@@ -277,14 +347,14 @@
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
-    if (textField == _tfUsername) {
-        [_tfEmail becomeFirstResponder];
+    if (textField == _usernameTextField) {
+        [_emailTextField becomeFirstResponder];
     }
-    else if (textField == _tfEmail) {
-        [_tfPassword becomeFirstResponder];
+    else if (textField == _emailTextField) {
+        [_passwordTextField becomeFirstResponder];
     }
-    else if(textField == _tfPassword) {
-        [_tfConfirmPassword becomeFirstResponder];
+    else if(textField == _passwordTextField) {
+        [_confirmPasswordTextField becomeFirstResponder];
     }
     else {
         [textField resignFirstResponder];
@@ -297,27 +367,28 @@
 
 - (void)registerSuccessWithResponse:(NSDictionary *)responseData
 {
-    [self.viewProgress removeFromSuperview];
+    [self.progressView removeFromSuperview];
     
     //Store user/pass for later use
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
-	[userDefaults setObject:_stringEmail    forKey:@"PortalUseremail"];
-	[userDefaults setObject:_stringUsername forKey:@"PortalUsername"];
-	[userDefaults setObject:_stringPassword forKey:@"PortalPassword"];
+	[userDefaults setObject:_email    forKey:@"PortalUseremail"];
+	[userDefaults setObject:_username forKey:@"PortalUsername"];
+	[userDefaults setObject:_password forKey:@"PortalPassword"];
     [userDefaults setObject:[responseData[@"data"] objectForKey:@"authentication_token"] forKey:@"PortalApiKey"];
     [userDefaults synchronize];
     
-    UserAccount *account = [[UserAccount alloc] initWithUser:_stringUsername
-                                                    password:_stringPassword
+    UserAccount *account = [[UserAccount alloc] initWithUser:_username
+                                                    password:_password
                                                       apiKey:[userDefaults stringForKey:@"PortalApiKey"]
                                              accountDelegate:nil];
+    
     [account sync_online_and_offline_data:nil];
     
-    [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Register successfully - user: %@", _stringUsername] withProperties:nil];
+    [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Register successfully - user: %@", _username] withProperties:nil];
     
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
-                                                    withAction:[NSString stringWithFormat:@"Register successfully - user: %@", _stringUsername]
+                                                    withAction:[NSString stringWithFormat:@"Register successfully - user: %@", _username]
                                                      withLabel:nil
                                                      withValue:nil];
     
@@ -330,7 +401,7 @@
 
 - (void)registerFailedWithError:(NSDictionary *)error_response
 {
-    [self.viewProgress removeFromSuperview];
+    [self.progressView removeFromSuperview];
     
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:LocStr(@"Create_Account_Failed")
                                                      message:error_response[@"message"]
@@ -339,17 +410,17 @@
                                            otherButtonTitles:nil];
     [alert show];
     
-    [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Regsiter failed - user: %@, error: %@", _stringUsername, alert.message] withProperties:nil];
+    [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Regsiter failed - user: %@, error: %@", _username, alert.message] withProperties:nil];
     
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
-                                                    withAction:[NSString stringWithFormat:@"Register successfully - user: %@", _stringUsername]
+                                                    withAction:[NSString stringWithFormat:@"Register successfully - user: %@", _username]
                                                      withLabel:nil
                                                      withValue:nil];
 }
 
 - (void)registerFailedServerUnreachable
 {
-    [self.viewProgress removeFromSuperview];
+    [self.progressView removeFromSuperview];
 	
 	//ERROR condition
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:LocStr(@"Registration_Error")
@@ -359,31 +430,12 @@
                                           otherButtonTitles:nil];
 	[alert show];
     
-    [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Register failed - user: %@, error: Server is unreachable", _stringUsername] withProperties:nil];
+    [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Register failed - user: %@, error: Server is unreachable", _username] withProperties:nil];
     
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
-                                                    withAction:[NSString stringWithFormat:@"Register failed, Server is unreachable - user: %@", _stringUsername]
+                                                    withAction:[NSString stringWithFormat:@"Register failed, Server is unreachable - user: %@", _username]
                                                      withLabel:nil
                                                      withValue:nil];
-}
-
-- (IBAction)btnTermsConditionPressed:(id)sender
-{
-    /*TermsCondController *tcVC = [[TermsCondController alloc] initWithNibName:@"TermsCondController" bundle:nil];
-    [self.navigationController pushViewController:tcVC animated:YES];
-    [tcVC release];
-     */
-    ToUViewController *vc;
-    
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-        vc= [[ToUViewController alloc] initWithNibName:@"ToUViewController" bundle:nil];
-    }
-    else {
-        // iPad
-        vc= [[ToUViewController alloc] initWithNibName:@"ToUViewController_ipad" bundle:nil];
-    }
-    
-    [self.navigationController pushViewController:vc animated:YES];
 }
 
 @end

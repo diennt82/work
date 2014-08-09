@@ -1,20 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <deployment defaultVersion="1792" identifier="iOS"/>
+        <deployment defaultVersion="1552" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="RegistrationViewController">
             <connections>
-                <outlet property="btnCheckbox" destination="TRe-Gz-ApL" id="jWN-L7-BHi"/>
-                <outlet property="btnCreate" destination="NfN-ak-lqf" id="e5h-xV-M8N"/>
-                <outlet property="tfConfirmPassword" destination="4J6-DP-Q0d" id="Ult-eZ-a4I"/>
-                <outlet property="tfEmail" destination="x6z-Nj-O7W" id="VJx-kf-iiY"/>
-                <outlet property="tfPassword" destination="Nxb-Oe-rZ4" id="WyO-Qd-ZER"/>
-                <outlet property="tfUsername" destination="5Ia-ob-gAp" id="0oZ-p6-OtV"/>
+                <outlet property="accountExistsButton" destination="kn4-B0-PmE" id="7xS-7o-stD"/>
+                <outlet property="checkboxButton" destination="TRe-Gz-ApL" id="ajc-Fm-pv7"/>
+                <outlet property="confirmPasswordTextField" destination="4J6-DP-Q0d" id="yFp-GJ-LPJ"/>
+                <outlet property="createButton" destination="NfN-ak-lqf" id="PdI-c7-Uhm"/>
+                <outlet property="emailTextField" destination="x6z-Nj-O7W" id="RYL-X4-1k5"/>
+                <outlet property="logoImageView" destination="0UO-Uz-Hsf" id="B5T-VA-POb"/>
+                <outlet property="passwordTextField" destination="Nxb-Oe-rZ4" id="MFP-4c-prg"/>
+                <outlet property="progressView" destination="L2e-Rf-fNk" id="eBu-ZT-3Pb"/>
+                <outlet property="termsAgreeButton" destination="8sh-Kn-psI" id="yqe-yD-4Kz"/>
+                <outlet property="usernameTextField" destination="5Ia-ob-gAp" id="XLC-ql-Hsi"/>
                 <outlet property="view" destination="Sid-s9-1qg" id="heQ-dC-8Zm"/>
-                <outlet property="viewProgress" destination="L2e-Rf-fNk" id="m6G-FP-6XL"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -23,7 +26,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="launch_logo.png" translatesAutoresizingMaskIntoConstraints="NO" id="0UO-Uz-Hsf">
-                    <rect key="frame" x="73" y="20" width="175" height="155"/>
+                    <rect key="frame" x="73" y="25" width="175" height="155"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
                 <view contentMode="scaleAspectFit" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TEf-CK-z2M">
@@ -39,7 +42,7 @@
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="17"/>
-                            <textInputTraits key="textInputTraits" keyboardType="emailAddress" returnKeyType="next"/>
+                            <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="next"/>
                         </textField>
                     </subviews>
                 </view>
@@ -56,7 +59,7 @@
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="17"/>
-                            <textInputTraits key="textInputTraits" keyboardType="emailAddress" returnKeyType="next"/>
+                            <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="emailAddress" returnKeyType="next"/>
                         </textField>
                     </subviews>
                 </view>
@@ -128,13 +131,6 @@
                         <action selector="btnCheckboxTouchUpInsideAction:" destination="-1" eventType="touchUpInside" id="xBp-7t-XAT"/>
                     </connections>
                 </button>
-                <label hidden="YES" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="502" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="I agree with the Terms of Services" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eWF-fj-q7K">
-                    <rect key="frame" x="49" y="355" width="251" height="21"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="13"/>
-                    <color key="textColor" red="0.062745098040000002" green="0.062745098040000002" blue="0.062745098040000002" alpha="1" colorSpace="calibratedRGB"/>
-                    <nil key="highlightedColor"/>
-                </label>
                 <button opaque="NO" tag="504" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8sh-Kn-psI">
                     <rect key="frame" x="48" y="351" width="192" height="30"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
