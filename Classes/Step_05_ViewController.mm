@@ -7,17 +7,15 @@
 //
 
 #import "Step_05_ViewController.h"
+#import "Step_04_ViewController.h"
 #import "Step05Cell.h"
 #import "HttpCom.h"
-#import "Step_04_ViewController.h"
 #import "KISSMetricsAPI.h"
-
-#define ALERT_CONFIRM_TAG       555
-#define ALERT_RETRY_WIFI_TAG    559
-#define GAI_CATEGORY            @"Step 05 view"
 
 @interface Step_05_ViewController () <UIAlertViewDelegate>
 
+@property (nonatomic, weak) IBOutlet UITableView *tableView;
+@property (nonatomic, weak) IBOutlet UITableViewCell *cellView;
 @property (nonatomic, weak) IBOutlet UIButton *btnContinue;
 @property (nonatomic, weak) IBOutlet UITableViewCell *cellOtherNetwork;
 @property (nonatomic, weak) IBOutlet UITableViewCell *cellRefresh;
@@ -29,6 +27,10 @@
 @end
 
 @implementation Step_05_ViewController
+
+#define ALERT_CONFIRM_TAG       555
+#define ALERT_RETRY_WIFI_TAG    559
+#define GAI_CATEGORY @"Step 05 view"
 
 #pragma mark - UIViewController methods
 
@@ -79,9 +81,11 @@
     [self performSelector:@selector(queryWifiList) withObject:nil afterDelay:0.001];
 }
 
-
 #pragma mark - Private methods
 
+// Filters wifi access points that match our cameras naming pattern. Kind of a
+// hack way to do it but the likelyhood of anyone naming a normal access point
+// with a "Camera-" or "CameraHD-" name is not very high.
 - (void)filterCameraList
 {
     NSMutableArray *wifiList = [[NSMutableArray alloc] init];
@@ -145,6 +149,7 @@
 - (void)moveToNextStep
 {
     NSLog(@"Load step 6");
+    
     //Load the next xib
     Step_06_ViewController *step06ViewController = [[Step_06_ViewController alloc] initWithNibName:@"Step_06_ViewController" bundle:nil];
     
@@ -184,7 +189,6 @@
     NSString *fwVersion = [userDefaults stringForKey:FW_VERSION]; // 01.12.58
     
     BOOL newCmdFlag = TRUE;
-   // [HttpCom instance].comWithDevice.device_port = 80;
     
     if ([fwVersion compare:FW_MILESTONE] >= NSOrderedSame) {
         // fw >= FW_MILESTONE
@@ -275,7 +279,8 @@
 - (void)setWifiResult:(NSArray *)wifiList
 {
     NSLog(@"GOT WIFI RESULT: numentries: %d", wifiList.count);
-    //hide progressView
+
+    // hide progressView
     [_viewProgress removeFromSuperview];
 
     WifiEntry *entry;
@@ -288,6 +293,7 @@
     
     [_listOfWifi addObject:_otherWiFi];
     [self filterCameraList];
+    [_tableView reloadData];
 }
 
 #pragma mark - Table view delegates & datasource

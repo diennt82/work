@@ -14,7 +14,6 @@
 
 @interface Step_05_ViewController : GAITrackedViewController
 
-@property (nonatomic, weak) IBOutlet UITableViewCell *cellView;
 @property (nonatomic, strong) NSMutableArray *listOfWifi;
 
 @end
