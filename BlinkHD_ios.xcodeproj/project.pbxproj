@@ -397,7 +397,7 @@
 		26D68C311983048B00389053 /* settings_switch_on.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299F2218AF500900D36BE5 /* settings_switch_on.png */; };
 		26D68C331983048B00389053 /* tab_active@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299EA418AF500900D36BE5 /* tab_active@2x.png */; };
 		26D68C341983048B00389053 /* camera_action_photo_land@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299E4818AF500800D36BE5 /* camera_action_photo_land@2x.png */; };
-		26D68C351983048B00389053 /* ToUViewController_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 974ACB58168055F8005AE4C6 /* ToUViewController_ipad.xib */; };
+		26D68C351983048B00389053 /* ToUViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 974ACB58168055F8005AE4C6 /* ToUViewController~ipad.xib */; };
 		26D68C361983048B00389053 /* camera_action_pause_pressed_land@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299E4618AF500800D36BE5 /* camera_action_pause_pressed_land@2x.png */; };
 		26D68C371983048B00389053 /* setup_camera_c3.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B95074218C9960D006D4945 /* setup_camera_c3.png */; };
 		26D68C391983048B00389053 /* MonitorEverywhere_App_ios_Apple.html in Resources */ = {isa = PBXBuildFile; fileRef = 974ACB7E168079CB005AE4C6 /* MonitorEverywhere_App_ios_Apple.html */; };
@@ -1377,7 +1377,7 @@
 		8BE896B31845CB3B00674E01 /* bb_motion_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BE896B21845CB3B00674E01 /* bb_motion_icon.png */; };
 		8BFA669F18F3A50C00492866 /* H264PlayerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 979BC68A17D990F400B3B373 /* H264PlayerViewController.xib */; };
 		972E2B8715A4234300E60A96 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 972E2B8515A4234300E60A96 /* NSData+Base64.m */; };
-		974ACB59168055F9005AE4C6 /* ToUViewController_ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 974ACB58168055F8005AE4C6 /* ToUViewController_ipad.xib */; };
+		974ACB59168055F9005AE4C6 /* ToUViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 974ACB58168055F8005AE4C6 /* ToUViewController~ipad.xib */; };
 		974ACB7F168079CB005AE4C6 /* MonitorEverywhere_App_ios_Apple.html in Resources */ = {isa = PBXBuildFile; fileRef = 974ACB7E168079CB005AE4C6 /* MonitorEverywhere_App_ios_Apple.html */; };
 		9770CDF2143076CD009E69EF /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9770CDF1143076CD009E69EF /* CoreAudio.framework */; };
 		9770CEC81430783A009E69EF /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9770CEC71430783A009E69EF /* CFNetwork.framework */; };
@@ -2237,7 +2237,7 @@
 		9704F37E14B76202000B4AA5 /* Entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Entitlements.plist; sourceTree = "<group>"; };
 		972E2B8515A4234300E60A96 /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Base64.m"; sourceTree = "<group>"; };
 		972E2B8615A4234300E60A96 /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Base64.h"; sourceTree = "<group>"; };
-		974ACB58168055F8005AE4C6 /* ToUViewController_ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ToUViewController_ipad.xib; sourceTree = "<group>"; };
+		974ACB58168055F8005AE4C6 /* ToUViewController~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "ToUViewController~ipad.xib"; sourceTree = "<group>"; };
 		974ACB7E168079CB005AE4C6 /* MonitorEverywhere_App_ios_Apple.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = MonitorEverywhere_App_ios_Apple.html; sourceTree = "<group>"; };
 		9770CD67143071DA009E69EF /* PublicDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PublicDefine.h; sourceTree = "<group>"; };
 		9770CDF1143076CD009E69EF /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
@@ -2650,7 +2650,7 @@
 				97DA238116425F9E00EE2528 /* ToUViewController.h */,
 				97DA238216425F9E00EE2528 /* ToUViewController.m */,
 				97DA238316425F9F00EE2528 /* ToUViewController.xib */,
-				974ACB58168055F8005AE4C6 /* ToUViewController_ipad.xib */,
+				974ACB58168055F8005AE4C6 /* ToUViewController~ipad.xib */,
 			);
 			name = Terms;
 			sourceTree = "<group>";
@@ -4750,7 +4750,7 @@
 				8B29A05918AF500A00D36BE5 /* settings_switch_on.png in Resources */,
 				8B299FE018AF500900D36BE5 /* tab_active@2x.png in Resources */,
 				8B299F8818AF500900D36BE5 /* camera_action_photo_land@2x.png in Resources */,
-				974ACB59168055F9005AE4C6 /* ToUViewController_ipad.xib in Resources */,
+				974ACB59168055F9005AE4C6 /* ToUViewController~ipad.xib in Resources */,
 				8B299F8618AF500900D36BE5 /* camera_action_pause_pressed_land@2x.png in Resources */,
 				8B95078C18C9960D006D4945 /* setup_camera_c3.png in Resources */,
 				8B29A02A18AF500900D36BE5 /* Default.png in Resources */,
@@ -5362,7 +5362,7 @@
 				26D68C311983048B00389053 /* settings_switch_on.png in Resources */,
 				26D68C331983048B00389053 /* tab_active@2x.png in Resources */,
 				26D68C341983048B00389053 /* camera_action_photo_land@2x.png in Resources */,
-				26D68C351983048B00389053 /* ToUViewController_ipad.xib in Resources */,
+				26D68C351983048B00389053 /* ToUViewController~ipad.xib in Resources */,
 				26D68C361983048B00389053 /* camera_action_pause_pressed_land@2x.png in Resources */,
 				26D68C371983048B00389053 /* setup_camera_c3.png in Resources */,
 				26D68C391983048B00389053 /* MonitorEverywhere_App_ios_Apple.html in Resources */,
@@ -5889,6 +5889,7 @@
 				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "";
 				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)",
@@ -5906,7 +5907,7 @@
 					"\"$(SRCROOT)/../ios-frameworks/GoogleAnalyticsLibrary\"",
 				);
 				INFOPLIST_FILE = "BlinkHD_ios-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(SRCROOT)",
 					"$(SRCROOT)/../ios-frameworks/H264Player.lib",
@@ -5934,7 +5935,7 @@
 				PROVISIONING_PROFILE = "22745096-5AEF-4C89-A51A-97A4B9BA39C4";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
-				VALID_ARCHS = "armv6 armv7";
+				VALID_ARCHS = armv7;
 			};
 			name = Debug;
 		};
@@ -5961,7 +5962,7 @@
 					"\"$(SRCROOT)/../ios-frameworks/GoogleAnalyticsLibrary\"",
 				);
 				INFOPLIST_FILE = "BlinkHD_ios-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)",
@@ -5985,7 +5986,7 @@
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
 				VALIDATE_PRODUCT = YES;
-				VALID_ARCHS = "armv6 armv7";
+				VALID_ARCHS = armv7;
 			};
 			name = Release;
 		};
@@ -5997,6 +5998,7 @@
 				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "";
 				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)",
@@ -6015,7 +6017,7 @@
 					"\"$(SRCROOT)/../ios-frameworks/GoogleAnalyticsLibrary\"",
 				);
 				INFOPLIST_FILE = "VTech-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(SRCROOT)",
 					"$(SRCROOT)/../ios-frameworks/H264Player.lib",
@@ -6043,7 +6045,7 @@
 				PROVISIONING_PROFILE = "22745096-5AEF-4C89-A51A-97A4B9BA39C4";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
-				VALID_ARCHS = "armv6 armv7";
+				VALID_ARCHS = armv7;
 			};
 			name = Debug;
 		};
@@ -6071,7 +6073,7 @@
 					"\"$(SRCROOT)/../ios-frameworks/GoogleAnalyticsLibrary\"",
 				);
 				INFOPLIST_FILE = "VTech-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)",
@@ -6095,7 +6097,7 @@
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
 				VALIDATE_PRODUCT = YES;
-				VALID_ARCHS = "armv6 armv7";
+				VALID_ARCHS = armv7;
 			};
 			name = Release;
 		};
@@ -6122,7 +6124,7 @@
 					"\"$(SRCROOT)/../ios-frameworks/GoogleAnalyticsLibrary\"",
 				);
 				INFOPLIST_FILE = "VTech-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(SRCROOT)",
 					"$(SRCROOT)/../ios-frameworks/H264Player.lib",
@@ -6146,7 +6148,7 @@
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
 				VALIDATE_PRODUCT = YES;
-				VALID_ARCHS = "armv6 armv7";
+				VALID_ARCHS = armv7;
 			};
 			name = Distribute;
 		};
@@ -6196,7 +6198,7 @@
 					"\"$(SRCROOT)/../ios-frameworks/GoogleAnalyticsLibrary\"",
 				);
 				INFOPLIST_FILE = "BlinkHD_ios-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(SRCROOT)",
 					"$(SRCROOT)/../ios-frameworks/H264Player.lib",
@@ -6220,7 +6222,7 @@
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../ios-frameworks/pjsip/arm/include/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../ios-frameworks/pjsip/arm/include/pjnath/";
 				VALIDATE_PRODUCT = YES;
-				VALID_ARCHS = "armv6 armv7";
+				VALID_ARCHS = armv7;
 			};
 			name = Distribute;
 		};
