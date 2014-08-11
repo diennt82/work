@@ -54,7 +54,7 @@
                     </connections>
                 </button>
                 <scrollView autoresizesSubviews="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="o0q-1H-IBF">
-                    <rect key="frame" x="-1" y="196" width="322" height="170"/>
+                    <rect key="frame" x="-1" y="196" width="322" height="250"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                 </scrollView>
             </subviews>

@@ -15,7 +15,7 @@
 #import "define.h"
 #import "PublicDefine.h"
 
-#define VERTICAL_DISTANCE           15
+#define VERTICAL_DISTANCE           10
 #define HORIGENTAL_DISTANCE         10
 
 @interface AddCameraViewController () <CameraItemViewDelegate>
@@ -47,19 +47,19 @@
     [self.btnCancel setBackgroundImage:[UIImage imageNamed:@"cancel_btn_pressed"] forState:UIControlEventTouchDown];
     
     NSMutableArray *array = [[NSMutableArray alloc] init];
-    Camera *cam = [[Camera alloc] initWith:FORCUS_66_TAG andLable:@"Focus 66" andImage:[UIImage imageNamed:@"focus661-black"]];
+    Camera *cam = [[Camera alloc] initWith:FORCUS_66_TAG andLable:@"Blink66, Focus66, Scout66" andImage:[UIImage imageNamed:@"focus661-black"]];
     [array addObject:cam];
     [cam release];
     
-    cam = [[Camera alloc] initWith:MBP_83_TAG andLable:@"MBP 83/836" andImage:[UIImage imageNamed:@"camera_2"]];
+    cam = [[Camera alloc] initWith:MBP_83_TAG andLable:@"Blink83/836, Focus83/836, Scout83/836" andImage:[UIImage imageNamed:@"camera_2"]];
     [array addObject:cam];
     [cam release];
     
-    cam = [[Camera alloc] initWith:SCOUT_73_TAG andLable:@"Scout 73" andImage:[UIImage imageNamed:@"camera_scout85"]];
+    cam = [[Camera alloc] initWith:SCOUT_73_TAG andLable:@"Blink73, Focus73, Scout73" andImage:[UIImage imageNamed:@"camera_scout85"]];
     [array addObject:cam];
     [cam release];
     
-    cam = [[Camera alloc] initWith:MBP_85_TAG andLable:@"MBP 85/854" andImage:[UIImage imageNamed:@"mbp85"]];
+    cam = [[Camera alloc] initWith:MBP_85_TAG andLable:@"Blink85/854, Focus85/854, Scout85/854" andImage:[UIImage imageNamed:@"mbp85"]];
     [array addObject:cam];
     [cam release];
     
@@ -150,18 +150,22 @@
 
 - (void)loadCameras:(NSArray *)cameras {
     NSInteger numberOfRow = 1;
-    CGFloat scaleDistance = 1;
+    CGFloat iphone_ipad_scale = 1;
+    CGFloat itemWidth = ITEM_WIDTH_IPHONE;
+    CGFloat paddingLeft = 10;
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        numberOfRow = 3;
-        scaleDistance = 4;
+        numberOfRow = 2;
+        iphone_ipad_scale = 6;
+        itemWidth = ITEM_WIDTH_IPAD;
+        paddingLeft = 70;
     }
     
-    NSInteger numberOfColumn = (self.scrollView.frame.size.width - VERTICAL_DISTANCE * scaleDistance) / (ITEM_WIDTH + VERTICAL_DISTANCE * scaleDistance);
-    NSInteger realColumn = cameras.count / numberOfRow;
-    CGFloat paddingLeft = 30;
+    NSInteger numberOfColumn = (self.scrollView.frame.size.width - VERTICAL_DISTANCE * iphone_ipad_scale) / (itemWidth + VERTICAL_DISTANCE * iphone_ipad_scale);
+    NSInteger realColumn = ceil((float)cameras.count / numberOfRow);
+    
     if (realColumn <= numberOfColumn) {
         realColumn = numberOfColumn;
-        paddingLeft = (self.scrollView.frame.size.width - (realColumn * ITEM_WIDTH + (realColumn - 1) * VERTICAL_DISTANCE * scaleDistance)) / 2;
+        paddingLeft = (self.scrollView.frame.size.width - (realColumn * itemWidth + (realColumn - 1) * VERTICAL_DISTANCE * iphone_ipad_scale)) / 2;
     }
     CGFloat paddingTop = 10;//(self.frame.size.height - numberOfRow * ITEM_HEIGHT) / 2;
     
@@ -179,12 +183,12 @@
             [itemView release];
             
             if (i == 0 && j == realColumn - 1) {
-                CGSize size = CGSizeMake(x + ITEM_WIDTH + paddingLeft, self.scrollView.frame.size.height);
+                CGSize size = CGSizeMake(x + itemWidth + paddingLeft, self.scrollView.frame.size.height);
                 self.scrollView.contentSize = size;
             }
-            x += ITEM_WIDTH + VERTICAL_DISTANCE * scaleDistance;
+            x += itemWidth + VERTICAL_DISTANCE * iphone_ipad_scale;
         }
-        y += ITEM_HEIGHT + HORIGENTAL_DISTANCE * scaleDistance;
+        y += ITEM_HEIGHT + HORIGENTAL_DISTANCE * iphone_ipad_scale;
     }
     
 }

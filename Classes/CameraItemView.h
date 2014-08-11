@@ -9,8 +9,10 @@
 #import <UIKit/UIKit.h>
 #import "Camera.h"
 
-#define ITEM_WIDTH      110
-#define ITEM_HEIGHT     145
+#define ITEM_WIDTH_IPHONE       130
+#define ITEM_WIDTH_IPAD         200
+
+#define ITEM_HEIGHT             215
 
 @protocol CameraItemViewDelegate <NSObject>
 - (void)selectedItem:(CAMERA_TAG)cameraTad;

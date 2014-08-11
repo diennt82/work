@@ -53,7 +53,7 @@
                     </connections>
                 </button>
                 <scrollView autoresizesSubviews="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="voq-pB-M2b">
-                    <rect key="frame" x="-1" y="201" width="769" height="544"/>
+                    <rect key="frame" x="-1" y="201" width="769" height="473"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                 </scrollView>
             </subviews>
