@@ -18,6 +18,7 @@
 #import "RegistrationViewController.h"
 #import "MBP_iosViewController.h"
 #import "MBP_iosAppDelegate.h"
+#import "define.h"
 
 #define MOVEMENT_DURATION   0.3 //movementDuration
 #define GAI_CATEGORY        @"Login view"
@@ -839,9 +840,21 @@
     
     
 #if !TARGET_IPHONE_SIMULATOR
+    NSInteger nowInterval = (NSInteger)[[NSDate date] timeIntervalSince1970];
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSInteger timeExpire = [userDefaults integerForKey:TIME_TO_EXPIRED];
+    NSInteger deltaTime = nowInterval - timeExpire;
+    
     // Let the device know we want to receive push notifications
     MBP_iosAppDelegate *appDelegate = (MBP_iosAppDelegate *)[UIApplication sharedApplication].delegate;
-    [appDelegate registerForRemoteNotification];
+    if (deltaTime >= 0)
+    {
+        [appDelegate registerForRemoteNotification];
+    }
+    else
+    {
+        [appDelegate unregisterForRemoteNotifications];
+    }
 #endif
     NSLog(@"Login success! 2");
     
