@@ -829,6 +829,8 @@
         }
     }
     
+    [CameraAlert insertAlertForCamera:camAlert];
+    
     NSLog(@"pushAlert : %@", self.pushAlert);
     if (self.pushAlert != nil && [self.pushAlert isVisible])
     {
@@ -842,6 +844,7 @@
                     andCancelButton:alertLeftButtonText
                      andOtherButton:alertOtherButtonText
                         andAlertTag:tag andCameraAlert:camAlert];
+
     
     NSLog(@"play sound");
     [self playSound];
@@ -851,21 +854,32 @@
 }
 
 - (NSString *)formatDetectedDate:(NSString *)alertTime andAlertMess:(NSString *)alertMess {
+    NSString *mess = alertMess;
     NSDateFormatter *dateFormater = [[NSDateFormatter alloc] init];
     [dateFormater setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssXXXXX"];
     [dateFormater setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
-    NSError *error;
-    NSDate *eventDate ;
+    
+    NSError *error = nil;
+    NSDate *eventDate = nil;
     [dateFormater getObjectValue:&eventDate forString:alertTime range:nil error:&error];
-    [dateFormater release];
+    if (eventDate == nil)
+    {
+        eventDate = [NSDate date];
+    }
+    else
+    {
+        NSLog(@"%s error: %@", __FUNCTION__, error);
+    }
+    
     NSLog(@"eventDate: %@ & insert to database & clear obsolete history ", eventDate);
     
     NSDateFormatter* df_local = [[NSDateFormatter alloc] init];
     [df_local setTimeZone:[NSTimeZone localTimeZone]];
     df_local.dateFormat = @"hh:mm a, dd-MM-yyyy";
-    NSString *aNewAlertMess = [NSString stringWithFormat:@"%@ at %@", alertMess, [df_local stringFromDate:eventDate]];
+    mess = [NSString stringWithFormat:@"%@ at %@", alertMess, [df_local stringFromDate:eventDate]];
     [df_local release];
-    return  aNewAlertMess;
+    [dateFormater release];
+    return mess;
 }
 
 -(void) playSound

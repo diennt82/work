@@ -799,6 +799,7 @@ void checkingApplicationCrashed()
 {
     if (!self.isRegisteredPushNotification)
     {
+        NSLog(@"%s", __FUNCTION__);
         [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
         self.isRegisteredPushNotification = YES;
         // Set icon badge number to zero
@@ -808,6 +809,7 @@ void checkingApplicationCrashed()
 
 - (void)unregisterForRemoteNotifications
 {
+    NSLog(@"%s", __FUNCTION__);
     if (self.isRegisteredPushNotification)
     {
         [[UIApplication sharedApplication] unregisterForRemoteNotifications];;
