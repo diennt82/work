@@ -13,7 +13,7 @@
 #import "MBPNavController.h"
 #import "CreateBLEConnection_VController.h"
 #import "BLEConnectionManager.h"
-#import "KISSMetricsAPI.h"
+//#import "KISSMetricsAPI.h"
 #import "Focus73TableViewController.h"
 #import "define.h"
 
@@ -153,7 +153,7 @@
 
 - (IBAction)btnContinueTouchUpInsideAction:(id)sender
 {
-    [[KISSMetricsAPI sharedAPI] recordEvent:@"Step02 - Touch up inside continue button" withProperties:nil];
+    //[[KISSMetricsAPI sharedAPI] recordEvent:@"Step02 - Touch up inside continue button" withProperties:nil];
     
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:@"Touch up inside continue button"

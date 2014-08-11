@@ -13,11 +13,12 @@
 #import "UserAccount.h"
 #import "PublicDefine.h"
 #import <MonitorCommunication/MonitorCommunication.h>
-#import "KISSMetricsAPI.h"
+//#import "KISSMetricsAPI.h"
 #import "TimelineDatabase.h"
 #import "RegistrationViewController.h"
 #import "MBP_iosViewController.h"
 #import "MBP_iosAppDelegate.h"
+#import "define.h"
 
 #define MOVEMENT_DURATION   0.3 //movementDuration
 #define GAI_CATEGORY        @"Login view"
@@ -157,7 +158,7 @@
 -(void) viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [[KISSMetricsAPI sharedAPI] recordEvent:@"Login Screen" withProperties:nil];
+    //[[KISSMetricsAPI sharedAPI] recordEvent:@"Login Screen" withProperties:nil];
     
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:@"viewDidAppear"
@@ -797,7 +798,7 @@
                                                                @"Server response invalid, please try again!", nil);
             
             NSString * ok = NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil);
-            [[KISSMetricsAPI sharedAPI] recordEvent:@"Login Failed" withProperties:nil];
+            //[[KISSMetricsAPI sharedAPI] recordEvent:@"Login Failed" withProperties:nil];
             
             [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                             withAction:[NSString stringWithFormat:@"Login succeed-user: %@", _stringUsername]
@@ -839,9 +840,21 @@
     
     
 #if !TARGET_IPHONE_SIMULATOR
+    NSInteger nowInterval = (NSInteger)[[NSDate date] timeIntervalSince1970];
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSInteger timeExpire = [userDefaults integerForKey:TIME_TO_EXPIRED];
+    NSInteger deltaTime = nowInterval - timeExpire;
+    
     // Let the device know we want to receive push notifications
     MBP_iosAppDelegate *appDelegate = (MBP_iosAppDelegate *)[UIApplication sharedApplication].delegate;
-    [appDelegate registerForRemoteNotification];
+    if (deltaTime >= 0)
+    {
+        [appDelegate registerForRemoteNotification];
+    }
+    else
+    {
+        [appDelegate unregisterForRemoteNotifications];
+    }
 #endif
     NSLog(@"Login success! 2");
     

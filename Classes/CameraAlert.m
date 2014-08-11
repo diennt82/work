@@ -125,10 +125,9 @@ static sqlite3_stmt *init_statement = nil;
     NSDateFormatter *dateFormater = [[NSDateFormatter alloc] init];
     [dateFormater setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssXXXXX"];
     [dateFormater setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
-    NSError *error;
-    NSDate *eventDate ;
+    NSError *error = nil;
+    NSDate *eventDate = nil;
     [dateFormater getObjectValue:&eventDate forString:camAlert.alertTime range:nil error:&error];
-    [dateFormater release];
     
     int timeStamp  = [[NSDate date] timeIntervalSince1970];
     if (eventDate != nil)
@@ -171,7 +170,7 @@ static sqlite3_stmt *init_statement = nil;
         
     }
     sqlite3_close(database);
-    
+    [dateFormater release];
     
     
     return TRUE; 
