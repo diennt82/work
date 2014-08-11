@@ -13,7 +13,7 @@
 #import "UserAccount.h"
 #import "PublicDefine.h"
 #import <MonitorCommunication/MonitorCommunication.h>
-#import "KISSMetricsAPI.h"
+//#import "KISSMetricsAPI.h"
 #import "TimelineDatabase.h"
 #import "RegistrationViewController.h"
 #import "MBP_iosViewController.h"
@@ -157,7 +157,7 @@
 -(void) viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [[KISSMetricsAPI sharedAPI] recordEvent:@"Login Screen" withProperties:nil];
+    //[[KISSMetricsAPI sharedAPI] recordEvent:@"Login Screen" withProperties:nil];
     
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:@"viewDidAppear"
@@ -797,7 +797,7 @@
                                                                @"Server response invalid, please try again!", nil);
             
             NSString * ok = NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil);
-            [[KISSMetricsAPI sharedAPI] recordEvent:@"Login Failed" withProperties:nil];
+            //[[KISSMetricsAPI sharedAPI] recordEvent:@"Login Failed" withProperties:nil];
             
             [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                             withAction:[NSString stringWithFormat:@"Login succeed-user: %@", _stringUsername]

@@ -9,7 +9,7 @@
 #import "MBP_iosAppDelegate.h"
 #import "PublicDefine.h"
 #import "SetupData.h"
-#import "KISSMetricsAPI.h"
+//#import "KISSMetricsAPI.h"
 #import "EarlierNavigationController.h"
 #import "Crittercism.h"
 #import "SDWebImageManager.h"

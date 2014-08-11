@@ -8,7 +8,7 @@
 
 #import "RegistrationViewController.h"
 #import <MonitorCommunication/MonitorCommunication.h>
-#import "KISSMetricsAPI.h"
+//#import "KISSMetricsAPI.h"
 #import "Step_10_ViewController.h"
 #import "UserAccount.h"
 #import "PublicDefine.h"
@@ -617,7 +617,7 @@
     [account sync_online_and_offline_data:nil];
     [account release];
     
-    [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Register successfully - user: %@", _stringUsername] withProperties:nil];
+    //[[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Register successfully - user: %@", _stringUsername] withProperties:nil];
     
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:[NSString stringWithFormat:@"Register successfully - user: %@", _stringUsername]

@@ -1276,32 +1276,31 @@ double _ticks = 0;
     NSString *currentFwVersion = _selectedChannel.profile.fw_version;
     
     NSLog(@"%s currentFwVersion:%@", __FUNCTION__, currentFwVersion);
-    
+#if 0
     if ([currentFwVersion compare:FW_VERSION_OTA_UPGRADING_MIN] >= NSOrderedSame)
+#else
+    if ([currentFwVersion compare:FW_VERSION_OTA_REMOTE_UPGRADE_ENABLE] == NSOrderedSame)
+#endif
     {
         NSString * response = nil ;
-        
-        BMS_JSON_Communication * jsoncomm = [[BMS_JSON_Communication alloc]initWithObject:self
-                                                                                 Selector:nil
-                                                                             FailSelector:nil
-                                                                                ServerErr:nil];
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        
-        NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
-
         
         if (self.selectedChannel.profile.isInLocal == TRUE)
         {
             response = [[HttpCom instance].comWithDevice sendCommandAndBlock:CHECK_FW_UPGRADE];
         }
         // ONLY START TO DO REMOTE UPDATE  IF VERSION IS 01.15.11
-        else if ([currentFwVersion compare:FW_VERSION_OTA_REMOTE_UPGRADE_ENABLE] == NSOrderedSame)
+        else// if ([currentFwVersion compare:FW_VERSION_OTA_REMOTE_UPGRADE_ENABLE] == NSOrderedSame)
         {
             NSLog(@"%s DO REMOTE FW upgrade", __FUNCTION__);
+            BMS_JSON_Communication * jsoncomm = [[BMS_JSON_Communication alloc]initWithCaller:self];
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            
+            NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
             
             NSDictionary * responseDict = [jsoncomm sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
                                                            andCommand:[NSString stringWithFormat:@"action=command&command=%@",CHECK_FW_UPGRADE]
                                                             andApiKey:apiKey];
+            [jsoncomm release];
             
             if (responseDict != nil)
             {
@@ -1311,7 +1310,6 @@ double _ticks = 0;
                     response = [[[responseDict objectForKey:@"data"] objectForKey:@"device_response"] objectForKey:@"body"];
                 }
             }
-
         }
         
         /*
@@ -1350,7 +1348,6 @@ double _ticks = 0;
                 }
             }
         }
-        [jsoncomm release];
     }
 }
 

@@ -7,7 +7,7 @@
 //
 
 #import "Step_12_ViewController.h"
-#import "KISSMetricsAPI.h"
+//#import "KISSMetricsAPI.h"
 #import "define.h"
 #import "PublicDefine.h"
 

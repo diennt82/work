@@ -26,7 +26,7 @@
 #import "SetupData.h"
 
 #import "AlertPrompt.h"
-#import "KISSMetricsAPI.h"
+//#import "KISSMetricsAPI.h"
 #import <MessageUI/MFMailComposeViewController.h>
 #import "NSData+AESCrypt.h"
 #import "CameraMenuViewController.h"
