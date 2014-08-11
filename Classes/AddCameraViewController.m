@@ -47,19 +47,19 @@
     [self.btnCancel setBackgroundImage:[UIImage imageNamed:@"cancel_btn_pressed"] forState:UIControlEventTouchDown];
     
     NSMutableArray *array = [[NSMutableArray alloc] init];
-    Camera *cam = [[Camera alloc] initWith:FORCUS_66_TAG andLable:@"Blink66, Focus66, Scout66" andImage:[UIImage imageNamed:@"focus661-black"]];
+    Camera *cam = [[Camera alloc] initWith:FORCUS_66_TAG andLable:NSLocalizedStringWithDefaultValue(@"camera_66", nil, [NSBundle mainBundle], @"Blink 66, Focus 66, Scout 66", nil) andImage:[UIImage imageNamed:@"focus661-black"]];
     [array addObject:cam];
     [cam release];
     
-    cam = [[Camera alloc] initWith:MBP_83_TAG andLable:@"Blink83/836, Focus83/836, Scout83/836" andImage:[UIImage imageNamed:@"camera_2"]];
+    cam = [[Camera alloc] initWith:MBP_83_TAG andLable:NSLocalizedStringWithDefaultValue(@"camera_83_836", nil, [NSBundle mainBundle], @"Blink 83/836, Focus 83/836, Scout 83/836", nil) andImage:[UIImage imageNamed:@"camera_2"]];
     [array addObject:cam];
     [cam release];
     
-    cam = [[Camera alloc] initWith:SCOUT_73_TAG andLable:@"Blink73, Focus73, Scout73" andImage:[UIImage imageNamed:@"camera_scout85"]];
+    cam = [[Camera alloc] initWith:SCOUT_73_TAG andLable:NSLocalizedStringWithDefaultValue(@"camera_73", nil, [NSBundle mainBundle], @"Blink 73, Focus 73, Scout 73", nil) andImage:[UIImage imageNamed:@"camera_scout85"]];
     [array addObject:cam];
     [cam release];
     
-    cam = [[Camera alloc] initWith:MBP_85_TAG andLable:@"Blink85/854, Focus85/854, Scout85/854" andImage:[UIImage imageNamed:@"mbp85"]];
+    cam = [[Camera alloc] initWith:MBP_85_TAG andLable:NSLocalizedStringWithDefaultValue(@"camera_85_854", nil, [NSBundle mainBundle], @"Blink 85/854, Focus 85/854, Scout 85/854", nil) andImage:[UIImage imageNamed:@"mbp85"]];
     [array addObject:cam];
     [cam release];
     
