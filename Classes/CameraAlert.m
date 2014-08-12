@@ -123,8 +123,11 @@ static sqlite3_stmt *init_statement = nil;
     //INSERT INTO Persons VALUES (...)
     
     NSDateFormatter *dateFormater = [[NSDateFormatter alloc] init];
-    [dateFormater setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssXXXXX"];
+    [dateFormater setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
     [dateFormater setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+    dateFormater.calendar = [[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar] autorelease];
+    dateFormater.locale = [[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"] autorelease];
+    
     NSError *error = nil;
     NSDate *eventDate = nil;
     [dateFormater getObjectValue:&eventDate forString:camAlert.alertTime range:nil error:&error];
