@@ -8,7 +8,6 @@
 
 #import "Step_12_ViewController.h"
 #import "StartMonitorCallback.h"
-#import "KISSMetricsAPI.h"
 #import "define.h"
 #import "PublicDefine.h"
 
@@ -54,13 +53,13 @@
         stringModel = @"Focus66";
     }
     
-    NSString *fwVersion = [[NSUserDefaults standardUserDefaults] stringForKey:FW_VERSION];
-    NSDictionary *info = [NSDictionary dictionaryWithObjectsAndKeys:
-                          stringModel,   @"Camera model",
-                          fwVersion,     @"FW",
-                          nil];
+    //NSString *fwVersion = [[NSUserDefaults standardUserDefaults] stringForKey:FW_VERSION];
+    //NSDictionary *info = [NSDictionary dictionaryWithObjectsAndKeys:
+    //                      stringModel,   @"Camera model",
+    //                      fwVersion,     @"FW",
+    //                      nil];
     
-    [[KISSMetricsAPI sharedAPI] recordEvent:@"Add camera success" withProperties:info];
+    //[[KISSMetricsAPI sharedAPI] recordEvent:@"Add camera success" withProperties:info];
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:@"viewDidLoad"
                                                      withLabel:nil
@@ -77,7 +76,7 @@
 
 -(IBAction)startMonitor:(id)sender
 {
-    [[KISSMetricsAPI sharedAPI] recordEvent:@"Step11 - Touch up inside View Live Camera btn" withProperties:nil];
+    //[[KISSMetricsAPI sharedAPI] recordEvent:@"Step11 - Touch up inside View Live Camera btn" withProperties:nil];
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:@"Touch up inside"
                                                      withLabel:@"View Live Camera"

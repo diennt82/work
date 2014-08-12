@@ -10,7 +10,6 @@
 #import "Step_04_ViewController.h"
 #import "Step05Cell.h"
 #import "HttpCom.h"
-#import "KISSMetricsAPI.h"
 
 @interface Step_05_ViewController () <UIAlertViewDelegate>
 
@@ -129,7 +128,7 @@
                            otherButtonTitles:@"OK", nil] show];
     }
     else {
-        [[KISSMetricsAPI sharedAPI] recordEvent:@"Step05 - Touch continue button" withProperties:nil];
+        //[[KISSMetricsAPI sharedAPI] recordEvent:@"Step05 - Touch continue button" withProperties:nil];
         
         NSRange noQoute = NSMakeRange(1, _selectedWifiEntry.ssidWithQuotes.length - 2);
         NSString *wifiName = [_selectedWifiEntry.ssidWithQuotes substringWithRange:noQoute];
@@ -233,7 +232,7 @@
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
-    [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Step05 - dismiss dialog with button index: %d", buttonIndex] withProperties:nil];
+    //[[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Step05 - dismiss dialog with button index: %d", buttonIndex] withProperties:nil];
     
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:[NSString stringWithFormat:@"Dismiss alert: %d", alertView.tag]
@@ -342,7 +341,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Step05 - table view select row: %d in section: %d", indexPath.row, indexPath.section] withProperties:nil];
+    //[[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Step05 - table view select row: %d in section: %d", indexPath.row, indexPath.section] withProperties:nil];
     
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:@"Select Wifi entry"

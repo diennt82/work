@@ -9,11 +9,13 @@
 //#define ALERT_GENERIC_SERVER_INFO @"0"
 
 #import <CFNetwork/CFNetwork.h>
-#include <ifaddrs.h>
 #import <sys/socket.h>
 #import <netinet/in.h>
 #import <CameraScanner/CameraScanner.h>
 #import <MonitorCommunication/MonitorCommunication.h>
+#import <MessageUI/MFMailComposeViewController.h>
+
+#include <ifaddrs.h>
 
 #import "MBP_iosViewController.h"
 #import "PlayListViewController.h"
@@ -27,8 +29,6 @@
 #import "SetupData.h"
 
 #import "AlertPrompt.h"
-#import "KISSMetricsAPI.h"
-#import <MessageUI/MFMailComposeViewController.h>
 #import "NSData+AESCrypt.h"
 
 @interface MBP_iosViewController () <MFMailComposeViewControllerDelegate>

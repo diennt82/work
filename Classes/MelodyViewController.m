@@ -9,7 +9,6 @@
 #import "MelodyViewController.h"
 #import <MonitorCommunication/MonitorCommunication.h>
 #import "define.h"
-#import "KISSMetricsAPI.h"
 
 @interface MelodyViewController ()
 {
@@ -297,7 +296,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"MelodyVC select row: %d", indexPath.row] withProperties:nil];
+    //[[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"MelodyVC select row: %d", indexPath.row] withProperties:nil];
     
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:@"Selected melody"

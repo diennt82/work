@@ -11,7 +11,6 @@
 #import "UserAccount.h"
 #import "HttpCom.h"
 #import "MBP_iosViewController.h"
-#import "KISSMetricsAPI.h"
 
 #define TAG_IMAGE_VIEW_ANIMATION 595
 #define PROXY_HOST @"192.168.193.1"
@@ -148,7 +147,7 @@
 
 - (void)setupCompleted
 {
-    [[KISSMetricsAPI sharedAPI] recordEvent:@"Add camera success" withProperties:nil];
+    //[[KISSMetricsAPI sharedAPI] recordEvent:@"Add camera success" withProperties:nil];
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:@"Add camera succeeded"
                                                      withLabel:nil
@@ -176,7 +175,7 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     NSLog(@"Setup has failed - remove cam on server");
     
-    [[KISSMetricsAPI sharedAPI] recordEvent:@"Step10 - Add camera failed" withProperties:nil];
+    //[[KISSMetricsAPI sharedAPI] recordEvent:@"Step10 - Add camera failed" withProperties:nil];
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:[NSString stringWithFormat:@"Add camera failed:%@", _errorCode]
                                                      withLabel:nil
@@ -421,7 +420,7 @@
                     }
                     
                     [self setStopScanning:nil];
-                    [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Step10 - Check camera status: %@", _statusMessage] withProperties:nil];
+                    //[[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Step10 - Check camera status: %@", _statusMessage] withProperties:nil];
                     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                                     withAction:[NSString stringWithFormat:@"Check camera status: %@", _statusMessage]
                                                                      withLabel:nil
@@ -435,7 +434,7 @@
                 {
                     NSLog(@"Step_10_VC register successfully. Move on");
                     shouldCheckAgain = FALSE;
-                    [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Step10 - Check camera status: %d", deviceStatus] withProperties:nil];
+                    //[[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Step10 - Check camera status: %d", deviceStatus] withProperties:nil];
                     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                                     withAction:[NSString stringWithFormat:@"Check camera status: %@", _statusMessage]
                                                                      withLabel:nil
@@ -511,7 +510,7 @@
     
     [self setStopScanning:Nil];
     
-    [[KISSMetricsAPI sharedAPI] recordEvent:@"Step10 - Add camera failed - timeout" withProperties:nil];
+    //[[KISSMetricsAPI sharedAPI] recordEvent:@"Step10 - Add camera failed - timeout" withProperties:nil];
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:[NSString stringWithFormat:@"Add camera failed: %@", _errorCode]
                                                      withLabel:nil
@@ -871,7 +870,7 @@
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
-    [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Step10 - dismiss alert view with btn indx: %d", buttonIndex] withProperties:nil];
+    //[[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Step10 - dismiss alert view with btn indx: %d", buttonIndex] withProperties:nil];
     
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:[NSString stringWithFormat:@"Dismiss alert:%d", alertView.tag]

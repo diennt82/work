@@ -13,7 +13,6 @@
 #import "ForgotPwdViewController.h"
 #import "UserAccount.h"
 #import "PublicDefine.h"
-#import "KISSMetricsAPI.h"
 #import "TimelineDatabase.h"
 #import "RegistrationViewController.h"
 #import "MBP_iosViewController.h"
@@ -140,7 +139,7 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [[KISSMetricsAPI sharedAPI] recordEvent:@"Login Screen" withProperties:nil];
+    //[[KISSMetricsAPI sharedAPI] recordEvent:@"Login Screen" withProperties:nil];
     
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:@"viewDidAppear"
@@ -657,7 +656,7 @@
             
             NSString *ok = NSLocalizedStringWithDefaultValue(@"Ok" ,nil, [NSBundle mainBundle],
                                                               @"OK", nil);
-            [[KISSMetricsAPI sharedAPI] recordEvent:@"Login Failed" withProperties:nil];
+            //[[KISSMetricsAPI sharedAPI] recordEvent:@"Login Failed" withProperties:nil];
             
             [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                             withAction:[NSString stringWithFormat:@"Login succeed-user: %@", _stringUsername]
@@ -706,7 +705,7 @@
                                                       apiKey:apiKey
                                              accountDelegate:self];
     
-    [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Login successfully - user: %@", _stringUsername] withProperties:nil];
+    //[[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Login successfully - user: %@", _stringUsername] withProperties:nil];
     
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:[NSString stringWithFormat:@"Login succeeded-user:%@", _stringUsername]
@@ -749,7 +748,7 @@
 						  otherButtonTitles:nil];
 	[alert show];
     
-    [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Login failed - user: %@, error: %@", _stringUsername, msg] withProperties:nil];
+    //[[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Login failed - user: %@, error: %@", _stringUsername, msg] withProperties:nil];
     
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:[NSString stringWithFormat:@"Login failed-user:%@, error: %@", _stringUsername, msg]
@@ -787,7 +786,7 @@
     alert.tag = 112;
 	[alert show];
     
-    [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Login failed - user: %@, error: Server unreachable", _stringUsername] withProperties:nil];
+    //[[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Login failed - user: %@, error: Server unreachable", _stringUsername] withProperties:nil];
     
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:[NSString stringWithFormat:@"Login failed, Server unreachable-user:%@", _stringUsername]

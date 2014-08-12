@@ -7,9 +7,9 @@
 //
 
 #import "Step_11_ViewController.h"
-#import "KISSMetricsAPI.h"
 #import "define.h"
 #import "PublicDefine.h"
+
 #define GAI_CATEGORY    @"Step 11 view"
 
 @interface Step_11_ViewController ()
@@ -56,14 +56,14 @@
         stringModel = @"Focus66";
     }
     
-    NSString *fwVersion = [[NSUserDefaults standardUserDefaults] stringForKey:FW_VERSION];
-    NSDictionary *info = [NSDictionary dictionaryWithObjectsAndKeys:
-                         stringModel,   @"Camera model",
-                         fwVersion,     @"FW",
-                          _errorCode,   @"Error",
-                         nil];
+    //NSString *fwVersion = [[NSUserDefaults standardUserDefaults] stringForKey:FW_VERSION];
+    //NSDictionary *info = [NSDictionary dictionaryWithObjectsAndKeys:
+    //                     stringModel,   @"Camera model",
+    //                     fwVersion,     @"FW",
+    //                      _errorCode,   @"Error",
+    //                     nil];
     
-    [[KISSMetricsAPI sharedAPI] recordEvent:@"Add camera failed" withProperties:info];
+    //[[KISSMetricsAPI sharedAPI] recordEvent:@"Add camera failed" withProperties:info];
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:@"viewDidLoad"
                                                      withLabel:[NSString stringWithFormat:@"Add camera failed:%@", _errorCode]
@@ -74,7 +74,7 @@
 
 -(IBAction)tryAddCameraAgain:(id)sender
 {
-    [[KISSMetricsAPI sharedAPI] recordEvent:@"Step11 - Touch up inside try again btn" withProperties:nil];
+    //[[KISSMetricsAPI sharedAPI] recordEvent:@"Step11 - Touch up inside try again btn" withProperties:nil];
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:@"Touch up inside"
                                                      withLabel:@"Try Again"

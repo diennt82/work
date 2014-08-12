@@ -9,7 +9,6 @@
 #import "MBP_iosAppDelegate.h"
 #import "PublicDefine.h"
 #import "SetupData.h"
-#import "KISSMetricsAPI.h"
 #import "EarlierNavigationController.h"
 
 @interface MBP_iosAppDelegate ()
@@ -64,12 +63,9 @@
     self.handling_PN = FALSE;
     
     // Initialize Analytics
-#if 0
-    [KISSMetricsAPI sharedAPIWithKey:@"ff38140e358fdc343bb97297de4963291eec47d5"];
-    
-    [[KISSMetricsAPI sharedAPI] identify:@"85FF7C5E-3412-4AAC-9B07-5491AD022B4F"];
     
     // include some info about the type of device, operating system, and version of your app
+    /*
     NSDictionary *info = [NSDictionary dictionaryWithObjectsAndKeys:
                           [UIDevice currentDevice].model, @"Model",
                           [UIDevice currentDevice].systemName, @"System Name",
@@ -77,30 +73,18 @@
                           //[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"], @"My App Version",CFBundleShortVersionString
                           [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"], @"My App Version",
                           nil];
+     */
     
-    [[KISSMetricsAPI sharedAPI] recordEvent:@"Launched App" withProperties:info];
-#else
     // Optional: automatically send uncaught exceptions to Google Analytics.
-    [GAI sharedInstance].trackUncaughtExceptions = YES;
+    [GAI sharedInstance].trackUncaughtExceptions = NO;
     // Optional: set Google Analytics dispatch interval to e.g. 20 seconds.
     [GAI sharedInstance].dispatchInterval = 20;
     // Optional: set debug to YES for extra debugging information.
-    [GAI sharedInstance].debug = YES;
+    [GAI sharedInstance].debug = NO;
+
     // Create tracker instance.
-    
-    //UA-ID_INSTANCE is taken from the account analytics on google analytics
-    //id<GAITracker> tracker =
     [[GAI sharedInstance] trackerWithTrackingId:@"UA-51500380-2"];
-#endif
-    // !!!: Use the next line only during TEST - appstore release: need to comment this line
-    //[TestFlight setDeviceIdentifier:[[UIDevice currentDevice] uniqueIdentifier]];
-    
-    //Add testflight app token - For remote login & crash reporting
-    //[TestFlight takeOff:@"4574de50-f54d-4414-a803-fc460426c915"];
-    
-    //NSArray *names = [UIFont fontNamesForFamilyName:@"Proxima Nova"];
-    //NSLog(@"names: %@",names);
-    
+
     _window.rootViewController = [[EarlierNavigationController alloc] initWithRootViewController:viewController];
     
     // Check condition use STUN or not
@@ -109,44 +93,38 @@
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 	NSInteger app_stage = [userDefaults integerForKey:@"ApplicationStage"];
     
-    /*
-     * User kill app when SETUP camera
-     */
-    
+    // Check if user killed app during SETUP camera
     if (app_stage == APP_STAGE_SETUP) {
         viewController.app_stage = APP_STAGE_LOGGED_IN ;
         [userDefaults setInteger:viewController.app_stage forKey:@"ApplicationStage"];
     }
     
-    /*
-     * User kill app when app in view a Camera
-     */
-    
+    // Handled when user kills app when app in view a Camera
     [userDefaults removeObjectForKey:CAM_IN_VEW];
     [userDefaults synchronize];
     
     [_window makeKeyAndVisible];
     
-#if !DEBUG
-    NSSetUncaughtExceptionHandler(&HandleException);
-    
-    struct sigaction signalAction;
-    memset(&signalAction, 0, sizeof(signalAction));
-    signalAction.sa_handler = &HandleSignal;
-    
-    sigaction(SIGABRT, &signalAction, NULL);
-    sigaction(SIGILL, &signalAction, NULL);
-    sigaction(SIGBUS, &signalAction, NULL);
-    
-    NSString *cachesDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-	NSString *logPath = [cachesDirectory stringByAppendingPathComponent:@"application.log"];
-    
-    //[self createANewAppLog:logPath decumentDirectory:cachesDirectory];
-    
-    // Redirect NSLog output to a file
-	freopen([logPath cStringUsingEncoding:NSASCIIStringEncoding], "a+", stderr);
-	NSLog(@"Log location: %@",logPath);
-#endif
+//#if !DEBUG
+//    NSSetUncaughtExceptionHandler(&HandleException);
+//    
+//    struct sigaction signalAction;
+//    memset(&signalAction, 0, sizeof(signalAction));
+//    signalAction.sa_handler = &HandleSignal;
+//    
+//    sigaction(SIGABRT, &signalAction, NULL);
+//    sigaction(SIGILL, &signalAction, NULL);
+//    sigaction(SIGBUS, &signalAction, NULL);
+//    
+//    NSString *cachesDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+//	NSString *logPath = [cachesDirectory stringByAppendingPathComponent:@"application.log"];
+//    
+//    //[self createANewAppLog:logPath decumentDirectory:cachesDirectory];
+//    
+//    // Redirect NSLog output to a file
+//	freopen([logPath cStringUsingEncoding:NSASCIIStringEncoding], "a+", stderr);
+//	NSLog(@"Log location: %@",logPath);
+//#endif
     
     [CameraAlert reloadBlankTableIfNeeded];
 
@@ -433,7 +411,7 @@ void checkingApplicationCrashed()
     //NSString *uuidString = [MBP_iosAppDelegate GetUUID];
     NSLog(@"uuidString: %@", uuidString);
     
-    NSString *applicationName = NSBundle.mainBundle.infoDictionary  [@"CFBundleDisplayName"];
+    NSString *applicationName = NSBundle.mainBundle.infoDictionary[@"CFBundleDisplayName"];
     applicationName = [applicationName stringByAppendingFormat:@"-%@", [UIDevice currentDevice].name];
     NSLog(@"Application name: %@", applicationName);
     
@@ -452,13 +430,13 @@ void checkingApplicationCrashed()
                                                             andApiKey:apiKey];
     
     NSString *appId = [[responseDict objectForKey:@"data"] objectForKey:@"id"];
-    NSString * devTokenStr = [devToken hexadecimalString];
+    NSString *devTokenStr = [devToken hexadecimalString];
     
     [userDefaults setObject:devTokenStr forKey:_push_dev_token];
     [userDefaults setObject:appId forKey:@"APP_ID"];
     [userDefaults synchronize];
     
-    NSString * certType = @"1"; // for testflight
+    NSString *certType = @"1"; // for testflight
     NSString *bundleIdentifier = [[NSBundle mainBundle] bundleIdentifier];
     if ( [bundleIdentifier isEqualToString:@"com.binatonetelecom.hubble"]) {
         certType = @"0";

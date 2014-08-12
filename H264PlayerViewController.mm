@@ -19,7 +19,6 @@
 #import "EarlierViewController.h"
 #import "TimelineViewController.h"
 #import "AudioOutStreamRemote.h"
-#import "KISSMetricsAPI.h"
 #import "HttpCom.h"
 #import "define.h"
 
@@ -300,7 +299,7 @@
 {
     [super viewWillAppear:animated];
     
-    [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"PlayerView view will appear - return from Playback: %d", _returnFromPlayback] withProperties:nil];
+    //[[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"PlayerView view will appear - return from Playback: %d", _returnFromPlayback] withProperties:nil];
     NSLog(@"%s -_wantToShowTimeLine: %d, userWantToCancel: %d, returnFromPlayback: %d", __FUNCTION__, _wantToShowTimeLine, _userWantToCancel, _returnFromPlayback);
     
     self.trackedViewName = GAI_CATEGORY;
@@ -580,7 +579,7 @@
     [userDefaults setObject:_selectedChannel.profile.mac_address forKey:CAM_IN_VEW];
     [userDefaults synchronize];
     
-    [[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView Touch up inside NOW btn item" withProperties:nil];
+    //[[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView Touch up inside NOW btn item" withProperties:nil];
     
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:@"nowButtonAciton"
@@ -620,7 +619,7 @@
     [userDefaults removeObjectForKey:CAM_IN_VEW];
     [userDefaults synchronize];
 
-    [[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView Touch up inside EARLIER btn item" withProperties:nil];
+    //[[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView Touch up inside EARLIER btn item" withProperties:nil];
     
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:@"earlierButtonAction"
@@ -1320,7 +1319,7 @@
         [self showControlMenu];
     }
     
-    [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"PlayerView single tap on video image view: %d", _isHorizeShow] withProperties:nil];
+    //[[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"PlayerView single tap on video image view: %d", _isHorizeShow] withProperties:nil];
     
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:@"single tap on video image view"
@@ -1396,7 +1395,7 @@
 - (void)h264_HandleBecomeActive
 {
     NSLog(@"%s wants to cancel: %d, rtn frm Playback: %d", __FUNCTION__, _userWantToCancel, _returnFromPlayback);
-    [[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView Become active" withProperties:nil];
+    //[[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView Become active" withProperties:nil];
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:@"Become Active"
                                                      withLabel:nil
@@ -1437,7 +1436,7 @@
 {
     NSLog(@"%s wants to cancel: %d, rtn frm Playback: %d, nav: %@", __FUNCTION__, _userWantToCancel, _returnFromPlayback, self.navigationController.visibleViewController.description);
     
-    [[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView Enter background" withProperties:nil];
+    //[[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView Enter background" withProperties:nil];
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:@"Enter background"
                                                      withLabel:@"Homekey"
@@ -1807,7 +1806,7 @@
 
 - (void)prepareGoBackToCameraList:(id)sender
 {
-     [[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView goes back" withProperties:nil];
+    //[[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView goes back" withProperties:nil];
     
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:@"Go back"
@@ -3090,7 +3089,7 @@
 	@synchronized(_imgViewDrectionPad)
 	{
 		if (_lastDirUD != DIRECTION_V_NON) {
-            [[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView V directional change" withProperties:nil];
+            //[[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView V directional change" withProperties:nil];
             
             [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                             withAction:@"V directional change"
@@ -3170,7 +3169,7 @@
 	{
 		if ( _lastDirLR != DIRECTION_H_NON ) {
 			//need_to_send = TRUE;
-            [[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView H directional change" withProperties:nil];
+            //[[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView H directional change" withProperties:nil];
             
             [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                             withAction:@"H directional change"
@@ -3550,7 +3549,7 @@
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
-    [[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView - will rotate interface" withProperties:nil];
+    //[[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView - will rotate interface" withProperties:nil];
     
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:@"View will rotate interface"
@@ -3928,7 +3927,7 @@
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
     int tag = alertView.tag;
-    [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"PlayerView dismiss alert: %d with btn index: %d", tag, buttonIndex] withProperties:nil];
+    //[[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"PlayerView dismiss alert: %d with btn index: %d", tag, buttonIndex] withProperties:nil];
     
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:[NSString stringWithFormat:@"Dismiss alert: %d", tag]
@@ -4349,7 +4348,7 @@
     [self updateBottomView];
     [self applyFont];
     
-    [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"PlayerView select item on horize menu - idx: %d", _selectedItemMenu] withProperties:nil];
+    //[[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"PlayerView select item on horize menu - idx: %d", _selectedItemMenu] withProperties:nil];
     
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:@"Select item on horize menu"
@@ -4969,7 +4968,7 @@
 
 - (IBAction)changeToMainRecording:(id)sender
 {
-    [[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView changes Take picture to Recording or " withProperties:nil];
+    //[[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView changes Take picture to Recording or " withProperties:nil];
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:@"Changes Take picture to Recording or vice versa"
                                                      withLabel:@"Recording"
@@ -4980,7 +4979,7 @@
 
 - (IBAction)switchDegreePressed:(id)sender
 {
-    [[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView changes Temperature type" withProperties:nil];
+    //[[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView changes Temperature type" withProperties:nil];
     
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:@"Changes Temperature type"
@@ -5003,7 +5002,7 @@
 
 - (IBAction)processingRecordingOrTakePicture:(id)sender
 {
-    [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"PlayerView Touch up inside recording - mode: %d", _isRecordInterface] withProperties:nil];
+    //[[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"PlayerView Touch up inside recording - mode: %d", _isRecordInterface] withProperties:nil];
     
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:@"Changes Temperature type"
@@ -5085,7 +5084,7 @@
 
 - (IBAction)changeAction:(id)sender
 {
-    [[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView changes Take picture to Recording or " withProperties:nil];
+    //[[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView changes Take picture to Recording or " withProperties:nil];
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:@"Take picture to Recording or vice versa"
                                                      withLabel:@"Temperature"

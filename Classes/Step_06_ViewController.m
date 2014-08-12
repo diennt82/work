@@ -8,7 +8,6 @@
 
 #import "Step_06_ViewController.h"
 #import "Step_10_ViewController.h"
-#import "KISSMetricsAPI.h"
 #import "HttpCom.h"
 
 @interface Step_06_ViewController () <UIAlertViewDelegate, UITextFieldDelegate>
@@ -429,7 +428,7 @@
 
 - (void)handleNextButton:(id)sender
 {
-    [[KISSMetricsAPI sharedAPI] recordEvent:@"Step06 - next button" withProperties:nil];
+    //[[KISSMetricsAPI sharedAPI] recordEvent:@"Step06 - next button" withProperties:nil];
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:@"Touch Next button"
                                                      withLabel:@"Next"
@@ -580,7 +579,7 @@
     
     NSLog(@"set auth -set_auth_cmd: %d ", [fwVersion compare:FW_MILESTONE_F66_NEW_FLOW]);
     
-    [[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Step06 - Add camera fw: %@", fwVersion] withProperties:nil];
+    //[[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Step06 - Add camera fw: %@", fwVersion] withProperties:nil];
     
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:[NSString stringWithFormat:@"Send Wifi info to Camera-fw:%@", fwVersion]

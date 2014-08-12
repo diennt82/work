@@ -8,7 +8,6 @@
 
 #import "Step_03_ViewController.h"
 #import "UIBarButtonItem+Custom.h"
-#import "KISSMetricsAPI.h"
 
 @interface Step_03_ViewController ()
 
@@ -120,7 +119,7 @@
 
 - (void)handleEnteredBackground
 {
-    [[KISSMetricsAPI sharedAPI] recordEvent:@"Step03 - Enter background" withProperties:nil];
+    //[[KISSMetricsAPI sharedAPI] recordEvent:@"Step03 - Enter background" withProperties:nil];
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:@"Enter background"
                                                      withLabel:@"Homekey"
@@ -130,7 +129,7 @@
 
 - (void)becomeActive
 {
-    [[KISSMetricsAPI sharedAPI] recordEvent:@"Step03 - Enter fore ground" withProperties:nil];
+    //[[KISSMetricsAPI sharedAPI] recordEvent:@"Step03 - Enter fore ground" withProperties:nil];
     
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:@"Become active"
