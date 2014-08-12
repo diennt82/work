@@ -14,7 +14,7 @@
 
 @property (nonatomic, weak) IBOutlet UITableViewCell *tableViewCell;
 @property (nonatomic, weak) id<ConnectionMethodDelegate> cameraMenuDelegate;
-@property (nonatomic, weak) CamChannel *camChannel;
+@property (nonatomic, strong) CamChannel *camChannel;
 @property (nonatomic, copy) NSString *cameraName;
 
 @end
