@@ -409,6 +409,7 @@
 }
 
 #pragma mark Login Callbacks
+
 - (void)loginSuccessWithResponse:(NSDictionary *)responseDict
 {
    	if (responseDict) {
