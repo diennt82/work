@@ -41,14 +41,16 @@
 
 @interface CameraMenuViewController () <UITableViewDataSource, UITableViewDelegate,SensitivityCellDelegate,SensitivityTemperaureCellDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 
-@property (nonatomic, weak) IBOutlet UITableView *tableViewSettings;
-@property (nonatomic, weak) IBOutlet UIButton *btnRmoveCamera;
-@property (nonatomic, weak) IBOutlet UIView *viewProgress;
-@property (nonatomic, weak) IBOutlet UIView *vwHeaderCamDetail,*vwHeaderNotSens;
+@property (nonatomic, strong) IBOutlet UITableView *tableViewSettings;
+@property (nonatomic, strong) IBOutlet UIButton *btnRmoveCamera;
+@property (nonatomic, strong) IBOutlet UIView *viewProgress;
+@property (nonatomic, strong) IBOutlet UIView *vwHeaderCamDetail;
+@property (nonatomic, strong) IBOutlet UIView *vwHeaderNotSens;
 
-@property (nonatomic, weak) IBOutlet UIView *vwSnapshot;
-@property (nonatomic, weak) IBOutlet UIImageView *imgVSnapshot;
-@property (nonatomic, weak) IBOutlet UIButton *btnSnapshotRefresh,*btnSnapshotOK;
+@property (nonatomic, strong) IBOutlet UIView *vwSnapshot;
+@property (nonatomic, strong) IBOutlet UIImageView *imgVSnapshot;
+@property (nonatomic, strong) IBOutlet UIButton *btnSnapshotRefresh;
+@property (nonatomic, strong) IBOutlet UIButton *btnSnapshotOK;
 
 @property (nonatomic, strong) UIImage *imageSelected;
 @property (nonatomic, strong) UIAlertView *alertViewRename;
@@ -80,23 +82,23 @@
     self.title = @"Camera Settings";
     self.intTableSectionStatus = 0;
     
-    self.tableViewSettings.delegate = self;
-    self.tableViewSettings.dataSource = self;
+    _tableViewSettings.delegate = self;
+    _tableViewSettings.dataSource = self;
     
-    [self.btnRmoveCamera setBackgroundImage:[UIImage imageNamed:@"remove_camera"]
-                                   forState:UIControlStateNormal];
-    [self.btnRmoveCamera setBackgroundImage:[UIImage imageNamed:@"remove_camera_pressed"]
-                                   forState:UIControlEventTouchDown];
+    [_btnRmoveCamera setBackgroundImage:[UIImage imageNamed:@"remove_camera"]
+                               forState:UIControlStateNormal];
+    [_btnRmoveCamera setBackgroundImage:[UIImage imageNamed:@"remove_camera_pressed"]
+                               forState:UIControlEventTouchDown];
     
     self.stringFW_Version = NSLocalizedStringWithDefaultValue(@"firmware_version", nil, [NSBundle mainBundle],
                                                    @"Firmware version", nil);
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     self.apiKey = [userDefaults stringForKey:@"PortalApiKey"];
     
-    self.tableViewSettings.backgroundColor = [UIColor colorWithRed:249/255.0 green:249/255.0 blue:249/255.0 alpha:1];
+    _tableViewSettings.backgroundColor = [UIColor colorWithRed:249/255.0 green:249/255.0 blue:249/255.0 alpha:1];
     
-    UIImageView *imgView = (UIImageView*)[self.vwHeaderNotSens viewWithTag:500];
-    if ([self.camChannel.profile isNotAvailable]) {
+    UIImageView *imgView = (UIImageView*)[_vwHeaderNotSens viewWithTag:500];
+    if ([_camChannel.profile isNotAvailable]) {
         imgView.image = [UIImage imageNamed:@"sensitivity_disable"];
     }
     
@@ -123,10 +125,10 @@
 - (void)removeCameraAction:(id)sender
 {
     self.view.userInteractionEnabled = NO;
-    self.btnRmoveCamera.enabled = NO;
+    _btnRmoveCamera.enabled = NO;
     
-    self.viewProgress.frame = UIScreen.mainScreen.bounds;
-    self.viewProgress.hidden = NO;
+    _viewProgress.frame = UIScreen.mainScreen.bounds;
+    _viewProgress.hidden = NO;
     [self.view bringSubviewToFront:_viewProgress];
     
     [self showDialog:ALERT_REMOVE_CAM];
@@ -218,9 +220,9 @@
             else {
                 if (![newName isEqualToString:self.camChannel.profile.name]) {
                     self.cameraNewName = newName;
-                    self.isChangingName = TRUE;
-                    [self.tableViewSettings reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]]
-                                                  withRowAnimation:UITableViewRowAnimationAutomatic];
+                    self.isChangingName = YES;
+                    [_tableViewSettings reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]]
+                                              withRowAnimation:UITableViewRowAnimationAutomatic];
                     
                     dispatch_async(dispatch_get_main_queue(), ^{
                         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
@@ -246,9 +248,9 @@
             }
         }
         else {
-            self.viewProgress.hidden = YES;
             self.view.userInteractionEnabled = YES;
-            self.btnRmoveCamera.enabled = YES;
+            _viewProgress.hidden = YES;
+            _btnRmoveCamera.enabled = YES;
         }
     }
     else {
@@ -265,23 +267,22 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if ( section==0 ) {
+    if ( section == 0 ) {
         return 1;
     }
-    else if ( section==1 ) {
+    else if ( section == 1 ) {
         return 3;
     }
     return 0;
-    
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    if (section==0) {
-        return self.vwHeaderCamDetail;
+    if (section == 0) {
+        return _vwHeaderCamDetail;
     }
     else {
-        return self.vwHeaderNotSens;
+        return _vwHeaderNotSens;
     }
 }
 
@@ -331,8 +332,8 @@
             camDetCell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         
-        camDetCell.lblCameraName.text = self.camChannel.profile.name;
-        camDetCell.lblCamVer.text = self.camChannel.profile.fw_version;
+        camDetCell.lblCameraName.text = _camChannel.profile.name;
+        camDetCell.lblCamVer.text = _camChannel.profile.fw_version;
         
         cell =  camDetCell;
     }
@@ -341,7 +342,7 @@
         if (indexPath.row==0 || indexPath.row==1) {
             //Motion & Sound
             static NSString *CellIdentifier = @"SensitivityCell";
-            SensitivityCell *sensitivityCell = [self.tableViewSettings dequeueReusableCellWithIdentifier:CellIdentifier];
+            SensitivityCell *sensitivityCell = [_tableViewSettings dequeueReusableCellWithIdentifier:CellIdentifier];
             
             NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"SensitivityCell" owner:nil options:nil];
             for (id curObj in objects) {
@@ -370,7 +371,7 @@
         else {
             // (indexPath.row==2) Tempreture Cell
             static NSString *CellIdentifier = @"SensitivityTemperatureCell";
-            SensitivityTemperatureCell *stCell = [self.tableViewSettings dequeueReusableCellWithIdentifier:CellIdentifier];
+            SensitivityTemperatureCell *stCell = [_tableViewSettings dequeueReusableCellWithIdentifier:CellIdentifier];
             
             NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"SensitivityTemperatureCell" owner:nil options:nil];
             for (id curObj in objects) {
@@ -396,51 +397,6 @@
     return cell;
 }
 
-#pragma mark - Table view delegate
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Navigation logic may go here, for example:
-    // Create the next view controller.
-    
-   /* if (indexPath.row == 0)
-    {
-        _cameraName = self.camChannel.profile.name;
-        
-        if (_alertViewRename == nil)
-        {
-            self.alertViewRename = [[UIAlertView alloc] initWithTitle:@"Enter the new Camera name"
-                                                              message:nil
-                                                             delegate:self
-                                                    cancelButtonTitle:@"Cancel"
-                                                    otherButtonTitles:@"Ok", nil];
-            self.alertViewRename.alertViewStyle = UIAlertViewStylePlainTextInput;
-            UITextField *textField = [_alertViewRename textFieldAtIndex:0];
-            [textField setText:_cameraName];
-            self.alertViewRename.tag = ALERT_RENAME_CAMERA;
-        }
-        
-        [_alertViewRename show];
-    }
-#if ENABLE_CHANGE_IMAGE
-    else if (indexPath.row == 1)
-    {
-        //change Image
-        ChangeImageViewController *changeImageVC = [[ChangeImageViewController alloc] initWithNibName:@"ChangeImageViewController" bundle:nil];
-        [UIView transitionWithView:self.view
-                          duration:1.0
-                           options:UIViewAnimationOptionTransitionFlipFromBottom
-                        animations:^{
-                            [self.view addSubview:changeImageVC.view];
-                        }
-                        completion:NULL];
-        
-        
-    }
-#endif
-    */
-}
-
 #pragma mark - Server methods
 
 - (void)updateFWVersion_bg
@@ -450,7 +406,7 @@
                                                                          FailSelector:nil
                                                                             ServerErr:nil];
     
-    NSDictionary *responseDict = [jsonComm sendCommandBlockedWithRegistrationId:self.camChannel.profile.registrationID
+    NSDictionary *responseDict = [jsonComm sendCommandBlockedWithRegistrationId:_camChannel.profile.registrationID
                                                                      andCommand:@"action=command&command=get_version"
                                                                       andApiKey:_apiKey];
     if (responseDict) {
@@ -459,7 +415,7 @@
             NSString *cmd = @"get_version";
             
             if ([bodykey hasPrefix:cmd]) {
-                self.camChannel.profile.fw_version = [bodykey substringFromIndex:cmd.length + 2];
+                _camChannel.profile.fw_version = [bodykey substringFromIndex:cmd.length + 2];
             }
         }
     }
@@ -472,14 +428,14 @@
     NSInteger rowIndex = [row integerValue];
     
     if (rowIndex == 1) {
-        self.isLoading = FALSE;
+        self.isLoading = NO;
     }
     else {
-        self.isChangingName = FALSE;
+        self.isChangingName = NO;
     }
     
-    [self.tableViewSettings reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:rowIndex inSection:0]]
-                                  withRowAnimation:UITableViewRowAnimationAutomatic];
+    [_tableViewSettings reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:rowIndex inSection:0]]
+                              withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
 - (void)removeLocalCamera
@@ -487,15 +443,15 @@
     self.navigationItem.rightBarButtonItem.enabled = NO;
     self.tabBarController.tabBar.userInteractionEnabled = NO;
 
-    HttpCommunication *dev_comm = [[HttpCommunication alloc]init];
-    dev_comm.device_ip = _camChannel.profile.ip_address;
-    dev_comm.device_port = _camChannel.profile.port;
+    HttpCommunication *comm = [[HttpCommunication alloc]init];
+    comm.device_ip = _camChannel.profile.ip_address;
+    comm.device_port = _camChannel.profile.port;
     
 	NSString *command = SWITCH_TO_DIRECT_MODE;
-	[dev_comm sendCommandAndBlock:command];
+	[comm sendCommandAndBlock:command];
 	
 	command = RESTART_HTTP_CMD;
-	[dev_comm sendCommandAndBlock:command];
+	[comm sendCommandAndBlock:command];
     
     [self removeRemoteCamera];
 }
@@ -520,11 +476,7 @@
 
 - (void)changeCameraName
 {
-    //[self.viewPorgress setHidden:NO];
-    //[self.view addSubview:_viewPorgress];
-    //[self.view bringSubviewToFront:_viewPorgress];
-    
-    NSLog(@"CameraMenuVC - changeCameraName - _cameraNewName: %@", _cameraNewName);
+    DLog(@"CameraMenuVC - changeCameraName - _cameraNewName: %@", _cameraNewName);
 
     BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
                                                                              Selector:nil
@@ -539,10 +491,10 @@
                                                                                 andApiKey:_apiKey];
     if ( responseDict ) {
         if ([responseDict[@"status"] integerValue] == 200) {
-            self.camChannel.profile.name = _cameraNewName;
+            _camChannel.profile.name = _cameraNewName;
         }
         else {
-            NSLog(@"CameraNameVC - Change cameraname failed!");
+            DLog(@"CameraNameVC - Change cameraname failed!");
             
             [[[UIAlertView alloc] initWithTitle:@"Change Camera Name"
                                          message:responseDict[@"message"]
@@ -552,7 +504,7 @@
         }
     }
     else {
-        NSLog(@"CameraNameVC - doneAction - responseDict == nil");
+        DLog(@"CameraNameVC - doneAction - responseDict == nil");
         
         [[[UIAlertView alloc] initWithTitle:@"Change Camera Name"
                                      message:@"Server Error"
@@ -561,7 +513,7 @@
                            otherButtonTitles:@"OK", nil] show];
     }
     
-    [self.tableViewSettings reloadData];
+    [_tableViewSettings reloadData];
     [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
 }
 
@@ -577,14 +529,14 @@
 
 - (void)removeCameraSuccessWithResponse:(NSDictionary *)responseData
 {
-	NSLog(@"CameraMenuVC- removeCam success-- fatality");
+	DLog(@"CameraMenuVC- removeCam success-- fatality");
     [self.navigationController popViewControllerAnimated:YES];
     self.tabBarController.tabBar.userInteractionEnabled = YES;
 }
 
 - (void)removeCameraFailedWithError:(NSDictionary *)errorResponse
 {
-	NSLog(@"CameraMenuVC - removeCam failed errorcode:");
+	DLog(@"CameraMenuVC - removeCam failed errorcode:");
     
     [[[UIAlertView alloc] initWithTitle:@"Remove Camera"
                                  message:[errorResponse objectForKey:@"message"]
@@ -598,7 +550,7 @@
 
 - (void)removeCameraFailedServerUnreachable
 {
-	NSLog(@"CameraMenuVC - removeCam server unreachable");
+	DLog(@"CameraMenuVC - removeCam server unreachable");
     
     [[[UIAlertView alloc] initWithTitle:@"Remove Camera"
                                  message:@"Server is unreachable"
@@ -610,6 +562,8 @@
     self.tabBarController.tabBar.userInteractionEnabled = YES;
 }
 
+#pragma mark - Custom action methods
+
 - (IBAction)btnCameraDetailPressed:(id)sender
 {
     if ( _intTableSectionStatus != 1 ) {
@@ -618,14 +572,15 @@
     else {
         self.intTableSectionStatus = 0;
     }
-    [self.tableViewSettings beginUpdates];
-    [self.tableViewSettings reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, 1)] withRowAnimation:UITableViewRowAnimationAutomatic];
-    [self.tableViewSettings endUpdates];
+    
+    [_tableViewSettings beginUpdates];
+    [_tableViewSettings reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, 1)] withRowAnimation:UITableViewRowAnimationAutomatic];
+    [_tableViewSettings endUpdates];
 }
 
 - (IBAction)btnNotiSenPressed:(id)sender
 {
-    if ([self.camChannel.profile isNotAvailable]) {
+    if ([_camChannel.profile isNotAvailable]) {
         return;
     }
     
@@ -636,9 +591,9 @@
         self.intTableSectionStatus = 0;
     }
     
-    [self.tableViewSettings beginUpdates];
-    [self.tableViewSettings reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, 1)] withRowAnimation:UITableViewRowAnimationAutomatic];
-    [self.tableViewSettings endUpdates];
+    [_tableViewSettings beginUpdates];
+    [_tableViewSettings reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, 1)] withRowAnimation:UITableViewRowAnimationAutomatic];
+    [_tableViewSettings endUpdates];
     
     if ( _intTableSectionStatus == 2 ) {
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
@@ -719,7 +674,7 @@
         
         cmd = [cmd stringByAppendingFormat:@"vox_set_threshold&value=%d", soundValue];
         
-        self.sensitivityInfo.soundOn = value;
+        _sensitivityInfo.soundOn = value;
     }
     
     [self performSelectorInBackground:@selector(sendToServerTheCommand:) withObject:cmd];
@@ -729,12 +684,12 @@
 
 - (void)valueChangedTypeTemperaure:(BOOL)isFahrenheit // NOT need to receive
 {
-    self.sensitivityInfo.tempIsFahrenheit = isFahrenheit;
+    _sensitivityInfo.tempIsFahrenheit = isFahrenheit;
 }
 
 - (void)valueChangedTempLowValue:(NSInteger)tempValue
 {
-    self.sensitivityInfo.tempLowValue = tempValue;
+    _sensitivityInfo.tempLowValue = tempValue;
     NSString *cmd = [NSString stringWithFormat:@"action=command&command=set_temp_lo_threshold&value=%d", tempValue];
     
     [self performSelectorInBackground:@selector(sendToServerTheCommand:) withObject:cmd];
@@ -743,7 +698,7 @@
 
 - (void)valueChangedTempLowOn:(BOOL)isOn
 {
-    self.sensitivityInfo.tempLowOn = isOn;
+    _sensitivityInfo.tempLowOn = isOn;
     NSString *cmd = [NSString stringWithFormat:@"action=command&command=set_temp_lo_enable&value=%d", isOn];
     
     [self performSelectorInBackground:@selector(sendToServerTheCommand:) withObject:cmd];
@@ -751,7 +706,7 @@
 
 - (void)valueChangedTempHighValue:(NSInteger)tempValue
 {
-    self.sensitivityInfo.tempHighValue = tempValue;
+    _sensitivityInfo.tempHighValue = tempValue;
     NSString *cmd = [NSString stringWithFormat:@"action=command&command=set_temp_hi_threshold&value=%d", tempValue];
     
     [self performSelectorInBackground:@selector(sendToServerTheCommand:) withObject:cmd];
@@ -760,7 +715,7 @@
 
 - (void)valueChangedTempHighOn:(BOOL)isOn
 {
-    self.sensitivityInfo.tempHighOn = isOn;
+    _sensitivityInfo.tempHighOn = isOn;
     NSString *cmd = [NSString stringWithFormat:@"action=command&command=set_temp_hi_enable&value=%d", isOn];
     
     [self performSelectorInBackground:@selector(sendToServerTheCommand:) withObject:cmd];
@@ -790,7 +745,7 @@
 
 - (void)btnChangeCameraName
 {
-    _cameraName = self.camChannel.profile.name;
+    _cameraName = _camChannel.profile.name;
     
     if ( !_alertViewRename )
     {
@@ -830,7 +785,6 @@
         
         UIImagePickerController *picker = [[UIImagePickerController alloc] init];
         picker.delegate = self;
-        //picker.allowsEditing = YES;
         
         if (buttonIndex==0) {
             //Gallery
@@ -892,9 +846,7 @@
     as.tapBlock = ^(UIActionSheet *actionSheet, NSInteger buttonIndex){
         NSLog(@"Chose %@", [actionSheet buttonTitleAtIndex:buttonIndex]);
         
-        if(actionSheet.cancelButtonIndex!=buttonIndex) {
-            //self.camChannel.profile.registrationID
-            
+        if (actionSheet.cancelButtonIndex!=buttonIndex) {
             NSArray *paths = NSSearchPathForDirectoriesInDomains (NSDocumentDirectory, NSUserDomainMask, YES);
             NSString  *strPath = [paths firstObject];
             strPath = [strPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.jpg",self.camChannel.profile.registrationID]];
@@ -904,7 +856,6 @@
             }
             
             [UIImageJPEGRepresentation(image, 0.5) writeToFile:strPath atomically:YES];
-            // [strPath release];
         }
     };
     
@@ -915,6 +866,7 @@
 {
     _vwSnapshot.alpha = 0.0;
     _vwSnapshot.hidden = NO;
+    
     [UIView animateWithDuration:0.3 animations:^{
         _vwSnapshot.alpha = 1.0;
     }];
@@ -937,7 +889,7 @@
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
         NSString *strURL = [self getSnapImageFromCamera];
         if( !strURL ) {
-            return ;
+            return;
         }
         
         NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:strURL]];
@@ -951,14 +903,11 @@
 
 - (IBAction)btnSnapshotOKPressed:(id)sender
 {
-    [UIView animateWithDuration:0.3
-                     animations:^{
-                         _vwSnapshot.alpha = 0.0;
-                     }
-                     completion:^(BOOL finished) {
-                         _vwSnapshot.hidden = YES;
-                     }
-     ];
+    [UIView animateWithDuration:0.3 animations:^{
+        _vwSnapshot.alpha = 0.0;
+    } completion:^(BOOL finished) {
+        _vwSnapshot.hidden = YES;
+    } ];
     
     if (_imageSelected) {
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -1019,7 +968,7 @@
     NSDictionary *responseDict = [_jsonComm sendCommandBlockedWithRegistrationId:self.camChannel.profile.registrationID
                                                                       andCommand:@"action=command&command=device_setting"
                                                                        andApiKey:_apiKey];
-    self.isLoading = FALSE;
+    self.isLoading = NO;
     
     if ( [responseDict[@"status"] integerValue] == 200 ) {
         // "body": "error_in_control_command : 701"
@@ -1043,32 +992,32 @@
                 NSLog(@"%@, %d", settingsArray[0], [settingsArray[0] integerValue]);
                 
                 if ([settingsArray[1] integerValue] <= 10) {
-                    self.sensitivityInfo.motionValue = 0;
+                    _sensitivityInfo.motionValue = 0;
                 }
                 else if (10 < [settingsArray[1] integerValue] && [settingsArray[1] integerValue] <= 50) {
-                    self.sensitivityInfo.motionValue = 1;
+                    _sensitivityInfo.motionValue = 1;
                 }
                 else {
-                    self.sensitivityInfo.motionValue = 2;
+                    _sensitivityInfo.motionValue = 2;
                 }
                 
                 self.sensitivityInfo.soundOn = [settingsArray[2] boolValue];
                 
                 if (80 <= [settingsArray[3] integerValue]) {
-                    self.sensitivityInfo.soundValue = 0;
+                    _sensitivityInfo.soundValue = 0;
                 }
                 else if (70 <= [settingsArray[3] integerValue] && [settingsArray[3] integerValue] < 80) {
-                    self.sensitivityInfo.soundValue = 1;
+                    _sensitivityInfo.soundValue = 1;
                 }
                 else {
-                    self.sensitivityInfo.soundValue = 2;
+                    _sensitivityInfo.soundValue = 2;
                 }
                 
-                self.sensitivityInfo.tempLowOn     = [settingsArray[5] boolValue];
-                self.sensitivityInfo.tempHighOn    = [settingsArray[4] boolValue];
+                _sensitivityInfo.tempLowOn     = [settingsArray[5] boolValue];
+                _sensitivityInfo.tempHighOn    = [settingsArray[4] boolValue];
                 
-                self.sensitivityInfo.tempLowValue  = [settingsArray[7] integerValue];
-                self.sensitivityInfo.tempHighValue = [settingsArray[6] integerValue];
+                _sensitivityInfo.tempLowValue  = [settingsArray[7] integerValue];
+                _sensitivityInfo.tempHighValue = [settingsArray[6] integerValue];
             }
             else {
                 self.intTableSectionStatus = 0;
@@ -1077,7 +1026,7 @@
         }
     }
     else {
-        self.intTableSectionStatus=0;
+        self.intTableSectionStatus = 0;
         self.sensitivityMessage = @"Error -Load Sensitivity Settings error!";
     }
     
@@ -1086,7 +1035,7 @@
     
     if ( _intTableSectionStatus == 0 ) {
         MBProgressHUD *showError = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-        [showError setLabelText:self.sensitivityMessage];
+        [showError setLabelText:_sensitivityMessage];
         [showError setMode:MBProgressHUDModeText];
         
         dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 5 * NSEC_PER_SEC);
