@@ -655,6 +655,7 @@
 		8BA7F2821851C57200BE0145 /* blink11hd480p.sdp in Resources */ = {isa = PBXBuildFile; fileRef = 8BA7F27F1851C57100BE0145 /* blink11hd480p.sdp */; };
 		8BA7F2831851C57200BE0145 /* blink11hd720p.sdp in Resources */ = {isa = PBXBuildFile; fileRef = 8BA7F2801851C57100BE0145 /* blink11hd720p.sdp */; };
 		8BA8AE881821F3E900DC9E9F /* stream720p_10_926.sdp in Resources */ = {isa = PBXBuildFile; fileRef = 8BA8AE871821F3E900DC9E9F /* stream720p_10_926.sdp */; };
+		8BB404E11999F4AF008277FA /* CamerasListHelpWindowPopup.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BB404E01999F4AF008277FA /* CamerasListHelpWindowPopup.m */; };
 		8BB46F8B1993250700E31A3D /* SettingHeaderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BB46F8A1993250700E31A3D /* SettingHeaderCell.m */; };
 		8BB53A83194826050078B58E /* NotifViewController~iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8BB53A82194826050078B58E /* NotifViewController~iPad.xib */; };
 		8BB7EA9A196E3F5000FDD674 /* Focus73TableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BB7EA98196E3F5000FDD674 /* Focus73TableViewController.m */; };
@@ -1551,6 +1552,8 @@
 		8BA7F27F1851C57100BE0145 /* blink11hd480p.sdp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = blink11hd480p.sdp; sourceTree = "<group>"; };
 		8BA7F2801851C57100BE0145 /* blink11hd720p.sdp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = blink11hd720p.sdp; sourceTree = "<group>"; };
 		8BA8AE871821F3E900DC9E9F /* stream720p_10_926.sdp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stream720p_10_926.sdp; sourceTree = "<group>"; };
+		8BB404DF1999F4AF008277FA /* CamerasListHelpWindowPopup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CamerasListHelpWindowPopup.h; sourceTree = "<group>"; };
+		8BB404E01999F4AF008277FA /* CamerasListHelpWindowPopup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CamerasListHelpWindowPopup.m; sourceTree = "<group>"; };
 		8BB46F891993250700E31A3D /* SettingHeaderCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingHeaderCell.h; sourceTree = "<group>"; };
 		8BB46F8A1993250700E31A3D /* SettingHeaderCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingHeaderCell.m; sourceTree = "<group>"; };
 		8BB53A82194826050078B58E /* NotifViewController~iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "NotifViewController~iPad.xib"; sourceTree = "<group>"; };
@@ -3305,6 +3308,8 @@
 			children = (
 				8B9E214D1991CBF60026B0CE /* HelpWindowPopup.h */,
 				8B9E214E1991CBF60026B0CE /* HelpWindowPopup.m */,
+				8BB404DF1999F4AF008277FA /* CamerasListHelpWindowPopup.h */,
+				8BB404E01999F4AF008277FA /* CamerasListHelpWindowPopup.m */,
 			);
 			path = Helps;
 			sourceTree = "<group>";
@@ -4404,6 +4409,7 @@
 				8B977C9E18C70BDA00A61115 /* HubbleProgressView.m in Sources */,
 				84A6625A195C0C2500EF7DB5 /* SDWebImageManager.m in Sources */,
 				84F27EC118AE10750000CA7A /* UARTPeripheral.m in Sources */,
+				8BB404E11999F4AF008277FA /* CamerasListHelpWindowPopup.m in Sources */,
 				5EAFC058192A0CB9001FB3AA /* CameraDetailCell.m in Sources */,
 				8B3E0EF1198902A600BF5788 /* NSDate+NetworkClock.m in Sources */,
 				A1AC859518913014002A8CCD /* UIColor+Hubble.m in Sources */,

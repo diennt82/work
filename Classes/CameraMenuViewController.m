@@ -817,14 +817,16 @@ typedef enum _WAIT_FOR_UPDATING {
 
 - (IBAction)handleCameraDetailHelp:(id)sender
 {
-    HelpWindowPopup *popup = [[HelpWindowPopup alloc] initWithTitle:@"Help Title" andMessage:@"Help text"];
+    HelpWindowPopup *popup = [[HelpWindowPopup alloc] initWithTitle:@"Camera Details Help"
+                                                         andMessage:@"1. Camera Name\n- User can change the name of the camera.\n2. Change Image\n- User can change the thumbnail image shown on the camera list screen."];
     [popup show];
     [popup release];
 }
 
 - (IBAction)handleNotiSensityHelp:(id)sender
 {
-    HelpWindowPopup *popup = [[HelpWindowPopup alloc] initWithTitle:@"" andMessage:@""];
+    HelpWindowPopup *popup = [[HelpWindowPopup alloc] initWithTitle:@"Notification Sensitivity Help"
+                                                         andMessage:@"1. Motion Detection Sensitivity\n- Motion detection is triggered when 2 consecutive seconds of motion have been detected by your camera.\n- The sensitivity level determines how much change in activity your camera needs to detect in order for a motion detection notification to be sent.\n2. Sound Detection Sensitivity\nHigh: Your camera triggers a notification whenever it detects a sound below the low audio threshold that lasts for 0.5 seconds or more.\nMedium : Your camera triggers a notification whenever it detects a sound above the high audio threshold that lasts for 2 seconds or more.\nLow : Your camera triggers a notification whenever it detects a sound below the low audio threshold that lasts for 3 seconds or more.\n\nEach time sound is detected, your camera will pause the monitoring of sound levels for approximately 60 seconds before it resumes monitoring them again.\n3. Temperature\nYou will receive a notification every 30 minutes (on average) whenever the temperature falls outside the range you have selected."];
     [popup show];
     [popup release];
 }

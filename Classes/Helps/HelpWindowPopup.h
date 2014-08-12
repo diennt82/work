@@ -7,8 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "define.h"
+#import "UIFont+Hubble.h"
 
 @interface HelpWindowPopup : UIView
+
+@property (nonatomic, retain) UIScrollView  *scrollView;
+@property (nonatomic, retain) UIView        *contentView;
 
 - (id)initWithTitle:(NSString *)title andMessage:(NSString *)message;
 - (void)show;

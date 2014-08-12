@@ -32,7 +32,7 @@
 #import <MonitorCommunication/MonitorCommunication.h>
 #import <CameraScanner/CameraScanner.h>
 
-@interface SettingsViewController () <SchedulerCellDelegate, GeneralCellDelegate, SettingHeaderCellDelegate>
+@interface SettingsViewController () <SchedulerCellDelegate, GeneralCellDelegate>
 {
     NSInteger numOfRows[4];
     BOOL valueGeneralSettings[2];
@@ -266,23 +266,6 @@
     //TODO:Enable scheduling settings.
 }
 
-#pragma mark - SettingHeaderCellDelegate
-- (void)helpButtonOnTouchUpInside:(SETTING_HELP)helpType
-{
-    if (helpType == GENERAL_SETTING)
-    {
-        HelpWindowPopup *popup = [[HelpWindowPopup alloc] initWithTitle:@"" andMessage:@""];
-        [popup show];
-        [popup release];
-    }
-    else if (helpType == DO_NOT_DISTURB)
-    {
-        HelpWindowPopup *popup = [[HelpWindowPopup alloc] initWithTitle:@"" andMessage:@""];
-        [popup show];
-        [popup release];
-    }
-}
-
 #pragma mark - Table view data source
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -391,7 +374,6 @@
                     SettingHeaderCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
                     if (cell == nil) {
                         cell = [[[SettingHeaderCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-                        cell.delegate = self;
                     }
                     
                     // Configure the cell...
@@ -454,7 +436,6 @@
                     SettingHeaderCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
                     if (cell == nil) {
                         cell = [[[SettingHeaderCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-                        cell.delegate = self;
                     }
                     
                     // Configure the cell...

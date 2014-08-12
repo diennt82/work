@@ -18,12 +18,6 @@
         CGRect rect = CGRectMake(0, 0, 35, 35);
         rect.origin.x = SCREEN_WIDTH - 40;
         rect.origin.y = 10;
-        _helpButton = [[UIButton alloc] initWithFrame:rect];
-        [self.helpButton setBackgroundImage:[UIImage imageNamed:@"alert_learn.png"] forState:UIControlStateNormal];
-        [self.helpButton setBackgroundImage:[UIImage imageNamed:@"alert_play_pressed.png"] forState:UIControlStateSelected];
-        [self.helpButton addTarget:self action:@selector(handleHelpButton:) forControlEvents:UIControlEventTouchUpInside];
-        [self addSubview:self.helpButton];
-        [self.helpButton setHidden:YES];
     }
     return self;
 }
@@ -42,15 +36,6 @@
 
 - (void)dealloc
 {
-    [_helpButton release];
     [super dealloc];
-}
-
-- (void)handleHelpButton:(id)sender
-{
-    if ([self.delegate respondsToSelector:@selector(helpButtonOnTouchUpInside:)])
-    {
-        [self.delegate helpButtonOnTouchUpInside:self.helpType];
-    }
 }
 @end
