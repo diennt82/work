@@ -856,20 +856,14 @@
 - (NSString *)formatDetectedDate:(NSString *)alertTime andAlertMess:(NSString *)alertMess {
     NSString *mess = alertMess;
     NSDateFormatter *dateFormater = [[NSDateFormatter alloc] init];
-    [dateFormater setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssXXXXX"];
+    [dateFormater setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
     [dateFormater setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+    dateFormater.calendar = [[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar] autorelease];
+    dateFormater.locale = [[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"] autorelease];
     
     NSError *error = nil;
     NSDate *eventDate = nil;
     [dateFormater getObjectValue:&eventDate forString:alertTime range:nil error:&error];
-    if (eventDate == nil)
-    {
-        eventDate = [NSDate date];
-    }
-    else
-    {
-        NSLog(@"%s error: %@", __FUNCTION__, error);
-    }
     
     NSLog(@"eventDate: %@ & insert to database & clear obsolete history ", eventDate);
     
