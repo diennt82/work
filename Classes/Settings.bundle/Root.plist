@@ -6,6 +6,16 @@
 	<array>
 		<dict>
 			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+			<key>Title</key>
+			<string></string>
+			<key>Key</key>
+			<string>ttttt</string>
+			<key>DefaultValue</key>
+			<false/>
+		</dict>
+		<dict>
+			<key>Type</key>
 			<string>PSGroupSpecifier</string>
 			<key>Title</key>
 			<string>Server</string>
@@ -16,9 +26,9 @@
 			<key>Title</key>
 			<string>Name</string>
 			<key>Key</key>
-			<string>name_server</string>
+			<string>name_server1</string>
 			<key>DefaultValue</key>
-			<string>https://api.hubble.in/v1</string>
+			<string></string>
 			<key>IsSecure</key>
 			<false/>
 		</dict>

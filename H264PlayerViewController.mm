@@ -103,7 +103,20 @@ double _ticks = 0;
     _isDegreeFDisplay = [userDefaults boolForKey:IS_FAHRENHEIT];
     _resolution = @"";
     
-    NSString *serverInput = [userDefaults stringForKey:@"name_server"];
+    NSString *serverInput = [userDefaults stringForKey:@"name_server1"];
+    
+    if([userDefaults boolForKey:@"DebugOpt"] == YES)
+    {
+        if ([serverInput isEqualToString:@""])
+        {
+            serverInput = [userDefaults stringForKey:@"name_server"];
+        }
+    }
+    else
+    {
+        serverInput = [userDefaults stringForKey:@"name_server"];
+    }
+    
     serverInput = [serverInput substringToIndex:serverInput.length - 3];
     self.talkbackRemoteServer = [serverInput stringByReplacingOccurrencesOfString:@"api" withString:@"talkback"];
     self.talkbackRemoteServer = [_talkbackRemoteServer stringByReplacingOccurrencesOfString:@"https" withString:@"http"];
