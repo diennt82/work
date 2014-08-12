@@ -100,7 +100,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+#if 0
     self.navigationController.navigationBarHidden = YES;
+#endif
     
     NSArray *paths = NSSearchPathForDirectoriesInDomains
     (NSDocumentDirectory, NSUserDomainMask, YES);
@@ -122,8 +124,9 @@
     [super viewWillAppear:animated];
     
     NSLog(@"%s", __FUNCTION__);
-    
+#if 0
     self.navigationController.navigationBarHidden = YES;
+#endif
     self.ibTableListCamera.delegate = self;
 
     //[self updateBottomButton];

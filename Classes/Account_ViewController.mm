@@ -84,8 +84,9 @@
 {
     [super viewWillAppear:animated];
     NSLog(@"AccountVC -viewWillAppear --");
-    
+#if 0
     self.navigationController.navigationBarHidden = YES;
+#endif
     [self loadUserData];
 }
 

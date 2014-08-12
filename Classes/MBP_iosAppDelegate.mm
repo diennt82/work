@@ -123,7 +123,7 @@
                                                           [UIFont fontWithName:@"HelveticaNeue-Light" size:17], NSFontAttributeName,
                                                           nil]
                                                 forState:UIControlStateNormal];
-    [[UILabel appearanceWhenContainedIn:[UITableViewHeaderFooterView class], nil] setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:17]];
+    //[[UILabel appearanceWhenContainedIn:[UITableViewHeaderFooterView class], nil] setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:17]];
     // Check condition use STUN or not
     [self registerDefaultsFromSettingsBundle];
     

@@ -135,6 +135,7 @@
     //[self.view addSubview:self.accountVC.view];
     
     [self setViewControllers:@[_camerasVC, _settingsVC, _accountVC]];
+    self.tabBar.hidden = YES;
     
     cameraBarButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"camera", nil, [NSBundle mainBundle], @"Camera", nil)
                                                        style:UIBarButtonItemStylePlain
@@ -204,7 +205,7 @@
     self.navigationController.navigationBarHidden = NO;
     self.navigationItem.title = @"";
     [self selectMenuCamera];
-    self.camerasVC.ibTableListCamera.contentInset = UIEdgeInsetsMake(30, 0, 64, 0);
+    //self.camerasVC.ibTableListCamera.contentInset = UIEdgeInsetsMake(30, 0, 64, 0);
 
     if (!_isFirttime) //revert
     {
