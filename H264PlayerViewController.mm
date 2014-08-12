@@ -107,8 +107,9 @@ double _ticks = 0;
     serverInput = [serverInput substringToIndex:serverInput.length - 3];
     self.talkbackRemoteServer = [serverInput stringByReplacingOccurrencesOfString:@"api" withString:@"talkback"];
     self.talkbackRemoteServer = [_talkbackRemoteServer stringByReplacingOccurrencesOfString:@"https" withString:@"http"];
-    
+#if 0
     self.remoteViewTimeout = [userDefaults boolForKey:@"remote_view_timeout"];
+#endif
     self.disconnectAlert   = [userDefaults boolForKey:@"disconnect_alert"];
 
     if([userDefaults boolForKey:@"DebugOpt"] == YES)
@@ -953,10 +954,14 @@ double _ticks = 0;
                                                                      withValue:nil];
                     self.timeStartingStageTwo = 0;
                     
+#if 1
+                    [self reCreateTimoutViewCamera];
+#else
                     if (_remoteViewTimeout == YES)
                     {
                         [self reCreateTimoutViewCamera];
                     }
+#endif
                 }
                 
                 self.imageViewStreamer.userInteractionEnabled = YES;
@@ -2175,6 +2180,14 @@ double _ticks = 0;
     
     NSLog(@"self.currentMediaStatus: %d", self.currentMediaStatus);
     
+    if (UIDeviceOrientationIsLandscape([UIDevice currentDevice].orientation) ||
+        UIInterfaceOrientationIsLandscape([UIApplication sharedApplication].statusBarOrientation))
+    {
+        if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]) {
+            objc_msgSend([UIDevice currentDevice], @selector(setOrientation:),   UIDeviceOrientationPortrait);
+        }
+    }
+    
     userWantToCancel = TRUE;
     self.selectedChannel.stopStreaming = TRUE;
     
@@ -2192,6 +2205,9 @@ double _ticks = 0;
 
 - (void)goBack
 {
+    [MBProgressHUD showHUDAddedTo:self.view animated:NO];
+    NSLog(@" %s self.currentMediaStatus: %d retaintCount:%d ",__FUNCTION__, self.currentMediaStatus, self.retainCount);
+    
     self.walkieTalkieEnabled = NO;
     self.enablePTT = NO;
     if (self.selectedChannel.profile.isInLocal)
@@ -2206,9 +2222,13 @@ double _ticks = 0;
     // Release the instance here - since we are going to camera list
     MediaPlayer::release();
     
-    [MBProgressHUD showHUDAddedTo:self.view animated:NO];
-    
-    NSLog(@" %s self.currentMediaStatus: %d retaintCount:%d ",__FUNCTION__, self.currentMediaStatus, self.retainCount);
+    if (UIDeviceOrientationIsLandscape([UIDevice currentDevice].orientation) ||
+        UIInterfaceOrientationIsLandscape([UIApplication sharedApplication].statusBarOrientation))
+    {
+        if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]) {
+            objc_msgSend([UIDevice currentDevice], @selector(setOrientation:),   UIDeviceOrientationPortrait);
+        }
+    }
     
     userWantToCancel = TRUE;
     self.selectedChannel.stopStreaming = TRUE;
@@ -4717,16 +4737,6 @@ double _ticks = 0;
             {
                 case 0: // View other camera
                     self.view.userInteractionEnabled = NO;
-                    
-                    if ([[UIDevice currentDevice] orientation] == UIDeviceOrientationLandscapeLeft ||
-                        [[UIDevice currentDevice] orientation] == UIDeviceOrientationLandscapeRight ||
-                        [UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeLeft ||
-                        [UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeRight)
-                    {
-                        if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]) {
-                            objc_msgSend([UIDevice currentDevice], @selector(setOrientation:),   UIDeviceOrientationPortrait);
-                        }
-                    }
                     
                     //stop stream
                     if (_timerStopStreamAfter30s && [_timerStopStreamAfter30s isValid])

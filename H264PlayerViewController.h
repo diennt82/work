@@ -299,7 +299,9 @@
 @property (nonatomic, retain) NSString *talkbackRemoteServer;
 //check if shared cam is connected to macOS
 @property (nonatomic, retain) NSString *sharedCamConnectedTo;
+#if 0
 @property (nonatomic) BOOL remoteViewTimeout;
+#endif
 @property (nonatomic) BOOL disconnectAlert;
 @property (nonatomic) BOOL returnFromPlayback;
 @property (nonatomic) BOOL shouldUpdateHorizeMenu;
