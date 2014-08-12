@@ -87,7 +87,7 @@
     [super viewDidAppear:animated];
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSString * camInView = (NSString*)[userDefaults objectForKey:CAM_IN_VEW];
+    NSString *camInView = (NSString*)[userDefaults objectForKey:CAM_IN_VEW];
     if ( camInView ) {
         // We have a camera to view... so show it!
         NSString *camRegID = [userDefaults objectForKey:REG_ID];
@@ -230,7 +230,7 @@
             }];
         }
         else {
-            AddCameraViewController *addCameraVC = [[AddCameraViewController alloc] init];
+            AddCameraViewController *addCameraVC = [[AddCameraViewController alloc] initWithNibName:@"AddCameraViewController" bundle:nil];
             addCameraVC.delegate = self;
             [self presentViewController:addCameraVC animated:YES completion:nil];
         }
