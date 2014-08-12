@@ -8,11 +8,9 @@
 
 #define POPUP_WIDTH_IPHONE  290
 #define POPUP_WIDTH_IPAD    350
-#define POPUP_HEIGHT        210
+#define POPUP_HEIGHT        420
 
 #import "HelpWindowPopup.h"
-#import "define.h"
-#import "UIFont+Hubble.h"
 
 @interface MBP_PopupOverlayWindow : UIWindow
 @property (nonatomic, retain) HelpWindowPopup   *dialog;
@@ -68,6 +66,8 @@
     [_overlayWindow release];
     [_title release];
     [_message release];
+    [_scrollView release];
+    [_contentView release];
     [super dealloc];
 }
 
@@ -114,28 +114,34 @@
     [closeButton addTarget:self action:@selector(handleCloseButton:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:closeButton];
     
-    CGRect rect = CGRectMake(0, headerHeight, self.frame.size.width, self.frame.size.height - headerHeight - 45);
-    UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:rect];
-    [scrollView setBackgroundColor:[UIColor whiteColor]];
-    [self addSubview:scrollView];
     
-    UILabel *contentLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 10, self.frame.size.width - 20, 0)];
+    CGRect rect = CGRectMake(0, headerHeight, self.frame.size.width, self.frame.size.height - headerHeight - 45);
+    _contentView = [[UIView alloc] initWithFrame:rect];
+    [self.contentView setBackgroundColor:[UIColor whiteColor]];
+    [self addSubview:self.contentView];
+    
+    rect = self.contentView.frame;
+    rect.origin.y = 0;
+    _scrollView = [[UIScrollView alloc] initWithFrame:rect];
+    [self.scrollView setBackgroundColor:[UIColor whiteColor]];
+    [self.contentView addSubview:self.scrollView];
+    
+    UILabel *contentLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 5, self.frame.size.width - 20, 0)];
     UIFont *font = [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:17];
     contentLabel.font = font;
-    contentLabel.textColor = [UIColor colorWithRed:(128/255.f) green:(128/255.f) blue:(128/255.f) alpha:1];
+    contentLabel.textColor = [UIColor colorWithRed:(110/255.f) green:(110/255.f) blue:(110/255.f) alpha:1];
     contentLabel.numberOfLines = 0;
     rect = contentLabel.frame;
     rect.size.height = ceilf([self calculateHeightForString:self.message withWidthFrame:contentLabel.frame.size.width andFont:font]);
     contentLabel.frame = rect;
     contentLabel.text = self.message;
-    [scrollView addSubview:contentLabel];
-    scrollView.contentSize = CGSizeMake(scrollView.frame.size.width, contentLabel.frame.size.height + 10);
+    [self.scrollView addSubview:contentLabel];
+    self.scrollView.contentSize = CGSizeMake(self.scrollView.frame.size.width, contentLabel.frame.size.height + 10);
     
     [titleLabel release];
     [contentLabel release];
     [headerView release];
     [closeButton release];
-    [scrollView release];
 }
 
 - (void)handleCloseButton:(id)sender

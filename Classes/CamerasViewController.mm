@@ -19,6 +19,7 @@
 #import "UIDeviceHardware.h"
 #import "MBP_iosViewController.h"
 #import "UIView+Custom.h"
+#import "Helps/CamerasListHelpWindowPopup.h"
 
 #define MAX_CAM_ALLOWED     4
 #define CAMERA_TAG_66       566
@@ -111,8 +112,8 @@
     strDocDirPath = [[paths objectAtIndex:0] copy];
         
     [self.ibTableListCamera setContentSize:CGSizeMake(SCREEN_WIDTH, SCREEN_HEIGHT - 69 - 45)];
-    [self.ibViewAddCamera setFrame:CGRectMake(0, SCREEN_HEIGHT - 45, 160, 45)];
-    [self.ibViewBuyCamera setFrame:CGRectMake(160, SCREEN_HEIGHT - 45, 160, 45)];
+//    [self.ibViewAddCamera setFrame:CGRectMake(0, SCREEN_HEIGHT - 45, 160, 45)];
+//    [self.ibViewBuyCamera setFrame:CGRectMake(160, SCREEN_HEIGHT - 45, 160, 45)];
     
     [self.ibAddCameraButton setImage:[UIImage imageNamed:@"add_camera_btn"] forState:UIControlStateNormal];
     [self.ibAddCameraButton setImage:[UIImage imageNamed:@"add_camera_btn_pressed"] forState:UIControlEventTouchDown];
@@ -256,6 +257,14 @@
     [self.ibTextAddCamera setTextColor:[UIColor deSelectedAddCameraTextColor]];
 }
 
+
+- (IBAction)helpButtonTouchUpInside:(id)sender
+{
+    CamerasListHelpWindowPopup *popup = [[CamerasListHelpWindowPopup alloc] initWithTitle:@"Camera Status Help"
+                                                         andMessage:@"1. Offline:\n- Your camera is OFF / LED light on the camera is OFF.\n- Please check your camera’s power status and that the ON/OFF switch is set to ON.\n- Camera is not connected to the internet.\n- Please check your router to ensure it is connected to internet.\n2. Online:\n- Camera is online and operational.\n3. Firmware Upgrade in Progress\n- Your camera is upgrading to the latest firmware version. Please do not turn the camera off during this process.\n- This upgrade may take around 3-5 minutes to complete."];
+    [popup show];
+    [popup release];
+}
 #pragma mark - Cameras Cell Delegate
 
 - (void)sendTouchSettingsActionWithRowIndex:(NSInteger)rowIdx
