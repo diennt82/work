@@ -178,24 +178,32 @@
     
     [CameraAlert reloadBlankTableIfNeeded];
     
-    NSString *serverName = nil;
+    NSString *serverName = @"https://api.hubble.in/v1";
     
     BOOL shouldUseSettingValues = [userDefaults boolForKey:@"DebugOpt"];
+    
     if (shouldUseSettingValues == YES)
     {
         NSLog(@"DEBUG ENABLED: use customized server"); 
-        serverName = [userDefaults stringForKey:@"name_server"];
-    }
-    
-    if (serverName == nil ||
-        ![serverName hasPrefix:@"http"])
-    {
-        serverName = @"https://api.hubble.in";
-    }
-    
-    if (![serverName hasSuffix:@"/v1"])
-    {
-        serverName = [serverName stringByAppendingString:@"/v1"];
+        serverName = [userDefaults stringForKey:@"name_server1"];
+        
+        if ([serverName isEqualToString:@""])
+        {
+            serverName = @"https://api.hubble.in/v1";
+        }
+        else
+        {
+            if (serverName == nil ||
+                ![serverName hasPrefix:@"http"])
+            {
+                serverName = @"https://api.hubble.in";
+            }
+            
+            if (![serverName hasSuffix:@"/v1"])
+            {
+                serverName = [serverName stringByAppendingString:@"/v1"];
+            }
+        }
     }
     
     [BMS_JSON_Communication setServerInput:serverName];
