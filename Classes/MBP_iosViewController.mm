@@ -212,9 +212,13 @@
         self.menuVC = nil;
     }
     
+#if 1
+    _menuVC = [[MenuViewController alloc] initWithCaller:self];
+#else
     _menuVC = [[MenuViewController alloc] initWithNibName:@"MenuViewController"
                                                        bundle:nil
                                              withConnDelegate:self];
+#endif
     
 	NSMutableArray * validChannels = [[NSMutableArray alloc]init ];
     

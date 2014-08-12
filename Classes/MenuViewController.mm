@@ -51,6 +51,18 @@
     
 }
 
+- (id)initWithCaller:(id<ConnectionMethodDelegate>)caller
+{
+    self = [super init];
+    
+    if (self)
+    {
+        self.menuDelegate = caller;
+    }
+    
+    return self;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
