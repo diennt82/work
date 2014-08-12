@@ -6,7 +6,6 @@
 //  Copyright (c) 2013 Smart Panda Ltd. All rights reserved.
 //
 
-#define DISABLE_VIEW_RELEASE_FLAG 0
 
 #import "MenuViewController.h"
 #import "Account_ViewController.h"
@@ -14,7 +13,7 @@
 #import "UserAccount.h"
 #import "EarlierViewController.h"
 
-@interface MenuViewController () <H264PlayerVCDelegate, UserAccountDelegate>
+@interface MenuViewController () <UserAccountDelegate, UITabBarControllerDelegate>
 {
     UIBarButtonItem *cameraBarButton;
     UIBarButtonItem *settingsBarButton;
@@ -109,23 +108,11 @@
         self.camerasVC.camChannels = self.cameras;
     }
 
-#if DISABLE_VIEW_RELEASE_FLAG
-    self.accountVC = [[Account_ViewController alloc] init];
-    
-    NSLog(@"viewDidLoad: %p, %p", self.menuDelegate, self.accountVC.mdelegate);
-    
-    UINavigationController *nav2 = [[UINavigationController alloc] initWithRootViewController:_accountVC];
-    
-    self.viewControllers = [NSArray arrayWithObjects:nav, nav2, nil];
-    
-    [nav release];
-    [nav2 release];
-#else
-    [self.view addSubview:_camerasVC.view];
+    //[self.view addSubview:_camerasVC.view];
     
     _settingsVC = [[SettingsViewController alloc] init];
     _settingsVC.parentVC = self;
-    [self.view addSubview:_settingsVC.view];
+    //[self.view addSubview:_settingsVC.view];
     
     
     self.accountVC = [[Account_ViewController alloc] init];
@@ -133,7 +120,10 @@
     
     NSLog(@"MenuVC - viewDidLoad: %p, %p", self.menuDelegate, self.accountVC.parentVC);
     
-    [self.view addSubview:self.accountVC.view];
+    //[self.view addSubview:self.accountVC.view];
+    
+    [self setViewControllers:@[_camerasVC, _settingsVC, _accountVC]];
+    
     cameraBarButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"camera", nil, [NSBundle mainBundle], @"Camera", nil)
                                                        style:UIBarButtonItemStylePlain
                                                       target:self
@@ -153,7 +143,6 @@
     //[self.navigationItem.rightBarButtonItems[1] setEnabled:NO];
     
     self.navigationItem.leftBarButtonItem.enabled = YES;
-#endif
 }
 
 - (void)resetFontTextNormalBarButton
@@ -164,26 +153,38 @@
 }
 - (void)selectMenuCamera
 {
+#if 1
+    [self setSelectedIndex:0];
+#else
     [_camerasVC.view removeFromSuperview];
     [self resetFontTextNormalBarButton];
     [cameraBarButton setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont bold18Font], NSFontAttributeName,  [UIColor blackColor], NSForegroundColorAttributeName,nil] forState:UIControlStateNormal];
     [self.view addSubview:_camerasVC.view];
+#endif
 }
 - (void)selectSettings
 {
+#if 1
+    [self setSelectedIndex:1];
+#else
     [_settingsVC.view removeFromSuperview];
     [self resetFontTextNormalBarButton];
     [settingsBarButton setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont bold18Font], NSFontAttributeName,  [UIColor blackColor], NSForegroundColorAttributeName,nil] forState:UIControlStateNormal];
     _settingsVC.parentVC = self;
     [self.view addSubview:_settingsVC.view];
+#endif
 }
 - (void)selectAccountSetting
 {
+#if 1
+    [self setSelectedIndex:2];
+#else
     [self.accountVC.view removeFromSuperview];
     [self.view addSubview:self.accountVC.view];
     [self resetFontTextNormalBarButton];
     [accountBarButton setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont bold18Font], NSFontAttributeName,  [UIColor blackColor], NSForegroundColorAttributeName,nil] forState:UIControlStateNormal];
     self.accountVC.parentVC = self;
+#endif
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -359,11 +360,6 @@
             }
         }
     }
-}
-
-- (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item
-{
-    self.title = item.title;
 }
 
 - (void)refreshCameraList
@@ -589,6 +585,20 @@
     {
         [_camerasVC.view removeFromSuperview];
     }
+}
+
+#pragma mark - UITabBarDelegate
+
+- (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item
+{
+    self.title = item.title;
+}
+
+#pragma mark - UITabBarControllerDelegate
+
+- (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController
+{
+    NSLog(@"viewController:%@", viewController);
 }
 
 - (void)didReceiveMemoryWarning

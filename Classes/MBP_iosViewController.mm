@@ -237,6 +237,9 @@
 	self.menuVC.cameras = validChannels;
     self.menuVC.camerasVC.camChannels = validChannels;
     
+#if 1
+    [self.navigationController pushViewController:_menuVC animated:NO];
+#else
     EarlierNavigationController *nav = [[EarlierNavigationController alloc] initWithRootViewController:self.menuVC];
     
     if (self.presentedViewController) {
@@ -250,6 +253,7 @@
     
     NSLog(@"MBP_iosVC - Showing cameralist?  %d", self.menuVC.isFirttime);
     [nav release];
+#endif
     [validChannels release];
 }
 

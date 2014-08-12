@@ -21,7 +21,7 @@
 
 @end
 
-@interface MenuViewController : UIViewController
+@interface MenuViewController : UITabBarController
 {
     SettingsViewController *_settingsVC;
 }

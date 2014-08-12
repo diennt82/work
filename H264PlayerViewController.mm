@@ -2213,7 +2213,11 @@ double _ticks = 0;
     
     self.selectedChannel.profile.isSelected = FALSE;
     
+#if 1
+    [self.navigationController popViewControllerAnimated:YES];
+#else
     [self.navigationController popToRootViewControllerAnimated:YES];
+#endif
 }
 
 - (void)goBack
@@ -2255,7 +2259,11 @@ double _ticks = 0;
     
     self.selectedChannel.profile.isSelected = FALSE;
     
+#if 1
+    [self.navigationController popViewControllerAnimated:YES];
+#else
     [self.navigationController popToRootViewControllerAnimated:YES];
+#endif
 }
 
 -(void) cleanUpDirectionTimers
