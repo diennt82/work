@@ -167,6 +167,8 @@
         self.dateFormatterDevice = [[NSDateFormatter alloc] init];
         [_dateFormatterDevice setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
         [_dateFormatterDevice setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+        self.dateFormatterDevice.calendar = [[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar] autorelease];
+        self.dateFormatterDevice.locale = [[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"] autorelease];
     }
     
     [self performSelectorInBackground:@selector(getEventFromDbFirstTime:) withObject:camChannel];
@@ -1552,7 +1554,7 @@
     [dateFormater release];
 #endif
     
-    //NSLog(@"%s eventDate:%@, time_stamp:%@", __FUNCTION__, eventDate, eventInfo.time_stamp);
+    NSLog(@"%s eventDate:%@, time_stamp:%@", __FUNCTION__, eventDate, eventInfo.time_stamp);
     
     NSDateFormatter* df_local = [[NSDateFormatter alloc] init] ;
 #if 0
@@ -1579,6 +1581,7 @@
         {
             df_local.dateFormat = @"H:mm";
         }
+        
         str = [df_local stringFromDate:eventDate];
     }
     else if ([self isEqualToDateIgnoringTime:yesterday vsDate:eventDate])
@@ -1593,12 +1596,14 @@
         {
             df_local.dateFormat = @"H:mm";
         }
+        
         str  = [NSString stringWithFormat:@"%@ Yesterday",[df_local stringFromDate:eventDate]];
     }
     else
     {
         df_local.dateFormat = @"d";
         NSString *strDate = [df_local stringFromDate:eventDate];
+        NSLog(@"%s strDate base on df_local:%@", __FUNCTION__, strDate);
         
         df_local.dateFormat = @"MMM";
         NSString *strM = [df_local stringFromDate:eventDate];
@@ -1614,7 +1619,7 @@
         
         NSString *strTime = [df_local stringFromDate:eventDate];
         int m = [strDate intValue] % 10;
-        str = [NSString stringWithFormat:@"%@, %@%@ %@",strTime,strDate,[aryDatePrefix objectAtIndex:((m > 10 && m < 20) ? 0 : (m % 10))],strM];
+        str = [NSString stringWithFormat:@"%@, %@%@ %@", strTime, strDate, [aryDatePrefix objectAtIndex:((m > 10 && m < 20) ? 0 : (m % 10))],strM];
         //cell.eventTimeLabel.text = [df_local stringFromDate:eventDate];
     }
     
