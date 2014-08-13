@@ -951,7 +951,7 @@ typedef enum _WAIT_FOR_UPDATING {
     self.navigationController.view.userInteractionEnabled = YES;
     
     [[[[UIAlertView alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"alert_title_remove_camera", nil, [NSBundle mainBundle], @"Remove Camera", nil)
-                                 message:NSLocalizedString(@"Server_error_1", @"")
+                                 message:NSLocalizedStringWithDefaultValue(@"Server_error_1", nil, [NSBundle mainBundle], @"Server is unreachable. Please try again later.", nil)
                                 delegate:nil
                        cancelButtonTitle:nil
                        otherButtonTitles:NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil),
