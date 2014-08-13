@@ -329,10 +329,6 @@
 		8B29A00918AF500900D36BE5 /* video_action_temp@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299ECE18AF500900D36BE5 /* video_action_temp@2x.png */; };
 		8B29A00A18AF500900D36BE5 /* video_action_temp_pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299ECF18AF500900D36BE5 /* video_action_temp_pressed.png */; };
 		8B29A00B18AF500900D36BE5 /* video_action_temp_pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299ED018AF500900D36BE5 /* video_action_temp_pressed@2x.png */; };
-		8B29A00C18AF500900D36BE5 /* video_action_video.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299ED118AF500900D36BE5 /* video_action_video.png */; };
-		8B29A00D18AF500900D36BE5 /* video_action_video@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299ED218AF500900D36BE5 /* video_action_video@2x.png */; };
-		8B29A00E18AF500900D36BE5 /* video_action_video_pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299ED318AF500900D36BE5 /* video_action_video_pressed.png */; };
-		8B29A00F18AF500900D36BE5 /* video_action_video_pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299ED418AF500900D36BE5 /* video_action_video_pressed@2x.png */; };
 		8B29A01018AF500900D36BE5 /* checkbox.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299ED618AF500900D36BE5 /* checkbox.png */; };
 		8B29A01118AF500900D36BE5 /* checkbox@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299ED718AF500900D36BE5 /* checkbox@2x.png */; };
 		8B29A01218AF500900D36BE5 /* checkbox_active.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299ED818AF500900D36BE5 /* checkbox_active.png */; };
@@ -1165,10 +1161,6 @@
 		8B299ECE18AF500900D36BE5 /* video_action_temp@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "video_action_temp@2x.png"; sourceTree = "<group>"; };
 		8B299ECF18AF500900D36BE5 /* video_action_temp_pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = video_action_temp_pressed.png; sourceTree = "<group>"; };
 		8B299ED018AF500900D36BE5 /* video_action_temp_pressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "video_action_temp_pressed@2x.png"; sourceTree = "<group>"; };
-		8B299ED118AF500900D36BE5 /* video_action_video.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = video_action_video.png; sourceTree = "<group>"; };
-		8B299ED218AF500900D36BE5 /* video_action_video@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "video_action_video@2x.png"; sourceTree = "<group>"; };
-		8B299ED318AF500900D36BE5 /* video_action_video_pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = video_action_video_pressed.png; sourceTree = "<group>"; };
-		8B299ED418AF500900D36BE5 /* video_action_video_pressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "video_action_video_pressed@2x.png"; sourceTree = "<group>"; };
 		8B299ED618AF500900D36BE5 /* checkbox.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checkbox.png; sourceTree = "<group>"; };
 		8B299ED718AF500900D36BE5 /* checkbox@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkbox@2x.png"; sourceTree = "<group>"; };
 		8B299ED818AF500900D36BE5 /* checkbox_active.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checkbox_active.png; sourceTree = "<group>"; };
@@ -2429,10 +2421,6 @@
 				8B299ECE18AF500900D36BE5 /* video_action_temp@2x.png */,
 				8B299ECF18AF500900D36BE5 /* video_action_temp_pressed.png */,
 				8B299ED018AF500900D36BE5 /* video_action_temp_pressed@2x.png */,
-				8B299ED118AF500900D36BE5 /* video_action_video.png */,
-				8B299ED218AF500900D36BE5 /* video_action_video@2x.png */,
-				8B299ED318AF500900D36BE5 /* video_action_video_pressed.png */,
-				8B299ED418AF500900D36BE5 /* video_action_video_pressed@2x.png */,
 				8B933ED319111EBC00A97F12 /* video_action_photo_pressed@2x.png */,
 				8B933ED419111EBC00A97F12 /* video_action_photo@2x.png */,
 				8B933ED519111EBC00A97F12 /* video_action_photo.png */,
@@ -3824,7 +3812,6 @@
 				8B948E231921EE62004FAD96 /* camera_ble3.png in Resources */,
 				8BA7B093187FC87A00A23BD6 /* Step09ViewController_iPad.xib in Resources */,
 				8B29A07618AF500A00D36BE5 /* video_handle@2x.png in Resources */,
-				8B29A00C18AF500900D36BE5 /* video_action_video.png in Resources */,
 				A1B1E7EB18E9135800F076B6 /* online@2x.png in Resources */,
 				5EBA459319405BEA00695155 /* Step_03_ViewController.xib in Resources */,
 				8B95078218C9960D006D4945 /* camera_2.png in Resources */,
@@ -3953,7 +3940,6 @@
 				A1B1E7DA18E9135800F076B6 /* camera_settings_pressed.png in Resources */,
 				8B29A05618AF500A00D36BE5 /* settings_seperator@2x.png in Resources */,
 				8B9899AE1859771800AC3852 /* CameraNameViewController.xib in Resources */,
-				8B29A00D18AF500900D36BE5 /* video_action_video@2x.png in Resources */,
 				8B9507BB18C9960D006D4945 /* setup_clock@2x.png in Resources */,
 				8BA17EFC18B73E2400129FE7 /* RegistrationViewController_35.xib in Resources */,
 				8B29A04B18AF500A00D36BE5 /* settings_circle.png in Resources */,
@@ -3979,7 +3965,6 @@
 				A1ABF1AA187537AD0014FCB4 /* NetworkInfoToCamera_VController.xib in Resources */,
 				8B299F6018AF500900D36BE5 /* alert_play_pressed@2x.png in Resources */,
 				8B299FC118AF500900D36BE5 /* photo_grey_pressed.png in Resources */,
-				8B29A00F18AF500900D36BE5 /* video_action_video_pressed@2x.png in Resources */,
 				5EBA45A519405BEA00695155 /* Step_11_ViewController_ipad.xib in Resources */,
 				A1B1E7C618E9135800F076B6 /* add_camera_btn.png in Resources */,
 				A19778ED181E3316007C3CA7 /* ZoneViewController_ipad.xib in Resources */,
@@ -4004,7 +3989,6 @@
 				5EBA458E19405BEA00695155 /* FWUpgradeView_land.xib in Resources */,
 				8B29A07918AF500A00D36BE5 /* video_overlay_del.png in Resources */,
 				8BA7F2811851C57200BE0145 /* blink11hd360p.sdp in Resources */,
-				8B29A00E18AF500900D36BE5 /* video_action_video_pressed.png in Resources */,
 				8BC0A0461844B31700A5FD52 /* mbp_icon57x57.png in Resources */,
 				8B299F9618AF500900D36BE5 /* camera_action_video_stop_pressed_land@2x.png in Resources */,
 				8B299F8A18AF500900D36BE5 /* camera_action_photo_pressed_land@2x.png in Resources */,
