@@ -61,30 +61,17 @@
     
     NSLog(@"%s Camera model:%d", __FUNCTION__, _cameraType);
     
-#if 0
-    if (_cameraType == SETUP_CAMERA_FOCUS73)
+    UIImageView *imageView = (UIImageView *)[self.view viewWithTag:585];
+    imageView.animationImages = @[[UIImage imageNamed:@"setup_camera_led1"],
+                                  [UIImage imageNamed:@"setup_camera_led2"]];
+    imageView.animationDuration = 2.f;
+    imageView.animationRepeatCount = 0;
+    
+    [imageView startAnimating];
+    
+    if (_cameraType == BLUETOOTH_SETUP || _cameraType == SETUP_CAMERA_FOCUS73)
     {
-        /*
-         * TODO: UI for focus73 here. Implementing when it is required!
-         */
-        //self.viewInstructionFocus73.hidden = NO;
-        NSLog(@"%s - isOnBLE: %d", __FUNCTION__, [BLEConnectionManager getInstanceBLE].isOnBLE);
-    }
-    else
-#endif
-    {
-        UIImageView *imageView = (UIImageView *)[self.view viewWithTag:585];
-        imageView.animationImages = @[[UIImage imageNamed:@"setup_camera_led1"],
-                                      [UIImage imageNamed:@"setup_camera_led2"]];
-        imageView.animationDuration = 2.f;
-        imageView.animationRepeatCount = 0;
-        
-        [imageView startAnimating];
-        
-        if (_cameraType == BLUETOOTH_SETUP || _cameraType == SETUP_CAMERA_FOCUS73)
-        {
-            NSLog(@"%s- isOnBLE: %d", __FUNCTION__, [BLEConnectionManager getInstanceBLE].isOnBLE);
-        }
+        NSLog(@"%s- isOnBLE: %d", __FUNCTION__, [BLEConnectionManager getInstanceBLE].isOnBLE);
     }
 }
 
@@ -118,29 +105,6 @@
     }
 }
 
-- (void)presentModallyOn:(UIViewController *)parent
-{
-    
-    MBPNavController *    navController;
-    
-    //setup nav controller
-    navController= [[[MBPNavController alloc]initWithRootViewController:self] autorelease];
-    
-    
-    // Create a navigation controller with us as its root.
-    assert(navController != nil);
-    
-    
-    
-    // Present the navigation controller on the specified parent
-    // view controller.
-    
-    //[parent presentModalViewController:navController animated:NO];
-    [parent presentViewController:navController animated:NO completion:^{}];
-}
-
-
-
 #pragma mark - 
 #pragma mark Actions
 
@@ -159,59 +123,25 @@
                                                     withAction:@"Touch up inside continue button"
                                                      withLabel:@"Continue"
                                                      withValue:[NSNumber numberWithInteger:_cameraType]];
-    
-    if (_cameraType == BLUETOOTH_SETUP || _cameraType == SETUP_CAMERA_FOCUS73)
-    {
-        NSLog(@"Load step Create BLE Connection");
-        //Load the next xib
-        CreateBLEConnection_VController *step03ViewController = nil;
-        
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
-            step03ViewController = [[CreateBLEConnection_VController alloc]
-                                    initWithNibName:@"CreateBLEConnection_VController_iPad"
-                                    bundle:nil];
-        }
-        else
-        {
-            step03ViewController = [[CreateBLEConnection_VController alloc] initWithNibName:@"CreateBLEConnection_VController"
-                                                                                     bundle:nil];
-        }
-        
-        step03ViewController.cameraType = _cameraType;
-        [self.navigationController pushViewController:step03ViewController animated:NO];
-        
-        [step03ViewController release];
-    }
-    /*
-     * TODO: Enable #if 0 below & change condition above if needed Bonjour on Focus73
+    /**
+     * 1. nil == sender: --> Forcing to setup with WIFI from somewhere in BLE flow steps.
+     * 2. nil != sender: --> Using normal flow.
      */
-#if 0
-    else if (_cameraType == SETUP_CAMERA_FOCUS73)
+    
+    if (!sender)
     {
-        // Show Focus73 list.
-        Focus73TableViewController *focus73 = [[Focus73TableViewController alloc] init];
-        [self.navigationController pushViewController:focus73 animated:NO];
-        [focus73 release];
+        [self moveToNextWifiStep];
     }
-#endif
     else
     {
-        NSLog(@"Load step 3 Concurrent");
-        Step_03_ViewController *step03ViewController = nil;
-        
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        if (_cameraType == BLUETOOTH_SETUP || _cameraType == SETUP_CAMERA_FOCUS73)
         {
-            step03ViewController = [[Step_03_ViewController alloc] initWithNibName:@"Step_03_ViewController_ipad" bundle:nil];
+            [self moveToNextBLEStep];
         }
         else
         {
-            step03ViewController = [[Step_03_ViewController alloc] initWithNibName:@"Step_03_ViewController" bundle:nil];
+            [self moveToNextWifiStep];
         }
-        step03ViewController.delegate = self;
-        [self.navigationController pushViewController:step03ViewController animated:NO];
-        
-        [step03ViewController release];
     }
 }
 
@@ -235,88 +165,6 @@
     }];
 }
 
-- (IBAction)handleButtonPress:(id)sender
-{
-    //int tag = ((UIButton*)sender).tag;
-    
-    //if (tag == CONTINUE_BTN_TAG)
-    {
-        
-#if 1
-        
-        NSLog(@"Load step 3");
-        //Load the next xib
-        Step_03_ViewController *step03ViewController = nil;
-        
-        
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
-            
-            
-            step03ViewController = [[Step_03_ViewController alloc]initWithNibName:@"Step_03_ViewController_ipad" bundle:nil];
-            
-        }
-        else
-        {
-            step03ViewController = [[Step_03_ViewController alloc]
-                                    initWithNibName:@"Step_03_ViewController" bundle:nil];
-            
-        }
-        
-        
-        
-        
-        
-        [self.navigationController pushViewController:step03ViewController animated:NO];
-        
-        [step03ViewController release];
-        
-        
-#else // DBG - TEST view layout ..
-        
-        
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        
-
-        [userDefaults setObject:@"11:22:33:44:55:66" forKey:@"CameraMacWithQuote"];
-        [userDefaults synchronize];
-       
-        
-        
-        //Load step 10
-        NSLog(@"Load Step 10");
-        //Load the next xib
-        Step_10_ViewController *step10ViewController = nil;
-        
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
-            
-            step10ViewController = [[Step_10_ViewController alloc]
-                                    initWithNibName:@"Step_10_ViewController_ipad" bundle:nil];
-            
-        }
-        else
-        {
-            
-            step10ViewController = [[Step_10_ViewController alloc]
-                                    initWithNibName:@"Step_10_ViewController" bundle:nil];
-            
-        }
-        
-        
-        
-        
-        [self.navigationController pushViewController:step10ViewController animated:NO];
-        [step10ViewController release];
-
-#endif
-        
-    }
-    
-    
-}
-
-
 #pragma  mark -
 - (UIImage *)imageWithNameString:(NSString *)nameString scaledToSize:(CGSize)newSize
 {
@@ -339,4 +187,66 @@
 - (void)goBackCameralist {
     [self hubbleItemAction:nil];
 }
+
+- (void)moveToNextWifiStep
+{
+    NSLog(@"Load step 3 Concurrent");
+    Step_03_ViewController *step03ViewController = nil;
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        step03ViewController = [[Step_03_ViewController alloc] initWithNibName:@"Step_03_ViewController_ipad" bundle:nil];
+    }
+    else
+    {
+        step03ViewController = [[Step_03_ViewController alloc] initWithNibName:@"Step_03_ViewController" bundle:nil];
+    }
+    
+    step03ViewController.delegate = self;
+    [self.navigationController pushViewController:step03ViewController animated:NO];
+    
+    [step03ViewController release];
+}
+
+- (void)moveToNextBLEStep
+{
+    NSLog(@"Load step Create BLE Connection");
+    //Load the next xib
+    CreateBLEConnection_VController *step03ViewController = nil;
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        step03ViewController = [[CreateBLEConnection_VController alloc]
+                                initWithNibName:@"CreateBLEConnection_VController_iPad"
+                                bundle:nil];
+    }
+    else
+    {
+        step03ViewController = [[CreateBLEConnection_VController alloc] initWithNibName:@"CreateBLEConnection_VController"
+                                                                                 bundle:nil];
+    }
+    
+    step03ViewController.cameraType = _cameraType;
+    [self.navigationController pushViewController:step03ViewController animated:NO];
+    
+    [step03ViewController release];
+}
+
 @end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

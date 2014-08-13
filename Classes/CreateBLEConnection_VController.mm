@@ -14,8 +14,10 @@
 #import "Step_04_ViewController.h"
 #import "MBProgressHUD.h"
 #import "define.h"
+#import "Step_02_ViewController.h"
 
-#define BTN_CONTINUE_TAG    599
+#define BTN_RETRY_TAG       599
+#define BTN_SETUP_WIFI      699
 #define BLE_TIMEOUT_PROCESS 1.5*60
 #define SETUP_UNKNOW        0
 #define SETUP_BLE           1
@@ -24,7 +26,6 @@
 @interface CreateBLEConnection_VController () <CustomIOS7AlertViewDelegate, BonjourDelegate>
 
 @property (retain, nonatomic) IBOutlet UIButton *btnConnect;
-
 @property (retain, nonatomic) IBOutlet UITableViewCell *searchAgainCell;
 @property (retain, nonatomic) IBOutlet UIView *viewError;
 @property (retain, nonatomic) IBOutlet UIView *viewPairNDetecting;
@@ -34,7 +35,7 @@
 @property (retain, nonatomic) NSTimer *timerTimeoutConnectBLE;
 @property (retain, nonatomic) NSTimer *timerScanCameraBLEDone;
 @property (nonatomic) BOOL shouldTimeoutProcessing;
-@property (nonatomic, retain) UIButton *btnContinue;
+@property (nonatomic, retain) UIButton *btnRetry;
 @property (nonatomic) BOOL rescanFlag;
 @property (nonatomic, retain) UIView *viewSearching;
 @property (nonatomic) BOOL isNotFirstTime;
@@ -43,12 +44,13 @@
 @property (nonatomic, retain) CamProfile *selectedCamProfile;
 @property (retain, nonatomic) NSThread *threadBonjour;
 @property (nonatomic) NSInteger setupType;
+@property (nonatomic) BOOL isBackPress;
+@property (nonatomic, retain) UIButton *btnSetupWithWifi;
 
 @end
 
 @implementation CreateBLEConnection_VController
 
-@synthesize  inProgress;
 @synthesize  homeWifiSSID;
 @synthesize cameraName = _cameraName;
 @synthesize cameraMac = _cameraMac;
@@ -58,8 +60,6 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
-        
-        showProgressNextTime= FALSE;
     }
     return self;
 }
@@ -82,11 +82,19 @@
     [self.btnConnect setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
     [self.btnConnect setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
     self.btnConnect.enabled = NO;
+    self.btnSetupWithWifi.titleLabel.text = NSLocalizedString(@"continue", @"Continue");
     
-    self.btnContinue = (UIButton *)[_viewError viewWithTag:BTN_CONTINUE_TAG];
-    [self.btnContinue setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
-    [self.btnContinue setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
-    [self.btnContinue addTarget:self action:@selector(btnContinueTouchUpInsideAction:) forControlEvents:UIControlEventTouchUpInside];
+    self.btnRetry = (UIButton *)[_viewError viewWithTag:BTN_RETRY_TAG];
+    [self.btnRetry setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
+    [self.btnRetry setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
+    [self.btnRetry addTarget:self action:@selector(btnRetryTouchUpInsideAction:) forControlEvents:UIControlEventTouchUpInside];
+    self.btnRetry.titleLabel.text = NSLocalizedString(@"retry_setup_with_ble", @"Re-try setup with Bluetooth");
+    
+    self.btnSetupWithWifi = (UIButton *)[_viewError viewWithTag:BTN_SETUP_WIFI];
+    [self.btnSetupWithWifi setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
+    [self.btnSetupWithWifi setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
+    [self.btnSetupWithWifi addTarget:self action:@selector(btnSetupWithWifiAction:) forControlEvents:UIControlEventTouchUpInside];
+    self.btnSetupWithWifi.titleLabel.text = NSLocalizedString(@"setup_with_wifi", @"Setup with WIFI");
     
     self.currentBLEList = [[NSMutableArray alloc] init];
     
@@ -184,7 +192,6 @@
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
-            
             step04ViewController = [[Step_04_ViewController alloc]
                                     initWithNibName:@"Step_04_ViewController_ipad" bundle:nil];
         }
@@ -219,9 +226,10 @@
     }
 }
 
-- (IBAction)btnContinueTouchUpInsideAction:(id)sender
+- (IBAction)btnRetryTouchUpInsideAction:(id)sender
 {
-    NSLog(@"CreateBLE VC - btnContinueTouchUpInsideAction - refreshCamBLE");
+    NSLog(@"%s", __FUNCTION__);
+    
     [self.viewError removeFromSuperview];
     self.shouldTimeoutProcessing = FALSE;
     self.setupType = SETUP_UNKNOW;
@@ -234,11 +242,29 @@
     }
 }
 
+- (void)btnSetupWithWifiAction:(id)sender
+{
+    NSLog(@"%s", __FUNCTION__);
+    
+    id aViewController = self.navigationController.viewControllers[0];
+    
+    [self.navigationController popToRootViewControllerAnimated:NO];
+    
+    if ([aViewController isKindOfClass:[Step_02_ViewController class]])
+    {
+        [((Step_02_ViewController *)aViewController) btnContinueTouchUpInsideAction:nil];
+    }
+    else
+    {
+        NSLog(@"%s aViewController:%@", __FUNCTION__, aViewController);
+    }
+}
+
 - (void)hubbleItemAction:(id)sender
 {
     _isBackPress = YES;
     ConnectionState stateConnectBLE = [BLEConnectionManager getInstanceBLE].state;
-    NSLog(@"CreateBLE VC - hubbleItemAction - stateConnectBLE: %d", stateConnectBLE);
+    NSLog(@"%s - stateConnectBLE: %d", __FUNCTION__, stateConnectBLE);
     
     if (_cameraType == SETUP_CAMERA_FOCUS73)
     {
@@ -456,15 +482,6 @@
                                                                   repeats:NO];
 }
 
-- (void)checkConnectionToCamera:(NSTimer *)expired // just clear waring
-{
-    if (expired != nil)
-    {
-        [expired invalidate];
-        expired = nil;
-    }
-}
-
 - (void)scanCameraBLEDone
 {
     NSLog(@"%s - task_cancelled: %d, - _currentBLEList.count: %d, - shouldTimeoutProcessing: %d, isMT:%d", __FUNCTION__, task_cancelled, _currentBLEList.count, _shouldTimeoutProcessing, [NSThread currentThread].isMainThread);
@@ -632,47 +649,6 @@
     [_threadBonjour release];
     [super dealloc];
 }
-
-#if 0
--(void) handleEnteredBackground
-{
-    showProgressNextTime = TRUE;
-}
-
--(void) becomeActive
-{
-    if (showProgressNextTime)
-    {
-        NSLog(@"cshow progress 03");
-        [self showProgress:nil];
-    }
-    
-    task_cancelled = NO;
-    [self checkConnectionToCamera:nil];
-}
-
--(void) showProgress:(NSTimer *) exp
-{
-    NSLog(@"show progress ");
-    
-    if (self.inProgress != nil)
-    {
-        NSLog(@"show progress 01 ");
-        self.inProgress.hidden = NO;
-        [self.view bringSubviewToFront:self.inProgress];
-    }
-}
-
-- (void) hideProgess
-{
-    NSLog(@"hide progress");
-    
-    if (self.inProgress != nil)
-    {
-        self.inProgress.hidden = YES;
-    }
-}
-#endif
 
 #pragma mark - BLEConnectionManagerDelegate
 
