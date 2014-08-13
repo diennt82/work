@@ -464,3 +464,5 @@
 
 /* No comment provided by engineer. */
 "Confirm_Pass_Fail" = "Le mot de passe ne correspond pas. S'il vous plaît, saisir à nouveau !";
+
+"Re-try setup with Bluetooth" = "Réessayez configuration avec Bluetooth";

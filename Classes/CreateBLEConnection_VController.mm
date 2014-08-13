@@ -82,19 +82,19 @@
     [self.btnConnect setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
     [self.btnConnect setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
     self.btnConnect.enabled = NO;
-    self.btnSetupWithWifi.titleLabel.text = NSLocalizedString(@"continue", @"Continue");
+    self.btnConnect.titleLabel.text = NSLocalizedString(@"Connect", @"Connect");
     
     self.btnRetry = (UIButton *)[_viewError viewWithTag:BTN_RETRY_TAG];
     [self.btnRetry setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
     [self.btnRetry setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
     [self.btnRetry addTarget:self action:@selector(btnRetryTouchUpInsideAction:) forControlEvents:UIControlEventTouchUpInside];
-    self.btnRetry.titleLabel.text = NSLocalizedString(@"retry_setup_with_ble", @"Re-try setup with Bluetooth");
+    self.btnRetry.titleLabel.text = NSLocalizedString(@"Re-try setup with Bluetooth", @"Re-try setup with Bluetooth");
     
     self.btnSetupWithWifi = (UIButton *)[_viewError viewWithTag:BTN_SETUP_WIFI];
     [self.btnSetupWithWifi setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
     [self.btnSetupWithWifi setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
     [self.btnSetupWithWifi addTarget:self action:@selector(btnSetupWithWifiAction:) forControlEvents:UIControlEventTouchUpInside];
-    self.btnSetupWithWifi.titleLabel.text = NSLocalizedString(@"setup_with_wifi", @"Setup with WIFI");
+    self.btnSetupWithWifi.titleLabel.text = NSLocalizedString(@"Setup with WIFI", @"Setup with WIFI");
     
     self.currentBLEList = [[NSMutableArray alloc] init];
     

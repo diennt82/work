@@ -7,15 +7,17 @@
 //
 
 #import "Step_11_ViewController.h"
-#import "KISSMetricsAPI.h"
+//#import "KISSMetricsAPI.h"
 #import "define.h"
 #import "PublicDefine.h"
 #define GAI_CATEGORY    @"Step 11 view"
+#import "Step_02_ViewController.h"
 
 @interface Step_11_ViewController ()
 
 @property (nonatomic, retain) IBOutlet UILabel *error_code;
 @property (retain, nonatomic) IBOutlet UIButton *btnTestCamera;
+@property (retain, nonatomic) IBOutlet UIButton *btnSetupWithWifi;
 
 @end
 
@@ -40,7 +42,6 @@
     [self.btnTestCamera setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
     [self.btnTestCamera setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
 
-
     if (_errorCode != nil)
     {
         [self.error_code setText:_errorCode];
@@ -50,28 +51,34 @@
         self.error_code.hidden = YES;
     }
     
-    NSString *stringModel = @"";
+    //NSString *stringModel = @"";
     
-    NSInteger model = [[NSUserDefaults standardUserDefaults] integerForKey:SET_UP_CAMERA];
+    //NSInteger model = [[NSUserDefaults standardUserDefaults] integerForKey:SET_UP_CAMERA];
     
-    if (model == BLUETOOTH_SETUP)
+    if ([[NSUserDefaults standardUserDefaults] integerForKey:SET_UP_CAMERA] == BLUETOOTH_SETUP)
     {
-        stringModel = @"Mbp83";
+        [self.btnSetupWithWifi setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
+        [self.btnSetupWithWifi setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
+        self.btnSetupWithWifi.titleLabel.text = NSLocalizedString(@"Setup with WIFI", @"Setup with WIFI");
+        self.btnSetupWithWifi.hidden = NO;
+        
+        self.btnTestCamera.titleLabel.text = NSLocalizedString(@"Re-try setup with Bluetooth", @"Re-try setup with Bluetooth");
+        
+        //stringModel = @"Mbp83";
     }
-    else if(model == WIFI_SETUP)
+    else
     {
-        stringModel = @"Focus66";
+        //stringModel = @"Focus66";
+        self.btnTestCamera.titleLabel.text = NSLocalizedString(@"Try Again", @"Try Again");
     }
     
-    NSString *fwVersion = [[NSUserDefaults standardUserDefaults] stringForKey:FW_VERSION];
-    
-    NSDictionary *info = [NSDictionary dictionaryWithObjectsAndKeys:
-                         stringModel,   @"Camera model",
-                         fwVersion,     @"FW",
-                          _errorCode,   @"Error",
-                         nil];
-    
-    //[[KISSMetricsAPI sharedAPI] recordEvent:@"Add camera failed" withProperties:info];
+//   NSString *fwVersion = [[NSUserDefaults standardUserDefaults] stringForKey:FW_VERSION];
+//   NSDictionary *info = [NSDictionary dictionaryWithObjectsAndKeys:
+//                         stringModel,   @"Camera model",
+//                         fwVersion,     @"FW",
+//                          _errorCode,   @"Error",
+//                         nil];
+//  [[KISSMetricsAPI sharedAPI] recordEvent:@"Add camera failed" withProperties:info];
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:@"viewDidLoad"
                                                      withLabel:[NSString stringWithFormat:@"Add camera failed:%@", _errorCode]
@@ -98,15 +105,33 @@
     //Go back to the beginning
     
     // Disable Keep screen on
-    [UIApplication sharedApplication].idleTimerDisabled=  NO;
+    [UIApplication sharedApplication].idleTimerDisabled = NO;
     [self.navigationController popToRootViewControllerAnimated:NO];
-    //NSString * msgLabel = [NSString stringWithFormat:@"Add Camera Failed with errorCode:%@", self.errorCode];
 }
 
-
+- (IBAction)btnSetupWithWifiAction:(id)sender
+{
+    NSLog(@"%s", __FUNCTION__);
+    
+    id aViewController = self.navigationController.viewControllers[0];
+    
+    [self.navigationController popToRootViewControllerAnimated:NO];
+    
+    if ([aViewController isKindOfClass:[Step_02_ViewController class]])
+    {
+        [((Step_02_ViewController *)aViewController) btnContinueTouchUpInsideAction:nil];
+    }
+    else
+    {
+        NSLog(@"%s aViewController:%@", __FUNCTION__, aViewController);
+    }
+}
 
 - (void)dealloc {
     [_btnTestCamera release];
+    [_btnSetupWithWifi release];
     [super dealloc];
 }
+
+
 @end
