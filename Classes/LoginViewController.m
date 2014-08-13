@@ -130,9 +130,22 @@
                                                  name:UIKeyboardWillHideNotification object:nil];
 }    
 
+- (void)xibDefaultLocalization
+{
+    self.tfEmail.placeholder = NSLocalizedStringWithDefaultValue(@"xib_loginpage_email_texfield_placeholder", @"", [NSBundle mainBundle], @"Username/Email", nil);
+    NSLog(@"Duy %@", NSLocalizedStringWithDefaultValue(@"xib_loginpage_email_texfield_placeholder", @"", [NSBundle mainBundle], @"Username/Email", nil));
+    self.tfPassword.placeholder = NSLocalizedStringWithDefaultValue(@"xib_loginpage_password_textfield_placeholder", nil, [NSBundle mainBundle], @"Password", nil);
+    [self.buttonForgotPass setTitle:NSLocalizedStringWithDefaultValue(@"xib_loginpage_forgotpassword_button_labeltext", nil, [NSBundle mainBundle], @"Forgot Password?", nil) forState:UIControlStateNormal];
+    
+    [self.buttonEnter setTitle:NSLocalizedStringWithDefaultValue(@"xib_loginpage_enter_button_labeltext", nil, [NSBundle mainBundle], @"Enter", nil) forState:UIControlStateNormal];;
+    [self.buttonCreateAccount setTitle:NSLocalizedStringWithDefaultValue(@"xib_loginpage_creteacount_button_labletext", nil, [NSBundle mainBundle], @"Create Account", nil) forState:UIControlStateNormal];
+}
+
 -(void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    [self xibDefaultLocalization];
     self.navigationController.navigationBarHidden = YES;
     
     self.trackedViewName = GAI_CATEGORY;
