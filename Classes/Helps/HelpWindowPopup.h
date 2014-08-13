@@ -12,9 +12,9 @@
 
 @interface HelpWindowPopup : UIView
 
-@property (nonatomic, retain) UIScrollView  *scrollView;
+@property (nonatomic, retain) UIWebView     *webView;
 @property (nonatomic, retain) UIView        *contentView;
 
-- (id)initWithTitle:(NSString *)title andMessage:(NSString *)message;
+- (id)initWithTitle:(NSString *)title andHtmlString:(NSString *)htmlString;
 - (void)show;
 @end

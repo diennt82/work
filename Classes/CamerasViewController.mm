@@ -243,10 +243,50 @@
 
 - (IBAction)helpButtonTouchUpInside:(id)sender
 {
+    NSMutableString *html = [[NSMutableString alloc] init];
+    [html appendString:@"<html>"];
+    [html appendString:@"   <header>"];
+    [html appendString:@"       <style>"];
+    [html appendString:@"           ul.first_deep {padding-left:10px}"];
+    [html appendString:@"           ul.first_deep li {list-style-type:square;}"];
+    [html appendString:@"           ul.second_deep {padding-left:10px}"];
+    [html appendString:@"           ul.second_deep li {list-style-type:circle;}"];
+    [html appendString:@"       </style>"];
+    [html appendString:@"   </header>"];
+    [html appendString:@"   <body>"];
+    [html appendString:@"       <div style='margin-left:5px;'>"];
+    [html appendString:@"       <ul class=\"first_deep\">"];
+    [html appendString:@"           <li><b>Offline:</b>"];
+    [html appendString:@"               <ul class=\"second_deep\">"];
+    [html appendString:@"                   <li>Your camera is OFF / LED light on the camera is OFF</li>"];
+    [html appendString:@"                   <li>Please check your camera’s power status and that the ON/OFF switch is set to ON</li>"];
+    [html appendString:@"                   <li>Camera is not connected to the internet</li>"];
+    [html appendString:@"                   <li>Please check your router to ensure it is connected to internet</li>"];
+    [html appendString:@"               </ul>"];
+    [html appendString:@"           </li>"];
+    [html appendString:@"           <br/>"];
+    [html appendString:@"           <li><b>Online:</b>"];
+    [html appendString:@"               <ul class=\"second_deep\">"];
+    [html appendString:@"                   <li>Camera is online and operational</li>"];
+    [html appendString:@"               </ul>"];
+    [html appendString:@"           </li>"];
+    [html appendString:@"           <br/>"];
+    [html appendString:@"           <li><b>Firmware Upgrade in Progress:</b>"];
+    [html appendString:@"               <ul class=\"second_deep\">"];
+    [html appendString:@"                   <li>Your camera is upgrading to the latest firmware version. Please do not turn the camera off during this process</li>"];
+    [html appendString:@"                   <li>This upgrade may take around 3-5 minutes to complete</li>"];
+    [html appendString:@"               </ul>"];
+    [html appendString:@"           </li>"];
+    [html appendString:@"       </ul>"];
+    [html appendString:@"       </div>"];
+    [html appendString:@"   </body>"];
+    [html appendString:@"</html>"];
+    
     CamerasListHelpWindowPopup *popup = [[CamerasListHelpWindowPopup alloc] initWithTitle:@"Camera Status Help"
-                                                         andMessage:@"1. Offline:\n- Your camera is OFF / LED light on the camera is OFF.\n- Please check your camera’s power status and that the ON/OFF switch is set to ON.\n- Camera is not connected to the internet.\n- Please check your router to ensure it is connected to internet.\n2. Online:\n- Camera is online and operational.\n3. Firmware Upgrade in Progress\n- Your camera is upgrading to the latest firmware version. Please do not turn the camera off during this process.\n- This upgrade may take around 3-5 minutes to complete."];
+                                                      andHtmlString:html];
     [popup show];
     [popup release];
+    [html release];
 }
 #pragma mark - Cameras Cell Delegate
 

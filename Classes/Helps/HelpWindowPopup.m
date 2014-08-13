@@ -18,10 +18,10 @@
 @end
 
 
-@interface HelpWindowPopup()
+@interface HelpWindowPopup() <UIWebViewDelegate>
 @property (nonatomic, retain) MBP_PopupOverlayWindow    *overlayWindow;
 @property (nonatomic, retain) NSString                  *title;
-@property (nonatomic, retain) NSString                  *message;
+@property (nonatomic, retain) NSString                  *htmlString;
 @end
 
 @implementation HelpWindowPopup
@@ -32,18 +32,18 @@
     if (self) {
         self.backgroundColor = [UIColor whiteColor];
         self.title = @"";
-        self.message = @"";
+        self.htmlString = @"";
     }
     return self;
 }
 
-- (id)initWithTitle:(NSString *)title andMessage:(NSString *)message
+- (id)initWithTitle:(NSString *)title andHtmlString:(NSString *)htmlString;
 {
     self = [self initWithFrame:[self frame]];
     if (self)
     {
         self.title = title;
-        self.message = message;
+        self.htmlString = htmlString;
         [self initUIComponents];
     }
     return self;
@@ -65,8 +65,8 @@
 {
     [_overlayWindow release];
     [_title release];
-    [_message release];
-    [_scrollView release];
+    [_htmlString release];
+    [_webView release];
     [_contentView release];
     [super dealloc];
 }
@@ -90,6 +90,9 @@
     self.transform = CGAffineTransformIdentity;
     overlay.alpha = 1.0;
     [overlay release];
+    
+    NSData *htmlData = [self.htmlString dataUsingEncoding:NSUTF8StringEncoding];
+    [self.webView loadData:htmlData MIMEType:@"text/html" textEncodingName:@"UTF-8" baseURL:[NSURL URLWithString:@""]];
 }
 
 #pragma mark - Private
@@ -122,24 +125,12 @@
     
     rect = self.contentView.frame;
     rect.origin.y = 0;
-    _scrollView = [[UIScrollView alloc] initWithFrame:rect];
-    [self.scrollView setBackgroundColor:[UIColor whiteColor]];
-    [self.contentView addSubview:self.scrollView];
-    
-    UILabel *contentLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 5, self.frame.size.width - 20, 0)];
-    UIFont *font = [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:17];
-    contentLabel.font = font;
-    contentLabel.textColor = [UIColor colorWithRed:(110/255.f) green:(110/255.f) blue:(110/255.f) alpha:1];
-    contentLabel.numberOfLines = 0;
-    rect = contentLabel.frame;
-    rect.size.height = ceilf([self calculateHeightForString:self.message withWidthFrame:contentLabel.frame.size.width andFont:font]);
-    contentLabel.frame = rect;
-    contentLabel.text = self.message;
-    [self.scrollView addSubview:contentLabel];
-    self.scrollView.contentSize = CGSizeMake(self.scrollView.frame.size.width, contentLabel.frame.size.height + 10);
+    _webView = [[UIWebView alloc] initWithFrame:rect];
+    [self.webView setBackgroundColor:[UIColor whiteColor]];
+    self.webView.delegate = self;
+    [self.contentView addSubview:self.webView];
     
     [titleLabel release];
-    [contentLabel release];
     [headerView release];
     [closeButton release];
 }
@@ -203,6 +194,18 @@
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextClearRect(context, rect);
 }
+
+#pragma mark - UIWebviewDelegate
+- (void)webViewDidFinishLoad:(UIWebView *)webView
+{
+    
+}
+
+- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
+{
+    
+}
+
 @end
 
 @implementation MBP_PopupOverlayWindow

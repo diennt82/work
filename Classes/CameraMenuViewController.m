@@ -817,18 +817,86 @@ typedef enum _WAIT_FOR_UPDATING {
 
 - (IBAction)handleCameraDetailHelp:(id)sender
 {
+    NSMutableString *html = [[NSMutableString alloc] init];
+    [html appendString:@"<html>"];
+    [html appendString:@"   <header>"];
+    [html appendString:@"       <style>"];
+    [html appendString:@"           ul.first_deep {padding-left:10px}"];
+    [html appendString:@"           ul.first_deep li {list-style-type:square;}"];
+    [html appendString:@"           ul.second_deep {padding-left:10px}"];
+    [html appendString:@"           ul.second_deep li {list-style-type:circle;}"];
+    [html appendString:@"       </style>"];
+    [html appendString:@"   </header>"];
+    [html appendString:@"   <body>"];
+    [html appendString:@"       <div style='margin-left:5px;'>"];
+    [html appendString:@"       <ul class=\"first_deep\">"];
+    [html appendString:@"           <li><b>Camera Name:</b>"];
+    [html appendString:@"               <ul class=\"second_deep\">"];
+    [html appendString:@"                   <li>User can change the name of the camera</li>"];
+    [html appendString:@"               </ul>"];
+    [html appendString:@"           </li>"];
+    [html appendString:@"           <br/>"];
+    [html appendString:@"           <li><b>Change Image:</b>"];
+    [html appendString:@"               <ul class=\"second_deep\">"];
+    [html appendString:@"                   <li>User can change the thumbnail image shown on the camera list screen</li>"];
+    [html appendString:@"               </ul>"];
+    [html appendString:@"           </li>"];
+    [html appendString:@"       </ul>"];
+    [html appendString:@"       </div>"];
+    [html appendString:@"   </body>"];
+    [html appendString:@"</html>"];
     HelpWindowPopup *popup = [[HelpWindowPopup alloc] initWithTitle:@"Camera Details Help"
-                                                         andMessage:@"1. Camera Name\n- User can change the name of the camera.\n2. Change Image\n- User can change the thumbnail image shown on the camera list screen."];
+                                                         andHtmlString:html];
     [popup show];
     [popup release];
+    [html release];
 }
 
 - (IBAction)handleNotiSensityHelp:(id)sender
 {
+    NSMutableString *html = [[NSMutableString alloc] init];
+    [html appendString:@"<html>"];
+    [html appendString:@"   <header>"];
+    [html appendString:@"       <style>"];
+    [html appendString:@"           ul.first_deep {padding-left:10px}"];
+    [html appendString:@"           ul.first_deep li {list-style-type:square;}"];
+    [html appendString:@"           ul.second_deep {padding-left:10px}"];
+    [html appendString:@"           ul.second_deep li {list-style-type:circle;}"];
+    [html appendString:@"       </style>"];
+    [html appendString:@"   </header>"];
+    [html appendString:@"   <body>"];
+    [html appendString:@"       <div style='margin-left:5px;'>"];
+    [html appendString:@"       <ul class=\"first_deep\">"];
+    [html appendString:@"           <li><b>Motion Detection Sensitivity:</b>"];
+    [html appendString:@"               <ul class=\"second_deep\">"];
+    [html appendString:@"                   <li>Motion detection is triggered when 2 consecutive seconds of motion have been detected by your camera</li>"];
+    [html appendString:@"                   <li>The sensitivity level determines how much change in activity your camera needs to detect in order for a motion detection notification to be sent</li>"];
+    [html appendString:@"               </ul>"];
+    [html appendString:@"           </li>"];
+    [html appendString:@"           <br/>"];
+    [html appendString:@"           <li><b>Sound Detection Sensitivity:</b>"];
+    [html appendString:@"               <ul class=\"second_deep\">"];
+    [html appendString:@"                   <li>High: Your camera triggers a notification whenever it detects a sound below the low audio threshold that lasts for 0.5 seconds or more</li>"];
+    [html appendString:@"                   <li>Medium : Your camera triggers a notification whenever it detects a sound above the high audio threshold that lasts for 2 seconds or more</li>"];
+    [html appendString:@"                   <li>Low : Your camera triggers a notification whenever it detects a sound below the low audio threshold that lasts for 3 seconds or more</li>"];
+    [html appendString:@"                   <li>Each time sound is detected, your camera will pause the monitoring of sound levels for approximately 60 seconds before it resumes monitoring them again</li>"];
+    [html appendString:@"               </ul>"];
+    [html appendString:@"           </li>"];
+    [html appendString:@"           <br/>"];
+    [html appendString:@"           <li><b>Temperature:</b>"];
+    [html appendString:@"               <ul class=\"second_deep\">"];
+    [html appendString:@"                   <li>You will receive a notification every 30 minutes (on average) whenever the temperature falls outside the range you have selected</li>"];
+    [html appendString:@"               </ul>"];
+    [html appendString:@"           </li>"];
+    [html appendString:@"       </ul>"];
+    [html appendString:@"       </div>"];
+    [html appendString:@"   </body>"];
+    [html appendString:@"</html>"];
     HelpWindowPopup *popup = [[HelpWindowPopup alloc] initWithTitle:@"Notification Sensitivity Help"
-                                                         andMessage:@"1. Motion Detection Sensitivity\n- Motion detection is triggered when 2 consecutive seconds of motion have been detected by your camera.\n- The sensitivity level determines how much change in activity your camera needs to detect in order for a motion detection notification to be sent.\n2. Sound Detection Sensitivity\nHigh: Your camera triggers a notification whenever it detects a sound below the low audio threshold that lasts for 0.5 seconds or more.\nMedium : Your camera triggers a notification whenever it detects a sound above the high audio threshold that lasts for 2 seconds or more.\nLow : Your camera triggers a notification whenever it detects a sound below the low audio threshold that lasts for 3 seconds or more.\n\nEach time sound is detected, your camera will pause the monitoring of sound levels for approximately 60 seconds before it resumes monitoring them again.\n3. Temperature\nYou will receive a notification every 30 minutes (on average) whenever the temperature falls outside the range you have selected."];
+                                                         andHtmlString:html];
     [popup show];
     [popup release];
+    [html release];
 }
 
 - (void)showUpdatingProgressHUD {
