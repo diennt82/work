@@ -266,7 +266,7 @@
     [userDefaults setBool:TRUE forKey:FIRST_TIME_SETUP];
     [userDefaults synchronize];
     
-    RegistrationViewController *registrationVC = [[RegistrationViewController alloc] init];
+    RegistrationViewController *registrationVC = [[RegistrationViewController alloc] initWithNibName:@"RegistrationViewController" bundle:nil];
     registrationVC.delegate = _delegate;
     [self.navigationController pushViewController:registrationVC animated:YES];
     
@@ -713,8 +713,6 @@
                                                      withValue:nil];
     //BLOCKED method
     [account readCameraListAndUpdate];
-    
-    //[self dismissViewControllerAnimated:NO completion:^{}];
     
     NSLog(@"Login success! 3");
     

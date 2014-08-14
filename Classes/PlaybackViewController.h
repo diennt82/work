@@ -14,7 +14,6 @@
 #import "PlaybackListener.h"
 #import "PlayerCallbackHandler.h"
 #import "UIImage+Hubble.h"
-#import "UIFont+Hubble.h"
 #import "UIColor+Hubble.h"
 
 @protocol PlaybackDelegate <NSObject>

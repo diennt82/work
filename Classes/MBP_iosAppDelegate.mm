@@ -19,14 +19,11 @@
 
 @implementation MBP_iosAppDelegate
 
-@synthesize viewController;
-
 #pragma mark - Application lifecycle
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Setup global L&F
-    
 #ifdef VTECH
     UIColor *themeTintColor = [UIColor colorWithRed:11/255.f green:41/255.0f blue:109/255.f alpha:1];
 #else
@@ -39,20 +36,7 @@
     }
 
     [[UINavigationBar appearance] setTintColor:themeTintColor];
-    
-    [[UINavigationBar appearance] setTitleTextAttributes:@{
-                                                           NSForegroundColorAttributeName: [UIColor colorWithRed:16/255.f green:16/255.f blue:16/255.f alpha:1],
-                                                           NSFontAttributeName: [UIFont fontWithName:@"HelveticaNeue-Thin" size:17.f]
-                                                           }];
-    
-    [[UIBarButtonItem appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                          [UIColor blackColor], NSForegroundColorAttributeName,
-                                                          [UIFont fontWithName:@"HelveticaNeue-Light" size:17], NSFontAttributeName,
-                                                          nil]
-                                                forState:UIControlStateNormal];
-    
-    [[UILabel appearanceWhenContainedIn:[UITableViewHeaderFooterView class], nil] setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:17]];
-    
+
     // Handle launching from a notification
     UILocalNotification *locationNotification = [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
     if (locationNotification) {
@@ -60,7 +44,7 @@
         application.applicationIconBadgeNumber = 0;
     }
     
-    self.handling_PN = FALSE;
+    self.handling_PN = NO;
     
     // Initialize Analytics
     
@@ -85,18 +69,15 @@
     // Create tracker instance.
     [[GAI sharedInstance] trackerWithTrackingId:@"UA-51500380-2"];
 
-    _window.rootViewController = [[EarlierNavigationController alloc] initWithRootViewController:viewController];
-    
-    // Check condition use STUN or not
-    [self registerDefaultsFromSettingsBundle];
+    _window.rootViewController = [[EarlierNavigationController alloc] initWithRootViewController:_viewController];
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 	NSInteger app_stage = [userDefaults integerForKey:@"ApplicationStage"];
     
     // Check if user killed app during SETUP camera
     if (app_stage == APP_STAGE_SETUP) {
-        viewController.app_stage = APP_STAGE_LOGGED_IN ;
-        [userDefaults setInteger:viewController.app_stage forKey:@"ApplicationStage"];
+        _viewController.app_stage = APP_STAGE_LOGGED_IN ;
+        [userDefaults setInteger:_viewController.app_stage forKey:@"ApplicationStage"];
     }
     
     // Handled when user kills app when app in view a Camera
@@ -105,26 +86,8 @@
     
     [_window makeKeyAndVisible];
     
-//#if !DEBUG
-//    NSSetUncaughtExceptionHandler(&HandleException);
-//    
-//    struct sigaction signalAction;
-//    memset(&signalAction, 0, sizeof(signalAction));
-//    signalAction.sa_handler = &HandleSignal;
-//    
-//    sigaction(SIGABRT, &signalAction, NULL);
-//    sigaction(SIGILL, &signalAction, NULL);
-//    sigaction(SIGBUS, &signalAction, NULL);
-//    
-//    NSString *cachesDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-//	NSString *logPath = [cachesDirectory stringByAppendingPathComponent:@"application.log"];
-//    
-//    //[self createANewAppLog:logPath decumentDirectory:cachesDirectory];
-//    
-//    // Redirect NSLog output to a file
-//	freopen([logPath cStringUsingEncoding:NSASCIIStringEncoding], "a+", stderr);
-//	NSLog(@"Log location: %@",logPath);
-//#endif
+    // Check condition use STUN or not
+    [self registerDefaultsFromSettingsBundle];
     
     [CameraAlert reloadBlankTableIfNeeded];
 
@@ -143,206 +106,90 @@
     return YES;
 }
 
-void HandleException(NSException *exception)
-{
-    NSLog(@"App crashing with exception: %@", exception);
-    //Save somewhere that your app has crashed.
-    checkingApplicationCrashed();
-}
-
-void HandleSignal(int signal)
-{
-    NSLog(@"We received a signal: %d", signal);
-    checkingApplicationCrashed();
-    //Save somewhere that your app has crashed.
-}
-
-void checkingApplicationCrashed()
-{
-    BOOL success;
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    
-    NSError *error;
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentDirectory = [paths objectAtIndex:0];
-    
-    NSString *appCrashedLog = [documentDirectory stringByAppendingPathComponent:@"application_crash.log"];
-    NSString *defaultLogPath = [documentDirectory stringByAppendingPathComponent:@"application.log"];
-  
-    success = [fileManager copyItemAtPath:defaultLogPath toPath:appCrashedLog error:&error];
-    
-    if (success) {
-        NSLog(@"Save log crashed!");
-    }
-}
-
-- (void)createANewAppLog: (NSString *)appLogPath decumentDirectory: (NSString *)docDirectory
-{
-    NSString *appLog0 = [docDirectory stringByAppendingPathComponent:@"application0.log"];
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    BOOL success = FALSE;
-    NSError *error;
-    
-    // NSLog(@"%s size:%llu", __FUNCTION__, [[fileManager attributesOfItemAtPath:appLogPath error:&error] fileSize]);
-    
-    if ([[fileManager attributesOfItemAtPath:appLogPath error:&error] fileSize] > 5000000) // 5MB
-    {
-        if ([fileManager fileExistsAtPath:appLog0])
-        {
-            success = [fileManager removeItemAtPath:appLog0 error:&error];
-            
-            if (success) {
-                NSLog(@"Remove app log 0 success");
-            }
-            else {
-                NSLog(@"Remove app log 0 error: %@", [error localizedDescription]);
-            }
-        }
-        
-        success = [fileManager copyItemAtPath:appLogPath toPath:appLog0 error:&error];
-        
-        if (success) {
-            NSLog(@"Copy success");
-            
-            success = [fileManager removeItemAtPath:appLogPath error:&error];
-            if (success) {
-                NSLog(@"Remove app log success");
-                
-                freopen([appLogPath cStringUsingEncoding:NSASCIIStringEncoding], "a+", stderr);
-            }
-            else {
-                NSLog(@"Remove app log err: %@", [error localizedDescription]);
-            }
-        }
-        else {
-            NSLog(@"Copy error: %@", [error localizedDescription]);
-        }
-    }
-}
-
-- (void)registerDefaultsFromSettingsBundle
-{
-    NSString *settingsBundle = [[NSBundle mainBundle] pathForResource:@"Settings" ofType:@"bundle"];
-    if(!settingsBundle)
-    {
-        //NSLog(@"Could not find Settings.bundle");
-        return;
-    }
-    
-    NSDictionary *settings = [NSDictionary dictionaryWithContentsOfFile:[settingsBundle stringByAppendingPathComponent:@"Root.plist"]];
-    NSArray *preferences = [settings objectForKey:@"PreferenceSpecifiers"];
-    
-    NSMutableDictionary *defaultsToRegister = [[NSMutableDictionary alloc] initWithCapacity:[preferences count]];
-    for(NSDictionary *prefSpecification in preferences) {
-        NSString *key = [prefSpecification objectForKey:@"Key"];
-        if(key) {
-            [defaultsToRegister setObject:[prefSpecification objectForKey:@"DefaultValue"] forKey:key];
-        }
-    }
-    
-    [[NSUserDefaults standardUserDefaults] registerDefaults:defaultsToRegister];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-}
-
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
-    NSLog(@"AppDelegate - didReceiveRemoteNotification: %@", userInfo);
-    //clear status notification 
+    DLog(@"AppDelegate - didReceiveRemoteNotification: %@", userInfo);
+    
+    // Clear status notification
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:1];
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
     [[UIApplication sharedApplication] cancelAllLocalNotifications];
 
     if (userInfo) {
-        NSString * str2 = (NSString *) [userInfo objectForKey:@"alert"];
-        if ([str2 isEqualToString:ALERT_GENERIC_SERVER_INFO]) {
-            //Server Custom message
-            NSString * str3 = (NSString *) [userInfo objectForKey:@"message"];
-            NSString * str7 = (NSString *) [userInfo objectForKey:@"url"];
+        NSString *alertTitle = (NSString *) [userInfo objectForKey:@"alert"];
+        if ([alertTitle isEqualToString:ALERT_GENERIC_SERVER_INFO]) {
+            // Server Custom message
+            NSString *alertMessage = (NSString *) [userInfo objectForKey:@"message"];
+            NSString *alertURL = (NSString *) [userInfo objectForKey:@"url"];
             
             if ( [application applicationState] == UIApplicationStateActive) {
-                //App is running now
-                [viewController pushNotificationRcvedServerAnnouncement:str3 andUrl:str7];
+                // App is running now
+                [_viewController pushNotificationRcvedServerAnnouncement:alertMessage andUrl:alertURL];
             }
         }
-        else if ([str2 isEqualToString:@"1"] ||
-                 [str2 isEqualToString:@"2"]  ||
-                 [str2 isEqualToString:@"3"] ||
-                 [str2 isEqualToString:@"4"])
+        else if ([alertTitle isEqualToString:@"1"] ||
+                 [alertTitle isEqualToString:@"2"]  ||
+                 [alertTitle isEqualToString:@"3"] ||
+                 [alertTitle isEqualToString:@"4"])
         {
-            NSString * str3 = (NSString *) [userInfo objectForKey:@"mac"];
-            NSString * str4 = (NSString *) [userInfo objectForKey:@"val"];
-            NSString * str5 = (NSString *) [userInfo objectForKey:@"time"];
-            NSString * str6 = (NSString *) [userInfo objectForKey:@"cameraname"];
-            NSString * str8 = (NSString *) [userInfo objectForKey:@"ftp_url"]; //Motion url
+            NSString *alertMessage = (NSString *)[userInfo objectForKey:@"mac"];
+            NSString *alertVal = (NSString *)[userInfo objectForKey:@"val"];
+            NSString *alertTime = (NSString *)[userInfo objectForKey:@"time"];
+            NSString *cameraName = (NSString *)[userInfo objectForKey:@"cameraname"];
+            NSString *eventURL = (NSString *)[userInfo objectForKey:@"ftp_url"]; //Motion url
             
-            //4 44334C31A004 20130914055827490 2013-09-14T05:59:05+00:00 Camera-31a004
-            //NSLog(@"%@ %@ %@ %@ %@ %@",  str2, str3, str4 , str5, str6, str8);
-            
-            if (str2 == nil ||
-                str3 == nil ||
-                str4 == nil ||
-                str5 == nil ||
-                str6 == nil)
-            {
-                NSLog(@"NIL info.. silencely return");
+            if ( !alertTitle || !alertMessage || !alertVal || !alertTime || !cameraName ) {
+                DLog(@"NIL info.. silently return");
                 return;
             }
             
             int rcvTimeStamp = [[NSDate date] timeIntervalSince1970];
-            CameraAlert * camAlert = [[CameraAlert alloc]initWithTimeStamp1:rcvTimeStamp];// autorelease];
+            CameraAlert *camAlert = [[CameraAlert alloc]initWithTimeStamp1:rcvTimeStamp];// autorelease];
 
             //set other values
-            camAlert.cameraMacNoColon = [str3 substringWithRange:NSMakeRange(6, 12)];
-            camAlert.cameraName = str6;
-            camAlert.alertType = str2;
-            camAlert.alertTime =str5;
-            camAlert.alertVal = str4;
-            camAlert.registrationID = str3;
+            camAlert.cameraMacNoColon = [alertMessage substringWithRange:NSMakeRange(6, 12)];
+            camAlert.cameraName = cameraName;
+            camAlert.alertType = alertTitle;
+            camAlert.alertTime =alertTime;
+            camAlert.alertVal = alertVal;
+            camAlert.registrationID = alertMessage;
             
-            if ( str8 ) {
-                camAlert.server_url = str8;
-                NSLog(@"motion url is :%@", camAlert.server_url);
+            if ( eventURL ) {
+                camAlert.server_url = eventURL;
+                DLog(@"motion url is :%@", camAlert.server_url);
             }
             
-            BOOL shouldStoreAlert = TRUE;
+            BOOL shouldStoreAlert = YES;
             
-            //Next few lines: ORDER MATTERS
+            // Next few lines: ORDER MATTERS
             if ( [application applicationState] == UIApplicationStateActive) {
-                //App is running now
-                shouldStoreAlert = [viewController pushNotificationRcvedInForeground: camAlert];
+                // App is running now
+                shouldStoreAlert = [_viewController pushNotificationRcvedInForeground: camAlert];
             }
             else if ( [application applicationState] == UIApplicationStateInactive) {
-                NSLog(@"UIApplicationStateInactive");
+                DLog(@"UIApplicationStateInactive");
                 
                 [self performSelectorOnMainThread:@selector(activateNotificationViewController:) withObject:camAlert waitUntilDone:YES];
-                self.handling_PN = TRUE;
+                self.handling_PN = YES;
             }
             else {
-                // TODO: handle exception
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:str6
-                                                                message:str2
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:cameraName
+                                                                message:alertTitle
                                                                delegate:self cancelButtonTitle:@"OK"
                                                       otherButtonTitles:nil];
                 [alert show];
             }
-            
-//            if (shouldStoreAlert && [CameraAlert insertAlertForCamera:camAlert] == TRUE)
-//            {
-//                NSLog(@"Alert inserted successfully");
-//            }
         }
-        //[camAlert release]; camAlert leak memory but I can't release it.
     }
 }
 
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
 {
-    //delegate is called when app is active
-    //in case app in background, must click to active it.
+    // Delegate is called when app is active in case app in background, must click to active it.
     UIApplicationState state = [application applicationState];
     
     if (state == UIApplicationStateActive) {
-        //enable remote push notification
+        // Enable remote push notification
         [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
     }
     
@@ -350,70 +197,20 @@ void checkingApplicationCrashed()
     application.applicationIconBadgeNumber = 0;
 }
 
-- (void)activateNotificationViewController:(CameraAlert *)camAlert
-{
-    self.becomeActiveByNotificationFlag = TRUE;
-    viewController.camAlert = camAlert;
-    [NSTimer scheduledTimerWithTimeInterval:0.01
-                                     target:viewController
-                                   selector:@selector(showNotificationViewController:)
-                                   userInfo:nil
-                                    repeats:NO];
-}
-
-- (void)showInit
-{
-    NSLog(@"MBP_isoAppDelegate - show LoginVC as the first init");
-    //[viewController sendStatus:FRONT_PAGE];
-    [viewController sendStatus:LOGIN];
-}
-
-- (BOOL)shouldAlertForThisMac:(NSString *)mac_without_colon
-{
-    BOOL shouldAlert = NO;
-    SetupData *savedData = [[SetupData alloc] init];
-    
-	if ( [savedData restoreSessionData] ) {
-		NSArray *restored_profiles = savedData.configuredCams;
-        CamProfile *cp = nil;
-        for (int i = 0; i < restored_profiles.count; i++) {
-            cp = (CamProfile *)restored_profiles[i];
-            if ( cp.mac_address ) {
-                NSString *mac_wo_colon = [Util strip_colon_fr_mac:cp.mac_address]; 
-                if ([mac_wo_colon isEqualToString:mac_without_colon]) {
-                    shouldAlert = YES;
-                    break;
-                }
-            }
-        }
-	}
-    
-    return shouldAlert;
-}
-
-+ (NSString *)GetUUID
-{
-    CFUUIDRef theUUID = CFUUIDCreate(NULL);
-    CFStringRef string = CFUUIDCreateString(NULL, theUUID);
-    CFRelease(theUUID);
-    return (__bridge NSString *)string;
-}
-
 - (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)devToken
 {
     UIPasteboard *appPasteBoard = [UIPasteboard pasteboardWithName:@"Monitoreverywhere_HD" create:YES];
 	appPasteBoard.persistent = YES;
-    if ([appPasteBoard string] == nil) {
+    if ( ![appPasteBoard string] ) {
         [appPasteBoard setString:[MBP_iosAppDelegate GetUUID]];
     }
 
     NSString *uuidString = [appPasteBoard string];
-    //NSString *uuidString = [MBP_iosAppDelegate GetUUID];
-    NSLog(@"uuidString: %@", uuidString);
+    DLog(@"uuidString: %@", uuidString);
     
     NSString *applicationName = NSBundle.mainBundle.infoDictionary[@"CFBundleDisplayName"];
     applicationName = [applicationName stringByAppendingFormat:@"-%@", [UIDevice currentDevice].name];
-    NSLog(@"Application name: %@", applicationName);
+    DLog(@"Application name: %@", applicationName);
     
     NSString *swVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -448,26 +245,26 @@ void checkingApplicationCrashed()
                                                                                 andApiKey:apiKey
                                                                               andCertType:certType];
     
-    NSLog(@"Log - push status = %d", [[responseRegNotifn objectForKey:@"status"] intValue]);
+    DLog(@"Log - push status = %d", [[responseRegNotifn objectForKey:@"status"] intValue]);
      
 }
 
 - (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)err
 {
-    NSLog(@"Error in registration. Error: %@", err);
+    DLog(@"Error in registration. Error: %@", err);
 }
 
+/*
+ * Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
+ * Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
+ */
 - (void)applicationWillResignActive:(UIApplication *)application
 {
-    /*
-     Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
-     Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
-     */
-    NSLog(@"applicationWillResignActive: %d", viewController.app_stage);
+    DLog(@"applicationWillResignActive: %d", _viewController.app_stage);
     
-    if (viewController.app_stage == APP_STAGE_SETUP) {
+    if (_viewController.app_stage == APP_STAGE_SETUP) {
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        [userDefaults setInteger:viewController.app_stage forKey:@"ApplicationStage"];
+        [userDefaults setInteger:_viewController.app_stage forKey:@"ApplicationStage"];
         [userDefaults synchronize];
     }
     
@@ -481,49 +278,28 @@ void checkingApplicationCrashed()
     // End of workaround
 }
 
-- (void)applicationDidEnterBackground:(UIApplication *)application
-{
-    /*
-     Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
-     If your application supports background execution, called instead of applicationWillTerminate: when the user quits.
-     */
-}
-
-- (void)applicationWillEnterForeground:(UIApplication *)application
-{
-    /*
-     Called as part of  transition from the background to the inactive state: here you can undo many of the changes made on entering the background.
-     */
-	NSLog(@"%s", __FUNCTION__);
-    
-    NSString *cachesDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-	NSString *logPath = [cachesDirectory stringByAppendingPathComponent:@"application.log"];
-    
-    [self createANewAppLog:logPath decumentDirectory:cachesDirectory];
-}
-
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults synchronize]; // Synchnize to get setting from System settings
-	viewController.app_stage = [userDefaults integerForKey:@"ApplicationStage"];
+    [userDefaults synchronize]; // Synchronize to get setting from System settings
+	_viewController.app_stage = [userDefaults integerForKey:@"ApplicationStage"];
     
-    NSLog(@"MBP_iosAppDelegate - viewController.app_stage: %d", viewController.app_stage);
+    DLog(@"MBP_iosAppDelegate - viewController.app_stage: %d", _viewController.app_stage);
 
-    if (_handling_PN == TRUE) {
-        NSLog(@"handling PN, we may be in view");
+    if (_handling_PN) {
+        DLog(@"handling PN, we may be in view");
         if ( [userDefaults objectForKey:CAM_IN_VEW] ) {
-            NSLog(@"A camera is in view.Stop it");
+            DLog(@"A camera is in view.Stop it");
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
             [userDefaults removeObjectForKey:CAM_IN_VEW];
-            [userDefaults setBool:TRUE forKey:HANDLE_PN];
+            [userDefaults setBool:YES forKey:HANDLE_PN];
             [userDefaults synchronize];
         }
     }
     else if ([userDefaults objectForKey:CAM_IN_VEW] ) {
-        NSLog(@"A camera is in view. Do nothing");
+        DLog(@"A camera is in view. Do nothing");
     }
-    else if (viewController.app_stage == APP_STAGE_LOGGED_IN) {
+    else if (_viewController.app_stage == APP_STAGE_LOGGED_IN) {
         //20121114: phung: Need to force relogin, because while app in background many things can happen
         //   1. Wifi loss --> offline mode
         //   2. User switch on 3G
@@ -531,34 +307,36 @@ void checkingApplicationCrashed()
         //   4. Or a remote camera has become unreachable.
         //  -->>> NEED to relogin to verify
         
-        if (self.becomeActiveByNotificationFlag == TRUE) {
-            self.becomeActiveByNotificationFlag = FALSE;
+        if ( _becomeActiveByNotificationFlag ) {
+            self.becomeActiveByNotificationFlag = NO;
         }
         else {
             //Do nothing here : to return to the last page.
         }
     }
-    else if (viewController.app_stage == APP_STAGE_LOGGING_IN || viewController.app_stage == APP_STAGE_INIT) {
+    else if (_viewController.app_stage == APP_STAGE_LOGGING_IN || _viewController.app_stage == APP_STAGE_INIT) {
         [userDefaults setBool:NO forKey:AUTO_LOGIN_KEY];
         [userDefaults synchronize];
     }
 }
 
+/*
+ * Called when the application is about to terminate.
+ * See also applicationDidEnterBackground:.
+ */
 - (void)applicationWillTerminate:(UIApplication *)application
 {
-    /*
-     Called when the application is about to terminate.
-     See also applicationDidEnterBackground:.
-     */
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults removeObjectForKey:CAM_IN_VEW];
     [userDefaults synchronize];
     
-    NSLog(@"applicationWillTerminate");
+    DLog(@"applicationWillTerminate");
 }
 
-/*A bit mask of the UIInterfaceOrientation constants that indicate the orientations to use for the view controllers.*/
-
+/*
+ * A bit mask of the UIInterfaceOrientation constants that indicate the orientations 
+ * to use for the view controllers.
+ */
 - (NSUInteger)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window
 {    
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -569,15 +347,54 @@ void checkingApplicationCrashed()
     return  UIInterfaceOrientationMaskPortrait;
 }
 
+#pragma mark - Private methods
+
++ (NSString *)GetUUID
+{
+    CFUUIDRef theUUID = CFUUIDCreate(NULL);
+    CFStringRef string = CFUUIDCreateString(NULL, theUUID);
+    CFRelease(theUUID);
+    return (__bridge NSString *)string;
+}
+
+- (void)activateNotificationViewController:(CameraAlert *)camAlert
+{
+    self.becomeActiveByNotificationFlag = YES;
+    _viewController.camAlert = camAlert;
+    [NSTimer scheduledTimerWithTimeInterval:0.01
+                                     target:_viewController
+                                   selector:@selector(showNotificationViewController:)
+                                   userInfo:nil
+                                    repeats:NO];
+}
+
+- (void)registerDefaultsFromSettingsBundle
+{
+    NSString *settingsBundle = [[NSBundle mainBundle] pathForResource:@"Settings" ofType:@"bundle"];
+    if (!settingsBundle) {
+        return;
+    }
+    
+    NSDictionary *settings = [NSDictionary dictionaryWithContentsOfFile:[settingsBundle stringByAppendingPathComponent:@"Root.plist"]];
+    NSArray *preferences = [settings objectForKey:@"PreferenceSpecifiers"];
+    
+    NSMutableDictionary *defaultsToRegister = [[NSMutableDictionary alloc] initWithCapacity:[preferences count]];
+    for(NSDictionary *prefSpecification in preferences) {
+        NSString *key = [prefSpecification objectForKey:@"Key"];
+        if(key) {
+            [defaultsToRegister setObject:[prefSpecification objectForKey:@"DefaultValue"] forKey:key];
+        }
+    }
+    
+    [[NSUserDefaults standardUserDefaults] registerDefaults:defaultsToRegister];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
 #pragma mark - Memory management
 
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application
 {
-    /*
-     Free up as much memory as possible by purging cached data objects that can be recreated (or reloaded from disk) later.
-     */
-    
-    NSLog(@"applicationDidReceiveMemoryWarning from app delegate");
+    DLog(@"applicationDidReceiveMemoryWarning from app delegate");
 }
 
 @end

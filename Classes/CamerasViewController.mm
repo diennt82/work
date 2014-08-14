@@ -28,7 +28,7 @@
 
 @implementation CamerasViewController
 
-#define MAX_CAM_ALLOWED 8
+#define MAX_CAM_ALLOWED 5
 #define CAMERA_TAG_66 566
 #define CAMERA_TAG_83 583 //83/ 836
 #define CAMERA_STATUS_OFFLINE   -1
@@ -36,31 +36,26 @@
 #define CAMERA_STATUS_ONLINE     1
 #define DIALOG_CANT_ADD_CAM 955
 
-#pragma mark - Initialization methods
-
-- (id)initWithDelegate:(id<ConnectionMethodDelegate>)delegate parentVC:(id)parentVC
-{
-    self = [super initWithStyle:UITableViewStyleGrouped];
-    if (self) {
-        self.title = @"Cameras";
-        self.parentVC = (MenuViewController *)parentVC;
-
-        // Setup a custom title view so we can show a nice looking logo image
-        UIImage *image = [UIImage imageNamed:@"logo"];
-        UIImageView *imageview = [[UIImageView alloc] initWithImage:image];
-        imageview.frame = CGRectMake(0, 0, 120, 30);
-        imageview.contentMode = UIViewContentModeScaleAspectFit;
-        self.navigationItem.titleView = imageview;
-    }
-    return self;
-}
-
 #pragma mark - UIViewController methods
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+    self.title = LocStr(@"Cameras_");
     
+    if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1) {
+        // iOS 7
+        self.edgesForExtendedLayout = UIRectEdgeNone;
+    }
+    
+    // Setup a custom title view so we can show a nice looking logo image
+    UIImage *image = [UIImage imageNamed:@"logo"];
+    UIImageView *imageview = [[UIImageView alloc] initWithImage:image];
+    imageview.frame = CGRectMake(0, 0, 120, 30);
+    imageview.contentMode = UIViewContentModeScaleAspectFit;
+    self.navigationItem.titleView = imageview;
+
     self.view.backgroundColor = [UIColor whiteColor];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
@@ -101,10 +96,9 @@
         
         if ( ch ) {
             if ( ![ch.profile isNotAvailable] ) {
-                H264PlayerViewController *h264PlayerViewController = [[H264PlayerViewController alloc] init];
+                H264PlayerViewController *h264PlayerViewController = [[H264PlayerViewController alloc] initWithNibName:@"H264PlayerViewController" bundle:nil];
                 h264PlayerViewController.selectedChannel = ch;
                 h264PlayerViewController.h264PlayerVCDelegate = self;
-                
                 [self.navigationController pushViewController:h264PlayerViewController animated:YES];
             }
         }
@@ -127,7 +121,7 @@
 
 - (void)sendTouchSettingsActionWithRowIndex:(NSInteger)rowIdx
 {
-    CameraMenuViewController *cameraMenuCV = [[CameraMenuViewController alloc] init];
+    CameraMenuViewController *cameraMenuCV = [[CameraMenuViewController alloc] initWithNibName:@"CameraMenuViewController" bundle:nil];
     cameraMenuCV.camChannel = (CamChannel *)_camChannels[rowIdx];
     
     MenuViewController *menuVC = (MenuViewController *)self.parentVC;
@@ -362,16 +356,16 @@
         
         camerasCell.ibCameraNameLabel.text = ch.profile.name;
         NSString *boundCameraName = ch.profile.name;
-        CGSize size = [boundCameraName sizeWithAttributes:@{NSFontAttributeName:[UIFont fontWithName:PN_SEMIBOLD_FONT size:18]}];
+        CGSize size = [boundCameraName sizeWithAttributes:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:18]}];
         
         if (size.width > 154) {
             [camerasCell.ibCameraNameLabel setFrame:CGRectMake(165, 0, 154, 30)];
-            [camerasCell.ibCameraNameLabel setFont:[UIFont fontWithName:PN_SEMIBOLD_FONT size:15]];
+            [camerasCell.ibCameraNameLabel setFont:[UIFont boldSystemFontOfSize:15]];
             [camerasCell.ibCameraNameLabel setNumberOfLines:2];
         }
         else {
             [camerasCell.ibCameraNameLabel setFrame:CGRectMake(165, 15, 154, 18)];
-            [camerasCell.ibCameraNameLabel setFont:[UIFont fontWithName:PN_SEMIBOLD_FONT size:15]];
+            [camerasCell.ibCameraNameLabel setFont:[UIFont boldSystemFontOfSize:15]];
             [camerasCell.ibCameraNameLabel setNumberOfLines:1];
         }
         
@@ -421,10 +415,9 @@
             }
             else {
                 // Show Timeline view
-                TimelineViewController *timelineVC = [[TimelineViewController alloc] init];
+                TimelineViewController *timelineVC = [[TimelineViewController alloc] initWithNibName:@"TimelineViewController" bundle:nil];
                 timelineVC.hidesBottomBarWhenPushed = YES;
                 [timelineVC loadEvents:ch];
-                
                 [self.navigationController pushViewController:timelineVC animated:YES];
             }
         }
@@ -438,7 +431,7 @@
             [userDefaults setObject:ch.profile.mac_address forKey:CAM_IN_VEW];
             [userDefaults synchronize];
             
-            H264PlayerViewController *h264PlayerViewController = [[H264PlayerViewController alloc] init];
+            H264PlayerViewController *h264PlayerViewController = [[H264PlayerViewController alloc] initWithNibName:@"H264PlayerViewController" bundle:nil];
             h264PlayerViewController.selectedChannel = ch;
             h264PlayerViewController.h264PlayerVCDelegate = self;
             

@@ -10,7 +10,6 @@
 #import "SavedEventViewController.h"
 #import "SavedEventCell.h"
 #import "EventInfo.h"
-#import "UIFont+Hubble.h"
 
 @interface SavedEventViewController ()
 
@@ -73,7 +72,7 @@
     NSDate *date = [dFormater dateFromString:datestr]; //2013-12-12 00:42:00 +0000
     
     dFormater.dateFormat = @"MMM dd'th' yyyy";
-    cell.timeLabel.font = [UIFont regular14Font];
+    cell.timeLabel.font = [UIFont systemFontOfSize:14];
     cell.timeLabel.text = [dFormater stringFromDate:date];
     cell.placeEventLabel.text = [NSString stringWithFormat:@"Back Yard\n %d Videos", info.numberVideo];
     cell.snapshotImage.image = info.clipInfo.imgSnapshot;

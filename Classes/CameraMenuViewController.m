@@ -90,8 +90,7 @@
     [_btnRmoveCamera setBackgroundImage:[UIImage imageNamed:@"remove_camera_pressed"]
                                forState:UIControlEventTouchDown];
     
-    self.stringFW_Version = NSLocalizedStringWithDefaultValue(@"firmware_version", nil, [NSBundle mainBundle],
-                                                   @"Firmware version", nil);
+    self.stringFW_Version = LocStr(@"firmware_version");
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     self.apiKey = [userDefaults stringForKey:@"PortalApiKey"];
     

@@ -65,8 +65,7 @@
 
 - (IBAction)cancelTouchAction:(id)sender
 {
-    //[self.listNotifTableView reloadData];
-    [self dismissViewControllerAnimated:YES completion:^{}];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - Notif Cell Delegate

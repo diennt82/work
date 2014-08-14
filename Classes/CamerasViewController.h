@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "ConnectionMethodDelegate.h"
 
 @interface CamerasViewController : UITableViewController
 
@@ -15,7 +14,6 @@
 @property (nonatomic, weak) id parentVC;
 @property (nonatomic) BOOL waitingForUpdateData;
 
-- (id)initWithDelegate:(id<ConnectionMethodDelegate>)delegate parentVC:(id)parentVC;
 - (void)camerasReloadData;
 
 @end

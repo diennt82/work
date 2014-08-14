@@ -22,9 +22,8 @@
 
 #import "MHTabBarController.h"
 #import "UIColor+Hubble.h"
-#import "UIFont+Hubble.h"
-#import "define.h"
 #import "PublicDefine.h"
+#import "define.h"
 
 static const NSInteger TagOffset = 1000;
 
@@ -130,15 +129,8 @@ static const NSInteger TagOffset = 1000;
 	{
 		UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
 		button.tag = TagOffset + index;
-		button.titleLabel.font = [UIFont regular17Font];
-//		button.titleLabel.shadowOffset = CGSizeMake(0.0f, 1.0f);
-        
-//		UIOffset offset = viewController.tabBarItem.titlePositionAdjustment;
-//		button.titleEdgeInsets = UIEdgeInsetsMake(offset.vertical, offset.horizontal, 0.0f, 0.0f);
-//		button.imageEdgeInsets = viewController.tabBarItem.imageInsets;
+		button.titleLabel.font = [UIFont systemFontOfSize:17];
 		[button setTitle:viewController.title forState:UIControlStateNormal];
-//		[button setImage:viewController.tabBarItem.image forState:UIControlStateNormal];
-        
 		[button addTarget:self action:@selector(tabButtonPressed:) forControlEvents:UIControlEventTouchDown];
         
 		[self deselectTabButton:button];

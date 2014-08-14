@@ -589,7 +589,7 @@
             }
         }
         
-        [cell.eventDetailLabel setFont:[UIFont lightSmall14Font]];
+        [cell.eventDetailLabel setFont:[UIFont systemFontOfSize:14]];
         cell.eventLabel.text = self.stringIntelligentMessage;
         cell.eventDetailLabel.text = self.stringCurrentDate;
         [cell.eventLabel setTextColor:[UIColor timeLineColor]];
@@ -708,9 +708,9 @@
             [cell.activityIndicatorLoading setHidden:YES];
         }
 
-        [cell.eventLabel setFont:[UIFont regularMediumFont]];
+        [cell.eventLabel setFont:[UIFont systemFontOfSize:16]];
         [cell.eventLabel setTextColor:[UIColor timeLineColor]];
-        [cell.eventTimeLabel setFont:[UIFont lightSmall13Font]];
+        [cell.eventTimeLabel setFont:[UIFont systemFontOfSize:13]];
         [cell.eventTimeLabel setTextColor:[UIColor timeLineColor]];
         return cell;
     }
@@ -729,7 +729,7 @@
         [cell.timelineCellButtn setBackgroundImage:[UIImage imageNamed:@"save"] forState:UIControlStateNormal];
         [cell.timelineCellButtn setBackgroundImage:[UIImage imageNamed:@"save_pressed"] forState:UIControlEventTouchDown];
         [cell.timelineCellButtn setTitle:@"Save the Day" forState:UIControlStateNormal];
-        [cell.timelineCellButtn.titleLabel setFont:[UIFont bold20Font]];
+        [cell.timelineCellButtn.titleLabel setFont:[UIFont boldSystemFontOfSize:20]];
         return cell;
     }
     else {
@@ -744,9 +744,9 @@
             }
         }
         
-        [cell.titleLabel setFont:[UIFont bold20Font]];
+        [cell.titleLabel setFont:[UIFont boldSystemFontOfSize:20]];
         cell.titleLabel.textColor = [UIColor whiteColor];
-        [cell.subtitleLabel setFont:[UIFont semiBold12Font]];
+        [cell.subtitleLabel setFont:[UIFont boldSystemFontOfSize:12]];
         cell.subtitleLabel.textColor = [UIColor whiteColor];
         
         return cell;
@@ -782,16 +782,14 @@
         if (![urlFile isEqual:[NSNull null]] && ![urlFile isEqualToString:@""]) {
             [_timelineVCDelegate stopStreamPlayback];
             
-            NSString *alertString = [NSString stringWithFormat:@"%d", event.alert];
-            PlaybackViewController *playbackViewController = [[PlaybackViewController alloc] init];
             PlaylistInfo *clipInfo = [[PlaylistInfo alloc] init];
-            
             clipInfo.urlFile = urlFile;
-            clipInfo.alertType = alertString;
+            clipInfo.alertType = [NSString stringWithFormat:@"%d", event.alert];
             clipInfo.alertVal = event.value;
             clipInfo.macAddr = [Util strip_colon_fr_mac:_camChannel.profile.mac_address];
             clipInfo.registrationID = _camChannel.profile.registrationID;
             
+            PlaybackViewController *playbackViewController = [[PlaybackViewController alloc] initWithNibName:@"PlaybackViewController" bundle:nil];
             playbackViewController.clipInfo = clipInfo;
             playbackViewController.intEventId = event.eventID;
             playbackViewController.playbackVCDelegate = self;

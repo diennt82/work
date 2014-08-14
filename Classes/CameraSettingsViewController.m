@@ -198,7 +198,7 @@
 {
     if (indexPath.section == 3) {
         // Create the next view controller.
-        ValueSettingsViewController *valuesViewController = [[ValueSettingsViewController alloc] init];
+        ValueSettingsViewController *valuesViewController = [[ValueSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
         valuesViewController.parentVC = self;
         valuesViewController.parentIndex = indexPath.row;
         

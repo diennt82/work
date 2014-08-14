@@ -46,11 +46,6 @@
 {
     [super viewDidLoad];
 
-    // Load new nib for landscape iPad
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        [[NSBundle mainBundle] loadNibNamed:@"PlaybackViewController_ipad" owner:self options:nil];
-    }
-    
     [self applyFont];
     [self.view addSubview:_ib_myOverlay];
     self.view.userInteractionEnabled = NO;
@@ -323,7 +318,7 @@
 
 - (void)applyFont
 {
-    [_ib_timerPlayBack setFont:[UIFont lightSmall13Font]];
+    [_ib_timerPlayBack setFont:[UIFont systemFontOfSize:13]];
     _ib_timerPlayBack.textColor = [UIColor textTimerPlayBackColor];
 }
 

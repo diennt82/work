@@ -55,7 +55,7 @@
         self.hidesBottomBarWhenPushed = YES;
     }
     
-    self.timelineVC = [[TimelineViewController alloc] init];
+    self.timelineVC = [[TimelineViewController alloc] initWithNibName:@"TimelineViewController" bundle:nil];
     _timelineVC.title = @"Timeline";
     if ( [_parentVC conformsToProtocol:@protocol(TimelineVCDelegate)] ) {
         _timelineVC.timelineVCDelegate = (id<TimelineVCDelegate>)_parentVC;

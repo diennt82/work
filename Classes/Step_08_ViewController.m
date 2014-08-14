@@ -108,8 +108,8 @@
     }
     
     // Load RegistrationVC
-    RegistrationViewController *registrationVC = [[RegistrationViewController alloc] init];
-    [self.navigationController pushViewController:registrationVC animated:NO];
+    RegistrationViewController *controller = [[RegistrationViewController alloc] initWithNibName:@"RegistrationViewController" bundle:nil];
+    [self.navigationController pushViewController:controller animated:NO];
 }
 
 #pragma mark - Private methods

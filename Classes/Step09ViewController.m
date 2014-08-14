@@ -6,19 +6,10 @@
 //  Copyright (c) 2014 Hubble Connected Ltd. All rights reserved.
 //
 
-#define USERNAME_INDEX  0
-#define USERPASS_INDEX  1
-#define USERCPASS_INDEX 2
-#define USEREMAIL_INDEX 3
-
-#define TAG_USERNAME 201
-#define TAG_PASS     202
-#define TAG_CPASS    203
-#define TAG_EMAIL    204
+#import <MonitorCommunication/MonitorCommunication.h>
 
 #import "Step09ViewController.h"
 #import "Step_10_ViewController.h"
-#import <MonitorCommunication/MonitorCommunication.h>
 
 @interface Step09ViewController () <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate>
 
@@ -40,30 +31,31 @@
 
 @implementation Step09ViewController
 
+#define USERNAME_INDEX  0
+#define USERPASS_INDEX  1
+#define USERCPASS_INDEX 2
+#define USEREMAIL_INDEX 3
+
+#define TAG_USERNAME 201
+#define TAG_PASS     202
+#define TAG_CPASS    203
+#define TAG_EMAIL    204
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        [[NSBundle mainBundle] loadNibNamed:@"Step09ViewController_iPad" owner:self options:nil];
-    }
-    
     self.navigationController.navigationBarHidden = YES;
     
-    self.tableViewInfo.delegate = self;
-    self.tableViewInfo.dataSource = self;
+    _tableViewInfo.delegate = self;
+    _tableViewInfo.dataSource = self;
     
-    //NSLog(@"%f, %f, %f",  _tableViewInfo.frame.origin.y,  _tableViewInfo.frame.size.width,  _tableViewInfo.frame.origin.x);
+    _buttonCreate.enabled = NO;
+    [_buttonCreate setBackgroundImage:[UIImage imageNamed:@"enter"] forState:UIControlStateNormal];
+    [_buttonCreate setBackgroundImage:[UIImage imageNamed:@"enter_pressed"] forState:UIControlEventTouchDown];
     
-    self.buttonCreate.enabled = NO;
-    self.navigationController.navigationBarHidden = YES;
-    
-    [self.buttonCreate setBackgroundImage:[UIImage imageNamed:@"enter"] forState:UIControlStateNormal];
-    [self.buttonCreate setBackgroundImage:[UIImage imageNamed:@"enter_pressed"] forState:UIControlEventTouchDown];
-    
-    [self.buttonCheckbox setTitle:@"" forState:UIControlStateNormal];
-    [self.buttonCheckbox setTitle:@"√" forState:UIControlStateSelected];
-    [self.buttonCheckbox setTitle:@"√" forState:UIControlStateHighlighted];
+    [_buttonCheckbox setTitle:@"" forState:UIControlStateNormal];
+    [_buttonCheckbox setTitle:@"√" forState:UIControlStateSelected];
+    [_buttonCheckbox setTitle:@"√" forState:UIControlStateHighlighted];
     
     ((UITextField *)[_cellUsername viewWithTag:TAG_USERNAME]).delegate = self;
     ((UITextField *)[_cellPassword viewWithTag:TAG_PASS]).delegate = self;
@@ -76,9 +68,7 @@
 - (IBAction)buttonCheckboxTouchAction:(id)sender
 {
     self.selectedCheckBox = !_selectedCheckBox;
-    
     [sender setSelected:_selectedCheckBox];
-    
     [self validateAllFieldsEnableSignUp];
 }
 
@@ -89,32 +79,26 @@
 
 - (IBAction)buttonAlreadyAction:(id)sender
 {
-    [self.delegate sendStatus:LOGIN];
-    [self dismissViewControllerAnimated:YES completion:^{}];
+    [_delegate sendStatus:LOGIN];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - Methods
 
 -(void) validateAllFieldsEnableSignUp
 {
-    UITextField *tfUsername = (UITextField *)[_cellUsername     viewWithTag:TAG_USERNAME];
-    UITextField *tfPass     = (UITextField *)[_cellPassword     viewWithTag:TAG_PASS];
-    UITextField *tfCPass    = (UITextField *)[_cellConfirmPassword viewWithTag:TAG_CPASS];
-    UITextField *tfEmail    = (UITextField *)[_cellEmail        viewWithTag:TAG_EMAIL];
+    UITextField *tfUsername = (UITextField *)[_cellUsername viewWithTag:TAG_USERNAME];
+    UITextField *tfPass = (UITextField *)[_cellPassword viewWithTag:TAG_PASS];
+    UITextField *tfCPass = (UITextField *)[_cellConfirmPassword viewWithTag:TAG_CPASS];
+    UITextField *tfEmail = (UITextField *)[_cellEmail viewWithTag:TAG_EMAIL];
     
-    if ((tfUsername.text.length > 0) &&
-        (tfPass.text.length     > 0) &&
-        (tfCPass.text.length    > 0) &&
-        (tfEmail.text.length    > 0) &&
-        (_selectedCheckBox      == TRUE)
-      )
-    {
-        //Enable the "Create" button
-        self.buttonCreate.enabled = YES;
+    if ( tfUsername.text.length > 0 && tfPass.text.length > 0 &&
+        tfCPass.text.length > 0 && tfEmail.text.length > 0 && _selectedCheckBox
+      ) {
+        _buttonCreate.enabled = YES;
     }
     else {
-        //disable the "Create"  button
-        self.buttonCreate.enabled = NO;
+        _buttonCreate.enabled = NO;
     }
 }
 
@@ -122,12 +106,11 @@
 {
     const int movementDistance = 80; // tweak as needed
     const float movementDuration = 0.3f; // tweak as needed
-    
     int movement = (up ? -movementDistance : movementDistance);
     
-    [UIView beginAnimations: @"anim" context: nil];
-    [UIView setAnimationBeginsFromCurrentState: YES];
-    [UIView setAnimationDuration: movementDuration];
+    [UIView beginAnimations:@"anim" context:nil];
+    [UIView setAnimationBeginsFromCurrentState:YES];
+    [UIView setAnimationDuration:movementDuration];
     self.view.frame = CGRectOffset(self.view.frame, 0, movement);
     [UIView commitAnimations];
 }
@@ -135,118 +118,45 @@
 - (void)checkingDataInputToLogin
 {
     UITextField *tfUsername = (UITextField *)[_cellUsername viewWithTag:TAG_USERNAME];
-    UITextField *tfPass     = (UITextField *)[_cellPassword viewWithTag:TAG_PASS];
-    UITextField *tfCPass    = (UITextField *)[_cellConfirmPassword viewWithTag:TAG_CPASS];
-    UITextField *tfEmail    = (UITextField *)[_cellEmail viewWithTag:TAG_EMAIL];
+    UITextField *tfPass = (UITextField *)[_cellPassword viewWithTag:TAG_PASS];
+    UITextField *tfCPass = (UITextField *)[_cellConfirmPassword viewWithTag:TAG_CPASS];
+    UITextField *tfEmail = (UITextField *)[_cellEmail viewWithTag:TAG_EMAIL];
     
-    NSString * regex = @"[a-zA-Z0-9._-]+";
-    NSPredicate * validatedUsername = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
+    NSString *regex = @"[a-zA-Z0-9._-]+";
+    NSPredicate *validatedUsername = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
     BOOL isValidateUsername = [validatedUsername evaluateWithObject:tfUsername.text];
     
-    NSString * msg = nil ;
-    NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
-                                                      @"Ok", nil);
-    NSString * title = nil;
+    NSString *title = LocStr(@"Create Account Failed");
+    NSString *msg = nil;
+    NSString *ok = LocStr(@"Ok");
     
-    //UserName at least 5 chars and at most 20 characters
-    if ([tfUsername.text length] < 5 || [tfUsername.text length] > 20) {
-        //error
-        title = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed",nil, [NSBundle mainBundle],
-                                                  @"Create Account Failed" , nil);
-        msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg",nil, [NSBundle mainBundle],
-                                                @"User name has to be between 5-20 characters" , nil);
-        //ERROR condition
-        UIAlertView *_alert = [[UIAlertView alloc]
-                               initWithTitle:title
-                               message:msg
-                               delegate:self
-                               cancelButtonTitle:ok
-                               otherButtonTitles:nil];
-        [_alert show];
+    // UserName at least 5 chars and at most 20 characters
+    if ( tfUsername.text.length < 5 || tfUsername.text.length > 20 ) {
+        msg = LocStr(@"User name has to be between 5-20 characters");
     }
-    else if (!isValidateUsername)
-    {
-        title = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed",nil, [NSBundle mainBundle],
-                                                  @"Create Account Failed" , nil);
-        msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg5", nil, [NSBundle mainBundle],
-                                                @"Username should not contain special characters except for - _ and ."  , nil);
-        
-        //ERROR condition
-        [[[UIAlertView alloc] initWithTitle:title message:msg
-                                    delegate:self
-                           cancelButtonTitle:ok
-                           otherButtonTitles:nil] show];
+    else if ( !isValidateUsername ) {
+        msg = LocStr(@"Username should not contain special characters except for - _ and .");
     }
-    else if (([tfPass.text length] < 8) ||
-             ([tfPass.text length] > 12) ) {
-        //error
-        title = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed",nil, [NSBundle mainBundle],
-                                                  @"Create Account Failed" , nil);
-        msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg1",nil, [NSBundle mainBundle],
-                                                @"Password has to be between 8-12 characters" , nil);
-        //ERROR condition
-        UIAlertView *_alert = [[UIAlertView alloc] initWithTitle:title
-                                                         message:msg
-                                                        delegate:self
-                                               cancelButtonTitle:ok
-                                               otherButtonTitles:nil];
-        [_alert show];
+    else if ( tfPass.text.length < 8 || tfPass.text.length > 12 ) {
+        msg = LocStr(@"Create_Account_Failed_msg1");
     }
-    else if ( ![tfPass.text isEqualToString:tfCPass.text]) {
-        //error
-        title = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed",nil, [NSBundle mainBundle],
-                                                  @"Create Account Failed" , nil);
-        msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg2",nil, [NSBundle mainBundle],
-                                                @"Password does not match" , nil);
-        
-        //ERROR condition
-        UIAlertView *_alert = [[UIAlertView alloc] initWithTitle:title
-                                                         message: msg
-                                                        delegate:self
-                                               cancelButtonTitle:ok
-                                               otherButtonTitles:nil];
-        [_alert show];
+    else if ( ![tfPass.text isEqualToString:tfCPass.text] ) {
+        msg = LocStr(@"Create_Account_Failed_msg2");
     }
-    else if(![self isValidEmail:tfEmail.text]) {
-        //error
-        title = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed",nil, [NSBundle mainBundle],
-                                                  @"Create Account Failed" , nil);
-        msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg3",nil, [NSBundle mainBundle],
-                                                @"Invalid email. Email address should be of the form somebody@somewhere.com"  , nil);
-        
-        //ERROR condition
-        UIAlertView *_alert = [[UIAlertView alloc] initWithTitle:title
-                                                         message:msg
-                                                        delegate:self
-                                               cancelButtonTitle:ok
-                                               otherButtonTitles:nil];
-        [_alert show];
+    else if( ![self isValidEmail:tfEmail.text] ) {
+        msg = LocStr(@"Create_Account_Failed_msg3");
     }
-    else if (![Step09ViewController isWifiConnectionAvailable] ) {
-        title = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed",nil, [NSBundle mainBundle],
-                                                  @"Create Account Failed" , nil);
-        msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg4",nil, [NSBundle mainBundle],
-                                                @"Please select a Wifi network to connect"  , nil);
-        
-        NSString * msg1 = NSLocalizedStringWithDefaultValue(@"Settings",nil, [NSBundle mainBundle],
-                                                            @"Settings"  , nil);
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title
-                                                            message:msg
-                                                           delegate:self
-                                                  cancelButtonTitle:msg1
-                                                  otherButtonTitles:nil];
-        [alertView show];
+    else if ( ![Step09ViewController isWifiConnectionAvailable] ) {
+        msg = LocStr(@"Create_Account_Failed_msg4");
     }
-    else //Good info now..
-    {
-        //Register user ...
-        self.stringUsername  = tfUsername.text;
-        self.stringPassword  = tfPass.text;
-        self.stringConfPass  = tfCPass.text;
-        self.stringEmail     = tfEmail.text;
+    else {
+        // Good info now... Register user.
+        self.stringUsername = tfUsername.text;
+        self.stringPassword = tfPass.text;
+        self.stringConfPass = tfCPass.text;
+        self.stringEmail = tfEmail.text;
         
-        NSLog(@"Start registration");
-        
+        DLog(@"Start registration");
         BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
                                                                                   Selector:@selector(regSuccessWithResponse:)
                                                                               FailSelector:@selector(regFailedWithError:)
@@ -257,6 +167,15 @@
                       andPasswordConfirmation:_stringConfPass];
         
     }
+    
+    if ( title && msg ) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title
+                                                        message:msg
+                                                       delegate:nil
+                                              cancelButtonTitle:nil
+                                              otherButtonTitles:ok, nil];
+        [alert show];
+    }
 }
 
 -(BOOL) isValidEmail:(NSString *)email
@@ -265,25 +184,24 @@
         return NO;
     }
     
-    NSArray * array = [email componentsSeparatedByString:@"@"];
-    NSString * domain = [array objectAtIndex:1];
-    NSLog(@"Domain is : %@",domain);
+    NSArray *array = [email componentsSeparatedByString:@"@"];
+    NSString *domain = array[1];
+    DLog(@"Domain is : %@", domain);
     
     NSError *error = NULL;
     NSRegularExpression *regexExpr = [NSRegularExpression regularExpressionWithPattern:@"\\([^\\)]*\\)" options:NSRegularExpressionCaseInsensitive error:&error];
     NSString *modifiedString = [regexExpr stringByReplacingMatchesInString:domain options:0 range:NSMakeRange(0, [domain length]) withTemplate:@""];
+    DLog(@"modifiedString ------> %@", modifiedString);
     
-    NSLog(@"modifiedString ------> %@", modifiedString);
-    
-    NSString * regex = @"[_a-zA-Z0-9-]+(\\.[_a-zA-Z0-9-]+)+";
-    NSPredicate * validatedDomain = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
+    NSString *regex = @"[_a-zA-Z0-9-]+(\\.[_a-zA-Z0-9-]+)+";
+    NSPredicate *validatedDomain = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
     
     return [validatedDomain evaluateWithObject:modifiedString];
 }
 
 + (BOOL)isWifiConnectionAvailable
 {
-    Reachability* wifiReach = [Reachability reachabilityForLocalWiFi];
+    Reachability *wifiReach = [Reachability reachabilityForLocalWiFi];
     NetworkStatus netStatus = [wifiReach currentReachabilityStatus];
     if (netStatus != ReachableViaWiFi) {
         return NO;
@@ -296,7 +214,7 @@
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {
-    [self animateTextField: textField withUp:YES];
+    [self animateTextField:textField withUp:YES];
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField
@@ -307,7 +225,6 @@
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
     [self validateAllFieldsEnableSignUp];
-    
     return YES;
 }
 
@@ -346,14 +263,14 @@
     //Store user/pass for later use
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
-	[userDefaults setObject:_stringEmail    forKey:@"PortalUseremail"];
+	[userDefaults setObject:_stringEmail forKey:@"PortalUseremail"];
 	[userDefaults setObject:_stringUsername forKey:@"PortalUsername"];
 	[userDefaults setObject:_stringPassword forKey:@"PortalPassword"];
     [userDefaults setObject:[responseData[@"data"] objectForKey:@"authentication_token"] forKey:@"PortalApiKey"];
     [userDefaults synchronize];
     
     //Load step 10
-    NSLog(@"Load Step 10");
+    DLog(@"Load Step 10");
     
     //Load the next xib
     Step_10_ViewController *step10ViewController = [[Step_10_ViewController alloc] initWithNibName:@"Step_10_ViewController" bundle:nil];
@@ -363,36 +280,29 @@
 
 - (void)regFailedWithError:(NSDictionary *)errorResponse
 {
-    NSString *ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
-                                                      @"Ok", nil);
-    NSString *title = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed",nil, [NSBundle mainBundle],
-                                                         @"Create Account Failed" , nil);
+    NSString *ok = LocStr(@"Ok");
+    NSString *title = LocStr(@"Create Account Failed");
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title
                                                     message:errorResponse[@"message"]
-                                                   delegate:self
-                                          cancelButtonTitle:ok
-                                          otherButtonTitles:nil];
+                                                   delegate:nil
+                                          cancelButtonTitle:nil
+                                          otherButtonTitles:ok, nil];
     [alert show];
 }
 
 - (void)regFailedServerUnreachable
 {
-	NSLog(@"register failed : server unreachable");
+	DLog(@"register failed : server unreachable");
 	
-    NSString *msg1 = NSLocalizedStringWithDefaultValue(@"Registration_Error",nil, [NSBundle mainBundle],
-                                                        @"Registration Error" , nil);
+    NSString *title = LocStr(@"Registration Error");
+    NSString *msg = LocStr(@"Registration_Error_1");
+    NSString *ok = LocStr(@"Ok");
     
-    NSString *msg = NSLocalizedStringWithDefaultValue(@"Registration_Error_1" ,nil, [NSBundle mainBundle],
-                                                       @"BMS Server is unreachable. Please goto WIFI setting to ensure iOS device is connected to router/3G network" , nil);
-    
-    NSString *ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
-                                                      @"Ok", nil);
-	//ERROR condition
-	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:msg1
+	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title
                                                     message:msg
-                                                   delegate:self
-                                          cancelButtonTitle:ok
-                                          otherButtonTitles:nil];
+                                                   delegate:nil
+                                          cancelButtonTitle:nil
+                                          otherButtonTitles:ok, nil];
 	[alert show];
 }
 

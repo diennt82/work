@@ -15,14 +15,11 @@
 #define SCAN_CAMERA             3
 #define AFTER_ADD_RELOGIN       4
 #define AFTER_DEL_RELOGIN       5
-#define BACK_FRM_MENU_NOLOAD    6
-//#define FRONT_PAGE              7
+#define BACK_FROM_MENU_NOLOAD    6
 #define LOGGING_IN              7
 #define LOGIN_FAILED_OR_LOGOUT  8
 #define SCAN_BONJOUR_CAMERA     9
-
 #define SHOW_CAMERA_LIST        10
-#define SHOW_CAMERA_LIST2       11
 
 @protocol ConnectionMethodDelegate
 

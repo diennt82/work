@@ -102,17 +102,17 @@
 - (void)loadFont
 {
     if ( isiPhone5 ) {
-        self.semiBoldFont = [UIFont applyHubbleFontName:PN_SEMIBOLD_FONT withSize:19];
-        self.regularFont = [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:19];
+        self.semiBoldFont = [UIFont boldSystemFontOfSize:19];
+        self.regularFont = [UIFont systemFontOfSize:19];
     }
     else if (isiPhone4) {
-        self.semiBoldFont = [UIFont applyHubbleFontName:PN_SEMIBOLD_FONT withSize:17];
-        self.regularFont = [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:17];
+        self.semiBoldFont = [UIFont boldSystemFontOfSize:17];
+        self.regularFont = [UIFont systemFontOfSize:17];
     }
     else {
         //maybe iPad
-        self.semiBoldFont = [UIFont applyHubbleFontName:PN_SEMIBOLD_FONT withSize:30];
-        self.regularFont = [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:30];
+        self.semiBoldFont = [UIFont boldSystemFontOfSize:30];
+        self.regularFont = [UIFont systemFontOfSize:30];
     }
 }
 

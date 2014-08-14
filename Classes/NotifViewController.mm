@@ -179,7 +179,7 @@
                 clipInfo.alertVal = _alertVal;
                 clipInfo.registrationID = _registrationID;
                 
-                PlaybackViewController *playbackViewController = [[PlaybackViewController alloc] init];
+                PlaybackViewController *playbackViewController = [[PlaybackViewController alloc] initWithNibName:@"PlaybackViewController" bundle:nil];
                 [playbackViewController setClipInfo:clipInfo];
                 
                 NSLog(@"Push the view controller.- %@", self.parentViewController);
@@ -220,7 +220,7 @@
 {
     [self cancelTaskDoInBackground];
     
-    CameraMenuViewController *cameraMenuCV = [[CameraMenuViewController alloc] init];
+    CameraMenuViewController *cameraMenuCV = [[CameraMenuViewController alloc] initWithNibName:@"CameraMenuViewController" bundle:nil];
     cameraMenuCV.camChannel = _camChannel;
     if (_parentVC) {
         MenuViewController *menuVC = (MenuViewController *)_parentVC;
@@ -244,11 +244,10 @@
 
 - (IBAction)ignoreTouchAction:(id)sender
 {
-    NSLog(@"%s _notifDelegate:%@", __FUNCTION__, _notifDelegate);
-
+    DLog(@"%s _notifDelegate:%@", __FUNCTION__, _notifDelegate);
     [self cancelTaskDoInBackground];
     [self.navigationController popToRootViewControllerAnimated:NO];
-    [_notifDelegate sendStatus:SHOW_CAMERA_LIST2];
+    [_notifDelegate sendStatus:SHOW_CAMERA_LIST];
 }
 
 #pragma mark - Methods

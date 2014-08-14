@@ -11,7 +11,6 @@
 #import "H264PlayerVCDelegate.h"
 #import "EarlierNavigationController.h"
 #import "EarlierViewController.h"
-#import "UIFont+Hubble.h"
 #import "PublicDefine.h"
 #import "UserAccount.h"
 #import "CameraAlert.h"
@@ -53,10 +52,12 @@
     
     self.initialView = YES;
     
-    self.buttonTitleTextAttrs = @{ NSFontAttributeName:[UIFont bold18Font],
-                                   NSForegroundColorAttributeName: [UIColor blackColor] };
+    self.buttonTitleTextAttrs = @{ NSFontAttributeName:[UIFont boldSystemFontOfSize:18],
+                                   NSForegroundColorAttributeName:[UIColor blackColor] };
     
-    self.camerasVC = [[CamerasViewController alloc] initWithDelegate:self.menuDelegate parentVC:self];
+    self.camerasVC = [[CamerasViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    _camerasVC.parentVC = self;
+    
     EarlierNavigationController *camerasNavContoller = [[EarlierNavigationController alloc] initWithRootViewController:_camerasVC];
     _camerasVC.tabBarItem.image = [UIImage imageNamed:@"logo2"];
     
@@ -69,12 +70,10 @@
     UINavigationController *settingsNavContoller = [[UINavigationController alloc] initWithRootViewController:_settingsVC];
     _settingsVC.tabBarItem.image = [UIImage imageNamed:@"general"];
     
-    self.accountVC = [[AccountViewController alloc] init];
+    self.accountVC = [[AccountViewController alloc] initWithNibName:@"AccountViewController" bundle:nil];
     _accountVC.parentVC = self;
     UINavigationController *accountNavContoller = [[UINavigationController alloc] initWithRootViewController:_accountVC];
     _accountVC.tabBarItem.image = [UIImage imageNamed:@"account_icon"];
-    
-    NSLog(@"MenuVC - viewDidLoad: %p, %p", _menuDelegate, _accountVC.parentVC);
     
     self.cameraBarButton = [[UIBarButtonItem alloc] initWithTitle:@"Camera" style:UIBarButtonItemStylePlain target:self action:@selector(selectMenuCamera)];
     self.settingsBarButton = [[UIBarButtonItem alloc] initWithTitle:@"Settings" style:UIBarButtonItemStylePlain target:self action:@selector(selectSettings)];
@@ -127,9 +126,12 @@
 
 - (void)resetFontTextNormalBarButton
 {
-    [_cameraBarButton setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont regular18Font], NSFontAttributeName,  [UIColor blackColor], NSForegroundColorAttributeName,nil] forState:UIControlStateNormal];
-    [_settingsBarButton setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont regular18Font], NSFontAttributeName,  [UIColor blackColor], NSForegroundColorAttributeName,nil] forState:UIControlStateNormal];
-    [_accountBarButton setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont regular18Font], NSFontAttributeName,  [UIColor blackColor], NSForegroundColorAttributeName,nil] forState:UIControlStateNormal];
+    NSDictionary *dict = @{ NSFontAttributeName : [UIFont systemFontOfSize:18],
+                            NSForegroundColorAttributeName : [UIColor blackColor] };
+    
+    [_cameraBarButton setTitleTextAttributes:dict forState:UIControlStateNormal];
+    [_settingsBarButton setTitleTextAttributes:dict forState:UIControlStateNormal];
+    [_accountBarButton setTitleTextAttributes:dict forState:UIControlStateNormal];
 }
 
 - (void)selectMenuCamera

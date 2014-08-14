@@ -10,33 +10,18 @@
 //
 
 #import "UICircularSlider.h"
-#import "UIFont+Hubble.h"
 #import "define.h"
 
 @interface UICircularSlider()
 
-#define Rgb2UIColor(r, g, b)  [UIColor colorWithRed:((r) / 255.0) green:((g) / 255.0) blue:((b) / 255.0) alpha:1.0]
+@property (nonatomic) CGPoint thumbCenterPoint;
 
-/** Helper Functions **/
+@end
+
+#define Rgb2UIColor(r, g, b)  [UIColor colorWithRed:((r) / 255.0) green:((g) / 255.0) blue:((b) / 255.0) alpha:1.0]
 #define ToRad(deg) 		( (M_PI * (deg)) / 180.0 )
 #define ToDeg(rad)		( (180.0 * (rad)) / M_PI )
 #define SQR(x)			( (x) * (x) )
-
-@property (nonatomic) CGPoint thumbCenterPoint;
-
-#pragma mark - Init and Setup methods
-- (void)setup;
-
-#pragma mark - Thumb management methods
-- (BOOL)isPointInThumb:(CGPoint)point;
-
-#pragma mark - Drawing methods
-- (CGFloat)sliderRadius;
-- (void)drawThumbAtPoint:(CGPoint)sliderButtonCenterPoint inContext:(CGContextRef)context;
-- (CGPoint)drawCircularTrack:(float)track atPoint:(CGPoint)point withRadius:(CGFloat)radius inContext:(CGContextRef)context;
-- (CGPoint)drawPieTrack:(float)track atPoint:(CGPoint)point withRadius:(CGFloat)radius inContext:(CGContextRef)context;
-
-@end
 
 #pragma mark -
 
@@ -50,9 +35,6 @@
 		_value = value;
         [self.textField setText:[self timeFormat:(int)round(self.value)]];
 		[self setNeedsDisplay];
-//        if (self.isContinuous) {
-//            [self sendActionsForControlEvents:UIControlEventValueChanged];
-//        }
 	}
 }
 
@@ -137,8 +119,8 @@
 
     //Add label
     //Define the Font
-    UIFont *font = [UIFont lightLarge75Font];
-    UIFont *font1 = [UIFont regularMedium23Font];
+    UIFont *font = [UIFont systemFontOfSize:75];
+    UIFont *font1 = [UIFont systemFontOfSize:23];
     
     //Calculate font size needed to display 3 numbers
     NSString *str = @"0000";

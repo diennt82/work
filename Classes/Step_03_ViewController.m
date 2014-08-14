@@ -102,7 +102,8 @@
 
 - (void)Step04Action:(id)sender
 {
-    [self.navigationController pushViewController:[[Step_04_ViewController alloc] init] animated:YES];
+    Step_04_ViewController *controller = [[Step_04_ViewController alloc] initWithNibName:@"Step_04_ViewController" bundle:nil];
+    [self.navigationController pushViewController:controller animated:YES];
 }
 
 #pragma mark -

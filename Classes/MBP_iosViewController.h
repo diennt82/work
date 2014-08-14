@@ -3,7 +3,7 @@
 //  MBP_ios
 //
 //  Created by NxComm on 9/26/11.
-//  Copyright 2011 __MyCompanyName__. All rights reserved.
+//  Copyright 2011 Hubble Connected Ltd. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
@@ -31,10 +31,6 @@
 
 #define CURRENT_VIEW_MODE_MULTI     0x11
 #define CURRENT_VIEW_MODE_SINGLE    0x12
-
-@class DashBoard_ViewController; 
-@class MBP_CamView;
-@class CamProfile;
 
 #define DIRECT_MODE_NEXT_BTN 311
 
@@ -73,10 +69,7 @@
 + (void)getBroadcastAddress:(NSString **)bcast AndOwnIp:(NSString**)ownip ipasLong:(long *)ownip;
 
 - (void)initialize;
-- (void)scan_for_devices;
-- (void)startShowingCameraList:(NSNumber *) option;
 - (void)sendStatus:(int) status;
-- (BOOL)restoreConfigData;
 - (BOOL)pushNotificationRcvedInForeground:(CameraAlert *)camAlert;
 - (BOOL)pushNotificationRcvedServerAnnouncement:(NSString *)customMessage andUrl:(NSString *)customUrl;
 

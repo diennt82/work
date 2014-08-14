@@ -9,7 +9,6 @@
 #import <UIKit/UIKit.h>
 #import <CameraScanner/CameraScanner.h>
 
-#import "UIFont+Hubble.h"
 #import "UIImage+Hubble.h"
 #import "CellMelody.h"
 #import "UIColor+Hubble.h"

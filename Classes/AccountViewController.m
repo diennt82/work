@@ -32,9 +32,9 @@
 
 #pragma mark - UIViewController methods
 
-- (id)init
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
-    self = [super init];
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Set title here and not in viewDidLoad otherwise problem occurs in a tabbedViewController parent.
         self.title = LocStr(@"Account_");
@@ -50,6 +50,7 @@
     UILabel *lblVersion = (UILabel *)[self.view viewWithTag:559];
     
     lblVersion.text = [NSString stringWithFormat:@"Hubble Home v%@", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]];
+    _emailLabel.text = LocStr(@"Email");
     
     UIBarButtonItem *logoutButton = [[UIBarButtonItem alloc] initWithTitle:@"Logout"
                                                                      style:UIBarButtonItemStylePlain
@@ -61,10 +62,10 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    NSLog(@"AccountVC -viewWillAppear --");
+    DLog(@"AccountVC -viewWillAppear --");
     [self loadUserData];
     
-    // Don't know why but on iOS 7.1 the tineColor was getting unset somehow
+    // Don't know why but on iOS 7.1 the tintColor was getting unset somehow
     if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1) {
         // iOS 7+
         self.navigationItem.rightBarButtonItem.tintColor = [UIApplication sharedApplication].keyWindow.tintColor;
@@ -86,7 +87,7 @@
 {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 	// can be user email or user name here --
-	NSString *user_email = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
+	NSString *user_email = (NSString *)[userDefaults objectForKey:@"PortalUseremail"];
     UITextField *userTextField  =  (UITextField *)[_userEmailCell viewWithTag:1];
     userTextField.text = user_email;
 }
