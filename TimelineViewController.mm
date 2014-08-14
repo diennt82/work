@@ -1554,7 +1554,7 @@
     [dateFormater release];
 #endif
     
-    NSLog(@"%s eventDate:%@, time_stamp:%@", __FUNCTION__, eventDate, eventInfo.time_stamp);
+    //NSLog(@"%s eventDate:%@, time_stamp:%@", __FUNCTION__, eventDate, eventInfo.time_stamp);
     
     NSDateFormatter* df_local = [[NSDateFormatter alloc] init] ;
 #if 0
@@ -1603,7 +1603,7 @@
     {
         df_local.dateFormat = @"d";
         NSString *strDate = [df_local stringFromDate:eventDate];
-        NSLog(@"%s strDate base on df_local:%@", __FUNCTION__, strDate);
+        //NSLog(@"%s strDate base on df_local:%@", __FUNCTION__, strDate);
         
         df_local.dateFormat = @"MMM";
         NSString *strM = [df_local stringFromDate:eventDate];
