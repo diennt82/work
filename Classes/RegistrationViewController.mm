@@ -155,12 +155,26 @@
     
     UIButton *iAgreeButton = (UIButton *)[self.view viewWithTag:505];
     [iAgreeButton setTitle:NSLocalizedStringWithDefaultValue(@"xib_registration_buttun_title_agree", nil, [NSBundle mainBundle], @"I agree with the", nil) forState:UIControlStateNormal];
+    CGRect rect = iAgreeButton.frame;
+    rect.size.width = [self calculateWidthForString:iAgreeButton.titleLabel.text withHeightFrame:iAgreeButton.frame.size.height andFont:iAgreeButton.titleLabel.font];
+    iAgreeButton.frame = rect;
     
     UIButton *termOfServicesButton = (UIButton *)[self.view viewWithTag:504];
     [termOfServicesButton setTitle:NSLocalizedStringWithDefaultValue(@"xib_registration_button_title_term", nil, [NSBundle mainBundle], @"Terms of Services", nil) forState:UIControlStateNormal];
+    rect = termOfServicesButton.frame;
+    rect.origin.x = CGRectGetMaxX(iAgreeButton.frame) + 2;
+    rect.size.width = [self calculateWidthForString:termOfServicesButton.titleLabel.text withHeightFrame:termOfServicesButton.frame.size.height andFont:termOfServicesButton.titleLabel.font];
+    termOfServicesButton.frame = rect;
     
     [self.btnCreate setTitle:NSLocalizedStringWithDefaultValue(@"xib_registration_button_title_create", nil, [NSBundle mainBundle], @"Create", nil) forState:UIControlStateNormal];
+    
     [self.btnAlreadyAccount setTitle:NSLocalizedStringWithDefaultValue(@"xib_registration_button_title_alreadyaccount", nil, [NSBundle mainBundle], @"Already have a Account?", nil) forState:UIControlStateNormal];
+}
+
+- (CGFloat)calculateWidthForString:(NSString *)desc withHeightFrame:(CGFloat)height andFont:(UIFont *)font {
+    CGSize constraintSize = CGSizeMake(MAXFLOAT, height);
+    CGSize theSize = [desc sizeWithFont:font constrainedToSize:constraintSize lineBreakMode:NSLineBreakByWordWrapping];
+    return theSize.width;
 }
 
 - (void)viewDidAppear:(BOOL)animated {
