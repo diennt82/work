@@ -92,7 +92,7 @@ typedef enum _WAIT_FOR_UPDATING {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
-        self.title = @"Camera Settings";
+        self.title = NSLocalizedStringWithDefaultValue(@"camera_settings", nil, [NSBundle mainBundle], @"Camera Settings", nil);
     }
     return self;
 }
@@ -157,8 +157,18 @@ typedef enum _WAIT_FOR_UPDATING {
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [self xibDefaultLocalization];
     self.navigationController.navigationBarHidden = NO;
     [self.navigationController.view setUserInteractionEnabled:YES];
+}
+
+- (void)xibDefaultLocalization
+{
+    [self.btnRmoveCamera setTitle:NSLocalizedStringWithDefaultValue(@"xib_cameramenu_button_text_cameramenu", nil, [NSBundle mainBundle], @"Remove Camera", nil) forState:UIControlStateNormal];
+    UILabel *detailLable = (UILabel *)[self.vwHeaderCamDetail viewWithTag:1];
+    detailLable.text = NSLocalizedStringWithDefaultValue(@"xib_cameramenu_label_camdetail", nil, [NSBundle mainBundle], @"Camera Detail", nil);
+    UILabel *sensityLable = (UILabel *)[self.vwHeaderNotSens viewWithTag:1];
+    sensityLable.text = NSLocalizedStringWithDefaultValue(@"xib_cameramenu_label_sensity", nil, [NSBundle mainBundle], @"Notification Sensity", nil);
 }
 
 - (void)didReceiveMemoryWarning

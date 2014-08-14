@@ -73,6 +73,7 @@
             <connections>
                 <outlet property="btnChangeImage" destination="IRl-qw-7hb" id="N7q-8y-apT"/>
                 <outlet property="btnChangeName" destination="SFG-3Z-44k" id="ihF-xz-5Yx"/>
+                <outlet property="btnFirmwareVersion" destination="9NU-1Y-H61" id="3Vp-1V-2JR"/>
                 <outlet property="lblCamVer" destination="IIL-PM-DO3" id="RAQ-UM-lRd"/>
                 <outlet property="lblCameraName" destination="53J-p0-3cn" id="rXc-aP-2Bf"/>
             </connections>

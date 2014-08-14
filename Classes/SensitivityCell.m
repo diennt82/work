@@ -92,6 +92,13 @@
     }
     
     self.imageViewCircleWhite.center = ((UIImageView *)_imageViewCircleArray[_settingsValue]).center;
+    
+    UILabel *lowLabel = (UILabel *)[self viewWithTag:101];
+    lowLabel.text = NSLocalizedStringWithDefaultValue(@"xib_camerasettings_cell_label_low", nil, [NSBundle mainBundle], @"Low", nil);
+    UILabel *mediumLabel = (UILabel *)[self viewWithTag:102];
+    mediumLabel.text = NSLocalizedStringWithDefaultValue(@"xib_camerasettings_cell_label_medium", nil, [NSBundle mainBundle], @"Medium", nil);
+    UILabel *highLabel = (UILabel *)[self viewWithTag:103];
+    highLabel.text = NSLocalizedStringWithDefaultValue(@"xib_camerasettings_cell_label_high", nil, [NSBundle mainBundle], @"High", nil);
 }
 
 - (void)singleTap: (UITapGestureRecognizer *)recognizer

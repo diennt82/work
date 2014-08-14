@@ -126,6 +126,12 @@
         [self.imgViewRight setBackgroundColor:[UIColor lightGrayColor]];
     }    
 
+    UILabel *tempLabel = (UILabel *)[self viewWithTag:101];
+    tempLabel.text = NSLocalizedStringWithDefaultValue(@"xib_camerasettings_cell_label_temperature", nil, [NSBundle mainBundle], @"Temperature", nil);
+    UILabel *lowLabel = (UILabel *)[self viewWithTag:102];
+    lowLabel.text = NSLocalizedStringWithDefaultValue(@"xib_camerasettings_cell_label_low", nil, [NSBundle mainBundle], @"Low", nil);
+    UILabel *highLabel = (UILabel *)[self viewWithTag:103];
+    highLabel.text = NSLocalizedStringWithDefaultValue(@"xib_camerasettings_cell_label_high", nil, [NSBundle mainBundle], @"High", nil);
 }
 
 - (IBAction)btnTypeTempTouchUpInsideAction:(UIButton *)sender
