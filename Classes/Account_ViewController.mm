@@ -21,7 +21,6 @@
 @property (retain, nonatomic) IBOutlet UITableViewCell * userEmailCell;
 @property (retain, nonatomic) IBOutlet UITableViewCell * versionCell;
 @property (retain, nonatomic) IBOutlet UITableView * accountInfo;
-@property (retain, nonatomic) IBOutlet UIActivityIndicatorView * progress;
 @property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellChangePassword;
 
 @property (nonatomic) NSInteger screenWidth;
@@ -101,25 +100,29 @@
     _user.text = user_email;
 }
 
-- (void)sendTouchBtnStateWithIndex:(NSInteger)rowIdx
-{
-    [self userLogout];
-}
-
--(IBAction) userLogout
+- (IBAction)btnLogoutTouchUpInsideAction:(id)sender
 {
     NSLog(@"LOG OUT>>>>");
+    
+    MBProgressHUD *hub = [MBProgressHUD showHUDAddedTo:self.view animated:NO];
+    hub.labelText = @"Log out...";
     
     MenuViewController *tabBarController = (MenuViewController *)self.parentVC;
     
     _accountInfo.hidden = YES;
-    _progress.hidden = NO;
+    ((UIButton *)sender).enabled = NO;
     [CameraAlert clearAllAlerts];
     
+#if 1
+    [tabBarController.navigationController popToRootViewControllerAnimated:NO];
+    [tabBarController.menuDelegate sendStatus:LOGIN_FAILED_OR_LOGOUT];
+#else
     [tabBarController dismissViewControllerAnimated:NO completion:^
      {
          [tabBarController.menuDelegate sendStatus:LOGIN_FAILED_OR_LOGOUT];
      }];
+#endif
+    [MBProgressHUD hideHUDForView:self.view animated:NO];
 }
 
 - (void)sendsAppLog
@@ -378,7 +381,7 @@
         else if (indexPath.row == 2)
         {
             //log out
-            [self userLogout];
+            [self btnLogoutTouchUpInsideAction:nil];
         }
     }
     else if(indexPath.section == 1 && indexPath.row == 1 ) //App Version

@@ -580,7 +580,7 @@
 - (void)removeSubviews
 {
     NSLog(@"%s", __FUNCTION__);
-    
+#if 0
     if (_accountVC)
     {
         // Dismiss account view's subviews.
@@ -598,14 +598,17 @@
     {
         [_camerasVC.view removeFromSuperview];
     }
+#endif
 }
 
+#if 0
 #pragma mark - UITabBarDelegate
 
 - (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item
 {
     self.title = item.title;
 }
+#endif
 
 #pragma mark - UITabBarControllerDelegate
 

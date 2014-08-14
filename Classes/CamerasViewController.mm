@@ -19,9 +19,9 @@
 #import "UIDeviceHardware.h"
 #import "MBP_iosViewController.h"
 
-#define MAX_CAM_ALLOWED 4
-#define CAMERA_TAG_66 566
-#define CAMERA_TAG_83 583 //83/ 836
+#define MAX_CAM_ALLOWED     4
+#define CAMERA_TAG_66       566
+#define CAMERA_TAG_83       583 //83/ 836
 #define CAMERA_STATUS_OFFLINE   -1
 #define CAMERA_STATUS_UPGRADING  0
 #define CAMERA_STATUS_ONLINE     1
@@ -163,12 +163,17 @@
             [userDefaults setInteger:WIFI_SETUP forKey:SET_UP_CAMERA];
             [userDefaults setBool:FALSE forKey:FIRST_TIME_SETUP];
             [userDefaults synchronize];
-            
+#if 1
+            [tabBarController.navigationController popToRootViewControllerAnimated:NO];
+            [tabBarController.menuDelegate sendStatus:SETUP_CAMERA];
+            tabBarController.menuDelegate = nil;
+            return;
+#else
             [tabBarController dismissViewControllerAnimated:NO completion:^{
                 [tabBarController.menuDelegate sendStatus:SETUP_CAMERA]; //initial setup
                 tabBarController.menuDelegate = nil;
             }];
-            
+#endif
         }
         else
         {
@@ -266,10 +271,16 @@
     
     if (flag)
     {
+#if 1
+        [tabBarController.navigationController popToRootViewControllerAnimated:NO];
+        [tabBarController.menuDelegate sendStatus:SETUP_CAMERA];
+        tabBarController.menuDelegate = nil;
+#else
         [tabBarController dismissViewControllerAnimated:NO completion:^{
             [tabBarController.menuDelegate sendStatus:SETUP_CAMERA]; //initial setup
             tabBarController.menuDelegate = nil;
         }];
+#endif
     }
     else
     {
