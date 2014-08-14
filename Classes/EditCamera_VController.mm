@@ -41,6 +41,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self xibDefaultLocalization];
 	// Do any additional setup after loading the view.
     self.navigationItem.hidesBackButton = YES;
     
@@ -71,6 +72,22 @@
     self.tfCamName.delegate = self;
     
     self.tfCamName.text = self.cameraName;
+}
+
+- (void)xibDefaultLocalization
+{
+    UILabel *lable = (UILabel *)[self.view viewWithTag:1];
+    lable.text = NSLocalizedStringWithDefaultValue(@"xib_EditCameraPage_label_camera_detected", nil, [NSBundle mainBundle], @"Camera Detected", nil);
+    lable = (UILabel *)[self.view viewWithTag:2];
+    lable.text = NSLocalizedStringWithDefaultValue(@"xib_EditCameraPage_label_make_your_notifcation", nil, [NSBundle mainBundle], @"Please name the location of your camera. This will help make your notification more relevant.", nil);
+    
+    self.tfCamName.placeholder = NSLocalizedStringWithDefaultValue(@"xib_EditCameraPage_textfield_camname", nil, [NSBundle mainBundle], @"Eg. Living Room, Nursery", nil);
+    [self.btnContinue setTitle:NSLocalizedStringWithDefaultValue(@"xib_EditCameraPage_button_continue", nil, [NSBundle mainBundle], @"Continue", nil) forState:UIControlStateNormal];
+    
+    lable = (UILabel *)[self.viewProgress viewWithTag:1];
+    lable.text = NSLocalizedStringWithDefaultValue(@"xib_EditCameraPage_label_searching", nil, [NSBundle mainBundle], @"Searching for Wi-Fi Networks", nil);
+    lable = (UILabel *)[self.viewProgress viewWithTag:2];
+    lable.text = NSLocalizedStringWithDefaultValue(@"xib_EditCameraPage_label_waitfor", nil, [NSBundle mainBundle], @"Please wait", nil);
 }
 
 - (void)viewDidUnload
