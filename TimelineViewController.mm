@@ -701,48 +701,48 @@
     {
         if (numberOfMovement >= 4)
         {
-            self.stringIntelligentMessage = @"There has been a lot of noise/movement";
+            self.stringIntelligentMessage = NSLocalizedStringWithDefaultValue(@"", nil, [NSBundle mainBundle], @"There has been a lot of noise/movement", nil);
         }
         else if(numberOfMovement >= 2)
         {
-            self.stringIntelligentMessage = @"There has been a lot of noise and some movement";
+            self.stringIntelligentMessage = NSLocalizedStringWithDefaultValue(@"", nil, [NSBundle mainBundle], @"There has been a lot of noise and some movement", nil);
         }
         else if(numberOfMovement == 1)
         {
-            self.stringIntelligentMessage = @"There has been a lot of noise and little movement";
+            self.stringIntelligentMessage = NSLocalizedStringWithDefaultValue(@"", nil, [NSBundle mainBundle], @"There has been a lot of noise and little movement", nil);
         }
         else
         {
-            self.stringIntelligentMessage = @"There has been a lot of noise";
+            self.stringIntelligentMessage = NSLocalizedStringWithDefaultValue(@"", nil, [NSBundle mainBundle], @"There has been a lot of noise", nil);
         }
     }
     else// if (numberOfVOX >= 0)
     {
         if (numberOfMovement >= 4)
         {
-            self.stringIntelligentMessage = @"There has been a lot of movement";
+            self.stringIntelligentMessage = NSLocalizedStringWithDefaultValue(@"", nil, [NSBundle mainBundle], @"There has been a lot of movement", nil);
         }
         else if(numberOfMovement >= 2)
         {
-            self.stringIntelligentMessage = @"There has been some movement";
+            self.stringIntelligentMessage = NSLocalizedStringWithDefaultValue(@"", nil, [NSBundle mainBundle], @"There has been some movement", nil);
         }
         else if(numberOfMovement == 1)
         {
-            self.stringIntelligentMessage = @"There has been a little movement";
+            self.stringIntelligentMessage = NSLocalizedStringWithDefaultValue(@"", nil, [NSBundle mainBundle], @"There has been a little movement", nil);
         }
         else
         {
             if (numberOfVOX >= 2)
             {
-                self.stringIntelligentMessage = @"There has been some noise";
+                self.stringIntelligentMessage = NSLocalizedStringWithDefaultValue(@"", nil, [NSBundle mainBundle], @"There has been some noise", nil);
             }
             else if (numberOfVOX >= 1)
             {
-                self.stringIntelligentMessage = @"There has been a little noise";
+                self.stringIntelligentMessage = NSLocalizedStringWithDefaultValue(@"", nil, [NSBundle mainBundle], @"There has been a little noise", nil);
             }
             else
             {
-                self.stringIntelligentMessage = @"All is calm";
+                self.stringIntelligentMessage = NSLocalizedStringWithDefaultValue(@"", nil, [NSBundle mainBundle], @"All is calm", nil);
             }
         }
     }
