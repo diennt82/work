@@ -473,7 +473,8 @@
 {
     //self.viewProgress.hidden = YES;
     
-    NSString *title = @"Network";
+    NSString *title = NSLocalizedStringWithDefaultValue(@"alert_title_network" ,nil, [NSBundle mainBundle],
+                                                        @"Network", nil);
     NSString *msg;
     NSString *yes = NSLocalizedStringWithDefaultValue(@"Yes" ,nil, [NSBundle mainBundle],
                                                       @"Yes", nil);
@@ -483,7 +484,8 @@
     
     if (tagAlert == TAG_ALERT_VIEW_NETWORK_NOT_REACHABLE)
     {
-        msg = @"Network is unreachale.";
+        msg = NSLocalizedStringWithDefaultValue(@"alert_mes__network_unreachale" ,nil, [NSBundle mainBundle],
+                                                @"Network is unreachale.", nil);
         NSString *msg1 = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg4" ,nil, [NSBundle mainBundle],
                                                 @"Please go to wifi settings and select a Wifi network to connect", nil);
         msg = [msg stringByAppendingString:msg1];
