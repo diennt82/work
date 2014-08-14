@@ -808,7 +808,20 @@ void checkingApplicationCrashed()
     if (!self.isRegisteredPushNotification)
     {
         NSLog(@"%s", __FUNCTION__);
+        
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000
+        if ([[UIApplication sharedApplication] respondsToSelector:@selector(registerUserNotificationSettings:)]) {
+            // use registerUserNotificationSettings
+            [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge) categories:nil]];
+            [[UIApplication sharedApplication] registerForRemoteNotifications];
+        } else {
+            // use registerForRemoteNotifications
+            [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
+        }
+#else
+        // use registerForRemoteNotifications
         [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
+#endif
         self.isRegisteredPushNotification = YES;
         // Set icon badge number to zero
         [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
