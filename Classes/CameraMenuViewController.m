@@ -6,17 +6,18 @@
 //  Copyright (c) 2014 Hubble Connected Ltd. All rights reserved.
 //
 
+#import <MBProgressHUD.h>
+#import <MonitorCommunication/MonitorCommunication.h>
+
 #import "CameraMenuViewController.h"
 #import "CameraSettingsCell.h"
 #import "CameraNameViewController.h"
-#import <MonitorCommunication/MonitorCommunication.h>
 #import "define.h"
 #import "ChangeImageViewController.h"
 #import "CameraDetailCell.h"
 #import "SensitivityTemperatureCell.h"
 #import "SensitivityCell.h"
 #import "SensitivityInfo.h"
-#import "MBProgressHUD.h"
 #import "UIActionSheet+Blocks.h"
 
 #define ALERT_REMOVE_CAM        5

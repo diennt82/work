@@ -6,6 +6,8 @@
 //  Copyright 2011 Hubble Connected Ltd. All rights reserved.
 //
 
+#import <Crittercism.h>
+
 #import "MBP_iosAppDelegate.h"
 #import "PublicDefine.h"
 #import "SetupData.h"
@@ -23,6 +25,9 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    // Enable remote crash reporting
+    [Crittercism enableWithAppID: @"53d6a3761787842dba000001"];
+
     // Setup global L&F
 #ifdef VTECH
     UIColor *themeTintColor = [UIColor colorWithRed:11/255.f green:41/255.0f blue:109/255.f alpha:1];

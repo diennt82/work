@@ -13,7 +13,6 @@
 #import "AddCameraViewController.h"
 #import "TimelineViewController.h"
 #import "MBP_iosViewController.h"
-#import "UIDeviceHardware.h"
 #import "CamerasCell.h"
 #import "CameraAlert.h"
 #import "define.h"
@@ -207,27 +206,9 @@
         MenuViewController *menuViewController = (MenuViewController *)self.parentVC;
         menuViewController.notUpdateCameras = YES;
         
-        //IF this is Iphone4 - Go directly to WIFI setup , as there is no BLE on IPHON4
-        NSString *platformString = [UIDeviceHardware platformString];
-        if( [platformString isEqualToString:@"iPhone 4"] ||
-           [platformString isEqualToString:@"Verizon iPhone 4"] ||
-           [platformString hasPrefix:@"iPad 2"] )
-        {
-            NSLog(@"**** IPHONE 4  / IPAD 2 *** use wifi setup for all");
-            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-            [userDefaults setInteger:WIFI_SETUP forKey:SET_UP_CAMERA];
-            [userDefaults setBool:NO forKey:FIRST_TIME_SETUP];
-            [userDefaults synchronize];
-            
-            [menuViewController dismissViewControllerAnimated:NO completion:^{
-                [menuViewController.menuDelegate sendStatus:SETUP_CAMERA]; //initial setup
-            }];
-        }
-        else {
-            AddCameraViewController *addCameraVC = [[AddCameraViewController alloc] initWithNibName:@"AddCameraViewController" bundle:nil];
-            addCameraVC.delegate = self;
-            [self presentViewController:addCameraVC animated:YES completion:nil];
-        }
+        AddCameraViewController *addCameraVC = [[AddCameraViewController alloc] initWithNibName:@"AddCameraViewController" bundle:nil];
+        addCameraVC.delegate = self;
+        [self presentViewController:addCameraVC animated:YES completion:nil];
     }
 }
 

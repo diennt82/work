@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 Hubble Connected Ltd. All rights reserved.
 //
 
+#import <MBProgressHUD.h>
 #import <MonitorCommunication/MonitorCommunication.h>
 #import <objc/message.h>
 
@@ -13,7 +14,6 @@
 #import "NotifViewController.h"
 #import "PlaybackListener.h"
 #import "TimelineDatabase.h"
-#import "MBProgressHUD.h"
 #import "define.h"
 
 #define START 0

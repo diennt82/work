@@ -620,7 +620,6 @@
 		26D68D281983048B00389053 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9633A918A8AAA2008A9579 /* LoginViewController.m */; };
 		26D68D291983048B00389053 /* UICircularSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = A13AD83C18D0691E0009F0E5 /* UICircularSlider.m */; };
 		26D68D2A1983048B00389053 /* NotifViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B9112D51860341C004301C5 /* NotifViewController.mm */; };
-		26D68D2B1983048B00389053 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EAFC05D192A3DCA001FB3AA /* MBProgressHUD.m */; };
 		26D68D2C1983048B00389053 /* ZoneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BA5C47E1818DCC1006B4BB8 /* ZoneViewController.m */; };
 		26D68D2D1983048B00389053 /* CamerasViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B9C7E13185F268C0038B3A8 /* CamerasViewController.mm */; };
 		26D68D2E1983048B00389053 /* UserAccount.m in Sources */ = {isa = PBXBuildFile; fileRef = 97987E411546AF2C0066C49B /* UserAccount.m */; };
@@ -655,7 +654,6 @@
 		26D68D4B1983048B00389053 /* UARTPeripheral.m in Sources */ = {isa = PBXBuildFile; fileRef = 84F27EC018AE10750000CA7A /* UARTPeripheral.m */; };
 		26D68D4C1983048B00389053 /* CameraDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EAFC057192A0CB9001FB3AA /* CameraDetailCell.m */; };
 		26D68D4D1983048B00389053 /* UIColor+Hubble.m in Sources */ = {isa = PBXBuildFile; fileRef = A1AC859418913014002A8CCD /* UIColor+Hubble.m */; };
-		26D68D4E1983048B00389053 /* UIDeviceHardware.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B2EABA18FFBFBB00763F06 /* UIDeviceHardware.m */; };
 		26D68D4F1983048B00389053 /* Step_08_ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 38A478F915C12913008682FE /* Step_08_ViewController.m */; };
 		26D68D501983048B00389053 /* BLEConnectionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A1ABF1A1187537170014FCB4 /* BLEConnectionManager.m */; };
 		26D68D511983048B00389053 /* BLEConnectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B977B6918C7025100A61115 /* BLEConnectionCell.m */; };
@@ -810,7 +808,6 @@
 		5E7A9096192CD42F00DCC8EE /* CameraMenuViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5E7A9095192CD42F00DCC8EE /* CameraMenuViewController~ipad.xib */; };
 		5EAFC058192A0CB9001FB3AA /* CameraDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EAFC057192A0CB9001FB3AA /* CameraDetailCell.m */; };
 		5EAFC05A192A0D2D001FB3AA /* CameraDetailCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5EAFC059192A0D2D001FB3AA /* CameraDetailCell.xib */; };
-		5EAFC05E192A3DCA001FB3AA /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EAFC05D192A3DCA001FB3AA /* MBProgressHUD.m */; };
 		5EBA45661940598000695155 /* MBP_iosViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5EBA45651940598000695155 /* MBP_iosViewController.xib */; };
 		5EBA458819405BEA00695155 /* AccountViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5EBA456819405BEA00695155 /* AccountViewController.xib */; };
 		5EBA458A19405BEA00695155 /* cameraMenuRouter.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5EBA456A19405BEA00695155 /* cameraMenuRouter.plist */; };
@@ -847,7 +844,6 @@
 		8429C575193325EF00F5FCF8 /* TermsCondController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8429C573193325EF00F5FCF8 /* TermsCondController.xib */; };
 		844359ED1908F64D00148436 /* TimelineDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 844359EC1908F64D00148436 /* TimelineDatabase.m */; };
 		844359EF19090AA200148436 /* t_history_v1.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 844359EE1908FFA600148436 /* t_history_v1.sqlite */; };
-		84B2EABB18FFBFBB00763F06 /* UIDeviceHardware.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B2EABA18FFBFBB00763F06 /* UIDeviceHardware.m */; };
 		84E9D1CB18B728A000468918 /* libpj-arm-apple-darwin9.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 84E9D1C818B728A000468918 /* libpj-arm-apple-darwin9.a */; };
 		84E9D1CC18B728A000468918 /* libpjlib-util-arm-apple-darwin9.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 84E9D1C918B728A000468918 /* libpjlib-util-arm-apple-darwin9.a */; };
 		84E9D1CD18B728A000468918 /* libpjnath-arm-apple-darwin9.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 84E9D1CA18B728A000468918 /* libpjnath-arm-apple-darwin9.a */; };
@@ -1315,7 +1311,6 @@
 		8B97A3C018BEE628008A38E1 /* UIBarButtonItem+Custom.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B97A3BF18BEE628008A38E1 /* UIBarButtonItem+Custom.m */; };
 		8B97A3C318BF1B5F008A38E1 /* Hubble_back_text@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B97A3C118BF1B5F008A38E1 /* Hubble_back_text@2x.png */; };
 		8B97A3C418BF1B5F008A38E1 /* Hubble_back_text.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B97A3C218BF1B5F008A38E1 /* Hubble_back_text.png */; };
-		8B98765118DAFF6A00A2FDD7 /* libGoogleAnalytics_debug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B73057618D6D05A00D079B0 /* libGoogleAnalytics_debug.a */; };
 		8B98765218DAFF6A00A2FDD7 /* libGoogleAnalytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B73057718D6D05A00D079B0 /* libGoogleAnalytics.a */; };
 		8B9899AD1859771800AC3852 /* CameraNameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9899AB1859771800AC3852 /* CameraNameViewController.m */; };
 		8B9899AE1859771800AC3852 /* CameraNameViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9899AC1859771800AC3852 /* CameraNameViewController.xib */; };
@@ -1468,6 +1463,7 @@
 		A1DEC68418D43CCB00EE29C8 /* info.png in Resources */ = {isa = PBXBuildFile; fileRef = A1DEC68318D43CCB00EE29C8 /* info.png */; };
 		A1E32FAD17E9899800504538 /* H264PlayerListener.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1E32FAB17E9899800504538 /* H264PlayerListener.mm */; };
 		A1E32FB017E98A4700504538 /* PlaybackListener.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1E32FAE17E98A4700504538 /* PlaybackListener.mm */; };
+		BA073FEDFD7E4ABDA805082E /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FBC182285E849028B03F200 /* libPods.a */; };
 		BC3C1B0316F05C0C00175AFF /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = BC3C1B0516F05C0C00175AFF /* Localizable.strings */; };
 		BC5B0FCE1701855600D2C308 /* cameraMenuRouter.plist in Resources */ = {isa = PBXBuildFile; fileRef = BC5B0FCD1701855600D2C308 /* cameraMenuRouter.plist */; };
 /* End PBXBuildFile section */
@@ -1478,6 +1474,7 @@
 		1D3623250D0F684500981E51 /* MBP_iosAppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MBP_iosAppDelegate.mm; sourceTree = "<group>"; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		261504D6198C076D000BC263 /* H264PlayerVCDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = H264PlayerVCDelegate.h; sourceTree = "<group>"; };
+		263169ED199D74680090BCF9 /* README.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
 		26977A401951E7E5005D45B9 /* CamerasViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CamerasViewController.xib; sourceTree = "<group>"; };
 		26977A421951EAF2005D45B9 /* SettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingsViewController.xib; sourceTree = "<group>"; };
 		26B2D8B4193F6B74005E5F2E /* 29.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 29.png; sourceTree = "<group>"; };
@@ -1591,8 +1588,6 @@
 		5EAFC056192A0CB9001FB3AA /* CameraDetailCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraDetailCell.h; sourceTree = "<group>"; };
 		5EAFC057192A0CB9001FB3AA /* CameraDetailCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraDetailCell.m; sourceTree = "<group>"; };
 		5EAFC059192A0D2D001FB3AA /* CameraDetailCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CameraDetailCell.xib; sourceTree = "<group>"; };
-		5EAFC05C192A3DCA001FB3AA /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
-		5EAFC05D192A3DCA001FB3AA /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
 		5EBA45651940598000695155 /* MBP_iosViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MBP_iosViewController.xib; sourceTree = "<group>"; };
 		5EBA456819405BEA00695155 /* AccountViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AccountViewController.xib; sourceTree = "<group>"; };
 		5EBA456A19405BEA00695155 /* cameraMenuRouter.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = cameraMenuRouter.plist; sourceTree = "<group>"; };
@@ -1631,8 +1626,6 @@
 		844359EB1908F64D00148436 /* TimelineDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimelineDatabase.h; sourceTree = "<group>"; };
 		844359EC1908F64D00148436 /* TimelineDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimelineDatabase.m; sourceTree = "<group>"; };
 		844359EE1908FFA600148436 /* t_history_v1.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = t_history_v1.sqlite; sourceTree = "<group>"; };
-		84B2EAB918FFBFBB00763F06 /* UIDeviceHardware.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIDeviceHardware.h; sourceTree = "<group>"; };
-		84B2EABA18FFBFBB00763F06 /* UIDeviceHardware.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIDeviceHardware.m; sourceTree = "<group>"; };
 		84E9D1C818B728A000468918 /* libpj-arm-apple-darwin9.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libpj-arm-apple-darwin9.a"; path = "../ios-frameworks/pjsip/dist-uarch/lib/libpj-arm-apple-darwin9.a"; sourceTree = "<group>"; };
 		84E9D1C918B728A000468918 /* libpjlib-util-arm-apple-darwin9.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libpjlib-util-arm-apple-darwin9.a"; path = "../ios-frameworks/pjsip/dist-uarch/lib/libpjlib-util-arm-apple-darwin9.a"; sourceTree = "<group>"; };
 		84E9D1CA18B728A000468918 /* libpjnath-arm-apple-darwin9.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libpjnath-arm-apple-darwin9.a"; path = "../ios-frameworks/pjsip/dist-uarch/lib/libpjnath-arm-apple-darwin9.a"; sourceTree = "<group>"; };
@@ -2238,6 +2231,7 @@
 		97DC55BF14BAFAAD00AA4911 /* HubbleHome.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HubbleHome.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		97E3CC76159D89EE00481854 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		97F5531417BDD3AF00024017 /* MBPNavController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBPNavController.m; sourceTree = "<group>"; };
+		9FBC182285E849028B03F200 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		A10E6BBB18D2F13E00B10EDD /* ChangeImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChangeImageViewController.h; sourceTree = "<group>"; };
 		A10E6BBC18D2F13E00B10EDD /* ChangeImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChangeImageViewController.m; sourceTree = "<group>"; };
 		A10E6BBD18D2F13E00B10EDD /* ChangeImageViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ChangeImageViewController.xib; sourceTree = "<group>"; };
@@ -2367,6 +2361,7 @@
 		BCF2463717096F8F00A83B3C /* fr-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "fr-CA"; path = "fr-CA.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		BCF3CDD5170D7FF500968A60 /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		BCFBB2881711F4930085D804 /* es-419 */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-419"; path = "es-419.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		CA554EBAF3174A5896D91F4D /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2377,7 +2372,6 @@
 				8B98D55A192375420084C2FD /* libz.1.2.5.dylib in Frameworks */,
 				8B933ED21911198900A97F12 /* MessageUI.framework in Frameworks */,
 				8BA23841182CBC130022581A /* CameraScanner.framework in Frameworks */,
-				8B98765118DAFF6A00A2FDD7 /* libGoogleAnalytics_debug.a in Frameworks */,
 				8B98765218DAFF6A00A2FDD7 /* libGoogleAnalytics.a in Frameworks */,
 				8B900FD718D85AFF0031C457 /* MobileCoreServices.framework in Frameworks */,
 				8B9CE1FD18C8384C00B1B7F9 /* QuartzCore.framework in Frameworks */,
@@ -2403,6 +2397,7 @@
 				97A3BF4715453F69000C3546 /* CoreFoundation.framework in Frameworks */,
 				97A3C00515455054000C3546 /* SystemConfiguration.framework in Frameworks */,
 				97E3CC77159D89EE00481854 /* AVFoundation.framework in Frameworks */,
+				BA073FEDFD7E4ABDA805082E /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2472,12 +2467,10 @@
 				A1AC859218912FFC002A8CCD /* Color */,
 				A118C19C187E4643009176F5 /* HttpCommunication */,
 				A12A9D8B18B1DF5D004987F2 /* ImageManagement */,
-				5EAFC05B192A3DCA001FB3AA /* MBProgressHUD */,
 				261504D41989B043000BC263 /* Other */,
 				A1A98E8A180BF57700C8EBD3 /* PJ_NAT */,
 				844359EA1908F5E500148436 /* Timeline Dbs */,
 				5E712D8E192B3332000858F1 /* UIActionSheetBlock */,
-				8B181B591914FF7800A355F3 /* UIDeviceHw */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -2651,13 +2644,14 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
-				A1ABF1CA187539A80014FCB4 /* define.h */,
+				263169ED199D74680090BCF9 /* README.txt */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
 				9704F37E14B76202000B4AA5 /* Entitlements.plist */,
+				CA554EBAF3174A5896D91F4D /* Pods.xcconfig */,
 			);
 			name = CustomTemplate;
 			sourceTree = "<group>";
@@ -2666,6 +2660,7 @@
 			isa = PBXGroup;
 			children = (
 				32CA4F630368D1EE00C91783 /* BlinkHD_ios_Prefix.pch */,
+				A1ABF1CA187539A80014FCB4 /* define.h */,
 				29B97316FDCFA39411CA2CEA /* main.m */,
 			);
 			name = "Other Sources";
@@ -2695,36 +2690,37 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				8B98D559192375420084C2FD /* libz.1.2.5.dylib */,
+				9770CDF7143076DD009E69EF /* AudioToolbox.framework */,
+				97E3CC76159D89EE00481854 /* AVFoundation.framework */,
+				9770CEC71430783A009E69EF /* CFNetwork.framework */,
+				9770CDF1143076CD009E69EF /* CoreAudio.framework */,
+				8BA372571887C5EA009FA465 /* CoreData.framework */,
+				97A3BF4615453F69000C3546 /* CoreFoundation.framework */,
+				288765A40DF7441C002DB57D /* CoreGraphics.framework */,
+				8B9640B118811106000C388E /* CoreText.framework */,
+				1D30AB110D05D00D00671497 /* Foundation.framework */,
+				A120548218BC3AAD00557C1A /* MediaPlayer.framework */,
 				8B933ED11911198900A97F12 /* MessageUI.framework */,
 				8B98764F18DACDCB00A2FDD7 /* MobileCoreServices.framework */,
-				8B73057618D6D05A00D079B0 /* libGoogleAnalytics_debug.a */,
-				8B73057718D6D05A00D079B0 /* libGoogleAnalytics.a */,
+				97A3C00415455054000C3546 /* SystemConfiguration.framework */,
 				8B9CE1FC18C8384C00B1B7F9 /* QuartzCore.framework */,
-				A120548218BC3AAD00557C1A /* MediaPlayer.framework */,
+				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
+				8B98D559192375420084C2FD /* libz.1.2.5.dylib */,
+				A11E8C1217E2DB7D00915F84 /* libstdc++.dylib */,
+				38962C821769587E0016AE16 /* libz.dylib */,
+				3803A86115FF42ED00B4DD97 /* libsqlite3.dylib */,
+				3803A85F15FF42DA00B4DD97 /* libsqlite3.0.dylib */,
+				A1ABF1CB18753C240014FCB4 /* CoreBluetooth.framework */,
+				8BA23838182C8E130022581A /* CameraScanner.framework */,
+				A15430FA1818CFD500337EFE /* H264MediaPlayer.framework */,
+				8408F1801833222A00B00188 /* MonitorCommunication.framework */,
+				A15430FC1818D08A00337EFE /* libcrypto.a */,
+				8B73057718D6D05A00D079B0 /* libGoogleAnalytics.a */,
+				8B73057618D6D05A00D079B0 /* libGoogleAnalytics_debug.a */,
 				84E9D1C818B728A000468918 /* libpj-arm-apple-darwin9.a */,
 				84E9D1C918B728A000468918 /* libpjlib-util-arm-apple-darwin9.a */,
 				84E9D1CA18B728A000468918 /* libpjnath-arm-apple-darwin9.a */,
-				A11E8C1217E2DB7D00915F84 /* libstdc++.dylib */,
-				38962C821769587E0016AE16 /* libz.dylib */,
-				8BA372571887C5EA009FA465 /* CoreData.framework */,
-				8B9640B118811106000C388E /* CoreText.framework */,
-				A1ABF1CB18753C240014FCB4 /* CoreBluetooth.framework */,
-				8408F1801833222A00B00188 /* MonitorCommunication.framework */,
-				8BA23838182C8E130022581A /* CameraScanner.framework */,
-				A15430FC1818D08A00337EFE /* libcrypto.a */,
-				A15430FA1818CFD500337EFE /* H264MediaPlayer.framework */,
-				3803A86115FF42ED00B4DD97 /* libsqlite3.dylib */,
-				3803A85F15FF42DA00B4DD97 /* libsqlite3.0.dylib */,
-				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
-				1D30AB110D05D00D00671497 /* Foundation.framework */,
-				288765A40DF7441C002DB57D /* CoreGraphics.framework */,
-				9770CDF1143076CD009E69EF /* CoreAudio.framework */,
-				9770CDF7143076DD009E69EF /* AudioToolbox.framework */,
-				9770CEC71430783A009E69EF /* CFNetwork.framework */,
-				97A3BF4615453F69000C3546 /* CoreFoundation.framework */,
-				97A3C00415455054000C3546 /* SystemConfiguration.framework */,
-				97E3CC76159D89EE00481854 /* AVFoundation.framework */,
+				9FBC182285E849028B03F200 /* libPods.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -2776,15 +2772,6 @@
 			name = CameraDetailCell;
 			sourceTree = "<group>";
 		};
-		5EAFC05B192A3DCA001FB3AA /* MBProgressHUD */ = {
-			isa = PBXGroup;
-			children = (
-				5EAFC05C192A3DCA001FB3AA /* MBProgressHUD.h */,
-				5EAFC05D192A3DCA001FB3AA /* MBProgressHUD.m */,
-			);
-			path = MBProgressHUD;
-			sourceTree = "<group>";
-		};
 		5EBA456719405BEA00695155 /* XIB FIles */ = {
 			isa = PBXGroup;
 			children = (
@@ -2827,15 +2814,6 @@
 				844359EC1908F64D00148436 /* TimelineDatabase.m */,
 			);
 			name = "Timeline Dbs";
-			sourceTree = "<group>";
-		};
-		8B181B591914FF7800A355F3 /* UIDeviceHw */ = {
-			isa = PBXGroup;
-			children = (
-				84B2EAB918FFBFBB00763F06 /* UIDeviceHardware.h */,
-				84B2EABA18FFBFBB00763F06 /* UIDeviceHardware.m */,
-			);
-			name = UIDeviceHw;
 			sourceTree = "<group>";
 		};
 		8B1D544A1865814B008857F0 /* Scheduler */ = {
@@ -4183,10 +4161,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "Camera HD" */;
 			buildPhases = (
+				9C123F4F8141474CA7313CF7 /* Check Pods Manifest.lock */,
 				1D60588D0D05DD3D006BFB54 /* Resources */,
 				26B2D8D0193F8D2C005E5F2E /* Run Script - Copy Settings.bundle */,
 				1D60588E0D05DD3D006BFB54 /* Sources */,
 				1D60588F0D05DD3D006BFB54 /* Frameworks */,
+				BEC2448A8E9746A4B2EC5C0C /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -5493,6 +5473,36 @@
 			shellPath = /bin/sh;
 			shellScript = "if [ ${CONFIGURATION} == \"Debug\" ]; then\n    cp -r ${PROJECT_DIR}/Settings/Developer/Settings.bundle ${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app\nelse\n    cp -r ${PROJECT_DIR}/Settings/Release/Settings.bundle ${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app\nfi";
 		};
+		9C123F4F8141474CA7313CF7 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		BEC2448A8E9746A4B2EC5C0C /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Pods-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -5521,7 +5531,6 @@
 				8B9633AB18A8AAA2008A9579 /* LoginViewController.m in Sources */,
 				A13AD83D18D0691E0009F0E5 /* UICircularSlider.m in Sources */,
 				8B9112D71860341C004301C5 /* NotifViewController.mm in Sources */,
-				5EAFC05E192A3DCA001FB3AA /* MBProgressHUD.m in Sources */,
 				266D2A361993F0930086E055 /* main.m in Sources */,
 				8BA5C4801818DCC1006B4BB8 /* ZoneViewController.m in Sources */,
 				8B9C7E15185F268C0038B3A8 /* CamerasViewController.mm in Sources */,
@@ -5557,7 +5566,6 @@
 				84F27EC118AE10750000CA7A /* UARTPeripheral.m in Sources */,
 				5EAFC058192A0CB9001FB3AA /* CameraDetailCell.m in Sources */,
 				A1AC859518913014002A8CCD /* UIColor+Hubble.m in Sources */,
-				84B2EABB18FFBFBB00763F06 /* UIDeviceHardware.m in Sources */,
 				38A478FA15C12914008682FE /* Step_08_ViewController.m in Sources */,
 				A1ABF1A3187537170014FCB4 /* BLEConnectionManager.m in Sources */,
 				8B977B6A18C7025200A61115 /* BLEConnectionCell.m in Sources */,
@@ -5639,7 +5647,6 @@
 				26D68D281983048B00389053 /* LoginViewController.m in Sources */,
 				26D68D291983048B00389053 /* UICircularSlider.m in Sources */,
 				26D68D2A1983048B00389053 /* NotifViewController.mm in Sources */,
-				26D68D2B1983048B00389053 /* MBProgressHUD.m in Sources */,
 				26D68D2C1983048B00389053 /* ZoneViewController.m in Sources */,
 				26D68D2D1983048B00389053 /* CamerasViewController.mm in Sources */,
 				26D68D2E1983048B00389053 /* UserAccount.m in Sources */,
@@ -5674,7 +5681,6 @@
 				26D68D4B1983048B00389053 /* UARTPeripheral.m in Sources */,
 				26D68D4C1983048B00389053 /* CameraDetailCell.m in Sources */,
 				26D68D4D1983048B00389053 /* UIColor+Hubble.m in Sources */,
-				26D68D4E1983048B00389053 /* UIDeviceHardware.m in Sources */,
 				26D68D4F1983048B00389053 /* Step_08_ViewController.m in Sources */,
 				26D68D501983048B00389053 /* BLEConnectionManager.m in Sources */,
 				26D68D511983048B00389053 /* BLEConnectionCell.m in Sources */,
@@ -5757,6 +5763,7 @@
 /* Begin XCBuildConfiguration section */
 		1D6058940D05DD3E006BFB54 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = CA554EBAF3174A5896D91F4D /* Pods.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -5775,36 +5782,37 @@
 				GCC_PREFIX_HEADER = BlinkHD_ios_Prefix.pch;
 				GCC_THUMB_SUPPORT = NO;
 				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
 					"\"$(SRCROOT)/../ios-frameworks/ffmpeg/include/**\"",
-					"$(SRCROOT)/../ios-frameworks/openssl/**",
+					"\"$(SRCROOT)/../ios-frameworks/openssl\"/**",
 					"\"$(SRCROOT)/../ios-frameworks/udt\"",
 					"\"$(SRCROOT)/../ios-frameworks/GoogleAnalyticsLibrary\"",
 				);
 				INFOPLIST_FILE = "BlinkHD_ios-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
 					"$(SRCROOT)",
+					"$(SRCROOT)/../ios-frameworks",
 					"$(SRCROOT)/../ios-frameworks/H264Player.lib",
 					"$(SRCROOT)/../ios-frameworks/ffmpeg/lib",
 					"$(SRCROOT)/../ios-frameworks/udt",
-					"$(SRCROOT)/../ios-frameworks",
 					"$(SRCROOT)/../ios-frameworks/pjsip/dist-uarch/lib",
 					"$(SRCROOT)/../ios-frameworks/GoogleAnalyticsLibrary",
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = (
+					"$(inherited)",
 					"-DDEBUG",
 					"-DPJ_IS_BIG_ENDIAN=0",
 					"-DPJ_IS_LITTLE_ENDIAN=1",
 					"-DPJ_BUILT_WITH_XCODE=1",
 				);
-				OTHER_CPLUSPLUSFLAGS = (
-					"-DDEBUG",
-					"-DPJ_IS_BIG_ENDIAN=0",
-					"-DPJ_IS_LITTLE_ENDIAN=1",
-					"-DPJ_BUILT_WITH_XCODE=1",
+				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-lz",
 				);
-				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = HubbleHome;
 				PROVISIONING_PROFILE = "22745096-5AEF-4C89-A51A-97A4B9BA39C4";
 				SDKROOT = iphoneos;
@@ -5815,6 +5823,7 @@
 		};
 		1D6058950D05DD3E006BFB54 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = CA554EBAF3174A5896D91F4D /* Pods.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -5830,8 +5839,9 @@
 				GCC_PREFIX_HEADER = BlinkHD_ios_Prefix.pch;
 				GCC_THUMB_SUPPORT = NO;
 				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
 					"\"$(SRCROOT)/../ios-frameworks/ffmpeg/include/**\"",
-					"$(SRCROOT)/../ios-frameworks/openssl/**",
+					"\"$(SRCROOT)/../ios-frameworks/openssl\"/**",
 					"\"$(SRCROOT)/../ios-frameworks/udt\"",
 					"\"$(SRCROOT)/../ios-frameworks/GoogleAnalyticsLibrary\"",
 				);
@@ -5840,21 +5850,25 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)",
+					"$(SRCROOT)/../ios-frameworks",
 					"$(SRCROOT)/../ios-frameworks/H264Player.lib",
 					"$(SRCROOT)/../ios-frameworks/ffmpeg/lib",
 					"$(SRCROOT)/../ios-frameworks/udt",
 					"$(SRCROOT)/../ios-frameworks/pjsip/dist-uarch/lib",
-					"$(SRCROOT)/../ios-frameworks",
 					"$(SRCROOT)/../ios-frameworks/GoogleAnalyticsLibrary",
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = (
+					"$(inherited)",
 					"-DNS_BLOCK_ASSERTIONS=1",
 					"-DPJ_IS_BIG_ENDIAN=0",
 					"-DPJ_IS_LITTLE_ENDIAN=1",
 					"-DPJ_BUILT_WITH_XCODE=1",
 				);
-				OTHER_LDFLAGS = "-lz";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-lz",
+				);
 				PRODUCT_NAME = HubbleHome;
 				PROVISIONING_PROFILE = "BEE7B868-3871-4C3E-870A-2AE4C2B9FCDA";
 				SDKROOT = iphoneos;
@@ -5885,19 +5899,21 @@
 				GCC_PREPROCESSOR_DEFINITIONS = VTECH;
 				GCC_THUMB_SUPPORT = NO;
 				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
 					"\"$(SRCROOT)/../ios-frameworks/ffmpeg/include/**\"",
-					"$(SRCROOT)/../ios-frameworks/openssl/**",
+					"\"$(SRCROOT)/../ios-frameworks/openssl\"/**",
 					"\"$(SRCROOT)/../ios-frameworks/udt\"",
 					"\"$(SRCROOT)/../ios-frameworks/GoogleAnalyticsLibrary\"",
 				);
 				INFOPLIST_FILE = "VTech-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
 					"$(SRCROOT)",
+					"$(SRCROOT)/../ios-frameworks",
 					"$(SRCROOT)/../ios-frameworks/H264Player.lib",
 					"$(SRCROOT)/../ios-frameworks/ffmpeg/lib",
 					"$(SRCROOT)/../ios-frameworks/udt",
-					"$(SRCROOT)/../ios-frameworks",
 					"$(SRCROOT)/../ios-frameworks/pjsip/dist-uarch/lib",
 					"$(SRCROOT)/../ios-frameworks/GoogleAnalyticsLibrary",
 				);
@@ -5914,7 +5930,10 @@
 					"-DPJ_IS_LITTLE_ENDIAN=1",
 					"-DPJ_BUILT_WITH_XCODE=1",
 				);
-				OTHER_LDFLAGS = "-lz";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-lz",
+				);
 				PRODUCT_NAME = VTechConnect;
 				PROVISIONING_PROFILE = "22745096-5AEF-4C89-A51A-97A4B9BA39C4";
 				SDKROOT = iphoneos;
@@ -5941,8 +5960,9 @@
 				GCC_PREPROCESSOR_DEFINITIONS = VTECH;
 				GCC_THUMB_SUPPORT = NO;
 				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
 					"\"$(SRCROOT)/../ios-frameworks/ffmpeg/include/**\"",
-					"$(SRCROOT)/../ios-frameworks/openssl/**",
+					"\"$(SRCROOT)/../ios-frameworks/openssl\"/**",
 					"\"$(SRCROOT)/../ios-frameworks/udt\"",
 					"\"$(SRCROOT)/../ios-frameworks/GoogleAnalyticsLibrary\"",
 				);
@@ -5951,11 +5971,11 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)",
+					"$(SRCROOT)/../ios-frameworks",
 					"$(SRCROOT)/../ios-frameworks/H264Player.lib",
 					"$(SRCROOT)/../ios-frameworks/ffmpeg/lib",
 					"$(SRCROOT)/../ios-frameworks/udt",
 					"$(SRCROOT)/../ios-frameworks/pjsip/dist-uarch/lib",
-					"$(SRCROOT)/../ios-frameworks",
 					"$(SRCROOT)/../ios-frameworks/GoogleAnalyticsLibrary",
 				);
 				ONLY_ACTIVE_ARCH = NO;
@@ -5965,7 +5985,10 @@
 					"-DPJ_IS_LITTLE_ENDIAN=1",
 					"-DPJ_BUILT_WITH_XCODE=1",
 				);
-				OTHER_LDFLAGS = "-lz";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-lz",
+				);
 				PRODUCT_NAME = VTechConnect;
 				PROVISIONING_PROFILE = "BEE7B868-3871-4C3E-870A-2AE4C2B9FCDA";
 				SDKROOT = iphoneos;
@@ -5985,6 +6008,7 @@
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
+					"$(SRCROOT)",
 					"$(SRCROOT)/../ios-frameworks",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -5992,20 +6016,22 @@
 				GCC_PREPROCESSOR_DEFINITIONS = VTECH;
 				GCC_THUMB_SUPPORT = NO;
 				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
 					"\"$(SRCROOT)/../ios-frameworks/ffmpeg/include/**\"",
-					"$(SRCROOT)/../ios-frameworks/openssl/**",
+					"\"$(SRCROOT)/../ios-frameworks/openssl\"/**",
 					"\"$(SRCROOT)/../ios-frameworks/udt\"",
 					"\"$(SRCROOT)/../ios-frameworks/GoogleAnalyticsLibrary\"",
 				);
 				INFOPLIST_FILE = "VTech-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
 					"$(SRCROOT)",
+					"$(SRCROOT)/../ios-frameworks",
 					"$(SRCROOT)/../ios-frameworks/H264Player.lib",
 					"$(SRCROOT)/../ios-frameworks/ffmpeg/lib",
 					"$(SRCROOT)/../ios-frameworks/udt",
 					"$(SRCROOT)/../ios-frameworks/pjsip/dist-uarch/lib",
-					"$(SRCROOT)/../ios-frameworks",
 					"$(SRCROOT)/../ios-frameworks/GoogleAnalyticsLibrary",
 				);
 				ONLY_ACTIVE_ARCH = NO;
@@ -6015,7 +6041,10 @@
 					"-DPJ_IS_LITTLE_ENDIAN=1",
 					"-DPJ_BUILT_WITH_XCODE=1",
 				);
-				OTHER_LDFLAGS = "-lz";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-lz",
+				);
 				PRODUCT_NAME = VTechConnect;
 				PROVISIONING_PROFILE = "BEE7B868-3871-4C3E-870A-2AE4C2B9FCDA";
 				RAMEWORK_SEARCH_PATHS = "$(inherited) \"$(SRCROOT)\"";
@@ -6052,6 +6081,7 @@
 		};
 		9770CB6A14302E3D009E69EF /* Distribute */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = CA554EBAF3174A5896D91F4D /* Pods.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -6060,36 +6090,43 @@
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
+					"$(SRCROOT)",
 					"$(SRCROOT)/../ios-frameworks",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = BlinkHD_ios_Prefix.pch;
 				GCC_THUMB_SUPPORT = NO;
 				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
 					"\"$(SRCROOT)/../ios-frameworks/ffmpeg/include/**\"",
-					"$(SRCROOT)/../ios-frameworks/openssl/**",
+					"\"$(SRCROOT)/../ios-frameworks/openssl\"/**",
 					"\"$(SRCROOT)/../ios-frameworks/udt\"",
 					"\"$(SRCROOT)/../ios-frameworks/GoogleAnalyticsLibrary\"",
 				);
 				INFOPLIST_FILE = "BlinkHD_ios-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
 					"$(SRCROOT)",
+					"$(SRCROOT)/../ios-frameworks",
 					"$(SRCROOT)/../ios-frameworks/H264Player.lib",
 					"$(SRCROOT)/../ios-frameworks/ffmpeg/lib",
 					"$(SRCROOT)/../ios-frameworks/udt",
 					"$(SRCROOT)/../ios-frameworks/pjsip/dist-uarch/lib",
-					"$(SRCROOT)/../ios-frameworks",
 					"$(SRCROOT)/../ios-frameworks/GoogleAnalyticsLibrary",
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = (
+					"$(inherited)",
 					"-DNS_BLOCK_ASSERTIONS=1",
 					"-DPJ_IS_BIG_ENDIAN=0",
 					"-DPJ_IS_LITTLE_ENDIAN=1",
 					"-DPJ_BUILT_WITH_XCODE=1",
 				);
-				OTHER_LDFLAGS = "-lz";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-lz",
+				);
 				PRODUCT_NAME = HubbleHome;
 				PROVISIONING_PROFILE = "BEE7B868-3871-4C3E-870A-2AE4C2B9FCDA";
 				RAMEWORK_SEARCH_PATHS = "$(inherited) \"$(SRCROOT)\"";
