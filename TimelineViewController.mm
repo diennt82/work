@@ -701,48 +701,48 @@
     {
         if (numberOfMovement >= 4)
         {
-            self.stringIntelligentMessage = NSLocalizedStringWithDefaultValue(@"", nil, [NSBundle mainBundle], @"There has been a lot of noise/movement", nil);
+            self.stringIntelligentMessage = NSLocalizedStringWithDefaultValue(@"timeline_mes_noise_movenent", nil, [NSBundle mainBundle], @"There has been a lot of noise/movement", nil);
         }
         else if(numberOfMovement >= 2)
         {
-            self.stringIntelligentMessage = NSLocalizedStringWithDefaultValue(@"", nil, [NSBundle mainBundle], @"There has been a lot of noise and some movement", nil);
+            self.stringIntelligentMessage = NSLocalizedStringWithDefaultValue(@"timeline_mes_noise_some_movement", nil, [NSBundle mainBundle], @"There has been a lot of noise and some movement", nil);
         }
         else if(numberOfMovement == 1)
         {
-            self.stringIntelligentMessage = NSLocalizedStringWithDefaultValue(@"", nil, [NSBundle mainBundle], @"There has been a lot of noise and little movement", nil);
+            self.stringIntelligentMessage = NSLocalizedStringWithDefaultValue(@"timeline_mes_noise_alittle_movement", nil, [NSBundle mainBundle], @"There has been a lot of noise and little movement", nil);
         }
         else
         {
-            self.stringIntelligentMessage = NSLocalizedStringWithDefaultValue(@"", nil, [NSBundle mainBundle], @"There has been a lot of noise", nil);
+            self.stringIntelligentMessage = NSLocalizedStringWithDefaultValue(@"timeline_mes_alotof_noise", nil, [NSBundle mainBundle], @"There has been a lot of noise", nil);
         }
     }
     else// if (numberOfVOX >= 0)
     {
         if (numberOfMovement >= 4)
         {
-            self.stringIntelligentMessage = NSLocalizedStringWithDefaultValue(@"", nil, [NSBundle mainBundle], @"There has been a lot of movement", nil);
+            self.stringIntelligentMessage = NSLocalizedStringWithDefaultValue(@"timeline_mes_alotof_movement", nil, [NSBundle mainBundle], @"There has been a lot of movement", nil);
         }
         else if(numberOfMovement >= 2)
         {
-            self.stringIntelligentMessage = NSLocalizedStringWithDefaultValue(@"", nil, [NSBundle mainBundle], @"There has been some movement", nil);
+            self.stringIntelligentMessage = NSLocalizedStringWithDefaultValue(@"timeline_mes_some_movement", nil, [NSBundle mainBundle], @"There has been some movement", nil);
         }
         else if(numberOfMovement == 1)
         {
-            self.stringIntelligentMessage = NSLocalizedStringWithDefaultValue(@"", nil, [NSBundle mainBundle], @"There has been a little movement", nil);
+            self.stringIntelligentMessage = NSLocalizedStringWithDefaultValue(@"timeline_mes_alittle_movenent", nil, [NSBundle mainBundle], @"There has been a little movement", nil);
         }
         else
         {
             if (numberOfVOX >= 2)
             {
-                self.stringIntelligentMessage = NSLocalizedStringWithDefaultValue(@"", nil, [NSBundle mainBundle], @"There has been some noise", nil);
+                self.stringIntelligentMessage = NSLocalizedStringWithDefaultValue(@"timeline_mes_some_noise", nil, [NSBundle mainBundle], @"There has been some noise", nil);
             }
             else if (numberOfVOX >= 1)
             {
-                self.stringIntelligentMessage = NSLocalizedStringWithDefaultValue(@"", nil, [NSBundle mainBundle], @"There has been a little noise", nil);
+                self.stringIntelligentMessage = NSLocalizedStringWithDefaultValue(@"timeline_mes_alittle_noise", nil, [NSBundle mainBundle], @"There has been a little noise", nil);
             }
             else
             {
-                self.stringIntelligentMessage = NSLocalizedStringWithDefaultValue(@"", nil, [NSBundle mainBundle], @"All is calm", nil);
+                self.stringIntelligentMessage = NSLocalizedStringWithDefaultValue(@"timeline_mes_is_calm", nil, [NSBundle mainBundle], @"All is calm", nil);
             }
         }
     }
