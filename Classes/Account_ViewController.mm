@@ -114,8 +114,9 @@
     [CameraAlert clearAllAlerts];
     
 #if 1
-    [tabBarController.navigationController popToRootViewControllerAnimated:NO];
+    //[tabBarController.navigationController popToRootViewControllerAnimated:NO];
     [tabBarController.menuDelegate sendStatus:LOGIN_FAILED_OR_LOGOUT];
+    tabBarController.menuDelegate = nil;
 #else
     [tabBarController dismissViewControllerAnimated:NO completion:^
      {

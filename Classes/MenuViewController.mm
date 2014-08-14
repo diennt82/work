@@ -13,7 +13,7 @@
 #import "UserAccount.h"
 #import "EarlierViewController.h"
 
-@interface MenuViewController () <UserAccountDelegate, UITabBarControllerDelegate>
+@interface MenuViewController () <UserAccountDelegate>//, UITabBarControllerDelegate>
 {
     UIBarButtonItem *cameraBarButton;
     UIBarButtonItem *settingsBarButton;
@@ -69,17 +69,7 @@
     // Do any additional setup after loading the view from its nib.
     
     self.navigationController.navigationBarHidden = NO;
-    //[[UINavigationBar appearance] setTintColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"back"]]];
-    
-    /*UIImage *hubbleBack = [UIImage imageNamed:@"Hubble_logo_back"];
-    UIBarButtonItem *backBarBtn = [[UIBarButtonItem alloc] initWithImage:hubbleBack
-                                                                   style:UIBarButtonItemStyleBordered
-                                                                  target:self
-                                                                  action:@selector(menuBackAction:)];
-    [backBarBtn setTintColor:[UIColor colorWithPatternImage:hubbleBack]];
-    
-    self.navigationItem.leftBarButtonItem = backBarBtn;
-     */
+
     UIImage *image = [UIImage imageNamed:@"Hubble_logo_back"];
     CGRect frame = CGRectMake(0, 0, image.size.width, image.size.height);
     
@@ -608,7 +598,6 @@
 {
     self.title = item.title;
 }
-#endif
 
 #pragma mark - UITabBarControllerDelegate
 
@@ -616,6 +605,7 @@
 {
     NSLog(@"viewController:%@", viewController);
 }
+#endif
 
 - (void)didReceiveMemoryWarning
 {

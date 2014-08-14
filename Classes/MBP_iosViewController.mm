@@ -335,6 +335,9 @@
                 NSLog(@">>> SETUP ");
                 //Normal add cam sequence
                 //Load the next xib
+                
+                [self.navigationController popToRootViewControllerAnimated:NO];
+                
                 Step_02_ViewController *step02ViewController = nil;
                 
                 if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
@@ -424,7 +427,10 @@
             
 		case LOGIN_FAILED_OR_LOGOUT : //back from login -failed Or logout
         {
+            NSLog(@"%s LOGIN_FAILED_OR_LOGOUT.", __FUNCTION__);
             //Clear Do Not Disturb Cache
+            [self.navigationController popToRootViewControllerAnimated:NO];
+            
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
             [userDefaults setInteger:(NSInteger)[[NSDate date] timeIntervalSince1970] forKey:TIME_TO_EXPIRED];
             [userDefaults setBool:NO forKey:ENABLE_DO_NOT_DISTURB];
@@ -436,9 +442,8 @@
             
             [self logoutAndUnregistration_bg];
             [self show_login_or_reg:nil];
-			
-            break;
         }
+            break;
             
         case SCAN_BONJOUR_CAMERA :
         {
@@ -1022,9 +1027,12 @@
                 case 1:
                 {
                     NSLog(@"%s, %d", __FUNCTION__, self.navigationController.viewControllers.count);
-                    
+#if 1
+                    [self popAllViewControllers];
+#else
                     [self dismissMenuHubbleView];
                     [self dismissNotificationViewController];
+#endif
                     [self showNotifViewController:pushNotiAlert.camAlert];
                 }
                     break;
@@ -1137,8 +1145,12 @@
 }
 
 - (void)gotoCamerasListPage:(NSString *)registrationId {
+#if 1
+    [self popAllViewControllers];
+#else
     [self dismissMenuHubbleView];
     [self dismissNotificationViewController];
+#endif
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setObject:registrationId forKey:REG_ID];
@@ -1148,8 +1160,12 @@
 }
 
 - (void)gotoSelectedCameraPage:(NSString *)registrationId {
+#if 1
+    [self popAllViewControllers];
+#else
     [self dismissMenuHubbleView];
     [self dismissNotificationViewController];
+#endif
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setObject:registrationId forKey:REG_ID];
@@ -1261,8 +1277,8 @@
 }
 
 - (void)dismissNotificationViewController
-{
-    id aViewController = self.navigationController.viewControllers[self.navigationController.viewControllers.count - 1];
+{    
+    id aViewController = [self.navigationController.viewControllers lastObject];
     
     NSLog(@"%s %d %@", __FUNCTION__, self.navigationController.viewControllers.count, aViewController);
     
@@ -1276,8 +1292,44 @@
         NotifViewController *aNotifVC = ((NotifViewController *)aViewController);
         aNotifVC.notifDelegate = nil;
         [aNotifVC cancelTaskDoInBackground];
-        [aNotifVC.navigationController popToRootViewControllerAnimated:NO];
+        //[aNotifVC.navigationController popToRootViewControllerAnimated:NO];
     }
+    
+    [self.navigationController popToRootViewControllerAnimated:NO];
+}
+
+- (void)popAllViewControllers
+{
+    id aViewController = [self.navigationController.viewControllers lastObject];
+    
+    NSLog(@"%s %d %@", __FUNCTION__, self.navigationController.viewControllers.count, aViewController);
+    
+    if ([aViewController isKindOfClass:[PlaybackViewController class]])
+    {
+        PlaybackViewController *playbackViewController = (PlaybackViewController *)aViewController;
+        [playbackViewController closePlayBack:nil];
+    }
+    else if ([aViewController isKindOfClass:[NotifViewController class]])
+    {
+        NotifViewController *aNotifVC = (NotifViewController *)aViewController;
+        aNotifVC.notifDelegate = nil;
+        [aNotifVC cancelTaskDoInBackground];
+    }
+    else if ([aViewController isKindOfClass:[H264PlayerViewController class]])
+    {
+        H264PlayerViewController *h264VC = (H264PlayerViewController *)aViewController;
+        [h264VC prepareGoBackToCameraList:nil];
+    }
+    else if ([aViewController isKindOfClass:[EarlierViewController class]])
+    {
+        // Ignoring.
+    }
+    else if ([aViewController isKindOfClass:[MenuViewController class]])
+    {
+        // Do some stuffs.
+    }
+    
+    [self.navigationController popToRootViewControllerAnimated:NO];
 }
 
 - (void)showNotifViewController:(CameraAlert *)cameraAlert
@@ -1920,11 +1972,14 @@
         }
         return;
     }
-    
+#if 1
+    [self popAllViewControllers];
+#else
     //Back from login- login success
     [self dismissViewControllerAnimated:NO completion:nil];
     [self dismissMenuHubbleView];
     [self dismissNotificationViewController];
+#endif
     self.progressView.hidden = NO;
     
     if ([self.camAlert.alertType isEqualToString:ALERT_TYPE_MOTION])

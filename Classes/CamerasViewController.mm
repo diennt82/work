@@ -164,7 +164,7 @@
             [userDefaults setBool:FALSE forKey:FIRST_TIME_SETUP];
             [userDefaults synchronize];
 #if 1
-            [tabBarController.navigationController popToRootViewControllerAnimated:NO];
+            //[tabBarController.navigationController popToRootViewControllerAnimated:NO];
             [tabBarController.menuDelegate sendStatus:SETUP_CAMERA];
             tabBarController.menuDelegate = nil;
             return;
@@ -203,15 +203,15 @@
     CameraAlert * camAlert = [[CameraAlert alloc]initWithTimeStamp1:rcvTimeStamp];// autorelease];
     
     
-#if 0
+#if 1
     //set other values
-    camAlert.cameraMacNoColon = @"44334C5FF075";
+    camAlert.cameraMacNoColon = @"44334C81E8FC";
     
     camAlert.cameraName = @"Camera-fake motion push";
     camAlert.alertType = @"4";
-    camAlert.alertTime =@"2014-04-30T04:51:54+00:00";
-    camAlert.alertVal = @"20140430090958000";
-    camAlert.registrationID = @"01006644334C5FF075GPIRBEXE";
+    camAlert.alertTime =@"2014-08-14T06:04:10Z";
+    camAlert.alertVal = @"20140814070404000";
+    camAlert.registrationID = @"01006644334C81E8FCPRMRBULM";
 #else 
     camAlert.cameraMacNoColon = @"44334C5FF075";
     
@@ -272,7 +272,7 @@
     if (flag)
     {
 #if 1
-        [tabBarController.navigationController popToRootViewControllerAnimated:NO];
+        //[tabBarController.navigationController popToRootViewControllerAnimated:NO];
         [tabBarController.menuDelegate sendStatus:SETUP_CAMERA];
         tabBarController.menuDelegate = nil;
 #else

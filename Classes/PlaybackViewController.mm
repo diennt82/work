@@ -756,7 +756,7 @@
     else
     {
         [self stopStream:nil];
-        [self.navigationController popToRootViewControllerAnimated:NO];
+        //[self.navigationController popToRootViewControllerAnimated:NO];
     }
 }
 
