@@ -100,6 +100,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self xibDefaultLocalization];
     self.navigationController.navigationBarHidden = YES;
     
     NSArray *paths = NSSearchPathForDirectoriesInDomains
@@ -127,6 +128,13 @@
     self.ibTableListCamera.delegate = self;
 
     //[self updateBottomButton];
+    
+}
+
+- (void)xibDefaultLocalization
+{
+    self.ibTextAddCamera.text = NSLocalizedStringWithDefaultValue(@"xib_cameraspage_button_text_addcamera", nil, [NSBundle mainBundle], @"Add Camera", nil);
+    self.ibTextBuyCamera.text = NSLocalizedStringWithDefaultValue(@"xib_cameraspage_button_text_buycamera", nil, [NSBundle mainBundle], @"Buy Camera", nil);
 }
 
 #pragma mark - Actions
