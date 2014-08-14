@@ -123,6 +123,8 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    [self xibDefauleLocalization];
     self.navigationController.navigationBarHidden = YES;
     
     self.trackedViewName = GAI_CATEGORY;
@@ -142,6 +144,23 @@
         self.containtView.frame = rect;
         self.viewProgress.frame = CGRectMake(0, 0, UIScreen.mainScreen.bounds.size.width, UIScreen.mainScreen.bounds.size.height);
     }
+}
+
+- (void)xibDefauleLocalization
+{
+    self.tfEmail.placeholder = NSLocalizedStringWithDefaultValue(@"xib_registration_texfield_placeholder_email", nil, [NSBundle mainBundle], @"Email", nil);
+    self.tfUsername.placeholder = NSLocalizedStringWithDefaultValue(@"xib_registration_texfield_placeholder_username", nil, [NSBundle mainBundle], @"Username", nil);
+    self.tfPassword.placeholder = NSLocalizedStringWithDefaultValue(@"xib_registration_texfield_placeholder_password", nil, [NSBundle mainBundle], @"Password", nil);
+    self.tfConfirmPassword.placeholder = NSLocalizedStringWithDefaultValue(@"xib_registration_texfield_placeholder_confirmpassword", nil, [NSBundle mainBundle], @"Confirm Password", nil);
+    
+    UIButton *iAgreeButton = (UIButton *)[self.view viewWithTag:505];
+    [iAgreeButton setTitle:NSLocalizedStringWithDefaultValue(@"xib_registration_buttun_title_agree", nil, [NSBundle mainBundle], @"I agree with the", nil) forState:UIControlStateNormal];
+    
+    UIButton *termOfServicesButton = (UIButton *)[self.view viewWithTag:504];
+    [termOfServicesButton setTitle:NSLocalizedStringWithDefaultValue(@"xib_registration_button_title_term", nil, [NSBundle mainBundle], @"Terms of Services", nil) forState:UIControlStateNormal];
+    
+    [self.btnCreate setTitle:NSLocalizedStringWithDefaultValue(@"xib_registration_button_title_create", nil, [NSBundle mainBundle], @"Create", nil) forState:UIControlStateNormal];
+    [self.btnAlreadyAccount setTitle:NSLocalizedStringWithDefaultValue(@"xib_registration_button_title_alreadyaccount", nil, [NSBundle mainBundle], @"Already have a Account?", nil) forState:UIControlStateNormal];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
