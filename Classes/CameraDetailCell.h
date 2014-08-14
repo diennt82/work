@@ -12,7 +12,7 @@
 {
     
 }
-@property(nonatomic,retain) IBOutlet UIButton *btnChangeName,*btnChangeImage;
+@property(nonatomic,retain) IBOutlet UIButton *btnChangeName,*btnChangeImage, *btnFirmwareVersion;
 @property(nonatomic,retain) IBOutlet UILabel *lblCameraName,*lblCamVer;
 
 @end
