@@ -74,6 +74,14 @@
         [self.ib_circleSliderCustom.textField setTextColor:[UIColor lightGrayColor]];
         [self.ib_circleSliderCustom.minuteTField setTextColor:[UIColor lightGrayColor]];
     }
+    
+    [self xibDefaultLocalization];
+}
+
+- (void)xibDefaultLocalization
+{
+    [self.ib_enableDoNotDisturb setTitle:NSLocalizedStringWithDefaultValue(@"xib_settingpage_cell_donotdisturb_button_on", nil, [NSBundle mainBundle], @"On", nil) forState:UIControlStateNormal];
+    self.descLabel.text = NSLocalizedStringWithDefaultValue(@"xib_settingpage_cell_donotdisturb_label_des", nil, [NSBundle mainBundle], @"Choose how long you don't want to receive notifications for. Remember you can always edit your notification settings in General Settings", nil);
 }
 
 - (NSInteger)updateValueCustomSlider

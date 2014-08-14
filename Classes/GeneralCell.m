@@ -40,6 +40,9 @@
     [self.btnTemperature setImage:[UIImage imageNamed:@"settings_temp_f"] forState:UIControlStateSelected];
     [self.btnTemperature setImage:[UIImage imageNamed:@"settings_temp_f"] forState:UIControlStateHighlighted];
     self.btnTemperature.selected = _isFahrenheit;
+    
+    self.labelClock.text = NSLocalizedStringWithDefaultValue(@"xib_settingpage_cell_clock", nil, [NSBundle mainBundle], @"Clock", nil);
+    self.labelTemperature.text = NSLocalizedStringWithDefaultValue(@"xib_settingpage_cell_temperature", nil, [NSBundle mainBundle], @"Temperature", nil);
 }
 
 - (IBAction)btnClockTouchUpInsideAction:(UIButton *)sender
