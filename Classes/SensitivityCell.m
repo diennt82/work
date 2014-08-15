@@ -40,6 +40,8 @@
 
 - (void)drawRect:(CGRect)rect
 {
+    [self xibDefaultLocalization];
+    
     [self.btnSwitch setImage:[UIImage imageNamed:@"settings_switch_off"] forState:UIControlStateNormal];
     [self.btnSwitch setImage:[UIImage imageNamed:@"settings_switch_on"] forState:UIControlStateSelected];
     [self.btnSwitch setImage:[UIImage imageNamed:@"settings_switch_on"] forState:UIControlStateHighlighted];
@@ -92,7 +94,10 @@
     }
     
     self.imageViewCircleWhite.center = ((UIImageView *)_imageViewCircleArray[_settingsValue]).center;
-    
+}
+
+- (void)xibDefaultLocalization
+{
     UILabel *lowLabel = (UILabel *)[self viewWithTag:101];
     lowLabel.text = NSLocalizedStringWithDefaultValue(@"xib_camerasettings_cell_label_low", nil, [NSBundle mainBundle], @"Low", nil);
     UILabel *mediumLabel = (UILabel *)[self viewWithTag:102];

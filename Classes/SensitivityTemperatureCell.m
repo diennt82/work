@@ -59,6 +59,8 @@
 
 - (void)drawRect:(CGRect)rect
 {
+    [self xibDefaultLocalization];
+    
     [self.btnTypeTemperature setImage:[UIImage imageNamed:@"settings_temp_c"] forState:UIControlStateNormal];
     [self.btnTypeTemperature setImage:[UIImage imageNamed:@"settings_temp_f"] forState:UIControlStateSelected];
     [self.btnTypeTemperature setImage:[UIImage imageNamed:@"settings_temp_f"] forState:UIControlStateHighlighted];
@@ -124,8 +126,11 @@
         [self.imgViewRight setBackgroundColor:COLOR_RGB(255.0,(33-tempValueInCel)*20,(33-tempValueInCel)*10)];
     }else{
         [self.imgViewRight setBackgroundColor:[UIColor lightGrayColor]];
-    }    
+    }
+}
 
+- (void)xibDefaultLocalization
+{
     UILabel *tempLabel = (UILabel *)[self viewWithTag:101];
     tempLabel.text = NSLocalizedStringWithDefaultValue(@"xib_camerasettings_cell_label_temperature", nil, [NSBundle mainBundle], @"Temperature", nil);
     UILabel *lowLabel = (UILabel *)[self viewWithTag:102];
