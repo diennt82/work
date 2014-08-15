@@ -13,8 +13,6 @@
 #import "UserAccount.h"
 #import "EarlierViewController.h"
 
-#define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v)  ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedAscending)
-
 @interface MenuViewController () <UserAccountDelegate>//, UITabBarControllerDelegate>
 {
     UIBarButtonItem *cameraBarButton;
@@ -286,12 +284,10 @@
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:PLAYBACK_IN_VEW];
         [[NSUserDefaults standardUserDefaults] setInteger:-1 forKey:EVENT_DELETED_ID];
         [[NSUserDefaults standardUserDefaults] synchronize];
-        
-        if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8.0")) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self menuBackAction:nil];
-            });
-        }
+    
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self menuBackAction:nil];
+        });
        
         [self removeNavigationBarBottomLine];
     }

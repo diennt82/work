@@ -579,6 +579,7 @@
         }
         
         cell.ibCameraNameLabel.text = ch.profile.name;
+#if 0
         NSString *boundCameraName = ch.profile.name;
         CGSize size = [boundCameraName sizeWithAttributes:@{NSFontAttributeName:[UIFont fontWithName:PN_SEMIBOLD_FONT size:18]}];
         
@@ -594,7 +595,7 @@
             [cell.ibCameraNameLabel setFont:[UIFont fontWithName:PN_SEMIBOLD_FONT size:15]];
             [cell.ibCameraNameLabel setNumberOfLines:1];
         }
-        
+#endif
         if (!ch.profile.hasUpdateLocalStatus)
         {
             shouldHighlightAtRow[indexPath.row] = NO;
