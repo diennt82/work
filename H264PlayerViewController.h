@@ -346,7 +346,7 @@
 @property (nonatomic, retain) AudioOutStreamer * audioOut;
 @property (nonatomic, retain) UserAccount *userAccount;
 @property (nonatomic) BOOL isFwUpgradedByAnotherDevice;
-
+@property (nonatomic, retain) NSTimer *timerCheckMelodyState;
 
 - (void)scan_done:(NSArray *) _scan_results;
 

@@ -234,6 +234,12 @@ double _ticks = 0;
     NSLog(@"%s ********************************************************************************", __FUNCTION__);
     
     [self stopTimerRecoring];
+    
+    if (_timerCheckMelodyState) {
+        [_timerCheckMelodyState invalidate];
+        self.timerCheckMelodyState = nil;
+    }
+    
     [MBProgressHUD hideAllHUDsForView:self.view animated:NO];
     
     [super viewWillDisappear:animated];
@@ -1581,6 +1587,10 @@ double _ticks = 0;
     {
         [_jsonComm cancel];
         self.jsonComm = nil;
+    }
+    
+    if (_timerCheckMelodyState) {
+        [_timerCheckMelodyState invalidate];
     }
     
     [self stopMediaProcessGoBack:NO backgroundMode:YES];
@@ -3017,6 +3027,21 @@ double _ticks = 0;
     [degreeCelsius release];
 }
 
+#pragma mark - Melody
+
+- (void)getMelodyState:(NSTimer *)timer
+{
+    if (self.melodyViewController.view.isHidden)
+    {
+        NSLog(@"%s Melody view is hidden. Invalidate timer.", __FUNCTION__);
+        [timer invalidate];
+    }
+    else
+    {
+        [_melodyViewController performSelectorInBackground:@selector(getMelodyValue_bg)
+                                                withObject:nil];
+    }
+}
 
 #pragma mark -
 #pragma mark - Stun probe timer
@@ -5367,12 +5392,6 @@ double _ticks = 0;
         {
             [self.melodyViewController.view setHidden:NO];
             
-            if ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeLeft ||
-                [UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeRight)
-            {
-                //self.wantToShowTimeLine = YES;
-            }
-            
             CGRect rect;
             
             if (_isLandScapeMode)
@@ -5412,9 +5431,21 @@ double _ticks = 0;
              when landscape or portrait display correctly
              */
             //[self performSelectorInBackground:@selector(getMelodyValue_bg) withObject:nil];
-            [_melodyViewController performSelectorInBackground:@selector(getMelodyValue_bg) withObject:nil];
-            //[self.melodyViewController.melodyTableView setNeedsLayout];
-            //[self.melodyViewController.melodyTableView setNeedsDisplay];
+            
+            if (_timerCheckMelodyState) {
+                [_timerCheckMelodyState invalidate];
+            }
+            
+            self.timerCheckMelodyState = [NSTimer scheduledTimerWithTimeInterval:5
+                                                                          target:self
+                                                                        selector:@selector(getMelodyState:)
+                                                                        userInfo:nil
+                                                                         repeats:YES];
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [_melodyViewController performSelectorInBackground:@selector(getMelodyValue_bg)
+                                                        withObject:nil];
+            });
         }
         else if (_selectedItemMenu == INDEX_TEMP)
         {
@@ -5469,17 +5500,6 @@ double _ticks = 0;
     [self.melodyViewController.view setHidden:YES];
 }
 
-//Who on earth would call this ???
-- (void)showAllBottomView
-{
-    [self.imgViewDrectionPad setHidden:NO];
-    [self.ib_temperature setHidden:NO];
-    [self.ib_ViewTouchToTalk setHidden:NO];
-    [self.ib_viewRecordTTT setHidden:NO];
-    [self.melodyViewController.view setHidden:NO];
-    [self.scrollView setHidden:NO];
-}
-
 #pragma mark - Memory Release
 
 - (void)didReceiveMemoryWarning
@@ -5487,12 +5507,16 @@ double _ticks = 0;
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
     
-    NSLog(@"H264Player - didReceiveMemoryWarning - force restart stream if running");
-    
-    if (MediaPlayer::Instance()->isPlaying())
+    if (MediaPlayer::Instance()->isPlaying() &&
+        self.isViewLoaded                    &&
+        self.view.window)
     {
-        NSLog(@"H264Player - send interrupt ");
+        NSLog(@"%s Send interrupt.", __FUNCTION__);
         MediaPlayer::Instance()->sendInterrupt();
+    }
+    else
+    {
+        NSLog(@"%s View is invisible. Ignoring.", __FUNCTION__);
     }
 }
 
@@ -5536,6 +5560,7 @@ double _ticks = 0;
     [_alertFWUpgrading release];
     [_audioOut release];
     [_userAccount release];
+    [_timerCheckMelodyState release];
     
     NSLog(@"%s", __FUNCTION__);
     
