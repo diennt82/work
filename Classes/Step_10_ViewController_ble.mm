@@ -145,6 +145,36 @@
     [self wait_for_camera_to_reboot:nil];
 }
 
+- (void)xibDefaultLocalization
+{
+    UILabel *lable = (UILabel *)[self.view viewWithTag:3];
+    lable.text = NSLocalizedStringWithDefaultValue(@"xib_step10_ble_label_with", nil, [NSBundle mainBundle], @"with", nil);
+    UITextView *textView = (UITextView *)[self.view viewWithTag:1];
+    textView.text = NSLocalizedStringWithDefaultValue(@"xib_step10_ble_textview_signed_up", nil, [NSBundle mainBundle], @"You are signed up as ", nil);
+    textView = (UITextView *)[self.view viewWithTag:2];
+    textView.text = NSLocalizedStringWithDefaultValue(@"xib_step10_ble_textview_access_camera_any_time", nil, [NSBundle mainBundle], @"You can access your camera any time from this app from home or work. Or on the web at www.monitoreverywhere.com", nil);
+    
+    lable = (UILabel *)[self.progressView viewWithTag:1];
+    lable.text = NSLocalizedStringWithDefaultValue(@"xib_step10_ble_label_checking_connection_to_camera", nil, [NSBundle mainBundle], @"Checking connection to camera", nil);
+    lable = (UILabel *)[self.progressView viewWithTag:695];
+    lable.text = NSLocalizedStringWithDefaultValue(@"xib_step10_ble_label_takeup_a_minute", nil, [NSBundle mainBundle], @"This may take up to a minute", nil);
+    
+    textView = (UITextView *)[cameraAddedView viewWithTag:1];
+    textView.text = NSLocalizedStringWithDefaultValue(@"xib_step10_ble_textview_return_here_to_test_camera", nil, [NSBundle mainBundle], @"Once the above step is done, return here to test your camera. ", nil);
+    textView = (UITextView *)[cameraAddedView viewWithTag:2];
+    textView.text = NSLocalizedStringWithDefaultValue(@"xib_step10_ble_textview_switch_back_to_wifi_network", nil, [NSBundle mainBundle], @"Please switch back to the Wi-Fi network ", nil);
+    textView = (UITextView *)[cameraAddedView viewWithTag:4];
+    textView.text = NSLocalizedStringWithDefaultValue(@"xib_step10_ble_textview_camera_now_configured", nil, [NSBundle mainBundle], @"Your camera is now configured.", nil);
+    textView = (UITextView *)[cameraAddedView viewWithTag:6];
+    textView.text = NSLocalizedStringWithDefaultValue(@"xib_step10_ble_textview_select_wifi", nil, [NSBundle mainBundle], @"How to reach Wi-Fi Network? Select settings in iphone home screen and then select Wi-Fi.", nil);
+    textView = (UITextView *)[cameraAddedView viewWithTag:7];
+    textView.text = NSLocalizedStringWithDefaultValue(@"xib_step10_ble_textview_switch_to_wifi_network", nil, [NSBundle mainBundle], @"Please switch to Wi-Fi network :", nil);
+    UIButton *button = (UIButton *)[cameraAddedView viewWithTag:3];
+    [button setTitle:NSLocalizedStringWithDefaultValue(@"xib_step10_ble_button_camera_test", nil, [NSBundle mainBundle], @"Camera Test", nil) forState:UIControlStateNormal];
+    lable = (UILabel *)[cameraAddedView viewWithTag:5];
+    lable.text = NSLocalizedStringWithDefaultValue(@"xib_step10_ble_label_home_ssid", nil, [NSBundle mainBundle], @"Home SSID", nil);
+}
+
 - (void)hubbleItemAction: (id)sender
 {
     [self setStopScanning:nil];
