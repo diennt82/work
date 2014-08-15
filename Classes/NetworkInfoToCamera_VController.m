@@ -543,8 +543,7 @@
         
         NSLog(@"NetworkInfo - timeoutBLESetupProcessing - try to remove camera");
         
-        [jsonComm deleteBlockedDeviceWithRegistrationId:stringUDID
-                                              andApiKey:apiKey];
+        [jsonComm deleteDeviceBlockedWithRegistrationId:stringUDID andApiKey:apiKey];
         
         [_viewProgress removeFromSuperview];
         

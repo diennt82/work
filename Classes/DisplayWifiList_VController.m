@@ -250,10 +250,9 @@
     NSString *stringUDID = [userDefaults stringForKey:CAMERA_UDID];
     NSString *apiKey     = [userDefaults objectForKey:@"PortalApiKey"];
     
-    NSLog(@"DisplayWifiListVC - timeoutBLESetupProcessing - try to remove camera");
+    DLog(@"DisplayWifiListVC - timeoutBLESetupProcessing - try to remove camera");
     
-    [jsonComm deleteBlockedDeviceWithRegistrationId:stringUDID
-                                          andApiKey:apiKey];
+    [jsonComm deleteDeviceBlockedWithRegistrationId:stringUDID andApiKey:apiKey];
     
     [_viewProgress removeFromSuperview];
     [self.view addSubview:_viewError];
