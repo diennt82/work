@@ -20,7 +20,7 @@
 #import "UIActionSheet+Blocks.h"
 #import "PublicDefine.h"
 #import "UIImageView+WebCache.h"
-
+#import "UIView+Custom.h"
 
 
 #define ALERT_REMOVE_CAM        5
@@ -164,11 +164,9 @@ typedef enum _WAIT_FOR_UPDATING {
 
 - (void)xibDefaultLocalization
 {
-    [self.btnRmoveCamera setTitle:NSLocalizedStringWithDefaultValue(@"xib_cameramenu_button_text_cameramenu", nil, [NSBundle mainBundle], @"Remove Camera", nil) forState:UIControlStateNormal];
-    UILabel *detailLable = (UILabel *)[self.vwHeaderCamDetail viewWithTag:1];
-    detailLable.text = NSLocalizedStringWithDefaultValue(@"xib_cameramenu_label_camdetail", nil, [NSBundle mainBundle], @"Camera Detail", nil);
-    UILabel *sensityLable = (UILabel *)[self.vwHeaderNotSens viewWithTag:1];
-    sensityLable.text = NSLocalizedStringWithDefaultValue(@"xib_cameramenu_label_sensity", nil, [NSBundle mainBundle], @"Notification Sensity", nil);
+    [self.btnRmoveCamera setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_cameramenu_button_text_cameramenu", nil, [NSBundle mainBundle], @"Remove Camera", nil)];
+    [[self.vwHeaderCamDetail viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_cameramenu_label_camdetail", nil, [NSBundle mainBundle], @"Camera Detail", nil)];
+    [[self.vwHeaderNotSens viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_cameramenu_label_sensity", nil, [NSBundle mainBundle], @"Notification Sensity", nil)];
 }
 
 - (void)didReceiveMemoryWarning

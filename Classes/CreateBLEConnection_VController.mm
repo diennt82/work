@@ -14,6 +14,7 @@
 #import "Step_04_ViewController.h"
 #import "MBProgressHUD.h"
 #import "define.h"
+#import "UIView+Custom.h"
 
 #define BTN_CONTINUE_TAG    599
 #define BLE_TIMEOUT_PROCESS 1.5*60
@@ -121,23 +122,16 @@
 
 - (void)xibDefaultLocalization
 {
-    UILabel *lable = (UILabel *)[self.view viewWithTag:10];
-    lable.text = NSLocalizedStringWithDefaultValue(@"xib_CreateBLEConnection_label_select_camera", nil, [NSBundle mainBundle], @"Select Camera", nil);
-    [self.btnConnect setTitle:NSLocalizedStringWithDefaultValue(@"xib_step03_button_yes", nil, [NSBundle mainBundle], @"Yes", nil) forState:UIControlStateNormal];
+    [[self.view viewWithTag:10] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_CreateBLEConnection_label_select_camera", nil, [NSBundle mainBundle], @"Select Camera", nil)];
+    [self.btnConnect setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step03_button_yes", nil, [NSBundle mainBundle], @"Yes", nil)];
     
-    lable = (UILabel *)[self.viewPairNDetecting viewWithTag:10];
-    lable.text = NSLocalizedStringWithDefaultValue(@"xib_CreateBLEConnection_label_detectint_the_camera", nil, [NSBundle mainBundle], @"Detecting the Camera", nil);
-    lable = (UILabel *)[self.viewPairNDetecting viewWithTag:11];
-    lable.text = NSLocalizedStringWithDefaultValue(@"xib_CreateBLEConnection_label_press_and_hold", nil, [NSBundle mainBundle], @"Press and hold the button marked 'PAIR' for 3 seconds ", nil);
-    lable = (UILabel *)[self.viewPairNDetecting viewWithTag:12];
-    lable.text = NSLocalizedStringWithDefaultValue(@"xib_CreateBLEConnection_label_this_may_takeup", nil, [NSBundle mainBundle], @"This may take up to a minute", nil);
+    [[self.viewPairNDetecting viewWithTag:10] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_CreateBLEConnection_label_detectint_the_camera", nil, [NSBundle mainBundle], @"Detecting the Camera", nil)];
+    [[self.viewPairNDetecting viewWithTag:11] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_CreateBLEConnection_label_press_and_hold", nil, [NSBundle mainBundle], @"Press and hold the button marked 'PAIR' for 3 seconds ", nil)];
+    [[self.viewPairNDetecting viewWithTag:12] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_CreateBLEConnection_label_this_may_takeup", nil, [NSBundle mainBundle], @"This may take up to a minute", nil)];
     
-    lable = (UILabel *)[self.viewError viewWithTag:10];
-    lable.text = NSLocalizedStringWithDefaultValue(@"xib_CreateBLEConnection_label_unable_to_detect_camera", nil, [NSBundle mainBundle], @"Unable to Detect Camera", nil);
-    lable = (UILabel *)[self.viewError viewWithTag:11];
-    lable.text = NSLocalizedStringWithDefaultValue(@"xib_CreateBLEConnection_label_timout", nil, [NSBundle mainBundle], @"Timeout", nil);
-    UIButton *button = (UIButton *)[self.viewError viewWithTag:599];
-    [button setTitle:NSLocalizedStringWithDefaultValue(@"xib_CreateBLEConnection_button_retry", nil, [NSBundle mainBundle], @"Retry", nil) forState:UIControlStateNormal];
+    [[self.viewError viewWithTag:10] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_CreateBLEConnection_label_unable_to_detect_camera", nil, [NSBundle mainBundle], @"Unable to Detect Camera", nil)];
+    [[self.viewError viewWithTag:11] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_CreateBLEConnection_label_timout", nil, [NSBundle mainBundle], @"Timeout", nil)];
+    [[self.viewError viewWithTag:599] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_CreateBLEConnection_button_retry", nil, [NSBundle mainBundle], @"Retry", nil)];
 }
 
 - (void)viewWillAppear:(BOOL)animated

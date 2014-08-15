@@ -14,6 +14,7 @@
 #import "HoldOnCamWifi.h"
 #import "CustomIOS7AlertView.h"
 #import "Step_10_ViewController.h"
+#import "UIView+Custom.h"
 
 #define ALERT_CONFIRM_TAG       555
 #define ALERT_RETRY_WIFI_TAG    559
@@ -123,28 +124,21 @@
 
 - (void)xibDefaultLocalization
 {
-    UILabel *lable = (UILabel *)[self.view viewWithTag:1];
-    lable.text = NSLocalizedStringWithDefaultValue(@"xib_step05_label_selected_wifi_network", nil, [NSBundle mainBundle], @"Select Wi-Fi Network to Connect Camera", nil);
-    lable = (UILabel *)[self.view viewWithTag:2];
-    lable.text = NSLocalizedStringWithDefaultValue(@"xib_step05_label_select_your_own trusted_network", nil, [NSBundle mainBundle], @"Select your own trusted network.", nil);
-    lable = (UILabel *)[self.view viewWithTag:3];
-    lable.text = NSLocalizedStringWithDefaultValue(@"xib_step05_label_password_protected", nil, [NSBundle mainBundle], @"(It must be password protected.)", nil);
-    lable = (UILabel *)[self.view viewWithTag:4];
-    lable.text = NSLocalizedStringWithDefaultValue(@"xib_step05_label_detected_wifi_network", nil, [NSBundle mainBundle], @"Detected Wi-Fi Network", nil);
+    [[self.view viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step05_label_selected_wifi_network", nil, [NSBundle mainBundle], @"Select Wi-Fi Network to Connect Camera", nil)];
+    [[self.view viewWithTag:2] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step05_label_select_your_own trusted_network", nil, [NSBundle mainBundle], @"Select your own trusted network.", nil)];
+    [[self.view viewWithTag:3] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step05_label_password_protected", nil, [NSBundle mainBundle], @"(It must be password protected.)", nil)];
+    [[self.view viewWithTag:4] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step05_label_detected_wifi_network", nil, [NSBundle mainBundle], @"Detected Wi-Fi Network", nil)];
     
-    [self.btnSkipWifiSetup setTitle:NSLocalizedStringWithDefaultValue(@"xib_step05_button_skip_wifi_settup", nil, [NSBundle mainBundle], @"Skip WIFI Setup", nil) forState:UIControlStateNormal];
+    [self.btnSkipWifiSetup setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step05_button_skip_wifi_settup", nil, [NSBundle mainBundle], @"Skip WIFI Setup", nil)];
     [self.btnContinue setTitle:NSLocalizedStringWithDefaultValue(@"xib_step05_button_continue", nil, [NSBundle mainBundle], @"Continue", nil) forState:UIControlStateNormal];
     
-    lable = (UILabel *)[self.viewProgress viewWithTag:1];
-    lable.text = NSLocalizedStringWithDefaultValue(@"xib_step05_label_search_wifi_network", nil, [NSBundle mainBundle], @"Searching for Wi-Fi Networks", nil);
-    lable = (UILabel *)[self.viewProgress viewWithTag:2];
-    lable.text = NSLocalizedStringWithDefaultValue(@"xib_step05_label_please_wait", nil, [NSBundle mainBundle], @"Please wait", nil);
+    [[self.viewProgress viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step05_label_search_wifi_network", nil, [NSBundle mainBundle], @"Searching for Wi-Fi Networks", nil)];
+
+    [[self.viewProgress viewWithTag:2] setLocalizationText: NSLocalizedStringWithDefaultValue(@"xib_step05_label_please_wait", nil, [NSBundle mainBundle], @"Please wait", nil)];
     
-    lable = (UILabel *)[self.cellOtherNetwork viewWithTag:1];
-    lable.text = NSLocalizedStringWithDefaultValue(@"xib_step05_cell_other_network", nil, [NSBundle mainBundle], @"Other Network", nil);
+    [[self.cellOtherNetwork viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step05_cell_other_network", nil, [NSBundle mainBundle], @"Other Network", nil)];
     
-    lable = (UILabel *)[self.cellRefresh viewWithTag:1];
-    lable.text = NSLocalizedStringWithDefaultValue(@"xib_step05_cell_refresh", nil, [NSBundle mainBundle], @"Refresh", nil);
+    [[self.cellRefresh viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step05_cell_refresh", nil, [NSBundle mainBundle], @"Refresh", nil)];
 }
 
 - (void)viewDidUnload

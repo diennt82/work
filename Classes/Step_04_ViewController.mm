@@ -13,6 +13,7 @@
 #import "Step_05_ViewController.h"
 #import "MBProgressHUD.h"
 #import "Step_10_ViewController.h"
+#import "UIView+Custom.h"
 //#import "CustomIOS7AlertView.h"
 
 @interface Step_04_ViewController () <UITextFieldDelegate, UIAlertViewDelegate>
@@ -76,17 +77,14 @@
 
 - (void)xibDefaultLocalization
 {
-    UILabel *lable = (UILabel *)[self.view viewWithTag:1];
-    lable.text = NSLocalizedStringWithDefaultValue(@"xib_step04_label_camera_detected", nil, [NSBundle mainBundle], @"Camera Detected", nil);
-    lable = (UILabel *)[self.view viewWithTag:2];
-    lable.text = NSLocalizedStringWithDefaultValue(@"xib_step04_label_make_your_notifcation", nil, [NSBundle mainBundle], @"Please name the location of your camera. This will help make your notification more relevant.", nil);
+    [[self.view viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step04_label_camera_detected", nil, [NSBundle mainBundle], @"Camera Detected", nil)];
+    [[self.view viewWithTag:2] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step04_label_make_your_notifcation", nil, [NSBundle mainBundle], @"Please name the location of your camera. This will help make your notification more relevant.", nil)];
     
-    self.tfCamName.placeholder = NSLocalizedStringWithDefaultValue(@"xib_step04_textfield_camname", nil, [NSBundle mainBundle], @"Eg. Living Room, Nursery", nil);
-    [self.btnContinue setTitle:NSLocalizedStringWithDefaultValue(@"xib_step04_button_continue", nil, [NSBundle mainBundle], @"Continue", nil) forState:UIControlStateNormal];
-    [self.btnSkipWIFISetup setTitle:NSLocalizedStringWithDefaultValue(@"xib_step04_button_skip_WIFI_settup", nil, [NSBundle mainBundle], @"Skip WIFI Setup", nil) forState:UIControlStateNormal];
+    [self.tfCamName setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step04_textfield_camname", nil, [NSBundle mainBundle], @"Eg. Living Room, Nursery", nil)];
+    [self.btnContinue setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step04_button_continue", nil, [NSBundle mainBundle], @"Continue", nil)];
+    [self.btnSkipWIFISetup setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step04_button_skip_WIFI_settup", nil, [NSBundle mainBundle], @"Skip WIFI Setup", nil)];
     
-    UITextField *textfield = (UITextField *)[self.progressView viewWithTag:1];
-    textfield.text = NSLocalizedStringWithDefaultValue(@"xib_step04_textfield_couple_seconds_to_complete", nil, [NSBundle mainBundle], @"This will take a couple seconds to complete. Please wait...", nil);
+    [[self.progressView viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step04_textfield_couple_seconds_to_complete", nil, [NSBundle mainBundle], @"This will take a couple seconds to complete. Please wait...", nil)];
 }
 
 - (void)viewWillDisappear:(BOOL)animated

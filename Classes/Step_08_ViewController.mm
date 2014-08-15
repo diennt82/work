@@ -9,6 +9,7 @@
 #import "Step_08_ViewController.h"
 #import "Step_11_ViewController.h"
 #import "RegistrationViewController.h"
+#import "UIView+Custom.h"
 
 @interface Step_08_ViewController ()
 
@@ -76,19 +77,13 @@
 
 - (void)xibDefaultLocalization
 {
-    UITextView *textView = (UITextView *)[self.view viewWithTag:1];
-    textView.text = NSLocalizedStringWithDefaultValue(@"xib_step08_textview_reach_wifi_network", nil, [NSBundle mainBundle], @"How to reach Wi-Fi Network? Select settings in iphone home screen and then select Wi-Fi.", nil);
-    textView = (UITextView *)[self.view viewWithTag:2];
-    textView.text = NSLocalizedStringWithDefaultValue(@"xib_step08_textview_switch_wifi_network", nil, [NSBundle mainBundle], @"Please switch to Wi-Fi network :", nil);
-    textView = (UITextView *)[self.view viewWithTag:3];
-    textView.text = NSLocalizedStringWithDefaultValue(@"xib_step08_textview_switch_back_to_wifi_network", nil, [NSBundle mainBundle], @"Please switch back to the Wi-Fi network ", nil);
-    textView = (UITextView *)[self.view viewWithTag:4];
-    textView.text = NSLocalizedStringWithDefaultValue(@"xib_step08_textview_once_the_above_step_is_done", nil, [NSBundle mainBundle], @"Once the above step is done, return here to create an account", nil);
-    textView = (UITextView *)[self.view viewWithTag:5];
-    textView.text = NSLocalizedStringWithDefaultValue(@"xib_step08_textview_camera_configured_to_wifi", nil, [NSBundle mainBundle], @"Your camera is configured to WiFi ", nil);
+    [[self.view viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step08_textview_reach_wifi_network", nil, [NSBundle mainBundle], @"How to reach Wi-Fi Network? Select settings in iphone home screen and then select Wi-Fi.", nil)];
+    [[self.view viewWithTag:2] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step08_textview_switch_wifi_network", nil, [NSBundle mainBundle], @"Please switch to Wi-Fi network :", nil)];
+    [[self.view viewWithTag:3] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step08_textview_switch_back_to_wifi_network", nil, [NSBundle mainBundle], @"Please switch back to the Wi-Fi network ", nil)];
+    [[self.view viewWithTag:4] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step08_textview_once_the_above_step_is_done", nil, [NSBundle mainBundle], @"Once the above step is done, return here to create an account", nil)];
+    [[self.view viewWithTag:5] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step08_textview_camera_configured_to_wifi", nil, [NSBundle mainBundle], @"Your camera is configured to WiFi ", nil)];
     
-    UILabel *lable = (UILabel *)[self.view viewWithTag:6];
-    lable.text = NSLocalizedStringWithDefaultValue(@"xib_step08_label_home_ssid", nil, [NSBundle mainBundle], @"Home ssid", nil);
+    [[self.view viewWithTag:6] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step08_label_home_ssid", nil, [NSBundle mainBundle], @"Home ssid", nil)];
 }
 
 -(void) dealloc

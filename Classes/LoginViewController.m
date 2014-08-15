@@ -19,6 +19,7 @@
 #import "MBP_iosViewController.h"
 #import "MBP_iosAppDelegate.h"
 #import "define.h"
+#import "UIView+Custom.h"
 
 #define MOVEMENT_DURATION   0.3 //movementDuration
 #define GAI_CATEGORY        @"Login view"
@@ -132,13 +133,12 @@
 
 - (void)xibDefaultLocalization
 {
-    self.tfEmail.placeholder = NSLocalizedStringWithDefaultValue(@"xib_loginpage_email_texfield_placeholder", @"", [NSBundle mainBundle], @"Username/Email", nil);
-    NSLog(@"Duy %@", NSLocalizedStringWithDefaultValue(@"xib_loginpage_email_texfield_placeholder", @"", [NSBundle mainBundle], @"Username/Email", nil));
-    self.tfPassword.placeholder = NSLocalizedStringWithDefaultValue(@"xib_loginpage_password_textfield_placeholder", nil, [NSBundle mainBundle], @"Password", nil);
-    [self.buttonForgotPass setTitle:NSLocalizedStringWithDefaultValue(@"xib_loginpage_forgotpassword_button_labeltext", nil, [NSBundle mainBundle], @"Forgot Password?", nil) forState:UIControlStateNormal];
+    [self.tfEmail setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_loginpage_email_texfield_placeholder", @"", [NSBundle mainBundle], @"Username/Email", nil)];
+    [self.tfPassword setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_loginpage_password_textfield_placeholder", nil, [NSBundle mainBundle], @"Password", nil)];
+    [self.buttonForgotPass setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_loginpage_forgotpassword_button_labeltext", nil, [NSBundle mainBundle], @"Forgot Password?", nil)];
     
-    [self.buttonEnter setTitle:NSLocalizedStringWithDefaultValue(@"xib_loginpage_enter_button_labeltext", nil, [NSBundle mainBundle], @"Enter", nil) forState:UIControlStateNormal];;
-    [self.buttonCreateAccount setTitle:NSLocalizedStringWithDefaultValue(@"xib_loginpage_creteacount_button_labletext", nil, [NSBundle mainBundle], @"Create Account", nil) forState:UIControlStateNormal];
+    [self.buttonEnter setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_loginpage_enter_button_labeltext", nil, [NSBundle mainBundle], @"Enter", nil)];
+    [self.buttonCreateAccount setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_loginpage_creteacount_button_labletext", nil, [NSBundle mainBundle], @"Create Account", nil)];
 }
 
 -(void) viewWillAppear:(BOOL)animated

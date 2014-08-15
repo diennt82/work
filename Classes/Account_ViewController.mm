@@ -15,6 +15,7 @@
 #import "NSData+AESCrypt.h"
 #import "CustomIOS7AlertView.h"
 #import "MBProgressHUD.h"
+#import "UIView+Custom.h"
 
 @interface Account_ViewController () <MFMailComposeViewControllerDelegate, UIAlertViewDelegate>
 
@@ -92,8 +93,7 @@
 
 - (void)xibDefaultLocalization
 {
-    UIButton *logoutButton = (UIButton *)[self.view viewWithTag:101];
-    [logoutButton setTitle:NSLocalizedStringWithDefaultValue(@"xib_accountpage_button_text_logout", nil, [NSBundle mainBundle], @"Logout", nil) forState:UIControlStateNormal];
+    [[self.view viewWithTag:101] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_accountpage_button_text_logout", nil, [NSBundle mainBundle], @"Logout", nil)];
 }
 
 -(void)loadUserData

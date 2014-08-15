@@ -12,6 +12,7 @@
 #define TEMP_HIGH_MAX 40
 
 #import "SensitivityTemperatureCell.h"
+#import "UIView+Custom.h"
 
 @interface SensitivityTemperatureCell()
 
@@ -131,12 +132,9 @@
 
 - (void)xibDefaultLocalization
 {
-    UILabel *tempLabel = (UILabel *)[self viewWithTag:101];
-    tempLabel.text = NSLocalizedStringWithDefaultValue(@"xib_camerasettings_cell_label_temperature", nil, [NSBundle mainBundle], @"Temperature", nil);
-    UILabel *lowLabel = (UILabel *)[self viewWithTag:102];
-    lowLabel.text = NSLocalizedStringWithDefaultValue(@"xib_camerasettings_cell_label_low", nil, [NSBundle mainBundle], @"Low", nil);
-    UILabel *highLabel = (UILabel *)[self viewWithTag:103];
-    highLabel.text = NSLocalizedStringWithDefaultValue(@"xib_camerasettings_cell_label_high", nil, [NSBundle mainBundle], @"High", nil);
+    [[self viewWithTag:101] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_camerasettings_cell_label_temperature", nil, [NSBundle mainBundle], @"Temperature", nil)];
+    [[self viewWithTag:102] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_camerasettings_cell_label_low", nil, [NSBundle mainBundle], @"Low", nil)];
+    [[self viewWithTag:103] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_camerasettings_cell_label_high", nil, [NSBundle mainBundle], @"High", nil)];
 }
 
 - (IBAction)btnTypeTempTouchUpInsideAction:(UIButton *)sender
