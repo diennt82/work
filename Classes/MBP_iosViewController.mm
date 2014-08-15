@@ -979,10 +979,10 @@
                     break;
                 case 1:
                 {
-                    NSLog(@"%s, %d", __FUNCTION__, self.navigationController.viewControllers.count);
 #if 1
                     [self popAllViewControllers];
 #else
+                    NSLog(@"%s, %d", __FUNCTION__, self.navigationController.viewControllers.count);
                     [self dismissMenuHubbleView];
                     [self dismissNotificationViewController];
 #endif

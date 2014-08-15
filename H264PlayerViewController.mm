@@ -1532,7 +1532,7 @@ double _ticks = 0;
 {
     NSLog(@"%s enter >>>>>>>>>>>>>>>>>> call prepareGoBackToCameraList ", __FUNCTION__);
     
-    [self prepareGoBackToCameraList:nil];
+    [self prepareGoBackToCameraList:self.navigationItem.leftBarButtonItem];
 }
 
 - (void)h264_HandleDidEnterBackground
@@ -2120,7 +2120,8 @@ double _ticks = 0;
     
     self.view.userInteractionEnabled = NO;
     
-    NSLog(@"H264VC- prepareGoBackToCameraList - self.currentMediaStatus: %d", self.currentMediaStatus);
+    NSLog(@"%s - self.currentMediaStatus: %d", __FUNCTION__, self.currentMediaStatus);
+    
     self.navigationItem.leftBarButtonItem.enabled = NO;
     
     userWantToCancel = TRUE;
@@ -2184,7 +2185,14 @@ double _ticks = 0;
         [_jsonCommBlocked release];
     }
     
-    [self stopMediaProcessGoBack:YES backgroundMode:NO];
+    BOOL isGoBack = YES;
+    
+    if (!sender)
+    {
+        isGoBack = NO; // Calling from iosVC.
+    }
+    
+    [self stopMediaProcessGoBack:isGoBack backgroundMode:NO];
 }
 
 - (void)goBackToCamerasRemoteStreamTimeOut
@@ -4902,7 +4910,7 @@ double _ticks = 0;
             
         case TAG_ALERT_FW_OTA_UPGRADE_FAILED:
         {
-            [self prepareGoBackToCameraList:nil];
+            [self prepareGoBackToCameraList:self.navigationItem.leftBarButtonItem];
         }
             break;
         case TAG_ALERT_FW_OTA_UPGRADE_DONE:
