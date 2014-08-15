@@ -10,6 +10,8 @@
                 <outlet property="btnContinue" destination="lne-ns-Iya" id="AZo-ab-xP7"/>
                 <outlet property="confPasswordCell" destination="41" id="45"/>
                 <outlet property="infoSelectCameView" destination="Qxn-or-QKK" id="Nj8-qo-P2g"/>
+                <outlet property="lblNameTitle" destination="29" id="gAA-Mw-iVZ"/>
+                <outlet property="lblSecurityTitle" destination="31" id="sbg-SS-S1B"/>
                 <outlet property="passwordCell" destination="36" id="46"/>
                 <outlet property="progressView" destination="nSw-Db-ssL" id="PEM-u2-NeE"/>
                 <outlet property="scrollViewGuide" destination="fUx-oY-EgV" id="p8G-bG-ikx"/>
@@ -61,7 +63,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="left" text="Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="29">
+                    <label autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="left" text="Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="29">
                         <rect key="frame" x="13" y="12" width="48" height="21"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
