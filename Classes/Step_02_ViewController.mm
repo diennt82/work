@@ -214,12 +214,13 @@
         [step03ViewController release];
     }
 }
-
+#if 0
 - (IBAction)goBackToFirstScreen:(id)sender
 {
     //[self.delegate sendStatus:FRONT_PAGE];
     [self.delegate sendStatus:LOGIN];
 }
+#endif
 
 - (void)startMonitorCallBack:(BOOL)success;
 {

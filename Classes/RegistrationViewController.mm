@@ -627,7 +627,7 @@
                                                      withLabel:nil
                                                      withValue:nil];
     
-    [self.navigationController popToRootViewControllerAnimated:YES];
+    //[self.navigationController popToRootViewControllerAnimated:YES];
     
     if (_delegate)
     {

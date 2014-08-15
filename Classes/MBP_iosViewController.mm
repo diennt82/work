@@ -207,14 +207,14 @@
 
 -(void) startShowingCameraList:(NSNumber *) option
 {
+#if 1
+    _menuVC = [[MenuViewController alloc] initWithCaller:self];
+#else
     if (_menuVC)
     {
         self.menuVC = nil;
     }
     
-#if 1
-    _menuVC = [[MenuViewController alloc] initWithCaller:self];
-#else
     _menuVC = [[MenuViewController alloc] initWithNibName:@"MenuViewController"
                                                        bundle:nil
                                              withConnDelegate:self];
@@ -320,11 +320,90 @@
 /**** Main program switching point is here *****/
 - (void)sendStatus:(int) method
 {
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [self.navigationController popToRootViewControllerAnimated:NO];
     
 	switch (method)
     {
-		case SETUP_CAMERA:
+        case SETUP_CAMERA:
+        {
+            NSLog(@">>> SETUP ");
+            //Normal add cam sequence
+            //Load the next xib
+            
+            Step_02_ViewController *step02ViewController = nil;
+            
+            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+            {
+                step02ViewController = [[Step_02_ViewController alloc]
+                                        initWithNibName:@"Step_02_ViewController_ipad" bundle:nil];
+            }
+            else
+            {
+                step02ViewController = [[Step_02_ViewController alloc]
+                                        initWithNibName:@"Step_02_ViewController" bundle:nil];
+            }
+            
+            step02ViewController.delegate = self;
+            step02ViewController.cameraType = [[NSUserDefaults standardUserDefaults] integerForKey:SET_UP_CAMERA];
+            UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:step02ViewController];
+            //[self presentViewController:nav animated:NO completion:^{}];
+            [step02ViewController release];
+            
+            if (self.presentedViewController) {
+                [self dismissViewControllerAnimated:NO completion:^{
+                    [self presentViewController:nav animated:YES completion:nil];
+                }];
+            } else {
+                [self presentViewController:nav animated:YES completion:nil];
+            }
+            
+            [nav release];
+        }
+            break;
+            
+		case LOGIN_FAILED_OR_LOGOUT : //back from login -failed Or logout
+        {
+            NSLog(@"%s LOGIN_FAILED_OR_LOGOUT.", __FUNCTION__);
+            //Clear Do Not Disturb Cache
+            
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            [userDefaults setInteger:(NSInteger)[[NSDate date] timeIntervalSince1970] forKey:TIME_TO_EXPIRED];
+            [userDefaults setBool:NO forKey:ENABLE_DO_NOT_DISTURB];
+            [userDefaults synchronize];
+            
+            statusDialogLabel.hidden = YES;
+            self.app_stage = APP_STAGE_LOGGING_IN;
+            
+            
+            [self logoutAndUnregistration_bg];
+            [self show_login_or_reg:nil];
+        }
+            break;
+            
+        case SHOW_CAMERA_LIST: // This  will actually switch to the selected camera
+        {
+            self.app_stage = APP_STAGE_LOGGED_IN;
+            isRebinded = [self rebindCameraResource];
+            
+            [self performSelectorOnMainThread:@selector(startShowingCameraList:)
+                                   withObject:[NSNumber numberWithInt:0]
+                                waitUntilDone:NO];
+        }
+            break;
+            
+        case SHOW_CAMERA_LIST2:// Use this to force staying at camera list
+        {
+            self.app_stage = APP_STAGE_LOGGED_IN;
+            isRebinded = [self rebindCameraResource];
+            
+            [self performSelectorOnMainThread:@selector(startShowingCameraList:)
+                                   withObject:[NSNumber numberWithInt:STAY_AT_CAMERA_LIST]
+                                waitUntilDone:NO];
+            
+            break;
+        }
+#if 0
+        case SETUP_CAMERA:
         {
             self.app_stage = APP_STAGE_SETUP;
             
@@ -374,28 +453,25 @@
         }
             break;
             
-            
-            
-		case SCAN_CAMERA:
+        case SCAN_CAMERA:
         {
-			//may be offline mode
+            //may be offline mode
             NSLog(@"start scanning");
             statusDialogLabel.hidden = NO;
-			self.app_stage = APP_STAGE_LOGGED_IN;
+            self.app_stage = APP_STAGE_LOGGED_IN;
             
             isRebinded = [self rebindCameraResource];
-			[self performSelector:@selector(scan_for_devices)
+            [self performSelector:@selector(scan_for_devices)
                        withObject:nil
                        afterDelay:0.1];
             
-			//Back from login- login success
-			[self dismissViewControllerAnimated:NO completion:nil];
-			self.progressView.hidden = NO;
+            //Back from login- login success
+            [self dismissViewControllerAnimated:NO completion:nil];
+            self.progressView.hidden = NO;
         }
-			break;
+            break;
             
-            
-		case AFTER_DEL_RELOGIN: //Only use when cancel from Add camera
+        case AFTER_DEL_RELOGIN: //Only use when cancel from Add camera
         {
             
             statusDialogLabel.hidden = YES;
@@ -411,7 +487,8 @@
             
             break;
         }
-		case  BACK_FRM_MENU_NOLOAD: //USED by AppDelegate as well.. please check if modifying this case
+            
+        case  BACK_FRM_MENU_NOLOAD: //USED by AppDelegate as well.. please check if modifying this case
         {
             NSLog(@"Back from menu");
             statusDialogLabel.hidden = YES;
@@ -424,26 +501,6 @@
             
             break;
         }
-            
-		case LOGIN_FAILED_OR_LOGOUT : //back from login -failed Or logout
-        {
-            NSLog(@"%s LOGIN_FAILED_OR_LOGOUT.", __FUNCTION__);
-            //Clear Do Not Disturb Cache
-            [self.navigationController popToRootViewControllerAnimated:NO];
-            
-            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-            [userDefaults setInteger:(NSInteger)[[NSDate date] timeIntervalSince1970] forKey:TIME_TO_EXPIRED];
-            [userDefaults setBool:NO forKey:ENABLE_DO_NOT_DISTURB];
-            [userDefaults synchronize];
-            
-            statusDialogLabel.hidden = YES;
-            self.app_stage = APP_STAGE_LOGGING_IN;
-            
-            
-            [self logoutAndUnregistration_bg];
-            [self show_login_or_reg:nil];
-        }
-            break;
             
         case SCAN_BONJOUR_CAMERA :
         {
@@ -471,30 +528,7 @@
             
             break;
         }
-            
-        case SHOW_CAMERA_LIST: // This  will actually switch to the selected camera
-        {
-            self.app_stage = APP_STAGE_LOGGED_IN;
-            isRebinded = [self rebindCameraResource];
-            
-            [self performSelectorOnMainThread:@selector(startShowingCameraList:)
-                                   withObject:[NSNumber numberWithInt:0]
-                                waitUntilDone:NO];
-        }
-            break;
-            
-        case SHOW_CAMERA_LIST2:// Use this to force staying at camera list
-        {
-            self.app_stage = APP_STAGE_LOGGED_IN;
-            isRebinded = [self rebindCameraResource];
-            
-            [self performSelectorOnMainThread:@selector(startShowingCameraList:)
-                                   withObject:[NSNumber numberWithInt:STAY_AT_CAMERA_LIST]
-                                waitUntilDone:NO];
-            
-            break;
-        }
-            
+#endif
 		default:
 			break;
 	}
@@ -564,91 +598,6 @@
     }
     return restore_successful;
 }
-
-
--(void) callForStartScanningBonjour
-{
-    
-    if (isRebinded)
-    {
-        if ( [self isCurrentConnection3G] ||
-            [self.restored_profiles count] ==0)
-        {
-            NSLog(@" Connection over 3g OR empty cam list  --> Skip scanning all together");
-            
-            
-            for (int j = 0; j < [restored_profiles count]; j++)
-            {
-                CamProfile * cp = (CamProfile *) [restored_profiles objectAtIndex:j];
-                
-                cp.isInLocal = FALSE;
-                cp.hasUpdateLocalStatus = TRUE;
-            }
-            
-            [self finish_scanning];
-        }
-        else
-        {
-            bonjourThread = [[NSThread alloc] initWithTarget:self selector:@selector(scan_with_bonjour) object:nil];
-            [bonjourThread start];
-        }
-    }
-}
-
--(void) scan_with_bonjour
-{
-    @autoreleasepool
-    {
-        NSDate * endDate;
-        // When use autoreleseapool, no need to call autorelease.
-        _bonjourBrowser = [[Bonjour alloc] initSetupWith:self.restored_profiles];
-        [_bonjourBrowser setDelegate:self];
-        
-        [_bonjourBrowser startScanLocalWiFi];
-        
-        endDate = [NSDate dateWithTimeIntervalSinceNow:0.5];
-        while (_bonjourBrowser.isSearching)
-        {
-            [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:endDate];
-        }
-        bonjourList = _bonjourBrowser.cameraList;
-    }
-    
-    [NSThread exit];
-}
-
-- (BOOL) isThisMacStoredOffline:(NSString*) mac_without_colon
-{
-    
-	if (self.restored_profiles == nil &&
-        self.channel_array == nil)
-	{
-		// No offline data is available --> force re login
-		return FALSE;
-        
-	}
-    
-    
-	CamProfile * cp = nil;
-	for (int i =0; i< [self.restored_profiles count]; i++)
-	{
-		cp = (CamProfile *) [self.restored_profiles objectAtIndex:i];
-		if (cp!= nil &&
-            cp.mac_address != nil )
-		{
-			NSString *  mac_wo_colon = [Util strip_colon_fr_mac:cp.mac_address];
-			if ([mac_wo_colon isEqualToString:mac_without_colon])
-			{
-				return TRUE;
-			}
-		}
-        
-	}
-    
-	return FALSE;
-}
-
-
 
 -(BOOL) pushNotificationRcvedServerAnnouncement:(NSString *) custom_message andUrl:(NSString *) custom_url
 {
@@ -1006,7 +955,11 @@
             switch(buttonIndex)
             {
                 case 0:
+#if 1
+                    [self popAllViewControllers];
+#else
                     [self dismissMenuHubbleView];
+#endif
                     [self sendStatus:LOGIN_FAILED_OR_LOGOUT];
                     break;
                     
@@ -1051,8 +1004,13 @@
                     break;
                 case 1:
                 {
+#if 1
+                    [self popAllViewControllers];
+                    [self show_login_or_reg:nil];
+#else
                     [self dismissMenuHubbleView];
                     [self sendStatus:LOGIN];
+#endif
                 }
                     break;
                     
@@ -2213,6 +2171,88 @@
     
     return FALSE;
     
+}
+
+-(void) callForStartScanningBonjour
+{
+    
+    if (isRebinded)
+    {
+        if ( [self isCurrentConnection3G] ||
+            [self.restored_profiles count] ==0)
+        {
+            NSLog(@" Connection over 3g OR empty cam list  --> Skip scanning all together");
+            
+            
+            for (int j = 0; j < [restored_profiles count]; j++)
+            {
+                CamProfile * cp = (CamProfile *) [restored_profiles objectAtIndex:j];
+                
+                cp.isInLocal = FALSE;
+                cp.hasUpdateLocalStatus = TRUE;
+            }
+            
+            [self finish_scanning];
+        }
+        else
+        {
+            bonjourThread = [[NSThread alloc] initWithTarget:self selector:@selector(scan_with_bonjour) object:nil];
+            [bonjourThread start];
+        }
+    }
+}
+
+-(void) scan_with_bonjour
+{
+    @autoreleasepool
+    {
+        NSDate * endDate;
+        // When use autoreleseapool, no need to call autorelease.
+        _bonjourBrowser = [[Bonjour alloc] initSetupWith:self.restored_profiles];
+        [_bonjourBrowser setDelegate:self];
+        
+        [_bonjourBrowser startScanLocalWiFi];
+        
+        endDate = [NSDate dateWithTimeIntervalSinceNow:0.5];
+        while (_bonjourBrowser.isSearching)
+        {
+            [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:endDate];
+        }
+        bonjourList = _bonjourBrowser.cameraList;
+    }
+    
+    [NSThread exit];
+}
+
+- (BOOL) isThisMacStoredOffline:(NSString*) mac_without_colon
+{
+    
+    if (self.restored_profiles == nil &&
+        self.channel_array == nil)
+    {
+        // No offline data is available --> force re login
+        return FALSE;
+        
+    }
+    
+    
+    CamProfile * cp = nil;
+    for (int i =0; i< [self.restored_profiles count]; i++)
+    {
+        cp = (CamProfile *) [self.restored_profiles objectAtIndex:i];
+        if (cp!= nil &&
+            cp.mac_address != nil )
+        {
+            NSString *  mac_wo_colon = [Util strip_colon_fr_mac:cp.mac_address];
+            if ([mac_wo_colon isEqualToString:mac_without_colon])
+            {
+                return TRUE;
+            }
+        }
+        
+    }
+    
+    return FALSE;
 }
 #endif
 @end

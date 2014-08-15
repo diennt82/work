@@ -23,7 +23,7 @@
 @property (nonatomic) NSInteger cameraType;
 
 - (IBAction)handleButtonPress:(id)sender;
-- (IBAction)goBackToFirstScreen:(id)sender;
+//- (IBAction)goBackToFirstScreen:(id)sender;
 
 
 - (void)presentModallyOn:(UIViewController *)parent;

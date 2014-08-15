@@ -14,7 +14,7 @@
 
 /// sendStatus:
 #define SETUP_CAMERA            1
-#define LOGIN                   2
+//#define LOGIN                   2
 #define SCAN_CAMERA             3
 #define AFTER_ADD_RELOGIN       4
 #define AFTER_DEL_RELOGIN       5

@@ -495,14 +495,14 @@ void checkingApplicationCrashed()
                                     repeats:NO];
 }
 
-
+#if 0
 -(void) showInit
 {
     NSLog(@"MBP_isoAppDelegate - show LoginVC as the first init");
     //[viewController sendStatus:FRONT_PAGE];
     [viewController sendStatus:LOGIN];
 }
-
+#endif
 
 - (BOOL) shouldAlertForThisMac:(NSString*) mac_without_colon
 {

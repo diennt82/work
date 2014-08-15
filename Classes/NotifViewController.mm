@@ -246,7 +246,7 @@
         [userDefaults synchronize];
 
         
-        [self.navigationController popToRootViewControllerAnimated:YES];
+        //[self.navigationController popToRootViewControllerAnimated:YES];
         [_notifDelegate sendStatus:SHOW_CAMERA_LIST];
 
     }
