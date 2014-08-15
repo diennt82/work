@@ -9,6 +9,7 @@
 #import "EditCamera_VController.h"
 #import "define.h"
 #import <MonitorCommunication/MonitorCommunication.h>
+#import "PublicDefine.h"
 
 @interface EditCamera_VController () <UITextFieldDelegate>
 

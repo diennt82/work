@@ -6,7 +6,13 @@
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
-//#define ALERT_GENERIC_SERVER_INFO @"0"
+#define ALERT_PUSH_RECVED_RESCAN_AFTER              200
+#define ALERT_PUSH_RECVED_RELOGIN_AFTER             201
+#define ALERT_PUSH_SERVER_ANNOUNCEMENT              203
+#define ALERT_PUSH_RECVED_SOUND_TEMP_HI_TEMP_LO     204
+#define ALERT_PUSH_RECVED_MULTIPLE                  205
+#define ALERT_PUSH_RECVED_REMOVE_CAM                206
+#define ALERT_PUSH_RECVED_PASSWORD_CHANGED          207
 
 #import <CFNetwork/CFNetwork.h>
 #include <ifaddrs.h>
@@ -30,30 +36,46 @@
 #import <MessageUI/MFMailComposeViewController.h>
 #import "NSData+AESCrypt.h"
 #import "CameraMenuViewController.h"
+#import "MenuViewController.h"
+#import "TimelineDatabase.h"
+#import "NotifViewController.h"
+#import "PushNotificationAlert.h"
+#import "PublicDefine.h"
 
-@interface MBP_iosViewController () <MFMailComposeViewControllerDelegate>
+@interface MBP_iosViewController () <MFMailComposeViewControllerDelegate, ConnectionMethodDelegate, UIActionSheetDelegate>
+{
+    SystemSoundID soundFileObject;
+    NSArray * channel_array;
+    NSMutableArray * restored_profiles ;
+    int app_stage;
+    BOOL isRebinded;
+    
+    //int nextCameraToScanIndex;
+    //Bonjour * _bonjourBrowser;
+    //NSArray * bonjourList;
+    //NSThread * bonjourThread;
+}
+
+@property (nonatomic, retain) IBOutlet UIImageView * splashScreen;
+
+@property (nonatomic, retain) NSArray * channel_array;
+@property (nonatomic, retain) NSMutableArray * restored_profiles ;
+@property (nonatomic, retain) PushNotificationAlert * pushAlert;
+@property (nonatomic, retain) MenuViewController *menuVC;
 @property (nonatomic) BOOL changePasswordReady;
+
 @end
 
 @implementation MBP_iosViewController
-
-//@synthesize  mainMenuView;
-
-@synthesize toTakeSnapShot,recordInProgress ;
-@synthesize bc_addr,own_addr;
 
 
 @synthesize channel_array;
 @synthesize restored_profiles ;
 
-@synthesize progressView;
-
 @synthesize app_stage;
 
 - (void) initialize
 {
-	self.toTakeSnapShot = NO;
-	self.recordInProgress = NO;
 	//self.app_stage = APP_STAGE_INIT;
     self.app_stage = APP_STAGE_LOGGING_IN;
     
@@ -300,15 +322,13 @@
 - (void)dealloc {
     
 	// [mainMenuView release];
-    [_bonjourBrowser release];
+    //[_bonjourBrowser release];
     [_splashScreen release];
-	[bc_addr release];
-	[own_addr release];
     
 	[channel_array release];
 	[restored_profiles release];
     
-    [bonjourThread release];
+    //[bonjourThread release];
     [_menuVC release];
     [_pushAlert release];
 	[super dealloc];
@@ -326,9 +346,9 @@
     {
         case SETUP_CAMERA:
         {
-            NSLog(@">>> SETUP ");
-            //Normal add cam sequence
-            //Load the next xib
+            NSLog(@">>> SETUP.");
+            
+            self.app_stage = APP_STAGE_SETUP;
             
             Step_02_ViewController *step02ViewController = nil;
             
@@ -371,7 +391,7 @@
             [userDefaults setBool:NO forKey:ENABLE_DO_NOT_DISTURB];
             [userDefaults synchronize];
             
-            statusDialogLabel.hidden = YES;
+            //statusDialogLabel.hidden = YES;
             self.app_stage = APP_STAGE_LOGGING_IN;
             
             
@@ -457,7 +477,7 @@
         {
             //may be offline mode
             NSLog(@"start scanning");
-            statusDialogLabel.hidden = NO;
+            //statusDialogLabel.hidden = NO;
             self.app_stage = APP_STAGE_LOGGED_IN;
             
             isRebinded = [self rebindCameraResource];
@@ -467,14 +487,14 @@
             
             //Back from login- login success
             [self dismissViewControllerAnimated:NO completion:nil];
-            self.progressView.hidden = NO;
+            //self.progressView.hidden = NO;
         }
             break;
             
         case AFTER_DEL_RELOGIN: //Only use when cancel from Add camera
         {
             
-            statusDialogLabel.hidden = YES;
+            //statusDialogLabel.hidden = YES;
             
             [userDefaults setBool:TRUE forKey:_AutoLogin];
             [userDefaults synchronize];
@@ -491,7 +511,7 @@
         case  BACK_FRM_MENU_NOLOAD: //USED by AppDelegate as well.. please check if modifying this case
         {
             NSLog(@"Back from menu");
-            statusDialogLabel.hidden = YES;
+            //statusDialogLabel.hidden = YES;
             //[self dismissViewControllerAnimated:NO completion:nil];
             
             if (self.presentedViewController)
@@ -511,7 +531,7 @@
              */
             NSLog(@"start scanning Bonjour");
             
-            statusDialogLabel.hidden = NO;
+            //statusDialogLabel.hidden = NO;
 			self.app_stage = APP_STAGE_LOGGED_IN;
             
             isRebinded = [self rebindCameraResource];
@@ -522,10 +542,8 @@
             
             //Back from login- login success
             //[self dismissViewControllerAnimated:NO completion:^{}];
-            self.progressView.hidden = NO;
-            
-            
-            
+            //self.progressView.hidden = NO;
+
             break;
         }
 #endif
@@ -1560,7 +1578,7 @@
     [self dismissMenuHubbleView];
     [self dismissNotificationViewController];
 #endif
-    self.progressView.hidden = NO;
+    //self.progressView.hidden = NO;
     
     if ([self.camAlert.alertType isEqualToString:ALERT_TYPE_MOTION])
     {
@@ -1999,28 +2017,7 @@
         }
     }
 #else
-    else if (*index < [self.restored_profiles count])
-    {
-        if (dashBoard != nil)
-        {
-            NSLog(@"reload dashboard in scan_done");
-            [dashBoard.cameraList reloadData];
-            
-        }
-        
-        if (((CamProfile *)[self.restored_profiles objectAtIndex:*index]).hasUpdateLocalStatus == NO)
-        {
-            NSLog(@"This camera at index has not been scanned");
-            [self scan_next_camera:self.restored_profiles index:*index];
-        }
-        else
-        {
-            NSLog(@"This camera at index has been scanned");
-            
-            ++(*index);
-            [self scanNextIndex:index];
-        }
-    }
+
 #endif
 }
 
@@ -2030,19 +2027,7 @@
     //Notify to MenuVC
     [self.menuVC.camerasVC camerasReloadData];
 #else
-    //Hide it, since we're done
-    self.progressView.hidden = YES;
-    
-    
-    //TODO: Need to save offline data here???
-    
-    if (dashBoard != nil)
-    {
-        NSLog(@"reload dashboard in finish");
-        //[dashBoard setupTopBarForEditMode:dashBoard.editModeEnabled];
-        
-        [dashBoard.cameraList reloadData];
-    }
+
 #endif
 }
 

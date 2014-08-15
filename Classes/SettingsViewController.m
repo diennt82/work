@@ -561,9 +561,15 @@
     return footerView;
 }
 
-/*
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
+#if 1
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad &&
+        indexPath.row > 0)
+    {
+        cell.backgroundColor = [UIColor colorWithRed:43/255.f green:50/255.f blue:56/255.f alpha:1];
+    }
+#else
     for (id obj in cell.contentView.subviews)
     {
         if ([obj isKindOfClass:[UIView class]] &&
@@ -594,8 +600,8 @@
             [cell.contentView addSubview:lineView];
         }
     }
+#endif
 }
- */
 
 -(CGFloat)tableView:(UITableView *)tableView heightHeaderInSection:(NSInteger)section{
     return 0;

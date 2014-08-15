@@ -48,6 +48,7 @@
         stringModel = @"Focus66";
     }
     
+#if 0
     NSString *fwVersion = [[NSUserDefaults standardUserDefaults] stringForKey:FW_VERSION];
     
     NSDictionary *info = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -55,7 +56,9 @@
                           fwVersion,     @"FW",
                           nil];
     
-    //[[KISSMetricsAPI sharedAPI] recordEvent:@"Add camera success" withProperties:info];
+    [[KISSMetricsAPI sharedAPI] recordEvent:@"Add camera success" withProperties:info];
+#endif
+    
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:@"viewDidLoad"
                                                      withLabel:nil

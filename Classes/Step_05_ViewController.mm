@@ -14,6 +14,7 @@
 #import "HoldOnCamWifi.h"
 #import "CustomIOS7AlertView.h"
 #import "Step_10_ViewController.h"
+#import "PublicDefine.h"
 
 #define ALERT_CONFIRM_TAG       555
 #define ALERT_RETRY_WIFI_TAG    559

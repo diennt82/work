@@ -15,6 +15,7 @@
 #import "UIFont+Hubble.h"
 #import "Camera.h"
 #import "define.h"
+#import "PublicDefine.h"
 
 #define GAI_CATEGORY    @"Step 03 view"
 

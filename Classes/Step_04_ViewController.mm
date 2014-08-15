@@ -13,7 +13,7 @@
 #import "Step_05_ViewController.h"
 #import "MBProgressHUD.h"
 #import "Step_10_ViewController.h"
-//#import "CustomIOS7AlertView.h"
+#import "PublicDefine.h"
 
 @interface Step_04_ViewController () <UITextFieldDelegate, UIAlertViewDelegate>
 
