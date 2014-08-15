@@ -10,6 +10,9 @@
 #define ALIGNMENT_LR 40
 
 #import "SensitivityCell.h"
+#import "UIView+Custom.h"
+
+
 @interface SensitivityCell()
 
 @property (retain, nonatomic) IBOutlet UIImageView *imageViewCircleWhite;
@@ -98,12 +101,9 @@
 
 - (void)xibDefaultLocalization
 {
-    UILabel *lowLabel = (UILabel *)[self viewWithTag:101];
-    lowLabel.text = NSLocalizedStringWithDefaultValue(@"xib_camerasettings_cell_label_low", nil, [NSBundle mainBundle], @"Low", nil);
-    UILabel *mediumLabel = (UILabel *)[self viewWithTag:102];
-    mediumLabel.text = NSLocalizedStringWithDefaultValue(@"xib_camerasettings_cell_label_medium", nil, [NSBundle mainBundle], @"Medium", nil);
-    UILabel *highLabel = (UILabel *)[self viewWithTag:103];
-    highLabel.text = NSLocalizedStringWithDefaultValue(@"xib_camerasettings_cell_label_high", nil, [NSBundle mainBundle], @"High", nil);
+    [[self viewWithTag:101] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_camerasettings_cell_label_low", nil, [NSBundle mainBundle], @"Low", nil)];
+    [[self viewWithTag:102] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_camerasettings_cell_label_medium", nil, [NSBundle mainBundle], @"Medium", nil)];
+    [[self viewWithTag:103] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_camerasettings_cell_label_high", nil, [NSBundle mainBundle], @"High", nil)];
 }
 
 - (void)singleTap: (UITapGestureRecognizer *)recognizer

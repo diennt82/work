@@ -12,6 +12,7 @@
 //#import "KISSMetricsAPI.h"
 #import "HoldOnCamWifi.h"
 #import "define.h"
+#import "UIView+Custom.h"
 
 #define TIME_INPUT_PASSWORD_AGAIN   60.0
 #define RETRY_SETUP_WIFI_TIMES      5
@@ -200,47 +201,30 @@
 
 - (void)xibDefaultLocalization
 {
-    [self.btnContinue setTitle:NSLocalizedStringWithDefaultValue(@"xib_step06_button_continue", nil, [NSBundle mainBundle], @"Continue", nil) forState:UIControlStateNormal];
+    [self.btnContinue setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step06_button_continue", nil, [NSBundle mainBundle], @"Continue", nil)];
     
-    UILabel *lable = (UILabel *)[self.progressView viewWithTag:1];
-    lable.text = NSLocalizedStringWithDefaultValue(@"xib_step06_label_checking_connection_camera", nil, [NSBundle mainBundle], @"Checking connection to camera", nil);
-    lable = (UILabel *)[self.progressView viewWithTag:695];
-    lable.text = NSLocalizedStringWithDefaultValue(@"xib_step06_label_take_up_a_minute", nil, [NSBundle mainBundle], @"This may take up to a minute", nil);
+    [[self.progressView viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step06_label_checking_connection_camera", nil, [NSBundle mainBundle], @"Checking connection to camera", nil)];
+    [[self.progressView viewWithTag:695] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step06_label_take_up_a_minute", nil, [NSBundle mainBundle], @"This may take up to a minute", nil)];
     
-    lable = (UILabel *)[self.infoSelectCameView viewWithTag:1];
-    lable.text = NSLocalizedStringWithDefaultValue(@"xib_step06_label_select_camera_wifi_again", nil, [NSBundle mainBundle], @"Select camera Wi-Fi again", nil);
-    lable = (UILabel *)[self.infoSelectCameView viewWithTag:2];
-    lable.text = NSLocalizedStringWithDefaultValue(@"xib_step06_label_select_camera_wifi_via_wifi", nil, [NSBundle mainBundle], @"To select your camera wifi simply connect your phone to it via Wi-Fi", nil);
-    lable = (UILabel *)[self.infoSelectCameView viewWithTag:3];
-    lable.text = NSLocalizedStringWithDefaultValue(@"xib_step06_label_connect_your_camera_and_phone", nil, [NSBundle mainBundle], @"1. Connect to your camera via your phone's Wi-Fi", nil);
-    lable = (UILabel *)[self.infoSelectCameView viewWithTag:4];
-    lable.text = NSLocalizedStringWithDefaultValue(@"xib_step06_label_select_wifi_network", nil, [NSBundle mainBundle], @"2. Open IPhone Wi-Fi settings icon to select Wi-Fi netwowrk", nil);
-    lable = (UILabel *)[self.infoSelectCameView viewWithTag:5];
-    lable.text = NSLocalizedStringWithDefaultValue(@"xib_step06_label_select_your_camera", nil, [NSBundle mainBundle], @"3. Click on Wi-Fi icon and select your camera from the list of networks.", nil);
-    lable = (UILabel *)[self.infoSelectCameView viewWithTag:6];
-    lable.text = NSLocalizedStringWithDefaultValue(@"xib_step06_label_return_app_and_resume", nil, [NSBundle mainBundle], @"4. Once you have completed these steps return this app & resume setup", nil);
-    lable = (UILabel *)[self.infoSelectCameView viewWithTag:7];
-    lable.text = NSLocalizedStringWithDefaultValue(@"xib_step06_label_note_disconnect", nil, [NSBundle mainBundle], @"(Note that this will disconnect your own Wi-Fi for a short while)", nil);
+    [[self.infoSelectCameView viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step06_label_select_camera_wifi_again", nil, [NSBundle mainBundle], @"Select camera Wi-Fi again", nil)];
+    [[self.infoSelectCameView viewWithTag:2] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step06_label_select_camera_wifi_via_wifi", nil, [NSBundle mainBundle], @"To select your camera wifi simply connect your phone to it via Wi-Fi", nil)];
+    [[self.infoSelectCameView viewWithTag:3] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step06_label_connect_your_camera_and_phone", nil, [NSBundle mainBundle], @"1. Connect to your camera via your phone's Wi-Fi", nil)];
+    [[self.infoSelectCameView viewWithTag:4] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step06_label_select_wifi_network", nil, [NSBundle mainBundle], @"2. Open IPhone Wi-Fi settings icon to select Wi-Fi netwowrk", nil)];
+    [[self.infoSelectCameView viewWithTag:5] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step06_label_select_your_camera", nil, [NSBundle mainBundle], @"3. Click on Wi-Fi icon and select your camera from the list of networks.", nil)];
+    [[self.infoSelectCameView viewWithTag:6] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step06_label_return_app_and_resume", nil, [NSBundle mainBundle], @"4. Once you have completed these steps return this app & resume setup", nil)];
+    [[self.infoSelectCameView viewWithTag:7] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step06_label_note_disconnect", nil, [NSBundle mainBundle], @"(Note that this will disconnect your own Wi-Fi for a short while)", nil)];
     
-    lable = (UILabel *)[self.ssidCell viewWithTag:1];
-    lable.text = NSLocalizedStringWithDefaultValue(@"xib_step06_cell_name", nil, [NSBundle mainBundle], @"Name", nil);
+    [[self.ssidCell viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step06_cell_name", nil, [NSBundle mainBundle], @"Name", nil)];
     
-    lable = (UILabel *)[self.securityCell viewWithTag:1];
-    lable.text = NSLocalizedStringWithDefaultValue(@"xib_step06_cell_none", nil, [NSBundle mainBundle], @"None", nil);
-    lable = (UILabel *)[self.securityCell viewWithTag:2];
-    lable.text = NSLocalizedStringWithDefaultValue(@"xib_step06_cell_security", nil, [NSBundle mainBundle], @"Security", nil);
+    [[self.securityCell viewWithTag:1] setLocalizationText: NSLocalizedStringWithDefaultValue(@"xib_step06_cell_none", nil, [NSBundle mainBundle], @"None", nil)];
+    [[self.securityCell viewWithTag:2] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step06_cell_security", nil, [NSBundle mainBundle], @"Security", nil)];
     
-    lable = (UILabel *)[self.passwordCell viewWithTag:1];
-    lable.text = NSLocalizedStringWithDefaultValue(@"xib_step06_cell_router_password", nil, [NSBundle mainBundle], @"Router Password", nil);
-    UITextField *textField = (UITextField *)[self.passwordCell viewWithTag:200];
-    textField.placeholder = NSLocalizedStringWithDefaultValue(@"xib_step06_cell_enter_wifi_passord", nil, [NSBundle mainBundle], @"Enter WIFI password", nil);
-    textField = (UITextField *)[self.passwordCell viewWithTag:202];
-    textField.text = NSLocalizedStringWithDefaultValue(@"xib_step06_cell_show_passord", nil, [NSBundle mainBundle], @"Show Password", nil);
+    [[self.passwordCell viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step06_cell_router_password", nil, [NSBundle mainBundle], @"Router Password", nil)];
+    [[self.passwordCell viewWithTag:200] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step06_cell_enter_wifi_passord", nil, [NSBundle mainBundle], @"Enter WIFI password", nil)];
+    [[self.passwordCell viewWithTag:202] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step06_cell_show_passord", nil, [NSBundle mainBundle], @"Show Password", nil)];
     
-    lable = (UILabel *)[self.confPasswordCell viewWithTag:1];
-    lable.text = NSLocalizedStringWithDefaultValue(@"xib_step06_cell_confirm", nil, [NSBundle mainBundle], @"Confirm", nil);
-    textField = (UITextField *)[self.confPasswordCell viewWithTag:201];
-    textField.text = NSLocalizedStringWithDefaultValue(@"xib_step06_cell_confirm_password", nil, [NSBundle mainBundle], @"Confirm password", nil);
+    [[self.confPasswordCell viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step06_cell_confirm", nil, [NSBundle mainBundle], @"Confirm", nil)];
+    [[self.confPasswordCell viewWithTag:201] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step06_cell_confirm_password", nil, [NSBundle mainBundle], @"Confirm password", nil)];
 }
 
 - (void)viewWillAppear:(BOOL)animated

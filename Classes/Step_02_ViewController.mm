@@ -16,6 +16,7 @@
 //#import "KISSMetricsAPI.h"
 #import "Focus73TableViewController.h"
 #import "define.h"
+#import "UIView+Custom.h"
 
 #define GAI_CATEGORY    @"Step 02 view"
 
@@ -78,18 +79,13 @@
 
 - (void)xibDefaultLocalization
 {
-    UILabel *lableBefore = (UILabel *)[self.view viewWithTag:10];
-    lableBefore.text = NSLocalizedStringWithDefaultValue(@"xib_step02_label_before", nil, [NSBundle mainBundle], @"Before you start:", nil);
-    UILabel *lableFollow = (UILabel *)[self.view viewWithTag:11];
-    lableFollow.text = NSLocalizedStringWithDefaultValue(@"xib_step02_label_follow", nil, [NSBundle mainBundle], @"Follow the 3 simple steps", nil);
-    UILabel *lablePlugin = (UILabel *)[self.view viewWithTag:12];
-    lablePlugin.text = NSLocalizedStringWithDefaultValue(@"xib_step02_label_plugin", nil, [NSBundle mainBundle], @"Plugin and switch camera on", nil);
-    UILabel *lableWaitfor = (UILabel *)[self.view viewWithTag:13];
-    lableWaitfor.text = NSLocalizedStringWithDefaultValue(@"xib_step02_label_waitfor", nil, [NSBundle mainBundle], @"Wait for one minute for it to warm up", nil);
-    UILabel *lablWhen = (UILabel *)[self.view viewWithTag:14];
-    lablWhen.text = NSLocalizedStringWithDefaultValue(@"xib_step02_label_whentheLED", nil, [NSBundle mainBundle], @"When the LED starts to blink press continue", nil);
+    [[self.view viewWithTag:10] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step02_label_before", nil, [NSBundle mainBundle], @"Before you start:", nil)];
+    [[self.view viewWithTag:11] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step02_label_follow", nil, [NSBundle mainBundle], @"Follow the 3 simple steps", nil)];
+    [[self.view viewWithTag:12] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step02_label_plugin", nil, [NSBundle mainBundle], @"Plugin and switch camera on", nil)];
+    [[self.view viewWithTag:13] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step02_label_waitfor", nil, [NSBundle mainBundle], @"Wait for one minute for it to warm up", nil)];
+    [[self.view viewWithTag:14] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step02_label_whentheLED", nil, [NSBundle mainBundle], @"When the LED starts to blink press continue", nil)];
     
-    [self.btnContinue setTitle:NSLocalizedStringWithDefaultValue(@"xib_step02_button_continue", nil, [NSBundle mainBundle], @"Continue", nil) forState:UIControlStateNormal];
+    [self.btnContinue setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step02_button_continue", nil, [NSBundle mainBundle], @"Continue", nil)];
 }
 
 - (void)viewWillAppear:(BOOL)animated

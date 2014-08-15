@@ -10,6 +10,7 @@
 #import "Step_10_ViewController_ble.h"
 #import "define.h"
 #import "Step_02_ViewController.h"
+#import "UIView+Custom.h"
 
 #define BTN_CONTINUE_TAG    599
 #define BTN_TRY_AGAIN_TAG   559
@@ -211,41 +212,27 @@
 
 - (void)xibDefaultLocalization
 {
-    [self.btnContinueMain setTitle:NSLocalizedStringWithDefaultValue(@"xib_NetworkInfoToCamera_button_continue", nil, [NSBundle mainBundle], @"Continue", nil) forState:UIControlStateNormal];
+    [self.btnContinueMain setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_NetworkInfoToCamera_button_continue", nil, [NSBundle mainBundle], @"Continue", nil)];
     
-    UILabel *lable = (UILabel *)[self.viewProgress viewWithTag:1];
-    lable.text = NSLocalizedStringWithDefaultValue(@"xib_NetworkInfoToCamera_label_checking_connection_camera", nil, [NSBundle mainBundle], @"Checking connection to camera", nil);
-    lable = (UILabel *)[self.viewProgress viewWithTag:695];
-    lable.text = NSLocalizedStringWithDefaultValue(@"xib_NetworkInfoToCamera_label_take_up_a_minute", nil, [NSBundle mainBundle], @"This may take up to a minute", nil);
+    [[self.viewProgress viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_NetworkInfoToCamera_label_checking_connection_camera", nil, [NSBundle mainBundle], @"Checking connection to camera", nil)];
+    [[self.viewProgress viewWithTag:695] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_NetworkInfoToCamera_label_take_up_a_minute", nil, [NSBundle mainBundle], @"This may take up to a minute", nil)];
     
-    lable = (UILabel *)[self.viewError viewWithTag:1];
-    lable.text = NSLocalizedStringWithDefaultValue(@"xib_NetworkInfoToCamera_label_unable_detect_camera", nil, [NSBundle mainBundle], @"Unable to Detect Camera", nil);
-    lable = (UILabel *)[self.viewError viewWithTag:2];
-    lable.text = NSLocalizedStringWithDefaultValue(@"xib_NetworkInfoToCamera_label_timeout", nil, [NSBundle mainBundle], @"Timeout", nil);
-    UIButton *button = (UIButton *)[self.viewError viewWithTag:559];
-    [button setTitle:NSLocalizedStringWithDefaultValue(@"xib_NetworkInfoToCamera_button_try_again", nil, [NSBundle mainBundle], @"Try Again", nil) forState:UIControlStateNormal];
-    button = (UIButton *)[self.viewError viewWithTag:599];
-    [button setTitle:NSLocalizedStringWithDefaultValue(@"xib_NetworkInfoToCamera_button_continue", nil, [NSBundle mainBundle], @"Continue", nil) forState:UIControlStateNormal];
+    [[self.viewError viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_NetworkInfoToCamera_label_unable_detect_camera", nil, [NSBundle mainBundle], @"Unable to Detect Camera", nil)];
+    [[self.viewError viewWithTag:2] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_NetworkInfoToCamera_label_timeout", nil, [NSBundle mainBundle], @"Timeout", nil)];
+    [[self.viewError viewWithTag:559] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_NetworkInfoToCamera_button_try_again", nil, [NSBundle mainBundle], @"Try Again", nil)];
+    [[self.viewError viewWithTag:599] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_NetworkInfoToCamera_button_continue", nil, [NSBundle mainBundle], @"Continue", nil)];
     
-    lable = (UILabel *)[self.ssidCell viewWithTag:1];
-    lable.text = NSLocalizedStringWithDefaultValue(@"xib_NetworkInfoToCamera_cell_name", nil, [NSBundle mainBundle], @"Name", nil);
+    [[self.ssidCell viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_NetworkInfoToCamera_cell_name", nil, [NSBundle mainBundle], @"Name", nil)];
+
+    [[self.securityCell viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_NetworkInfoToCamera_cell_none", nil, [NSBundle mainBundle], @"None", nil)];
+    [[self.securityCell viewWithTag:2] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_NetworkInfoToCamera_cell_security", nil, [NSBundle mainBundle], @"Security", nil)];
+
+    [[self.passwordCell viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_NetworkInfoToCamera_cell_router_password", nil, [NSBundle mainBundle], @"Router Password", nil)];
+    [[self.passwordCell viewWithTag:200] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_NetworkInfoToCamera_cell_enter_wifi_passord", nil, [NSBundle mainBundle], @"Enter WIFI password", nil)];
+    [[self.passwordCell viewWithTag:202] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_NetworkInfoToCamera_cell_show_passord", nil, [NSBundle mainBundle], @"Show Password", nil)];
     
-    lable = (UILabel *)[self.securityCell viewWithTag:1];
-    lable.text = NSLocalizedStringWithDefaultValue(@"xib_NetworkInfoToCamera_cell_none", nil, [NSBundle mainBundle], @"None", nil);
-    lable = (UILabel *)[self.securityCell viewWithTag:2];
-    lable.text = NSLocalizedStringWithDefaultValue(@"xib_NetworkInfoToCamera_cell_security", nil, [NSBundle mainBundle], @"Security", nil);
-    
-    lable = (UILabel *)[self.passwordCell viewWithTag:1];
-    lable.text = NSLocalizedStringWithDefaultValue(@"xib_NetworkInfoToCamera_cell_router_password", nil, [NSBundle mainBundle], @"Router Password", nil);
-    UITextField *textField = (UITextField *)[self.passwordCell viewWithTag:200];
-    textField.placeholder = NSLocalizedStringWithDefaultValue(@"xib_NetworkInfoToCamera_cell_enter_wifi_passord", nil, [NSBundle mainBundle], @"Enter WIFI password", nil);
-    textField = (UITextField *)[self.passwordCell viewWithTag:202];
-    textField.text = NSLocalizedStringWithDefaultValue(@"xib_NetworkInfoToCamera_cell_show_passord", nil, [NSBundle mainBundle], @"Show Password", nil);
-    
-    lable = (UILabel *)[self.confPasswordCell viewWithTag:1];
-    lable.text = NSLocalizedStringWithDefaultValue(@"xib_NetworkInfoToCamera_cell_confirm", nil, [NSBundle mainBundle], @"Confirm", nil);
-    textField = (UITextField *)[self.confPasswordCell viewWithTag:201];
-    textField.text = NSLocalizedStringWithDefaultValue(@"xib_NetworkInfoToCamera_cell_confirm_password", nil, [NSBundle mainBundle], @"Confirm password", nil);
+    [[self.confPasswordCell viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_NetworkInfoToCamera_cell_confirm", nil, [NSBundle mainBundle], @"Confirm", nil)];
+    [[self.confPasswordCell viewWithTag:201] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_NetworkInfoToCamera_cell_confirm_password", nil, [NSBundle mainBundle], @"Confirm password", nil)];
 }
 
 - (void)viewDidUnload

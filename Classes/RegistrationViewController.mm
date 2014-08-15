@@ -14,6 +14,7 @@
 #import "PublicDefine.h"
 #import "ToUViewController.h"
 #import "define.h"
+#import "UIView+Custom.h"
 
 #define GAI_CATEGORY            @"Registration view"
 #define ERROR_MESSAGE_TEXT      @"error_message_text"
@@ -148,27 +149,33 @@
 
 - (void)xibDefauleLocalization
 {
-    self.tfEmail.placeholder = NSLocalizedStringWithDefaultValue(@"xib_registration_texfield_placeholder_email", nil, [NSBundle mainBundle], @"Email", nil);
-    self.tfUsername.placeholder = NSLocalizedStringWithDefaultValue(@"xib_registration_texfield_placeholder_username", nil, [NSBundle mainBundle], @"Username", nil);
-    self.tfPassword.placeholder = NSLocalizedStringWithDefaultValue(@"xib_registration_texfield_placeholder_password", nil, [NSBundle mainBundle], @"Password", nil);
-    self.tfConfirmPassword.placeholder = NSLocalizedStringWithDefaultValue(@"xib_registration_texfield_placeholder_confirmpassword", nil, [NSBundle mainBundle], @"Confirm Password", nil);
+    [self.tfEmail setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_registration_texfield_placeholder_email", nil, [NSBundle mainBundle], @"Email", nil)];
+    [self.tfUsername setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_registration_texfield_placeholder_username", nil, [NSBundle mainBundle], @"Username", nil)];
+    [self.tfPassword setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_registration_texfield_placeholder_password", nil, [NSBundle mainBundle], @"Password", nil)];
+    [self.tfConfirmPassword setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_registration_texfield_placeholder_confirmpassword", nil, [NSBundle mainBundle], @"Confirm Password", nil)];
     
     UIButton *iAgreeButton = (UIButton *)[self.view viewWithTag:505];
-    [iAgreeButton setTitle:NSLocalizedStringWithDefaultValue(@"xib_registration_buttun_title_agree", nil, [NSBundle mainBundle], @"I agree with the", nil) forState:UIControlStateNormal];
-    CGRect rect = iAgreeButton.frame;
-    rect.size.width = [self calculateWidthForString:iAgreeButton.titleLabel.text withHeightFrame:iAgreeButton.frame.size.height andFont:iAgreeButton.titleLabel.font];
-    iAgreeButton.frame = rect;
+    if (iAgreeButton)
+    {
+        [iAgreeButton setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_registration_buttun_title_agree", nil, [NSBundle mainBundle], @"I agree with the", nil)];
+        CGRect rect = iAgreeButton.frame;
+        rect.size.width = [self calculateWidthForString:iAgreeButton.titleLabel.text withHeightFrame:iAgreeButton.frame.size.height andFont:iAgreeButton.titleLabel.font];
+        iAgreeButton.frame = rect;
+        
+        UIButton *termOfServicesButton = (UIButton *)[self.view viewWithTag:504];
+        if (termOfServicesButton)
+        {
+            [termOfServicesButton setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_registration_button_title_term", nil, [NSBundle mainBundle], @"Terms of Services", nil)];
+            rect = termOfServicesButton.frame;
+            rect.origin.x = CGRectGetMaxX(iAgreeButton.frame) + 2;
+            rect.size.width = [self calculateWidthForString:termOfServicesButton.titleLabel.text withHeightFrame:termOfServicesButton.frame.size.height andFont:termOfServicesButton.titleLabel.font];
+            termOfServicesButton.frame = rect;
+        }
+    }
     
-    UIButton *termOfServicesButton = (UIButton *)[self.view viewWithTag:504];
-    [termOfServicesButton setTitle:NSLocalizedStringWithDefaultValue(@"xib_registration_button_title_term", nil, [NSBundle mainBundle], @"Terms of Services", nil) forState:UIControlStateNormal];
-    rect = termOfServicesButton.frame;
-    rect.origin.x = CGRectGetMaxX(iAgreeButton.frame) + 2;
-    rect.size.width = [self calculateWidthForString:termOfServicesButton.titleLabel.text withHeightFrame:termOfServicesButton.frame.size.height andFont:termOfServicesButton.titleLabel.font];
-    termOfServicesButton.frame = rect;
+    [self.btnCreate setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_registration_button_title_create", nil, [NSBundle mainBundle], @"Create", nil)];
     
-    [self.btnCreate setTitle:NSLocalizedStringWithDefaultValue(@"xib_registration_button_title_create", nil, [NSBundle mainBundle], @"Create", nil) forState:UIControlStateNormal];
-    
-    [self.btnAlreadyAccount setTitle:NSLocalizedStringWithDefaultValue(@"xib_registration_button_title_alreadyaccount", nil, [NSBundle mainBundle], @"Already have a Account?", nil) forState:UIControlStateNormal];
+    [self.btnAlreadyAccount setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_registration_button_title_alreadyaccount", nil, [NSBundle mainBundle], @"Already have a Account?", nil)];
 }
 
 - (CGFloat)calculateWidthForString:(NSString *)desc withHeightFrame:(CGFloat)height andFont:(UIFont *)font {
