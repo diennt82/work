@@ -87,6 +87,36 @@
     ((UITextField *)[_cellEmail viewWithTag:TAG_EMAIL]).delegate = self;
 }
 
+- (void)xibDefaultLocalization
+{
+    UILabel *lable = (UILabel *)[self.view viewWithTag:1];
+    lable.text = NSLocalizedStringWithDefaultValue(@"xib_step09_label_term_of_service", nil, [NSBundle mainBundle], @"I agree with the Terms of Services", nil);
+    UIButton *button = (UIButton *)[self.view viewWithTag:2];
+    [button setTitle:NSLocalizedStringWithDefaultValue(@"xib_step09_button_create", nil, [NSBundle mainBundle], @"Create", nil) forState:UIControlStateNormal];
+    button = (UIButton *)[self.view viewWithTag:3];
+    [button setTitle:NSLocalizedStringWithDefaultValue(@"xib_step09_button_already_account", nil, [NSBundle mainBundle], @"Already have a Account?", nil) forState:UIControlStateNormal];
+    
+    lable = (UILabel *)[self.cellUsername viewWithTag:1];
+    lable.text = NSLocalizedStringWithDefaultValue(@"xib_step09_cell_label_username", nil, [NSBundle mainBundle], @"Username", nil);
+    UITextField *textField = (UITextField *)[self.cellUsername viewWithTag:201];
+    textField.placeholder = NSLocalizedStringWithDefaultValue(@"xib_step09_cell_textfield_username", nil, [NSBundle mainBundle], @"Username", nil);
+    
+    lable = (UILabel *)[self.cellPassword viewWithTag:1];
+    lable.text = NSLocalizedStringWithDefaultValue(@"xib_step09_cell_label_password", nil, [NSBundle mainBundle], @"Password", nil);
+    textField = (UITextField *)[self.cellPassword viewWithTag:202];
+    textField.placeholder = NSLocalizedStringWithDefaultValue(@"xib_step09_cell_textfield_password", nil, [NSBundle mainBundle], @"Password", nil);
+    
+    lable = (UILabel *)[self.cellConfirmPassword viewWithTag:1];
+    lable.text = NSLocalizedStringWithDefaultValue(@"xib_step09_cell_label_confirm_pass", nil, [NSBundle mainBundle], @"Confirm Pass", nil);
+    textField = (UITextField *)[self.cellConfirmPassword viewWithTag:203];
+    textField.placeholder = NSLocalizedStringWithDefaultValue(@"xib_step09_cell_text_field_confirm_pass", nil, [NSBundle mainBundle], @"Confirm Pass", nil);
+    
+    lable = (UILabel *)[self.cellEmail viewWithTag:1];
+    lable.text = NSLocalizedStringWithDefaultValue(@"xib_step09_cell_label_email", nil, [NSBundle mainBundle], @"Email", nil);
+    textField = (UITextField *)[self.cellEmail viewWithTag:204];
+    textField.placeholder = NSLocalizedStringWithDefaultValue(@"xib_step09_cell_textfield_email", nil, [NSBundle mainBundle], @"Email", nil);
+}
+
 #pragma mark - Action
 
 - (IBAction)buttonCheckboxTouchAction:(id)sender
