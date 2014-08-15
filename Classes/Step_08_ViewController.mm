@@ -232,7 +232,7 @@
             if (self.ssid != nil)
             {
                 NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-                [userDefaults setObject:self.ssid forKey:HOME_SSID];
+                //[userDefaults setObject:self.ssid forKey:HOME_SSID];
                 [userDefaults synchronize];
             }
             

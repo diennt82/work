@@ -16,6 +16,7 @@
 #define TIME_INPUT_PASSWORD_AGAIN   60.0
 #define RETRY_SETUP_WIFI_TIMES      5
 #define GAI_CATEGORY    @"Step 06 view"
+#import "PublicDefine.h"
 
 @interface Step_06_ViewController () <UITextFieldDelegate, SecurityChangingDelegate>
 

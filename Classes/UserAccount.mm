@@ -9,6 +9,7 @@
 #import "UserAccount.h"
 #import "MBP_iosAppDelegate.h"
 #import "GAI.h"
+#import "PublicDefine.h"
 
 @interface UserAccount()
 

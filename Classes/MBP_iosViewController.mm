@@ -6,7 +6,13 @@
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
-//#define ALERT_GENERIC_SERVER_INFO @"0"
+#define ALERT_PUSH_RECVED_RESCAN_AFTER              200
+#define ALERT_PUSH_RECVED_RELOGIN_AFTER             201
+#define ALERT_PUSH_SERVER_ANNOUNCEMENT              203
+#define ALERT_PUSH_RECVED_SOUND_TEMP_HI_TEMP_LO     204
+#define ALERT_PUSH_RECVED_MULTIPLE                  205
+#define ALERT_PUSH_RECVED_REMOVE_CAM                206
+#define ALERT_PUSH_RECVED_PASSWORD_CHANGED          207
 
 #import <CFNetwork/CFNetwork.h>
 #include <ifaddrs.h>
@@ -30,9 +36,32 @@
 #import <MessageUI/MFMailComposeViewController.h>
 #import "NSData+AESCrypt.h"
 #import "CameraMenuViewController.h"
+#import "MenuViewController.h"
+#import "TimelineDatabase.h"
+#import "NotifViewController.h"
+#import "PushNotificationAlert.h"
+#import "PublicDefine.h"
 
-@interface MBP_iosViewController () <MFMailComposeViewControllerDelegate>
+@interface MBP_iosViewController () <MFMailComposeViewControllerDelegate, ConnectionMethodDelegate, UIActionSheetDelegate>
+{
+    SystemSoundID soundFileObject;
+    NSArray * channel_array;
+    NSMutableArray * restored_profiles ;
+    int app_stage;
+    BOOL isRebinded;
+    
+    //int nextCameraToScanIndex;
+    //Bonjour * _bonjourBrowser;
+    //NSArray * bonjourList;
+    //NSThread * bonjourThread;
+}
 
+@property (nonatomic, retain) IBOutlet UIImageView * splashScreen;
+
+@property (nonatomic, retain) NSArray * channel_array;
+@property (nonatomic, retain) NSMutableArray * restored_profiles ;
+@property (nonatomic, retain) PushNotificationAlert * pushAlert;
+@property (nonatomic, retain) MenuViewController *menuVC;
 @property (nonatomic) BOOL changePasswordReady;
 
 @end

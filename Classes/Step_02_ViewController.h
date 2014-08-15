@@ -20,7 +20,6 @@
 @property (nonatomic, assign)  id<ConnectionMethodDelegate> delegate;
 @property (nonatomic) NSInteger cameraType;
 
-- (IBAction)handleButtonPress:(id)sender;
 - (IBAction)btnContinueTouchUpInsideAction:(id)sender;
 
 @end
