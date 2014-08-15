@@ -132,6 +132,8 @@
     [[self.viewError viewWithTag:10] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_CreateBLEConnection_label_unable_to_detect_camera", nil, [NSBundle mainBundle], @"Unable to Detect Camera", nil)];
     [[self.viewError viewWithTag:11] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_CreateBLEConnection_label_timout", nil, [NSBundle mainBundle], @"Timeout", nil)];
     [[self.viewError viewWithTag:599] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_CreateBLEConnection_button_retry", nil, [NSBundle mainBundle], @"Retry", nil)];
+    
+    [[self.searchAgainCell viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_CreateBLEConnection_cell_search_again", nil, [NSBundle mainBundle], @"Search Again", nil)];
 }
 
 - (void)viewWillAppear:(BOOL)animated
