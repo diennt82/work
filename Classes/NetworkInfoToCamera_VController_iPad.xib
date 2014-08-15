@@ -9,6 +9,8 @@
             <connections>
                 <outlet property="btnContinueMain" destination="9Db-Cf-5es" id="uiE-aE-Ddn"/>
                 <outlet property="confPasswordCell" destination="4" id="18"/>
+                <outlet property="lblNameTitle" destination="11" id="WDk-ag-phx"/>
+                <outlet property="lblSecurityTitle" destination="13" id="nNl-zl-vlG"/>
                 <outlet property="passwordCell" destination="3" id="19"/>
                 <outlet property="securityCell" destination="5" id="20"/>
                 <outlet property="ssidCell" destination="6" id="22"/>
