@@ -9,9 +9,11 @@
 #import "NetworkInfoToCamera_VController.h"
 #import "Step_10_ViewController_ble.h"
 #import "define.h"
+#import "Step_02_ViewController.h"
 
 #define BTN_CONTINUE_TAG    599
 #define BTN_TRY_AGAIN_TAG   559
+#define BTN_SETUP_WIFI      569
 #define BLE_TIMEOUT_PROCESS 4*60.0
 
 @interface NetworkInfoToCamera_VController () <UITextFieldDelegate, SecurityChangingDelegate>
@@ -28,6 +30,7 @@
 @property (nonatomic) BOOL shouldTimeoutProcessing;
 @property (nonatomic, retain) UIButton *btnContinue;
 @property (nonatomic, retain) UIButton *btnTryAgain;
+@property (nonatomic, retain) UIButton *btnSetupWithWifi;
 
 @end
 
@@ -80,11 +83,19 @@
     [self.btnContinue setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
     [self.btnContinue setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
     [self.btnContinue addTarget:self action:@selector(btnContinueTouchUpInsideAction:) forControlEvents:UIControlEventTouchUpInside];
+    self.btnContinue.titleLabel.text = NSLocalizedString(@"continue", @"Continue");
     
     self.btnTryAgain = (UIButton *)[_viewError viewWithTag:BTN_TRY_AGAIN_TAG];
     [self.btnTryAgain setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
     [self.btnTryAgain setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
     [self.btnTryAgain addTarget:self action:@selector(btnTryAgainTouchUpInsideAction:) forControlEvents:UIControlEventTouchUpInside];
+    self.btnTryAgain.titleLabel.text = NSLocalizedString(@"Re-try setup with Bluetooth", @"Re-try setup with Bluetooth");
+    
+    self.btnSetupWithWifi = (UIButton *)[_viewError viewWithTag:BTN_SETUP_WIFI];
+    [self.btnSetupWithWifi setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
+    [self.btnSetupWithWifi setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
+    [self.btnSetupWithWifi addTarget:self action:@selector(btnSetupWithWifiAction:) forControlEvents:UIControlEventTouchUpInside];
+    self.btnSetupWithWifi.titleLabel.text = NSLocalizedString(@"Setup with WIFI", @"Setup with WIFI");
     
     UIImageView *imageView = (UIImageView *)[_viewProgress viewWithTag:595];
     imageView.animationImages =[NSArray arrayWithObjects:
@@ -240,6 +251,36 @@
 {
     sender.enabled = NO;
     [self.navigationController popToRootViewControllerAnimated:YES];
+}
+
+- (IBAction)btnSetupWithWifiAction:(id)sender
+{
+    NSLog(@"%s", __FUNCTION__);
+    
+    if (_timerTimeoutConnectBLE != nil)
+    {
+        [self.timerTimeoutConnectBLE invalidate];
+        self.timerTimeoutConnectBLE = nil;
+    }
+    
+    NSLog(@"%s Killing BLE.", __FUNCTION__);
+    [BLEConnectionManager getInstanceBLE].delegate = nil;
+    [[BLEConnectionManager getInstanceBLE] stopScanBLE];
+    [BLEConnectionManager getInstanceBLE].needReconnect = NO;
+    [[BLEConnectionManager getInstanceBLE].uartPeripheral didDisconnect];
+    
+    id aViewController = self.navigationController.viewControllers[0];
+    
+    [self.navigationController popToRootViewControllerAnimated:NO];
+    
+    if ([aViewController isKindOfClass:[Step_02_ViewController class]])
+    {
+        [((Step_02_ViewController *)aViewController) btnContinueTouchUpInsideAction:nil];
+    }
+    else
+    {
+        NSLog(@"%s aViewController:%@", __FUNCTION__, aViewController);
+    }
 }
 
 #pragma mark -

@@ -12,8 +12,11 @@
 #import "WifiListParser.h"
 #import "Step_10_ViewController_ble.h"
 #import "MBProgressHUD.h"
+#import "Step_02_ViewController.h"
 
 #define BLE_TIMEOUT_PROCESS 1*60
+#define BTN_RETRY_TAG       599
+#define BTN_SETUP_WIFI      699
 
 @interface DisplayWifiList_VController () <UIAlertViewDelegate>
 
@@ -30,6 +33,8 @@
 @property (retain, nonatomic) NSTimer *timerTimeoutConnectBLE;
 @property (nonatomic) BOOL shouldTimeoutProcessing;
 @property (nonatomic) BOOL isAlreadyWifiList;
+@property (nonatomic, retain) UIButton *btnRetry;
+@property (nonatomic, retain) UIButton *btnSetupWithWifi;
 
 @end
 
@@ -83,7 +88,18 @@
     
     [self.btnContinue setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
     [self.btnContinue setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
+    self.btnContinue.titleLabel.text = NSLocalizedString(@"continue", @"Continue");
     self.btnContinue.enabled = NO;
+    
+    self.btnRetry = (UIButton *)[_viewError viewWithTag:BTN_RETRY_TAG];
+    [self.btnRetry setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
+    [self.btnRetry setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
+    self.btnRetry.titleLabel.text = NSLocalizedString(@"Re-try setup with Bluetooth", @"Re-try setup with Bluetooth");
+    
+    self.btnSetupWithWifi = (UIButton *)[_viewError viewWithTag:BTN_SETUP_WIFI];
+    [self.btnSetupWithWifi setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
+    [self.btnSetupWithWifi setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
+    self.btnSetupWithWifi.titleLabel.text = NSLocalizedString(@"Setup with WIFI", @"Setup with WIFI");
     
     if ([[NSUserDefaults standardUserDefaults] integerForKey:SET_UP_CAMERA] == SETUP_CAMERA_FOCUS73)
     {
@@ -203,6 +219,8 @@
 
 - (IBAction)btnRetryTouchUpInsideAction:(id)sender
 {
+    NSLog(@"%s", __FUNCTION__);
+    
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
@@ -218,6 +236,36 @@
     [self moveToFinalStep];
     
     [MBProgressHUD hideHUDForView:self.view animated:NO];
+}
+
+- (IBAction)btnSetupWithWifiAction:(id)sender
+{
+    NSLog(@"%s", __FUNCTION__);
+    
+    if (_timerTimeoutConnectBLE != nil)
+    {
+        [self.timerTimeoutConnectBLE invalidate];
+        self.timerTimeoutConnectBLE = nil;
+    }
+    
+    NSLog(@"%s Killing BLE.", __FUNCTION__);
+    [BLEConnectionManager getInstanceBLE].delegate = nil;
+    [[BLEConnectionManager getInstanceBLE] stopScanBLE];
+    [BLEConnectionManager getInstanceBLE].needReconnect = NO;
+    [[BLEConnectionManager getInstanceBLE].uartPeripheral didDisconnect];
+    
+    id aViewController = self.navigationController.viewControllers[0];
+    
+    [self.navigationController popToRootViewControllerAnimated:NO];
+    
+    if ([aViewController isKindOfClass:[Step_02_ViewController class]])
+    {
+        [((Step_02_ViewController *)aViewController) btnContinueTouchUpInsideAction:nil];
+    }
+    else
+    {
+        NSLog(@"%s aViewController:%@", __FUNCTION__, aViewController);
+    }
 }
 
 #pragma mark - Methods
