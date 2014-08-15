@@ -34,6 +34,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self xibDefaultLocalization];
     self.navigationItem.hidesBackButton = YES;
     self.trackedViewName = GAI_CATEGORY;
     
