@@ -124,9 +124,18 @@
     
     //Calculate font size needed to display 3 numbers
     NSString *str = @"0000";
-    NSString *minites = @"minutes";
-    CGSize fontSize = [str sizeWithAttributes:@{NSFontAttributeName: font}];
-    CGSize fontSize1 = [minites sizeWithAttributes:@{NSFontAttributeName: font1}];
+    NSString *minutes = @"minutes";
+    
+    CGSize fontSize;
+    CGSize fontSize1;
+    if ( isiOS7AndAbove ) {
+        fontSize = [str sizeWithAttributes:@{NSFontAttributeName:font}];
+        fontSize1 = [minutes sizeWithAttributes:@{NSFontAttributeName:font1}];
+    }
+    else {
+        fontSize = [str sizeWithFont:font];
+        fontSize1 = [minutes sizeWithFont:font1];
+    }
     
     //Using a TextField area we can easily modify the control to get user input from this field
     _textField = [[UITextField alloc]initWithFrame:CGRectMake((self.frame.size.width  - fontSize.width) /2,
