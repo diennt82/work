@@ -423,6 +423,9 @@
 
 + (BOOL) isConnectingToCameraNetwork
 {
+#if TARGET_IPHONE_SIMULATOR
+    return FALSE;
+#endif
     NSString * current_ssid = [CameraPassword fetchSSIDInfo] ;
     
     if ([current_ssid hasPrefix:DEFAULT_SSID_HD_PREFIX] ||
@@ -624,7 +627,7 @@
                                                      withLabel:nil
                                                      withValue:nil];
     
-    [self.navigationController popToRootViewControllerAnimated:YES];
+    //[self.navigationController popToRootViewControllerAnimated:YES];
     
     if (_delegate)
     {

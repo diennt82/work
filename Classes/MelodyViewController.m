@@ -465,7 +465,7 @@
         valueMelodiesMap[melodyIndex] = TRUE;
     }
     
-    self.shouldSendToGetMelodyValue = NO;
+    //self.shouldSendToGetMelodyValue = NO;
     [_melodyTableView reloadData];
 }
 @end

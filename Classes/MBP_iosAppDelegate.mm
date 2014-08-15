@@ -123,7 +123,7 @@
                                                           [UIFont fontWithName:@"HelveticaNeue-Light" size:17], NSFontAttributeName,
                                                           nil]
                                                 forState:UIControlStateNormal];
-    [[UILabel appearanceWhenContainedIn:[UITableViewHeaderFooterView class], nil] setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:17]];
+    //[[UILabel appearanceWhenContainedIn:[UITableViewHeaderFooterView class], nil] setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:17]];
     // Check condition use STUN or not
     [self registerDefaultsFromSettingsBundle];
     
@@ -495,14 +495,14 @@ void checkingApplicationCrashed()
                                     repeats:NO];
 }
 
-
+#if 0
 -(void) showInit
 {
     NSLog(@"MBP_isoAppDelegate - show LoginVC as the first init");
     //[viewController sendStatus:FRONT_PAGE];
     [viewController sendStatus:LOGIN];
 }
-
+#endif
 
 - (BOOL) shouldAlertForThisMac:(NSString*) mac_without_colon
 {
@@ -636,7 +636,7 @@ void checkingApplicationCrashed()
      Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
      If your application supports background execution, called instead of applicationWillTerminate: when the user quits.
      */
-	
+	NSLog(@"%s", __FUNCTION__);
 }
 
 
@@ -808,7 +808,20 @@ void checkingApplicationCrashed()
     if (!self.isRegisteredPushNotification)
     {
         NSLog(@"%s", __FUNCTION__);
+        
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000
+        if ([[UIApplication sharedApplication] respondsToSelector:@selector(registerUserNotificationSettings:)]) {
+            // use registerUserNotificationSettings
+            [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge) categories:nil]];
+            [[UIApplication sharedApplication] registerForRemoteNotifications];
+        } else {
+            // use registerForRemoteNotifications
+            [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
+        }
+#else
+        // use registerForRemoteNotifications
         [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
+#endif
         self.isRegisteredPushNotification = YES;
         // Set icon badge number to zero
         [UIApplication sharedApplication].applicationIconBadgeNumber = 0;

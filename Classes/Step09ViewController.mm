@@ -105,7 +105,7 @@
 
 - (IBAction)buttonAlreadyAction:(id)sender
 {
-    [self.delegate sendStatus:LOGIN];
+    //[self.delegate sendStatus:LOGIN];
     [self dismissViewControllerAnimated:YES completion:^{}];
 }
 

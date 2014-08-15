@@ -14,18 +14,12 @@
 
 @interface Step_02_ViewController : GAITrackedViewController <StartMonitorDelegate>
 {
-    IBOutlet UITableViewCell * step1_cell, * step2_cell, * step3_cell;
     id<ConnectionMethodDelegate> delegate;
-    
 }
 
 @property (nonatomic, assign)  id<ConnectionMethodDelegate> delegate;
 @property (nonatomic) NSInteger cameraType;
 
-- (IBAction)handleButtonPress:(id)sender;
-- (IBAction)goBackToFirstScreen:(id)sender;
-
-
-- (void)presentModallyOn:(UIViewController *)parent;
+- (IBAction)btnContinueTouchUpInsideAction:(id)sender;
 
 @end

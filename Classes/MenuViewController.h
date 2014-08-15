@@ -21,7 +21,7 @@
 
 @end
 
-@interface MenuViewController : UIViewController
+@interface MenuViewController : UITabBarController
 {
     SettingsViewController *_settingsVC;
 }
@@ -34,6 +34,7 @@
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
      withConnDelegate:(id<ConnectionMethodDelegate> ) caller;
+- (id)initWithCaller:(id<ConnectionMethodDelegate>)caller;
 - (void)refreshCameraList;
 - (void)removeSubviews;
 

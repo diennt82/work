@@ -7,6 +7,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="Step_11_ViewController">
             <connections>
+                <outlet property="btnSetupWithWifi" destination="pzC-4C-Zca" id="Za1-TJ-saW"/>
                 <outlet property="btnTestCamera" destination="5" id="m2g-GK-qfR"/>
                 <outlet property="error_code" destination="g3m-5C-LdE" id="IQ3-9u-J3s"/>
                 <outlet property="view" destination="3" id="67"/>
@@ -83,7 +84,7 @@
                     </state>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="5">
-                    <rect key="frame" x="256" y="954" width="337" height="50"/>
+                    <rect key="frame" x="130" y="954" width="507" height="50"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="20"/>
                     <state key="normal" title="Try Again" backgroundImage="green_btn.png">
@@ -91,6 +92,18 @@
                     </state>
                     <connections>
                         <action selector="tryAddCameraAgain:" destination="-1" eventType="touchUpInside" id="65"/>
+                    </connections>
+                </button>
+                <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="pzC-4C-Zca">
+                    <rect key="frame" x="130" y="891" width="507" height="50"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="20"/>
+                    <state key="normal" title="Setup with WIFI" backgroundImage="green_btn.png">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="btnSetupWithWifiAction:" destination="-1" eventType="touchUpInside" id="n6U-l6-fpH"/>
+                        <action selector="tryAddCameraAgain:" destination="-1" eventType="touchUpInside" id="GYR-zx-CjG"/>
                     </connections>
                 </button>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="(0)" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="g3m-5C-LdE">
