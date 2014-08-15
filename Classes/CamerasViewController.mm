@@ -337,7 +337,14 @@
         
         camerasCell.ibCameraNameLabel.text = ch.profile.name;
         NSString *boundCameraName = ch.profile.name;
-        CGSize size = [boundCameraName sizeWithAttributes:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:18]}];
+        
+        CGSize size;
+        if ( isiOS7AndAbove ) {
+            size = [boundCameraName sizeWithAttributes:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:18]}];
+        }
+        else {
+            size = [boundCameraName sizeWithFont:[UIFont boldSystemFontOfSize:18]];
+        }
         
         if (size.width > 154) {
             [camerasCell.ibCameraNameLabel setFrame:CGRectMake(165, 0, 154, 30)];
