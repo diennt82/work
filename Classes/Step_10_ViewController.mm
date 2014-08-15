@@ -252,6 +252,45 @@
     }
 }
 
+- (void)xibDefaultLocalization
+{
+    UILabel *lable = (UILabel *)[self.view viewWithTag:1];
+    lable.text = NSLocalizedStringWithDefaultValue(@"xib_step10_label_checking_connection_camera", nil, [NSBundle mainBundle], @"Checking connection to camera", nil);
+    lable = (UILabel *)[self.view viewWithTag:695];
+    lable.text = NSLocalizedStringWithDefaultValue(@"xib_step10_label_takeup_a_minute", nil, [NSBundle mainBundle], @"This may take up to a minute", nil);
+    lable = (UILabel *)[self.view viewWithTag:2];
+    lable.text = NSLocalizedStringWithDefaultValue(@"xib_step10_label_re-start_settup", nil, [NSBundle mainBundle], @"If setup failed, press button below to re-start setup", nil);
+    [self.btnCancel setTitle:NSLocalizedStringWithDefaultValue(@"xib_step10_button_cancel", nil, [NSBundle mainBundle], @"Cancel", nil) forState:UIControlStateNormal];
+    
+    lable = (UILabel *)[self.ib_viewGuild viewWithTag:1];
+    lable.text = NSLocalizedStringWithDefaultValue(@"xib_step10_label_wrong_wifi_network", nil, [NSBundle mainBundle], @"Wrong Wi-Fi Network", nil);
+    lable = (UILabel *)[self.ib_viewGuild viewWithTag:2];
+    lable.text = NSLocalizedStringWithDefaultValue(@"xib_step10_label_change_wifi_network", nil, [NSBundle mainBundle], @"How to Change Wi-Fi Network", nil);
+    lable = (UILabel *)[self.ib_viewGuild viewWithTag:3];
+    lable.text = NSLocalizedStringWithDefaultValue(@"xib_step10_label_connect_to_defferent_wifi_network", nil, [NSBundle mainBundle], @"Your phone has reconnected to a different Wi-Fi network than your camera. Both must be on the same network to complete the setup. ", nil);
+    lable = (UILabel *)[self.ib_viewGuild viewWithTag:4];
+    lable.text = NSLocalizedStringWithDefaultValue(@"xib_step10_label_access_home_screen", nil, [NSBundle mainBundle], @"1. Access your home screen by clicking on the home button", nil);
+    lable = (UILabel *)[self.ib_viewGuild viewWithTag:5];
+    lable.text = NSLocalizedStringWithDefaultValue(@"xib_step10_label_select_correct_wifi_network", nil, [NSBundle mainBundle], @"2. Select the correct Wi-Fi network by going to the iPhone settings app on your home screen", nil);
+    lable = (UILabel *)[self.ib_viewGuild viewWithTag:6];
+    lable.text = NSLocalizedStringWithDefaultValue(@"xib_step10_label_open_wifi_to_view_network", nil, [NSBundle mainBundle], @"3. Open Wi-Fi to view networks", nil);
+    lable = (UILabel *)[self.ib_viewGuild viewWithTag:7];
+    lable.text = NSLocalizedStringWithDefaultValue(@"xib_step10_label_select_network_during_camera_settup", nil, [NSBundle mainBundle], @"4. Select the network which you used during camera setup", nil);
+    lable = (UILabel *)[self.ib_viewGuild viewWithTag:8];
+    lable.text = NSLocalizedStringWithDefaultValue(@"xib_step10_label_enter_password_if_prompted", nil, [NSBundle mainBundle], @"(and enter password if prompted)", nil);
+    lable = (UILabel *)[self.ib_viewGuild viewWithTag:9];
+    lable.text = NSLocalizedStringWithDefaultValue(@"xib_step10_label_resume_settup", nil, [NSBundle mainBundle], @"Once you have completed the above steps return to this app and resume setup", nil);
+    UIButton *button = (UIButton *)[self.ib_viewGuild viewWithTag:10];
+    [button setTitle:NSLocalizedStringWithDefaultValue(@"xib_step10_button_resume_settup", nil, [NSBundle mainBundle], @"Resume Setup", nil) forState:UIControlStateNormal];
+    
+    lable = (UILabel *)[self.viewFwOtaUpgrading viewWithTag:5993];
+    lable.text = NSLocalizedStringWithDefaultValue(@"xib_step10_label_camera_firmware_is_being_upgrade", nil, [NSBundle mainBundle], @"Camera Firmware is being upgraded, please keep the camera power on during this process", nil);
+    lable = (UILabel *)[self.viewFwOtaUpgrading viewWithTag:5991];
+    lable.text = NSLocalizedStringWithDefaultValue(@"xib_step10_label_takeup_5_minute", nil, [NSBundle mainBundle], @"This may take up to 5 minutes", nil);
+    [self.btnCancelFirmware setTitle:NSLocalizedStringWithDefaultValue(@"xib_step10_button_cancel", nil, [NSBundle mainBundle], @"Cancel", nil) forState:UIControlStateNormal];
+    [self.btnContinue setTitle:NSLocalizedStringWithDefaultValue(@"xib_step10_button_continue", nil, [NSBundle mainBundle], @"Continue", nil) forState:UIControlStateNormal];
+}
+
 - (void)showAdditionalOption:(NSTimer *)timer
 {
     _lblWordAddition.hidden = NO;
