@@ -57,7 +57,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+    [self xibDefaultLocalization];
 #if 1
     //Disconnect BLE
     NSLog(@"%s BLE deletgate:%@", __FUNCTION__, [BLEConnectionManager getInstanceBLE].delegate);
