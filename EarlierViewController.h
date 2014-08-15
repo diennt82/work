@@ -16,7 +16,7 @@
     //MHTabBarController *_tabBarController;
 }
 
-@property (nonatomic, assign) MHTabBarController *tabBarController;
+@property (nonatomic, assign) MHTabBarController *mhTabBarController;
 @property (nonatomic, assign) TimelineViewController *timelineVC;
 @property (nonatomic, assign) CamChannel *camChannel;
 @property (nonatomic, assign) UINavigationController *nav;

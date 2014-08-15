@@ -6,7 +6,6 @@
 //  Copyright (c) 2013 Smart Panda Ltd. All rights reserved.
 //
 
-#define DISABLE_VIEW_RELEASE_FLAG 0
 
 #import "MenuViewController.h"
 #import "Account_ViewController.h"
@@ -14,7 +13,7 @@
 #import "UserAccount.h"
 #import "EarlierViewController.h"
 
-@interface MenuViewController () <H264PlayerVCDelegate, UserAccountDelegate>
+@interface MenuViewController () <UserAccountDelegate>//, UITabBarControllerDelegate>
 {
     UIBarButtonItem *cameraBarButton;
     UIBarButtonItem *settingsBarButton;
@@ -35,7 +34,6 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
-        self.title = @"Menu";
     }
     return self;
 }
@@ -52,23 +50,25 @@
     
 }
 
+- (id)initWithCaller:(id<ConnectionMethodDelegate>)caller
+{
+    self = [super init];
+    
+    if (self)
+    {
+        self.menuDelegate = caller;
+    }
+    
+    return self;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
     self.navigationController.navigationBarHidden = NO;
-    //[[UINavigationBar appearance] setTintColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"back"]]];
-    
-    /*UIImage *hubbleBack = [UIImage imageNamed:@"Hubble_logo_back"];
-    UIBarButtonItem *backBarBtn = [[UIBarButtonItem alloc] initWithImage:hubbleBack
-                                                                   style:UIBarButtonItemStyleBordered
-                                                                  target:self
-                                                                  action:@selector(menuBackAction:)];
-    [backBarBtn setTintColor:[UIColor colorWithPatternImage:hubbleBack]];
-    
-    self.navigationItem.leftBarButtonItem = backBarBtn;
-     */
+
     UIImage *image = [UIImage imageNamed:@"Hubble_logo_back"];
     CGRect frame = CGRectMake(0, 0, image.size.width, image.size.height);
     
@@ -88,10 +88,7 @@
     self.navigationItem.leftBarButtonItem = barButtonItem;
 
     [barButtonItem release];
-    
-    
-    
-    
+
     self.navigationItem.leftBarButtonItem.enabled = NO;
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
@@ -103,29 +100,16 @@
         self.camerasVC = [[CamerasViewController alloc]initWithNibName:@"CamerasViewController" bundle:nil delegate:self.menuDelegate parentVC:self];
     }
     
-    
     if (_cameras)
     {
         self.camerasVC.camChannels = self.cameras;
     }
 
-#if DISABLE_VIEW_RELEASE_FLAG
-    self.accountVC = [[Account_ViewController alloc] init];
-    
-    NSLog(@"viewDidLoad: %p, %p", self.menuDelegate, self.accountVC.mdelegate);
-    
-    UINavigationController *nav2 = [[UINavigationController alloc] initWithRootViewController:_accountVC];
-    
-    self.viewControllers = [NSArray arrayWithObjects:nav, nav2, nil];
-    
-    [nav release];
-    [nav2 release];
-#else
-    [self.view addSubview:_camerasVC.view];
+    //[self.view addSubview:_camerasVC.view];
     
     _settingsVC = [[SettingsViewController alloc] init];
     _settingsVC.parentVC = self;
-    [self.view addSubview:_settingsVC.view];
+    //[self.view addSubview:_settingsVC.view];
     
     
     self.accountVC = [[Account_ViewController alloc] init];
@@ -133,11 +117,17 @@
     
     NSLog(@"MenuVC - viewDidLoad: %p, %p", self.menuDelegate, self.accountVC.parentVC);
     
-    [self.view addSubview:self.accountVC.view];
+    //[self.view addSubview:self.accountVC.view];
+    
+    [self setViewControllers:@[_camerasVC, _settingsVC, _accountVC]];
+    self.tabBar.hidden = YES;
+    
     cameraBarButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"camera", nil, [NSBundle mainBundle], @"Camera", nil)
                                                        style:UIBarButtonItemStylePlain
                                                       target:self
                                                       action:@selector(selectMenuCamera)];
+    [cameraBarButton setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont bold18Font], NSFontAttributeName,  [UIColor blackColor], NSForegroundColorAttributeName,nil] forState:UIControlStateNormal];
+    
     settingsBarButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"settings", nil, [NSBundle mainBundle], @"Settings", nil)
                                                          style:UIBarButtonItemStylePlain
                                                         target:self
@@ -148,51 +138,95 @@
                                                        target:self
                                                        action:@selector(selectAccountSetting)];
     
-    //NSArray *actionButtonItems = @[accountBarButton, settingsBarButton, cameraBarButton];
     self.navigationItem.rightBarButtonItems = @[accountBarButton, settingsBarButton, cameraBarButton];
     //[self.navigationItem.rightBarButtonItems[1] setEnabled:NO];
     
     self.navigationItem.leftBarButtonItem.enabled = YES;
-#endif
 }
 
+- (void)setSelectedStateAtIndex:(NSInteger )indx
+{
+    if ([self selectedIndex] != indx)
+    {
+        if (indx == 0) {
+            [settingsBarButton setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont regular18Font], NSFontAttributeName,  [UIColor blackColor], NSForegroundColorAttributeName,nil]
+                                             forState:UIControlStateNormal];
+            [accountBarButton setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont regular18Font], NSFontAttributeName,  [UIColor blackColor], NSForegroundColorAttributeName,nil]
+                                            forState:UIControlStateNormal];
+        }
+        else if (indx == 1){
+            [cameraBarButton setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont regular18Font], NSFontAttributeName,  [UIColor blackColor], NSForegroundColorAttributeName,nil]
+                                           forState:UIControlStateNormal];
+            [accountBarButton setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont regular18Font], NSFontAttributeName,  [UIColor blackColor], NSForegroundColorAttributeName,nil]
+                                            forState:UIControlStateNormal];
+        }
+        else
+        {
+            [cameraBarButton setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont regular18Font], NSFontAttributeName,  [UIColor blackColor], NSForegroundColorAttributeName,nil]
+                                           forState:UIControlStateNormal];
+            [settingsBarButton setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont regular18Font], NSFontAttributeName,  [UIColor blackColor], NSForegroundColorAttributeName,nil]
+                                             forState:UIControlStateNormal];
+        }
+        
+        [self.navigationItem.rightBarButtonItems[2 - indx] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont bold18Font], NSFontAttributeName,  [UIColor blackColor], NSForegroundColorAttributeName,nil]
+                                                                     forState:UIControlStateNormal];
+        [self setSelectedIndex:indx];
+    }
+}
+
+#if 0
 - (void)resetFontTextNormalBarButton
 {
     [cameraBarButton setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont regular18Font], NSFontAttributeName,  [UIColor blackColor], NSForegroundColorAttributeName,nil] forState:UIControlStateNormal];
     [settingsBarButton setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont regular18Font], NSFontAttributeName,  [UIColor blackColor], NSForegroundColorAttributeName,nil] forState:UIControlStateNormal];
     [accountBarButton setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont regular18Font], NSFontAttributeName,  [UIColor blackColor], NSForegroundColorAttributeName,nil] forState:UIControlStateNormal];
 }
+#endif
+
 - (void)selectMenuCamera
 {
+#if 1
+    [self setSelectedStateAtIndex:0];
+#else
     [_camerasVC.view removeFromSuperview];
     [self resetFontTextNormalBarButton];
     [cameraBarButton setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont bold18Font], NSFontAttributeName,  [UIColor blackColor], NSForegroundColorAttributeName,nil] forState:UIControlStateNormal];
     [self.view addSubview:_camerasVC.view];
+#endif
 }
 - (void)selectSettings
 {
+#if 1
+    [self setSelectedStateAtIndex:1];
+#else
     [_settingsVC.view removeFromSuperview];
     [self resetFontTextNormalBarButton];
     [settingsBarButton setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont bold18Font], NSFontAttributeName,  [UIColor blackColor], NSForegroundColorAttributeName,nil] forState:UIControlStateNormal];
     _settingsVC.parentVC = self;
     [self.view addSubview:_settingsVC.view];
+#endif
 }
 - (void)selectAccountSetting
 {
+#if 1
+    [self setSelectedStateAtIndex:2];
+#else
     [self.accountVC.view removeFromSuperview];
     [self.view addSubview:self.accountVC.view];
     [self resetFontTextNormalBarButton];
     [accountBarButton setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont bold18Font], NSFontAttributeName,  [UIColor blackColor], NSForegroundColorAttributeName,nil] forState:UIControlStateNormal];
     self.accountVC.parentVC = self;
+#endif
 }
 
-- (void)viewWillAppear:(BOOL)animated
+#if 1
+- (void)viewDidAppear:(BOOL)animated
 {
+    [super viewDidAppear:animated];
+    NSLog(@"%s", __FUNCTION__);
     self.navigationController.navigationBarHidden = NO;
-    self.navigationItem.title = @"";
-    [self selectMenuCamera];
-    self.camerasVC.ibTableListCamera.contentInset = UIEdgeInsetsMake(30, 0, 64, 0);
-
+    [self setSelectedStateAtIndex:0];
+    
     if (!_isFirttime) //revert
     {
         self.isFirttime = TRUE;
@@ -202,7 +236,57 @@
         [[NSUserDefaults standardUserDefaults] synchronize];
         
         dispatch_async(dispatch_get_main_queue(), ^{
-             [self menuBackAction:nil];
+            [self menuBackAction:nil];
+        });
+        
+        [self removeNavigationBarBottomLine];
+    }
+    else
+    {
+        if (![[NSUserDefaults standardUserDefaults] boolForKey:_OfflineMode] &&
+            !_notUpdateCameras)
+        {
+            if (!_camerasVC.waitingForUpdateData)
+            {
+                self.camerasVC.waitingForUpdateData = TRUE;
+                
+                for (CamChannel *ch in _camerasVC.camChannels) {
+                    ch.profile.hasUpdateLocalStatus = NO;
+                }
+                
+                @synchronized(self.camerasVC)
+                {
+                    [self performSelectorInBackground:@selector(recreateAccount)
+                                           withObject:nil];
+                }
+            }
+            else
+            {
+                NSLog(@"%s Loading is going on...", __FUNCTION__);
+            }
+            
+            [self.camerasVC.ibTableListCamera reloadData];
+        }
+    }
+}
+#else
+- (void)viewWillAppear:(BOOL)animated
+{
+    self.navigationController.navigationBarHidden = NO;
+    self.navigationItem.title = @"";
+    //[self selectMenuCamera];
+    //self.camerasVC.ibTableListCamera.contentInset = UIEdgeInsetsMake(30, 0, 64, 0);
+
+    if (!_isFirttime) //revert
+    {
+        self.isFirttime = TRUE;
+        
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:PLAYBACK_IN_VEW];
+        [[NSUserDefaults standardUserDefaults] setInteger:-1 forKey:EVENT_DELETED_ID];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self menuBackAction:nil];
         });
        
         [self removeNavigationBarBottomLine];
@@ -235,6 +319,7 @@
         }
     }
 }
+#endif
 
 - (void)viewWillDisappear:(BOOL)animated
 {
@@ -273,8 +358,6 @@
     if (self.cameras != nil &&
         self.cameras.count > 0)
     {
-        //self.navigationItem.rightBarButtonItems = @[accountBarButton, settingsBarButton, cameraBarButton];
-        
         CamChannel *camChannel = nil;
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         NSString *regID = [userDefaults stringForKey:REG_ID];
@@ -330,8 +413,7 @@
             
             h264PlayerViewController.selectedChannel = camChannel;
             //h264PlayerViewController.h264PlayerVCDelegate = self;
-
-    
+            
             [self.navigationController pushViewController:h264PlayerViewController animated:NO];
             [h264PlayerViewController release];
         }
@@ -359,11 +441,6 @@
             }
         }
     }
-}
-
-- (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item
-{
-    self.title = item.title;
 }
 
 - (void)refreshCameraList
@@ -571,7 +648,7 @@
 - (void)removeSubviews
 {
     NSLog(@"%s", __FUNCTION__);
-    
+#if 0
     if (_accountVC)
     {
         // Dismiss account view's subviews.
@@ -589,7 +666,24 @@
     {
         [_camerasVC.view removeFromSuperview];
     }
+#endif
 }
+
+#if 0
+#pragma mark - UITabBarDelegate
+
+- (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item
+{
+    self.title = item.title;
+}
+
+#pragma mark - UITabBarControllerDelegate
+
+- (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController
+{
+    NSLog(@"viewController:%@", viewController);
+}
+#endif
 
 - (void)didReceiveMemoryWarning
 {

@@ -303,7 +303,7 @@
 {
     if (success)
     {
-        [self.navigationController popToRootViewControllerAnimated:YES];
+        //[self.navigationController popToRootViewControllerAnimated:YES];
         
         if (_delegate)
         {
@@ -471,10 +471,7 @@
         [[TimelineDatabase getSharedInstance] clearEventForUserName:userName];
         
         
-        BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                                                 Selector:nil
-                                                                             FailSelector:nil
-                                                                                ServerErr:nil];
+        BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithCaller:self];
         
         NSDictionary *responseDict = [jsonComm deleteAppBlockedWithAppId:appId
                                                                andApiKey:apiKey];
@@ -1009,6 +1006,8 @@
 }
 
 - (void)dealloc {
+    NSLog(@"%s", __FUNCTION__);
+    
     [_viewProgress release];
     [_tfEmail release];
     [_tfPassword release];

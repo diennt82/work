@@ -21,7 +21,6 @@
 @property (nonatomic) NSInteger cameraType;
 
 - (IBAction)handleButtonPress:(id)sender;
-- (IBAction)goBackToFirstScreen:(id)sender;
 - (IBAction)btnContinueTouchUpInsideAction:(id)sender;
 
 @end

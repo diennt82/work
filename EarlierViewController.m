@@ -99,12 +99,12 @@
         viewControllers = @[_timelineVC, savedViewController];
     }
 #endif
-    _tabBarController = [[MHTabBarController alloc] init];
+    _mhTabBarController = [[MHTabBarController alloc] init];
     
-	_tabBarController.delegate = self;
-	_tabBarController.viewControllers = @[_timelineVC];
+	_mhTabBarController.delegate = self;
+	_mhTabBarController.viewControllers = @[_timelineVC];
     
-    [self.view addSubview:_tabBarController.view];
+    [self.view addSubview:_mhTabBarController.view];
     
     //load event for timeline
     if (_isDidLoad == FALSE)
@@ -172,10 +172,10 @@
 {
     NSLog(@"%s retain:%d", __FUNCTION__, self.retainCount);
     
-    if (_tabBarController)
+    if (_mhTabBarController)
     {
-        [_tabBarController.view removeFromSuperview];
-        _tabBarController.delegate = nil;
+        [_mhTabBarController.view removeFromSuperview];
+        _mhTabBarController.delegate = nil;
     }
     
     if (_timelineVC)
@@ -198,10 +198,10 @@
         _timelineVC.timelineVCDelegate = nil;
     }
     
-    if (_tabBarController)
+    if (_mhTabBarController)
     {
-        _tabBarController.delegate = nil;
-        [_tabBarController.view removeFromSuperview];
+        _mhTabBarController.delegate = nil;
+        [_mhTabBarController.view removeFromSuperview];
     }
 }
 
@@ -226,15 +226,15 @@
     NSLog(@"%s", __FUNCTION__);
     
     [_timelineVC release];
-    [_tabBarController release];
+    [_mhTabBarController release];
     [super dealloc];
 }
 
 
 #pragma mark - Custom tab bar delegate
-- (BOOL)mh_tabBarController:(MHTabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController atIndex:(NSUInteger)index
+- (BOOL)mh_mhTabBarController:(MHTabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController atIndex:(NSUInteger)index
 {
-	NSLog(@"mh_tabBarController %@ shouldSelectViewController %@ at index %u", tabBarController, viewController, index);
+	NSLog(@"mh_mhTabBarController %@ shouldSelectViewController %@ at index %u", tabBarController, viewController, index);
     
 	// Uncomment this to prevent "Tab 3" from being selected.
 	//return (index != 2);
@@ -242,9 +242,9 @@
 	return YES;
 }
 
-- (void)mh_tabBarController:(MHTabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController atIndex:(NSUInteger)index
+- (void)mh_mhTabBarController:(MHTabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController atIndex:(NSUInteger)index
 {
-	NSLog(@"mh_tabBarController %@ didSelectViewController %@ at index %u", tabBarController, viewController, index);
+	NSLog(@"mh_mhTabBarController %@ didSelectViewController %@ at index %u", tabBarController, viewController, index);
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad && index == 0)
     {

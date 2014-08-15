@@ -62,7 +62,7 @@
 
 
 
-@interface MBP_iosViewController : UIViewController <BonjourDelegate, ConnectionMethodDelegate,UIActionSheetDelegate,ScanForCameraNotifier>
+@interface MBP_iosViewController : UIViewController </*BonjourDelegate, */ConnectionMethodDelegate,UIActionSheetDelegate,ScanForCameraNotifier>
 {
     //NOT USED - TO BE REMOVED
  	
@@ -130,7 +130,7 @@
 
 
 - (void) initialize ;
-- (void) scan_for_devices;
+//- (void) scan_for_devices;
 + (void)getBroadcastAddress:(NSString **) bcast AndOwnIp:(NSString**) ownip;
 + (void)getBroadcastAddress:(NSString **) bcast AndOwnIp:(NSString**) ownip ipasLong:(long *) _ownip;
 

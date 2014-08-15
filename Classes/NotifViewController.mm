@@ -90,14 +90,15 @@
     [_playEnventBtn setEnabled:NO];
     _isReturnFrmPlayback = FALSE;
     
-    self.jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                     Selector:nil
-                                                 FailSelector:nil
-                                                    ServerErr:nil];
+    self.jsonComm = [[BMS_JSON_Communication alloc] initWithCaller:self];
     
     NSDateFormatter *dateFormater = [[NSDateFormatter alloc] init];
-    [dateFormater setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
+    //[dateFormater setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
+    [dateFormater setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZZZ"];
+    //2014-08-14T08:19:58+00:00
     [dateFormater setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+    dateFormater.calendar = [[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar] autorelease];
+    dateFormater.locale = [[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"] autorelease];
     NSDate *eventDate = [dateFormater dateFromString:self.alertTime]; //2013-12-31 07:38:35 +0000
     [dateFormater release];
     
@@ -110,7 +111,7 @@
                               NSLocalizedStringWithDefaultValue(@"some_movement_at_camera", nil, [NSBundle mainBundle], @"There was some movement at", nil),
                               self.cameraName];
     
-    NSLog(@"notif view timelable is %@",self.timeLabel.text); 
+    NSLog(@"notif view timelable is %@", self.timeLabel.text);
     
     if(self.camChannel)
     {
@@ -143,7 +144,10 @@
     }
 }
 
-
+- (BOOL)shouldAutorotate
+{
+    return NO;
+}
 
 - (void)layoutImageAndTextForButton: (UIButton *)button
 {
@@ -242,7 +246,7 @@
         [userDefaults synchronize];
 
         
-        [self.navigationController popToRootViewControllerAnimated:YES];
+        //[self.navigationController popToRootViewControllerAnimated:YES];
         [_notifDelegate sendStatus:SHOW_CAMERA_LIST];
 
     }

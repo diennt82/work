@@ -19,9 +19,9 @@
 #import "UIDeviceHardware.h"
 #import "MBP_iosViewController.h"
 
-#define MAX_CAM_ALLOWED 4
-#define CAMERA_TAG_66 566
-#define CAMERA_TAG_83 583 //83/ 836
+#define MAX_CAM_ALLOWED     4
+#define CAMERA_TAG_66       566
+#define CAMERA_TAG_83       583 //83/ 836
 #define CAMERA_STATUS_OFFLINE   -1
 #define CAMERA_STATUS_UPGRADING  0
 #define CAMERA_STATUS_ONLINE     1
@@ -100,7 +100,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+#if 0
     self.navigationController.navigationBarHidden = YES;
+#endif
     
     NSArray *paths = NSSearchPathForDirectoriesInDomains
     (NSDocumentDirectory, NSUserDomainMask, YES);
@@ -122,8 +124,9 @@
     [super viewWillAppear:animated];
     
     NSLog(@"%s", __FUNCTION__);
-    
+#if 0
     self.navigationController.navigationBarHidden = YES;
+#endif
     self.ibTableListCamera.delegate = self;
 
     //[self updateBottomButton];
@@ -160,12 +163,17 @@
             [userDefaults setInteger:WIFI_SETUP forKey:SET_UP_CAMERA];
             [userDefaults setBool:FALSE forKey:FIRST_TIME_SETUP];
             [userDefaults synchronize];
-            
+#if 1
+            //[tabBarController.navigationController popToRootViewControllerAnimated:NO];
+            [tabBarController.menuDelegate sendStatus:SETUP_CAMERA];
+            tabBarController.menuDelegate = nil;
+            return;
+#else
             [tabBarController dismissViewControllerAnimated:NO completion:^{
                 [tabBarController.menuDelegate sendStatus:SETUP_CAMERA]; //initial setup
                 tabBarController.menuDelegate = nil;
             }];
-            
+#endif
         }
         else
         {
@@ -195,15 +203,15 @@
     CameraAlert * camAlert = [[CameraAlert alloc]initWithTimeStamp1:rcvTimeStamp];// autorelease];
     
     
-#if 0
+#if 1
     //set other values
-    camAlert.cameraMacNoColon = @"44334C5FF075";
+    camAlert.cameraMacNoColon = @"44334C81E8FC";
     
     camAlert.cameraName = @"Camera-fake motion push";
     camAlert.alertType = @"4";
-    camAlert.alertTime =@"2014-04-30T04:51:54+00:00";
-    camAlert.alertVal = @"20140430090958000";
-    camAlert.registrationID = @"01006644334C5FF075GPIRBEXE";
+    camAlert.alertTime =@"2014-08-14T06:04:10Z";
+    camAlert.alertVal = @"20140814070404000";
+    camAlert.registrationID = @"01006644334C81E8FCPRMRBULM";
 #else 
     camAlert.cameraMacNoColon = @"44334C5FF075";
     
@@ -263,10 +271,16 @@
     
     if (flag)
     {
+#if 1
+        //[tabBarController.navigationController popToRootViewControllerAnimated:NO];
+        [tabBarController.menuDelegate sendStatus:SETUP_CAMERA];
+        tabBarController.menuDelegate = nil;
+#else
         [tabBarController dismissViewControllerAnimated:NO completion:^{
             [tabBarController.menuDelegate sendStatus:SETUP_CAMERA]; //initial setup
             tabBarController.menuDelegate = nil;
         }];
+#endif
     }
     else
     {
@@ -565,6 +579,7 @@
         }
         
         cell.ibCameraNameLabel.text = ch.profile.name;
+#if 0
         NSString *boundCameraName = ch.profile.name;
         CGSize size = [boundCameraName sizeWithAttributes:@{NSFontAttributeName:[UIFont fontWithName:PN_SEMIBOLD_FONT size:18]}];
         
@@ -580,7 +595,7 @@
             [cell.ibCameraNameLabel setFont:[UIFont fontWithName:PN_SEMIBOLD_FONT size:15]];
             [cell.ibCameraNameLabel setNumberOfLines:1];
         }
-        
+#endif
         if (!ch.profile.hasUpdateLocalStatus)
         {
             shouldHighlightAtRow[indexPath.row] = NO;

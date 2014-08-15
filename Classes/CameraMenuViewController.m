@@ -1456,6 +1456,8 @@ typedef enum _WAIT_FOR_UPDATING {
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
         [dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+        dateFormatter.calendar = [[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar] autorelease];
+        dateFormatter.locale = [[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"] autorelease];
         NSDate *eventDate = [dateFormatter dateFromString:expireDate]; //2014-07-22T22:39:51Z
         [dateFormatter release];
         

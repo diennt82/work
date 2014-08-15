@@ -75,7 +75,7 @@
     [super viewDidLoad];
 
     // Uncomment the following line to preserve selection between presentations.
-    self.clearsSelectionOnViewWillAppear = NO;
+    //self.clearsSelectionOnViewWillAppear = NO;
     
     for (int i = 0; i < 4; i++)
     {
@@ -209,8 +209,9 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    
+#if 0
     self.navigationController.navigationBarHidden = YES;
+#endif
 }
 
 - (void)didReceiveMemoryWarning
