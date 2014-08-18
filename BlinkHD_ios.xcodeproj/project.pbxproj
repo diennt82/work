@@ -166,16 +166,6 @@
 		8B299F6618AF500900D36BE5 /* alert_upgrade@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299E2318AF500800D36BE5 /* alert_upgrade@2x.png */; };
 		8B299F6718AF500900D36BE5 /* alert_upgrade_pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299E2418AF500800D36BE5 /* alert_upgrade_pressed.png */; };
 		8B299F6818AF500900D36BE5 /* alert_upgrade_pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299E2518AF500800D36BE5 /* alert_upgrade_pressed@2x.png */; };
-		8B299F6918AF500900D36BE5 /* alert_camera@5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299E2718AF500800D36BE5 /* alert_camera@5.png */; };
-		8B299F6A18AF500900D36BE5 /* alert_camera_pressed@5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299E2818AF500800D36BE5 /* alert_camera_pressed@5.png */; };
-		8B299F6B18AF500900D36BE5 /* alert_learn@5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299E2918AF500800D36BE5 /* alert_learn@5.png */; };
-		8B299F6C18AF500900D36BE5 /* alert_learn_pressed@5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299E2A18AF500800D36BE5 /* alert_learn_pressed@5.png */; };
-		8B299F6D18AF500900D36BE5 /* alert_play@5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299E2B18AF500800D36BE5 /* alert_play@5.png */; };
-		8B299F6E18AF500900D36BE5 /* alert_play_pressed@5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299E2C18AF500800D36BE5 /* alert_play_pressed@5.png */; };
-		8B299F6F18AF500900D36BE5 /* alert_settings@5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299E2D18AF500800D36BE5 /* alert_settings@5.png */; };
-		8B299F7018AF500900D36BE5 /* alert_settings_pressed@5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299E2E18AF500800D36BE5 /* alert_settings_pressed@5.png */; };
-		8B299F7118AF500900D36BE5 /* alert_upgrade@5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299E2F18AF500800D36BE5 /* alert_upgrade@5.png */; };
-		8B299F7218AF500900D36BE5 /* alert_upgrade_pressed@5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299E3018AF500800D36BE5 /* alert_upgrade_pressed@5.png */; };
 		8B299F7318AF500900D36BE5 /* camera_action_listening_land.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299E3318AF500800D36BE5 /* camera_action_listening_land.png */; };
 		8B299F7418AF500900D36BE5 /* camera_action_listening_land@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299E3418AF500800D36BE5 /* camera_action_listening_land@2x.png */; };
 		8B299F7518AF500900D36BE5 /* camera_action_listening_pressed_land.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299E3518AF500800D36BE5 /* camera_action_listening_pressed_land.png */; };
@@ -260,28 +250,6 @@
 		8B299FC418AF500900D36BE5 /* video_grey@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299E8618AF500800D36BE5 /* video_grey@2x.png */; };
 		8B299FC518AF500900D36BE5 /* video_grey_pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299E8718AF500800D36BE5 /* video_grey_pressed.png */; };
 		8B299FC618AF500900D36BE5 /* video_grey_pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299E8818AF500800D36BE5 /* video_grey_pressed@2x.png */; };
-		8B299FC718AF500900D36BE5 /* camera_action_listening@5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299E8A18AF500800D36BE5 /* camera_action_listening@5.png */; };
-		8B299FC818AF500900D36BE5 /* camera_action_listening_pressed@5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299E8B18AF500800D36BE5 /* camera_action_listening_pressed@5.png */; };
-		8B299FC918AF500900D36BE5 /* camera_action_mic@5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299E8C18AF500800D36BE5 /* camera_action_mic@5.png */; };
-		8B299FCA18AF500900D36BE5 /* camera_action_mic_pressed@5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299E8D18AF500800D36BE5 /* camera_action_mic_pressed@5.png */; };
-		8B299FCB18AF500900D36BE5 /* camera_action_pan_bg@5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299E8E18AF500800D36BE5 /* camera_action_pan_bg@5.png */; };
-		8B299FCC18AF500900D36BE5 /* camera_action_pan_handle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299E8F18AF500800D36BE5 /* camera_action_pan_handle@2x.png */; };
-		8B299FCD18AF500900D36BE5 /* camera_action_pan_knob@5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299E9018AF500800D36BE5 /* camera_action_pan_knob@5.png */; };
-		8B299FCE18AF500900D36BE5 /* camera_action_pan_knob_shadow@5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299E9118AF500800D36BE5 /* camera_action_pan_knob_shadow@5.png */; };
-		8B299FCF18AF500900D36BE5 /* camera_action_pause@5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299E9218AF500800D36BE5 /* camera_action_pause@5.png */; };
-		8B299FD018AF500900D36BE5 /* camera_action_pause_pressed@5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299E9318AF500800D36BE5 /* camera_action_pause_pressed@5.png */; };
-		8B299FD118AF500900D36BE5 /* camera_action_photo@5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299E9418AF500900D36BE5 /* camera_action_photo@5.png */; };
-		8B299FD218AF500900D36BE5 /* camera_action_photo_pressed@5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299E9518AF500900D36BE5 /* camera_action_photo_pressed@5.png */; };
-		8B299FD318AF500900D36BE5 /* camera_action_play@5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299E9618AF500900D36BE5 /* camera_action_play@5.png */; };
-		8B299FD418AF500900D36BE5 /* camera_action_play_pressed@5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299E9718AF500900D36BE5 /* camera_action_play_pressed@5.png */; };
-		8B299FD518AF500900D36BE5 /* camera_action_video@5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299E9818AF500900D36BE5 /* camera_action_video@5.png */; };
-		8B299FD618AF500900D36BE5 /* camera_action_video_pressed@5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299E9918AF500900D36BE5 /* camera_action_video_pressed@5.png */; };
-		8B299FD718AF500900D36BE5 /* camera_action_video_stop@5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299E9A18AF500900D36BE5 /* camera_action_video_stop@5.png */; };
-		8B299FD818AF500900D36BE5 /* camera_action_video_stop_pressed@5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299E9B18AF500900D36BE5 /* camera_action_video_stop_pressed@5.png */; };
-		8B299FD918AF500900D36BE5 /* photo_grey@5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299E9C18AF500900D36BE5 /* photo_grey@5.png */; };
-		8B299FDA18AF500900D36BE5 /* photo_grey_pressed@5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299E9D18AF500900D36BE5 /* photo_grey_pressed@5.png */; };
-		8B299FDB18AF500900D36BE5 /* video_grey@5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299E9E18AF500900D36BE5 /* video_grey@5.png */; };
-		8B299FDC18AF500900D36BE5 /* video_grey_pressed@5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299E9F18AF500900D36BE5 /* video_grey_pressed@5.png */; };
 		8B299FDD18AF500900D36BE5 /* feed_date.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299EA118AF500900D36BE5 /* feed_date.png */; };
 		8B299FDE18AF500900D36BE5 /* feed_date@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299EA218AF500900D36BE5 /* feed_date@2x.png */; };
 		8B299FDF18AF500900D36BE5 /* tab_active.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299EA318AF500900D36BE5 /* tab_active.png */; };
@@ -357,7 +325,6 @@
 		8B29A02918AF500900D36BE5 /* login_line@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299EF018AF500900D36BE5 /* login_line@2x.png */; };
 		8B29A02A18AF500900D36BE5 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299EF118AF500900D36BE5 /* Default.png */; };
 		8B29A02B18AF500900D36BE5 /* Default~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299EF218AF500900D36BE5 /* Default~iphone.png */; };
-		8B29A02C18AF500900D36BE5 /* splash@5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299EF318AF500900D36BE5 /* splash@5.png */; };
 		8B29A03118AF500900D36BE5 /* back.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299EF918AF500900D36BE5 /* back.png */; };
 		8B29A03318AF500900D36BE5 /* back_pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299EFB18AF500900D36BE5 /* back_pressed.png */; };
 		8B29A03618AF500900D36BE5 /* camera@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299EFE18AF500900D36BE5 /* camera@2x.png */; };
@@ -436,7 +403,6 @@
 		8B29A08218AF500A00D36BE5 /* video_play@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299F4C18AF500900D36BE5 /* video_play@2x.png */; };
 		8B29A08318AF500A00D36BE5 /* video_player_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299F4D18AF500900D36BE5 /* video_player_bg.png */; };
 		8B29A08418AF500A00D36BE5 /* video_player_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299F4E18AF500900D36BE5 /* video_player_bg@2x.png */; };
-		8B29A08518AF500A00D36BE5 /* video_player_bg@5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299F4F18AF500900D36BE5 /* video_player_bg@5.png */; };
 		8B29A08618AF500A00D36BE5 /* video_progress_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299F5018AF500900D36BE5 /* video_progress_bg.png */; };
 		8B29A08718AF500A00D36BE5 /* video_progress_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299F5118AF500900D36BE5 /* video_progress_bg@2x.png */; };
 		8B29A08818AF500A00D36BE5 /* video_progress_green.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299F5218AF500900D36BE5 /* video_progress_green.png */; };
@@ -636,6 +602,40 @@
 		8BA18CB2184879A10097D1AF /* DeviceSettingsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8BA18CB1184879A10097D1AF /* DeviceSettingsCell.xib */; };
 		8BA23841182CBC130022581A /* CameraScanner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BA23838182C8E130022581A /* CameraScanner.framework */; };
 		8BA372581887C5EA009FA465 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BA372571887C5EA009FA465 /* CoreData.framework */; };
+		8BA564E519A1B4AB0001D9A8 /* alert_camera_5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BA564DB19A1B4AB0001D9A8 /* alert_camera_5.png */; };
+		8BA564E619A1B4AB0001D9A8 /* alert_camera_pressed_5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BA564DC19A1B4AB0001D9A8 /* alert_camera_pressed_5.png */; };
+		8BA564E719A1B4AB0001D9A8 /* alert_learn_5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BA564DD19A1B4AB0001D9A8 /* alert_learn_5.png */; };
+		8BA564E819A1B4AB0001D9A8 /* alert_learn_pressed_5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BA564DE19A1B4AB0001D9A8 /* alert_learn_pressed_5.png */; };
+		8BA564E919A1B4AB0001D9A8 /* alert_play_5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BA564DF19A1B4AB0001D9A8 /* alert_play_5.png */; };
+		8BA564EA19A1B4AB0001D9A8 /* alert_play_pressed_5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BA564E019A1B4AB0001D9A8 /* alert_play_pressed_5.png */; };
+		8BA564EB19A1B4AB0001D9A8 /* alert_settings_5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BA564E119A1B4AB0001D9A8 /* alert_settings_5.png */; };
+		8BA564EC19A1B4AB0001D9A8 /* alert_settings_pressed_5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BA564E219A1B4AB0001D9A8 /* alert_settings_pressed_5.png */; };
+		8BA564ED19A1B4AB0001D9A8 /* alert_upgrade_5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BA564E319A1B4AB0001D9A8 /* alert_upgrade_5.png */; };
+		8BA564EE19A1B4AB0001D9A8 /* alert_upgrade_pressed_5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BA564E419A1B4AB0001D9A8 /* alert_upgrade_pressed_5.png */; };
+		8BA5650519A1B5210001D9A8 /* camera_action_listening_5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BA564EF19A1B5210001D9A8 /* camera_action_listening_5.png */; };
+		8BA5650619A1B5210001D9A8 /* camera_action_listening_pressed_5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BA564F019A1B5210001D9A8 /* camera_action_listening_pressed_5.png */; };
+		8BA5650719A1B5210001D9A8 /* camera_action_mic_5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BA564F119A1B5210001D9A8 /* camera_action_mic_5.png */; };
+		8BA5650819A1B5210001D9A8 /* camera_action_mic_pressed_5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BA564F219A1B5210001D9A8 /* camera_action_mic_pressed_5.png */; };
+		8BA5650919A1B5210001D9A8 /* camera_action_pan_bg_5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BA564F319A1B5210001D9A8 /* camera_action_pan_bg_5.png */; };
+		8BA5650A19A1B5210001D9A8 /* camera_action_pan_handle_2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BA564F419A1B5210001D9A8 /* camera_action_pan_handle_2x.png */; };
+		8BA5650B19A1B5210001D9A8 /* camera_action_pan_knob_5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BA564F519A1B5210001D9A8 /* camera_action_pan_knob_5.png */; };
+		8BA5650C19A1B5210001D9A8 /* camera_action_pan_knob_shadow_5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BA564F619A1B5210001D9A8 /* camera_action_pan_knob_shadow_5.png */; };
+		8BA5650D19A1B5210001D9A8 /* camera_action_pause_5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BA564F719A1B5210001D9A8 /* camera_action_pause_5.png */; };
+		8BA5650E19A1B5210001D9A8 /* camera_action_pause_pressed_5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BA564F819A1B5210001D9A8 /* camera_action_pause_pressed_5.png */; };
+		8BA5650F19A1B5210001D9A8 /* camera_action_photo_5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BA564F919A1B5210001D9A8 /* camera_action_photo_5.png */; };
+		8BA5651019A1B5210001D9A8 /* camera_action_photo_pressed_5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BA564FA19A1B5210001D9A8 /* camera_action_photo_pressed_5.png */; };
+		8BA5651119A1B5210001D9A8 /* camera_action_play_5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BA564FB19A1B5210001D9A8 /* camera_action_play_5.png */; };
+		8BA5651219A1B5210001D9A8 /* camera_action_play_pressed_5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BA564FC19A1B5210001D9A8 /* camera_action_play_pressed_5.png */; };
+		8BA5651319A1B5210001D9A8 /* camera_action_video_5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BA564FD19A1B5210001D9A8 /* camera_action_video_5.png */; };
+		8BA5651419A1B5210001D9A8 /* camera_action_video_pressed_5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BA564FE19A1B5210001D9A8 /* camera_action_video_pressed_5.png */; };
+		8BA5651519A1B5210001D9A8 /* camera_action_video_stop_5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BA564FF19A1B5210001D9A8 /* camera_action_video_stop_5.png */; };
+		8BA5651619A1B5210001D9A8 /* camera_action_video_stop_pressed_5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BA5650019A1B5210001D9A8 /* camera_action_video_stop_pressed_5.png */; };
+		8BA5651719A1B5210001D9A8 /* photo_grey_5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BA5650119A1B5210001D9A8 /* photo_grey_5.png */; };
+		8BA5651819A1B5210001D9A8 /* photo_grey_pressed_5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BA5650219A1B5210001D9A8 /* photo_grey_pressed_5.png */; };
+		8BA5651919A1B5210001D9A8 /* video_grey_5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BA5650319A1B5210001D9A8 /* video_grey_5.png */; };
+		8BA5651A19A1B5210001D9A8 /* video_grey_pressed_5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BA5650419A1B5210001D9A8 /* video_grey_pressed_5.png */; };
+		8BA5651C19A1B56B0001D9A8 /* splash_5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BA5651B19A1B56B0001D9A8 /* splash_5.png */; };
+		8BA5651E19A1B5A10001D9A8 /* video_player_bg_5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BA5651D19A1B5A10001D9A8 /* video_player_bg_5.png */; };
 		8BA5C47C1818DAAC006B4BB8 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A15430FC1818D08A00337EFE /* libcrypto.a */; };
 		8BA5C4801818DCC1006B4BB8 /* ZoneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BA5C47E1818DCC1006B4BB8 /* ZoneViewController.m */; };
 		8BA5C4811818DCC1006B4BB8 /* ZoneViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8BA5C47F1818DCC1006B4BB8 /* ZoneViewController.xib */; };
@@ -998,16 +998,6 @@
 		8B299E2318AF500800D36BE5 /* alert_upgrade@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "alert_upgrade@2x.png"; sourceTree = "<group>"; };
 		8B299E2418AF500800D36BE5 /* alert_upgrade_pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = alert_upgrade_pressed.png; sourceTree = "<group>"; };
 		8B299E2518AF500800D36BE5 /* alert_upgrade_pressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "alert_upgrade_pressed@2x.png"; sourceTree = "<group>"; };
-		8B299E2718AF500800D36BE5 /* alert_camera@5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "alert_camera@5.png"; sourceTree = "<group>"; };
-		8B299E2818AF500800D36BE5 /* alert_camera_pressed@5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "alert_camera_pressed@5.png"; sourceTree = "<group>"; };
-		8B299E2918AF500800D36BE5 /* alert_learn@5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "alert_learn@5.png"; sourceTree = "<group>"; };
-		8B299E2A18AF500800D36BE5 /* alert_learn_pressed@5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "alert_learn_pressed@5.png"; sourceTree = "<group>"; };
-		8B299E2B18AF500800D36BE5 /* alert_play@5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "alert_play@5.png"; sourceTree = "<group>"; };
-		8B299E2C18AF500800D36BE5 /* alert_play_pressed@5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "alert_play_pressed@5.png"; sourceTree = "<group>"; };
-		8B299E2D18AF500800D36BE5 /* alert_settings@5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "alert_settings@5.png"; sourceTree = "<group>"; };
-		8B299E2E18AF500800D36BE5 /* alert_settings_pressed@5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "alert_settings_pressed@5.png"; sourceTree = "<group>"; };
-		8B299E2F18AF500800D36BE5 /* alert_upgrade@5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "alert_upgrade@5.png"; sourceTree = "<group>"; };
-		8B299E3018AF500800D36BE5 /* alert_upgrade_pressed@5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "alert_upgrade_pressed@5.png"; sourceTree = "<group>"; };
 		8B299E3318AF500800D36BE5 /* camera_action_listening_land.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_action_listening_land.png; sourceTree = "<group>"; };
 		8B299E3418AF500800D36BE5 /* camera_action_listening_land@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera_action_listening_land@2x.png"; sourceTree = "<group>"; };
 		8B299E3518AF500800D36BE5 /* camera_action_listening_pressed_land.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_action_listening_pressed_land.png; sourceTree = "<group>"; };
@@ -1092,28 +1082,6 @@
 		8B299E8618AF500800D36BE5 /* video_grey@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "video_grey@2x.png"; sourceTree = "<group>"; };
 		8B299E8718AF500800D36BE5 /* video_grey_pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = video_grey_pressed.png; sourceTree = "<group>"; };
 		8B299E8818AF500800D36BE5 /* video_grey_pressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "video_grey_pressed@2x.png"; sourceTree = "<group>"; };
-		8B299E8A18AF500800D36BE5 /* camera_action_listening@5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera_action_listening@5.png"; sourceTree = "<group>"; };
-		8B299E8B18AF500800D36BE5 /* camera_action_listening_pressed@5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera_action_listening_pressed@5.png"; sourceTree = "<group>"; };
-		8B299E8C18AF500800D36BE5 /* camera_action_mic@5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera_action_mic@5.png"; sourceTree = "<group>"; };
-		8B299E8D18AF500800D36BE5 /* camera_action_mic_pressed@5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera_action_mic_pressed@5.png"; sourceTree = "<group>"; };
-		8B299E8E18AF500800D36BE5 /* camera_action_pan_bg@5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera_action_pan_bg@5.png"; sourceTree = "<group>"; };
-		8B299E8F18AF500800D36BE5 /* camera_action_pan_handle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera_action_pan_handle@2x.png"; sourceTree = "<group>"; };
-		8B299E9018AF500800D36BE5 /* camera_action_pan_knob@5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera_action_pan_knob@5.png"; sourceTree = "<group>"; };
-		8B299E9118AF500800D36BE5 /* camera_action_pan_knob_shadow@5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera_action_pan_knob_shadow@5.png"; sourceTree = "<group>"; };
-		8B299E9218AF500800D36BE5 /* camera_action_pause@5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera_action_pause@5.png"; sourceTree = "<group>"; };
-		8B299E9318AF500800D36BE5 /* camera_action_pause_pressed@5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera_action_pause_pressed@5.png"; sourceTree = "<group>"; };
-		8B299E9418AF500900D36BE5 /* camera_action_photo@5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera_action_photo@5.png"; sourceTree = "<group>"; };
-		8B299E9518AF500900D36BE5 /* camera_action_photo_pressed@5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera_action_photo_pressed@5.png"; sourceTree = "<group>"; };
-		8B299E9618AF500900D36BE5 /* camera_action_play@5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera_action_play@5.png"; sourceTree = "<group>"; };
-		8B299E9718AF500900D36BE5 /* camera_action_play_pressed@5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera_action_play_pressed@5.png"; sourceTree = "<group>"; };
-		8B299E9818AF500900D36BE5 /* camera_action_video@5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera_action_video@5.png"; sourceTree = "<group>"; };
-		8B299E9918AF500900D36BE5 /* camera_action_video_pressed@5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera_action_video_pressed@5.png"; sourceTree = "<group>"; };
-		8B299E9A18AF500900D36BE5 /* camera_action_video_stop@5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera_action_video_stop@5.png"; sourceTree = "<group>"; };
-		8B299E9B18AF500900D36BE5 /* camera_action_video_stop_pressed@5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera_action_video_stop_pressed@5.png"; sourceTree = "<group>"; };
-		8B299E9C18AF500900D36BE5 /* photo_grey@5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "photo_grey@5.png"; sourceTree = "<group>"; };
-		8B299E9D18AF500900D36BE5 /* photo_grey_pressed@5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "photo_grey_pressed@5.png"; sourceTree = "<group>"; };
-		8B299E9E18AF500900D36BE5 /* video_grey@5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "video_grey@5.png"; sourceTree = "<group>"; };
-		8B299E9F18AF500900D36BE5 /* video_grey_pressed@5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "video_grey_pressed@5.png"; sourceTree = "<group>"; };
 		8B299EA118AF500900D36BE5 /* feed_date.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = feed_date.png; sourceTree = "<group>"; };
 		8B299EA218AF500900D36BE5 /* feed_date@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "feed_date@2x.png"; sourceTree = "<group>"; };
 		8B299EA318AF500900D36BE5 /* tab_active.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tab_active.png; sourceTree = "<group>"; };
@@ -1189,7 +1157,6 @@
 		8B299EF018AF500900D36BE5 /* login_line@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_line@2x.png"; sourceTree = "<group>"; };
 		8B299EF118AF500900D36BE5 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		8B299EF218AF500900D36BE5 /* Default~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default~iphone.png"; sourceTree = "<group>"; };
-		8B299EF318AF500900D36BE5 /* splash@5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "splash@5.png"; sourceTree = "<group>"; };
 		8B299EF918AF500900D36BE5 /* back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = back.png; sourceTree = "<group>"; };
 		8B299EFA18AF500900D36BE5 /* back@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "back@2x.png"; sourceTree = "<group>"; };
 		8B299EFB18AF500900D36BE5 /* back_pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = back_pressed.png; sourceTree = "<group>"; };
@@ -1274,7 +1241,6 @@
 		8B299F4C18AF500900D36BE5 /* video_play@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "video_play@2x.png"; sourceTree = "<group>"; };
 		8B299F4D18AF500900D36BE5 /* video_player_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = video_player_bg.png; sourceTree = "<group>"; };
 		8B299F4E18AF500900D36BE5 /* video_player_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "video_player_bg@2x.png"; sourceTree = "<group>"; };
-		8B299F4F18AF500900D36BE5 /* video_player_bg@5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "video_player_bg@5.png"; sourceTree = "<group>"; };
 		8B299F5018AF500900D36BE5 /* video_progress_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = video_progress_bg.png; sourceTree = "<group>"; };
 		8B299F5118AF500900D36BE5 /* video_progress_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "video_progress_bg@2x.png"; sourceTree = "<group>"; };
 		8B299F5218AF500900D36BE5 /* video_progress_green.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = video_progress_green.png; sourceTree = "<group>"; };
@@ -1522,6 +1488,40 @@
 		8BA18CB1184879A10097D1AF /* DeviceSettingsCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DeviceSettingsCell.xib; sourceTree = "<group>"; };
 		8BA23838182C8E130022581A /* CameraScanner.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CameraScanner.framework; path = "../ios-frameworks/CameraScanner.framework"; sourceTree = "<group>"; };
 		8BA372571887C5EA009FA465 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		8BA564DB19A1B4AB0001D9A8 /* alert_camera_5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = alert_camera_5.png; sourceTree = "<group>"; };
+		8BA564DC19A1B4AB0001D9A8 /* alert_camera_pressed_5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = alert_camera_pressed_5.png; sourceTree = "<group>"; };
+		8BA564DD19A1B4AB0001D9A8 /* alert_learn_5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = alert_learn_5.png; sourceTree = "<group>"; };
+		8BA564DE19A1B4AB0001D9A8 /* alert_learn_pressed_5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = alert_learn_pressed_5.png; sourceTree = "<group>"; };
+		8BA564DF19A1B4AB0001D9A8 /* alert_play_5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = alert_play_5.png; sourceTree = "<group>"; };
+		8BA564E019A1B4AB0001D9A8 /* alert_play_pressed_5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = alert_play_pressed_5.png; sourceTree = "<group>"; };
+		8BA564E119A1B4AB0001D9A8 /* alert_settings_5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = alert_settings_5.png; sourceTree = "<group>"; };
+		8BA564E219A1B4AB0001D9A8 /* alert_settings_pressed_5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = alert_settings_pressed_5.png; sourceTree = "<group>"; };
+		8BA564E319A1B4AB0001D9A8 /* alert_upgrade_5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = alert_upgrade_5.png; sourceTree = "<group>"; };
+		8BA564E419A1B4AB0001D9A8 /* alert_upgrade_pressed_5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = alert_upgrade_pressed_5.png; sourceTree = "<group>"; };
+		8BA564EF19A1B5210001D9A8 /* camera_action_listening_5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_action_listening_5.png; sourceTree = "<group>"; };
+		8BA564F019A1B5210001D9A8 /* camera_action_listening_pressed_5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_action_listening_pressed_5.png; sourceTree = "<group>"; };
+		8BA564F119A1B5210001D9A8 /* camera_action_mic_5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_action_mic_5.png; sourceTree = "<group>"; };
+		8BA564F219A1B5210001D9A8 /* camera_action_mic_pressed_5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_action_mic_pressed_5.png; sourceTree = "<group>"; };
+		8BA564F319A1B5210001D9A8 /* camera_action_pan_bg_5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_action_pan_bg_5.png; sourceTree = "<group>"; };
+		8BA564F419A1B5210001D9A8 /* camera_action_pan_handle_2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_action_pan_handle_2x.png; sourceTree = "<group>"; };
+		8BA564F519A1B5210001D9A8 /* camera_action_pan_knob_5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_action_pan_knob_5.png; sourceTree = "<group>"; };
+		8BA564F619A1B5210001D9A8 /* camera_action_pan_knob_shadow_5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_action_pan_knob_shadow_5.png; sourceTree = "<group>"; };
+		8BA564F719A1B5210001D9A8 /* camera_action_pause_5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_action_pause_5.png; sourceTree = "<group>"; };
+		8BA564F819A1B5210001D9A8 /* camera_action_pause_pressed_5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_action_pause_pressed_5.png; sourceTree = "<group>"; };
+		8BA564F919A1B5210001D9A8 /* camera_action_photo_5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_action_photo_5.png; sourceTree = "<group>"; };
+		8BA564FA19A1B5210001D9A8 /* camera_action_photo_pressed_5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_action_photo_pressed_5.png; sourceTree = "<group>"; };
+		8BA564FB19A1B5210001D9A8 /* camera_action_play_5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_action_play_5.png; sourceTree = "<group>"; };
+		8BA564FC19A1B5210001D9A8 /* camera_action_play_pressed_5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_action_play_pressed_5.png; sourceTree = "<group>"; };
+		8BA564FD19A1B5210001D9A8 /* camera_action_video_5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_action_video_5.png; sourceTree = "<group>"; };
+		8BA564FE19A1B5210001D9A8 /* camera_action_video_pressed_5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_action_video_pressed_5.png; sourceTree = "<group>"; };
+		8BA564FF19A1B5210001D9A8 /* camera_action_video_stop_5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_action_video_stop_5.png; sourceTree = "<group>"; };
+		8BA5650019A1B5210001D9A8 /* camera_action_video_stop_pressed_5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_action_video_stop_pressed_5.png; sourceTree = "<group>"; };
+		8BA5650119A1B5210001D9A8 /* photo_grey_5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = photo_grey_5.png; sourceTree = "<group>"; };
+		8BA5650219A1B5210001D9A8 /* photo_grey_pressed_5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = photo_grey_pressed_5.png; sourceTree = "<group>"; };
+		8BA5650319A1B5210001D9A8 /* video_grey_5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = video_grey_5.png; sourceTree = "<group>"; };
+		8BA5650419A1B5210001D9A8 /* video_grey_pressed_5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = video_grey_pressed_5.png; sourceTree = "<group>"; };
+		8BA5651B19A1B56B0001D9A8 /* splash_5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = splash_5.png; sourceTree = "<group>"; };
+		8BA5651D19A1B5A10001D9A8 /* video_player_bg_5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = video_player_bg_5.png; sourceTree = "<group>"; };
 		8BA5C47D1818DCC1006B4BB8 /* ZoneViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZoneViewController.h; sourceTree = "<group>"; };
 		8BA5C47E1818DCC1006B4BB8 /* ZoneViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZoneViewController.m; sourceTree = "<group>"; };
 		8BA5C47F1818DCC1006B4BB8 /* ZoneViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ZoneViewController.xib; sourceTree = "<group>"; };
@@ -2205,16 +2205,16 @@
 		8B299E2618AF500800D36BE5 /* @5 */ = {
 			isa = PBXGroup;
 			children = (
-				8B299E2718AF500800D36BE5 /* alert_camera@5.png */,
-				8B299E2818AF500800D36BE5 /* alert_camera_pressed@5.png */,
-				8B299E2918AF500800D36BE5 /* alert_learn@5.png */,
-				8B299E2A18AF500800D36BE5 /* alert_learn_pressed@5.png */,
-				8B299E2B18AF500800D36BE5 /* alert_play@5.png */,
-				8B299E2C18AF500800D36BE5 /* alert_play_pressed@5.png */,
-				8B299E2D18AF500800D36BE5 /* alert_settings@5.png */,
-				8B299E2E18AF500800D36BE5 /* alert_settings_pressed@5.png */,
-				8B299E2F18AF500800D36BE5 /* alert_upgrade@5.png */,
-				8B299E3018AF500800D36BE5 /* alert_upgrade_pressed@5.png */,
+				8BA564DB19A1B4AB0001D9A8 /* alert_camera_5.png */,
+				8BA564DC19A1B4AB0001D9A8 /* alert_camera_pressed_5.png */,
+				8BA564DD19A1B4AB0001D9A8 /* alert_learn_5.png */,
+				8BA564DE19A1B4AB0001D9A8 /* alert_learn_pressed_5.png */,
+				8BA564DF19A1B4AB0001D9A8 /* alert_play_5.png */,
+				8BA564E019A1B4AB0001D9A8 /* alert_play_pressed_5.png */,
+				8BA564E119A1B4AB0001D9A8 /* alert_settings_5.png */,
+				8BA564E219A1B4AB0001D9A8 /* alert_settings_pressed_5.png */,
+				8BA564E319A1B4AB0001D9A8 /* alert_upgrade_5.png */,
+				8BA564E419A1B4AB0001D9A8 /* alert_upgrade_pressed_5.png */,
 			);
 			path = "@5";
 			sourceTree = "<group>";
@@ -2338,28 +2338,28 @@
 		8B299E8918AF500800D36BE5 /* @5 */ = {
 			isa = PBXGroup;
 			children = (
-				8B299E8A18AF500800D36BE5 /* camera_action_listening@5.png */,
-				8B299E8B18AF500800D36BE5 /* camera_action_listening_pressed@5.png */,
-				8B299E8C18AF500800D36BE5 /* camera_action_mic@5.png */,
-				8B299E8D18AF500800D36BE5 /* camera_action_mic_pressed@5.png */,
-				8B299E8E18AF500800D36BE5 /* camera_action_pan_bg@5.png */,
-				8B299E8F18AF500800D36BE5 /* camera_action_pan_handle@2x.png */,
-				8B299E9018AF500800D36BE5 /* camera_action_pan_knob@5.png */,
-				8B299E9118AF500800D36BE5 /* camera_action_pan_knob_shadow@5.png */,
-				8B299E9218AF500800D36BE5 /* camera_action_pause@5.png */,
-				8B299E9318AF500800D36BE5 /* camera_action_pause_pressed@5.png */,
-				8B299E9418AF500900D36BE5 /* camera_action_photo@5.png */,
-				8B299E9518AF500900D36BE5 /* camera_action_photo_pressed@5.png */,
-				8B299E9618AF500900D36BE5 /* camera_action_play@5.png */,
-				8B299E9718AF500900D36BE5 /* camera_action_play_pressed@5.png */,
-				8B299E9818AF500900D36BE5 /* camera_action_video@5.png */,
-				8B299E9918AF500900D36BE5 /* camera_action_video_pressed@5.png */,
-				8B299E9A18AF500900D36BE5 /* camera_action_video_stop@5.png */,
-				8B299E9B18AF500900D36BE5 /* camera_action_video_stop_pressed@5.png */,
-				8B299E9C18AF500900D36BE5 /* photo_grey@5.png */,
-				8B299E9D18AF500900D36BE5 /* photo_grey_pressed@5.png */,
-				8B299E9E18AF500900D36BE5 /* video_grey@5.png */,
-				8B299E9F18AF500900D36BE5 /* video_grey_pressed@5.png */,
+				8BA564EF19A1B5210001D9A8 /* camera_action_listening_5.png */,
+				8BA564F019A1B5210001D9A8 /* camera_action_listening_pressed_5.png */,
+				8BA564F119A1B5210001D9A8 /* camera_action_mic_5.png */,
+				8BA564F219A1B5210001D9A8 /* camera_action_mic_pressed_5.png */,
+				8BA564F319A1B5210001D9A8 /* camera_action_pan_bg_5.png */,
+				8BA564F419A1B5210001D9A8 /* camera_action_pan_handle_2x.png */,
+				8BA564F519A1B5210001D9A8 /* camera_action_pan_knob_5.png */,
+				8BA564F619A1B5210001D9A8 /* camera_action_pan_knob_shadow_5.png */,
+				8BA564F719A1B5210001D9A8 /* camera_action_pause_5.png */,
+				8BA564F819A1B5210001D9A8 /* camera_action_pause_pressed_5.png */,
+				8BA564F919A1B5210001D9A8 /* camera_action_photo_5.png */,
+				8BA564FA19A1B5210001D9A8 /* camera_action_photo_pressed_5.png */,
+				8BA564FB19A1B5210001D9A8 /* camera_action_play_5.png */,
+				8BA564FC19A1B5210001D9A8 /* camera_action_play_pressed_5.png */,
+				8BA564FD19A1B5210001D9A8 /* camera_action_video_5.png */,
+				8BA564FE19A1B5210001D9A8 /* camera_action_video_pressed_5.png */,
+				8BA564FF19A1B5210001D9A8 /* camera_action_video_stop_5.png */,
+				8BA5650019A1B5210001D9A8 /* camera_action_video_stop_pressed_5.png */,
+				8BA5650119A1B5210001D9A8 /* photo_grey_5.png */,
+				8BA5650219A1B5210001D9A8 /* photo_grey_pressed_5.png */,
+				8BA5650319A1B5210001D9A8 /* video_grey_5.png */,
+				8BA5650419A1B5210001D9A8 /* video_grey_pressed_5.png */,
 			);
 			path = "@5";
 			sourceTree = "<group>";
@@ -2452,7 +2452,7 @@
 				8B299EF018AF500900D36BE5 /* login_line@2x.png */,
 				8B299EF118AF500900D36BE5 /* Default.png */,
 				8B299EF218AF500900D36BE5 /* Default~iphone.png */,
-				8B299EF318AF500900D36BE5 /* splash@5.png */,
+				8BA5651B19A1B56B0001D9A8 /* splash_5.png */,
 			);
 			path = launch;
 			sourceTree = "<group>";
@@ -2625,7 +2625,7 @@
 				8B299F4C18AF500900D36BE5 /* video_play@2x.png */,
 				8B299F4D18AF500900D36BE5 /* video_player_bg.png */,
 				8B299F4E18AF500900D36BE5 /* video_player_bg@2x.png */,
-				8B299F4F18AF500900D36BE5 /* video_player_bg@5.png */,
+				8BA5651D19A1B5A10001D9A8 /* video_player_bg_5.png */,
 				8B299F5018AF500900D36BE5 /* video_progress_bg.png */,
 				8B299F5118AF500900D36BE5 /* video_progress_bg@2x.png */,
 				8B299F5218AF500900D36BE5 /* video_progress_green.png */,
@@ -3528,7 +3528,6 @@
 		A1ABF19C187536A00014FCB4 /* BLE Setup */ = {
 			isa = PBXGroup;
 			children = (
-				8B9CE1F818C81DBA00B1B7F9 /* HubbleAlertView */,
 				8B977B6718C701F200A61115 /* BLEConnectionCell */,
 				A1ABF19D187536B20014FCB4 /* Connection */,
 				A1ABF1B7187538280014FCB4 /* CreateBLEConnection_VController.h */,
@@ -3693,6 +3692,7 @@
 				8B299FB118AF500900D36BE5 /* camera_action_photo_pressed.png in Resources */,
 				A15773A1186145DD00DEBD45 /* H264PlayerViewController_land_iPad.xib in Resources */,
 				A16995C918F6B8790075757C /* add_camera.png in Resources */,
+				8BA5651C19A1B56B0001D9A8 /* splash_5.png in Resources */,
 				8B95079918C9960D006D4945 /* detect_camera_2@2x.png in Resources */,
 				8B9C7E16185F268C0038B3A8 /* CamerasViewController.xib in Resources */,
 				8B299FFC18AF500900D36BE5 /* video_action_mic.png in Resources */,
@@ -3701,14 +3701,15 @@
 				A1AC858F18912859002A8CCD /* ProximaNova-RegularItalic.otf in Resources */,
 				8BB7EA9B196E3F5000FDD674 /* Focus73TableViewController.xib in Resources */,
 				8B29A06018AF500A00D36BE5 /* settings_temp_f@2x.png in Resources */,
+				8BA5651519A1B5210001D9A8 /* camera_action_video_stop_5.png in Resources */,
 				8B9507AB18C9960D006D4945 /* setup_camera_b1@2x.png in Resources */,
 				A1B1E7CD18E9135800F076B6 /* back_pressed@2x.png in Resources */,
 				8B97A3C418BF1B5F008A38E1 /* Hubble_back_text.png in Resources */,
 				8BA17EFA18B7399100129FE7 /* LoginViewController_35.xib in Resources */,
-				8B299FD018AF500900D36BE5 /* camera_action_pause_pressed@5.png in Resources */,
 				8B29A04718AF500A00D36BE5 /* scheduler.png in Resources */,
 				A1ABF1C0187538550014FCB4 /* EditCamera_VController_iPad.xib in Resources */,
 				8B29A03618AF500900D36BE5 /* camera@2x.png in Resources */,
+				8BA5650819A1B5210001D9A8 /* camera_action_mic_pressed_5.png in Resources */,
 				8B95078B18C9960D006D4945 /* setup_camera_c2@2x.png in Resources */,
 				A1B1E7DE18E9135800F076B6 /* camera.png in Resources */,
 				8B299F6318AF500900D36BE5 /* alert_settings_pressed.png in Resources */,
@@ -3719,6 +3720,7 @@
 				8B29A08718AF500A00D36BE5 /* video_progress_bg@2x.png in Resources */,
 				8B299F7A18AF500900D36BE5 /* camera_action_mic_pressed_land@2x.png in Resources */,
 				8B94BD73188A42530002E804 /* Settings.bundle in Resources */,
+				8BA5650F19A1B5210001D9A8 /* camera_action_photo_5.png in Resources */,
 				A1ABF1B0187537D10014FCB4 /* Step_10_ViewController_ble.xib in Resources */,
 				A138A67718ED41720088685A /* CamerasViewController_ipad.xib in Resources */,
 				8BA18CB2184879A10097D1AF /* DeviceSettingsCell.xib in Resources */,
@@ -3727,7 +3729,6 @@
 				5EBA45A119405BEA00695155 /* Step_08_ViewController_land_ipad.xib in Resources */,
 				5EBA459D19405BEA00695155 /* Step_07_ViewController_ipad.xib in Resources */,
 				8B3E0EEF198902A600BF5788 /* ntp.hosts in Resources */,
-				8B299FDB18AF500900D36BE5 /* video_grey@5.png in Resources */,
 				8B299F6218AF500900D36BE5 /* alert_settings@2x.png in Resources */,
 				8B29A07B18AF500A00D36BE5 /* video_overlay_download.png in Resources */,
 				8B9507A518C9960D006D4945 /* setup_add@2x.png in Resources */,
@@ -3741,6 +3742,7 @@
 				8B29A01B18AF500900D36BE5 /* loader_a@2x.png in Resources */,
 				A1AC859018912859002A8CCD /* ProximaNova-Semibold.otf in Resources */,
 				8B299F5F18AF500900D36BE5 /* alert_play_pressed.png in Resources */,
+				8BA5650719A1B5210001D9A8 /* camera_action_mic_5.png in Resources */,
 				8B9C7E0E185F260A0038B3A8 /* MenuViewController.xib in Resources */,
 				8B9507CD18C999FA006D4945 /* default_account@2x.png in Resources */,
 				A18635F318B6F43F00CB5CDA /* MelodyViewController_land.xib in Resources */,
@@ -3758,7 +3760,9 @@
 				8B299FEA18AF500900D36BE5 /* hubble_logo.png in Resources */,
 				38A478F415C02674008682FE /* Step_05_tableViewCell.xib in Resources */,
 				8B9507B718C9960D006D4945 /* setup_camera_plug@2x.png in Resources */,
+				8BA564E919A1B4AB0001D9A8 /* alert_play_5.png in Resources */,
 				8B299F6118AF500900D36BE5 /* alert_settings.png in Resources */,
+				8BA5650E19A1B5210001D9A8 /* camera_action_pause_pressed_5.png in Resources */,
 				8B299F7B18AF500900D36BE5 /* camera_action_pan_handle_land.png in Resources */,
 				A1ABF1B1187537D10014FCB4 /* Step_10_ViewController_ipad_ble.xib in Resources */,
 				A1AC858C18912859002A8CCD /* ProximaNova-Light.otf in Resources */,
@@ -3782,7 +3786,6 @@
 				8B299F7F18AF500900D36BE5 /* camera_action_pan_knob_shadow_land.png in Resources */,
 				8B299FEE18AF500900D36BE5 /* outline_circle.png in Resources */,
 				8B29A04418AF500A00D36BE5 /* remove_camera@2x.png in Resources */,
-				8B299F6D18AF500900D36BE5 /* alert_play@5.png in Resources */,
 				8B299FDF18AF500900D36BE5 /* tab_active.png in Resources */,
 				3812F82D15C8BF3600DADFA6 /* bb_spk_icon.png in Resources */,
 				8B299FB918AF500900D36BE5 /* camera_action_video_pressed.png in Resources */,
@@ -3795,7 +3798,6 @@
 				5EBA45661940598000695155 /* MBP_iosViewController.xib in Resources */,
 				8B29A03318AF500900D36BE5 /* back_pressed.png in Resources */,
 				8B299FBC18AF500900D36BE5 /* camera_action_video_stop@2x.png in Resources */,
-				8B299FD118AF500900D36BE5 /* camera_action_photo@5.png in Resources */,
 				8B1D544F186581CD008857F0 /* SchedulerCell.xib in Resources */,
 				8B299F6518AF500900D36BE5 /* alert_upgrade.png in Resources */,
 				38A62E8D15C92BDF00DEA520 /* bb_spk_icon_d.png in Resources */,
@@ -3810,26 +3812,27 @@
 				8B29A06618AF500A00D36BE5 /* settings_white_arrow@2x.png in Resources */,
 				8B29A03818AF500900D36BE5 /* menu_settings@2x.png in Resources */,
 				8B948E231921EE62004FAD96 /* camera_ble3.png in Resources */,
+				8BA564E819A1B4AB0001D9A8 /* alert_learn_pressed_5.png in Resources */,
 				8BA7B093187FC87A00A23BD6 /* Step09ViewController_iPad.xib in Resources */,
 				8B29A07618AF500A00D36BE5 /* video_handle@2x.png in Resources */,
 				A1B1E7EB18E9135800F076B6 /* online@2x.png in Resources */,
 				5EBA459319405BEA00695155 /* Step_03_ViewController.xib in Resources */,
 				8B95078218C9960D006D4945 /* camera_2.png in Resources */,
 				8B29A02218AF500900D36BE5 /* loader_e.png in Resources */,
+				8BA5650519A1B5210001D9A8 /* camera_action_listening_5.png in Resources */,
 				8B9507C418C9960D006D4945 /* setup_wifi_grey.png in Resources */,
 				8425087C196B9C42009CE927 /* camera_scout85@2x.png in Resources */,
 				8B9C7E1B185F26D40038B3A8 /* CamerasCell.xib in Resources */,
 				38A62E9315CA12C000DEA520 /* bb_camera_slider_icon.png in Resources */,
 				8B299F9318AF500900D36BE5 /* camera_action_video_stop_land.png in Resources */,
-				8B299FC718AF500900D36BE5 /* camera_action_listening@5.png in Resources */,
 				8B29A07218AF500A00D36BE5 /* vertcal_video_player_Bg@2x.png in Resources */,
 				38A62E9415CA12C000DEA520 /* bb_video_slider_icon.png in Resources */,
 				8B299F7318AF500900D36BE5 /* camera_action_listening_land.png in Resources */,
 				8B29A06B18AF500A00D36BE5 /* maximize.png in Resources */,
 				38A62E9715CA143200DEA520 /* vid_snap_bg.png in Resources */,
+				8BA564E719A1B4AB0001D9A8 /* alert_learn_5.png in Resources */,
 				8B299F5518AF500900D36BE5 /* alert_camera.png in Resources */,
 				8B29A00918AF500900D36BE5 /* video_action_temp@2x.png in Resources */,
-				8B299FCC18AF500900D36BE5 /* camera_action_pan_handle@2x.png in Resources */,
 				8B299F9018AF500900D36BE5 /* camera_action_video_land@2x.png in Resources */,
 				8B29A05D18AF500A00D36BE5 /* settings_temp_c.png in Resources */,
 				8B29A03C18AF500900D36BE5 /* do_not_disturb@2x.png in Resources */,
@@ -3844,8 +3847,8 @@
 				8B29A07118AF500A00D36BE5 /* vertcal_video_player_Bg.png in Resources */,
 				8B29A01318AF500900D36BE5 /* checkbox_active@2x.png in Resources */,
 				5EBA458F19405BEA00695155 /* MBP_iosViewController_ipad.xib in Resources */,
+				8BA5651919A1B5210001D9A8 /* video_grey_5.png in Resources */,
 				8B29A03D18AF500900D36BE5 /* dont_disturb_circle.png in Resources */,
-				8B299F6918AF500900D36BE5 /* alert_camera@5.png in Resources */,
 				A1176B75180D1DD9000B7527 /* stream720p.sdp in Resources */,
 				A10E6BBF18D2F13E00B10EDD /* ChangeImageViewController.xib in Resources */,
 				8B29A06318AF500A00D36BE5 /* settings_temp_switch_top.png in Resources */,
@@ -3870,7 +3873,6 @@
 				8B299FE418AF500900D36BE5 /* feed_video_play.png in Resources */,
 				8B299FBA18AF500900D36BE5 /* camera_action_video_pressed@2x.png in Resources */,
 				5EBA45A019405BEA00695155 /* Step_08_ViewController_land.xib in Resources */,
-				8B29A02C18AF500900D36BE5 /* splash@5.png in Resources */,
 				8B95078A18C9960D006D4945 /* setup_camera_c2.png in Resources */,
 				8B29A01C18AF500900D36BE5 /* loader_b.png in Resources */,
 				A1B1E7EA18E9135800F076B6 /* online.png in Resources */,
@@ -3878,8 +3880,8 @@
 				8BC0A02F1844A87700A5FD52 /* temp_bg.png in Resources */,
 				8B299F7918AF500900D36BE5 /* camera_action_mic_pressed_land.png in Resources */,
 				38B85E4F15CFA4DC00E5A1FA /* Step_07_tableViewCell.xib in Resources */,
-				8B299FCF18AF500900D36BE5 /* camera_action_pause@5.png in Resources */,
 				8B299F8118AF500900D36BE5 /* camera_action_pan_l_bg_land.png in Resources */,
+				8BA5650C19A1B5210001D9A8 /* camera_action_pan_knob_shadow_5.png in Resources */,
 				A15110DD18AB7D9800E116E1 /* TimeLinePremiumCell.xib in Resources */,
 				8412C990195D26F7000FEA1C /* dsym_upload.sh in Resources */,
 				5EBA459919405BEA00695155 /* Step_06_ViewController.xib in Resources */,
@@ -3887,8 +3889,8 @@
 				A16995C818F6B8790075757C /* add_camera_pressed@2x.png in Resources */,
 				8B95144918C03AB600C1D06A /* Step05Cell.xib in Resources */,
 				8B99DB8D18B873120009612A /* mbp_icon114x114.png in Resources */,
-				8B299F6F18AF500900D36BE5 /* alert_settings@5.png in Resources */,
 				8B299FDD18AF500900D36BE5 /* feed_date.png in Resources */,
+				8BA564EC19A1B4AB0001D9A8 /* alert_settings_pressed_5.png in Resources */,
 				8B299FF518AF500900D36BE5 /* timeline_blue_dot@2x.png in Resources */,
 				8B299FB318AF500900D36BE5 /* camera_action_play.png in Resources */,
 				8B299F8B18AF500900D36BE5 /* camera_action_play_land.png in Resources */,
@@ -3896,7 +3898,6 @@
 				8BE9D32419653F3E00D3DE8D /* wifisetup_scout85@2x.png in Resources */,
 				8B29A05F18AF500A00D36BE5 /* settings_temp_f.png in Resources */,
 				8B299FA218AF500900D36BE5 /* camera_action_mic_pressed@2x.png in Resources */,
-				8B299FD918AF500900D36BE5 /* photo_grey@5.png in Resources */,
 				8B95078818C9960D006D4945 /* setup_camera_c1.png in Resources */,
 				8B29A07018AF500A00D36BE5 /* vertcal_video_close_pressed@2x.png in Resources */,
 				8B29A03118AF500900D36BE5 /* back.png in Resources */,
@@ -3906,23 +3907,20 @@
 				38CE2A0F15D4E07300B8F7EC /* dialog_bg.png in Resources */,
 				8B299F8C18AF500900D36BE5 /* camera_action_play_land@2x.png in Resources */,
 				8B99DB8B18B872FF0009612A /* mbp_icon76x76.png in Resources */,
-				8B299FC918AF500900D36BE5 /* camera_action_mic@5.png in Resources */,
-				8B299FD218AF500900D36BE5 /* camera_action_photo_pressed@5.png in Resources */,
-				8B299FD718AF500900D36BE5 /* camera_action_video_stop@5.png in Resources */,
+				8BA5650619A1B5210001D9A8 /* camera_action_listening_pressed_5.png in Resources */,
 				8BA7B095187FC87A00A23BD6 /* Step09ViewController.xib in Resources */,
 				8B29A06918AF500A00D36BE5 /* temp_plus.png in Resources */,
 				8B299F9118AF500900D36BE5 /* camera_action_video_pressed_land.png in Resources */,
 				8BE9D32319653F3E00D3DE8D /* wifisetup_scout85.png in Resources */,
 				8B9507B118C9960D006D4945 /* setup_camera_led1@2x.png in Resources */,
-				8B299F7218AF500900D36BE5 /* alert_upgrade_pressed@5.png in Resources */,
 				8B29A02418AF500900D36BE5 /* loader_f.png in Resources */,
 				5E769B0719345B0E008D9CA7 /* loader_big_d@2x.png in Resources */,
-				8B299F6E18AF500900D36BE5 /* alert_play_pressed@5.png in Resources */,
 				8B29A02018AF500900D36BE5 /* loader_d.png in Resources */,
 				8B95078918C9960D006D4945 /* setup_camera_c1@2x.png in Resources */,
 				8B9507A618C9960D006D4945 /* setup_arrow.png in Resources */,
 				8BC0A0491844B31700A5FD52 /* mbp_icon144x144.png in Resources */,
 				38AC741515D9199E00618188 /* account_icon.png in Resources */,
+				8BA5650A19A1B5210001D9A8 /* camera_action_pan_handle_2x.png in Resources */,
 				A1B1E7CF18E9135800F076B6 /* back@2x.png in Resources */,
 				8BE9D32019653D0C00D3DE8D /* AddCameraViewController_iPad.xib in Resources */,
 				8B29A01E18AF500900D36BE5 /* loader_c.png in Resources */,
@@ -3930,9 +3928,9 @@
 				8B99DB8818B872C30009612A /* iTunesArtwork in Resources */,
 				8B29A02318AF500900D36BE5 /* loader_e@2x.png in Resources */,
 				8B299F5A18AF500900D36BE5 /* alert_learn@2x.png in Resources */,
+				8BA564EE19A1B4AB0001D9A8 /* alert_upgrade_pressed_5.png in Resources */,
 				8B29A01A18AF500900D36BE5 /* loader_a.png in Resources */,
 				8B99DB8518B8729F0009612A /* Icon-Small@2x.png in Resources */,
-				8B299F6C18AF500900D36BE5 /* alert_learn_pressed@5.png in Resources */,
 				8B29A01618AF500900D36BE5 /* enter_pressed.png in Resources */,
 				8B299FB418AF500900D36BE5 /* camera_action_play@2x.png in Resources */,
 				8B9584391877DF1D0055BCE3 /* mbp_icon72x72.png in Resources */,
@@ -3954,12 +3952,10 @@
 				8B29A01118AF500900D36BE5 /* checkbox@2x.png in Resources */,
 				A1ABF1C1187538550014FCB4 /* EditCamera_VController.xib in Resources */,
 				8B9384801856D42C009C4771 /* InformationViewController.xib in Resources */,
-				8B299FD318AF500900D36BE5 /* camera_action_play@5.png in Resources */,
 				8B1D545818658903008857F0 /* SchedulerViewController.xib in Resources */,
 				8B299F9418AF500900D36BE5 /* camera_action_video_stop_land@2x.png in Resources */,
 				A1AC858E18912859002A8CCD /* ProximaNova-Regular.otf in Resources */,
 				8B92A0921863E69F005923D2 /* TimelineCell.xib in Resources */,
-				8B29A08518AF500A00D36BE5 /* video_player_bg@5.png in Resources */,
 				8B29A04F18AF500A00D36BE5 /* settings_hr_12.png in Resources */,
 				8B9384941856EF13009C4771 /* SlideSettingsCell.xib in Resources */,
 				A1ABF1AA187537AD0014FCB4 /* NetworkInfoToCamera_VController.xib in Resources */,
@@ -3984,6 +3980,7 @@
 				8B95077E18C9960D006D4945 /* BLE_pair.png in Resources */,
 				5EBA459719405BEA00695155 /* Step_05_ViewController.xib in Resources */,
 				5EBA459519405BEA00695155 /* Step_04_ViewController.xib in Resources */,
+				8BA5651819A1B5210001D9A8 /* photo_grey_pressed_5.png in Resources */,
 				8B29A07418AF500A00D36BE5 /* video_fullscreen_close@2x.png in Resources */,
 				8B95079B18C9960D006D4945 /* detect_camera_3@2x.png in Resources */,
 				5EBA458E19405BEA00695155 /* FWUpgradeView_land.xib in Resources */,
@@ -3997,7 +3994,6 @@
 				97DA238516425FA100EE2528 /* ToUViewController.xib in Resources */,
 				8B299F6618AF500900D36BE5 /* alert_upgrade@2x.png in Resources */,
 				8B299FC518AF500900D36BE5 /* video_grey_pressed.png in Resources */,
-				8B299FD518AF500900D36BE5 /* camera_action_video@5.png in Resources */,
 				8425087F196BB3AA009CE927 /* mbp85.png in Resources */,
 				8B299FB018AF500900D36BE5 /* camera_action_photo@2x.png in Resources */,
 				8B9507A818C9960D006D4945 /* setup_camera_account.png in Resources */,
@@ -4022,7 +4018,6 @@
 				8B9507CC18C999FA006D4945 /* default_account.png in Resources */,
 				8B29A05218AF500A00D36BE5 /* settings_hr_24@2x.png in Resources */,
 				5EBA459C19405BEA00695155 /* Step_07_ViewController.xib in Resources */,
-				8B299F7018AF500900D36BE5 /* alert_settings_pressed@5.png in Resources */,
 				8B1D545D18658CBC008857F0 /* hour-img.png in Resources */,
 				8B299FF018AF500900D36BE5 /* save.png in Resources */,
 				8B299FB518AF500900D36BE5 /* camera_action_play_pressed.png in Resources */,
@@ -4032,8 +4027,8 @@
 				8B299FA118AF500900D36BE5 /* camera_action_mic_pressed.png in Resources */,
 				8B95078718C9960D006D4945 /* cancel_btn_pressed@2x.png in Resources */,
 				8B29A00218AF500900D36BE5 /* video_action_music_pressed.png in Resources */,
-				8B299FCB18AF500900D36BE5 /* camera_action_pan_bg@5.png in Resources */,
 				8B95079218C9960D006D4945 /* blue_btn_pressed.png in Resources */,
+				8BA5651019A1B5210001D9A8 /* camera_action_photo_pressed_5.png in Resources */,
 				8B948E221921EE62004FAD96 /* camera_ble2@2x.png in Resources */,
 				8B9507AF18C9960D006D4945 /* setup_camera_b3@2x.png in Resources */,
 				5EBA458B19405BEA00695155 /* ForgotPwdViewController.xib in Resources */,
@@ -4048,19 +4043,18 @@
 				8B299F8F18AF500900D36BE5 /* camera_action_video_land.png in Resources */,
 				A1B1E7E318E9135800F076B6 /* cart@2x.png in Resources */,
 				8B299FA018AF500900D36BE5 /* camera_action_mic@2x.png in Resources */,
-				8B299FDA18AF500900D36BE5 /* photo_grey_pressed@5.png in Resources */,
 				5EBA458D19405BEA00695155 /* FWUpgradeView.xib in Resources */,
 				8B29A04A18AF500A00D36BE5 /* sensitivity@2x.png in Resources */,
-				8B299FCE18AF500900D36BE5 /* camera_action_pan_knob_shadow@5.png in Resources */,
+				8BA5651719A1B5210001D9A8 /* photo_grey_5.png in Resources */,
 				8B9507C218C9960D006D4945 /* setup_wifi_green.png in Resources */,
 				841D567B1834C1E600ACE7A7 /* streamqvga.sdp in Resources */,
 				38699127167055B8009F3E66 /* MainWindow_ipad.xib in Resources */,
-				8B299FCA18AF500900D36BE5 /* camera_action_mic_pressed@5.png in Resources */,
 				8B299FF718AF500900D36BE5 /* timeline_line@2x.png in Resources */,
 				8B95077D18C9960D006D4945 /* BLE_camera_small@2x.png in Resources */,
 				8B29A00618AF500900D36BE5 /* video_action_pan_pressed.png in Resources */,
 				8B299F5818AF500900D36BE5 /* alert_camera_pressed@2x.png in Resources */,
 				8B95078D18C9960D006D4945 /* setup_camera_c3@2x.png in Resources */,
+				8BA564EB19A1B4AB0001D9A8 /* alert_settings_5.png in Resources */,
 				8B299F7518AF500900D36BE5 /* camera_action_listening_pressed_land.png in Resources */,
 				8B299FEB18AF500900D36BE5 /* hubble_logo2.png in Resources */,
 				8B29A06518AF500A00D36BE5 /* settings_white_arrow.png in Resources */,
@@ -4069,7 +4063,6 @@
 				8B299FA518AF500900D36BE5 /* camera_action_pan_handle.png in Resources */,
 				8B29A00718AF500900D36BE5 /* video_action_pan_pressed@2x.png in Resources */,
 				5EBA458A19405BEA00695155 /* cameraMenuRouter.plist in Resources */,
-				8B299FD618AF500900D36BE5 /* camera_action_video_pressed@5.png in Resources */,
 				8B95079C18C9960D006D4945 /* detect_camera_4.png in Resources */,
 				8B299FDE18AF500900D36BE5 /* feed_date@2x.png in Resources */,
 				A18635FB18B7527000CB5CDA /* EarlierViewController_iPad.xib in Resources */,
@@ -4091,6 +4084,7 @@
 				974ACB59168055F9005AE4C6 /* ToUViewController_ipad.xib in Resources */,
 				8B299F8618AF500900D36BE5 /* camera_action_pause_pressed_land@2x.png in Resources */,
 				8B95078C18C9960D006D4945 /* setup_camera_c3.png in Resources */,
+				8BA5651419A1B5210001D9A8 /* camera_action_video_pressed_5.png in Resources */,
 				8B29A02A18AF500900D36BE5 /* Default.png in Resources */,
 				974ACB7F168079CB005AE4C6 /* MonitorEverywhere_App_ios_Apple.html in Resources */,
 				5EBA45A219405BEA00695155 /* Step_10_ViewController.xib in Resources */,
@@ -4116,8 +4110,8 @@
 				5EBA45A419405BEA00695155 /* Step_11_ViewController.xib in Resources */,
 				A16995C718F6B8790075757C /* add_camera_pressed.png in Resources */,
 				8B29A06D18AF500A00D36BE5 /* vertcal_video_close.png in Resources */,
-				8B299F6B18AF500900D36BE5 /* alert_learn@5.png in Resources */,
 				5E712DA5192B8802000858F1 /* settings_line_white@2x.png in Resources */,
+				8BA5651619A1B5210001D9A8 /* camera_action_video_stop_pressed_5.png in Resources */,
 				8B299F9218AF500900D36BE5 /* camera_action_video_pressed_land@2x.png in Resources */,
 				8B92A0A81863F6B4005923D2 /* SavedEventCell.xib in Resources */,
 				8B948E211921EE62004FAD96 /* camera_ble2.png in Resources */,
@@ -4130,11 +4124,11 @@
 				8B29A02518AF500900D36BE5 /* loader_f@2x.png in Resources */,
 				8B29A08018AF500A00D36BE5 /* video_pause@2x.png in Resources */,
 				A1AC858818912859002A8CCD /* ProximaNova-Black.otf in Resources */,
-				8B299FD418AF500900D36BE5 /* camera_action_play_pressed@5.png in Resources */,
 				A1B1E7D118E9135800F076B6 /* buy_camera_btn_pressed@2x.png in Resources */,
 				A1B1E7D718E9135800F076B6 /* camera_mbp_83@2x.png in Resources */,
 				8B299FFA18AF500900D36BE5 /* upgrade_pressed.png in Resources */,
 				8B299F8918AF500900D36BE5 /* camera_action_photo_pressed_land.png in Resources */,
+				8BA564ED19A1B4AB0001D9A8 /* alert_upgrade_5.png in Resources */,
 				8B299F9718AF500900D36BE5 /* photo_grey_land.png in Resources */,
 				8B97A3C318BF1B5F008A38E1 /* Hubble_back_text@2x.png in Resources */,
 				8B9507C818C998AD006D4945 /* detect_camera_5.png in Resources */,
@@ -4150,9 +4144,11 @@
 				8B9507AD18C9960D006D4945 /* setup_camera_b2@2x.png in Resources */,
 				8B29A03F18AF500900D36BE5 /* dont_disturb_handle.png in Resources */,
 				8B299F5D18AF500900D36BE5 /* alert_play.png in Resources */,
+				8BA5651219A1B5210001D9A8 /* camera_action_play_pressed_5.png in Resources */,
 				8B299F9F18AF500900D36BE5 /* camera_action_mic.png in Resources */,
 				8B9507C918C998AD006D4945 /* detect_camera_5@2x.png in Resources */,
 				8BE896B31845CB3B00674E01 /* bb_motion_icon.png in Resources */,
+				8BA5651E19A1B5A10001D9A8 /* video_player_bg_5.png in Resources */,
 				8B9507A318C9960D006D4945 /* green_btn_pressed@2x.png in Resources */,
 				8B91E63E18629E910041BA9D /* Snapshot.png in Resources */,
 				8B29A05018AF500A00D36BE5 /* settings_hr_12@2x.png in Resources */,
@@ -4174,16 +4170,17 @@
 				8B299FB218AF500900D36BE5 /* camera_action_photo_pressed@2x.png in Resources */,
 				8B299FF918AF500900D36BE5 /* upgrade@2x.png in Resources */,
 				8B299FE518AF500900D36BE5 /* feed_video_play@2x.png in Resources */,
-				8B299FC818AF500900D36BE5 /* camera_action_listening_pressed@5.png in Resources */,
 				8B99DB8918B872C30009612A /* iTunesArtwork@2x in Resources */,
-				8B299FD818AF500900D36BE5 /* camera_action_video_stop_pressed@5.png in Resources */,
 				8B9507B618C9960D006D4945 /* setup_camera_plug.png in Resources */,
 				8B9507BE18C9960D006D4945 /* setup_progress_blue.png in Resources */,
 				8B29A06F18AF500A00D36BE5 /* vertcal_video_close_pressed.png in Resources */,
 				A1B1E7E918E9135800F076B6 /* offline@2x.png in Resources */,
+				8BA5650919A1B5210001D9A8 /* camera_action_pan_bg_5.png in Resources */,
 				84250880196BB3AA009CE927 /* mbp85@2x.png in Resources */,
+				8BA564EA19A1B4AB0001D9A8 /* alert_play_pressed_5.png in Resources */,
 				8B29A00318AF500900D36BE5 /* video_action_music_pressed@2x.png in Resources */,
 				5E769B0A19345C1E008D9CA7 /* Logo_220@2x.png in Resources */,
+				8BA5650D19A1B5210001D9A8 /* camera_action_pause_5.png in Resources */,
 				8B29A06118AF500A00D36BE5 /* settings_temp_switch_bg.png in Resources */,
 				8B9507B018C9960D006D4945 /* setup_camera_led1.png in Resources */,
 				8B299F7C18AF500900D36BE5 /* camera_action_pan_handle_land@2x.png in Resources */,
@@ -4192,7 +4189,6 @@
 				5EBA459F19405BEA00695155 /* Step_08_ViewController_ipad.xib in Resources */,
 				5EBA458C19405BEA00695155 /* ForgotPwdViewController_ipad.xib in Resources */,
 				8B29A08618AF500A00D36BE5 /* video_progress_bg.png in Resources */,
-				8B299F6A18AF500900D36BE5 /* alert_camera_pressed@5.png in Resources */,
 				5EBA45A619405BEA00695155 /* Step_12_ViewController.xib in Resources */,
 				8B92D45618865F0400120BCE /* SchedulingViewController.xib in Resources */,
 				A1B1E7DC18E9135800F076B6 /* camera_settings.png in Resources */,
@@ -4236,6 +4232,7 @@
 				A1B1E7D318E9135800F076B6 /* buy_camera_btn@2x.png in Resources */,
 				A15431091818DEB800337EFE /* streamvga.sdp in Resources */,
 				8B29A04918AF500A00D36BE5 /* sensitivity.png in Resources */,
+				8BA5651A19A1B5210001D9A8 /* video_grey_pressed_5.png in Resources */,
 				8B29A04D18AF500A00D36BE5 /* settings_circle_white.png in Resources */,
 				8B29A08418AF500A00D36BE5 /* video_player_bg@2x.png in Resources */,
 				84FD1DCF1832399E00238089 /* stream720p_10_926_alaw.sdp in Resources */,
@@ -4243,21 +4240,24 @@
 				8B299F8D18AF500900D36BE5 /* camera_action_play_pressed_land.png in Resources */,
 				8B29A06A18AF500A00D36BE5 /* temp_plus@2x.png in Resources */,
 				A1B1E7C718E9135800F076B6 /* add_camera_btn@2x.png in Resources */,
-				8B299F7118AF500900D36BE5 /* alert_upgrade@5.png in Resources */,
 				8B95078418C9960D006D4945 /* cancel_btn.png in Resources */,
 				A1B1E7D518E9135800F076B6 /* camera_focus_66@2x.png in Resources */,
 				5EBA459219405BEA00695155 /* Step_02_ViewController_ipad.xib in Resources */,
 				8B9507AC18C9960D006D4945 /* setup_camera_b2.png in Resources */,
 				8B9507C318C9960D006D4945 /* setup_wifi_green@2x.png in Resources */,
 				5EBA459619405BEA00695155 /* Step_04_ViewController_ipad.xib in Resources */,
+				8BA564E619A1B4AB0001D9A8 /* alert_camera_pressed_5.png in Resources */,
+				8BA5650B19A1B5210001D9A8 /* camera_action_pan_knob_5.png in Resources */,
 				8B299FF118AF500900D36BE5 /* save@2x.png in Resources */,
 				A1B1E7E218E9135800F076B6 /* cart.png in Resources */,
 				8B299F9D18AF500900D36BE5 /* camera_action_listening_pressed.png in Resources */,
+				8BA564E519A1B4AB0001D9A8 /* alert_camera_5.png in Resources */,
 				5EBA459A19405BEA00695155 /* Step_06_ViewController_ipad.xib in Resources */,
 				8B299FFE18AF500900D36BE5 /* video_action_mic_pressed.png in Resources */,
 				8B29A00518AF500900D36BE5 /* video_action_pan@2x.png in Resources */,
 				8B948E241921EE62004FAD96 /* camera_ble3@2x.png in Resources */,
 				8B299F5618AF500900D36BE5 /* alert_camera@2x.png in Resources */,
+				8BA5651319A1B5210001D9A8 /* camera_action_video_5.png in Resources */,
 				8B29A05A18AF500A00D36BE5 /* settings_switch_on@2x.png in Resources */,
 				8B92A0A21863F655005923D2 /* SavedEventViewController.xib in Resources */,
 				979BC69B17D9B97700B3B373 /* PlaybackViewController.xib in Resources */,
@@ -4275,7 +4275,6 @@
 				A1B1E7D218E9135800F076B6 /* buy_camera_btn.png in Resources */,
 				8B299FFB18AF500900D36BE5 /* upgrade_pressed@2x.png in Resources */,
 				8B29A07F18AF500A00D36BE5 /* video_pause.png in Resources */,
-				8B299FCD18AF500900D36BE5 /* camera_action_pan_knob@5.png in Resources */,
 				A1B1E7E118E9135800F076B6 /* cart_pressed@2x.png in Resources */,
 				8B29A05C18AF500A00D36BE5 /* settings_temp_bg@2x.png in Resources */,
 				8B29A06218AF500A00D36BE5 /* settings_temp_switch_bg@2x.png in Resources */,
@@ -4295,8 +4294,8 @@
 				8B29A02718AF500900D36BE5 /* loader_iphone@2x.png in Resources */,
 				8B29A07818AF500A00D36BE5 /* video_overlay_bg@2x.png in Resources */,
 				8B68F5D118066CE500661527 /* PlaybackViewController_ipad.xib in Resources */,
+				8BA5651119A1B5210001D9A8 /* camera_action_play_5.png in Resources */,
 				8B93848A1856E97D009C4771 /* CameraSettingsCell.xib in Resources */,
-				8B299FDC18AF500900D36BE5 /* video_grey_pressed@5.png in Resources */,
 				A19778FB181E6CAB007C3CA7 /* motion_detection_on.png in Resources */,
 				8B95078318C9960D006D4945 /* camera_2@2x.png in Resources */,
 				8B9507A118C9960D006D4945 /* green_btn@2x.png in Resources */,

@@ -24,7 +24,7 @@
     }
     else
     {
-        return [UIImage imageNamed:@"camera_action_pan_bg@5"];
+        return [UIImage imageNamed:@"camera_action_pan_bg_5"];
     }
 }
 
@@ -41,7 +41,7 @@
     }
     else
     {
-        return [UIImage imageNamed:@"camera_action_mic@5"];
+        return [UIImage imageNamed:@"camera_action_mic_5"];
     }
 }
 
@@ -58,7 +58,7 @@
     }
     else
     {
-        return [UIImage imageNamed:@"camera_action_mic_pressed@5.png"];
+        return [UIImage imageNamed:@"camera_action_mic_pressed_5.png"];
     }
 }
 
@@ -74,7 +74,7 @@
     }
     else
     {
-        return [UIImage imageNamed:@"video_grey@5.png"];
+        return [UIImage imageNamed:@"video_grey_5.png"];
     }
 }
 + (UIImage *)imageVideoGreyPressed
@@ -89,7 +89,7 @@
     }
     else
     {
-        return [UIImage imageNamed:@"video_grey_pressed@5.png"];
+        return [UIImage imageNamed:@"video_grey_pressed_5.png"];
     }
 }
 + (UIImage *)imagePhotoGrey
@@ -105,7 +105,7 @@
     }
     else
     {
-        return [UIImage imageNamed:@"photo_grey@5.png"];
+        return [UIImage imageNamed:@"photo_grey_5.png"];
     }
 }
 + (UIImage *)imagePhotoGreyPressed
@@ -121,7 +121,7 @@
     }
     else
     {
-        return [UIImage imageNamed:@"photo_grey_pressed@5.png"];
+        return [UIImage imageNamed:@"photo_grey_pressed_5.png"];
     }
 }
 
@@ -138,7 +138,7 @@
     }
     else
     {
-        return [UIImage imageNamed:@"camera_action_video@5.png"];
+        return [UIImage imageNamed:@"camera_action_video_5.png"];
     }
 }
 + (UIImage *)imageRecordVideoPressed
@@ -153,7 +153,7 @@
     }
     else
     {
-        return [UIImage imageNamed:@"camera_action_video_pressed@5.png"];
+        return [UIImage imageNamed:@"camera_action_video_pressed_5.png"];
     }
 }
 
@@ -171,7 +171,7 @@
     }
     else
     {
-        return [UIImage imageNamed:@"camera_action_photo@5.png"];
+        return [UIImage imageNamed:@"camera_action_photo_5.png"];
     }
 }
 + (UIImage *)imageTakePhotoPressed
@@ -187,7 +187,7 @@
     }
     else
     {
-        return [UIImage imageNamed:@"camera_action_photo_pressed@5.png"];
+        return [UIImage imageNamed:@"camera_action_photo_pressed_5.png"];
     }
 }
 + (UIImage *)imageVideoStop
@@ -202,7 +202,7 @@
     }
     else
     {
-        return [UIImage imageNamed:@"camera_action_video_stop@5.png"];
+        return [UIImage imageNamed:@"camera_action_video_stop_5.png"];
     }
 }
 
@@ -218,7 +218,7 @@
     }
     else
     {
-        return [UIImage imageNamed:@"camera_action_video_stop_pressed@5.png"];
+        return [UIImage imageNamed:@"camera_action_video_stop_pressed_5.png"];
     }
 }
 
@@ -235,7 +235,7 @@
     }
     else
     {
-        return [UIImage imageNamed:@"camera_action_play@5"];
+        return [UIImage imageNamed:@"camera_action_play_5"];
     }
 }
 
@@ -251,7 +251,7 @@
     }
     else
     {
-        return [UIImage imageNamed:@"camera_action_play_pressed@5"];
+        return [UIImage imageNamed:@"camera_action_play_pressed_5"];
     }
 }
 
@@ -267,7 +267,7 @@
     }
     else
     {
-        return [UIImage imageNamed:@"camera_action_pause@5"];
+        return [UIImage imageNamed:@"camera_action_pause_5"];
     }
 }
 
@@ -283,7 +283,7 @@
     }
     else
     {
-        return [UIImage imageNamed:@"camera_action_pause_pressed@5"];
+        return [UIImage imageNamed:@"camera_action_pause_pressed_5"];
     }
 }
 

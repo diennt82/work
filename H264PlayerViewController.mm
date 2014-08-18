@@ -992,7 +992,7 @@ double _ticks = 0;
                 }
                 else
                 {
-                    self.imgViewDrectionPad.image = [UIImage imageNamed:@"camera_action_pan_bg@5.png"];
+                    self.imgViewDrectionPad.image = [UIImage imageNamed:@"camera_action_pan_bg_5.png"];
                 }
                 
                 if (![_cameraModel isEqualToString:CP_MODEL_0073])
@@ -5678,7 +5678,7 @@ double _ticks = 0;
         }
         else
         {
-            imageHoldedToTalk = [UIImage imageNamed:@"camera_action_mic_pressed@5.png"];
+            imageHoldedToTalk = [UIImage imageNamed:@"camera_action_mic_pressed_5.png"];
         }
         
         [self.ib_buttonTouchToTalk setBackgroundImage:imageHoldedToTalk forState:UIControlEventTouchDown];
@@ -5741,7 +5741,7 @@ double _ticks = 0;
         }
         else
         {
-            imageNormal = [UIImage imageNamed:@"camera_action_mic@5.png"];
+            imageNormal = [UIImage imageNamed:@"camera_action_mic_5.png"];
         }
         
         [self.ib_buttonTouchToTalk setBackgroundImage:imageNormal forState:UIControlEventTouchDown];
