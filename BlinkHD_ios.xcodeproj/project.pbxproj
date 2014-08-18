@@ -5856,7 +5856,7 @@
 			};
 			name = Debug;
 		};
-		1D6058950D05DD3E006BFB54 /* Release */ = {
+		1D6058950D05DD3E006BFB54 /* Adhoc */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = CA554EBAF3174A5896D91F4D /* Pods.xcconfig */;
 			buildSettings = {
@@ -5905,13 +5905,13 @@
 					"-lz",
 				);
 				PRODUCT_NAME = HubbleHome;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "e4086421-8db4-4dcd-ae14-ac795cd7db49";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../iphone-frameworks/pjsip/arm/include/ $(SRCROOT)/../iphone-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../iphone-frameworks/pjsip/arm/include/pjnath/";
 				VALIDATE_PRODUCT = YES;
 				VALID_ARCHS = armv7;
 			};
-			name = Release;
+			name = Adhoc;
 		};
 		268E8BD9199E6F4E00DBF8B2 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -5978,69 +5978,7 @@
 			};
 			name = Debug;
 		};
-		268E8BDA199E6F4E00DBF8B2 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = CA554EBAF3174A5896D91F4D /* Pods.xcconfig */;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				COPY_PHASE_STRIP = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(SRCROOT)",
-					"$(SRCROOT)/../iphone-frameworks",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = BlinkHD_ios_Prefix.pch;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					VTECH,
-					"COCOAPODS=1",
-				);
-				GCC_THUMB_SUPPORT = NO;
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../iphone-frameworks/ffmpeg/include/**\"",
-					"\"$(SRCROOT)/../iphone-frameworks/openssl\"/**",
-					"\"$(SRCROOT)/../iphone-frameworks/udt\"",
-					"\"$(SRCROOT)/../iphone-frameworks/GoogleAnalyticsLibrary\"",
-				);
-				INFOPLIST_FILE = "VTech-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(SRCROOT)",
-					"$(SRCROOT)/../iphone-frameworks",
-					"$(SRCROOT)/../iphone-frameworks/H264Player.lib",
-					"$(SRCROOT)/../iphone-frameworks/ffmpeg/lib",
-					"$(SRCROOT)/../iphone-frameworks/udt",
-					"$(SRCROOT)/../iphone-frameworks/pjsip/dist-uarch/lib",
-					"$(SRCROOT)/../iphone-frameworks/GoogleAnalyticsLibrary",
-				);
-				ONLY_ACTIVE_ARCH = NO;
-				OTHER_CFLAGS = (
-					"$(inherited)",
-					"-DNS_BLOCK_ASSERTIONS=1",
-					"-DPJ_IS_BIG_ENDIAN=0",
-					"-DPJ_IS_LITTLE_ENDIAN=1",
-					"-DPJ_BUILT_WITH_XCODE=1",
-				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-lz",
-				);
-				PRODUCT_NAME = VTechConnect;
-				PROVISIONING_PROFILE = "";
-				SDKROOT = iphoneos;
-				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../iphone-frameworks/pjsip/arm/include/ $(SRCROOT)/../iphone-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../iphone-frameworks/pjsip/arm/include/pjnath/";
-				VALIDATE_PRODUCT = YES;
-				VALID_ARCHS = armv7;
-			};
-			name = Release;
-		};
-		268E8BDB199E6F4E00DBF8B2 /* Adhoc */ = {
+		268E8BDA199E6F4E00DBF8B2 /* Adhoc */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = CA554EBAF3174A5896D91F4D /* Pods.xcconfig */;
 			buildSettings = {
@@ -6102,7 +6040,7 @@
 			};
 			name = Adhoc;
 		};
-		9770CB6914302E3D009E69EF /* Adhoc */ = {
+		268E8BEE19A2B50300DBF8B2 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
@@ -6124,9 +6062,9 @@
 				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external_include\"/**";
 				VALID_ARCHS = "arm64 armv7 armv7s";
 			};
-			name = Adhoc;
+			name = Release;
 		};
-		9770CB6A14302E3D009E69EF /* Adhoc */ = {
+		268E8BEF19A2B50300DBF8B2 /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = CA554EBAF3174A5896D91F4D /* Pods.xcconfig */;
 			buildSettings = {
@@ -6175,13 +6113,75 @@
 					"-lz",
 				);
 				PRODUCT_NAME = HubbleHome;
-				PROVISIONING_PROFILE = "e4086421-8db4-4dcd-ae14-ac795cd7db49";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../iphone-frameworks/pjsip/arm/include/ $(SRCROOT)/../iphone-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../iphone-frameworks/pjsip/arm/include/pjnath/";
 				VALIDATE_PRODUCT = YES;
 				VALID_ARCHS = armv7;
 			};
-			name = Adhoc;
+			name = Release;
+		};
+		268E8BF019A2B50300DBF8B2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = CA554EBAF3174A5896D91F4D /* Pods.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)",
+					"$(SRCROOT)/../iphone-frameworks",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = BlinkHD_ios_Prefix.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					VTECH,
+					"COCOAPODS=1",
+				);
+				GCC_THUMB_SUPPORT = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../iphone-frameworks/ffmpeg/include/**\"",
+					"\"$(SRCROOT)/../iphone-frameworks/openssl\"/**",
+					"\"$(SRCROOT)/../iphone-frameworks/udt\"",
+					"\"$(SRCROOT)/../iphone-frameworks/GoogleAnalyticsLibrary\"",
+				);
+				INFOPLIST_FILE = "VTech-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)",
+					"$(SRCROOT)/../iphone-frameworks",
+					"$(SRCROOT)/../iphone-frameworks/H264Player.lib",
+					"$(SRCROOT)/../iphone-frameworks/ffmpeg/lib",
+					"$(SRCROOT)/../iphone-frameworks/udt",
+					"$(SRCROOT)/../iphone-frameworks/pjsip/dist-uarch/lib",
+					"$(SRCROOT)/../iphone-frameworks/GoogleAnalyticsLibrary",
+				);
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-DNS_BLOCK_ASSERTIONS=1",
+					"-DPJ_IS_BIG_ENDIAN=0",
+					"-DPJ_IS_LITTLE_ENDIAN=1",
+					"-DPJ_BUILT_WITH_XCODE=1",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-lz",
+				);
+				PRODUCT_NAME = VTechConnect;
+				PROVISIONING_PROFILE = "";
+				SDKROOT = iphoneos;
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../iphone-frameworks/pjsip/arm/include/ $(SRCROOT)/../iphone-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../iphone-frameworks/pjsip/arm/include/pjnath/";
+				VALIDATE_PRODUCT = YES;
+				VALID_ARCHS = armv7;
+			};
+			name = Release;
 		};
 		C01FCF4F08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -6206,7 +6206,7 @@
 			};
 			name = Debug;
 		};
-		C01FCF5008A954540054247B /* Release */ = {
+		C01FCF5008A954540054247B /* Adhoc */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
@@ -6228,7 +6228,7 @@
 				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external_include\"/**";
 				VALID_ARCHS = "arm64 armv7 armv7s";
 			};
-			name = Release;
+			name = Adhoc;
 		};
 /* End XCBuildConfiguration section */
 
@@ -6237,8 +6237,8 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1D6058940D05DD3E006BFB54 /* Debug */,
-				1D6058950D05DD3E006BFB54 /* Release */,
-				9770CB6A14302E3D009E69EF /* Adhoc */,
+				1D6058950D05DD3E006BFB54 /* Adhoc */,
+				268E8BEF19A2B50300DBF8B2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -6247,8 +6247,8 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				268E8BD9199E6F4E00DBF8B2 /* Debug */,
-				268E8BDA199E6F4E00DBF8B2 /* Release */,
-				268E8BDB199E6F4E00DBF8B2 /* Adhoc */,
+				268E8BDA199E6F4E00DBF8B2 /* Adhoc */,
+				268E8BF019A2B50300DBF8B2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -6257,8 +6257,8 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C01FCF4F08A954540054247B /* Debug */,
-				C01FCF5008A954540054247B /* Release */,
-				9770CB6914302E3D009E69EF /* Adhoc */,
+				C01FCF5008A954540054247B /* Adhoc */,
+				268E8BEE19A2B50300DBF8B2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
