@@ -248,6 +248,7 @@
 @property (retain, nonatomic) IBOutlet UIActivityIndicatorView *activityStopStreamingProgress;
 @property (retain, nonatomic) IBOutlet UIImageView *customIndicator;
 @property (retain, nonatomic) IBOutlet UILabel *ib_lbCameraNotAccessible;
+@property (assign, nonatomic) IBOutlet UIButton *ib_openHelpButton;
 @property (retain, nonatomic) IBOutlet UILabel *ib_lbCameraName;
 @property (retain, nonatomic) IBOutlet UIButton *ib_btShowDebugInfo;
 @property (nonatomic) BOOL h264StreamerIsInStopped;

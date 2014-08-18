@@ -20,6 +20,7 @@
                 <outlet property="ib_labelTouchToTalk" destination="Iqs-XW-DXM" id="Hnn-2v-8sl"/>
                 <outlet property="ib_lbCameraName" destination="wjU-YW-RNl" id="h2c-WY-u0R"/>
                 <outlet property="ib_lbCameraNotAccessible" destination="bDd-Pe-fXC" id="seQ-dp-jQP"/>
+                <outlet property="ib_openHelpButton" destination="BSq-lz-u1g" id="UZs-Uk-zNZ"/>
                 <outlet property="ib_processRecordOrTakePicture" destination="GnV-0e-uit" id="uwE-Mx-ad9"/>
                 <outlet property="ib_switchDegree" destination="u8v-Jo-Lal" id="tHH-9z-Mmm"/>
                 <outlet property="ib_temperature" destination="YH6-sq-ZAV" id="prx-2O-QfZ"/>
@@ -60,6 +61,17 @@
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <nil key="highlightedColor"/>
                         </label>
+                        <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="BSq-lz-u1g">
+                            <rect key="frame" x="64" y="140" width="440" height="40"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            <state key="normal">
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="handleOpenHelpButton:" destination="-1" eventType="touchUpInside" id="N86-Gi-UlZ"/>
+                            </connections>
+                        </button>
                         <view hidden="YES" contentMode="scaleToFill" id="ug7-nN-raT">
                             <rect key="frame" x="380" y="0.0" width="97" height="100"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>

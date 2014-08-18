@@ -21,6 +21,7 @@
                 <outlet property="ib_labelTouchToTalk" destination="dN9-DT-qb0" id="Ul3-CN-vlp"/>
                 <outlet property="ib_lbCameraName" destination="l1s-KV-aCs" id="Ltq-we-Jo2"/>
                 <outlet property="ib_lbCameraNotAccessible" destination="LFJ-X3-0i4" id="0Z3-ia-EqH"/>
+                <outlet property="ib_openHelpButton" destination="Tqu-X4-oPZ" id="3p9-ca-waj"/>
                 <outlet property="ib_processRecordOrTakePicture" destination="N11-5t-78m" id="ZYQ-Ed-P0M"/>
                 <outlet property="ib_switchDegree" destination="fwE-e7-ABl" id="Dge-TX-Gtb"/>
                 <outlet property="ib_temperature" destination="IAv-zf-rhC" id="VTr-kK-kTx"/>
@@ -51,11 +52,22 @@
                     <subviews>
                         <label hidden="YES" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Camera is not accessible" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="LFJ-X3-0i4">
                             <rect key="frame" x="20" y="368" width="984" height="32"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <nil key="highlightedColor"/>
                         </label>
+                        <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Tqu-X4-oPZ">
+                            <rect key="frame" x="20" y="368" width="984" height="32"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            <state key="normal">
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="handleOpenHelpButton:" destination="-1" eventType="touchUpInside" id="Kdi-eP-COu"/>
+                            </connections>
+                        </button>
                         <view hidden="YES" contentMode="scaleToFill" id="q5L-bd-0P8">
                             <rect key="frame" x="843" y="20" width="161" height="109"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>

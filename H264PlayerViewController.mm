@@ -16,6 +16,7 @@
 
 #import <SystemConfiguration/CaptiveNetwork.h>
 #import <objc/message.h>
+#import "HelpWindowPopup.h"
 
 #define TEMP_NULL @"NIL"
 
@@ -717,6 +718,48 @@ double _ticks = 0;
     [alertViewSendingLog release];
 }
 
+- (IBAction)handleOpenHelpButton:(id)sender
+{
+    NSMutableString *html = [[NSMutableString alloc] init];
+    [html appendString:@"<html>"];
+    [html appendString:@"   <header>"];
+    [html appendString:@"       <style>"];
+    [html appendString:@"           ul.first_deep {padding-left:10px}"];
+    [html appendString:@"           ul.first_deep li {list-style-type:square;}"];
+    [html appendString:@"           ul.second_deep {padding-left:10px}"];
+    [html appendString:@"           ul.second_deep li {list-style-type:circle;}"];
+    [html appendString:@"       </style>"];
+    [html appendString:@"   </header>"];
+    [html appendString:@"   <body>"];
+    [html appendString:@"       <div style='margin-left:5px;'>"];
+    [html appendString:@"       <ul class=\"first_deep\">"];
+    [html appendString:@"           <li>Q. Why can’t I access my camera? Why do I keep seeing the warning message \"Low bandwidth detected\"?"];
+    [html appendString:@"           </li>"];
+    [html appendString:@"           <li>A. This could be due to one of the following reasons:"];
+    [html appendString:@"               <ul class=\"second_deep\">"];
+    [html appendString:@"                   <li>The upload bandwidth of your broadband network is too low</li>"];
+    [html appendString:@"                   <li>The minimum upload bandwidth required is about 600kbps</li>"];
+    [html appendString:@"                   <li>Please check your upload bandwidth with your Internet Service Provider or use an online bandwidth speed test tool, such as http://www.speedtest.net</li>"];
+    [html appendString:@"                   <li>Your camera may be too far away from your router. Please try reducing the distance between the router and camera</li>"];
+    [html appendString:@"                   <li>If you are using a mobile network (3G), the bandwidth may be limited</li>"];
+    [html appendString:@"                   <li>If you are running other applications (eg. games), they could be consuming a lot of bandwidth. This can impact on the performance of the Hubble app. Please try closing any unnecessary applications before using the Hubble app</li>"];
+    [html appendString:@"               </ul>"];
+    [html appendString:@"           </li>"];
+    [html appendString:@"           <br/>"];
+    [html appendString:@"           <li>Q. Where can I find my recorded videos and snapshots?"];
+    [html appendString:@"           </li>"];
+    [html appendString:@"           <li>A. Your recorded video footage and snapshots are all stored inside your Photos application. Please go to ‘Photos' application to view them"];
+    [html appendString:@"           </li>"];
+    [html appendString:@"       </ul>"];
+    [html appendString:@"       </div>"];
+    [html appendString:@"   </body>"];
+    [html appendString:@"</html>"];
+    HelpWindowPopup *popup = [[HelpWindowPopup alloc] initWithTitle:@"Video Screen Help"
+                                                      andHtmlString:html];
+    [popup show];
+    [popup release];
+    [html release];
+}
 #pragma mark - Delegate Stream callback
 
 - (void)forceRestartStream:(NSTimer *)timer
@@ -3268,7 +3311,7 @@ double _ticks = 0;
                                        _isShowTextCameraIsNotAccesible = YES;
                                        
                                        dispatch_async(dispatch_get_main_queue(), ^{
-                                           [self.ib_lbCameraNotAccessible setHidden:NO];
+                                           [self messageNotAccesible:NO];
                                        });
                                        
                                        [self symmetric_check_result:TRUE];
@@ -3289,7 +3332,7 @@ double _ticks = 0;
                                    _isShowTextCameraIsNotAccesible = YES;
 #if 1
                                    dispatch_async(dispatch_get_main_queue(), ^{
-                                       [self.ib_lbCameraNotAccessible setHidden:NO];
+                                       [self messageNotAccesible:NO];
                                        [self performSelector:@selector(setupCamera) withObject:nil afterDelay:10];
                                    });
 #else
@@ -4326,6 +4369,7 @@ double _ticks = 0;
     rect.origin.x = (self.scrollView.frame.size.width - rect.size.width) / 2;
     rect.origin.y = (self.scrollView.frame.size.height - rect.size.height) / 2 + 55;
     self.ib_lbCameraNotAccessible.frame = rect;
+    self.ib_openHelpButton.frame = rect;
 }
 
 -(void) checkOrientation
@@ -6944,10 +6988,11 @@ double _ticks = 0;
         {
             [self.ib_lbCameraNotAccessible setHidden:NO];
             [self showTimelineView];
+            [self messageNotAccesible:NO];
         }
         else
         {
-            [self.ib_lbCameraNotAccessible setHidden:YES];
+            [self messageNotAccesible:YES];
         }
     }
     else
@@ -6956,9 +7001,15 @@ double _ticks = 0;
         _isShowTextCameraIsNotAccesible = NO;
         [self.customIndicator stopAnimating];
         [self.customIndicator setHidden:YES];
-        [self.ib_lbCameraNotAccessible setHidden:YES];
+        [self messageNotAccesible:YES];
         [self.ib_lbCameraName setText:self.selectedChannel.profile.name];
     }
+}
+
+- (void)messageNotAccesible:(BOOL)hidden
+{
+    [self.ib_lbCameraNotAccessible setHidden:hidden];
+    [self.ib_openHelpButton setHidden:hidden];
 }
 
 #pragma mark - Hubble alert view & delegate
@@ -7259,7 +7310,7 @@ double _ticks = 0;
             _isShowTextCameraIsNotAccesible = YES;
             
             dispatch_async(dispatch_get_main_queue(), ^{
-                [self.ib_lbCameraNotAccessible setHidden:NO];
+                [self messageNotAccesible:NO];
             });
             
             [self symmetric_check_result:TRUE];
@@ -7284,7 +7335,7 @@ double _ticks = 0;
         _isShowTextCameraIsNotAccesible = YES;
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self.ib_lbCameraNotAccessible setHidden:NO];
+            [self messageNotAccesible:NO];
         });
         
         [self symmetric_check_result:TRUE];
@@ -7306,7 +7357,7 @@ double _ticks = 0;
 //            [self showTimelineView];
             self.messageStreamingState = NSLocalizedStringWithDefaultValue(@"camera_is_not_accessible", nil, [NSBundle mainBundle], @"Camera is not accessible", nil);
             _isShowTextCameraIsNotAccesible = YES;
-            [self.ib_lbCameraNotAccessible setHidden:NO];
+            [self messageNotAccesible:NO];
             [self performSelector:@selector(setupCamera) withObject:nil afterDelay:10];
         }
         else
