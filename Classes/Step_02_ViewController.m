@@ -29,21 +29,17 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.title = LocStr(@"Before you start");
 
     [self removeNavigationBarBottomLine];
     self.navigationItem.hidesBackButton = TRUE;
     
-    UIImage *hubbleLogo = [UIImage imageNamed:@"logo"];
-    UIBarButtonItem *barBtnHubble = [[UIBarButtonItem alloc] initWithImage:hubbleLogo
-                                                                   style:UIBarButtonItemStylePlain
-                                                                  target:self
-                                                                  action:@selector(hubbleItemAction:)];
-    [barBtnHubble setTintColor:[UIColor colorWithPatternImage:hubbleLogo]];
+    UIBarButtonItem *exitButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
+                                                                                target:self action:@selector(exitAddCameraAction)];
+    self.navigationItem.leftBarButtonItem = exitButton;
     
-    self.navigationItem.leftBarButtonItem = barBtnHubble;
-    
-    [self.btnContinue setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
-    [self.btnContinue setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
+    [_btnContinue setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
+    [_btnContinue setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
     
     UIImageView *imageView = (UIImageView *)[self.view viewWithTag:585];
     imageView.animationImages = @[[UIImage imageNamed:@"setup_camera_led1"],
@@ -53,8 +49,8 @@
     
     [imageView startAnimating];
     
-    if (_cameraType == BLUETOOTH_SETUP) {
-        NSLog(@"Step_02_VC - viewDidLoad: - isOnBLE: %d", BLEConnectionManager.instanceBLE.isOnBLE);
+    if ( _cameraType == BLUETOOTH_SETUP ) {
+        DLog(@"Step_02_VC - viewDidLoad: - isOnBLE: %d", BLEConnectionManager.instanceBLE.isOnBLE);
     }
 }
 
@@ -79,7 +75,7 @@
 
 - (void)presentModallyOn:(UIViewController *)parent
 {
-    //setup nav controller
+    // Setup nav controller
     MBPNavController *navController = [[MBPNavController alloc] initWithRootViewController:self];
     
     // Create a navigation controller with us as its root.
@@ -91,7 +87,7 @@
 
 #pragma mark - Actions
 
-- (void)hubbleItemAction:(id)sender
+- (void)exitAddCameraAction
 {
     [self dismissViewControllerAnimated:YES completion:^{
         [_delegate sendStatus:AFTER_DEL_RELOGIN];
