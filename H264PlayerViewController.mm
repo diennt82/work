@@ -298,7 +298,6 @@
     [self setSendLogButton:nil];
 #endif
     
-    [self checkOrientation];
     [self becomeActive];
 }
 
@@ -314,6 +313,7 @@
                                                      withLabel:nil
                                                      withValue:nil];
     [self startStreamPlayback];
+    [self checkOrientation];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -445,13 +445,28 @@
         // update position text recording
         CGPoint localPoint = _ib_viewRecordTTT.frame.origin;
         NSString *recordingString = _ib_labelRecordVideo.text;
-        CGSize recordingSize = [recordingString sizeWithAttributes:@{NSFontAttributeName: font}];
+        
+        CGSize recordingSize;
+        if ( isiOS7AndAbove ) {
+            recordingSize = [recordingString sizeWithAttributes:@{NSFontAttributeName: font}];
+        }
+        else {
+            recordingSize = [recordingString sizeWithFont:font];
+        }
         
         float alignY = (SCREEN_HEIGHT - localPoint.y) - marginBottomText + _ib_labelRecordVideo.bounds.size.height/2 - 3*recordingSize.height/2;
         
         // update position text Touch to Talk
         NSString *holdTTString = _ib_labelTouchToTalk.text;
-        CGSize holdTTSize = [holdTTString sizeWithAttributes:@{NSFontAttributeName:font}];
+        
+        CGSize holdTTSize;
+        if ( isiOS7AndAbove ) {
+            holdTTSize = [holdTTString sizeWithAttributes:@{NSFontAttributeName:font}];
+        }
+        else {
+            holdTTSize = [holdTTString sizeWithFont:font];
+        }
+        
         CGSize labelTouchToTalkSize = _ib_labelTouchToTalk.bounds.size;
         
         float alignY1 = (SCREEN_HEIGHT - localPoint.y) - marginBottomText + labelTouchToTalkSize.height/2 - 3*holdTTSize.height/2;
@@ -1278,7 +1293,7 @@
 - (void)hideTimelineView
 {
     if ( _timelineVC ) {
-        self.timelineVC.view.hidden = YES;
+        _timelineVC.view.hidden = YES;
     }
     _timerHideMenu = nil;
     
@@ -1290,8 +1305,8 @@
     _selectedItemMenu = -1;
     
     if ( _timelineVC ) {
-        self.timelineVC.view.hidden = NO;
-        [self.view bringSubviewToFront:self.timelineVC.view];
+        _timelineVC.view.hidden = NO;
+        [self.view bringSubviewToFront:_timelineVC.view];
     }
 }
 
@@ -2391,8 +2406,14 @@
         [_ib_temperature setShadowOffset:CGSizeMake(2, 2)];
         [_ib_temperature setText:stringTemperature];
         
-        stringBoundingBox = [stringTemperature sizeWithAttributes:@{NSFontAttributeName: temperatureFont}];
-        degreeCelBoundingBox = [degreeCel sizeWithAttributes:@{NSFontAttributeName: degreeFont}];
+        if ( isiOS7AndAbove ) {
+            stringBoundingBox = [stringTemperature sizeWithAttributes:@{NSFontAttributeName:temperatureFont}];
+            degreeCelBoundingBox = [degreeCel sizeWithAttributes:@{NSFontAttributeName:degreeFont}];
+        }
+        else {
+            stringBoundingBox = [stringTemperature sizeWithFont:temperatureFont];
+            degreeCelBoundingBox = [degreeCel sizeWithFont:degreeFont];
+        }
         
         xPosTemperature = SCREEN_HEIGHT - _ib_temperature.bounds.size.width - 40 + (_ib_temperature.bounds.size.width - stringBoundingBox.width)/2;
         yPosTemperature = SCREEN_WIDTH - deltaWidth - stringBoundingBox.height;
@@ -2433,8 +2454,16 @@
         // need update text for C or F
         [_ib_temperature setText:stringTemperature];
 
-        CGSize stringBoundingBox = [stringTemperature sizeWithAttributes:@{NSFontAttributeName: temperatureFont}];
-        CGSize degreeCelBoundingBox = [degreeCel sizeWithAttributes:@{NSFontAttributeName: degreeFont}];
+        CGSize stringBoundingBox;
+        CGSize degreeCelBoundingBox;
+        if ( isiOS7AndAbove ) {
+            stringBoundingBox = [stringTemperature sizeWithAttributes:@{NSFontAttributeName:temperatureFont}];
+            degreeCelBoundingBox = [degreeCel sizeWithAttributes:@{NSFontAttributeName:degreeFont}];
+        }
+        else {
+            stringBoundingBox = [stringTemperature sizeWithFont:temperatureFont];
+            degreeCelBoundingBox = [degreeCel sizeWithFont:degreeFont];
+        }
         
         CGFloat widthString = stringBoundingBox.width;
         CGFloat heightString = stringBoundingBox.height;
@@ -3477,7 +3506,7 @@
 	if (UIInterfaceOrientationIsLandscape(orientation)) {
         _isLandScapeMode = YES;
 
-        //load new nib for landscape iPad
+        // Load new nib for landscape iPad
         [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController_land" owner:self options:nil];
         self.melodyViewController = [[MelodyViewController alloc] initWithNibName:@"MelodyViewController_land" bundle:nil];
         
@@ -3500,8 +3529,7 @@
         self.melodyViewController.selectedChannel = self.selectedChannel;
         self.melodyViewController.melodyVcDelegate = self;
         
-        //landscape mode
-        //hide navigation bar
+        // Landscape mode - hide navigation bar
         [self.navigationController setNavigationBarHidden:YES];
         [UIApplication sharedApplication].statusBarHidden = YES;
         
@@ -3553,73 +3581,38 @@
         CGFloat imageViewHeight = SCREEN_WIDTH * 9 / 16;
         
         if (isiOS7AndAbove) {
-            //CGRect destRect = CGRectMake(0, 44 + deltaY, SCREEN_WIDTH, imageViewHeight);
-            //self.scrollView.frame = destRect;
-            //self.imageViewVideo.frame = CGRectMake(0, 0, SCREEN_WIDTH, imageViewHeight);
             self.melodyViewController.view.frame = CGRectMake(0, self.ib_ViewTouchToTalk.frame.origin.y - 5, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
-            
-            // Control display for TimelineVC
-            
-            if ( _timelineVC ) {
-                CGFloat alignYTimeLine = self.ib_ViewTouchToTalk.frame.origin.y;
-                
-                if (isiPhone4) {
-                    // This condition check size of screen. Not iPhone4 or other
-                    self.timelineVC.view.frame = CGRectMake(0, alignYTimeLine, SCREEN_HEIGHT, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y + 64);
-                }
-                else {
-                    self.timelineVC.view.frame = CGRectMake(0, alignYTimeLine, SCREEN_HEIGHT, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
-                }
-                
-                _timelineVC.tableView.contentSize = CGSizeMake(SCREEN_WIDTH, _timelineVC.tableView.frame.size.height);
-                //don't show timeline after switch from land to port
-                self.timelineVC.view.hidden = NO;
-                [self.view addSubview:_timelineVC.view];
-                
-                if (_isLandScapeMode) {
-                    if (isiPhone4 || isiPhone5) {
-                        //iPhone
-                        self.timelineVC.tableView.contentInset = UIEdgeInsetsMake(0, 0, 275, 0);
-                    }
-                    else {
-                        //iPad
-                        self.timelineVC.tableView.contentInset = UIEdgeInsetsMake(0, 0, 50, 0);
-                    }
-                }
-                else {
-                    self.timelineVC.tableView.contentInset = UIEdgeInsetsMake(0, 0, 30, 0);
-                }
-            }
         }
         else {
             CGRect destRect = CGRectMake(0, deltaY, SCREEN_WIDTH, imageViewHeight);
             self.scrollView.frame = destRect;
             self.imageViewVideo.frame = CGRectMake(0, -44, SCREEN_WIDTH, imageViewHeight);
             self.melodyViewController.view.frame = CGRectMake(0, self.ib_ViewTouchToTalk.frame.origin.y - 30 - 44, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
-            
-            
-            // Control display for TimelineVC
-            if ( _timelineVC ) {
-                CGFloat alignYTimeLine = self.ib_ViewTouchToTalk.frame.origin.y - 64;
-                
-                if (_isLandScapeMode) {
-                    self.timelineVC.view.frame = CGRectMake(0, alignYTimeLine, SCREEN_WIDTH, SCREEN_HEIGHT - alignYTimeLine);
-                    self.timelineVC.view.hidden = NO;
-                    [self.view addSubview:_timelineVC.view];
-                    self.timelineVC.tableView.contentInset = UIEdgeInsetsMake(0, 0, 250, 0);
-                }
-                else {
-                    self.timelineVC.view.frame = CGRectMake(0, alignYTimeLine, SCREEN_WIDTH, SCREEN_HEIGHT - alignYTimeLine);
-                    self.timelineVC.view.hidden = NO;
-                    [self.view addSubview:_timelineVC.view];
-                    self.timelineVC.tableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
-                }
-            }
         }
         
         [self showControlMenu];
         _isLandScapeMode = NO;
 	}
+    
+    // Ensure that TimelineVC view frame is setup correctly
+    if ( _timelineVC ) {
+        CGRect rect = self.view.bounds;
+        
+        if (isiOS7AndAbove) {
+            // Place with the same y as teh touch to talk view.
+            rect.origin.y = _ib_ViewTouchToTalk.frame.origin.y;
+        }
+        else {
+            // Place with the a y that is just under the toolbar view.
+            rect.origin.y = _menuBackgroundView.frame.origin.y + _menuBackgroundView.frame.size.height;
+        }
+        
+        rect.size.height -= rect.origin.y;
+        _timelineVC.view.frame = rect;
+        
+        _timelineVC.view.hidden = NO;
+        [self.view addSubview:_timelineVC.view];
+    }
     
 #ifndef DEBUG
     // Remove debug buttons for Release builds
