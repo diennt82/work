@@ -148,6 +148,7 @@
 }
 
 #pragma mark - PLAY VIDEO
+
 - (void)becomeActive
 {
     self.shouldRestartProcess = NO;
