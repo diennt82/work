@@ -4157,9 +4157,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		1D6058900D05DD3D006BFB54 /* Camera HD */ = {
+		1D6058900D05DD3D006BFB54 /* Camera */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "Camera HD" */;
+			buildConfigurationList = 1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "Camera" */;
 			buildPhases = (
 				9C123F4F8141474CA7313CF7 /* Check Pods Manifest.lock */,
 				1D60588D0D05DD3D006BFB54 /* Resources */,
@@ -4172,7 +4172,7 @@
 			);
 			dependencies = (
 			);
-			name = "Camera HD";
+			name = Camera;
 			productName = MBP_ios;
 			productReference = 97DC55BF14BAFAAD00AA4911 /* HubbleHome.app */;
 			productType = "com.apple.product-type.application";
@@ -4208,7 +4208,10 @@
 				ORGANIZATIONNAME = "Hubble Connected Ltd.";
 				TargetAttributes = {
 					1D6058900D05DD3D006BFB54 = {
-						DevelopmentTeam = 4BXBVPGK3K;
+						DevelopmentTeam = 2SRV8RVUMY;
+					};
+					268E88F7199E6F4E00DBF8B2 = {
+						DevelopmentTeam = 2SRV8RVUMY;
 					};
 				};
 			};
@@ -4238,7 +4241,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				1D6058900D05DD3D006BFB54 /* Camera HD */,
+				1D6058900D05DD3D006BFB54 /* Camera */,
 				268E88F7199E6F4E00DBF8B2 /* VTech */,
 			);
 		};
@@ -5800,13 +5803,13 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)",
-					"$(SRCROOT)/../iphone-frameworks",
+					"\"$(SRCROOT)\"",
+					"\"$(SRCROOT)/../iphone-frameworks\"",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -5821,7 +5824,7 @@
 					"\"$(SRCROOT)/../iphone-frameworks/GoogleAnalyticsLibrary\"",
 				);
 				INFOPLIST_FILE = "BlinkHD_ios-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)",
@@ -5846,7 +5849,7 @@
 					"-lz",
 				);
 				PRODUCT_NAME = HubbleHome;
-				PROVISIONING_PROFILE = "8d1b3c17-d709-4aec-a814-c9fe9999a934";
+				PROVISIONING_PROFILE = "448bc7c6-c93a-4207-92ca-7b6453dc65b0";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../iphone-frameworks/pjsip/arm/include/ $(SRCROOT)/../iphone-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../iphone-frameworks/pjsip/arm/include/pjnath/";
 				VALID_ARCHS = armv7;
@@ -5860,12 +5863,12 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)",
-					"$(SRCROOT)/../iphone-frameworks",
+					"\"$(SRCROOT)\"",
+					"\"$(SRCROOT)/../iphone-frameworks\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = BlinkHD_ios_Prefix.pch;
@@ -5878,7 +5881,7 @@
 					"\"$(SRCROOT)/../iphone-frameworks/GoogleAnalyticsLibrary\"",
 				);
 				INFOPLIST_FILE = "BlinkHD_ios-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)",
@@ -5917,7 +5920,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -5943,7 +5946,7 @@
 					"\"$(SRCROOT)/../iphone-frameworks/GoogleAnalyticsLibrary\"",
 				);
 				INFOPLIST_FILE = "VTech-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)",
@@ -5968,7 +5971,7 @@
 					"-lz",
 				);
 				PRODUCT_NAME = VTechConnect;
-				PROVISIONING_PROFILE = "8d1b3c17-d709-4aec-a814-c9fe9999a934";
+				PROVISIONING_PROFILE = "448bc7c6-c93a-4207-92ca-7b6453dc65b0";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../iphone-frameworks/pjsip/arm/include/ $(SRCROOT)/../iphone-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../iphone-frameworks/pjsip/arm/include/pjnath/";
 				VALID_ARCHS = armv7;
@@ -5982,7 +5985,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -6005,7 +6008,7 @@
 					"\"$(SRCROOT)/../iphone-frameworks/GoogleAnalyticsLibrary\"",
 				);
 				INFOPLIST_FILE = "VTech-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)",
@@ -6037,14 +6040,14 @@
 			};
 			name = Release;
 		};
-		268E8BDB199E6F4E00DBF8B2 /* Distribute */ = {
+		268E8BDB199E6F4E00DBF8B2 /* Adhoc */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = CA554EBAF3174A5896D91F4D /* Pods.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -6067,7 +6070,7 @@
 					"\"$(SRCROOT)/../iphone-frameworks/GoogleAnalyticsLibrary\"",
 				);
 				INFOPLIST_FILE = "VTech-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)",
@@ -6091,15 +6094,15 @@
 					"-lz",
 				);
 				PRODUCT_NAME = VTechConnect;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "ad1e01ea-c99a-4b8c-b308-60ad33b3d266";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../iphone-frameworks/pjsip/arm/include/ $(SRCROOT)/../iphone-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../iphone-frameworks/pjsip/arm/include/pjnath/";
 				VALIDATE_PRODUCT = YES;
 				VALID_ARCHS = armv7;
 			};
-			name = Distribute;
+			name = Adhoc;
 		};
-		9770CB6914302E3D009E69EF /* Distribute */ = {
+		9770CB6914302E3D009E69EF /* Adhoc */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
@@ -6121,21 +6124,21 @@
 				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external_include\"/**";
 				VALID_ARCHS = "arm64 armv7 armv7s";
 			};
-			name = Distribute;
+			name = Adhoc;
 		};
-		9770CB6A14302E3D009E69EF /* Distribute */ = {
+		9770CB6A14302E3D009E69EF /* Adhoc */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = CA554EBAF3174A5896D91F4D /* Pods.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)",
-					"$(SRCROOT)/../iphone-frameworks",
+					"\"$(SRCROOT)\"",
+					"\"$(SRCROOT)/../iphone-frameworks\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = BlinkHD_ios_Prefix.pch;
@@ -6148,7 +6151,7 @@
 					"\"$(SRCROOT)/../iphone-frameworks/GoogleAnalyticsLibrary\"",
 				);
 				INFOPLIST_FILE = "BlinkHD_ios-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)",
@@ -6172,13 +6175,13 @@
 					"-lz",
 				);
 				PRODUCT_NAME = HubbleHome;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "e4086421-8db4-4dcd-ae14-ac795cd7db49";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../iphone-frameworks/pjsip/arm/include/ $(SRCROOT)/../iphone-frameworks/pjsip/arm/include/pj/ $(SRCROOT)/../iphone-frameworks/pjsip/arm/include/pjnath/";
 				VALIDATE_PRODUCT = YES;
 				VALID_ARCHS = armv7;
 			};
-			name = Distribute;
+			name = Adhoc;
 		};
 		C01FCF4F08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -6230,35 +6233,35 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "Camera HD" */ = {
+		1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "Camera" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1D6058940D05DD3E006BFB54 /* Debug */,
 				1D6058950D05DD3E006BFB54 /* Release */,
-				9770CB6A14302E3D009E69EF /* Distribute */,
+				9770CB6A14302E3D009E69EF /* Adhoc */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Distribute;
+			defaultConfigurationName = Release;
 		};
 		268E8BD8199E6F4E00DBF8B2 /* Build configuration list for PBXNativeTarget "VTech" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				268E8BD9199E6F4E00DBF8B2 /* Debug */,
 				268E8BDA199E6F4E00DBF8B2 /* Release */,
-				268E8BDB199E6F4E00DBF8B2 /* Distribute */,
+				268E8BDB199E6F4E00DBF8B2 /* Adhoc */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Distribute;
+			defaultConfigurationName = Release;
 		};
 		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "BlinkHD_ios" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C01FCF4F08A954540054247B /* Debug */,
 				C01FCF5008A954540054247B /* Release */,
-				9770CB6914302E3D009E69EF /* Distribute */,
+				9770CB6914302E3D009E69EF /* Adhoc */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Distribute;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
