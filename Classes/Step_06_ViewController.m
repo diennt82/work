@@ -41,19 +41,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view.
-    
-    [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(handleEnteredBackground)
-                                                 name: UIApplicationDidEnterBackgroundNotification
-                                               object: nil];
-    
-
-    // Do any additional setup after loading the view.
-    [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(becomeActive)
-                                                 name: UIApplicationDidBecomeActiveNotification
-                                               object: nil];
     
     [_progressView setHidden:YES];
     
@@ -172,7 +159,6 @@
     _task_cancelled = YES;
     [self resetAllTimer];
 }
-
 
 #pragma mark - Actions
 

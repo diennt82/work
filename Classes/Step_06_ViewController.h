@@ -21,10 +21,10 @@
 @property (nonatomic, weak) IBOutlet UIView *progressView;
 @property (nonatomic, weak) IBOutlet UIScrollView *scrollViewGuide;
 @property (nonatomic, weak) IBOutlet UIView *infoSelectCameView;
-@property (nonatomic, weak) IBOutlet UITableViewCell * ssidCell;
-@property (nonatomic, weak) IBOutlet UITableViewCell * securityCell;
-@property (nonatomic, weak) IBOutlet UITableViewCell * passwordCell;
-@property (nonatomic, weak) IBOutlet UITableViewCell * confPasswordCell;
+@property (nonatomic, weak) IBOutlet UITableViewCell *ssidCell;
+@property (nonatomic, weak) IBOutlet UITableViewCell *securityCell;
+@property (nonatomic, weak) IBOutlet UITableViewCell *passwordCell;
+@property (nonatomic, weak) IBOutlet UITableViewCell *confPasswordCell;
 
 @property (nonatomic, copy) NSString *security;
 @property (nonatomic, copy) NSString *ssid;
