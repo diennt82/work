@@ -134,7 +134,7 @@
 {
     MenuViewController *menuViewController = (MenuViewController *)self.parentVC;
     menuViewController.notUpdateCameras = NO;
-    [menuViewController.menuDelegate sendStatus:SETUP_CAMERA]; //initial setup
+    [menuViewController.menuDelegate sendStatus:SETUP_CAMERA]; // initial setup
 }
 
 #pragma mark - Public Methods
