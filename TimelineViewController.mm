@@ -1377,7 +1377,7 @@
         }
         [cell.timelineCellButtn setBackgroundImage:[UIImage imageNamed:@"save"] forState:UIControlStateNormal];
         [cell.timelineCellButtn setBackgroundImage:[UIImage imageNamed:@"save_pressed"] forState:UIControlEventTouchDown];
-        [cell.timelineCellButtn setTitle:@"Save the Day" forState:UIControlStateNormal];
+        [cell.timelineCellButtn setTitle:NSLocalizedStringWithDefaultValue(@"xib_timeline_cell_save_the_day", nil, [NSBundle mainBundle], @"Save the Day", nil) forState:UIControlStateNormal];
         [cell.timelineCellButtn.titleLabel setFont:[UIFont bold20Font]];
         return cell;
     }
