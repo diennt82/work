@@ -15,17 +15,17 @@
 #import "NSData+AESCrypt.h"
 #import "CustomIOS7AlertView.h"
 #import "MBProgressHUD.h"
+#import "define.h"
 
-@interface Account_ViewController () <MFMailComposeViewControllerDelegate, UIAlertViewDelegate>
+@interface Account_ViewController () <MFMailComposeViewControllerDelegate, UIAlertViewDelegate, CustomIOS7AlertViewDelegate>
 
 @property (retain, nonatomic) IBOutlet UITableViewCell * userEmailCell;
 @property (retain, nonatomic) IBOutlet UITableViewCell * versionCell;
 @property (retain, nonatomic) IBOutlet UITableView * accountInfo;
 @property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellChangePassword;
 
-@property (nonatomic) NSInteger screenWidth;
-
 @property (nonatomic,strong) NSString *strNewChangedPass;
+@property (nonatomic, retain) CustomIOS7AlertView *customAlertView;
 
 @end
 
@@ -53,30 +53,10 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    
-    //[self loadUserData];
-    self.screenWidth = [UIScreen mainScreen].bounds.size.width;
     UILabel *lblVersion = (UILabel *)[self.view viewWithTag:559];
     
     lblVersion.text = [NSString stringWithFormat:@"Hubble Home v%@", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]];
     debugEnabledCount = 8;
-}
-
-- (void)viewDidUnload
-{
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
-}
-
--(void)removeSubViewOfNavigationController {
-    for (UIView *subView in self.navigationController.view.subviews)
-    {
-        if ([subView isKindOfClass:[UIToolbar class]])
-        {
-            [subView removeFromSuperview];
-        }
-    }
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -87,6 +67,25 @@
     self.navigationController.navigationBarHidden = YES;
 #endif
     [self loadUserData];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    NSLog(@"%s", __FUNCTION__);
+    
+    [self customIOS7dialogButtonTouchUpInside:_customAlertView clickedButtonAtIndex:0];
+}
+
+-(void)removeSubViewOfNavigationController {
+    for (UIView *subView in self.navigationController.view.subviews)
+    {
+        if ([subView isKindOfClass:[UIToolbar class]])
+        {
+            [subView removeFromSuperview];
+        }
+    }
 }
 
 -(void)loadUserData
@@ -268,7 +267,7 @@
         }
     }
     
-    UIView *lineView = [[[UIView alloc] initWithFrame:CGRectMake(0, cell.contentView.frame.size.height - 0.5f, _screenWidth, 0.5f)] autorelease];
+    UIView *lineView = [[[UIView alloc] initWithFrame:CGRectMake(0, cell.contentView.frame.size.height - 0.5f, SCREEN_WIDTH, 0.5f)] autorelease];
     if (indexPath.row == 2 || indexPath.section == 2)
     {
         cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:17];
@@ -464,6 +463,7 @@
     [alert setButtonTitles:[NSMutableArray arrayWithObjects:
                             NSLocalizedStringWithDefaultValue(@"cancel", nil, [NSBundle mainBundle], @"Cancel", nil),
                             NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil), nil]];
+    [alert setDelegate:self];
     
     [alert setOnButtonTouchUpInside:^(CustomIOS7AlertView *alertView, int buttonIndex)
     {
@@ -509,9 +509,18 @@
         [alertView release];
     }];
     [alert show];
+    self.customAlertView = alert;
+    
+    [alert release];
 }
 
-
+- (void)customIOS7dialogButtonTouchUpInside:(id)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    NSLog(@"%s buttonIndex:%d", __FUNCTION__, buttonIndex);
+    
+    [alertView setDelegate:nil];
+    [alertView close];
+}
 
 -(void)checkOldPass:(NSString *)strOldPass NewPass:(NSString *)strNewPass
 {
