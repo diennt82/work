@@ -41,7 +41,7 @@
     NSInteger cameraType = WIFI_SETUP;
     
     if (sender.tag == CAMERA_TAG_83) {
-        //MBP 83/ 836
+        // MBP 83 / 836
         cameraType = BLUETOOTH_SETUP;
     }
     else {
