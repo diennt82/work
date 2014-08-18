@@ -4157,9 +4157,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		1D6058900D05DD3D006BFB54 /* Camera */ = {
+		1D6058900D05DD3D006BFB54 /* Hubble */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "Camera" */;
+			buildConfigurationList = 1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "Hubble" */;
 			buildPhases = (
 				9C123F4F8141474CA7313CF7 /* Check Pods Manifest.lock */,
 				1D60588D0D05DD3D006BFB54 /* Resources */,
@@ -4172,7 +4172,7 @@
 			);
 			dependencies = (
 			);
-			name = Camera;
+			name = Hubble;
 			productName = MBP_ios;
 			productReference = 97DC55BF14BAFAAD00AA4911 /* HubbleHome.app */;
 			productType = "com.apple.product-type.application";
@@ -4241,7 +4241,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				1D6058900D05DD3D006BFB54 /* Camera */,
+				1D6058900D05DD3D006BFB54 /* Hubble */,
 				268E88F7199E6F4E00DBF8B2 /* VTech */,
 			);
 		};
@@ -6233,7 +6233,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "Camera" */ = {
+		1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "Hubble" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1D6058940D05DD3E006BFB54 /* Debug */,
