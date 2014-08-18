@@ -10,6 +10,7 @@
 #import "PlaybackViewController.h"
 #import "PlaylistInfo.h"
 #import "MBProgressHUD.h"
+#import "UIView+Custom.h"
 
 @interface NotifViewController ()
 
@@ -52,6 +53,7 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    [self xibDefaultLocalization];
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
     {
@@ -121,10 +123,22 @@
     [self performSelectorInBackground:@selector(getEventSnapshot_bg) withObject:nil];
 }
 
+- (void)xibDefaultLocalization
+{
+    [[self.view viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_Nofi_label_some_movement", nil, [NSBundle mainBundle], @"There was some movement at the camera location.", nil)];
+    [[self.view viewWithTag:2] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_Nofi_label_like_to_do", nil, [NSBundle mainBundle], @"What would you like to do?", nil)];
+    [[self.view viewWithTag:3] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_Nofi_label_play_event", nil, [NSBundle mainBundle], @"Play Event", nil)];
+    [[self.view viewWithTag:4] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_Nofi_label_goto_camera", nil, [NSBundle mainBundle], @"Go to Camera", nil)];
+    [[self.view viewWithTag:5] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_Nofi_label_change_settings", nil, [NSBundle mainBundle], @"Change Settings", nil)];
+    [[self.view viewWithTag:6] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_Nofi_label_choose_plan", nil, [NSBundle mainBundle], @"Choose Plan", nil)];
+    [[self.view viewWithTag:7] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_Nofi_label_learn_more", nil, [NSBundle mainBundle], @"Learn More", nil)];
+    [self.ignoreBtn setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_Nofi_button_ignore", nil, [NSBundle mainBundle], @"Ignore", nil)];
+}
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
     NSLog(@"%s _isReturnFrmPlayback:%d", __FUNCTION__, _isReturnFrmPlayback);
     
     self.navigationController.navigationBarHidden = YES;
