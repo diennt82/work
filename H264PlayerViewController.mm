@@ -226,6 +226,7 @@
     }
     */
     
+    self.view.backgroundColor = [UIColor whiteColor];
     _hideCustomIndicatorAndTextNotAccessble = NO;
     
     // update navi
@@ -287,9 +288,6 @@
     // Remove debug buttons for Release builds
     [_ib_btShowDebugInfo removeFromSuperview];
     [self setIb_btShowDebugInfo:nil];
-    
-
-    
     self.customIndicator.image = [UIImage imageNamed:@"loader_a"];
     
     DLog(@"camera model is :%@", self.cameraModel);
@@ -1188,7 +1186,7 @@
         self.ticks = 0.0;
         
         if ( _timelineVC ) {
-            self.timelineVC.camChannel = self.selectedChannel;
+            _timelineVC.camChannel = _selectedChannel;
         }
     }
     else {
@@ -1438,8 +1436,8 @@
     [_ib_switchDegree setHidden:YES];
     
     _imageViewHandle.hidden = YES;
-    _imageViewKnob.center = self.imgViewDrectionPad.center;
-    _imageViewHandle.center = self.imgViewDrectionPad.center;
+    _imageViewKnob.center = _imgViewDrectionPad.center;
+    _imageViewHandle.center = _imgViewDrectionPad.center;
     
     DLog(@"H264VC - becomeActive -timeline: %@", NSStringFromCGRect(_timelineVC.view.frame));
 }
@@ -1450,7 +1448,7 @@
 {
     NSString *bodyKey = @"";
     
-    if ( self.selectedChannel.profile.isInLocal ) {
+    if ( _selectedChannel.profile.isInLocal ) {
         //[HttpCom instance].comWithDevice.device_ip   = self.selectedChannel.profile.ip_address;
         //[HttpCom instance].comWithDevice.device_port = self.selectedChannel.profile.port;
         
@@ -1459,7 +1457,7 @@
             self.sharedCamConnectedTo = [[response componentsSeparatedByString:@": "] objectAtIndex:1];
         }
 	}
-	else if (self.selectedChannel.profile.minuteSinceLastComm <= 5) {
+	else if ( _selectedChannel.profile.minuteSinceLastComm <= 5 ) {
         // Remote
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
@@ -1471,7 +1469,7 @@
                                                                         ServerErr:nil];
         }
         
-        NSDictionary *responseDict = [_jsonCommBlocked sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
+        NSDictionary *responseDict = [_jsonCommBlocked sendCommandBlockedWithRegistrationId:_selectedChannel.profile.registrationID
                                                                                  andCommand:[NSString stringWithFormat:@"action=command&command=get_running_os"]
                                                                                   andApiKey:apiKey];
         if ( responseDict ) {
@@ -1496,10 +1494,8 @@
 - (void)createMonvementControlTimer
 {
     [self cleanUpDirectionTimers];
-    if ([_cameraModel isEqualToString:CP_MODEL_BLE]) //MBP83
-    {
-        
-        
+    if ([_cameraModel isEqualToString:CP_MODEL_BLE]) {
+        //MBP83
         DLog(@"H264VC - createMonvementControlTimer");
         
         //Direction stuf
@@ -1529,23 +1525,23 @@
 
 - (void)setupCamera
 {
-    self.isInLocal = self.selectedChannel.profile.isInLocal;
+    self.isInLocal = _selectedChannel.profile.isInLocal;
     self.mediaProcessStatus = 0;
     [self createMonvementControlTimer];
     
     _isShowCustomIndicator = YES;
     [self displayCustomIndicator];
-    self.selectedChannel.stream_url = nil;
+    _selectedChannel.stream_url = nil;
     
     [self setupHttpPort];
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
-    DLog(@"H264VC - setupCamera -device_ip: %@, -device_port: %d, -{remote_only: %d}", self.selectedChannel.profile.ip_address, self.selectedChannel.profile.port, [userDefaults boolForKey:@"remote_only"]);
+    DLog(@"H264VC - setupCamera -device_ip: %@, -device_port: %d, -{remote_only: %d}", _selectedChannel.profile.ip_address, _selectedChannel.profile.port, [userDefaults boolForKey:@"remote_only"]);
     //Support remote UPNP video as well
     if ( _selectedChannel.profile.isInLocal ) {
         DLog(@"H264VC - setupCamera -created a local streamer");
-        self.selectedChannel.stream_url = [NSString stringWithFormat:@"rtsp://user:pass@%@:6667/blinkhd", self.selectedChannel.profile.ip_address];
+        self.selectedChannel.stream_url = [NSString stringWithFormat:@"rtsp://user:pass@%@:6667/blinkhd", _selectedChannel.profile.ip_address];
         DLog(@"%s Start stage 2", __FUNCTION__);
         self.timeStartingStageTwo = [NSDate date];
         
@@ -1555,7 +1551,7 @@
 #ifdef SHOW_DEBUG_INFO
         _viewVideoIn = @"L";
 #endif
-        self.ib_labelTouchToTalk.text = @"Touch to Talk";
+        _ib_labelTouchToTalk.text = @"Touch to Talk";
         self.stringStatePTT = @"Touch to Talk";
     }
     else if (self.selectedChannel.profile.minuteSinceLastComm <= 5) {
@@ -1564,7 +1560,7 @@
         // Ignore enable_stun value key
         [self symmetric_check_result:YES];
         
-        self.ib_labelTouchToTalk.text = @"Touch to Talk";
+        _ib_labelTouchToTalk.text = @"Touch to Talk";
         self.stringStatePTT = @"Touch to Talk";
     }
     else {
@@ -1748,15 +1744,12 @@
         [self performSelectorInBackground:@selector(closeRemoteTalkback) withObject:nil];
         [_audioOutStreamRemote disconnectFromAudioSocketRemote];
     }
-#if 1
     
     DLog(@"%s _mediaProcessStatus: %d", __FUNCTION__, _mediaProcessStatus);
-    
     
     if (_timelineVC) {
         _timelineVC.timelineVCDelegate = nil;
     }
-    
     
     if (_mediaProcessStatus == 0) {
         [self goBack];
@@ -1774,32 +1767,11 @@
         [self stopStream];
         [self goBack];
     }
-    
-#else
-    if (self.currentMediaStatus == 0 && MediaPlayer::Instance() == NULL) {
-        // Media player haven't start yet.
-        [self performSelector:@selector(goBackToCameraList)
-                   withObject:nil
-                   afterDelay:0.001];
-    }
-    else if ( self.currentMediaStatus == MEDIA_INFO_HAS_FIRST_IMAGE ||
-            self.currentMediaStatus == MEDIA_PLAYER_STARTED       ||
-            ( MediaPlayer::Instance() != NULL))
-    {
-        DLog(@"H264VC- prepareGoBackToCameraList - just sendInterrupt");
-        
-        MediaPlayer::Instance()->sendInterrupt();
-        [self goBackToCameraList];
-    }
-    else {
-        [self goBackToCameraList];
-    }
-#endif
 }
 
 - (void)goBackToCamerasRemoteStreamTimeOut
 {
-    self.activityStopStreamingProgress.hidden = NO;
+    _activityStopStreamingProgress.hidden = NO;
     [self.view bringSubviewToFront:_activityStopStreamingProgress];
     
     DLog(@"self.currentMediaStatus: %d", self.currentMediaStatus);
@@ -1824,7 +1796,7 @@
     // Release the instance here - since we are going to camera list
     MediaPlayer::release();
     
-    self.activityStopStreamingProgress.hidden = NO;
+    _activityStopStreamingProgress.hidden = NO;
     [self.view bringSubviewToFront:_activityStopStreamingProgress];
     
     DLog(@"self.currentMediaStatus: %d", _currentMediaStatus);
@@ -1846,8 +1818,8 @@
 
 -(void) cleanUpDirectionTimers
 {
-    if ([_cameraModel isEqualToString:CP_MODEL_BLE]) //MBP83
-    {
+    if ([_cameraModel isEqualToString:CP_MODEL_BLE]) {
+        //MBP83
         /* Kick off the two timer for direction sensing */
         self.currentDirUD = DIRECTION_V_NON;
         self.lastDirUD    = DIRECTION_V_NON;
@@ -1885,7 +1857,7 @@
             _selectedChannel.profile.camera_stun_video_port != 0 )
         {
             // Make sure we are connecting via STUN
-            if ( _h264PlayerVCDelegate != nil) {
+            if ( _h264PlayerVCDelegate ) {
                 _selectedChannel.waitingForStreamerToClose = YES;
                 DLog(@"waiting for close STUN stream from server");
             }
@@ -1914,15 +1886,14 @@
                                                                     ServerErr:nil];
     }
     
-    NSString * cmd_string = @"action=command&command=close_p2p_rtsp_stun";
+    NSString *cmd_string = @"action=command&command=close_p2p_rtsp_stun";
     
-    //NSDictionary *responseDict =
     [_jsonCommBlocked  sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
                                                  andCommand:cmd_string
                                                   andApiKey:apiKey];
     H264PlayerViewController *thisVC = (H264PlayerViewController *)vc;
     if ( _userWantToCancel ) {
-        [thisVC.h264PlayerVCDelegate stopStreamFinished: thisVC.selectedChannel];
+        [thisVC.h264PlayerVCDelegate stopStreamFinished:thisVC.selectedChannel];
         thisVC.h264PlayerVCDelegate = nil;
     }
     else {
@@ -1970,11 +1941,11 @@
         }
         
         if ( _timerRemoteStreamTimeOut ) {
-            [self.timerRemoteStreamTimeOut invalidate];
+            [_timerRemoteStreamTimeOut invalidate];
             self.timerRemoteStreamTimeOut = nil;
         }
         
-        self.imageViewStreamer.userInteractionEnabled = NO;
+        _imageViewStreamer.userInteractionEnabled = NO;
         
         if ( _isHorizeShow ) {
             [self hideControlMenu];
@@ -2014,30 +1985,26 @@
 {
     NSString *bodyKey = @"";
     
-    if (self.selectedChannel.profile.isInLocal )
-	{
+    if (_selectedChannel.profile.isInLocal ) {
         //[HttpCom instance].comWithDevice.device_ip   = self.selectedChannel.profile.ip_address;
         //[HttpCom instance].comWithDevice.device_port = self.selectedChannel.profile.port;
         
         NSData *responseData = [[HttpCom instance].comWithDevice sendCommandAndBlock_raw:@"get_resolution"];
         
-        if (responseData != nil)
-        {
+        if ( responseData ) {
             bodyKey = [[NSString alloc] initWithData:responseData encoding: NSUTF8StringEncoding];
-            
             DLog(@"getVQ_bg response string: %@", bodyKey);
         }
 	}
-	else if(self.selectedChannel.profile.minuteSinceLastComm <= 5) // Remote
-	{
+	else if ( _selectedChannel.profile.minuteSinceLastComm <= 5 ) {
+        // Remote
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         
         //NSString *mac = [Util strip_colon_fr_mac:self.selectedChannel.profile.mac_address];
         NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
         DLog(@"Log - registrationID %@, apikey %@", self.selectedChannel.profile.registrationID, apiKey);
         
-		if (_jsonCommBlocked == nil)
-        {
+		if ( !_jsonCommBlocked ) {
             self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
                                                                          Selector:nil
                                                                      FailSelector:nil
@@ -2047,12 +2014,10 @@
         NSDictionary *responseDict = [_jsonCommBlocked sendCommandBlockedWithRegistrationId:self.selectedChannel.profile.registrationID
                                                                                  andCommand:[NSString stringWithFormat:@"action=command&command=get_resolution"]
                                                                                   andApiKey:apiKey];
-        if (responseDict != nil)
-        {
+        if ( responseDict ) {
             
             NSInteger status = [[responseDict objectForKey:@"status"] intValue];
-            if (status == 200)
-            {
+            if (status == 200) {
                 bodyKey = [[[responseDict objectForKey:@"data"] objectForKey:@"device_response"] objectForKey:@"body"];
             }
         }
@@ -2060,11 +2025,9 @@
         DLog(@"getVQ_bg responseDict = %@", responseDict);
 	}
     
-    if (![bodyKey isEqualToString:@""])
-    {
+    if (![bodyKey isEqualToString:@""]) {
         NSArray * tokens = [bodyKey componentsSeparatedByString:@": "];
-        if ([tokens count] >=2 )
-        {
+        if ( tokens.count >=2 ) {
             NSString *modeVideo = [tokens objectAtIndex:1];
             
             [self performSelectorOnMainThread:@selector(setVQForground:)
@@ -3515,10 +3478,10 @@
         }
         else {
             if (isiOS7AndAbove) {
-                self.melodyViewController.view.frame = CGRectMake(393, 78, 175, 165);
+                _melodyViewController.view.frame = CGRectMake(393, 78, 175, 165);
             }
             else {
-                self.melodyViewController.view.frame = CGRectMake(320, 60, 159, 204);
+                _melodyViewController.view.frame = CGRectMake(320, 60, 159, 204);
             }
         }
         
@@ -3526,11 +3489,11 @@
             _menuBackgroundView.alpha = 0;
         }
         
-        self.melodyViewController.selectedChannel = self.selectedChannel;
-        self.melodyViewController.melodyVcDelegate = self;
+        _melodyViewController.selectedChannel = _selectedChannel;
+        _melodyViewController.melodyVcDelegate = self;
         
         // Landscape mode - hide navigation bar
-        [self.navigationController setNavigationBarHidden:YES];
+        self.navigationController.navigationBarHidden = YES;
         [UIApplication sharedApplication].statusBarHidden = YES;
         
         if (_isAlreadyHorizeMenu) {
@@ -3542,7 +3505,7 @@
         
         CGFloat imageViewHeight = SCREEN_HEIGHT * 9 / 16;
         CGRect newRect = CGRectMake(0, (SCREEN_WIDTH - imageViewHeight) / 2, SCREEN_HEIGHT, imageViewHeight);
-        self.imageViewVideo.frame = CGRectMake(0, 0, SCREEN_HEIGHT, imageViewHeight);
+        _imageViewVideo.frame = CGRectMake(0, 0, SCREEN_HEIGHT, imageViewHeight);
         self.scrollView.frame = newRect;
         
         if ( _timelineVC ) {
@@ -3567,12 +3530,11 @@
             _menuBackgroundView.alpha = 0;
         }
         
-        self.melodyViewController.selectedChannel = self.selectedChannel;
-        self.melodyViewController.melodyVcDelegate = self;
+        _melodyViewController.selectedChannel = _selectedChannel;
+        _melodyViewController.melodyVcDelegate = self;
         
         [self.navigationController setNavigationBarHidden:NO];
         [[UIApplication sharedApplication] setStatusBarHidden:NO];
-        self.view.backgroundColor = [UIColor whiteColor];
         
         if (_isAlreadyHorizeMenu) {
             [self.horizMenu reloadData:NO];
@@ -3581,13 +3543,13 @@
         CGFloat imageViewHeight = SCREEN_WIDTH * 9 / 16;
         
         if (isiOS7AndAbove) {
-            self.melodyViewController.view.frame = CGRectMake(0, self.ib_ViewTouchToTalk.frame.origin.y - 5, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
+            self.melodyViewController.view.frame = CGRectMake(0, self.ib_ViewTouchToTalk.frame.origin.y - 5, SCREEN_WIDTH, SCREEN_HEIGHT - _ib_ViewTouchToTalk.frame.origin.y);
         }
         else {
             CGRect destRect = CGRectMake(0, deltaY, SCREEN_WIDTH, imageViewHeight);
-            self.scrollView.frame = destRect;
-            self.imageViewVideo.frame = CGRectMake(0, -44, SCREEN_WIDTH, imageViewHeight);
-            self.melodyViewController.view.frame = CGRectMake(0, self.ib_ViewTouchToTalk.frame.origin.y - 30 - 44, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
+            _scrollView.frame = destRect;
+            _imageViewVideo.frame = CGRectMake(0, -44, SCREEN_WIDTH, imageViewHeight);
+            _melodyViewController.view.frame = CGRectMake(0, _ib_ViewTouchToTalk.frame.origin.y - 30 - 44, SCREEN_WIDTH, SCREEN_HEIGHT - _ib_ViewTouchToTalk.frame.origin.y);
         }
         
         [self showControlMenu];
@@ -3599,8 +3561,8 @@
         CGRect rect = self.view.bounds;
         
         if (isiOS7AndAbove) {
-            // Place with the same y as teh touch to talk view.
-            rect.origin.y = _ib_ViewTouchToTalk.frame.origin.y;
+            // Place with the same y as the video container's scroll view.
+            rect.origin.y = _scrollView.frame.origin.y + _scrollView.frame.size.height;
         }
         else {
             // Place with the a y that is just under the toolbar view.
@@ -3611,8 +3573,8 @@
         _timelineVC.view.frame = rect;
         
         _timelineVC.view.hidden = NO;
-        [self.view addSubview:_timelineVC.view];
-    }
+        [self.view insertSubview:_timelineVC.view belowSubview:_scrollView];
+   }
     
 #ifndef DEBUG
     // Remove debug buttons for Release builds
