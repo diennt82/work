@@ -435,7 +435,7 @@ typedef enum _WAIT_FOR_UPDATING {
     }
     else{
         if(indexPath.section==0 && intTableSectionStatus==1){
-            return 225;
+            return 280;
         }
         else if(indexPath.section==1 && intTableSectionStatus==2){
             if(indexPath.row==0 || indexPath.row==1)
@@ -450,185 +450,6 @@ typedef enum _WAIT_FOR_UPDATING {
 
     return 0;
 }
-
-/*- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    cell.backgroundColor = [UIColor colorWithRed:249/255.0 green:249/255.0 blue:249/255.0 alpha:1];
-}*/
-
-/*
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-#if ENABLE_CHANGE_IMAGE
-    if (indexPath.row == 0 ||
-        indexPath.row == 2)
-    {
-        static NSString *CellIdentifier = @"CameraSettingsCell";
-        CameraSettingsCell *cell = [self.tableViewSettings dequeueReusableCellWithIdentifier:CellIdentifier];
-        
-        NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"CameraSettingsCell" owner:nil options:nil];
-        
-        for (id curObj in objects)
-        {
-            
-            if([curObj isKindOfClass:[UITableViewCell class]])
-            {
-                cell = (CameraSettingsCell *)curObj;
-                break;
-            }
-        }
-        
-        if (indexPath.row == 0)
-        {
-            if (self.camChannel.profile.name.length > 10)
-            {
-                cell.valueLabel.frame = CGRectMake(cell.valueLabel.frame.origin.x, cell.valueLabel.frame.origin.y, cell.valueLabel.frame.size.width, cell.valueLabel.frame.size.height * 2);
-                cell.nameLabel.frame = CGRectMake(cell.nameLabel.frame.origin.x, cell.valueLabel.center.y - cell.nameLabel.frame.size.height / 2, cell.nameLabel.frame.size.width, cell.nameLabel.frame.size.height);
-            }
-            
-            cell.nameLabel.text = @"Name";
-            cell.valueLabel.text = self.camChannel.profile.name;
-        }
-        else
-        {
-            cell.nameLabel.text = _stringFW_Version;
-            cell.valueLabel.text = self.camChannel.profile.fw_version;
-        }
-        
-        return cell;
-    }
-    else // indexPath.row == 1
-    {
-        static NSString *CellIdentifier = @"Cell";
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        if (cell == nil) {
-            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-        }
-        
-        // Configure the cell...
-        cell.textLabel.text = @"Change Image";
-        cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:17];
-        cell.textLabel.textColor = [UIColor colorWithRed:128/255.0 green:128/255.0 blue:128/255.0 alpha:1];
-        
-        return cell;
-    }
-#else
-    if (indexPath.row == 0 ||
-        indexPath.row == 1)
-    {
-        static NSString *CellIdentifier = @"CameraSettingsCell";
-        CameraSettingsCell *cell = [self.tableViewSettings dequeueReusableCellWithIdentifier:CellIdentifier];
-        
-        NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"CameraSettingsCell" owner:nil options:nil];
-        
-        for (id curObj in objects)
-        {
-            
-            if([curObj isKindOfClass:[UITableViewCell class]])
-            {
-                cell = (CameraSettingsCell *)curObj;
-                break;
-            }
-        }
-        
-        if (indexPath.row == 0)
-        {
-            if (_isChangingName)
-            {
-                static NSString *CellIdentifier = @"Cell";
-                UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-                if (cell == nil) {
-                    cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-                }
-                
-                // Configure the cell...
-                cell.textLabel.text = @"Name";
-                
-                UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc]
-                                                    initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-                // Spacer is a 1x1 transparent png
-                UIImage *spacer = [UIImage imageNamed:@"spacer"];
-                
-                UIGraphicsBeginImageContext(spinner.frame.size);
-                
-                [spacer drawInRect:CGRectMake(0, 0, spinner.frame.size.width, spinner.frame.size.height)];
-                UIImage* resizedSpacer = UIGraphicsGetImageFromCurrentImageContext();
-                
-                UIGraphicsEndImageContext();
-                cell.imageView.image = resizedSpacer;
-                spinner.frame = CGRectMake(UIScreen.mainScreen.bounds.size.width - spinner.frame.size.width - 30, 0, spinner.frame.size.width, spinner.frame.size.height);
-                [cell.imageView addSubview:spinner];
-                [spinner startAnimating];
-                
-                return cell;
-            }
-            else
-            {
-                if (self.camChannel.profile.name.length > 10)
-                {
-                    cell.valueLabel.frame = CGRectMake(cell.valueLabel.frame.origin.x, cell.valueLabel.frame.origin.y, cell.valueLabel.frame.size.width, cell.valueLabel.frame.size.height * 2);
-                    cell.nameLabel.frame = CGRectMake(cell.nameLabel.frame.origin.x, cell.valueLabel.center.y - cell.nameLabel.frame.size.height / 2, cell.nameLabel.frame.size.width, cell.nameLabel.frame.size.height);
-                }
-                
-                cell.nameLabel.text = @"Name";
-                cell.valueLabel.text = self.camChannel.profile.name;
-            }
-        }
-        else
-        {
-            if (_isLoading)
-            {
-                static NSString *CellIdentifier = @"Cell";
-                UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-                if (cell == nil) {
-                    cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-                }
-                
-                // Configure the cell...
-                cell.textLabel.text = _stringFW_Version;
-                
-                UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc]
-                                                    initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-                // Spacer is a 1x1 transparent png
-                UIImage *spacer = [UIImage imageNamed:@"spacer"];
-                
-                UIGraphicsBeginImageContext(spinner.frame.size);
-                
-                [spacer drawInRect:CGRectMake(0, 0, spinner.frame.size.width, spinner.frame.size.height)];
-                UIImage* resizedSpacer = UIGraphicsGetImageFromCurrentImageContext();
-                
-                UIGraphicsEndImageContext();
-                cell.imageView.image = resizedSpacer;
-                spinner.frame = CGRectMake(UIScreen.mainScreen.bounds.size.width - spinner.frame.size.width - 30, 0, spinner.frame.size.width, spinner.frame.size.height);
-                [cell.imageView addSubview:spinner];
-                [spinner startAnimating];
-                
-                return cell;
-            }
-            else
-            {
-                cell.nameLabel.text = _stringFW_Version;
-                cell.valueLabel.text = self.camChannel.profile.fw_version;
-            }
-        }
-        
-        return cell;
-    }
-    else
-    {
-        static NSString *CellIdentifier = @"Cell";
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        if (cell == nil) {
-            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-        }
-        
-        // Configure the cell...
-        
-        return cell;
-    }
-#endif
-}
- */
 
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -648,6 +469,7 @@ typedef enum _WAIT_FOR_UPDATING {
         
         camDetCell.lblCameraName.text = self.camChannel.profile.name;
         camDetCell.lblCamVer.text = self.camChannel.profile.fw_version;
+        camDetCell.lblCamModel.text = [self.camChannel.profile getModel];
         return camDetCell;
 
     }
