@@ -138,7 +138,7 @@ double _ticks = 0;
     
     self.enablePTT = YES;
     self.currentBitRate = @"128";
-    self.messageStreamingState = NSLocalizedStringWithDefaultValue(@"camera_is_not_accessible", nil, [NSBundle mainBundle], @"Camera is not accessible", nil);
+    self.messageStreamingState = NSLocalizedStringWithDefaultValue(@"camera_is_not_accessible", nil, [NSBundle mainBundle], @"Camera is not accessible...", nil);
     self.timeStartingStageTwo = 0;
     
     
@@ -6992,8 +6992,16 @@ double _ticks = 0;
         [self start_animation_with_orientation];
         
         
-        
-        self.ib_lbCameraNotAccessible.text = _messageStreamingState;
+        NSString *message = [NSString stringWithFormat:@"%@ %@", _messageStreamingState, NSLocalizedStringWithDefaultValue(@"more_detail", nil, [NSBundle mainBundle], @"details", nil)];
+        self.ib_lbCameraNotAccessible.text = message;
+        NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithAttributedString:self.ib_lbCameraNotAccessible.attributedText];
+        [attributedString addAttribute:NSUnderlineStyleAttributeName
+                                 value:[NSNumber numberWithInteger:NSUnderlineStyleSingle]
+                                 range:NSMakeRange(attributedString.length - 7, 7)];
+        [attributedString addAttribute:NSForegroundColorAttributeName
+                                 value:[UIColor colorWithRed:51/255.0f green:102/255.f blue:187/255.0f alpha:1.0f]
+                                 range:NSMakeRange(attributedString.length - 7, 7)];
+        [self.ib_lbCameraNotAccessible setAttributedText:attributedString];
         
         if (_isShowTextCameraIsNotAccesible)
         {
@@ -7317,7 +7325,7 @@ double _ticks = 0;
         {
             //handle Bad response
             NSLog(@"%s ERROR: %@", __FUNCTION__, [responseDict objectForKey:@"message"]);
-            self.messageStreamingState = NSLocalizedStringWithDefaultValue(@"camera_is_not_accessible", nil, [NSBundle mainBundle], @"Camera is not accessible", nil);
+            self.messageStreamingState = NSLocalizedStringWithDefaultValue(@"camera_is_not_accessible", nil, [NSBundle mainBundle], @"Camera is not accessible...", nil);
             _isShowTextCameraIsNotAccesible = YES;
             
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -7342,7 +7350,7 @@ double _ticks = 0;
     {
         //handle Bad response
         NSLog(@"%s ERROR: %@", __FUNCTION__, [responseDict objectForKey:@"message"]);
-        self.messageStreamingState = NSLocalizedStringWithDefaultValue(@"camera_is_not_accessible", nil, [NSBundle mainBundle], @"Camera is not accessible", nil);
+        self.messageStreamingState = NSLocalizedStringWithDefaultValue(@"camera_is_not_accessible", nil, [NSBundle mainBundle], @"Camera is not accessible...", nil);
         _isShowTextCameraIsNotAccesible = YES;
         
         dispatch_async(dispatch_get_main_queue(), ^{
