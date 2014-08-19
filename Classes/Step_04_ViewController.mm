@@ -20,6 +20,7 @@
 @property (retain, nonatomic) IBOutlet UITextField *tfCamName;
 @property (retain, nonatomic) IBOutlet UIButton *btnContinue;
 @property (retain, nonatomic) IBOutlet UIButton *btnSkipWIFISetup;
+@property (assign, nonatomic) IBOutlet UIImageView *lineImageView;
 
 //@property (retain, nonatomic) CustomIOS7AlertView *alertView;
 
@@ -71,6 +72,14 @@
     }
     
     self.tfCamName.text = self.cameraName;
+    
+    if (isiPhone4)
+    {
+        self.tfCamName.frame = CGRectOffset(self.tfCamName.frame, 0, -75);
+        self.lineImageView.frame = CGRectOffset(self.lineImageView.frame, 0, -75);
+        self.btnSkipWIFISetup.frame = CGRectOffset(self.btnSkipWIFISetup.frame, 0, -75);
+        self.btnContinue.frame = CGRectOffset(self.btnContinue.frame, 0, -80);
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated
