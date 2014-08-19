@@ -16,7 +16,6 @@
 
 #import <SystemConfiguration/CaptiveNetwork.h>
 #import <objc/message.h>
-#import "HelpWindowPopup.h"
 
 #define TEMP_NULL @"NIL"
 
@@ -150,6 +149,8 @@ double _ticks = 0;
     self.backgroundTask = UIBackgroundTaskInvalid;
     self.askForFWUpgradeOnce = YES;
     [self becomeActive];
+    
+    self.helpPopup = nil;
 }
 
 //At first time, we set to FALSE after call checkOrientation()
@@ -755,10 +756,13 @@ double _ticks = 0;
     [html appendString:@"   </body>"];
     [html appendString:@"</html>"];
     HelpWindowPopup *popup = [[HelpWindowPopup alloc] initWithTitle:@"Video Screen Help"
-                                                      andHtmlString:html];
+                                                      andHtmlString:html
+                                                          andHeight:280];
+    popup.delegate = self;
     [popup show];
-    [popup release];
+    self.helpPopup = popup;
     [html release];
+    [popup release];
 }
 #pragma mark - Delegate Stream callback
 
@@ -4317,7 +4321,10 @@ double _ticks = 0;
 	}
 }
 
-
+- (void)willDismiss:(id)sender
+{
+    self.helpPopup = nil;
+}
 
 #pragma mark - Rotation screen
 - (BOOL)shouldAutorotate
@@ -4346,6 +4353,11 @@ double _ticks = 0;
 - (void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
     //[[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView - will rotate interface" withProperties:nil];
+    if (self.helpPopup != nil)
+    {
+        [self.helpPopup dismiss];
+    }
+    
     
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:@"View will rotate interface"
@@ -4382,7 +4394,6 @@ double _ticks = 0;
 - (void) adjustViewsForOrientation:(UIInterfaceOrientation)orientation
 {
     NSLog(@"H264VC - adjustViewsForOrientation:");
-    
     
     if (_isProcessRecording)
     {
