@@ -10,11 +10,19 @@
 #import "define.h"
 #import "UIFont+Hubble.h"
 
+@protocol HelpWindowPopupDelegate <NSObject>
+- (void)willDismiss:(id)sender;
+@end
+
 @interface HelpWindowPopup : UIView
 
 @property (nonatomic, retain) UIWebView     *webView;
 @property (nonatomic, retain) UIView        *contentView;
+@property (nonatomic, assign) id <HelpWindowPopupDelegate> delegate;
 
 - (id)initWithTitle:(NSString *)title andHtmlString:(NSString *)htmlString;
+- (id)initWithTitle:(NSString *)title andHtmlString:(NSString *)htmlString andHeight:(CGFloat)height;
 - (void)show;
+- (void)dismiss;
+- (BOOL)isShowing;
 @end

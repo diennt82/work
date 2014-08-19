@@ -42,6 +42,7 @@
 #import "HubbleProgressView.h"
 #import "MBProgressHUD.h"
 #import "UserAccount.h"
+#import "HelpWindowPopup.h"
 
 
 #define H264_STREAM_STARTED              1
@@ -151,7 +152,7 @@
 
 
 @interface H264PlayerViewController: GAITrackedViewController
-<PlayerCallbackHandler, ScanForCameraNotifier, StunClientDelegate, UIScrollViewDelegate, ScrollHorizontalMenuDelegate, AudioOutStreamerDelegate, TimelineVCDelegate, AudioOutStreamRemoteDelegate, BonjourDelegate, CustomIOS7AlertViewDelegate, MelodySetingDelegate>
+<PlayerCallbackHandler, ScanForCameraNotifier, StunClientDelegate, UIScrollViewDelegate, ScrollHorizontalMenuDelegate, AudioOutStreamerDelegate, TimelineVCDelegate, AudioOutStreamRemoteDelegate, BonjourDelegate, CustomIOS7AlertViewDelegate, MelodySetingDelegate, HelpWindowPopupDelegate>
 {
     ScrollHorizontalMenu *_horizMenu;
     int _selectedItemMenu;
@@ -345,6 +346,7 @@
 @property (nonatomic, retain) AudioOutStreamer * audioOut;
 @property (nonatomic, retain) UserAccount *userAccount;
 @property (nonatomic) BOOL isFwUpgradedByAnotherDevice;
+@property (nonatomic, assign) HelpWindowPopup *helpPopup;
 
 
 - (void)scan_done:(NSArray *) _scan_results;
