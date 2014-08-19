@@ -82,6 +82,7 @@ typedef enum _WAIT_FOR_UPDATING {
 @property (nonatomic) WAIT_FOR_UPDATING shoulfWaitForUpdatingType;
 @property (nonatomic) BOOL backGroundUpdateExecuting;
 @property (retain, nonatomic) SensitivityTemperatureCell *sensitivityTemperatureCell;
+@property (nonatomic) BOOL isNewDeviceSettingsCommand;
 
 @end
 
@@ -151,7 +152,6 @@ typedef enum _WAIT_FOR_UPDATING {
     vwSnapshot.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     vwSnapshot.hidden = YES;
     [self.view addSubview:vwSnapshot];
-    
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -438,10 +438,28 @@ typedef enum _WAIT_FOR_UPDATING {
             return 198;
         }
         else if(indexPath.section==1 && intTableSectionStatus==2){
+#if 1
+            if (indexPath.row == 1) // Sound
+            {
+                return 120;
+            }
+            else if (indexPath.row == 0) // Motion
+            {
+                if (_isNewDeviceSettingsCommand)
+                {
+                    return 190;
+                }
+                else
+                {
+                    return 120;
+                }
+            }
+#else
             if(indexPath.row==0 || indexPath.row==1)
             {
                 return 120;
             }
+#endif
             else{
                 return 227;
             }
@@ -678,7 +696,8 @@ typedef enum _WAIT_FOR_UPDATING {
                 cell.nameLabel.text = NSLocalizedStringWithDefaultValue(@"motion", nil, [NSBundle mainBundle], @"Motion", nil);
                 cell.switchValue   = _sensitivityInfo.motionOn;
                 cell.settingsValue = _sensitivityInfo.motionValue;
-
+                cell.recordingValue = _sensitivityInfo.motionVideoRecordingOn;
+                cell.captureSnapshotValue = _sensitivityInfo.motionCaptureSnapshotOn;
             }
             else
             {
@@ -1095,6 +1114,22 @@ typedef enum _WAIT_FOR_UPDATING {
     }
     
     [self performSelectorInBackground:@selector(sendToServerTheCommand:) withObject:cmd];
+}
+
+- (void)reportChangedAdditionalOptionsValue:(NSArray *)values atRow:(NSInteger)rowIdx
+{
+    [self showUpdatingProgressHUD];
+    NSString *cmd = @"action=command&command=";
+    
+    if (rowIdx == 0) // Motion
+    {
+        cmd = [cmd stringByAppendingFormat:@"set_recording_parameter&value=%d%d", [values[0] integerValue], 1];
+        
+        self.sensitivityInfo.motionVideoRecordingOn = [values[0] boolValue];
+        self.sensitivityInfo.motionCaptureSnapshotOn = TRUE;//[values[1] boolValue];
+        
+        [self performSelectorInBackground:@selector(sendToServerTheCommand:) withObject:cmd];
+    }
 }
 
 #pragma  mark - Sensitivity temperature cell delegate
@@ -1551,8 +1586,8 @@ typedef enum _WAIT_FOR_UPDATING {
 
 - (void)getSensitivityInfoFromServer
 {
-    //self.selectedReg = [[NSUserDefaults standardUserDefaults] stringForKey:@"REG"];
-    //NSString *apiKey = [[NSUserDefaults standardUserDefaults] stringForKey:@"PortalApiKey"];
+    NSString *cmd = @"action=command&command=camera_parameter_setting";
+    self.isNewDeviceSettingsCommand = TRUE;
     
     if(self.sensitivityInfo==nil){
         SensitivityInfo *senInfo = [[SensitivityInfo alloc] init];
@@ -1566,8 +1601,23 @@ typedef enum _WAIT_FOR_UPDATING {
     }
     
     NSDictionary *responseDict = [_jsonCommBlock sendCommandBlockedWithRegistrationId:self.camChannel.profile.registrationID
-                                                                      andCommand:@"action=command&command=device_setting"
+                                                                      andCommand:cmd
                                                                        andApiKey:_apiKey];
+    NSLog(@"%s responseDict:%@", __func__, responseDict);
+    
+    if (responseDict &&
+        [[responseDict objectForKey:@"status"] integerValue] == 200 &&
+        [[[[responseDict objectForKey: @"data"] objectForKey: @"device_response"] objectForKey: @"body"] isEqualToString:@"NA"])
+    {
+        cmd = @"action=command&command=device_setting";
+        
+        responseDict = [_jsonCommBlock sendCommandBlockedWithRegistrationId:self.camChannel.profile.registrationID
+                                                                 andCommand:cmd
+                                                                  andApiKey:_apiKey];
+        self.isNewDeviceSettingsCommand = FALSE;
+    }
+    
+    NSLog(@"%s responseDict:%@", __func__, responseDict);
     
     self.isLoading = FALSE;
     
@@ -1576,8 +1626,10 @@ typedef enum _WAIT_FOR_UPDATING {
         if ([[responseDict objectForKey:@"status"] integerValue] == 200)
         {
             // "body": "error_in_control_command : 701"
-            // "body:: "device_setting: ms=1,me=70,vs=1,vt=80,hs=0,ls=1,ht=30,lt=18"
+            // "body": "device_setting: ms=1,me=70,vs=1,vt=80,hs=0,ls=1,ht=30,lt=18"
+            // "body": "camera_parameter_setting: ms=1,me=70,vs=1,vt=80,hs=0,ls=1,ht=30,lt=18,mvr=1,cs=1" --> new command.
             NSString *body = [[[responseDict objectForKey: @"data"] objectForKey: @"device_response"] objectForKey: @"body"];
+            //NSString *body = @"camera_parameter_setting: ms=1,me=70,vs=1,vt=80,hs=0,ls=1,ht=30,lt=18,mvr=0,cs=1";
             
             if ([body hasPrefix:@"error"])
             {
@@ -1596,7 +1648,14 @@ typedef enum _WAIT_FOR_UPDATING {
                     
                     for (int i = 0; i < settingsArray.count; ++i)
                     {
-                        settingsArray[i] = [settingsArray[i] substringFromIndex:3];
+                        if (_isNewDeviceSettingsCommand && i == 8)
+                        {
+                            settingsArray[i] = [settingsArray[i] substringFromIndex:4];
+                        }
+                        else
+                        {
+                            settingsArray[i] = [settingsArray[i] substringFromIndex:3];
+                        }
                     }
                     
                     self.sensitivityInfo.motionOn      = [settingsArray[0] integerValue];
@@ -1615,8 +1674,11 @@ typedef enum _WAIT_FOR_UPDATING {
                     
                     self.sensitivityInfo.tempIsFahrenheit = [[NSUserDefaults standardUserDefaults] boolForKey:IS_FAHRENHEIT];
                     NSLog(@"%s, mv:%d, sv:%d", __FUNCTION__, _sensitivityInfo.motionValue, _sensitivityInfo.soundValue);
-                    //numOfRows[indexPath.section] = 4;
-                    //self.isExistSensitivityData = TRUE;
+
+                    if (_isNewDeviceSettingsCommand) {
+                        self.sensitivityInfo.motionVideoRecordingOn = [settingsArray[8] boolValue];
+                        self.sensitivityInfo.motionCaptureSnapshotOn = [settingsArray[9] boolValue];
+                    }
                 }
                 else
                 {
