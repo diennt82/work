@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.iPad.XIB" version="3.0" toolsVersion="5053" systemVersion="13D65" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.iPad.XIB" version="3.0" toolsVersion="5056" systemVersion="13C64" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
@@ -34,7 +34,7 @@
                     <rect key="frame" x="237" y="933" width="295" height="55"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                     <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="20"/>
-                    <state key="normal" title="Remove Camera" backgroundImage="remove_camera.png">
+                    <state key="normal" title="Remove Camera" backgroundImage="enter.png">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
@@ -210,8 +210,8 @@
         </view>
     </objects>
     <resources>
+        <image name="enter.png" width="270" height="50"/>
         <image name="general.png" width="25" height="25"/>
-        <image name="remove_camera.png" width="295" height="55"/>
         <image name="sensitivity.png" width="25" height="25"/>
     </resources>
 </document>
