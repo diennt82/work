@@ -14,22 +14,27 @@
 #import "define.h"
 #import "Util.h"
 
-#define BTN_CONTINUE_TAG    599
-#define BTN_TRY_AGAIN_TAG   559
-#define BLE_TIMEOUT_PROCESS 4*60.0
-
 @interface NetworkInfoToCamera_VController () <UITextFieldDelegate>
 
-@property (nonatomic, weak) IBOutlet UIView *viewProgress;
-@property (nonatomic, weak) IBOutlet UIView *viewError;
+@property (nonatomic, strong) IBOutlet UIView *viewProgress;
+@property (nonatomic, strong) IBOutlet UIView *viewError;
+@property (nonatomic, strong) IBOutlet UITableViewCell *ssidCell;
+@property (nonatomic, strong) IBOutlet UITableViewCell *securityCell;
+@property (nonatomic, strong) IBOutlet UITableViewCell *passwordCell;
+@property (nonatomic, strong) IBOutlet UITableViewCell *confPasswordCell;
+
+@property (nonatomic, weak) IBOutlet UILabel *checkingConnectionLabel;
+@property (nonatomic, weak) IBOutlet UILabel *makeTakeAMinuteLabel;
+@property (nonatomic, weak) IBOutlet UILabel *unableToDetectCameraLabel;
+@property (nonatomic, weak) IBOutlet UILabel *timeoutLabel;
 
 @property (nonatomic, strong) UITextField *tfSSID;
 @property (nonatomic, strong) UITextField *tfPassword;
 @property (nonatomic, strong) UITextField *tfConfirmPass;
 
 @property (nonatomic, strong) NSTimer *timerTimeoutConnectBLE;
-@property (nonatomic, strong) UIButton *btnContinue;
-@property (nonatomic, strong) UIButton *btnTryAgain;
+@property (nonatomic, strong) UIButton *continueButton;
+@property (nonatomic, strong) UIButton *tryAgainButton;
 
 @property (nonatomic, copy) NSString *statusNetworkCamString;
 @property (nonatomic) BOOL shouldTimeoutProcessing;
@@ -39,31 +44,55 @@
 
 @implementation NetworkInfoToCamera_VController
 
+#define PASSWORD_LABEL_TAG      100
+#define PASSWORD_TEXTFIELD_TAG  200
+
+#define CONFIRM_LABEL_TAG       101
+#define CONFIRM_TEXTFIELD_TAG   201
+
+#define NAME_LABEL_TAG          102
+#define NAME_TEXTFIELD_TAG      202
+
+#define SECURITY_LABEL_TAG      103
+#define SECURITY_VAL_LABEL_TAG  203
+
+#define BTN_CONTINUE_TAG    599
+#define BTN_TRY_AGAIN_TAG   559
+#define BLE_TIMEOUT_PROCESS 4*60.0
+
+#pragma mark - UIViewController methods
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view.
     
-    self.navigationItem.title = NSLocalizedStringWithDefaultValue(@"Enter_Network_Information",nil, [NSBundle mainBundle],
-                                                                  @"Enter Network Information" , nil);
+    self.title = LocStr(@"Enter Network Information");
     
-    self.navigationItem.backBarButtonItem =
-    [[UIBarButtonItem alloc] initWithTitle: NSLocalizedStringWithDefaultValue(@"Back",nil, [NSBundle mainBundle],
-                                                                               @"Back" , nil)
-                                      style:UIBarButtonItemStyleBordered
-                                     target:nil
-                                     action:nil];
-    self.navigationItem.hidesBackButton = NO;
+    self.continueButton = (UIButton *)[_viewError viewWithTag:BTN_CONTINUE_TAG];
+    [_continueButton setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
+    [_continueButton setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
+    [_continueButton addTarget:self action:@selector(btnContinueTouchUpInsideAction:) forControlEvents:UIControlEventTouchUpInside];
     
-    self.btnContinue = (UIButton *)[_viewError viewWithTag:BTN_CONTINUE_TAG];
-    [_btnContinue setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
-    [_btnContinue setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
-    [_btnContinue addTarget:self action:@selector(btnContinueTouchUpInsideAction:) forControlEvents:UIControlEventTouchUpInside];
+    self.tryAgainButton = (UIButton *)[_viewError viewWithTag:BTN_TRY_AGAIN_TAG];
+    [_tryAgainButton setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
+    [_tryAgainButton setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
+    [_tryAgainButton addTarget:self action:@selector(btnTryAgainTouchUpInsideAction:) forControlEvents:UIControlEventTouchUpInside];
     
-    self.btnTryAgain = (UIButton *)[_viewError viewWithTag:BTN_TRY_AGAIN_TAG];
-    [_btnTryAgain setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
-    [_btnTryAgain setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
-    [_btnTryAgain addTarget:self action:@selector(btnTryAgainTouchUpInsideAction:) forControlEvents:UIControlEventTouchUpInside];
+    
+    _checkingConnectionLabel.text = LocStr(@"Checking connection to camera");
+    _makeTakeAMinuteLabel.text = LocStr(@"This may take up to a minute");
+    _unableToDetectCameraLabel.text = LocStr(@"Unable to detect camera");
+    _timeoutLabel.text = LocStr(@"Timeout");
+    [_continueButton setTitle:LocStr(@"Continue") forState:UIControlStateNormal];
+    [_tryAgainButton setTitle:LocStr(@"Try again") forState:UIControlStateNormal];
+    
+    ((UILabel *)[_ssidCell viewWithTag:NAME_LABEL_TAG]).text = LocStr(@"Name");
+    ((UILabel *)[_securityCell viewWithTag:SECURITY_LABEL_TAG]).text = LocStr(@"Security");
+    ((UILabel *)[_securityCell viewWithTag:SECURITY_VAL_LABEL_TAG]).text = LocStr(@"None");
+    ((UILabel *)[_passwordCell viewWithTag:PASSWORD_LABEL_TAG]).text = LocStr(@"Password");
+    ((UITextField *)[_passwordCell viewWithTag:PASSWORD_TEXTFIELD_TAG]).placeholder = LocStr(@"Enter Wi-Fi password");
+    ((UILabel *)[_confPasswordCell viewWithTag:CONFIRM_LABEL_TAG]).text = LocStr(@"Confirm");
+    ((UITextField *)[_confPasswordCell viewWithTag:CONFIRM_TEXTFIELD_TAG]).placeholder = LocStr(@"Confirm password");
     
     UIImageView *imageView = (UIImageView *)[_viewProgress viewWithTag:595];
     imageView.animationImages =[NSArray arrayWithObjects:
@@ -77,48 +106,45 @@
     [imageView startAnimating];
     
     if ( !_ssid ) {
-        NSLog(@"empty SSID ");
+        DLog(@"empty SSID ");
     }
     
     if ( !_security ) {
-        NSLog(@"empty security ");
+        DLog(@"empty security ");
     }
     
-    UITextField *tfSsid = (UITextField *)[_ssidCell viewWithTag:202];
+    UITextField *tfSsid = (UITextField *)[_ssidCell viewWithTag:NAME_TEXTFIELD_TAG];
     if (tfSsid && !_isOtherNetwork ) {
         tfSsid.text = _ssid;
     }
     
-    UITextField *_sec = (UITextField *)[_securityCell viewWithTag:1];
+    UITextField *_sec = (UITextField *)[_securityCell viewWithTag:SECURITY_VAL_LABEL_TAG];
     _sec.text = _security;
     
-    UIBarButtonItem *nextButton =
-    [[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"Next",nil, [NSBundle mainBundle],
-                                                                             @"Next" , nil)
-     
-                                     style:UIBarButtonItemStylePlain
-                                    target:self
-                                    action:@selector(handleNextButton:)];
+    UIBarButtonItem *nextButton = [[UIBarButtonItem alloc] initWithTitle:LocStr(@"Next")
+                                                                   style:UIBarButtonItemStylePlain
+                                                                  target:self
+                                                                  action:@selector(handleNextButton:)];
     self.navigationItem.rightBarButtonItem = nextButton;
     self.navigationItem.rightBarButtonItem.enabled = NO;
     
-    self.tfSSID = (UITextField *)[_ssidCell viewWithTag:202];
+    self.tfSSID = (UITextField *)[_ssidCell viewWithTag:NAME_TEXTFIELD_TAG];
     
-    if ( _tfSSID.text.length > 0 && ([_security isEqualToString:@"None"] || [_security isEqualToString:@"open"]) ) {
+    if ( _tfSSID.text.length > 0 && ([_security isEqualToString:LocStr(@"None")] || [_security isEqualToString:@"open"]) ) {
         self.navigationItem.rightBarButtonItem.enabled = YES;
     }
     
-    self.tfPassword = (UITextField *)[_passwordCell viewWithTag:200];
+    self.tfPassword = (UITextField *)[_passwordCell viewWithTag:PASSWORD_TEXTFIELD_TAG];
     _tfPassword.delegate = self;
     
-    self.tfConfirmPass = (UITextField *)[_confPasswordCell viewWithTag:201];
+    self.tfConfirmPass = (UITextField *)[_confPasswordCell viewWithTag:CONFIRM_TEXTFIELD_TAG];
     _tfConfirmPass.delegate = self;
     
-    /* initialize transient object here */
+    // initialize transient object here
 	self.deviceConf = [[DeviceConfiguration alloc] init];
 	
     if ( ![self restoreDataIfPossible] ) {
-		//Try to read the ssid from preference:
+		// Try to read the ssid from preference:
         self.deviceConf.ssid = _ssid;
     }
     else {
@@ -128,7 +154,7 @@
          * 3. If ( =)  -> prefill pass- deviceConf.key  to  password/conf password text field
          */
         
-        NSLog(@"%s - deviceConf.ssid: %@, - self.ssid: %@, - self.security: %@", __FUNCTION__, self.deviceConf.ssid, self.ssid, self.security);
+        DLog(@"%s - deviceConf.ssid: %@, - self.ssid: %@, - self.security: %@", __FUNCTION__, self.deviceConf.ssid, self.ssid, self.security);
         
         if ( [_deviceConf.ssid isEqualToString:_ssid] &&
             ([_security isEqualToString:@"wep"] || [_security isEqualToString:@"wpa"]) )
@@ -153,25 +179,15 @@
         _viewError.frame = rect;
     }
     
-    NSLog(@"update security type");
-    UITextField * _sec = (UITextField *)[self.securityCell viewWithTag:1];
+    UITextField * _sec = (UITextField *)[_securityCell viewWithTag:SECURITY_VAL_LABEL_TAG];
     _sec.text = _security;
-}
-
-- (void)viewDidUnload
-{
-    [super viewDidUnload];
-    [self setIb_dialogVerifyNetwork:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    
-    //remove delegate
     [BLEConnectionManager.instanceBLE setDelegate:nil];
 }
-
 
 #pragma mark - Actions
 
@@ -185,11 +201,11 @@
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
-    if (textField.tag == 202) {
+    if (textField.tag == NAME_TEXTFIELD_TAG) {
         // SSID
         NSInteger ssidTextLength = 0;
-        const char * _char = [string cStringUsingEncoding:NSUTF8StringEncoding];
-        int isBackSpace = strcmp(_char, "\b");
+        const char * ch = [string cStringUsingEncoding:NSUTF8StringEncoding];
+        int isBackSpace = strcmp(ch, "\b");
         
         if (isBackSpace == -8) {
             ssidTextLength = textField.text.length - 1;
@@ -197,14 +213,14 @@
         else {
             ssidTextLength = textField.text.length + string.length;
         }
-        if (ssidTextLength > 0 && [self.tfPassword.text isEqualToString:self.tfConfirmPass.text]) {
+        if (ssidTextLength > 0 && [_tfPassword.text isEqualToString:_tfConfirmPass.text]) {
             self.navigationItem.rightBarButtonItem.enabled = YES;
         }
         else {
             self.navigationItem.rightBarButtonItem.enabled = NO;
         }
     }
-    else if (textField.tag == 200) {
+    else if (textField.tag == PASSWORD_TEXTFIELD_TAG) {
         // Password
         NSString *passString = @"";
         const char *ch = [string cStringUsingEncoding:NSUTF8StringEncoding];
@@ -216,14 +232,14 @@
         else {
             passString = [textField.text stringByAppendingString:string];
         }
-        if (self.tfSSID.text.length > 0 && [passString isEqualToString:self.tfConfirmPass.text]) {
+        if (_tfSSID.text.length > 0 && [passString isEqualToString:_tfConfirmPass.text]) {
             self.navigationItem.rightBarButtonItem.enabled = YES;
         }
         else {
             self.navigationItem.rightBarButtonItem.enabled = NO;
         }
     }
-    else if (textField.tag == 201) {
+    else if (textField.tag == CONFIRM_TEXTFIELD_TAG) {
         // Confirm Password
         NSString *confirmPassString = @"";
         
@@ -236,7 +252,7 @@
         else {
             confirmPassString = [textField.text stringByAppendingString:string];
         }
-        if (self.tfSSID.text.length > 0 && [self.tfPassword.text isEqualToString:confirmPassString]) {
+        if (_tfSSID.text.length > 0 && [_tfPassword.text isEqualToString:confirmPassString]) {
             self.navigationItem.rightBarButtonItem.enabled = YES;
         }
         else {
@@ -249,17 +265,17 @@
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {
-    if ( textField.tag != 202 ) {
-        // Dont move if it's the SSID name
-        [self animateTextField: textField up: YES];
+    // Dont move if it's the SSID name
+    if ( textField.tag != NAME_TEXTFIELD_TAG ) {
+        [self animateTextField:textField up:YES];
     }
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
-    if ( textField.tag != 202 ){
-        // Dont move if it's the SSID name
-        [self animateTextField: textField up: NO];
+    // Dont move if it's the SSID name
+    if ( textField.tag != NAME_TEXTFIELD_TAG ){
+        [self animateTextField:textField up:NO];
     }
 }
 
@@ -269,32 +285,29 @@
     const float movementDuration = 0.3f; // tweak as needed
     UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
     
-    if (textField.tag ==201 &&
-        (interfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
-         interfaceOrientation == UIInterfaceOrientationLandscapeRight)
-        ) //Confirm Password cell
-    {
+    if ( textField.tag == CONFIRM_TEXTFIELD_TAG && UIInterfaceOrientationIsLandscape(interfaceOrientation) ) {
+        // Confirm Password cell
         movementDistance+= 40;
     }
     
     int movement = (up ? -movementDistance : movementDistance);
     
-    [UIView beginAnimations: @"anim" context: nil];
-    [UIView setAnimationBeginsFromCurrentState: YES];
-    [UIView setAnimationDuration: movementDuration];
+    [UIView beginAnimations:@"anim" context:nil];
+    [UIView setAnimationBeginsFromCurrentState:YES];
+    [UIView setAnimationDuration:movementDuration];
     self.view.frame = CGRectOffset(self.view.frame, 0, movement);
     [UIView commitAnimations];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
-    if ( textField.tag == 200 ) {
+    if ( textField.tag == PASSWORD_TEXTFIELD_TAG ) {
         // password
         self.password = textField.text;
-        [self.tfConfirmPass becomeFirstResponder];
+        [_tfConfirmPass becomeFirstResponder];
     }
-    else if ( textField.tag ==201 ) {
-        //conf password
+    else if ( textField.tag == CONFIRM_TEXTFIELD_TAG ) {
+        // conf password
         [textField resignFirstResponder];
     }
     else {
@@ -307,17 +320,17 @@
 
 - (void)hideAllKeyboard
 {
-    UITextField *textField = (UITextField *)[self.view viewWithTag:200];
+    UITextField *textField = (UITextField *)[self.view viewWithTag:PASSWORD_TEXTFIELD_TAG];
     if ( textField ) {
         [textField resignFirstResponder];
     }
     
-    textField = (UITextField *)[self.view viewWithTag:201];
+    textField = (UITextField *)[self.view viewWithTag:CONFIRM_TEXTFIELD_TAG];
     if( textField ) {
         [textField resignFirstResponder];
     }
     
-    textField = (UITextField *)[self.view viewWithTag:202];
+    textField = (UITextField *)[self.view viewWithTag:NAME_TEXTFIELD_TAG];
     if( textField ) {
         [textField resignFirstResponder];
     }
@@ -342,27 +355,23 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
     
-    int tag = tableView.tag;
-    
-    if (tag == 13) {
-        if (indexPath.section == SSID_SECTION) {
-            // only one cell in this section
-            if ( _isOtherNetwork ) {
-                UITextField *tfSsid  = (UITextField *)[_ssidCell viewWithTag:202];
-                [tfSsid setUserInteractionEnabled:YES];
-            }
-            return _ssidCell;
+    if (indexPath.section == SSID_SECTION) {
+        // only one cell in this section
+        if ( _isOtherNetwork ) {
+            UITextField *tfSsid  = (UITextField *)[_ssidCell viewWithTag:NAME_TEXTFIELD_TAG];
+            [tfSsid setUserInteractionEnabled:YES];
         }
-        else if (indexPath.section == SEC_SECTION) {
-            if (indexPath.row == SEC_INDEX) {
-                return _securityCell;
-            }
-            if (indexPath.row == PASSWORD_INDEX) {
-                return _passwordCell;
-            }
-            if (indexPath.row == CONFPASSWORD_INDEX) {
-                return _confPasswordCell;
-            }
+        return _ssidCell;
+    }
+    else if (indexPath.section == SEC_SECTION) {
+        if (indexPath.row == SEC_INDEX) {
+            return _securityCell;
+        }
+        if (indexPath.row == PASSWORD_INDEX) {
+            return _passwordCell;
+        }
+        if (indexPath.row == CONFPASSWORD_INDEX) {
+            return _confPasswordCell;
         }
     }
     
@@ -371,19 +380,15 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    int tag = tableView.tag;
-    
-    if (tag == 13) {
-        if (section == SSID_SECTION) {
+    if (section == SSID_SECTION) {
+        return 1;
+    }
+    else if (section == SEC_SECTION) {
+        if ([_security isEqualToString:@"open"] || [_security isEqualToString:LocStr(@"None")]) {
             return 1;
         }
-        else if (section == SEC_SECTION) {
-            if ([_security isEqualToString:@"open"] || [_security isEqualToString:@"none"]) {
-                return 1;
-            }
-            else {
-                return 3;
-            }
+        else {
+            return 3;
         }
     }
     
@@ -392,11 +397,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    int tag = tableView.tag;
-    if (tag == 13) {
-        return 2;
-    }
-    return 0;
+    return 2;
 }
 
 
@@ -413,9 +414,9 @@
     }
     
     if (indexPath.section == SSID_SECTION) {
-        //only one cell in this section
+        // only one cell in this section
         if ( _isOtherNetwork ) {
-            UITextField *tfSsid  = (UITextField*)[_ssidCell viewWithTag:202];
+            UITextField *tfSsid  = (UITextField*)[_ssidCell viewWithTag:NAME_TEXTFIELD_TAG];
             [tfSsid setUserInteractionEnabled:YES];
             [tfSsid becomeFirstResponder];
         }
@@ -423,12 +424,12 @@
     else if (indexPath.section == SEC_SECTION)
     {
         if (indexPath.row == PASSWORD_INDEX) {
-            UITextField * txtField = (UITextField*)[_passwordCell viewWithTag:200];
+            UITextField * txtField = (UITextField*)[_passwordCell viewWithTag:PASSWORD_TEXTFIELD_TAG];
             [txtField becomeFirstResponder];
         }
         if (indexPath.row == CONFPASSWORD_INDEX)
         {
-            UITextField * txtField = (UITextField*)[_confPasswordCell viewWithTag:201];
+            UITextField * txtField = (UITextField*)[_confPasswordCell viewWithTag:CONFIRM_TEXTFIELD_TAG];
             [txtField becomeFirstResponder];
         }
     }
@@ -438,25 +439,23 @@
 
 - (void)changeSecurityType
 {
-    //load step 07
-    NSLog(@"Load step 7");
+    // ? TODO ?
+    DLog(@"Load step 7");
 }
 
 - (void)handleNextButton:(id)sender
 {
-    //check if password is ok?
-    UITextField *my_ssid = (UITextField*)[_ssidCell viewWithTag:202];
-    NSLog(@"%s other: %d, security: %@", __FUNCTION__, _isOtherNetwork, _security);
+    // check if password is ok
+    UITextField *my_ssid = (UITextField*)[_ssidCell viewWithTag:NAME_TEXTFIELD_TAG];
+    DLog(@"%s other: %d, security: %@", __FUNCTION__, _isOtherNetwork, _security);
     
     if ( _isOtherNetwork ) {
         if ([my_ssid.text length] == 0) {
-            // ERROR condition
-            UIAlertView *_alert = [[UIAlertView alloc]
-                                   initWithTitle:@"SSID cannot be empty"
-                                   message:@"Please fill the SSID name and try again"
-                                   delegate:self
-                                   cancelButtonTitle:@"OK"
-                                   otherButtonTitles:nil];
+            UIAlertView *_alert = [[UIAlertView alloc] initWithTitle:LocStr(@"SSID cannot be empty")
+                                                             message:LocStr(@"Enter the SSID name and try again")
+                                                            delegate:nil
+                                                   cancelButtonTitle:nil
+                                                   otherButtonTitles:LocStr(@"Ok"), nil];
             [_alert show];
             
             return;
@@ -466,55 +465,51 @@
         }
     }
     
-    if ([_security isEqualToString:@"open"])
-    {
+    if ([_security isEqualToString:@"open"]) {
         self.navigationItem.rightBarButtonItem.enabled = NO;
         
-        /* Start timer to check for camera connection issue */
+        // Start timer to check for camera connection issue
         self.timerTimeoutConnectBLE  = [NSTimer scheduledTimerWithTimeInterval:BLE_TIMEOUT_PROCESS
                                                        target:self
                                                      selector:@selector(timeoutBLESetupProcessing:)
                                                      userInfo:nil
                                                       repeats:NO];
         
-        /* Blocking call, after this return the camera should be either added or failed setup already */
+        // Blocking call, after this return the camera should be either added or failed setup already
         self.password = @"";
         [self sendWifiInfoToCamera];
     }
     else {
-        UITextField *pass = (UITextField *)[_passwordCell viewWithTag:200];
-        UITextField *confpass = (UITextField *)[_confPasswordCell viewWithTag:201];
+        UITextField *pass = (UITextField *)[_passwordCell viewWithTag:PASSWORD_TEXTFIELD_TAG];
+        UITextField *confpass = (UITextField *)[_confPasswordCell viewWithTag:CONFIRM_TEXTFIELD_TAG];
         
         if ( [pass.text length] == 0 ||
             [confpass.text length] ==0 ||
             ![pass.text isEqualToString:confpass.text] )
         {
-            // ERROR condition
-            NSString *msg_fail = NSLocalizedStringWithDefaultValue(@"Confirm_Pass_Fail", nil, [NSBundle mainBundle], @"Le mot de passe ne correspond pas. S'il vous plaît, saisir à nouveau !", nil);
-            UIAlertView *alert = [[UIAlertView alloc]
-                                   initWithTitle:@"Confirm Password Failed"
-                                   message:msg_fail
-                                   delegate:self
-                                   cancelButtonTitle:@"OK"
-                                   otherButtonTitles:nil];
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:LocStr(@"Confirm password")
+                                                            message:LocStr(@"Password does not match, please re-enter!")
+                                                           delegate:nil
+                                                  cancelButtonTitle:nil
+                                                  otherButtonTitles:LocStr(@"Ok"), nil];
             [alert show];
             return;
         }
         else {
             //cont
-            self.password = [NSString stringWithString:[pass text]];
-            NSLog(@"NetworkInfo - handleNextButton - Create time out ble setup process");
+            self.password = [NSString stringWithString:pass.text];
+            DLog(@"NetworkInfo - handleNextButton - Create time out ble setup process");
             
             self.navigationItem.rightBarButtonItem.enabled = NO;
 
-            /* Start timer to check for camera connection issue */
+            // Start timer to check for camera connection issue
             self.timerTimeoutConnectBLE  = [NSTimer scheduledTimerWithTimeInterval:BLE_TIMEOUT_PROCESS
                                                            target:self
                                                          selector:@selector(timeoutBLESetupProcessing:)
                                                          userInfo:nil
                                                           repeats:NO];
             
-            /* Blocking call, after this return the camera should be either added or failed setup already */
+            // Blocking call, after this return the camera should be either added or failed setup already
             [self sendWifiInfoToCamera ];
         }
     }
@@ -526,7 +521,7 @@
     self.shouldTimeoutProcessing = YES;
     
     // disconnect to BLE and return to guide screen.
-    if (BLEConnectionManager.instanceBLE.state == CONNECTED) {
+    if ( BLEConnectionManager.instanceBLE.state == CONNECTED ) {
         BLEConnectionManager.instanceBLE.needReconnect = NO;
         [BLEConnectionManager.instanceBLE stopScanBLE];
         [self disconnectToBLE];
@@ -541,7 +536,7 @@
         NSString *stringUDID = [userDefaults stringForKey:CAMERA_UDID];
         NSString *apiKey     = [userDefaults objectForKey:@"PortalApiKey"];
         
-        NSLog(@"NetworkInfo - timeoutBLESetupProcessing - try to remove camera");
+        DLog(@"NetworkInfo - timeoutBLESetupProcessing - try to remove camera");
         
         [jsonComm deleteDeviceBlockedWithRegistrationId:stringUDID andApiKey:apiKey];
         
@@ -556,7 +551,7 @@
 {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString *cameraMac = [userDefaults objectForKey:@"CameraMacSave"];
-    NSLog(@"Check camera_mac is %@", cameraMac);
+    DLog(@"Check camera_mac is %@", cameraMac);
     self.deviceConf.ssid = self.ssid;
     
     //save mac address for used later
@@ -571,8 +566,7 @@
         _deviceConf.wepType = @"OPEN"; //default
         _deviceConf.keyIndex = @"1"; //default;
     }
-    else if ( [_security isEqualToString:@"wpa"] )
-    {
+    else if ( [_security isEqualToString:@"wpa"] ) {
         _deviceConf.securityMode = @"WPA-PSK/WPA2-PSK";
     }
     else if ([_security isEqualToString:@"shared"]) {
@@ -585,13 +579,13 @@
     _deviceConf.key = _password;
     
     _deviceConf.usrName = BASIC_AUTH_DEFAULT_USER;
-    NSLog(@"02 cam password is : %@", [CameraPassword getPasswordForCam:cameraMac]);
+    DLog(@"02 cam password is : %@", [CameraPassword getPasswordForCam:cameraMac]);
     NSString* camPass = [CameraPassword getPasswordForCam:cameraMac];
     
     if ( !camPass ) {
         // default pass
         camPass = @"00000000";
-        NSLog(@"02 cam password is default: %@", camPass);
+        DLog(@"02 cam password is default: %@", camPass);
     }
     
     _deviceConf.passWd = camPass;
@@ -601,17 +595,15 @@
 
 - (void)didReceiveBLEList:(NSMutableArray *)bleLists
 {
-    NSLog(@"NWINFO : rescan completed ");
+    DLog(@"NWINFO : rescan completed");
     CBPeripheral *bleUart = (CBPeripheral *)[BLEConnectionManager.instanceBLE.listBLEs firstObject];
     [BLEConnectionManager.instanceBLE connectToBLEWithPeripheral:bleUart];
 }
 
 - (void)bleDisconnected
 {
-    NSLog(@"NWINFO : BLE device is DISCONNECTED - state: %d, - shouldTimeoutProcessing: %d", _stage, _shouldTimeoutProcessing);
-    
+    DLog(@"NWINFO : BLE device is DISCONNECTED - state: %d, - shouldTimeoutProcessing: %d", _stage, _shouldTimeoutProcessing);
     if (_shouldTimeoutProcessing) {
-        //NSLog(@"NWINFO - bleDisconnected");
         [_viewProgress removeFromSuperview];
         [self.view addSubview:_viewError];
         [self.view bringSubviewToFront:_viewError];
@@ -629,8 +621,7 @@
 
 - (void)rescanToConnectToBLE
 {
-    NSLog(@"NetworkInfo - rescanToConnectToBLE - Reconnect after 2s");
-    
+    DLog(@"NetworkInfo - rescanToConnectToBLE - Reconnect after 2s");
     NSDate *date = [NSDate dateWithTimeInterval:2.0 sinceDate:[NSDate date]];
     [[NSRunLoop currentRunLoop] runUntilDate:date];
     
@@ -640,54 +631,55 @@
 
 - (void)didConnectToBle:(CBUUID*)serviceId
 {
-    NSLog(@"BLE device connected - now, latest stage: %d", _stage);
+    DLog(@"BLE device connected - now, latest stage: %d", _stage);
    
-#if 0
-    switch (stage)
+    switch (_stage)
     {
         case SENT_WIFI:
         case CHECKING_WIFI:
-            NSLog(@"checking wifi status ... do nothing here");
-           // [self readWifiStatusOfCamera:nil];
+        {
+            DLog(@"checking wifi status ... do nothing here");
+            //[self readWifiStatusOfCamera:nil];
             break;
-            
+        }
         case INIT:
-            NSLog(@"start over!!");
+        {
+            DLog(@"start over!!");
             //[self sendWifiInfoToCamera];
             break;
+        }
     }
-#endif
 }
 
 - (void)onReceiveDataError:(int)errorCode forCommand:(NSString *)commandToCamera
 {
-    NSLog(@"NetworkInfo - onReceiveDataError: %d, cmd: %@", errorCode, commandToCamera);
+    DLog(@"NetworkInfo - onReceiveDataError: %d, cmd: %@", errorCode, commandToCamera);
 }
 
 - (void)didReceiveData:(NSString *)string
 {
-    NSLog(@"NetworkInfoToCameraVC - didReceiveData: %@", string);
+    DLog(@"NetworkInfoToCameraVC - didReceiveData: %@", string);
     
     if ([string hasPrefix:@"set_time_zone"]) {
         // set_time_zone: 0 -> success
         self.stage = SENT_TIME_ZONE;
-        NSLog(@"NetworkInfo - Set time done");
+        DLog(@"NetworkInfo - Set time done");
     }
     else if ([string hasPrefix:@"setup_wireless_save"])
     {
         self.stage = SENT_WIFI;
-        NSLog(@"Finishing SETUP_HTTP_COMMAND");
+        DLog(@"Finishing SETUP_HTTP_COMMAND");
     }
     else if ([string hasPrefix:GET_STATE_NETWORK_CAMERA])
     {
         self.stage = CHECKING_WIFI;
         
-        NSLog(@"Recv: %@", string);
+        DLog(@"Recv: %@", string);
         NSString *state = string;
         NSString *currentStateCamera;
      
-        if ( state.length > 0) {
-            currentStateCamera = [[state componentsSeparatedByString:@": "] objectAtIndex:1];
+        if ( state.length > 0 ) {
+            currentStateCamera = [state componentsSeparatedByString:@": "][1];
         }
         else {
             currentStateCamera = @"";
@@ -701,25 +693,24 @@
         }
     }
     else if ([string hasPrefix:RESTART_HTTP_CMD]) {
-        NSLog(@"Finishing RESTART_HTTP_CMD");
+        DLog(@"Finishing RESTART_HTTP_CMD");
     }
     else {
-        NSLog(@"Receive un-expected data, Try to findout what to do next??? ");
-#if 0
-        switch (stage)
+        DLog(@"Receive un-expected data, Try to findout what to do next??? ");
+
+        switch (_stage)
         {
             case SENT_WIFI:
             case CHECKING_WIFI:
-                NSLog(@"checking wifi status");
-                [self readWifiStatusOfCamera:nil];
+                DLog(@"checking wifi status");
+                //[self readWifiStatusOfCamera:nil];
                 break;
                 
             case INIT:
-                NSLog(@"start over!!");
-                [self sendWifiInfoToCamera];
+                DLog(@"start over!!");
+                //[self sendWifiInfoToCamera];
                 break;
         }
-#endif
     }
 }
 
@@ -727,17 +718,17 @@
 
 - (void)sendCommandRestartSystem
 {
-    NSLog(@"Send RESTART Command, now");
+    DLog(@"Send RESTART Command, now");
     
     NSDate *date;
     while ( BLEConnectionManager.instanceBLE.state != CONNECTED && !_shouldTimeoutProcessing ) {
-        NSLog(@"sendCommandRestartSystem:  BLE disconnected - stage: %d, sleep 2s ", _stage);
+        DLog(@"sendCommandRestartSystem:  BLE disconnected - stage: %d, sleep 2s ", _stage);
         date = [NSDate dateWithTimeInterval:2.0 sinceDate:[NSDate date]];
         [[NSRunLoop currentRunLoop] runUntilDate:date];
     }
     
     if ( _shouldTimeoutProcessing ) {
-        NSLog(@"sendCommandRestartSystem: SETUP PROCESS TIMEOUT -- return");
+        DLog(@"sendCommandRestartSystem: SETUP PROCESS TIMEOUT -- return");
         return;
     }
     
@@ -749,27 +740,27 @@
         [[NSRunLoop currentRunLoop] runUntilDate:date];
         
         if( BLEConnectionManager.instanceBLE.uartPeripheral.isBusy ) {
-            NSLog(@"BLE still busy, camera may have already rebooted. Moving on..");
+            DLog(@"BLE still busy, camera may have already rebooted. Moving on..");
         }
     }
 }
 
 - (BOOL)sendCommandHTTPSetup
 {
-    NSLog(@"Send command SETUP HTTP Command, now");
+    DLog(@"Send command SETUP HTTP Command, now");
     NSDate *date;
     while( BLEConnectionManager.instanceBLE.state != CONNECTED && !_shouldTimeoutProcessing ) {
-        NSLog(@"sendCommandHTTPSetup:  BLE disconnected - stage: %d, sleep 2s ", _stage);
+        DLog(@"sendCommandHTTPSetup:  BLE disconnected - stage: %d, sleep 2s ", _stage);
         date = [NSDate dateWithTimeInterval:2.0 sinceDate:[NSDate date]];
         [[NSRunLoop currentRunLoop] runUntilDate:date];
     }
     
     if ( _shouldTimeoutProcessing ) {
-        NSLog(@"sendCommandHTTPSetup: SETUP PROCESS TIMEOUT -- return");
+        DLog(@"sendCommandHTTPSetup: SETUP PROCESS TIMEOUT -- return");
         return NO;
     }
     
-    //send next command
+    // send next command
     DeviceConfiguration *sentConf = [[DeviceConfiguration alloc] init];
     
     [sentConf restoreConfigurationData:[Util readDeviceConfiguration]];
@@ -777,7 +768,7 @@
     
     NSString *cmd = [NSString stringWithFormat:@"%@%@", SETUP_HTTP_CMD, conf];
     
-    //send cmd to Device
+    // send cmd to Device
     BLEConnectionManager.instanceBLE.delegate = self;
     [BLEConnectionManager.instanceBLE.uartPeripheral writeString:cmd withTimeOut:SHORT_TIME_OUT_SEND_COMMAND];
     
@@ -786,7 +777,7 @@
         [[NSRunLoop currentRunLoop] runUntilDate:date];
     }
     
-    NSLog(@"After sending Save Wireless wait for 3sec, after that - return TRUE");
+    DLog(@"After sending Save Wireless wait for 3sec, after that - return TRUE");
     date = [NSDate dateWithTimeInterval:3 sinceDate:[NSDate date]];
     [[NSRunLoop currentRunLoop] runUntilDate:date];
     
@@ -795,14 +786,14 @@
 
 - (BOOL)sendCommandSetTimeZone
 {
-    NSLog(@"NetworkInfo - sendCommandSetTimeZone");
+    DLog(@"NetworkInfo - sendCommandSetTimeZone");
     NSDate *date;
     
     BOOL debugLog = YES;
     
     while( BLEConnectionManager.instanceBLE.state != CONNECTED && !_shouldTimeoutProcessing ) {
         if ( debugLog ) {
-            NSLog(@"NetworkInfo - sendCommandSetTimeZone:  BLE disconnected - stage: %d, sleep 2s...", _stage);
+            DLog(@"NetworkInfo - sendCommandSetTimeZone:  BLE disconnected - stage: %d, sleep 2s...", _stage);
             debugLog = NO;
         }
         
@@ -811,7 +802,7 @@
     }
     
     if ( _shouldTimeoutProcessing ) {
-        NSLog(@"NetworkInfo - sendCommandSetTimeZone: TIMEOUT -- return");
+        DLog(@"NetworkInfo - sendCommandSetTimeZone: TIMEOUT -- return");
         return NO;
     }
     
@@ -821,11 +812,11 @@
     
     NSMutableString *stringFromDate = [NSMutableString stringWithString:[formatter stringFromDate:now]];
     [stringFromDate insertString:@"." atIndex:3];
-    NSLog(@"%@", stringFromDate);
+    DLog(@"%@", stringFromDate);
     
     NSString *cmd = [NSString stringWithFormat:SET_TIME_ZONE, stringFromDate];
     
-    //send cmd to Device
+    // send cmd to Device
     BLEConnectionManager.instanceBLE.delegate = self;
     [BLEConnectionManager.instanceBLE.uartPeripheral writeString:cmd withTimeOut:SHORT_TIME_OUT_SEND_COMMAND];
     
@@ -834,7 +825,7 @@
         [[NSRunLoop currentRunLoop] runUntilDate:date];
     }
     
-    NSLog(@"After sending Set Time Zone wait for 3sec, after that - return TRUE");
+    DLog(@"After sending Set Time Zone wait for 3sec, after that - return TRUE");
     date = [NSDate dateWithTimeInterval:3 sinceDate:[NSDate date]];
     [[NSRunLoop currentRunLoop] runUntilDate:date];
     
@@ -845,20 +836,20 @@
 {
     [self.view endEditing:YES];
     
-    //should hide back in navigation bar
+    // should hide back in navigation bar
     self.navigationItem.hidesBackButton = YES;
     
     // should be show dialog here, make sure user input username and password
     [self.view addSubview:_viewProgress];
     [self.view bringSubviewToFront:_viewProgress];
     
-    //and then disable user interaction
+    // and then disable user interaction
     [self.view setUserInteractionEnabled:NO];
     [self.navigationController.navigationBar setUserInteractionEnabled:NO];
     
     [self prepareWifiInfo];
     
-    //Save and send
+    // Save and send
     if ( [_deviceConf isDataReadyForStoring]) {
         [Util writeDeviceConfigurationData:[_deviceConf getWritableConfiguration]];
     }
@@ -887,17 +878,17 @@
             while (_stage != CHECKING_WIFI_PASSED && count-- > 0 && !_shouldTimeoutProcessing);
             
             if (_stage == CHECKING_WIFI) {
-                //Failed!!
+                // Failed!!
                 if ( _timerTimeoutConnectBLE ) {
                     [_timerTimeoutConnectBLE invalidate];
                     self.timerTimeoutConnectBLE = nil;
                 }
                 
                 [self timeoutBLESetupProcessing:nil];
-                NSLog(@"wifi pass check failed!!! call timeout");
+                DLog(@"wifi pass check failed!!! call timeout");
             }
             else if (_stage == CHECKING_WIFI_PASSED) {
-                //CONNECTED... Move on now..
+                // CONNECTED... Move on now..
                 [self sendCommandRestartSystem];
                 
                 [self showNextScreen];
@@ -907,30 +898,30 @@
         }
     }
     else {
-        NSLog(@"NetworkInfo - sendWifiInfoToCamera - SetTimeZone failed!");
+        DLog(@"NetworkInfo - sendWifiInfoToCamera - SetTimeZone failed!");
     }
 }
 
 - (void)readWifiStatusOfCamera:(NSTimer *)exp
 {
-    NSLog(@"now,readWifiStatusOfCamera blocking ");
+    DLog(@"now,readWifiStatusOfCamera blocking ");
     
     NSDate *date;
     while( BLEConnectionManager.instanceBLE.state != CONNECTED && !_shouldTimeoutProcessing ) {
-        NSLog(@"readWifiStatusOfCamera:  BLE disconnected - stage: %d, sleep 2s ", _stage);
+        DLog(@"readWifiStatusOfCamera:  BLE disconnected - stage: %d, sleep 2s ", _stage);
         date = [NSDate dateWithTimeInterval:2.0 sinceDate:[NSDate date]];
         [[NSRunLoop currentRunLoop] runUntilDate:date];
     }
     
     if ( _shouldTimeoutProcessing ) {
-        NSLog(@"readWifiStatusOfCamera: SETUP PROCESS TIMEOUT -- return");
+        DLog(@"readWifiStatusOfCamera: SETUP PROCESS TIMEOUT -- return");
         return;
     }
     
     BLEConnectionManager.instanceBLE.delegate = self;
     [BLEConnectionManager.instanceBLE.uartPeripheral writeString:GET_STATE_NETWORK_CAMERA withTimeOut:LONG_TIME_OUT_SEND_COMMAND];
     
-    NSLog(@"Finished sending: %@",GET_STATE_NETWORK_CAMERA);
+    DLog(@"Finished sending: %@",GET_STATE_NETWORK_CAMERA);
 
     while (BLEConnectionManager.instanceBLE.uartPeripheral.isBusy) {
         date = [NSDate dateWithTimeInterval:1.5 sinceDate:[NSDate date]];
@@ -943,7 +934,7 @@
 
 - (void)showNextScreen
 {
-    NSLog(@"NetworkInfo - SSID: %@   - %@", self.ssid, self.deviceConf.ssid );
+    DLog(@"NetworkInfo - SSID: %@   - %@", self.ssid, self.deviceConf.ssid );
     
     if ( _timerTimeoutConnectBLE ) {
         [_timerTimeoutConnectBLE invalidate];
@@ -953,10 +944,6 @@
     DeviceConfiguration *sentConf = [[DeviceConfiguration alloc] init];
     [sentConf restoreConfigurationData:[Util readDeviceConfiguration]];
     
-    //load step 10
-    
-    NSLog(@"Load Step 10");
-    //[self.ib_dialogVerifyNetwork setHidden:YES];
     [_viewProgress removeFromSuperview];
     if ( sentConf.ssid ) {
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -964,7 +951,6 @@
         [userDefaults synchronize];
     }
     
-    //Load the next xib
     Step_10_ViewController_ble *step10ViewController = [[Step_10_ViewController_ble alloc] initWithNibName:@"Step_10_ViewController_ble" bundle:nil];
     [self.navigationController pushViewController:step10ViewController animated:NO];
     
@@ -975,7 +961,7 @@
 	NSDictionary *savedData = [Util readDeviceConfiguration];
 	
 	if ( savedData ) {
-		//populate the fields with stored data
+		// populate the fields with stored data
 		[self.deviceConf restoreConfigurationData:savedData];
 		return YES;
 	}
@@ -987,17 +973,17 @@
 
 - (void)removeCamSuccessWithResponse:(NSDictionary *)responseData
 {
-	NSLog(@"removeCam success");
+	DLog(@"removeCam success");
 }
 
 - (void)removeCamFailedWithError:(NSDictionary *)errorResponse
 {
-	NSLog(@"removeCam failed Server error: %@", errorResponse[@"message"]);
+	DLog(@"removeCam failed Server error: %@", errorResponse[@"message"]);
 }
 
 - (void)removeCamFailedServerUnreachable
 {
-	NSLog(@"server unreachable");
+	DLog(@"server unreachable");
 }
 
 @end

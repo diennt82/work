@@ -19,12 +19,6 @@
 
 @interface NetworkInfoToCamera_VController : UIViewController<UIAlertViewDelegate, BLEConnectionManagerDelegate>
 
-@property (nonatomic, weak) IBOutlet UIView *ib_dialogVerifyNetwork;
-@property (nonatomic, weak) IBOutlet UITableViewCell *ssidCell;
-@property (nonatomic, weak) IBOutlet UITableViewCell *securityCell;
-@property (nonatomic, weak) IBOutlet UITableViewCell *passwordCell;
-@property (nonatomic, weak) IBOutlet UITableViewCell *confPasswordCell;
-
 @property (nonatomic, strong) DeviceConfiguration *deviceConf;
 @property (nonatomic, copy) NSString *ssid, *security, *password;
 @property (nonatomic, assign) BOOL isOtherNetwork;

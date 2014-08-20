@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5053" systemVersion="12F45" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
-        <deployment defaultVersion="1536" identifier="iOS"/>
+        <deployment defaultVersion="1792" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="NetworkInfoToCamera_VController">
             <connections>
+                <outlet property="checkingConnectionLabel" destination="JIG-PL-gJv" id="lvI-SM-hiC"/>
                 <outlet property="confPasswordCell" destination="41" id="45"/>
+                <outlet property="makeTakeAMinuteLabel" destination="kOl-dN-xi6" id="Leg-Fn-UdO"/>
                 <outlet property="passwordCell" destination="36" id="46"/>
                 <outlet property="securityCell" destination="28" id="47"/>
                 <outlet property="ssidCell" destination="27" id="48"/>
+                <outlet property="timeoutLabel" destination="Bz5-7d-5xz" id="9rf-HN-rzZ"/>
+                <outlet property="unableToDetectCameraLabel" destination="prp-1o-aaK" id="7n3-Ku-yxM"/>
                 <outlet property="view" destination="3" id="44"/>
                 <outlet property="viewError" destination="j6k-yg-01d" id="xc4-Dl-NjG"/>
                 <outlet property="viewProgress" destination="dxz-em-KCf" id="H1k-n9-17M"/>
@@ -21,7 +25,7 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <tableView clipsSubviews="YES" tag="13" contentMode="scaleToFill" alwaysBounceVertical="YES" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" style="grouped" separatorStyle="default" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="26">
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" style="grouped" separatorStyle="default" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="26">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
@@ -41,7 +45,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="29">
+                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="102" contentMode="left" text="Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="29">
                         <rect key="frame" x="20" y="11" width="46" height="21"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -70,7 +74,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="287" height="43"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Security" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="31">
+                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="103" contentMode="left" text="Security" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="31">
                         <rect key="frame" x="13" y="11" width="63" height="21"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -78,7 +82,7 @@
                         <color key="textColor" red="0.1760115592" green="0.40581968839999999" blue="0.66364397320000001" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </label>
-                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="left" text="None" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="32">
+                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="203" contentMode="left" text="None" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="32">
                         <rect key="frame" x="223" y="11" width="42" height="21"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -95,7 +99,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="324" height="41"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Password" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="39">
+                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="100" contentMode="left" text="Password" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="39">
                         <rect key="frame" x="13" y="9" width="76" height="21"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -124,7 +128,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="324" height="41"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Confirm" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="43">
+                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="101" contentMode="left" text="Confirm" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="43">
                         <rect key="frame" x="13" y="9" width="76" height="21"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
