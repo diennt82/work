@@ -29,7 +29,7 @@
 "alert_mes_check_your_network" = "Bitte überprüfen Sie Ihre Netzwerkeinstellungen";
 
 /* No comment provided by engineer. */
-"alert_mes_dialog_to_confirm_selected_wifi" = "You have selected wifi %1$@ which is not the same as your Home wifi, %2$@. If you choose to continue, there will more steps to setup your camera. Do you want to proceed?";
+"alert_mes_dialog_to_confirm_selected_wifi" = "You have selected wifi %@ which is not the same as your Home wifi, %@. If you choose to continue, there will more steps to setup your camera. Do you want to proceed?";
 
 /* No comment provided by engineer. */
 "alert_mes_enter_correct_old_password" = "Korrektes altes Passwort eingeben.";
@@ -159,6 +159,9 @@
 
 /* No comment provided by engineer. */
 "application_version" = "Anwendungsversion";
+
+/* No comment provided by engineer. */
+"at" = "at";
 
 /* No comment provided by engineer. */
 "back" = "Zurück";
@@ -693,6 +696,18 @@
 
 /* No comment provided by engineer. */
 "timeline" = "Timeline";
+
+/* No comment provided by engineer. */
+"timeline_event_high_temperature_detected" = "High temperature detected";
+
+/* No comment provided by engineer. */
+"timeline_event_low_temperature_detected" = "Low temperature detected";
+
+/* No comment provided by engineer. */
+"timeline_event_motion_detected" = "Motion detected";
+
+/* No comment provided by engineer. */
+"timeline_event_sound_detected" = "Sound detected";
 
 /* No comment provided by engineer. */
 "timeline_mes_alittle_movenent" = "There has been a little movement";

@@ -749,7 +749,7 @@
         }
     }
     
-    self.stringIntelligentMessage = [NSString stringWithFormat:@"%@ at %@", self.stringIntelligentMessage, self.camChannel.profile.name];
+    self.stringIntelligentMessage = [NSString stringWithFormat:@"%@ %@ %@", self.stringIntelligentMessage, NSLocalizedStringWithDefaultValue(@"at", nil, [NSBundle mainBundle], @"at", nil), self.camChannel.profile.name];
 }
 
 
@@ -1242,7 +1242,24 @@
         
         //Make the string first-letter-capitalized
         NSString *text = eventInfo.alert_name;
-        NSString *capitalized = [[[text substringToIndex:1] uppercaseString] stringByAppendingString:[text substringFromIndex:1]];
+//        NSString *capitalized = [[[text substringToIndex:1] uppercaseString] stringByAppendingString:[text substringFromIndex:1]];
+        NSString *capitalized = @"";
+        if ([text isEqualToString:@"motion detected"])
+        {
+            capitalized = NSLocalizedStringWithDefaultValue(@"timeline_event_motion_detected", nil, [NSBundle mainBundle], @"Motion detected", nil);
+        }
+        else if ([text isEqualToString:@"sound detected"])
+        {
+            capitalized = NSLocalizedStringWithDefaultValue(@"timeline_event_sound_detected", nil, [NSBundle mainBundle], @"Sound detected", nil);
+        }
+        else if ([text isEqualToString:@"high temperature detected"])
+        {
+            capitalized = NSLocalizedStringWithDefaultValue(@"timeline_event_high_temperature_detected", nil, [NSBundle mainBundle], @"High temperature detected", nil);
+        }
+        else if ([text isEqualToString:@"low temperature detected"])
+        {
+            capitalized = NSLocalizedStringWithDefaultValue(@"timeline_event_low_temperature_detected", nil, [NSBundle mainBundle], @"Low temperature detected", nil);
+        }
         
         cell.eventLabel.text =capitalized;
         
