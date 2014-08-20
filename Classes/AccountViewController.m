@@ -19,13 +19,28 @@
 
 @interface AccountViewController () <MFMailComposeViewControllerDelegate, UIAlertViewDelegate>
 
-@property (nonatomic, strong) IBOutlet UITableViewCell *tableViewCellChangePassword;
+@property (nonatomic, weak) IBOutlet UITableView *accountInfo;
+@property (nonatomic, weak) IBOutlet UIActivityIndicatorView *progress;
+@property (nonatomic, strong) IBOutlet UITableViewCell *userEmailCell;
+@property (nonatomic, strong) IBOutlet UITableViewCell *changePasswordCell;
+@property (nonatomic, strong) IBOutlet UILabel *emailLabel;
+@property (nonatomic, strong) IBOutlet UILabel *changePasswordLabel;
 @property (nonatomic, copy) NSString *strNewChangedPass;
 @property (nonatomic) NSInteger screenWidth;
 
 @end
 
 @implementation AccountViewController
+
+#define PROFILE_SECTION     0
+#define EMAIL_ROW           0
+#define CHANGE_PASSWORD_ROW 1
+
+#define PLAN_SECTION        1
+#define SUBSCRIPTION_ROW    0
+#define VERSION_ROW         1
+
+#define NUM_SECTIONS        2
 
 #define CHANGE_PASSWORD_DIALOG_TAG  111
 #define LOGOUT_DIALOG_TAG           222
@@ -37,7 +52,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Set title here and not in viewDidLoad otherwise problem occurs in a tabbedViewController parent.
-        self.title = LocStr(@"Account_");
+        self.title = LocStr(@"Account");
     }
     return self;
 }
@@ -49,10 +64,16 @@
     self.screenWidth = [UIScreen mainScreen].bounds.size.width;
     UILabel *lblVersion = (UILabel *)[self.view viewWithTag:559];
     
-    lblVersion.text = [NSString stringWithFormat:@"Hubble Home v%@", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]];
-    _emailLabel.text = LocStr(@"Email");
+#ifdef VTECH
+    lblVersion.text = [NSString stringWithFormat:LocStr(@"VTech Connect v%@"), [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]];
+#else
+    lblVersion.text = [NSString stringWithFormat:LocStr(@"Hubble Home v%@"), [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]];
+#endif
     
-    UIBarButtonItem *logoutButton = [[UIBarButtonItem alloc] initWithTitle:@"Logout"
+    _emailLabel.text = LocStr(@"Email");
+    _changePasswordLabel.text = LocStr(@"Change Password");
+    
+    UIBarButtonItem *logoutButton = [[UIBarButtonItem alloc] initWithTitle:LocStr(@"Logout")
                                                                      style:UIBarButtonItemStylePlain
                                                                     target:self
                                                                     action:@selector(confirmUserLogout)];
@@ -88,7 +109,7 @@
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 	// can be user email or user name here --
 	NSString *user_email = (NSString *)[userDefaults objectForKey:@"PortalUseremail"];
-    UITextField *userTextField  =  (UITextField *)[_userEmailCell viewWithTag:1];
+    UITextField *userTextField = (UITextField *)[_userEmailCell viewWithTag:1];
     userTextField.text = user_email;
 }
 
@@ -99,8 +120,8 @@
 
 - (void)confirmUserLogout
 {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Confirm"
-                                                    message:@"Are you sure?"
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:LocStr(@"Confirm")
+                                                    message:LocStr(@"Are you sure?")
                                                    delegate:self
                                           cancelButtonTitle:LocStr(@"Cancel")
                                           otherButtonTitles:LocStr(@"OK"), nil];
@@ -110,101 +131,45 @@
 
 - (void)userLogout
 {
-    NSLog(@"LOG OUT>>>>");
+    DLog(@"LOG OUT >>>>");
     
     _accountInfo.hidden = YES;
     _progress.hidden = NO;
     [CameraAlert clearAllAlerts];
     
     MenuViewController *menuViewController = (MenuViewController *)self.parentVC;
+    
     [menuViewController dismissViewControllerAnimated:NO completion:^{
         [menuViewController.menuDelegate sendStatus:LOGIN_FAILED_OR_LOGOUT];
     }];
-}
-
-- (void)sendsAppLog
-{
-    if ([MFMailComposeViewController canSendMail]) {
-        MFMailComposeViewController *picker = [[MFMailComposeViewController alloc] init];
-        picker.mailComposeDelegate = self;
-        
-        NSString *cachesDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-        NSString *logAppPath = [cachesDirectory stringByAppendingPathComponent:@"application.log"];
-        NSString *logPath0 = [cachesDirectory stringByAppendingPathComponent:@"application0.log"];
-        
-        NSData *dataLog = [NSData dataWithContentsOfFile:logAppPath];
-        NSData *dataLog0 = nil;
-        
-        if ([[NSFileManager defaultManager] fileExistsAtPath:logPath0]) {
-            dataLog0 = [NSData dataWithContentsOfFile:logPath0];
-        }
-        
-        NSInteger length = dataLog.length;
-        if (dataLog0) {
-            length += dataLog0.length;
-        }
-        
-        NSMutableData *dataZip = [NSMutableData dataWithLength:length];
-        if (dataLog0) {
-            [dataZip appendData:dataLog0];
-        }
-        [dataZip appendData:dataLog];
-        
-        [picker addAttachmentData:[[NSData gzipData:dataZip] AES128EncryptWithKey:CES128_ENCRYPTION_PASSWORD] mimeType:@"text/plain" fileName:@"application.log"];
-        
-        //[picker addAttachmentData:dataZip  mimeType:@"text/plain" fileName:@"application.log"];
-        
-        // Set the subject of email
-        [picker setSubject:@"iOS app log"];
-        NSArray *toRecipents = [NSArray arrayWithObject:@"ios.crashreport@cvisionhk.com"];
-        [picker setToRecipients:toRecipents];
-        
-        // Show email view
-        [self presentViewController:picker animated:YES completion:NULL];
-    }
-    else {
-        NSLog(@"%s Can not send Email from this device", __FUNCTION__);
-    }
 }
 
 #pragma mark - Table view delegate & data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 3;
+    return NUM_SECTIONS;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (section == 0) {
+    if (section == PROFILE_SECTION) {
         return 2;
-    }
-    else if(section == 1) {
-        return 2;
-    }
-    else if(section == 2) {
-        if (CUE_RELEASE_FLAG) {
-            return 1;
-        }
-        else {
-            return 2;
-        }
     }
     else {
-        return 1;
+        //section == PLAN_SECTION
+        return 2;
     }
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    if (section == 0) {
-        return @"Profile";
-    }
-    else if(section == 1) {
-        return @"Plan";
+    if (section == PROFILE_SECTION) {
+        return LocStr(@"Profile");
     }
     else {
-        return @"Report";
+        // if (section == PLAN_SECTION) {
+        return LocStr(@"Plan");
     }
 }
 
@@ -215,11 +180,12 @@
 
 - (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ((indexPath.section == 0 && (indexPath.row == 2 || indexPath.row == 1)) || indexPath.section == 2) {
+    if ( indexPath.section == PROFILE_SECTION && indexPath.row == CHANGE_PASSWORD_ROW ) {
         return YES;
     }
-    
-    return NO;
+    else {
+        return NO;
+    }
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -232,43 +198,35 @@
     }
     
     UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0, cell.contentView.frame.size.height - 0.5f, _screenWidth, 0.5f)];
-    if (indexPath.row == 2 || indexPath.section == 2) {
-        cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:17];
-        cell.textLabel.textColor = [UIColor colorWithRed:(128/255.f) green:(128/255.f) blue:(128/255.f) alpha:1];
-    }
-    
     lineView.backgroundColor = [UIColor colorWithRed:195/255.f green:195/255.f blue:195/255.f alpha:1];
     lineView.tag = 905;
     [cell.contentView addSubview:lineView];
     cell.backgroundColor = [UIColor colorWithRed:249/255.f green:249/255.f blue:249/255.f alpha:1];
 }
 
-#define USEREMAIL_INDEX     0
-#define CHANGE_PASS_INDEX   1
-#define APPVERSION_INDEX    2
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 0) {
-        if (indexPath.row == USEREMAIL_INDEX) {
+    if ( indexPath.section == PROFILE_SECTION ) {
+        if ( indexPath.row == EMAIL_ROW ) {
             return _userEmailCell;
         }
         
-        if (indexPath.row == CHANGE_PASS_INDEX) {
-            return _tableViewCellChangePassword;
+        if ( indexPath.row == CHANGE_PASSWORD_ROW ) {
+            return _changePasswordCell;
         }
         else {
             static NSString *CellIdentifier = @"Cell";
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-            if (cell == nil) {
+            if ( !cell ) {
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
             }
             
-            cell.textLabel.text = @"Logout";
+            cell.textLabel.text = LocStr(@"Logout");
             return cell;
         }
     }
-    else if(indexPath.section == 1) {
+    else {
+        // PLAN SECTION
         static NSString *CellIdentifier = @"CameraSettingsCell";
         CameraSettingsCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         
@@ -280,34 +238,19 @@
             }
         }
         
-        if (indexPath.row == 0) {
-            cell.nameLabel.text = @"Current Plan";
-            cell.valueLabel.text = @"Free";
+        if ( indexPath.row == SUBSCRIPTION_ROW ) {
+            cell.nameLabel.text = LocStr(@"Current Plan");
+            cell.valueLabel.text = LocStr(@"Free");
             cell.valueLabel.hidden = NO;
-            
             return cell;
         }
         else {
-            //cell.nameLabel.text = @"Upgrade Plan";
-            //cell.valueLabel.text = nil;
-            //cell.valueLabel.hidden = YES;
-            
-            cell.nameLabel.text = @"App Version";
+            cell.nameLabel.text = LocStr(@"App Version");
             NSDictionary* infoDict = [[NSBundle mainBundle] infoDictionary];
             cell.valueLabel.text = [infoDict objectForKey:@"CFBundleShortVersionString"];
             cell.valueLabel.hidden = NO;
             return cell;
         }
-    }
-    else {
-        static NSString *CellIdentifier = @"Cell";
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        if (cell == nil) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-        }
-        
-        cell.textLabel.text = @"Send app log";
-        return cell;
     }
 }
 
@@ -315,19 +258,10 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    if (indexPath.section == 0) {
-        if (indexPath.row == CHANGE_PASS_INDEX) {
-            // change password
+    if ( indexPath.section == PROFILE_SECTION ) {
+        if ( indexPath.row == CHANGE_PASSWORD_ROW ) {
             [self showDialogChangePassword];
-            
         }
-        else if (indexPath.row == 2) {
-            //log out
-            [self confirmUserLogout];
-        }
-    }
-    else if(indexPath.section == 2) {
-        [self sendsAppLog];
     }
 }
 
@@ -342,12 +276,12 @@
     UITextField *tfConfPass = [[UITextField alloc] initWithFrame:CGRectMake(10, 110, 280, 30)];
     
     UILabel *lblTitle = [[UILabel alloc] initWithFrame:CGRectMake(5, 5, 280, 25)];
-    [lblTitle setText:@"Change Password"];
+    [lblTitle setText:LocStr(@"Change Password")];
     [lblTitle setTextAlignment:NSTextAlignmentCenter];
     
-    tfOldPass.placeholder = @"Old Password";
-    tfNewPass.placeholder = @"New Password";
-    tfConfPass.placeholder = @"Confirm Password";
+    tfOldPass.placeholder = LocStr(@"Old Password");
+    tfNewPass.placeholder = LocStr(@"New Password");
+    tfConfPass.placeholder = LocStr(@"Confirm Password");
     
     [tfOldPass setSecureTextEntry:YES];
     [tfNewPass setSecureTextEntry:YES];
@@ -364,32 +298,32 @@
     
     [alert setContainerView:alertContenerView];
     
-    [alert setButtonTitles:[NSMutableArray arrayWithObjects:@"Cancel", @"OK", nil]];
+    [alert setButtonTitles:@[LocStr(@"Cancel"), LocStr(@"Ok")]];
     
     [alert setOnButtonTouchUpInside:^(CustomIOS7AlertView *alertView, int buttonIndex) {
         [alertView close];
         
-        if( buttonIndex==1 ) {
+        if ( buttonIndex == 1 ) {
             NSString *password = tfNewPass.text;
             NSString *passwordConfrm = tfConfPass.text;
             NSString *oldPass = tfOldPass.text;
             
-            if ((password && password.length > 0)  &&
-                (passwordConfrm && passwordConfrm.length > 0) &&
-                (oldPass && oldPass.length > 0) &&
+            if (password && password.length > 0  &&
+                passwordConfrm && passwordConfrm.length > 0 &&
+                oldPass && oldPass.length > 0 &&
                 [password isEqualToString:passwordConfrm])
             {
                 self.strNewChangedPass = password;
                 [self checkOldPass:oldPass NewPass:password];
             }
             else {
-                if (tfOldPass.text.length == 0) {
-                    NSDictionary *dictError = [NSDictionary dictionaryWithObjectsAndKeys:@"Please enter correct  old password", @"message", nil];
-                    [self changePasswordFialedWithError:dictError];
+                if ( password.length == 0 || oldPass.length == 0 ) {
+                    NSDictionary *dict = @{ @"message" : LocStr(@"New and old passwords required") };
+                    [self changePasswordFialedWithError:dict];
                 }
                 else {
-                    NSDictionary *dictError = [NSDictionary dictionaryWithObjectsAndKeys:@"Validation failed: Password is not match or empty", @"message", nil];
-                    [self changePasswordFialedWithError:dictError];
+                    NSDictionary *dict = @{@"message" : LocStr(@"Password confirmation did not match") };
+                    [self changePasswordFialedWithError:dict];
                 }
             }
         }
@@ -414,47 +348,38 @@
 - (void)loginSuccessWithResponse:(NSDictionary *)responseDict
 {
    	if (responseDict) {
-        NSInteger statusCode = [[responseDict objectForKey:@"status"] intValue];
+        NSInteger statusCode = [responseDict[@"status"] intValue];
         
         if (statusCode == 200) {
             // success
-            NSString *apiKey = [[responseDict objectForKey:@"data"] objectForKey:@"authentication_token"];
+            NSString *apiKey = [responseDict[@"data"] objectForKey:@"authentication_token"];
             [[NSUserDefaults standardUserDefaults] setObject:apiKey forKey:@"PortalApiKey"];
             [[NSUserDefaults standardUserDefaults] synchronize];
-            [self doChangePassword:self.strNewChangedPass];
+            [self doChangePassword:_strNewChangedPass];
         }
         else {
-            NSLog(@"Invalid response: %@", responseDict);
+            DLog(@"Invalid response: %@", responseDict);
             
-            [[[UIAlertView alloc] initWithTitle:@"Change Password Failed"
-                                         message:@"Enter correct old password."
+            [[[UIAlertView alloc] initWithTitle:LocStr(@"Change Password Failed")
+                                         message:LocStr(@"Old password was incorrect")
                                         delegate:nil
                                cancelButtonTitle:nil
-                               otherButtonTitles:@"OK", nil] show];
+                               otherButtonTitles:LocStr(@"Ok"), nil] show];
         }
     }
     else {
-        NSLog(@"Error - loginSuccessWithResponse: reponseDict = nil");
+        DLog(@"Error - loginSuccessWithResponse: reponseDict = nil");
     }
 }
 
 - (void)loginFailedWithError:(NSDictionary *)responseError
 {
-    [[[UIAlertView alloc] initWithTitle:@"Change Password Failed"
-                                 message:@"Enter correct old password."
-                                delegate:nil
-                       cancelButtonTitle:nil
-                       otherButtonTitles:@"OK", nil] show];
+    [self changePasswordFialedWithError:responseError];
 }
 
 - (void)loginFailedServerUnreachable
 {
-    [[[UIAlertView alloc] initWithTitle:@"Failed: Server is unreachable"
-                                 message:nil
-                                delegate:nil
-                       cancelButtonTitle:nil
-                       otherButtonTitles:@"OK", nil] show];
-    
+    [self changePasswordFailedServerUnreachable];
 }
 
 - (void)doChangePassword:(NSString *)newPassword
@@ -476,45 +401,48 @@
     [userDefaults setObject:self.strNewChangedPass forKey:@"PortalPassword"];
     [userDefaults synchronize];
     
-    [[[UIAlertView alloc] initWithTitle:@"Change Password"
-                                 message:@"Successful"
-                                delegate:nil
-                       cancelButtonTitle:nil
-                       otherButtonTitles:@"OK", nil] show];
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil
+                                                        message:LocStr(@"Change Password Succeeded")
+                                                       delegate:nil
+                                              cancelButtonTitle:nil
+                                              otherButtonTitles:LocStr(@"Ok"), nil];
+    [alertView show];
 }
 
-- (void)changePasswordFialedWithError:(NSDictionary *)error_response
+- (void)changePasswordFialedWithError:(NSDictionary *)errorResponse
 {
-    [[[UIAlertView alloc] initWithTitle:@"Change Password Failed"
-                                 message:[error_response objectForKey:@"message"]
-                                delegate:nil
-                       cancelButtonTitle:nil
-                       otherButtonTitles:@"OK", nil] show];
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:LocStr(@"Change Password Failed")
+                                                        message:errorResponse[@"message"]
+                                                       delegate:nil
+                                              cancelButtonTitle:nil
+                                              otherButtonTitles:LocStr(@"Ok"), nil];
+    [alertView show];
 }
 
 - (void)changePasswordFailedServerUnreachable
 {
-    [[[UIAlertView alloc] initWithTitle:@"Failed: Server is unreachable"
-                                 message:nil
-                                delegate:nil
-                       cancelButtonTitle:nil
-                       otherButtonTitles:@"OK", nil] show];
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:LocStr(@"Change Password Failed")
+                                                        message:LocStr(@"Server is unreachable")
+                                                       delegate:nil
+                                              cancelButtonTitle:nil
+                                              otherButtonTitles:LocStr(@"Ok"), nil];
+    [alertView show];
 }
 
-#pragma mark - UIAlert view delegate
+#pragma mark - UIAlertView delegate
 
 - (void )alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
-    if (buttonIndex != alertView.cancelButtonIndex ) {
+    if ( buttonIndex != alertView.cancelButtonIndex ) {
         if ( alertView.tag == CHANGE_PASSWORD_DIALOG_TAG ) {
             NSString *password = [alertView textFieldAtIndex:0].text;
             NSString *passwordConfrm = [alertView textFieldAtIndex:1].text;
             
-            if (password.length > 0 && passwordConfrm.length > 0 && [password isEqualToString:passwordConfrm]) {
+            if ( password.length > 0 && passwordConfrm.length > 0 && [password isEqualToString:passwordConfrm] ) {
                 [self doChangePassword:password];
             }
             else {
-                NSDictionary *dictError = [NSDictionary dictionaryWithObjectsAndKeys:@"Validation failed: Password is not match or empty", @"message", nil];
+                NSDictionary *dictError = @{@"message" : LocStr(@"Password did not match or is empty.")};
                 [self changePasswordFialedWithError:dictError];
             }
         }
@@ -524,33 +452,13 @@
     }
 }
 
-#pragma mark - FMail
+#pragma mark - MFMailComposeViewControllerDelegate protocol methods
 
 - (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
 {
-    MenuViewController *tabBarController = (MenuViewController *)self.parentVC;
-    tabBarController.navigationController.navigationBarHidden = NO;
-    
-    switch (result)
-    {
-        case MFMailComposeResultCancelled:
-            NSLog(@"Mail cancelled");
-            break;
-        case MFMailComposeResultSaved:
-            NSLog(@"Mail saved");
-            break;
-        case MFMailComposeResultSent:
-            NSLog(@"Mail sent");
-            break;
-        case MFMailComposeResultFailed:
-            NSLog(@"Mail sent failure: %@", [error localizedDescription]);
-            break;
-        default:
-            break;
-    }
-    
-    // Close the Mail Interface
-    [self dismissViewControllerAnimated:YES completion:NULL];
+    MenuViewController *menuViewController = (MenuViewController *)_parentVC;
+    menuViewController.navigationController.navigationBarHidden = NO;
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end

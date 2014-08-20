@@ -10,12 +10,6 @@
 
 @interface AccountViewController : UIViewController
 
-@property (nonatomic, weak) IBOutlet UITableView *accountInfo;
-@property (nonatomic, weak) IBOutlet UITableViewCell *userEmailCell;
-@property (nonatomic, weak) IBOutlet UITableViewCell *versionCell;
-@property (nonatomic, weak) IBOutlet UIActivityIndicatorView *progress;
-@property (nonatomic, weak) IBOutlet UILabel *emailLabel;
-
 @property (nonatomic, weak) id parentVC;
 
 @end
