@@ -44,17 +44,6 @@
     
     [_progressView setHidden:YES];
     
-    self.navigationItem.hidesBackButton = YES;
-    
-    UIImage *hubbleLogoBack = [UIImage imageNamed:@"Hubble_back_text"];
-    UIBarButtonItem *barBtnHubble = [[UIBarButtonItem alloc] initWithImage:hubbleLogoBack
-                                                                     style:UIBarButtonItemStyleBordered
-                                                                    target:self
-                                                                    action:@selector(hubbleItemAction:)];
-    [barBtnHubble setTintColor:[UIColor colorWithPatternImage:hubbleLogoBack]];
-    
-    self.navigationItem.leftBarButtonItem = barBtnHubble;
-    
     UIBarButtonItem *nextButton =
     [[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"Next",nil, [NSBundle mainBundle],
                                                                              @"Next" , nil)
@@ -158,13 +147,6 @@
     [super viewWillDisappear:animated];
     _task_cancelled = YES;
     [self resetAllTimer];
-}
-
-#pragma mark - Actions
-
-- (void)hubbleItemAction:(id)sender
-{
-    [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma mark - UITextFieldDelegate

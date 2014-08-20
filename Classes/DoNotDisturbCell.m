@@ -29,7 +29,7 @@
     _isEnableDoNotDisturb = [userDefaults boolForKey:@"EnableDoNotDisturb"];
     if (_isEnableDoNotDisturb) {
         _imgViewEnableDisable.hidden = YES;
-        //enable
+
         [[UIApplication sharedApplication] unregisterForRemoteNotifications];
         [_ienableDoNotDisturbButton setImage:[UIImage imageSwitchOn] forState:UIControlStateNormal];
         [_icircleSliderCustom setUserInteractionEnabled:YES];
@@ -41,8 +41,19 @@
     else {
         _imgViewEnableDisable.hidden = NO;
 
-        //disable
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000
+        if ([[UIApplication sharedApplication] respondsToSelector:@selector(registerUserNotificationSettings:)]) {
+            // use registerUserNotificationSettings
+            [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge) categories:nil]];
+            [[UIApplication sharedApplication] registerForRemoteNotifications];
+        } else {
+            // use registerForRemoteNotifications
+            [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
+        }
+#else
         [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
+#endif
+
         [_ienableDoNotDisturbButton setImage:[UIImage imageSwitchOff] forState:UIControlStateNormal];
         [_icircleSliderCustom setUserInteractionEnabled:NO];
         [_icircleSliderCustom.textField setTextColor:[UIColor lightGrayColor]];
@@ -79,7 +90,6 @@
     [[NSUserDefaults standardUserDefaults] synchronize];
     
     if (_isEnableDoNotDisturb) {
-        //enable
         [[UIApplication sharedApplication] unregisterForRemoteNotifications];
         [_ienableDoNotDisturbButton setImage:[UIImage imageSwitchOn] forState:UIControlStateNormal];
         [_icircleSliderCustom setUserInteractionEnabled:YES];
@@ -87,8 +97,18 @@
         [_icircleSliderCustom.minuteTField setTextColor:[UIColor colorWithWhite:1.0 alpha:1.0]];
     }
     else {
-        //disable
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000
+        if ([[UIApplication sharedApplication] respondsToSelector:@selector(registerUserNotificationSettings:)]) {
+            // use registerUserNotificationSettings
+            [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge) categories:nil]];
+            [[UIApplication sharedApplication] registerForRemoteNotifications];
+        } else {
+            // use registerForRemoteNotifications
+            [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
+        }
+#else
         [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
+#endif
         [_ienableDoNotDisturbButton setImage:[UIImage imageSwitchOff] forState:UIControlStateNormal];
         [_icircleSliderCustom setUserInteractionEnabled:NO];
         [_icircleSliderCustom.textField setTextColor:[UIColor lightGrayColor]];

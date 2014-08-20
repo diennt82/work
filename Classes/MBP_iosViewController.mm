@@ -412,7 +412,7 @@
 {
     NSString *title = LocStr(@"Server Announcement");
     NSString *ignore = LocStr(@"Close");
-    NSString *details = LocStr(@"Detail");
+    NSString *details = LocStr(@"Details");
     NSString *msg = [NSString stringWithFormat:@"%@ %@", customMessage, customUrl];
     
     self.pushAlert = [[AlertPrompt alloc] initWithTitle:title

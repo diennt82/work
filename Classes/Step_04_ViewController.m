@@ -24,17 +24,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view.
-    self.navigationItem.hidesBackButton = YES;
-    
-    UIImage *hubbleLogoBack = [UIImage imageNamed:@"Hubble_back_text"];
-    UIBarButtonItem *barBtnHubble = [[UIBarButtonItem alloc] initWithImage:hubbleLogoBack
-                                                                     style:UIBarButtonItemStyleBordered
-                                                                    target:self
-                                                                    action:@selector(hubbleItemAction:)];
-    [barBtnHubble setTintColor:[UIColor colorWithPatternImage:hubbleLogoBack]];
-    
-    self.navigationItem.leftBarButtonItem = barBtnHubble;
     
     [_btnContinue setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
     [_btnContinue setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
@@ -45,28 +34,16 @@
 
 - (void)viewWillDisappear:(BOOL)animated
 {
-    [_progressView removeFromSuperview];
     [super viewWillDisappear:animated];
-}
-
-
-#pragma mark - Actions
-
-- (void)hubbleItemAction:(id)sender
-{
-    [self.navigationController popViewControllerAnimated:YES];
+    [_progressView removeFromSuperview];
 }
 
 #pragma mark - Method
 
 - (void)moveToNextStep
 {
-    NSLog(@"Load step 5");
-
-    // Load the next xib
     Step_05_ViewController *step05ViewController =  [[Step_05_ViewController alloc] initWithNibName:@"Step_05_ViewController" bundle:nil];
     [self.navigationController pushViewController:step05ViewController animated:NO];
-    
     _btnContinue.enabled = YES;
 }
 
@@ -105,8 +82,8 @@
     const float movementDuration = 0.3f; // tweak as needed
     int movement = (up ? -movementDistance : movementDistance);
     
-    [UIView beginAnimations: @"anim" context: nil];
-    [UIView setAnimationBeginsFromCurrentState: YES];
+    [UIView beginAnimations:@"anim" context:nil];
+    [UIView setAnimationBeginsFromCurrentState:YES];
     [UIView setAnimationDuration: movementDuration];
     self.view.frame = CGRectOffset(self.view.frame, 0, movement);
     [UIView commitAnimations];
@@ -138,40 +115,20 @@
     NSString *cameraName_text = _tfCamName.text;
     [_tfCamName resignFirstResponder];
     
-    if ([cameraName_text length] < MIN_LENGTH_CAMERA_NAME || [cameraName_text length] > MAX_LENGTH_CAMERA_NAME )
-    {
-        NSString *title = NSLocalizedStringWithDefaultValue(@"Invalid_Camera_Name", nil, [NSBundle mainBundle],
-                                                             @"Invalid Camera Name", nil);
-        
-        NSString *msg = NSLocalizedStringWithDefaultValue(@"Invalid_Camera_Name_msg", nil, [NSBundle mainBundle],
-                                                           @"Camera Name has to be between 5-30 characters", nil);
-        
-        NSString *ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
-                                                          @"Ok", nil);
-        
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title
-                                                    message:msg
+    if ([cameraName_text length] < MIN_LENGTH_CAMERA_NAME || [cameraName_text length] > MAX_LENGTH_CAMERA_NAME ) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:LocStr(@"Invalid Camera Name")
+                                                    message:LocStr(@"Camera Name has to be between 5-30 characters")
                                                     delegate:nil
-                                                    cancelButtonTitle:ok
-                                                    otherButtonTitles:nil];
+                                                    cancelButtonTitle:nil
+                                                    otherButtonTitles:LocStr(@"Ok"), nil];
         [alert show];
     }
     else if (![self isCameraNameValidated:cameraName_text]) {
-        NSString *title = NSLocalizedStringWithDefaultValue(@"Invalid_Camera_Name", nil, [NSBundle mainBundle],
-                                                            @"Invalid Camera Name", nil);
-        
-        NSString *msg = NSLocalizedStringWithDefaultValue(@"Invalid_Camera_Name_msg2", nil, [NSBundle mainBundle],
-                                                          @"Camera name is invalid. Please enter [0-9],[a-Z], space, dot, hyphen, underscore & single quote only.", nil);
-        
-        NSString *ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
-                                                         @"Ok", nil);
-        
-        
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title
-                                                        message:msg
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:LocStr(@"Invalid Camera Name")
+                                                        message:LocStr(@"Camera name is invalid. Please enter [0-9],[a-Z], space, dot, hyphen, underscore & single quote only.")
                                                        delegate:nil
-                                              cancelButtonTitle:ok
-                                              otherButtonTitles:nil];
+                                              cancelButtonTitle:nil
+                                              otherButtonTitles:LocStr(@"Ok"), nil];
         [alert show];
     }
     else if (tag == CONF_CAM_BTN_TAG) {

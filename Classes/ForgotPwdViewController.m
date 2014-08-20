@@ -21,18 +21,8 @@
 {
     [super viewDidLoad];
     
-    self.navigationItem.title =  NSLocalizedStringWithDefaultValue(@"Forgot_Password",nil, [NSBundle mainBundle],
+    self.title =  NSLocalizedStringWithDefaultValue(@"Forgot_Password",nil, [NSBundle mainBundle],
                                                                    @"Forgot Password", nil);
-    
-    UIImage *hubbleBack = [UIImage imageNamed:@"Hubble_logo_back"];
-    UIBarButtonItem *backBarBtn = [[UIBarButtonItem alloc] initWithImage:hubbleBack
-                                                                   style:UIBarButtonItemStyleBordered
-                                                                  target:self
-                                                                  action:@selector(btnBackPressed)];
-    [backBarBtn setTintColor:[UIColor colorWithPatternImage:hubbleBack]];
-    
-    self.navigationItem.leftBarButtonItem = backBarBtn;
-
     _passwordLinkSent.hidden = YES;
     [self.view addSubview:_passwordLinkSent];
 }
@@ -66,11 +56,6 @@
 - (NSUInteger)supportedInterfaceOrientations
 {
     return UIInterfaceOrientationMaskAllButUpsideDown;
-}
-
-- (void)btnBackPressed
-{
-    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (BOOL)checkEmailValidation:(NSString*)strEmail {
@@ -149,14 +134,11 @@
     NSString *msg1 = NSLocalizedStringWithDefaultValue(@"Reset_Password_Error",nil, [NSBundle mainBundle],
                                                         @"Reset Password Error" , nil);
     
-    NSString *msg = NSLocalizedStringWithDefaultValue(@"Server_error_" ,nil, [NSBundle mainBundle],
-                                                       @"Server error: %@" , nil);
-    
     NSString *ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
                                                       @"Ok", nil);
 	//ERROR condition
 	[[[UIAlertView alloc] initWithTitle:msg1
-                               message:[NSString stringWithFormat:msg, [errorResponse objectForKey:@"message"]]
+                               message:[NSString stringWithFormat:LocStr(@"Server error: %@"), [errorResponse objectForKey:@"message"]]
                               delegate:nil
                      cancelButtonTitle:ok
                      otherButtonTitles:nil] show];

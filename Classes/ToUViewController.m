@@ -18,35 +18,18 @@
 {
     [super viewDidLoad];
     
-    self.title = @"Terms of Services";
-    self.navigationController.navigationBarHidden = NO;
+    self.title = LocStr(@"Terms of Services");
     
-    UIImage *hubbleLogoBack = [UIImage imageNamed:@"Hubble_logo_back"];
-    UIBarButtonItem *barBtnHubble = [[UIBarButtonItem alloc] initWithImage:hubbleLogoBack
-                                                                     style:UIBarButtonItemStylePlain
-                                                                    target:self
-                                                                    action:@selector(btnBackPressed)];
-    [barBtnHubble setTintColor:[UIColor colorWithPatternImage:hubbleLogoBack]];
-    
-    self.navigationItem.leftBarButtonItem = barBtnHubble;
-    
-    [termOfUse loadRequest:
-     [NSURLRequest requestWithURL:
-      [NSURL fileURLWithPath:
-       [[NSBundle mainBundle] pathForResource:@"MonitorEverywhere_App_ios_Apple" ofType:@"html"] ] ] ];
+    [termOfUse loadRequest:[NSURLRequest requestWithURL:
+                            [NSURL fileURLWithPath:
+                             [[NSBundle mainBundle] pathForResource:@"MonitorEverywhere_App_ios_Apple" ofType:@"html"]]]];
 }
 
--(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
 {
     return (toInterfaceOrientation == UIInterfaceOrientationPortrait ||
             toInterfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
             toInterfaceOrientation == UIInterfaceOrientationLandscapeRight);
-}
-
--(void)btnBackPressed
-{
-    [self.navigationController popViewControllerAnimated:YES];
-    self.navigationController.navigationBarHidden = YES;
 }
 
 @end

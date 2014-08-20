@@ -61,7 +61,7 @@
     self.trackedViewName = GAI_CATEGORY;
     [self.ib_scollViewGuide setContentSize:CGSizeMake(320, 1401)];
     
-    //Keep screen on
+    // Keep screen on
     [UIApplication sharedApplication].idleTimerDisabled = YES;
     
     // Do any additional setup after loading the view.
@@ -76,22 +76,7 @@
     self.cameraMac = (NSString *) [userDefaults objectForKey:@"CameraMacWithQuote"];
     self.stringUDID = [userDefaults stringForKey:CAMERA_UDID];
     
-    //Hide back button -- can't go back now..
-    self.navigationItem.hidesBackButton = TRUE;
-    self.navigationItem.hidesBackButton = YES;
-    
-    UIImage *hubbleLogoBack = [UIImage imageNamed:@"Hubble_back_text"];
-    UIBarButtonItem *barBtnHubble = [[UIBarButtonItem alloc] initWithImage:hubbleLogoBack
-                                                                     style:UIBarButtonItemStyleBordered
-                                                                    target:self
-                                                                    action:@selector(hubbleItemAction:)];
-    [barBtnHubble setTintColor:[UIColor colorWithPatternImage:hubbleLogoBack]];
-    
-    self.navigationItem.leftBarButtonItem = barBtnHubble;
-    
-    NSLog(@"Normal Add cam sequence" );
-    
-    //Add view guild first and hide it
+    // Add view guild first and hide it
     [self.view addSubview:self.ib_viewGuild];
     [self.ib_viewGuild setHidden:YES];
     
@@ -104,8 +89,6 @@
                                 nil];
     imageView.animationDuration = 1.5;
     imageView.animationRepeatCount = 0;
-    
-    //[self.view addSubview:self.progressView];
     
     [imageView startAnimating];
     [self showProgress:nil];
@@ -122,7 +105,7 @@
         [self waitingCameraRebootAndForceToWifiHome];
     }
     else {
-        NSLog(@"Step10 - old flow");
+        DLog(@"Step10 - old flow");
         ///Old flow: First add camera
         [self registerCamera:nil];
     }
@@ -250,11 +233,6 @@
 }
 
 #pragma mark - Actions
-
-- (void)hubbleItemAction:(id)sender
-{
-    [self.navigationController popViewControllerAnimated:YES];
-}
 
 - (IBAction)btnCancelTouchUpInsideAction:(id)sender
 {
@@ -757,26 +735,19 @@
 
 - (void)showDialogWithTag:(NSInteger)tag message: (NSString *)msg
 {
-    NSString *title = NSLocalizedStringWithDefaultValue(@"AddCam_Error" ,nil, [NSBundle mainBundle],
-                                                        @"AddCam Error" , nil);
-    
     switch (tag)
     {
         case ALERT_ADD_CAM_FAILED:
         case ALERT_CHECK_STATUS:
         {
-            NSString * ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
-                                                              @"Ok", nil);
-            
-            //ERROR condition
-            UIAlertView *alert = [[UIAlertView alloc]
-                                  initWithTitle:title
-                                  message:msg
-                                  delegate:nil
-                                  cancelButtonTitle:ok
-                                  otherButtonTitles:nil];
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:LocStr(@"AddCam Error")
+                                                            message:msg
+                                                           delegate:nil
+                                                  cancelButtonTitle:nil
+                                                  otherButtonTitles:LocStr(@"Ok"), nil];
             alert.tag = tag;
             [alert show];
+            
             break;
         }
             
@@ -787,23 +758,14 @@
                 return;
             }
             
-            NSString * message = NSLocalizedStringWithDefaultValue(@"addcam_error_1" ,nil, [NSBundle mainBundle],
-                                                               @"The device is not able to connect to the server. Please check the WIFI and the internet. Go to WIFI setting to confirm device is connected to intended router", nil);
-            NSString * cancel = NSLocalizedStringWithDefaultValue(@"Cancel",nil, [NSBundle mainBundle],
-                                                                  @"Cancel", nil);
-            
-            NSString * retry = NSLocalizedStringWithDefaultValue(@"Retry",nil, [NSBundle mainBundle],
-                                                                 @"Retry", nil);
-            //ERROR condition
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title
-                                                            message:message
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:LocStr(@"AddCam Error")
+                                                            message:LocStr(@"The device is not able to connect to the server. Go to device settings to confirm device is connected to the Internet.")
                                                            delegate:self
-                                                  cancelButtonTitle:cancel
-                                                  otherButtonTitles:retry, nil];
-            alert.delegate = self;
+                                                  cancelButtonTitle:LocStr(@"Cancel")
+                                                  otherButtonTitles:LocStr(@"Retry"), nil];
             alert.tag = ALERT_ADD_CAM_UNREACH;
-            
             [alert show];
+            
             break;
         }
             
@@ -816,8 +778,9 @@
 
 - (void)addCamSuccessWithResponse:(NSDictionary *)responseData
 {
-    NSLog(@"Do for concurent modep - addcam response");
+    DLog(@"Do for concurent modep - addcam response");
     self.stringAuth_token = [[responseData objectForKey:@"data"] objectForKey:@"auth_token"];
+    
     //send master key to device
     self.shouldSendMasterKeyAgain = TRUE;
     [self sendMasterKeyToDevice];

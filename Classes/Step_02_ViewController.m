@@ -9,7 +9,6 @@
 #import "Step_02_ViewController.h"
 #import "Step_03_ViewController.h"
 #import "UIBarButtonItem+Custom.h"
-#import "PAIRInstructionViewController.h"
 #import "MBPNavController.h"
 #import "CreateBLEConnection_VController.h"
 #import "BLEConnectionManager.h"

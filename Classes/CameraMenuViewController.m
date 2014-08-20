@@ -138,10 +138,8 @@
 
 - (void)showDialog:(int)dialogType
 {
-    NSString *title = @"";
-    NSString *ok = LocStr(@"Ok");
-    NSString *cancel = LocStr(@"Cancel");
-    
+    NSString *title = nil;
+    NSString *cancel = nil;
     NSString *msg = nil;
     int tag = NSNotFound;
     
@@ -149,6 +147,7 @@
 		case ALERT_REMOVE_CAM:
 		{
 			BOOL deviceInLocal = _camChannel.profile.isInLocal;
+            cancel = LocStr(@"Cancel");
             if (deviceInLocal) {
                 msg = LocStr(@"Confirm_remove_cam_local");
                 tag = ALERT_REMOVE_CAM_LOCAL;
@@ -173,15 +172,15 @@
 		}
         case ALERT_RENAME_OUT_LENGTH:
         {
-            title = LocStr(@"Invalid_Camera_Name");
-            msg = LocStr(@"Invalid_Camera_Name_msg");
+            title = LocStr(@"Invalid Camera Name");
+            msg = LocStr(@"Camera Name has to be between 5-30 characters");
             tag = ALERT_RENAME_OUT_LENGTH;
             break;
         }
         case ALERT_RENAME_REGEX:
         {
-            title = LocStr(@"Invalid_Camera_Name");
-            msg = LocStr(@"Invalid_Camera_Name_msg2");
+            title = LocStr(@"Invalid Camera Name");
+            msg = LocStr(@"Camera name is invalid. Please enter [0-9],[a-Z], space, dot, hyphen, underscore & single quote only.");
             tag = ALERT_RENAME_REGEX;
             break;
         }
@@ -190,11 +189,11 @@
 	}
     
     if ( msg ) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title
                                                         message:msg
                                                        delegate:self
                                               cancelButtonTitle:cancel
-                                              otherButtonTitles:ok, nil];
+                                              otherButtonTitles:LocStr(@"Ok"), nil];
         alert.tag = tag;
         [alert show];
     }

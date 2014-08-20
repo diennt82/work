@@ -36,19 +36,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view.
-    self.navigationItem.hidesBackButton = YES;
     
     self.trackedViewName = GAI_CATEGORY;
-    
-    UIImage *hubbleLogoBack = [UIImage imageNamed:@"Hubble_back_text"];
-    UIBarButtonItem *barBtnHubble = [[UIBarButtonItem alloc] initWithImage:hubbleLogoBack
-                                                                     style:UIBarButtonItemStyleBordered
-                                                                    target:self
-                                                                    action:@selector(hubbleItemAction:)];
-    [barBtnHubble setTintColor:[UIColor colorWithPatternImage:hubbleLogoBack]];
-    
-    self.navigationItem.leftBarButtonItem = barBtnHubble;
     
     [_btnContinue setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
     [_btnContinue setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
@@ -103,11 +92,6 @@
 }
 
 #pragma mark - Actions
-
-- (void)hubbleItemAction:(id)sender
-{
-    [self.navigationController popViewControllerAnimated:YES];
-}
 
 - (IBAction)btnContinueTouchUpInsideAction:(id)sender
 {
@@ -219,8 +203,8 @@
 
 - (void)askForRetry
 {
-    UIAlertView *myAlert = [[UIAlertView alloc] initWithTitle:LocStr(@"Fail_to_communicate_with_camera")
-                                                      message:@""
+    UIAlertView *myAlert = [[UIAlertView alloc] initWithTitle:nil
+                                                      message:LocStr(@"Failed to communicate with camera. Retry?")
                                                      delegate:self
                                             cancelButtonTitle:LocStr(@"Cancel")
                                             otherButtonTitles:LocStr(@"Retry"), nil];

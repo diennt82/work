@@ -692,13 +692,21 @@
         [jsonComm getUserInfoWithApiKey:apiKey];
     }
     
-    
-#if !TARGET_IPHONE_SIMULATOR
+#if !TARGET_IPHONE_SIMULATOR && __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000
     // Let the device know we want to receive push notifications
-    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:
-     (UIRemoteNotificationType) (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
+    if ([[UIApplication sharedApplication] respondsToSelector:@selector(registerUserNotificationSettings:)]) {
+        // use registerUserNotificationSettings
+        [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge) categories:nil]];
+        [[UIApplication sharedApplication] registerForRemoteNotifications];
+    } else {
+        // use registerForRemoteNotifications
+        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
+    }
+#else
+    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
 #endif
-    NSLog(@"Login success! 2");
+    
+    DLog(@"Login success! 2");
     
     UserAccount *account = [[UserAccount alloc] initWithUser:_stringUsername
                                                     password:_stringPassword
@@ -718,13 +726,13 @@
     
 }
 
-- (void) loginFailedWithError:(NSDictionary *) responseError
+- (void) loginFailedWithError:(NSDictionary *)responseError
 {
     //reset it here
     self.buttonEnterPressedFlag = NO;
     self.buttonEnter.enabled = YES;
     
-	NSLog(@"%s responseDict: %@", __FUNCTION__, responseError);
+	DLog(@"%s responseDict: %@", __FUNCTION__, responseError);
 	
 	self.viewProgress.hidden = YES;
 	

@@ -382,7 +382,7 @@
                                                       apiKey:[userDefaults stringForKey:@"PortalApiKey"]
                                              accountDelegate:nil];
     
-    [account sync_online_and_offline_data:nil];
+    [account syncOnlineAndOfflineData:nil];
     
     //[[KISSMetricsAPI sharedAPI] recordEvent:[NSString stringWithFormat:@"Register successfully - user: %@", _username] withProperties:nil];
     

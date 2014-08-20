@@ -381,32 +381,22 @@ int finalAngle;
             
             storeAngle = angleDegree;
             
-            
-            if (!isReachLimit)
-            {
-                
-                if (previousSweepAngle > 350 && storeAngle < 10)
-                {
+            if (!isReachLimit) {
+                if (previousSweepAngle > 350 && storeAngle < 10) {
                     finalAngle = 360;
                     isReachLimit = true;
-                    //NSLog(@"reach to limit 360");
                 }
                 else if (previousSweepAngle < 10 && storeAngle > 180)
                 {
                     finalAngle = 0;
-                    //NSLog(@"reach to limit zero");
                 }
-                else
-                {
+                else {
                     finalAngle = storeAngle;
                     previousSweepAngle = storeAngle;
                 }
             }
-            else
-            {
-                //NSLog(@"Normal sweep");
-                if (storeAngle + 10 > previousSweepAngle)
-                {
+            else {
+                if (storeAngle + 10 > previousSweepAngle) {
                     finalAngle = storeAngle;
                     isReachLimit = false;
                     previousSweepAngle = storeAngle;
@@ -419,23 +409,32 @@ int finalAngle;
 		}
         case UIGestureRecognizerStateEnded:
             
-            /**
+            /*
              When is needed to register local notification
              */
-            if (self.userInteractionEnabled)
-            {
+            if ( self.userInteractionEnabled ) {
                 NSInteger timeValue = (int)round(self.value);
 
-                if (timeValue>0)
-                {
-                    //disable
+                if ( timeValue > 0 ) {
+                    // disable
                     [[UIApplication sharedApplication] unregisterForRemoteNotifications];
                 }
-                else
-                {
-                    //disable
-                    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound)];
+                else {
+                    // enable
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000
+                    if ([[UIApplication sharedApplication] respondsToSelector:@selector(registerUserNotificationSettings:)]) {
+                        // use registerUserNotificationSettings
+                        [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge) categories:nil]];
+                        [[UIApplication sharedApplication] registerForRemoteNotifications];
+                    } else {
+                        // use registerForRemoteNotifications
+                        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
+                    }
+#else
+                    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
+#endif
                 }
+                
                 [self cancelAllLocalNotification];
                 /*Check todo
                  1. create local notification, from now
@@ -448,12 +447,14 @@ int finalAngle;
             if (!self.isContinuous) {
                 [self sendActionsForControlEvents:UIControlEventValueChanged];
             }
+            
             if ([self isPointInThumb:tapLocation]) {
                 [self sendActionsForControlEvents:UIControlEventTouchUpInside];
             }
             else {
                 [self sendActionsForControlEvents:UIControlEventTouchUpOutside];
             }
+            
             break;
 		default:
 			break;

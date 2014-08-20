@@ -41,7 +41,7 @@
 {
     [super viewDidLoad];
 
-    self.title = LocStr(@"Cameras_");
+    self.title = LocStr(@"Cameras");
     
     if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1) {
         // iOS 7

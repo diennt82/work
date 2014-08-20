@@ -24,25 +24,14 @@
 {
     [super viewDidLoad];
 
-    //Hide back button -- can't go back now..
-    self.navigationItem.hidesBackButton = TRUE;
-    
-    
-	// Do any additional setup after loading the view.
-    self.navigationItem.title = NSLocalizedStringWithDefaultValue(@"Camera_Configured",nil, [NSBundle mainBundle],
+    self.title = NSLocalizedStringWithDefaultValue(@"Camera_Configured",nil, [NSBundle mainBundle],
                                                                   @"Camera Configured" , nil);
     _ssidView.text = _ssid;
     _ssidView_1.text = _ssid;
+    
     self.navigationItem.hidesBackButton = YES;
     
-    NSString *title = NSLocalizedStringWithDefaultValue(@"Back",nil, [NSBundle mainBundle], @"Back" , nil);
-    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:title
-                                                                    style:UIBarButtonItemStyleBordered
-                                                                   target:nil
-                                                                   action:nil];
-    self.navigationItem.backBarButtonItem = backButton;
-    
-    //check back later..
+    // check back later..
     [NSTimer scheduledTimerWithTimeInterval:2.0
                                      target:self
                                    selector:@selector(checkConnectionToHomeWifi:)
