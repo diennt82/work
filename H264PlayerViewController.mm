@@ -252,6 +252,7 @@ double _ticks = 0;
         //update position text recording
         // update position button
         //Touch to Talk (size = 75, bottom align = 30
+#if 0
         CGSize holdTTButtonSize = self.ib_buttonTouchToTalk.bounds.size;
         CGSize viewRecordSize   = self.ib_viewRecordTTT.bounds.size;
         CGSize directionPadSize = self.imgViewDrectionPad.bounds.size;
@@ -282,7 +283,7 @@ double _ticks = 0;
         
         [self.ib_viewRecordTTT setFrame:CGRectMake(alignXButtonRecord, alignYButtonRecord, viewRecordSize.width, viewRecordSize.height)];
         [_imgViewDrectionPad setFrame:CGRectMake(alignXButtonDirectionPad, alignYButtonDirectionPad, directionPadSize.width, directionPadSize.height)];
-        
+#endif
         [self.ib_labelTouchToTalk setTextColor:[UIColor holdToTalkTextColor]];
     }
     else
