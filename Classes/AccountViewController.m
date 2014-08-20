@@ -276,12 +276,12 @@
     UITextField *tfConfPass = [[UITextField alloc] initWithFrame:CGRectMake(10, 110, 280, 30)];
     
     UILabel *lblTitle = [[UILabel alloc] initWithFrame:CGRectMake(5, 5, 280, 25)];
-    [lblTitle setText:LocStr(@"Change Password")];
+    [lblTitle setText:LocStr(@"Change password")];
     [lblTitle setTextAlignment:NSTextAlignmentCenter];
     
-    tfOldPass.placeholder = LocStr(@"Old Password");
-    tfNewPass.placeholder = LocStr(@"New Password");
-    tfConfPass.placeholder = LocStr(@"Confirm Password");
+    tfOldPass.placeholder = LocStr(@"Old password");
+    tfNewPass.placeholder = LocStr(@"New password");
+    tfConfPass.placeholder = LocStr(@"Confirm password");
     
     [tfOldPass setSecureTextEntry:YES];
     [tfNewPass setSecureTextEntry:YES];
