@@ -81,7 +81,12 @@ double _ticks = 0;
     singleTap.numberOfTouchesRequired = 1;
     [self.imageViewStreamer addGestureRecognizer:singleTap];
     [singleTap release];
-    
+#if 1
+    self.tapGestureTemperature = [[UITapGestureRecognizer alloc] initWithTarget:self
+                                                                                            action:@selector(changeDegreeTemperatureType:)];
+    self.tapGestureTemperature.numberOfTapsRequired = 1;
+    self.tapGestureTemperature.numberOfTouchesRequired = 1;
+#endif
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
     self.apiKey = [userDefaults stringForKey:@"PortalApiKey"];
@@ -151,6 +156,9 @@ double _ticks = 0;
 {
     [super viewDidAppear:animated];
     _syncPortraitAndLandscape = NO;
+    
+    UITapGestureRecognizer *tapGestureTemperature = [[UITapGestureRecognizer alloc] initWithTarget:self
+                                                                                            action:@selector(changeDegreeTemperatureType:)];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -417,7 +425,7 @@ double _ticks = 0;
     self.scrollView.maximumZoomScale = MAXIMUM_ZOOMING_SCALE;
     self.scrollView.minimumZoomScale = MINIMUM_ZOOMING_SCALE;
     [self centerScrollViewContents];
-    [self resetZooming];
+    //[self resetZooming];
     
     
     
@@ -528,8 +536,7 @@ double _ticks = 0;
     {
         CamProfile *cp = self.selectedChannel.profile;
         
-        if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7)
-        {
+        if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
             [self setTitle:cp.name];
             [self.navigationController.navigationBar setBarStyle:UIBarStyleDefault];
         }
@@ -2897,8 +2904,8 @@ double _ticks = 0;
     
     NSLog(@"%s isEarlierView:%d", __FUNCTION__, _earlierNavi.isEarlierView);
     
-    NSString *stringTemperature = [NSString stringWithFormat:@"%d", (int)roundf([temperature floatValue])];
-    _degreeCString = stringTemperature;
+    _degreeCString = [NSString stringWithFormat:@"%d", (int)roundf([temperature floatValue])];
+    //_degreeCString = stringTemperature;
     
     int degreeF = (int) [self temperatureToFfromC:[temperature floatValue]];
     
@@ -2918,6 +2925,18 @@ double _ticks = 0;
     
     UILabel *lblTemperatureType = (UILabel *)[_viewTemperature viewWithTag:TAG_TEMPERATURE_TYPE];
     lblTemperatureType.text = _isDegreeFDisplay?@"°F":@"°C";
+    
+    if (self.selectedItemMenu == INDEX_TEMP &&
+        ![self.stringTemperature isEqualToString:TEMP_NULL])
+    {
+        [MBProgressHUD hideHUDForView:self.view animated:NO];
+        self.viewTemperature.hidden = NO;
+        [self.view bringSubviewToFront:_viewTemperature];
+    }
+    else
+    {
+        self.viewTemperature.hidden = YES;
+    }
 #else
     // start
     [self.ib_temperature.subviews makeObjectsPerformSelector: @selector(removeFromSuperview)];
@@ -3049,6 +3068,18 @@ double _ticks = 0;
     
     [degreeCelsius release];
 #endif
+}
+
+- (void)changeDegreeTemperatureType:(id )sender
+{
+    [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
+                                                    withAction:@"Changes Temperature type"
+                                                     withLabel:@"Temperature"
+                                                     withValue:[NSNumber numberWithBool:_isDegreeFDisplay]];
+    
+    _isDegreeFDisplay = !_isDegreeFDisplay;
+    
+    [self setTemperatureState_Fg:_stringTemperature];
 }
 
 #pragma mark - Melody
@@ -4327,12 +4358,14 @@ double _ticks = 0;
     }
     
     // Remove all subviews before reloading the xib
+#if 1
     NSArray *viewsToRemove = [self.view subviews];
     for (UIView *v in viewsToRemove) {
         [v removeFromSuperview];
     }
+#endif
     
-	if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight)
+	if (UIInterfaceOrientationIsLandscape(orientation))
 	{
         _isLandScapeMode = YES;
         //load new nib for landscape iPad
@@ -4435,7 +4468,7 @@ double _ticks = 0;
                 [melodyVC setCurrentMelodyIndex:self.melodyViewController.melodyIndex andPlaying:self.melodyViewController.playing];
             }
             
-            [self release];
+            //[self release];
             [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController"
                                           owner:self
                                         options:nil];
@@ -4627,6 +4660,8 @@ double _ticks = 0;
         self.btnSendingLog.enabled = YES;
         self.ib_btShowDebugInfo.enabled = YES;
     }
+    
+    [self.viewTemperature addGestureRecognizer:_tapGestureTemperature];
 }
 
 
@@ -5422,7 +5457,13 @@ double _ticks = 0;
             {
                 if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
                 {
-                    rect = CGRectMake(SCREEN_HEIGHT - 236, SCREEN_WIDTH - 400, 236, 165);
+                    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8.0")) {
+                        rect = CGRectMake(SCREEN_WIDTH - 236, SCREEN_HEIGHT - 400, 236, 165);
+                    }
+                    else
+                    {
+                        rect = CGRectMake(SCREEN_HEIGHT - 236, SCREEN_WIDTH - 400, 236, 165);
+                    }
                 }
                 else
                 {
@@ -5435,17 +5476,20 @@ double _ticks = 0;
                         rect = CGRectMake(393, 78, 175, 165);
                     }
                 }
+                
+                //NSLog(@"%s rect:%@, SCREEN_HEIGHT:%f, SCREEN_WIDTH:%f", __FUNCTION__, NSStringFromCGRect(rect), SCREEN_HEIGHT, SCREEN_WIDTH);
             }
             else
             {
-                if (isiOS7AndAbove)
-                {
+                if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
                     rect = CGRectMake(0, self.ib_ViewTouchToTalk.frame.origin.y - 5, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
                 }
                 else
                 {
                     rect = CGRectMake(0, self.ib_ViewTouchToTalk.frame.origin.y - 30 - 44, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
                 }
+                
+                //NSLog(@"%s rect:%@, SCREEN_HEIGHT:%f, SCREEN_WIDTH:%f", __FUNCTION__, NSStringFromCGRect(rect), SCREEN_HEIGHT, SCREEN_WIDTH);
             }
             
             self.melodyViewController.view.frame = rect;
@@ -5599,6 +5643,7 @@ double _ticks = 0;
     
     [_btnSendingLog release];
     [_viewTemperature release];
+    [_tapGestureTemperature release];
     [super dealloc];
 }
 
@@ -6177,6 +6222,8 @@ double _ticks = 0;
     [self changeAction:nil];
 }
 
+#if 1
+#else
 - (IBAction)switchDegreePressed:(id)sender
 {
     //[[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView changes Temperature type" withProperties:nil];
@@ -6194,6 +6241,7 @@ double _ticks = 0;
     
     [self setTemperatureState_Fg:_stringTemperature];
 }
+#endif
 
 - (IBAction)showInfoDebug:(id)sender
 {

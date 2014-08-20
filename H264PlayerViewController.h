@@ -353,6 +353,7 @@
 @property (nonatomic, retain) UserAccount *userAccount;
 @property (nonatomic) BOOL isFwUpgradedByAnotherDevice;
 @property (nonatomic, retain) NSTimer *timerCheckMelodyState;
+@property (nonatomic, retain) UITapGestureRecognizer *tapGestureTemperature;
 
 - (void)scan_done:(NSArray *) _scan_results;
 
