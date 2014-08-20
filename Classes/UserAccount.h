@@ -29,13 +29,9 @@
             apiKey:(NSString *)apiKey
    accountDelegate:(id<UserAccountDelegate>)delegate;
 
-- (NSMutableArray *)parse_camera_list:(NSArray *)raw;
-- (void)sync_online_and_offline_data:(NSMutableArray *)online_list;
-- (void)query_snapshot_from_server:(NSArray *)cam_profiles;
-
-- (NSString *)query_cam_ip_online:(NSString *)mac_no_colon;
+- (void)syncOnlineAndOfflineData:(NSMutableArray *)onlineList;
 - (void)readCameraListAndUpdate;
-- (BOOL)checkCameraIsAvailable:(NSString *)mac_w_colon;
-- (NSInteger)checkAvailableAndFWUpgradingWithCamera:(NSString *)mac_w_colon;
+- (BOOL)checkCameraIsAvailable:(NSString *)macWithColon;
+- (NSInteger)checkAvailableAndFWUpgradingWithCamera:(NSString *)macWithColon;
 
 @end
