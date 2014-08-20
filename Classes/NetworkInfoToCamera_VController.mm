@@ -224,12 +224,6 @@
         self.btnTryAgain.frame = CGRectOffset(self.btnTryAgain.frame, 0, dy);
         self.btnSetupWithWifi.frame = CGRectOffset(self.btnSetupWithWifi.frame, 0, dy);
     }
-    
-    self.timerTimeoutConnectBLE  = [NSTimer scheduledTimerWithTimeInterval:2//BLE_TIMEOUT_PROCESS
-                                                                    target:self
-                                                                  selector:@selector(timeoutBLESetupProcessing:)
-                                                                  userInfo:nil
-                                                                   repeats:NO];
 }
 
 - (void)xibDefaultLocalization
