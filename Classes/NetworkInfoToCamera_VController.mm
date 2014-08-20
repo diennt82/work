@@ -85,19 +85,19 @@
     [self.btnContinue setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
     [self.btnContinue setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
     [self.btnContinue addTarget:self action:@selector(btnContinueTouchUpInsideAction:) forControlEvents:UIControlEventTouchUpInside];
-    self.btnContinue.titleLabel.text = NSLocalizedString(@"continue", @"Continue");
+    [self.btnContinue setTitle:NSLocalizedString(@"continue", @"Continue") forState:UIControlStateNormal];
     
-    self.btnTryAgain = (UIButton *)[_viewError viewWithTag:599];
+    self.btnTryAgain = (UIButton *)[_viewError viewWithTag:559];
     [self.btnTryAgain setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
     [self.btnTryAgain setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
     [self.btnTryAgain addTarget:self action:@selector(btnTryAgainTouchUpInsideAction:) forControlEvents:UIControlEventTouchUpInside];
-    self.btnTryAgain.titleLabel.text = NSLocalizedString(@"Re-try setup with Bluetooth", @"Re-try setup with Bluetooth");
+    [self.btnTryAgain setTitle:NSLocalizedString(@"Re-try setup with Bluetooth", @"Re-try setup with Bluetooth") forState:UIControlStateNormal];
     
     self.btnSetupWithWifi = (UIButton *)[_viewError viewWithTag:BTN_SETUP_WIFI];
     [self.btnSetupWithWifi setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
     [self.btnSetupWithWifi setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
     [self.btnSetupWithWifi addTarget:self action:@selector(btnSetupWithWifiAction:) forControlEvents:UIControlEventTouchUpInside];
-    self.btnSetupWithWifi.titleLabel.text = NSLocalizedString(@"Setup with WIFI", @"Setup with WIFI");
+    [self.btnSetupWithWifi setTitle:NSLocalizedString(@"Setup with WIFI", @"Setup with WIFI") forState:UIControlStateNormal];
     
     UIImageView *imageView = (UIImageView *)[_viewProgress viewWithTag:595];
     imageView.animationImages =[NSArray arrayWithObjects:
@@ -208,6 +208,28 @@
     lblProgress.text = message;
     
     [BLEConnectionManager getInstanceBLE].delegate = self;
+    
+    
+    if (isiPhone4)
+    {
+        CGFloat dy = -85;
+        UIImageView *imageView = (UIImageView *)[_viewError viewWithTag:575];
+        imageView.frame = CGRectOffset(imageView.frame, 0, dy);
+        UILabel *label = (UILabel *)[_viewError viewWithTag:1];
+        label.frame = CGRectOffset(label.frame, 0, dy);
+        label = (UILabel *)[_viewError viewWithTag:2];
+        label.frame = CGRectOffset(label.frame, 0, dy);
+        
+        self.btnContinue.frame = CGRectOffset(self.btnContinue.frame, 0, dy);
+        self.btnTryAgain.frame = CGRectOffset(self.btnTryAgain.frame, 0, dy);
+        self.btnSetupWithWifi.frame = CGRectOffset(self.btnSetupWithWifi.frame, 0, dy);
+    }
+    
+    self.timerTimeoutConnectBLE  = [NSTimer scheduledTimerWithTimeInterval:2//BLE_TIMEOUT_PROCESS
+                                                                    target:self
+                                                                  selector:@selector(timeoutBLESetupProcessing:)
+                                                                  userInfo:nil
+                                                                   repeats:NO];
 }
 
 - (void)xibDefaultLocalization
