@@ -83,19 +83,19 @@
     [self.btnConnect setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
     [self.btnConnect setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
     self.btnConnect.enabled = NO;
-    self.btnConnect.titleLabel.text = NSLocalizedString(@"Connect", @"Connect");
+    [self.btnConnect setTitle:NSLocalizedStringWithDefaultValue(@"Connect", nil, [NSBundle mainBundle], @"Connect", nil) forState:UIControlStateNormal];
     
     self.btnRetry = (UIButton *)[_viewError viewWithTag:BTN_RETRY_TAG];
     [self.btnRetry setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
     [self.btnRetry setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
     [self.btnRetry addTarget:self action:@selector(btnRetryTouchUpInsideAction:) forControlEvents:UIControlEventTouchUpInside];
-    self.btnRetry.titleLabel.text = NSLocalizedString(@"Re-try setup with Bluetooth", @"Re-try setup with Bluetooth");
+    [self.btnRetry setTitle:NSLocalizedStringWithDefaultValue(@"Re-try setup with Bluetooth", nil, [NSBundle mainBundle], @"Re-try setup with Bluetooth", nil) forState:UIControlStateNormal];
     
     self.btnSetupWithWifi = (UIButton *)[_viewError viewWithTag:BTN_SETUP_WIFI];
     [self.btnSetupWithWifi setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
     [self.btnSetupWithWifi setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
     [self.btnSetupWithWifi addTarget:self action:@selector(btnSetupWithWifiAction:) forControlEvents:UIControlEventTouchUpInside];
-    self.btnSetupWithWifi.titleLabel.text = NSLocalizedString(@"Setup with WIFI", @"Setup with WIFI");
+    [self.btnSetupWithWifi setTitle:NSLocalizedStringWithDefaultValue(@"Setup with WIFI", nil, [NSBundle mainBundle], @"Setup with WIFI", nil) forState:UIControlStateNormal];
     
     self.currentBLEList = [[NSMutableArray alloc] init];
     
@@ -315,7 +315,7 @@
     else
     {
         MBProgressHUD *hub = [MBProgressHUD showHUDAddedTo:self.view animated:NO];
-        hub.labelText = @"Disconnecting BLE...";
+        hub.labelText = NSLocalizedStringWithDefaultValue(@"hud_disconnecting_BLE", nil, [NSBundle mainBundle], @"Disconnecting BLE...", nil);
         /*
          * -- In State CONNECTED --
          * wait for return from delegate,

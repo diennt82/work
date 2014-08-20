@@ -23,7 +23,13 @@
 "alert_mes_camera_has_been_viewed_for_about_5_minutes" = "Die Kamera wurde etwa 5 Minuten angesehen. Möchten Sie fortfahren?";
 
 /* No comment provided by engineer. */
+"alert_mes_camera_offline_after_upgrading" = "Camera offline after upgrading.";
+
+/* No comment provided by engineer. */
 "alert_mes_check_your_network" = "Bitte überprüfen Sie Ihre Netzwerkeinstellungen";
+
+/* No comment provided by engineer. */
+"alert_mes_dialog_to_confirm_selected_wifi" = "You have selected wifi %1$@ which is not the same as your Home wifi, %2$@. If you choose to continue, there will more steps to setup your camera. Do you want to proceed?";
 
 /* No comment provided by engineer. */
 "alert_mes_enter_correct_old_password" = "Korrektes altes Passwort eingeben.";
@@ -41,6 +47,15 @@
 "alert_mes_fill_the_ssid_try_again" = "Bitte tragen Sie den SSID Namen ein und versuchen Sie es noch einmal";
 
 /* No comment provided by engineer. */
+"alert_mes_firmware_upgrade_completed" = "Firmware upgrade could not be completed.";
+
+/* No comment provided by engineer. */
+"alert_mes_incorrect_firmware_version" = "Incorrect Firmware version.";
+
+/* No comment provided by engineer. */
+"alert_mes_password_input_not_correctly" = "Password input don't correctly, try again";
+
+/* No comment provided by engineer. */
 "alert_mes_password_is_not_match_or_empty" = "Überprüfung fehlgeschlagen: Passwort stimmt nicht über ein oder ist leer";
 
 /* No comment provided by engineer. */
@@ -48,6 +63,12 @@
 
 /* No comment provided by engineer. */
 "alert_mes_please_enter_correct_old_password" = "Bitte korrektes altes Passwort eingeben";
+
+/* No comment provided by engineer. */
+"alert_mes_please_manually_off_and_on_the_camera" = "%@\n\rPlease manually off and on the camera.";
+
+/* No comment provided by engineer. */
+"alert_mes_retry_installing_the_camera" = "Press OK to retry installing the camera.";
 
 /* No comment provided by engineer. */
 "alert_mes_saved_to_photo_album" = "In Fotoalbum gespeichert";
@@ -87,6 +108,9 @@
 
 /* No comment provided by engineer. */
 "alert_title_change_password_failed" = "Passwortänderung fehlgeschlagen";
+
+/* No comment provided by engineer. */
+"alert_title_confirm_password_failed" = "Confirm Password Failed";
 
 /* No comment provided by engineer. */
 "alert_title_edter_password" = "Passwort eingeben";
@@ -226,6 +250,9 @@
 /* No comment provided by engineer. */
 "Confirm_remove_cam_remote" = "Sie sind dabei, die gekoppelte Kamera von der App zu entfernen. Sie müssen Sie erneut koppeln, um sie in Zukunft wieder verwenden zu können. Fortfahren?";
 
+/* Connect */
+"Connect" = "Connect";
+
 /* No comment provided by engineer. */
 "connecting_to_amera" = "Verbindung mit Kamera";
 
@@ -335,7 +362,13 @@
 "hours" = "Stunden";
 
 /* No comment provided by engineer. */
+"hud_configure_camera" = "Configure camera...";
+
+/* No comment provided by engineer. */
 "hud_deleting_video" = "Video wird gelöscht...";
+
+/* No comment provided by engineer. */
+"hud_disconnecting_BLE" = "Disconnecting BLE...";
 
 /* No comment provided by engineer. */
 "hud_error_sensitivity_settings" = "Error -Load Sensitivity Settings!";
@@ -446,6 +479,9 @@
 "monitor_everywhere_all_rights_reserved" = "Monitor überall © alle Rechte vorbehalten";
 
 /* No comment provided by engineer. */
+"monitor_is_offline" = "Monitor is offline";
+
+/* No comment provided by engineer. */
 "motion" = "Bewegung";
 
 /* No comment provided by engineer. */
@@ -520,6 +556,9 @@
 /* No comment provided by engineer. */
 "profile" = "Profil";
 
+/* Re-try setup with Bluetooth */
+"Re-try setup with Bluetooth" = "Re-try setup with Bluetooth";
+
 /* No comment provided by engineer. */
 "record_video" = "Video aufnehmen";
 
@@ -576,6 +615,9 @@
 
 /* No comment provided by engineer. */
 "Settings" = "Einstellungen";
+
+/* Setup with WIFI */
+"Setup with WIFI" = "Setup with WIFI";
 
 /* No comment provided by engineer. */
 "skip_wifi_setup" = "WIFI Setup überspringen";
@@ -644,6 +686,9 @@
 "text_touch_to_talk" = "Touch to Talk";
 
 /* No comment provided by engineer. */
+"there_is_currently_no_new_event" = "There is currently no new event";
+
+/* No comment provided by engineer. */
 "thur" = "Do";
 
 /* No comment provided by engineer. */
@@ -682,6 +727,9 @@
 /* No comment provided by engineer. */
 "touch_to_talk" = "Touch to Talk";
 
+/* Try Again */
+"Try Again" = "Noch einmal versuchen";
+
 /* No comment provided by engineer. */
 "tue" = "Di";
 
@@ -708,6 +756,9 @@
 
 /* No comment provided by engineer. */
 "volume" = "Lautstärke";
+
+/* No comment provided by engineer. */
+"waiting_for_configure_camera" = "Waiting for configure camera...";
 
 /* No comment provided by engineer. */
 "wed" = "Mi";

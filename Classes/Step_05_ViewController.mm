@@ -261,7 +261,7 @@
 
 - (void)showDialogToConfirm: (NSString *)homeWifi selectedWifi: (NSString *)selectedWifi
 {
-    NSString * msg = [NSString stringWithFormat:@"You have selected wifi %@ which is not the same as your Home wifi, %@. If you choose to continue, there will more steps to setup your camera. Do you want to proceed?", selectedWifi, homeWifi];
+    NSString * msg = [NSString stringWithFormat:NSLocalizedStringWithDefaultValue(@"alert_mes_dialog_to_confirm_selected_wifi", nil, [NSBundle mainBundle], @"You have selected wifi %@ which is not the same as your Home wifi, %@. If you choose to continue, there will more steps to setup your camera. Do you want to proceed?", nil), selectedWifi, homeWifi];
     
     UIAlertView *alertViewNotice = [[UIAlertView alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"notice", nil, [NSBundle mainBundle],  @"Notice", nil)
                                                         message:msg
@@ -326,8 +326,7 @@
                                                        @"Fail to communicate with camera. Retry?", nil);
     
     NSString * cancel = NSLocalizedStringWithDefaultValue(@"cancel", nil, [NSBundle mainBundle], @"Cancel", nil);
-    NSString * retry = NSLocalizedStringWithDefaultValue(@"Retry",nil, [NSBundle mainBundle],
-                                                         @"Retry", nil);
+    NSString * retry = NSLocalizedStringWithDefaultValue(@"Retry",nil, [NSBundle mainBundle], @"Retry", nil);
     UIAlertView *myAlert = [[UIAlertView alloc] initWithTitle:msg
                                                       message:@""
                                                      delegate:self
@@ -678,7 +677,7 @@
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(20, 85, 200, 41)];// autorelease];
     label.textAlignment = NSTextAlignmentCenter;
     label.numberOfLines = 2;
-    label.text = @"Waiting for configure camera...";
+    label.text = NSLocalizedStringWithDefaultValue(@"waiting_for_configure_camera", nil, [NSBundle mainBundle], @"Waiting for configure camera...", nil);
     [demoView addSubview:label];
     [label release];
     

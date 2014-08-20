@@ -569,7 +569,7 @@
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(20, 85, 200, 41)];// autorelease];
     label.textAlignment = NSTextAlignmentCenter;
     label.numberOfLines = 2;
-    label.text = @"Waiting for configure camera...";
+    label.text = NSLocalizedStringWithDefaultValue(@"waiting_for_configure_camera", nil, [NSBundle mainBundle], @"Waiting for configure camera...", nil);
     [demoView addSubview:label];
     [label release];
     

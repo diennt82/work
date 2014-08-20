@@ -90,26 +90,26 @@
     
     [self.btnContinue setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
     [self.btnContinue setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
-    self.btnContinue.titleLabel.text = NSLocalizedString(@"continue", @"Continue");
+    [self.btnContinue setTitle:NSLocalizedStringWithDefaultValue(@"continue", nil, [NSBundle mainBundle], @"Continue", nil)forState:UIControlStateNormal];
     self.btnContinue.enabled = NO;
     
     self.btnRetry = (UIButton *)[_viewError viewWithTag:BTN_RETRY_TAG];
     [self.btnRetry setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
     [self.btnRetry setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
-    self.btnRetry.titleLabel.text = NSLocalizedString(@"Re-try setup with Bluetooth", @"Re-try setup with Bluetooth");
+    [self.btnRetry setTitle:NSLocalizedStringWithDefaultValue(@"Re-try setup with Bluetooth", nil, [NSBundle mainBundle], @"Re-try setup with Bluetooth", nil) forState:UIControlStateNormal];
     
     self.btnSetupWithWifi = (UIButton *)[_viewError viewWithTag:BTN_SETUP_WIFI];
     [self.btnSetupWithWifi setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
     [self.btnSetupWithWifi setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
-    self.btnSetupWithWifi.titleLabel.text = NSLocalizedString(@"Setup with WIFI", @"Setup with WIFI");
+    [self.btnSetupWithWifi setTitle:NSLocalizedStringWithDefaultValue(@"skip_wifi_setup", nil, [NSBundle mainBundle], @"Skip WIFI Setup", nil) forState:UIControlStateNormal];
     
     if ([[NSUserDefaults standardUserDefaults] integerForKey:SET_UP_CAMERA] == SETUP_CAMERA_FOCUS73)
     {
         NSString *contTitle = NSLocalizedStringWithDefaultValue(@"continue", nil, [NSBundle mainBundle], @"Continue", nil);
-        self.btnContinue.titleLabel.text = contTitle;
+        [self.btnContinue setTitle:contTitle forState:UIControlStateNormal];
         
         NSString *skipWIFISetup = NSLocalizedStringWithDefaultValue(@"skip_wifi_setup", nil, [NSBundle mainBundle], @"Skip WIFI Setup", nil);
-        self.btnSkipWIFISetup.titleLabel.text = skipWIFISetup;
+        [self.btnSkipWIFISetup setTitle:skipWIFISetup forState:UIControlStateNormal];
         self.btnSkipWIFISetup.hidden = NO;
     }
     
@@ -252,7 +252,7 @@
 - (IBAction)btnSkipWIFISetupTouchUpInsideAction:(id)sender
 {
     MBProgressHUD *hub = [MBProgressHUD showHUDAddedTo:self.view animated:NO];
-    hub.labelText = @"Configure camera...";
+    hub.labelText = NSLocalizedStringWithDefaultValue(@"hud_configure_camera", nil, [NSBundle mainBundle], @"Configure camera...", nil);
     
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:HOST_SSID];
     [[NSUserDefaults standardUserDefaults] synchronize];
@@ -384,7 +384,7 @@
     NSString *contTitle = NSLocalizedStringWithDefaultValue(@"continue", nil, [NSBundle mainBundle], @"Continue", nil);
     NSString *cancelString = NSLocalizedStringWithDefaultValue(@"cancel", nil, [NSBundle mainBundle], @"Cancel", nil);
     
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Notice"
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"notice", nil, [NSBundle mainBundle], @"Notice", nil)
                                                         message:msg
                                                        delegate:self
                                               cancelButtonTitle:cancelString
