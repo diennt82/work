@@ -25,7 +25,6 @@
 		268E8905199E6F4E00DBF8B2 /* settings_temp_f@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299F2918AF500900D36BE5 /* settings_temp_f@2x.png */; };
 		268E8906199E6F4E00DBF8B2 /* setup_camera_b1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B95076118C9960D006D4945 /* setup_camera_b1@2x.png */; };
 		268E8907199E6F4E00DBF8B2 /* back_pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A1B1E7A718E9135800F076B6 /* back_pressed@2x.png */; };
-		268E8908199E6F4E00DBF8B2 /* Hubble_back_text.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B97A3C218BF1B5F008A38E1 /* Hubble_back_text.png */; };
 		268E8909199E6F4E00DBF8B2 /* LoginViewController_35.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8BA17EF918B7399100129FE7 /* LoginViewController_35.xib */; };
 		268E890A199E6F4E00DBF8B2 /* camera_action_pause_pressed@5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299E9318AF500800D36BE5 /* camera_action_pause_pressed@5.png */; };
 		268E890B199E6F4E00DBF8B2 /* scheduler.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299F1018AF500900D36BE5 /* scheduler.png */; };
@@ -34,7 +33,6 @@
 		268E890E199E6F4E00DBF8B2 /* setup_camera_c2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B95074118C9960D006D4945 /* setup_camera_c2@2x.png */; };
 		268E890F199E6F4E00DBF8B2 /* camera.png in Resources */ = {isa = PBXBuildFile; fileRef = A1B1E7B818E9135800F076B6 /* camera.png */; };
 		268E8910199E6F4E00DBF8B2 /* alert_settings_pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299E2018AF500800D36BE5 /* alert_settings_pressed.png */; };
-		268E8911199E6F4E00DBF8B2 /* Hubble_logo_back.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B88C98518ACBA3000B074E5 /* Hubble_logo_back.png */; };
 		268E8912199E6F4E00DBF8B2 /* video_action_music@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299EC618AF500900D36BE5 /* video_action_music@2x.png */; };
 		268E8913199E6F4E00DBF8B2 /* temp_minus@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299F3118AF500900D36BE5 /* temp_minus@2x.png */; };
 		268E8914199E6F4E00DBF8B2 /* setup_progress_grey@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B95077718C9960D006D4945 /* setup_progress_grey@2x.png */; };
@@ -56,7 +54,6 @@
 		268E8924199E6F4E00DBF8B2 /* buy_camera_btn_pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = A1B1E7AA18E9135800F076B6 /* buy_camera_btn_pressed.png */; };
 		268E8925199E6F4E00DBF8B2 /* remove_camera_pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299F0E18AF500900D36BE5 /* remove_camera_pressed.png */; };
 		268E8926199E6F4E00DBF8B2 /* video_grey@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299E8618AF500800D36BE5 /* video_grey@2x.png */; };
-		268E8927199E6F4E00DBF8B2 /* Hubble_logo_back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B88C98618ACBA3000B074E5 /* Hubble_logo_back@2x.png */; };
 		268E8928199E6F4E00DBF8B2 /* loader_a@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299EE218AF500900D36BE5 /* loader_a@2x.png */; };
 		268E8929199E6F4E00DBF8B2 /* alert_play_pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299E1C18AF500800D36BE5 /* alert_play_pressed.png */; };
 		268E892A199E6F4E00DBF8B2 /* MenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9C7E0C185F260A0038B3A8 /* MenuViewController.xib */; };
@@ -425,7 +422,6 @@
 		268E8AA2199E6F4E00DBF8B2 /* upgrade_pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299EBF18AF500900D36BE5 /* upgrade_pressed.png */; };
 		268E8AA3199E6F4E00DBF8B2 /* camera_action_photo_pressed_land.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299E4918AF500800D36BE5 /* camera_action_photo_pressed_land.png */; };
 		268E8AA4199E6F4E00DBF8B2 /* photo_grey_land.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299E5718AF500800D36BE5 /* photo_grey_land.png */; };
-		268E8AA5199E6F4E00DBF8B2 /* Hubble_back_text@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B97A3C118BF1B5F008A38E1 /* Hubble_back_text@2x.png */; };
 		268E8AA6199E6F4E00DBF8B2 /* detect_camera_5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9507C618C998AD006D4945 /* detect_camera_5.png */; };
 		268E8AA7199E6F4E00DBF8B2 /* NotifViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9112D61860341C004301C5 /* NotifViewController.xib */; };
 		268E8AA8199E6F4E00DBF8B2 /* remove_camera.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B299F0C18AF500900D36BE5 /* remove_camera.png */; };
@@ -1162,8 +1158,6 @@
 		8B53659318B34DA80018671F /* SensitivityTemperatureCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B53659218B34DA80018671F /* SensitivityTemperatureCell.m */; };
 		8B53659518B34DCA0018671F /* SensitivityTemperatureCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B53659418B34DCA0018671F /* SensitivityTemperatureCell.xib */; };
 		8B68F5D118066CE500661527 /* PlaybackViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B68F5D018066CE500661527 /* PlaybackViewController~ipad.xib */; };
-		8B88C98718ACBA3000B074E5 /* Hubble_logo_back.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B88C98518ACBA3000B074E5 /* Hubble_logo_back.png */; };
-		8B88C98818ACBA3000B074E5 /* Hubble_logo_back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B88C98618ACBA3000B074E5 /* Hubble_logo_back@2x.png */; };
 		8B900FD718D85AFF0031C457 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B900FD618D85AFF0031C457 /* MobileCoreServices.framework */; };
 		8B9112C518600B7C004301C5 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9112C318600B7C004301C5 /* SettingsViewController.m */; };
 		8B9112CA186010F1004301C5 /* GeneralCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9112C9186010F1004301C5 /* GeneralCell.m */; };
@@ -1309,8 +1303,6 @@
 		8B977B7218C709A100A61115 /* PAIRInstructionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B977B7018C709A100A61115 /* PAIRInstructionViewController.xib */; };
 		8B977C9E18C70BDA00A61115 /* HubbleProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B977C9D18C70BDA00A61115 /* HubbleProgressView.m */; };
 		8B97A3C018BEE628008A38E1 /* UIBarButtonItem+Custom.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B97A3BF18BEE628008A38E1 /* UIBarButtonItem+Custom.m */; };
-		8B97A3C318BF1B5F008A38E1 /* Hubble_back_text@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B97A3C118BF1B5F008A38E1 /* Hubble_back_text@2x.png */; };
-		8B97A3C418BF1B5F008A38E1 /* Hubble_back_text.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B97A3C218BF1B5F008A38E1 /* Hubble_back_text.png */; };
 		8B98765218DAFF6A00A2FDD7 /* libGoogleAnalytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B73057718D6D05A00D079B0 /* libGoogleAnalytics.a */; };
 		8B9899AD1859771800AC3852 /* CameraNameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9899AB1859771800AC3852 /* CameraNameViewController.m */; };
 		8B9899AE1859771800AC3852 /* CameraNameViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9899AC1859771800AC3852 /* CameraNameViewController.xib */; };
@@ -1958,8 +1950,6 @@
 		8B68F5D018066CE500661527 /* PlaybackViewController~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "PlaybackViewController~ipad.xib"; sourceTree = "<group>"; };
 		8B73057618D6D05A00D079B0 /* libGoogleAnalytics_debug.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libGoogleAnalytics_debug.a; path = "../iphone-frameworks/GoogleAnalyticsLibrary/libGoogleAnalytics_debug.a"; sourceTree = "<group>"; };
 		8B73057718D6D05A00D079B0 /* libGoogleAnalytics.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libGoogleAnalytics.a; path = "../iphone-frameworks/GoogleAnalyticsLibrary/libGoogleAnalytics.a"; sourceTree = "<group>"; };
-		8B88C98518ACBA3000B074E5 /* Hubble_logo_back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Hubble_logo_back.png; sourceTree = "<group>"; };
-		8B88C98618ACBA3000B074E5 /* Hubble_logo_back@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Hubble_logo_back@2x.png"; sourceTree = "<group>"; };
 		8B900FD618D85AFF0031C457 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		8B9112C218600B7C004301C5 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
 		8B9112C318600B7C004301C5 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
@@ -2135,8 +2125,6 @@
 		8B977C9D18C70BDA00A61115 /* HubbleProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HubbleProgressView.m; sourceTree = "<group>"; };
 		8B97A3BE18BEE628008A38E1 /* UIBarButtonItem+Custom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBarButtonItem+Custom.h"; sourceTree = "<group>"; };
 		8B97A3BF18BEE628008A38E1 /* UIBarButtonItem+Custom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIBarButtonItem+Custom.m"; sourceTree = "<group>"; };
-		8B97A3C118BF1B5F008A38E1 /* Hubble_back_text@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Hubble_back_text@2x.png"; sourceTree = "<group>"; };
-		8B97A3C218BF1B5F008A38E1 /* Hubble_back_text.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Hubble_back_text.png; sourceTree = "<group>"; };
 		8B98764F18DACDCB00A2FDD7 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		8B9899AA1859771800AC3852 /* CameraNameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraNameViewController.h; sourceTree = "<group>"; };
 		8B9899AB1859771800AC3852 /* CameraNameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraNameViewController.m; sourceTree = "<group>"; };
@@ -2304,7 +2292,7 @@
 		A1ABF1C3187538740014FCB4 /* DisplayWifiList_VController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DisplayWifiList_VController.h; sourceTree = "<group>"; };
 		A1ABF1C4187538740014FCB4 /* DisplayWifiList_VController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DisplayWifiList_VController.m; sourceTree = "<group>"; };
 		A1ABF1C5187538740014FCB4 /* DisplayWifiList_VController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DisplayWifiList_VController.xib; sourceTree = "<group>"; };
-		A1ABF1C8187539000014FCB4 /* refresh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = refresh.png; sourceTree = "<group>"; };
+		A1ABF1C8187539000014FCB4 /* refresh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = refresh.png; path = Classes/refresh.png; sourceTree = "<group>"; };
 		A1ABF1CA187539A80014FCB4 /* define.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = define.h; sourceTree = "<group>"; };
 		A1ABF1CB18753C240014FCB4 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/CoreBluetooth.framework; sourceTree = DEVELOPER_DIR; };
 		A1AC859318913014002A8CCD /* UIColor+Hubble.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Hubble.h"; sourceTree = "<group>"; };
@@ -2728,10 +2716,6 @@
 		3812F82315C8BEC700DADFA6 /* images13 */ = {
 			isa = PBXGroup;
 			children = (
-				8B97A3C118BF1B5F008A38E1 /* Hubble_back_text@2x.png */,
-				8B97A3C218BF1B5F008A38E1 /* Hubble_back_text.png */,
-				8B88C98518ACBA3000B074E5 /* Hubble_logo_back.png */,
-				8B88C98618ACBA3000B074E5 /* Hubble_logo_back@2x.png */,
 				8BC0A02E1844A87700A5FD52 /* temp_bg.png */,
 				8BE896B21845CB3B00674E01 /* bb_motion_icon.png */,
 				38AC741315D9199E00618188 /* account_icon.png */,
@@ -3826,6 +3810,7 @@
 				3812F82315C8BEC700DADFA6 /* images13 */,
 				8B9584371877DF110055BCE3 /* Icons */,
 				8B96915D18765F5300FB15B8 /* TempSnapshot */,
+				A1ABF1C8187539000014FCB4 /* refresh.png */,
 				8B99C0B1186ABB7900DB8AAA /* ImgNotAvailable.png */,
 				8B1D545918658CBC008857F0 /* selected-img.png */,
 				8B1D545A18658CBC008857F0 /* hour-img.png */,
@@ -4099,7 +4084,6 @@
 				8B9CE1F818C81DBA00B1B7F9 /* HubbleAlertView */,
 				8B977B6D18C7095F00A61115 /* PairInstructionVC */,
 				8B977B6718C701F200A61115 /* BLEConnectionCell */,
-				A1ABF1C8187539000014FCB4 /* refresh.png */,
 				A1ABF19D187536B20014FCB4 /* Connection */,
 				A1ABF1B7187538280014FCB4 /* CreateBLEConnection_VController.h */,
 				A1ABF1B8187538280014FCB4 /* CreateBLEConnection_VController.m */,
@@ -4266,7 +4250,6 @@
 				8B29A06018AF500A00D36BE5 /* settings_temp_f@2x.png in Resources */,
 				8B9507AB18C9960D006D4945 /* setup_camera_b1@2x.png in Resources */,
 				A1B1E7CD18E9135800F076B6 /* back_pressed@2x.png in Resources */,
-				8B97A3C418BF1B5F008A38E1 /* Hubble_back_text.png in Resources */,
 				8BA17EFA18B7399100129FE7 /* LoginViewController_35.xib in Resources */,
 				8B299FD018AF500900D36BE5 /* camera_action_pause_pressed@5.png in Resources */,
 				8B29A04718AF500A00D36BE5 /* scheduler.png in Resources */,
@@ -4275,7 +4258,6 @@
 				8B95078B18C9960D006D4945 /* setup_camera_c2@2x.png in Resources */,
 				A1B1E7DE18E9135800F076B6 /* camera.png in Resources */,
 				8B299F6318AF500900D36BE5 /* alert_settings_pressed.png in Resources */,
-				8B88C98718ACBA3000B074E5 /* Hubble_logo_back.png in Resources */,
 				8B29A00118AF500900D36BE5 /* video_action_music@2x.png in Resources */,
 				8B29A06818AF500A00D36BE5 /* temp_minus@2x.png in Resources */,
 				8B9507C118C9960D006D4945 /* setup_progress_grey@2x.png in Resources */,
@@ -4297,7 +4279,6 @@
 				A1B1E7D018E9135800F076B6 /* buy_camera_btn_pressed.png in Resources */,
 				8B29A04518AF500A00D36BE5 /* remove_camera_pressed.png in Resources */,
 				8B299FC418AF500900D36BE5 /* video_grey@2x.png in Resources */,
-				8B88C98818ACBA3000B074E5 /* Hubble_logo_back@2x.png in Resources */,
 				8B29A01B18AF500900D36BE5 /* loader_a@2x.png in Resources */,
 				8B299F5F18AF500900D36BE5 /* alert_play_pressed.png in Resources */,
 				8B9C7E0E185F260A0038B3A8 /* MenuViewController.xib in Resources */,
@@ -4679,7 +4660,6 @@
 				8B299FFA18AF500900D36BE5 /* upgrade_pressed.png in Resources */,
 				8B299F8918AF500900D36BE5 /* camera_action_photo_pressed_land.png in Resources */,
 				8B299F9718AF500900D36BE5 /* photo_grey_land.png in Resources */,
-				8B97A3C318BF1B5F008A38E1 /* Hubble_back_text@2x.png in Resources */,
 				8B9507C818C998AD006D4945 /* detect_camera_5.png in Resources */,
 				8B9112D81860341C004301C5 /* NotifViewController.xib in Resources */,
 				8B29A04318AF500A00D36BE5 /* remove_camera.png in Resources */,
@@ -4867,7 +4847,6 @@
 				268E8905199E6F4E00DBF8B2 /* settings_temp_f@2x.png in Resources */,
 				268E8906199E6F4E00DBF8B2 /* setup_camera_b1@2x.png in Resources */,
 				268E8907199E6F4E00DBF8B2 /* back_pressed@2x.png in Resources */,
-				268E8908199E6F4E00DBF8B2 /* Hubble_back_text.png in Resources */,
 				268E8909199E6F4E00DBF8B2 /* LoginViewController_35.xib in Resources */,
 				268E890A199E6F4E00DBF8B2 /* camera_action_pause_pressed@5.png in Resources */,
 				268E890B199E6F4E00DBF8B2 /* scheduler.png in Resources */,
@@ -4876,7 +4855,6 @@
 				268E890E199E6F4E00DBF8B2 /* setup_camera_c2@2x.png in Resources */,
 				268E890F199E6F4E00DBF8B2 /* camera.png in Resources */,
 				268E8910199E6F4E00DBF8B2 /* alert_settings_pressed.png in Resources */,
-				268E8911199E6F4E00DBF8B2 /* Hubble_logo_back.png in Resources */,
 				268E8912199E6F4E00DBF8B2 /* video_action_music@2x.png in Resources */,
 				268E8913199E6F4E00DBF8B2 /* temp_minus@2x.png in Resources */,
 				268E8914199E6F4E00DBF8B2 /* setup_progress_grey@2x.png in Resources */,
@@ -4898,7 +4876,6 @@
 				268E8924199E6F4E00DBF8B2 /* buy_camera_btn_pressed.png in Resources */,
 				268E8925199E6F4E00DBF8B2 /* remove_camera_pressed.png in Resources */,
 				268E8926199E6F4E00DBF8B2 /* video_grey@2x.png in Resources */,
-				268E8927199E6F4E00DBF8B2 /* Hubble_logo_back@2x.png in Resources */,
 				268E8928199E6F4E00DBF8B2 /* loader_a@2x.png in Resources */,
 				268E8929199E6F4E00DBF8B2 /* alert_play_pressed.png in Resources */,
 				268E892A199E6F4E00DBF8B2 /* MenuViewController.xib in Resources */,
@@ -5277,7 +5254,6 @@
 				268E8AA2199E6F4E00DBF8B2 /* upgrade_pressed.png in Resources */,
 				268E8AA3199E6F4E00DBF8B2 /* camera_action_photo_pressed_land.png in Resources */,
 				268E8AA4199E6F4E00DBF8B2 /* photo_grey_land.png in Resources */,
-				268E8AA5199E6F4E00DBF8B2 /* Hubble_back_text@2x.png in Resources */,
 				268E8AA6199E6F4E00DBF8B2 /* detect_camera_5.png in Resources */,
 				268E8AA7199E6F4E00DBF8B2 /* NotifViewController.xib in Resources */,
 				268E8AA8199E6F4E00DBF8B2 /* remove_camera.png in Resources */,
