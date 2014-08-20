@@ -109,9 +109,9 @@ typedef enum _WAIT_FOR_UPDATING {
     self.tableViewSettings.delegate = self;
     self.tableViewSettings.dataSource = self;
     
-    [self.btnRmoveCamera setBackgroundImage:[UIImage imageNamed:@"remove_camera"]
+    [self.btnRmoveCamera setBackgroundImage:[UIImage imageNamed:@"enter"]
                                    forState:UIControlStateNormal];
-    [self.btnRmoveCamera setBackgroundImage:[UIImage imageNamed:@"remove_camera_pressed"]
+    [self.btnRmoveCamera setBackgroundImage:[UIImage imageNamed:@"enter_pressed"]
                                    forState:UIControlEventTouchDown];
     
     self.stringFW_Version = NSLocalizedStringWithDefaultValue(@"firmware_version", nil, [NSBundle mainBundle],
@@ -435,7 +435,7 @@ typedef enum _WAIT_FOR_UPDATING {
     }
     else{
         if(indexPath.section==0 && intTableSectionStatus==1){
-            return 198;
+            return 225;
         }
         else if(indexPath.section==1 && intTableSectionStatus==2){
 #if 1
@@ -659,6 +659,7 @@ typedef enum _WAIT_FOR_UPDATING {
             camDetCell = [[[CameraDetailCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier] autorelease];
             [camDetCell.btnChangeImage addTarget:self action:@selector(btnChangeCameraIcon) forControlEvents:UIControlEventTouchUpInside];
             [camDetCell.btnChangeName addTarget:self action:@selector(btnChangeCameraName) forControlEvents:UIControlEventTouchUpInside];
+            [camDetCell.btnRemoveCamera addTarget:self action:@selector(btnRemoveCameraTouchUpInsideAction:) forControlEvents:UIControlEventTouchUpInside];
             
             camDetCell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
