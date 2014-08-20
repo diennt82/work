@@ -26,17 +26,6 @@
 {
     [super viewDidLoad];
 
-    self.navigationItem.hidesBackButton = YES;
-    
-    UIImage *hubbleLogoBack = [UIImage imageNamed:@"Hubble_back_text"];
-    UIBarButtonItem *barBtnHubble = [[UIBarButtonItem alloc] initWithImage:hubbleLogoBack
-                                                                     style:UIBarButtonItemStylePlain
-                                                                    target:self
-                                                                    action:@selector(hubbleItemAction:)];
-    [barBtnHubble setTintColor:[UIColor colorWithPatternImage:hubbleLogoBack]];
-    
-    self.navigationItem.leftBarButtonItem = barBtnHubble;
-    
     [self.searchCameraButton setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
     [self.searchCameraButton setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
     
@@ -53,11 +42,6 @@
     DLog(@"Load step Create BLE Connection");
     CreateBLEConnection_VController *step03ViewController = [[CreateBLEConnection_VController alloc] initWithNibName:@"CreateBLEConnection_VController" bundle:nil];
     [self.navigationController pushViewController:step03ViewController animated:YES];
-}
-
-- (void)hubbleItemAction: (id)sender
-{
-    [self.navigationController popViewControllerAnimated:YES];
 }
 
 @end
