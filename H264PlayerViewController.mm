@@ -2912,7 +2912,13 @@ double _ticks = 0;
     {
         return;
     }
+#if 1
+    UILabel *lblTemperatureValue = (UILabel *)[_viewTemperature viewWithTag:TAG_TEMPERATURE_VALUE];
+    lblTemperatureValue.text = _isDegreeFDisplay?_degreeFString:_degreeCString;
     
+    UILabel *lblTemperatureType = (UILabel *)[_viewTemperature viewWithTag:TAG_TEMPERATURE_TYPE];
+    lblTemperatureType.text = _isDegreeFDisplay?@"°F":@"°C";
+#else
     // start
     [self.ib_temperature.subviews makeObjectsPerformSelector: @selector(removeFromSuperview)];
     
@@ -3042,6 +3048,7 @@ double _ticks = 0;
     }
     
     [degreeCelsius release];
+#endif
 }
 
 #pragma mark - Melody
@@ -5472,10 +5479,16 @@ double _ticks = 0;
                 MBProgressHUD *hub = [MBProgressHUD showHUDAddedTo:self.view animated:NO];
                 [hub setLabelText:NSLocalizedStringWithDefaultValue(@"loading", nil, [NSBundle mainBundle], @"Loading...", nil)];
             }
+#if 1
+            self.viewTemperature.hidden = NO;
+            [self.view bringSubviewToFront:_viewTemperature];
+#else
             [ib_switchDegree setHidden:NO];
             [self.view bringSubviewToFront:ib_switchDegree];
+#endif
             
             [self setTemperatureState_Fg:_stringTemperature];
+            
             if (_existTimerTemperature == FALSE)
             {
                 self.existTimerTemperature = TRUE;
@@ -5505,9 +5518,12 @@ double _ticks = 0;
     [self.imgViewDrectionPad setHidden:YES];
     self.imageViewKnob.hidden = YES;
     self.imageViewHandle.hidden = YES;
-    
+#if 1
+    self.viewTemperature.hidden = YES;
+#else
     [self.ib_temperature setHidden:YES];
     [self.ib_temperature setBackgroundColor:[UIColor clearColor]];
+#endif
     
     [self.ib_ViewTouchToTalk setHidden:YES];
     [self.ib_ViewTouchToTalk setBackgroundColor:[UIColor clearColor]];
@@ -5582,6 +5598,7 @@ double _ticks = 0;
     NSLog(@"%s", __FUNCTION__);
     
     [_btnSendingLog release];
+    [_viewTemperature release];
     [super dealloc];
 }
 

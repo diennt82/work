@@ -142,6 +142,9 @@
 #define FW_UPGRADE_FAILED          -1
 #define FW_UPGRADE_SUCCEED          1
 
+#define TAG_TEMPERATURE_VALUE       5859
+#define TAG_TEMPERATURE_TYPE        5959
+
 @protocol H264PlayerVCDelegate <NSObject>
 
 - (void)stopStreamFinished: (CamChannel *)camChannel;
@@ -274,6 +277,9 @@
 @property (retain, nonatomic) IBOutlet UIImageView *imageViewKnob;
 @property (retain, nonatomic) IBOutlet UIView *viewDebugInfo;
 @property (retain, nonatomic) IBOutlet UIButton *btnSendingLog;
+
+@property (retain, nonatomic) IBOutlet UIView *viewTemperature;
+
 
 @property (retain, nonatomic) EarlierViewController *earlierVC;
 @property (retain, nonatomic) TimelineViewController *timelineVC;
