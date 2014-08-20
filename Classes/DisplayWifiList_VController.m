@@ -25,17 +25,17 @@
 @property (nonatomic, weak) IBOutlet UIButton *continueButton;
 @property (nonatomic, weak) IBOutlet UITableView *tableView;
 
-@property (weak, nonatomic) IBOutlet UILabel *selectWifiLabel;
-@property (weak, nonatomic) IBOutlet UILabel *selectYourOwnNetworkLabel;
-@property (weak, nonatomic) IBOutlet UILabel *mustBePasswordProtectedLabel;
-@property (weak, nonatomic) IBOutlet UILabel *detectedWifiNetworkLabel;
-@property (weak, nonatomic) IBOutlet UILabel *otherNetworkLabel;
-@property (weak, nonatomic) IBOutlet UILabel *refreshLabel;
-@property (weak, nonatomic) IBOutlet UILabel *searchingForWifiNetworksLabel;
-@property (weak, nonatomic) IBOutlet UILabel *pleaseWaitLabel;
-@property (weak, nonatomic) IBOutlet UILabel *unableToDetectCameraLabel;
-@property (weak, nonatomic) IBOutlet UILabel *timeoutLabel;
-@property (weak, nonatomic) IBOutlet UIButton *retryButton;
+@property (nonatomic, weak) IBOutlet UILabel *selectWifiLabel;
+@property (nonatomic, weak) IBOutlet UILabel *selectYourOwnNetworkLabel;
+@property (nonatomic, weak) IBOutlet UILabel *mustBePasswordProtectedLabel;
+@property (nonatomic, weak) IBOutlet UILabel *detectedWifiNetworkLabel;
+@property (nonatomic, weak) IBOutlet UILabel *otherNetworkLabel;
+@property (nonatomic, weak) IBOutlet UILabel *refreshLabel;
+@property (nonatomic, weak) IBOutlet UILabel *searchingForWifiNetworksLabel;
+@property (nonatomic, weak) IBOutlet UILabel *pleaseWaitLabel;
+@property (nonatomic, weak) IBOutlet UILabel *unableToDetectCameraLabel;
+@property (nonatomic, weak) IBOutlet UILabel *timeoutLabel;
+@property (nonatomic, weak) IBOutlet UIButton *retryButton;
 
 
 @property (nonatomic, strong) WifiEntry *selectedWifiEntry;
