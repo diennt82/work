@@ -16,6 +16,7 @@
 #import "Camera.h"
 #import "define.h"
 #import "PublicDefine.h"
+#import "UIView+Custom.h"
 
 #define GAI_CATEGORY    @"Step 03 view"
 
@@ -51,6 +52,7 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+    [self xibDefaultLocalization];
     self.navigationItem.hidesBackButton = YES;
     
     UIImage *hubbleLogoBack = [UIImage imageNamed:@"Hubble_back_text"];
@@ -100,6 +102,25 @@
     }
     [_scrollViewGuide setShowsVerticalScrollIndicator:YES];
     
+}
+
+- (void)xibDefaultLocalization
+{
+    [[self.view viewWithTag:10] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step03_label_detect_camera", nil, [NSBundle mainBundle], @"Detect Camera", nil)];
+    [[self.view viewWithTag:11] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step03_label_to_detect_your_camera", nil, [NSBundle mainBundle], @"To detect your camera simply connect your phone to it via Wi-Fi", nil)];
+    [[self.view viewWithTag:12] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step03_label_step1", nil, [NSBundle mainBundle], @"1. Press and hold the button marked 'PAIR' for 3 seconds ", nil)];
+    [[self.view viewWithTag:13] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step03_label_step2", nil, [NSBundle mainBundle], @"2. Connect to your camera via your phone's Wi-Fi", nil)];
+    [[self.view viewWithTag:14] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step03_label_step3", nil, [NSBundle mainBundle], @"3. Open iPhone settings icon to select Wi-Fi netwowrk", nil)];
+    [[self.view viewWithTag:15] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step03_label_step4", nil, [NSBundle mainBundle], @"4. Click on Wi-Fi icon and select your camera from the list of networks.", nil)];
+    [[self.view viewWithTag:16] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step03_label_step5", nil, [NSBundle mainBundle], @"5. Once you have completed these steps return to this app and resume setup", nil)];
+    [[self.view viewWithTag:17] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step03_label_note", nil, [NSBundle mainBundle], @"(Note that this will disconnect your own Wi-Fi for a short while)", nil)];
+    
+    [[self.inProgress viewWithTag:10] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step03_label_detecting_WIFI", nil, [NSBundle mainBundle], @"Detecting Wi-Fi Camera", nil)];
+    [[self.inProgress viewWithTag:11] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step03_label_this_may_teke", nil, [NSBundle mainBundle], @"This may take up to a minute", nil)];
+    
+    [[self.timoutView viewWithTag:10] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step03_label_hubble_cannot_connect", nil, [NSBundle mainBundle], @"Hubble can't connect to camera wifi, do you want to pair with camera again?", nil)];
+    [[self.timoutView viewWithTag:11] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step03_button_yes", nil, [NSBundle mainBundle], @"Yes", nil)];
+    [[self.timoutView viewWithTag:12] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step03_button_no", nil, [NSBundle mainBundle], @"No", nil)];
 }
 
 - (void) viewWillAppear:(BOOL)animated

@@ -14,6 +14,7 @@
 #import "PublicDefine.h"
 #import "ToUViewController.h"
 #import "define.h"
+#import "UIView+Custom.h"
 
 #define GAI_CATEGORY            @"Registration view"
 #define ERROR_MESSAGE_TEXT      @"error_message_text"
@@ -123,6 +124,8 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    [self xibDefauleLocalization];
     self.navigationController.navigationBarHidden = YES;
     
     self.trackedViewName = GAI_CATEGORY;
@@ -142,6 +145,43 @@
         self.containtView.frame = rect;
         self.viewProgress.frame = CGRectMake(0, 0, UIScreen.mainScreen.bounds.size.width, UIScreen.mainScreen.bounds.size.height);
     }
+}
+
+- (void)xibDefauleLocalization
+{
+    [self.tfEmail setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_registration_texfield_placeholder_email", nil, [NSBundle mainBundle], @"Email", nil)];
+    [self.tfUsername setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_registration_texfield_placeholder_username", nil, [NSBundle mainBundle], @"Username", nil)];
+    [self.tfPassword setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_registration_texfield_placeholder_password", nil, [NSBundle mainBundle], @"Password", nil)];
+    [self.tfConfirmPassword setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_registration_texfield_placeholder_confirmpassword", nil, [NSBundle mainBundle], @"Confirm Password", nil)];
+    
+    UIButton *iAgreeButton = (UIButton *)[self.view viewWithTag:505];
+    if (iAgreeButton)
+    {
+        [iAgreeButton setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_registration_buttun_title_agree", nil, [NSBundle mainBundle], @"I agree with the", nil)];
+        CGRect rect = iAgreeButton.frame;
+        rect.size.width = [self calculateWidthForString:iAgreeButton.titleLabel.text withHeightFrame:iAgreeButton.frame.size.height andFont:iAgreeButton.titleLabel.font];
+        iAgreeButton.frame = rect;
+        
+        UIButton *termOfServicesButton = (UIButton *)[self.view viewWithTag:504];
+        if (termOfServicesButton)
+        {
+            [termOfServicesButton setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_registration_button_title_term", nil, [NSBundle mainBundle], @"Terms of Services", nil)];
+            rect = termOfServicesButton.frame;
+            rect.origin.x = CGRectGetMaxX(iAgreeButton.frame) + 2;
+            rect.size.width = [self calculateWidthForString:termOfServicesButton.titleLabel.text withHeightFrame:termOfServicesButton.frame.size.height andFont:termOfServicesButton.titleLabel.font];
+            termOfServicesButton.frame = rect;
+        }
+    }
+    
+    [self.btnCreate setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_registration_button_title_create", nil, [NSBundle mainBundle], @"Create", nil)];
+    
+    [self.btnAlreadyAccount setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_registration_button_title_alreadyaccount", nil, [NSBundle mainBundle], @"Already have a Account?", nil)];
+}
+
+- (CGFloat)calculateWidthForString:(NSString *)desc withHeightFrame:(CGFloat)height andFont:(UIFont *)font {
+    CGSize constraintSize = CGSizeMake(MAXFLOAT, height);
+    CGSize theSize = [desc sizeWithFont:font constrainedToSize:constraintSize lineBreakMode:NSLineBreakByWordWrapping];
+    return theSize.width;
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -443,7 +483,8 @@
 {
     //self.viewProgress.hidden = YES;
     
-    NSString *title = @"Network";
+    NSString *title = NSLocalizedStringWithDefaultValue(@"alert_title_network" ,nil, [NSBundle mainBundle],
+                                                        @"Network", nil);
     NSString *msg;
     NSString *yes = NSLocalizedStringWithDefaultValue(@"Yes" ,nil, [NSBundle mainBundle],
                                                       @"Yes", nil);
@@ -453,7 +494,8 @@
     
     if (tagAlert == TAG_ALERT_VIEW_NETWORK_NOT_REACHABLE)
     {
-        msg = @"Network is unreachale.";
+        msg = NSLocalizedStringWithDefaultValue(@"alert_mes__network_unreachale" ,nil, [NSBundle mainBundle],
+                                                @"Network is unreachale.", nil);
         NSString *msg1 = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg4" ,nil, [NSBundle mainBundle],
                                                 @"Please go to wifi settings and select a Wifi network to connect", nil);
         msg = [msg stringByAppendingString:msg1];

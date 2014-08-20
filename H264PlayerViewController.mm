@@ -1878,7 +1878,7 @@ double _ticks = 0;
 #ifdef SHOW_DEBUG_INFO
         _viewVideoIn = @"L";
 #endif
-        self.ib_labelTouchToTalk.text = @"Touch to Talk";
+        self.ib_labelTouchToTalk.text = NSLocalizedStringWithDefaultValue(@"text_touch_to_talk", nil, [NSBundle mainBundle], @"Touch to Talk", nil);
         self.stringStatePTT = @"Touch to Talk";
         
         
@@ -1925,7 +1925,7 @@ double _ticks = 0;
         }
 #endif
         
-        self.ib_labelTouchToTalk.text = @"Touch to Talk";
+        self.ib_labelTouchToTalk.text = NSLocalizedStringWithDefaultValue(@"text_touch_to_talk", nil, [NSBundle mainBundle], @"Touch to Talk", nil);
         self.stringStatePTT = @"Touch to Talk";
     }
     else
@@ -5812,7 +5812,7 @@ double _ticks = 0;
         [self.ib_buttonTouchToTalk setBackgroundImage:imageNormal forState:UIControlEventTouchUpInside];
         //[self applyFont];
         self.disableAutorotateFlag = FALSE;
-        [self.ib_labelTouchToTalk setText:@"Touch to Talk"];
+        [self.ib_labelTouchToTalk setText:NSLocalizedStringWithDefaultValue(@"text_touch_to_talk", nil, [NSBundle mainBundle], @"Touch to Talk", nil)];
         self.stringStatePTT = @"Touch to Talk";
     }
 }

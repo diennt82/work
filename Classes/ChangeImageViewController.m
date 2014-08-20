@@ -7,9 +7,10 @@
 //
 
 #import "ChangeImageViewController.h"
+#import "UIView+Custom.h"
 
 @interface ChangeImageViewController ()
-
+@property (nonatomic, assign) IBOutlet UIView *controllView;
 @end
 
 @implementation ChangeImageViewController
@@ -26,6 +27,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self xibDefaultLocalization];
     // Do any additional setup after loading the view from its nib.
     
 //    self.capturedImages = [[NSMutableArray alloc] init];
@@ -43,6 +45,14 @@
     
     [self.navigationController.view setHidden:YES];
     [self.navigationController.view setUserInteractionEnabled:NO];
+}
+
+- (void)xibDefaultLocalization
+{
+    [[self.controllView viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_ChangeImage_button_change_image", nil, [NSBundle mainBundle], @"Change Image", nil)];
+    [[self.controllView viewWithTag:2] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_ChangeImage_button_select_image", nil, [NSBundle mainBundle], @"Select image from gallery", nil)];
+    [[self.controllView viewWithTag:3] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_ChangeImage_button_take_a_snapshot", nil, [NSBundle mainBundle], @"Take a snapshot now", nil)];
+//    [self.ib_dissMissChangeImage setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_ChangeImage_button_cancel", nil, [NSBundle mainBundle], @"Cancel", nil)];
 }
 
 - (void)didReceiveMemoryWarning

@@ -16,6 +16,7 @@
 #import "CustomIOS7AlertView.h"
 #import "MBProgressHUD.h"
 #import "define.h"
+#import "UIView+Custom.h"
 
 @interface Account_ViewController () <MFMailComposeViewControllerDelegate, UIAlertViewDelegate, CustomIOS7AlertViewDelegate>
 
@@ -52,6 +53,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self xibDefaultLocalization];
     // Do any additional setup after loading the view from its nib.
     UILabel *lblVersion = (UILabel *)[self.view viewWithTag:559];
     
@@ -86,6 +88,11 @@
             [subView removeFromSuperview];
         }
     }
+}
+
+- (void)xibDefaultLocalization
+{
+    [[self.view viewWithTag:101] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_accountpage_button_text_logout", nil, [NSBundle mainBundle], @"Logout", nil)];
 }
 
 -(void)loadUserData
@@ -291,11 +298,15 @@
     {
         if (indexPath.row == USEREMAIL_INDEX)
         {
+            UILabel *lableText = (UILabel *)[self.userEmailCell viewWithTag:201];
+            lableText.text = NSLocalizedStringWithDefaultValue(@"cell_email", nil, [NSBundle mainBundle], @"Email", nil);
             return _userEmailCell;
         }
         
         if (indexPath.row == CHANGE_PASS_INDEX)
         {
+            UILabel *lableText = (UILabel *)[self.tableViewCellChangePassword viewWithTag:301];
+            lableText.text = NSLocalizedStringWithDefaultValue(@"cell_password_changed", nil, [NSBundle mainBundle], @"Change Password", nil);
             return _tableViewCellChangePassword;
         }
         else
@@ -360,7 +371,7 @@
         
         // Configure the cell...
         
-        cell.textLabel.text = @"Send app log";
+        cell.textLabel.text = NSLocalizedStringWithDefaultValue(@"cell_send_app_log", nil, [NSBundle mainBundle], @"Send app log", nil);
         
         return cell;
     }

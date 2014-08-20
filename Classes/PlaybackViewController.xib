@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5053" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
         <deployment defaultVersion="1792" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
@@ -21,6 +21,7 @@
                 <outlet property="ib_viewOverlayVideo" destination="Dex-ec-XYU" id="pw0-hG-Iq2"/>
                 <outlet property="ib_zoomingPlayBack" destination="DyU-m3-yUY" id="NPB-yV-jqc"/>
                 <outlet property="imageVideo" destination="ZNw-nc-lw5" id="F2O-ch-9lP"/>
+                <outlet property="lblDelete" destination="jKC-zZ-6pQ" id="zRQ-cU-OHg"/>
                 <outlet property="view" destination="i3Z-4A-bNV" id="bUE-up-W6h"/>
             </connections>
         </placeholder>

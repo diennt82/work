@@ -1,22 +1,5 @@
-/* 
-  Localizable.strings
-  MBP_ios
-
-  Created by nxcomm on 13/03/13.
-  Copyright (c) 2013 Smart Panda Ltd. All rights reserved.
-*/
-
 /* No comment provided by engineer. */
-"Account" = "Konto";
-
-/* No comment provided by engineer. */
-"Account_" = "Konto";
-
-/* No comment provided by engineer. */
-"Account_Created" = "Konto erstellt";
-
-/* No comment provided by engineer. */
-"Add_Camera_Failed" = "Hinzufügen der Kamera gescheitert";
+"account" = "Konto";
 
 /* No comment provided by engineer. */
 "AddCam_Error" = "Fehler beim Hinzufügen der Kamera";
@@ -25,292 +8,409 @@
 "addcam_error_1" = "Das Gerät kann nicht mit dem Server verbunden werden. Bitte überprüfen Sie die WLAN- und die Internetverbindung";
 
 /* No comment provided by engineer. */
-"Baby_Monitor_Setup" = "Einrichten des Monitors";
+"addcam_error_2" = "Fehler bei der Verbindung zur Kamera. Bitte bleiben Sie nah bei der Kamera und versuchen Sie es noch einmal";
 
 /* No comment provided by engineer. */
-"Back" = "Zurück";
+"alert_inform_add_password_to_your_router" = "SSID ohne Passwort wird aus Sicherheitsgründen nicht unterstützt. Bitte fügen Sie Ihrem Router ein Passwort hinzu.";
 
 /* No comment provided by engineer. */
-"bms_error_404" = "Der Server ist vorübergehend nicht verfügbar";
+"alert_mes__network_unreachale" = "Network is unreachale.";
 
 /* No comment provided by engineer. */
-"bms_error_601" = "Ungültiger Befehl übergeben. Überprüfen Sie bitte die Abfrage.";
+"alert_mes_camera_ble_is_disconnected" = "Kamera (ble) wurde plötzlich getrennt, bitte versuchen Sie, die Kamera noch erneut hinzuzufügen";
 
 /* No comment provided by engineer. */
-"bms_error_602" = "Der/Die erforderliche(n) Parameter ist/sind nicht vorhanden.";
+"alert_mes_camera_has_been_viewed_for_about_5_minutes" = "Die Kamera wurde etwa 5 Minuten angesehen. Möchten Sie fortfahren?";
 
 /* No comment provided by engineer. */
-"bms_error_603" = "Länge des Parameters außerhalb der erwarteten Grenzen.";
+"alert_mes_check_your_network" = "Bitte überprüfen Sie Ihre Netzwerkeinstellungen";
 
 /* No comment provided by engineer. */
-"bms_error_611" = "Kamera existiert nicht.";
+"alert_mes_enter_correct_old_password" = "Korrektes altes Passwort eingeben.";
 
 /* No comment provided by engineer. */
-"bms_error_612" = "Can't start video stream due to camera port is inaccessible. Monitor is re-acquiring the port. Try again after 1 to 2 minutes. (612)";
+"alert_mes_enter_password" = "Bitte Passwort eingeben";
 
 /* No comment provided by engineer. */
-"bms_error_613" = "Kann nicht mit der Kamera kommunizieren.";
+"alert_mes_error_occured" = "Ein Fehler ist aufgetreten. Bitte versuchen Sie es noch einmal.";
 
 /* No comment provided by engineer. */
-"bms_error_614" = "Kamera nicht bereit für Datenstrom";
+"alert_mes_fill_ssid_name" = "Bitte tragen Sie den SSID Namen ein und versuchen Sie es noch einmal";
 
 /* No comment provided by engineer. */
-"bms_error_621" = "E-Mail ID ist nicht angemeldet.";
+"alert_mes_fill_the_ssid_try_again" = "Bitte tragen Sie den SSID Namen ein und versuchen Sie es noch einmal";
 
 /* No comment provided by engineer. */
-"bms_error_622" = "E-Mail ID ist angemeldet aber nicht aktiviert.";
+"alert_mes_password_is_not_match_or_empty" = "Überprüfung fehlgeschlagen: Passwort stimmt nicht über ein oder ist leer";
 
 /* No comment provided by engineer. */
-"bms_error_623" = "E-Mail ID ist bereits aktiviert.";
+"alert_mes_permission_to_save_media_in_gallery" = "Bitte genehmigen Sie das Speichern des Mediums in der Galerie.  iPhone Einstellungen > Privatsphäre> Photos > Hubble Home :- Schalter aktivieren.";
 
 /* No comment provided by engineer. */
-"bms_error_624" = "Aktivierung gescheitert. Der Benutzer ist entweder nicht angemeldet oder der Aktivierungszeitraum ist abgelaufen. Melden Sie sich bitte erneut an.";
+"alert_mes_please_enter_correct_old_password" = "Bitte korrektes altes Passwort eingeben";
 
 /* No comment provided by engineer. */
-"bms_error_625" = "Aktivierung fehlgeschlagen. Ungültiger Aktivierungsschlüssel.";
+"alert_mes_saved_to_photo_album" = "In Fotoalbum gespeichert";
 
 /* No comment provided by engineer. */
-"bms_error_626" = "Authentication failed, either Email Id or Password is invalid.";
+"alert_mes_server_unreachable" = "Server ist nicht erreichbar";
 
 /* No comment provided by engineer. */
-"bms_error_627" = "Kamera ist keinem Benutzer (E-Mail ID) zugeordnet. ";
+"alert_mes_successful" = "Erfolgreich";
 
 /* No comment provided by engineer. */
-"bms_error_628" = "E-Mail ist bereits angemeldet.";
+"alert_mes_video_clip_is_not_ready" = "Videoclip ist nicht bereit, bitte versuchen Sie es später noch einmal.";
 
 /* No comment provided by engineer. */
-"bms_error_636" = "Benutzername ist bereits angemeldet";
+"alert_mes_your_have_not_camera" = "Your %@ have not camera.";
 
 /* No comment provided by engineer. */
-"bms_error_699" = "Nicht behandelte Ausnahme aufgetreten, setzen Sie sich bitte mit dem Administrator in Verbindung.";
+"alert_mess_enter_camera_name" = "Enter the new camera name.";
 
 /* No comment provided by engineer. */
-"bms_error_unknown" = "Unbekannter Fehler - %d";
+"alert_mess_invaldate_name" = "Invaldate name";
 
 /* No comment provided by engineer. */
-"cam_menu_err_1" = "Kamera nicht erreichbar";
+"alert_mess_message" = "Message";
 
 /* No comment provided by engineer. */
-"cam_menu_err_2" = "Umbenennen dieser Kamera fehlgeschlagen Bitte erneut einloggen und noch einmal versuchen";
+"alert_title_camera" = "Kamera";
 
 /* No comment provided by engineer. */
-"cam_menu_err_3" = "Der Kameraname kann nicht leer sein, bitte noch einmal probieren";
+"alert_title_change_camera_name" = "Kameranamen ändern";
 
 /* No comment provided by engineer. */
-"cam_menu_err_4" = "Camera name can't be removed, please log-in";
+"alert_title_change_image" = "Bild ändern";
 
 /* No comment provided by engineer. */
-"cam_menu_err_5" = "Ändern des Kameranamens fehlgeschlagen. Bitte versuchen Sie es später noch einmal";
+"alert_title_change_password" = "Passwort ändern";
 
 /* No comment provided by engineer. */
-"cam_rem_msg" = "Bitte bestätigen Sie, dass Sie diese Kamera aus Ihrem Konto entfernen möchten. Durch diese Aktion kehrt die Kamera ebenso zu den Standardeinstellungen zurück Sie müssen die Kamera wieder Ihrem Konto hinzufügen, um sie nutzen zu können.";
+"alert_title_change_password_failed" = "Passwortänderung fehlgeschlagen";
 
 /* No comment provided by engineer. */
-"cam_rem_msg1" = "Bitte bestätigen Sie, dass Sie diese Kamera aus Ihrem Konto entfernen möchten. Die Kamera ist im Augenblick nicht erreichbar. Sie wird nicht in den direkten Modus umgeschaltet. Bitte lesen Sie in den FAQ nach, um sie manuell zurückzusetzen.";
+"alert_title_edter_password" = "Passwort eingeben";
 
 /* No comment provided by engineer. */
-"Camera_Configured" = "Camera Configured";
+"alert_title_network" = "Netzwerk";
 
 /* No comment provided by engineer. */
-"Camera_Detected" = "Camera Detected";
+"alert_title_password_failed" = "Passwort fehlgeschlagen";
 
 /* No comment provided by engineer. */
-"Camera_fw_upgrade" = "Upgrade der Kamera-Firmware ";
+"alert_title_push_to_talk_failed" = "Push-to-talk Start fehlgeschlagen";
 
 /* No comment provided by engineer. */
-"Camera_name_cant_be_empty" = "Der Kameraname kann nicht leer sein, bitte noch einmal probieren";
+"alert_title_remote_stream" = "Remote Stream";
 
 /* No comment provided by engineer. */
-"Cameras_" = "Kameras";
+"alert_title_remove_camera" = "Kamera entfernen";
 
 /* No comment provided by engineer. */
-"Cancel" = "Abbrechen";
+"alert_title_rename_camera" = "Rename Camera";
 
 /* No comment provided by engineer. */
-"Cancel_" = "Abbrechen";
+"alert_title_request_camera_log" = "Kamera Log anfordern?";
 
 /* No comment provided by engineer. */
-"cant_start_stream" = "Videostrom kann nicht gestartet werden, der Monitor ist ausgelastet. Versuchen Sie es bitte später noch einmal.";
+"alert_title_select_picture" = "Select Picture";
 
 /* No comment provided by engineer. */
-"cant_start_stream2" = "Zeitüberschreitung bei Serverabfrage. Versuchen Sie es später noch einmal.";
+"alert_title_server_is_unreachable" = "Fehlgeschlagen: Server ist unerreichbar";
 
 /* No comment provided by engineer. */
-"cant_start_stream_01" = "The session key on camera is mis-matched. Please reset the camera and add the camera again.(%d)";
+"alert_title_server_unreachable" = "Server ist nicht erreichbar";
 
 /* No comment provided by engineer. */
-"Celsius" = "Celsius";
+"alert_title_snapshot" = "Snapshot";
 
 /* No comment provided by engineer. */
-"Change_Camera_Name" = "Kamera Name ändern";
+"alert_title_ssid_cannot_be_empty" = "SSID kann nicht leer sein";
 
 /* No comment provided by engineer. */
-"comm_with_camera_timeout" = "Zeitüberschreitung bei Kommunikation mit der Kamera.";
+"alert_title_ssid_without_password_not_supported" = "SSID ohne Passwort wird aus Sicherheitsgründen nicht unterstützt. Bitte fügen Sie Ihrem Router ein Passwort hinzu.";
 
 /* No comment provided by engineer. */
-"comm_with_camera_timeout_msg" = "Bitte wiederholen.";
+"alert_title_user_info_failed" = "Erhalt der Nutzerinformationen fehlgeschlagen!";
 
 /* No comment provided by engineer. */
-"Configure_Camera" = "Kamera konfigurieren";
+"application_version" = "Anwendungsversion";
 
 /* No comment provided by engineer. */
-"Confirm_remove_cam_local" = "Bitte bestätigen Sie, dass Sie diese Kamera aus Ihrem Konto entfernen möchten. Durch diese Aktion kehrt die Kamera ebenso in den Einstellmodus zurück.";
+"back" = "Zurück";
 
 /* No comment provided by engineer. */
-"Confirm_remove_cam_remote" = "Bitte bestätigen Sie, dass Sie diese Kamera aus Ihrem Konto entfernen möchten. Die Kamera ist im Augenblick nicht erreichbar. Sie wird nicht in den direkten Modus umgeschaltet. Bitte lesen Sie in den FAQ nach, um sie manuell zurückzusetzen.";
+"back_yard_videos" = "Garten\n %d Videos";
 
 /* No comment provided by engineer. */
-"Connecting_to_server" = "Mit Server verbinden … ";
+"brightness" = "Helligkeit";
 
 /* No comment provided by engineer. */
-"Create_Account" = "Konto Erstellen";
+"button_set_picture" = "Set Picture";
 
 /* No comment provided by engineer. */
-"Create_Account_Failed" = "Erstellen des Kontos gescheitert";
+"camera" = "Kamera";
 
 /* No comment provided by engineer. */
-"Create_Account_Failed_msg" = "Benutzername muß zwischen 5-20 Zeichen lang sein";
+"camera_66" = "Blink 66, \nFocus 66, \nScout 66";
 
 /* No comment provided by engineer. */
-"Create_Account_Failed_msg1" = "Passwort muss zwischen 8-12 Zeichen lang sein";
+"camera_73" = "Blink 73, \nFocus 73, \nScout 73";
 
 /* No comment provided by engineer. */
-"Create_Account_Failed_msg2" = "Das Passwort stimmt nicht überein";
+"camera_83_836" = "Blink 83/836, \nFocus 83/836, \nScout 83/836";
 
 /* No comment provided by engineer. */
-"Create_Account_Failed_msg3" = "Ungültige E-Mail. Die E-Mai-Adresse sollte die Form irgendjemand@irgendwo.com haben.";
+"camera_85_854" = "Blink 85/854, \nFocus 85/854, \nScout 85/854";
 
 /* No comment provided by engineer. */
-"Create_Account_Failed_msg4" = "Bitte wählen Sie ein WLAN-Netzwerk zum Verbinden aus";
+"Camera_Configured" = "Kamera konfiguriert";
 
 /* No comment provided by engineer. */
-"Create_Account_Failed_msg5" = "Benutzername darf keine Sonderzeichen außer - und _.";
+"Camera_fw_upgrade" = "Kamera Firmware Upgrade";
 
 /* No comment provided by engineer. */
-"Detect_Camera" = "Kamera entdecken";
+"camera_is_not_accessible" = "Kamera ist nicht erreichbar";
 
 /* No comment provided by engineer. */
-"Done" = "Fertig";
+"Camera_name_cant_be_empty" = "Kameraname darf nicht leer sein, bitte versuchen Sie es noch einmal";
 
 /* No comment provided by engineer. */
-"Edit_" = "Bearbeiten";
+"camera_removed" = "wurde auf einem anderen Terminal entfernt. Bitte überprüfen Sie die Kamera und fügen Sie sie erneut hinzu, um sie zu sehen.";
 
 /* No comment provided by engineer. */
-"Email_Format_error" = "E-Mail-Format-Fehler";
+"camera_settings" = "Kameraeinstellungen";
 
 /* No comment provided by engineer. */
-"Email_Format_error_msg" = "Ein korrektes E-Mail-Format besitzt die Form: irgendjemand@irgedeinedomain.com. Bitte versuchen Sie es noch einmal!";
+"cancel" = "Abbrechen";
 
 /* No comment provided by engineer. */
-"Enter_Network_Information" = "Netzwerkdaten eingeben";
+"cell_app_version" = "App Version";
 
 /* No comment provided by engineer. */
-"enter_new_camera_name" = "Enter new camera name";
+"cell_current_plan" = "Aktueller Plan";
 
 /* No comment provided by engineer. */
-"Fahrenheit" = "Fahrenheit";
+"cell_email" = "E-Mail";
 
 /* No comment provided by engineer. */
-"Fail_to_communicate_with_camera" = "Kommunikation mit der Kamera fehlgeschlagen. Wiederholen?";
+"cell_free" = "Kostenlos";
+
+/* No comment provided by engineer. */
+"cell_logout" = "Abmelden";
+
+/* No comment provided by engineer. */
+"cell_password_changed" = "Passwort ändern";
+
+/* No comment provided by engineer. */
+"cell_send_app_log" = "Send app log";
+
+/* No comment provided by engineer. */
+"celsius" = "Celsius";
+
+/* No comment provided by engineer. */
+"change_password" = "Passwort ändern";
+
+/* No comment provided by engineer. */
+"close" = "Schliessen";
+
+/* No comment provided by engineer. */
+"Confirm_Pass_Fail" = "Das Passwort stimmt nicht überein. Bitte versuchen Sie es noch einmal!";
+
+/* No comment provided by engineer. */
+"confirm_password" = "Passwort bestätigen";
+
+/* No comment provided by engineer. */
+"Confirm_remove_cam_local" = "Bitte bestätigen Sie, dass Sie diese Kamera aus Ihrem Konto entfernen möchten.Dies setzt die Kamera auch in den Setup-Modus zurück.";
+
+/* No comment provided by engineer. */
+"Confirm_remove_cam_remote" = "Sie sind dabei, die gekoppelte Kamera von der App zu entfernen. Sie müssen Sie erneut koppeln, um sie in Zukunft wieder verwenden zu können. Fortfahren?";
+
+/* No comment provided by engineer. */
+"connecting_to_amera" = "Verbindung mit Kamera";
+
+/* No comment provided by engineer. */
+"continue" = "Weiter";
+
+/* No comment provided by engineer. */
+"controller_start_stop" = "Titel für überlagerte Ansicht Kontroller Start/Stupp Button";
+
+/* No comment provided by engineer. */
+"copyright" = "Copyright";
+
+/* No comment provided by engineer. */
+"Create_Account_Failed" = "Kontoerstellung fehlgeschlagen";
+
+/* No comment provided by engineer. */
+"Create_Account_Failed_msg" = "Username muss zwischen 5 und 20 Zeichen haben";
+
+/* No comment provided by engineer. */
+"Create_Account_Failed_msg1" = "Passwort muss 8-12 Zeichen haben";
+
+/* No comment provided by engineer. */
+"Create_Account_Failed_msg2" = "Password does not match";
+
+/* No comment provided by engineer. */
+"Create_Account_Failed_msg3" = "Ungültige E-Mail. E-Mailadresse sollte die Form jemand @jemand.com haben";
+
+/* No comment provided by engineer. */
+"Create_Account_Failed_msg4" = "Gehen Sie bitte zu Wi-Fi Einstellungen und wählen Sie ein Wi-Fi Netzwerk aus, mit dem Sie sich verbinden möchten";
+
+/* No comment provided by engineer. */
+"Create_Account_Failed_msg5" = "Username sollte keine Sonderzeichen enthalten, mit Ausnahme von - _ und .";
+
+/* No comment provided by engineer. */
+"default" = "Voreinstellung";
+
+/* No comment provided by engineer. */
+"detail" = "Detail";
+
+/* No comment provided by engineer. */
+"device_is_not_present" = "Gerät ist im Gerätemanager NICHT vorhanden";
+
+/* No comment provided by engineer. */
+"do_not_disturb_text" = "Bitte nicht stören";
+
+/* No comment provided by engineer. */
+"do_not_disturb_time_is_over" = "Ihre \"Bitte nicht stören\" Zeit ist abgelaufen Von nun an erhalten Sie Benachrichtigungen";
+
+/* No comment provided by engineer. */
+"earlier" = "Früher";
+
+/* No comment provided by engineer. */
+"eg_lingving_room_nursery_etc" = "Eg. Living Room, Nursery, etc";
+
+/* No comment provided by engineer. */
+"Enter_Network_Information" = "Netzwerkinformationen eingeben";
+
+/* No comment provided by engineer. */
+"error" = "Fehler";
+
+/* No comment provided by engineer. */
+"fahrenheit" = "Fahrenheit";
+
+/* No comment provided by engineer. */
+"Fail_to_communicate_with_camera" = "Fehler bei der Kommunikation mit der Kamera. Erneut versuchen?";
+
+/* No comment provided by engineer. */
+"firmware_version" = "Firmware Version";
 
 /* No comment provided by engineer. */
 "Forgot_Password" = "Passwort vergessen";
 
 /* No comment provided by engineer. */
-"fw_upgrade" = "Eine Kamera-Firmware %@ ist erhältlich. Drücken Sie auf OK, um jetzt zu aktualisieren!";
+"fri" = "Fr";
 
 /* No comment provided by engineer. */
-"fw_upgrade_1" = "Neustart der Kamera …";
+"FW_is_updating" = "FW wird aktualisiert...";
 
 /* No comment provided by engineer. */
-"Get_Camera_list_Error" = "Fehler beim Holen der Kameraliste";
+"fw_upgrade" = "Eine Kamerafirmware %@ ist verfügbar. Bitte drücken Sie OK, um jetzt zu aktualisieren.";
 
 /* No comment provided by engineer. */
-"Get_Camera_list_Error_msg" = "Server error: Invalid response";
+"fw_upgrade_2" = "Firmware wird aktualisiert, schalten Sie die Kamera nicht aus. Dieser Vorgang kann bis zu 5 Minuten dauern...";
 
 /* No comment provided by engineer. */
-"Get_Camera_list_Error_msg1" = "Server nicht erreichbar";
+"general_settings" = "Allgemeine Einstellungen";
 
 /* No comment provided by engineer. */
-"Go_to_Camera_list" = "Zur Kameraliste gehen";
+"get_a_live_snapshot_from_camera" = "Get a live snapshot from camera";
 
 /* No comment provided by engineer. */
-"High_Quality" = "Hohe Qualität (VGA)";
+"Get_Camera_list_Error" = "Kamera Fehlerliste erhalten";
+
+/* No comment provided by engineer. */
+"Get_Camera_list_Error_msg" = "Server Fehler: %@";
+
+/* No comment provided by engineer. */
+"Get_Camera_list_Error_msg1" = "Server ist nicht erreichbar";
+
+/* No comment provided by engineer. */
+"Go_to_camera" = "Gehe zu Kamera";
+
+/* No comment provided by engineer. */
+"high_quality" = "Hohe Qualität";
+
+/* No comment provided by engineer. */
+"hours" = "Stunden";
+
+/* No comment provided by engineer. */
+"hud_deleting_video" = "Video wird gelöscht...";
+
+/* No comment provided by engineer. */
+"hud_error_sensitivity_settings" = "Error -Load Sensitivity Settings!";
+
+/* No comment provided by engineer. */
+"hud_error_sensitivity_settings_error" = "Error -Load Sensitivity Settings error!";
+
+/* No comment provided by engineer. */
+"hud_please_wait" = "Bitte warten ...";
+
+/* No comment provided by engineer. */
+"hud_processing" = "Wird bearbeitet...";
+
+/* No comment provided by engineer. */
+"hud_removing" = "Wird entfernt...";
+
+/* No comment provided by engineer. */
+"hud_stop_playback" = "Abspielen anhalten...";
+
+/* No comment provided by engineer. */
+"hud_update_failed" = "Update failed";
+
+/* No comment provided by engineer. */
+"hud_updating" = "Wird aktualisiert...";
+
+/* No comment provided by engineer. */
+"hud_upload_image_successfully" = "Upload image successfully";
 
 /* No comment provided by engineer. */
 "information" = "Information";
 
 /* No comment provided by engineer. */
-"information_msg" = "Monitor Everywhere\nApplication version: %1$@\nFirmware version:%2$@,\nMonitoreverywhere \@ All rights Reserved.";
+"Invalid_Camera_Name" = "Kameraname ist ungültig";
 
 /* No comment provided by engineer. */
-"Invalid_Camera_Name" = "Invalid Camera Name";
+"Invalid_Camera_Name_msg" = "Kameraname muss 5-30 Zeichen enthalten";
 
 /* No comment provided by engineer. */
-"Invalid_Camera_Name_msg" = "Camera Name has to be between 5-30 characters";
+"Invalid_Camera_Name_msg2" = "Kameraname ist ungültig. Bitte geben Sie nur [0-9],[a-Z], Leerzeichen, Punkt, Bindestrich, Unterstrich und einfaches Anführungszeichen ein";
 
 /* No comment provided by engineer. */
-"Invalid_Camera_Name_msg2" = "Camera name is invalid. Please enter [0-9],[a-Z], space, dot, hyphen, underscore & single quote only.";
+"let_push_notification_from_camera" = "Benachrichtigungen von Kamera zulassen";
 
 /* No comment provided by engineer. */
-"Invalid_Server_Response" = "Invalid Server Response.(Nil response)";
+"loading" = "Lädt...";
 
 /* No comment provided by engineer. */
-"Level1" = "Stufe 1";
+"Logging_in_to_server" = "Anmeldung in Server...";
 
 /* No comment provided by engineer. */
-"Level1_" = "Stufe 1 (Niedrig)";
+"Login" = "Anmelden";
 
 /* No comment provided by engineer. */
-"Level2" = "Stufe 2";
+"Login_Error" = "Fehler bei Anmeldung";
 
 /* No comment provided by engineer. */
-"Level3" = "Stufe 3";
-
-/* No comment provided by engineer. */
-"Level4" = "Stufe 4";
-
-/* No comment provided by engineer. */
-"Level4_" = "Stufe 4 (Hoch)";
-
-/* No comment provided by engineer. */
-"Local_Wifi" = "Vom lokalen WLAN";
-
-/* No comment provided by engineer. */
-"Logging_in_to_server" = "Einloggen in den Server…";
-
-/* No comment provided by engineer. */
-"Login" = "Login";
-
-/* No comment provided by engineer. */
-"Login_Error" = "Login-Fehler";
-
-/* No comment provided by engineer. */
-"Login_Error_msg" = "Serverantwort ungültig. Bitte noch einmal versuchen!";
+"Login_Error_msg" = "Serverantwort ist ungültig. Bitte versuchen Sie es noch einmal!";
 
 /* No comment provided by engineer. */
 "Login_Error_msg2" = "Serverfehler: %@";
 
 /* No comment provided by engineer. */
-"Login_Error_msg3" = "Der Server ist nicht erreichbar. Möchten Sie offline auf Ihre Kameras zugreifen?";
+"Login_Error_msg3" = "Server ist nicht erreichbar. Wollen Sie offline auf Ihre Kameras zugreifen?";
 
 /* No comment provided by engineer. */
-"Logout" = "Logout";
+"Login_Error_msg4" = "Anmeldung ist nicht möglich. Der Server ist nicht erreichbar oder die Verbindungszeit ist abgelaufen";
 
 /* No comment provided by engineer. */
-"melody_1" = "Rock a Bye Baby";
+"low_data_bandwidth_detected" = "Niedrige Bandbreite entdeckt. Verbindungsversuch...";
 
 /* No comment provided by engineer. */
-"melody_2" = "Schlaflied und gute Nacht";
+"low_data_bandwidth_detected_1" = "Niedrige Datenbandbreite entdeckt. ";
 
 /* No comment provided by engineer. */
-"melody_3" = "Lavender Blue";
-
-/* No comment provided by engineer. */
-"melody_4" = "Twinkle Twinkle Little Star";
-
-/* No comment provided by engineer. */
-"melody_5" = "Hush Little Baby";
+"maximum_camera_support" = "Only maximum of 4 camera is supported. Please remove one camera from the list before adding the new camera.";
 
 /* No comment provided by engineer. */
 "melody_I" = "Melodie 1";
@@ -328,132 +428,938 @@
 "melody_V" = "Melodie 5";
 
 /* No comment provided by engineer. */
-"Lullaby" = "Schlaflied";
+"melody_VI" = "Alle Melodien";
 
 /* No comment provided by engineer. */
-"network_lost_link" = "Kamera wurde aufgrund eines Netzwerkkonnektivitätsproblems getrennt. Es wird versucht, sie erneut zu verbinden…";
+"midnight" = "Mitternacht";
 
 /* No comment provided by engineer. */
-"New_Name" = "Neuer Name";
+"minutes" = "Minuten";
 
 /* No comment provided by engineer. */
-"Next" = "Weiter";
+"mon" = "Mon";
 
 /* No comment provided by engineer. */
-"No" = "NEIN";
+"monitor_everywhere" = "monitor_überall";
 
 /* No comment provided by engineer. */
-"Normal_Quality" = "Normale Qualität (QVGA)";
+"monitor_everywhere_all_rights_reserved" = "Monitor überall © alle Rechte vorbehalten";
 
 /* No comment provided by engineer. */
-"Not_Available" = "Nicht verfügbar";
+"motion" = "Bewegung";
 
 /* No comment provided by engineer. */
-"Not_supported" = "Nicht unterstützt";
+"Motion Detected" = "Sie haben keine Bewegungsmelder-Aufnahme aktiviert. Bitte wählen Sie eine der unten stehende Optionen aus";
 
 /* No comment provided by engineer. */
-"Ok" = "Ok";
+"multiple_detection" = "Multiple detections at camera since %@";
 
 /* No comment provided by engineer. */
-"quickview_lost_link" = "Das Netzwerk hat die Verbindung verloren. Bitte überprüfen Sie das Telefon, die Kamera und den WLAN-Router oder bewegen Sie sie näher zum Router.";
+"name" = "Name";
 
 /* No comment provided by engineer. */
-"Registration_Error" = "Anmeldefehler";
+"new_password" = "Neues Passwort";
 
 /* No comment provided by engineer. */
-"Registration_Error_1" = "Der BMS-Server ist nicht erreichbar. Bitte gehen Sie zu den WLAN-Einstellungen, um sich zu vergewissern, dass das iOS-Gerät mit dem Router/3G-Netzwerk verbunden ist. ";
+"next" = "Weiter";
 
 /* No comment provided by engineer. */
-"Remote_Camera" = "Entfernte Kamera";
+"no" = "Nein";
 
 /* No comment provided by engineer. */
-"Remote_View_Error" = "Fernansichtsfehler";
+"No" = "Nein";
 
 /* No comment provided by engineer. */
-"Remote_View_Error_msg" = "Initialisierung der Fernverbindung gescheitert, bitte wiederholen";
+"no_camera_in_account" = "Es gibt keine Kamera im aktuellen Konto.";
 
 /* No comment provided by engineer. */
-"remove_one_cam" = "Bitte entfernen Sie eine Kamera von der aktuellen Liste, bevor Sie die neue Kamera hinzufügen";
+"noon" = "Mittag";
 
 /* No comment provided by engineer. */
-"Reset_Password_Error" = "Fehler beim Passwort zurücksetzen";
+"normal_quality" = "Normale Menge";
 
 /* No comment provided by engineer. */
-"Retry" = "Wiederholen";
+"note_camera_upgrade_lasted_software" = "Hinweis: Ihre Kamera kann auf die neuste Software aktualisiert werden. Dies kann etwa 5 Minuten dauern. In dieser Zeit können Sie nicht auf die Kamera zugreifen.";
+
+/* No comment provided by engineer. */
+"notice" = "Hinweis";
+
+/* No comment provided by engineer. */
+"notification_scheduler" = "Hinweisplaner";
+
+/* No comment provided by engineer. */
+"now" = "Jetzt";
+
+/* No comment provided by engineer. */
+"offline" = "Offline";
+
+/* No comment provided by engineer. */
+"ok" = "OK";
+
+/* No comment provided by engineer. */
+"old_password" = "Altes Passwort";
+
+/* No comment provided by engineer. */
+"online" = "Online";
+
+/* No comment provided by engineer. */
+"password" = "Passwort";
+
+/* No comment provided by engineer. */
+"phone_is_connected_to_camera" = "Sie verbinden sich mit einem Kameranetzwerk ohne Internetverbindung. Bitte öffnen Sie die Wi-Fi Einstellungen und wechseln Sie zu einem anderen Wi-Fi. Möchten Sie fortfahren?";
+
+/* No comment provided by engineer. */
+"plan" = "Plan";
+
+/* No comment provided by engineer. */
+"press_located_on_the_camera" = "Bitte drücken Sie den Button auf der Kamera.";
+
+/* No comment provided by engineer. */
+"product" = "Porduct";
+
+/* No comment provided by engineer. */
+"profile" = "Profil";
+
+/* No comment provided by engineer. */
+"record_video" = "Video aufnehmen";
+
+/* No comment provided by engineer. */
+"Registration_Error" = "Fehler bei der Registrierung";
+
+/* No comment provided by engineer. */
+"Registration_Error_1" = "BMS Server ist nicht erreichbar. Bitte gehen Sie zu den Wi-Fi Einstellungen, um sicherzustellen, dass das iOS Gerät mit einem Router/3G Netzwerk verbunden ist";
+
+/* No comment provided by engineer. */
+"remove_one_cam" = "Bitte entfernen Sie eine Kamera aus der aktuellen Liste, bevor Sie eine neue hinzufügen";
+
+/* No comment provided by engineer. */
+"report" = "Bericht";
+
+/* No comment provided by engineer. */
+"reset_password" = "Ihre Daten haben sich geändert. Bitte melden Sie sich neu an, um fortzufahren.";
+
+/* No comment provided by engineer. */
+"Reset_Password_Error" = "Passwortfehler zurücksetzen";
+
+/* No comment provided by engineer. */
+"Retry" = "Noch einmal versuchen";
+
+/* No comment provided by engineer. */
+"retrying" = "Wird wiederholt...";
+
+/* No comment provided by engineer. */
+"sat" = "Sat";
+
+/* No comment provided by engineer. */
+"saved" = "Gespeichert";
 
 /* No comment provided by engineer. */
 "Security" = "Sicherheit";
 
 /* No comment provided by engineer. */
+"select_a_device_to_connect" = "Wählen Sie ein Gerät, mit dem Sie sich verbinden möchten";
+
+/* No comment provided by engineer. */
+"select_image_from_photos" = "Select image from Photos";
+
+/* No comment provided by engineer. */
+"Server_Announcement" = "Server Ankündigung";
+
+/* No comment provided by engineer. */
 "Server_error_" = "Serverfehler: %@";
 
 /* No comment provided by engineer. */
-"Server_error_1" = "Der Server ist nicht erreichbar. Bitte versuchen Sie es später noch einmal.";
+"Server_error_1" = "Server ist nicht erreichbar. Bitte versuchen Sie es späater noch einmal..";
+
+/* No comment provided by engineer. */
+"settings" = "Einstellungen";
 
 /* No comment provided by engineer. */
 "Settings" = "Einstellungen";
 
 /* No comment provided by engineer. */
-"Setup_Complete" = "Einrichten abgeschlossen";
+"skip_wifi_setup" = "WIFI Setup überspringen";
 
 /* No comment provided by engineer. */
-"Sound_detected" = "Geräusch erkannt";
+"some_movement_at_camera" = "Es war etwas bei";
 
 /* No comment provided by engineer. */
-"Streamer_stopped" = "Streamer angehalten";
+"sound" = "Ton";
 
 /* No comment provided by engineer. */
-"Switch_On_Camera" = "Kamera einschalten";
+"Sound_detected" = "Ton entdeckt";
+
+/* No comment provided by engineer. */
+"sound_sensitivity" = "Tonsensibilität";
+
+/* No comment provided by engineer. */
+"stop_melody_toat" = "Melodie wird angehalten";
+
+/* No comment provided by engineer. */
+"stop_talking_toat" = "Talkback deaktiviert";
+
+/* No comment provided by engineer. */
+"sun" = "So";
+
+/* No comment provided by engineer. */
+"take_a_photo_using" = "Take a photo using";
+
+/* No comment provided by engineer. */
+"take_up_to_a_minute" = "Dies kann bis zu einer Minute dauern";
 
 /* No comment provided by engineer. */
 "Temperature_too_high" = "Temperatur zu hoch";
 
 /* No comment provided by engineer. */
-"Temperature_too_low" = "Temperatur zu niedrig";
+"Temperature_too_low" = "Temperatur zu iedrig";
 
 /* No comment provided by engineer. */
-"Time_out" = "Zeitüberschreitung";
+"temperature_unit" = "Temperatureinheit";
 
 /* No comment provided by engineer. */
-"Time_out_msg" = "Das Video wurde über 5 Minuten lang angesehen. Möchten Sie damit fortfahren?";
+"terms_condition" = "Allgemeine Geschäftsbedingungen";
 
 /* No comment provided by engineer. */
-"udt_relay_connect" = "Verbinden durch Relay... Bitte warten...";
+"terms_of_services" = "Nutzungsbedingungen";
 
 /* No comment provided by engineer. */
-"Unable_to_rename_this_camera" = "Umbenennen dieser Kamera fehlgeschlagen Bitte einloggen und noch einmal versuchen";
+"text_not_support" = "Nicht unterstützt!";
 
 /* No comment provided by engineer. */
-"version" = "Version %@";
+"text_please_speak" = "Bitte sprechen";
 
 /* No comment provided by engineer. */
-"video_rec_not_supported" = "Videoaufzeichnung wird nicht unterstützt, kommt aber bald";
+"text_processing" = "Wird verarbeitet...";
 
 /* No comment provided by engineer. */
-"wifi_not_available" = "Mobile Daten sind eingeschaltet. Wenn Sie mit der Verbindung fortfahren, können dafür Gebühren anfallen. Wollen Sie fortfahren?";
+"text_record_video" = "Video aufnehmen";
 
 /* No comment provided by engineer. */
-"Yes" = "Ja";
+"text_retry" = "Erneut versuchen...";
 
 /* No comment provided by engineer. */
-"Yes_n" = "Yes and don't ask again";
+"text_take_picture" = "Bild aufnehmen";
 
-"Camera Name:" = "Kameraname";
-
-"Camera Volume:" = "Kameralautstärke";
-
-"Camera Brightness:" = "Kamerahelligkeit";
-
-"Sound Sensitivity Settings:" = "Einstellungen für Tonsensibilität";
-
-"Temperature Unit:" = "Temperatureinheit";
-
-"Video Quality:" = "Videoqualität";
-
-"Remove this camera" = "Diese Kamera entfernen";
-
-"Information" = "Information";
-
-"Initialize" = "INITIALIZING...";
 /* No comment provided by engineer. */
-"Confirm_Pass_Fail" = "Wachtwoord komt niet overeen, vul het opnieuw in!";
+"text_touch_to_talk" = "Touch to Talk";
+
+/* No comment provided by engineer. */
+"thur" = "Do";
+
+/* No comment provided by engineer. */
+"timeline" = "Timeline";
+
+/* No comment provided by engineer. */
+"timeline_mes_alittle_movenent" = "There has been a little movement";
+
+/* No comment provided by engineer. */
+"timeline_mes_alittle_noise" = "There has been a little noise";
+
+/* No comment provided by engineer. */
+"timeline_mes_alotof_movement" = "There has been a lot of movement";
+
+/* No comment provided by engineer. */
+"timeline_mes_alotof_noise" = "There has been a lot of noise";
+
+/* No comment provided by engineer. */
+"timeline_mes_is_calm" = "All is calm";
+
+/* No comment provided by engineer. */
+"timeline_mes_noise_alittle_movement" = "There has been a lot of noise and little movement";
+
+/* No comment provided by engineer. */
+"timeline_mes_noise_movenent" = "There has been a lot of noise/movement";
+
+/* No comment provided by engineer. */
+"timeline_mes_noise_some_movement" = "There has been a lot of noise and some movement";
+
+/* No comment provided by engineer. */
+"timeline_mes_some_movement" = "There has been some movement";
+
+/* No comment provided by engineer. */
+"timeline_mes_some_noise" = "There has been some noise";
+
+/* No comment provided by engineer. */
+"touch_to_talk" = "Touch to Talk";
+
+/* No comment provided by engineer. */
+"tue" = "Di";
+
+/* No comment provided by engineer. */
+"update_melody_failed" = "Update melody failed";
+
+/* No comment provided by engineer. */
+"updating" = "Wird aktualisiert...";
+
+/* No comment provided by engineer. */
+"Upgrade_done" = "Aktualisierung abgeschlossen";
+
+/* No comment provided by engineer. */
+"video_clip_was_deleted" = "This event was deleted. It's going to be removed from list.";
+
+/* No comment provided by engineer. */
+"video_quality" = "Video Qualität";
+
+/* No comment provided by engineer. */
+"view_other_camera" = "Andere Kamera ansehen";
+
+/* No comment provided by engineer. */
+"View_snapshot" = "Snapshot ansehen";
+
+/* No comment provided by engineer. */
+"volume" = "Lautstärke";
+
+/* No comment provided by engineer. */
+"wed" = "Mi";
+
+/* No comment provided by engineer. */
+"wifi_not_available" = "Mobile Daten sind aktiviert. Wenn Sie die Verbindung fortsetzen, können Datenkosten anfallen. Möchten Sie fortfahren?";
+
+/* No comment provided by engineer. */
+"xib_accountpage_button_text_logout" = "Abmelden";
+
+/* No comment provided by engineer. */
+"xib_addcamera_button_cancel" = "Abbrechen";
+
+/* No comment provided by engineer. */
+"xib_addcamera_label_des" = "Bitte wählen Sie die Kamera aus, die Sie installieren möchten";
+
+/* No comment provided by engineer. */
+"xib_addcamera_label_get_start" = "Vorbereitung";
+
+/* No comment provided by engineer. */
+"xib_cameramenu_button_text_cameramenu" = "Kamera entfernen";
+
+/* No comment provided by engineer. */
+"xib_cameramenu_label_camdetail" = "Kamera Detail";
+
+/* No comment provided by engineer. */
+"xib_cameramenu_label_sensity" = "Notification Sensity";
+
+/* No comment provided by engineer. */
+"xib_camerasettings_cell_button_cameraname" = "Kameraname ist ungültig";
+
+/* No comment provided by engineer. */
+"xib_camerasettings_cell_button_changeimage" = "Change Image";
+
+/* No comment provided by engineer. */
+"xib_camerasettings_cell_button_firmwareversion" = "Firmwareversion";
+
+/* No comment provided by engineer. */
+"xib_camerasettings_cell_label_high" = "Hohe Qualität";
+
+/* No comment provided by engineer. */
+"xib_camerasettings_cell_label_low" = "Niedrig";
+
+/* No comment provided by engineer. */
+"xib_camerasettings_cell_label_medium" = "Medium";
+
+/* No comment provided by engineer. */
+"xib_camerasettings_cell_label_temperature" = "Temperatureinheit";
+
+/* No comment provided by engineer. */
+"xib_cameraspage_button_text_addcamera" = "Kamera Hinzufügen";
+
+/* No comment provided by engineer. */
+"xib_cameraspage_button_text_buycamera" = "Kamera kaufen";
+
+/* No comment provided by engineer. */
+"xib_ChangeImage_button_cancel" = "Abbrechen";
+
+/* No comment provided by engineer. */
+"xib_ChangeImage_button_change_image" = "Bild ändern";
+
+/* No comment provided by engineer. */
+"xib_ChangeImage_button_select_image" = "Bild aus Galerie auswählen";
+
+/* No comment provided by engineer. */
+"xib_ChangeImage_button_take_a_snapshot" = "Jetzt Schnappschuss aufnehmen";
+
+/* No comment provided by engineer. */
+"xib_CreateBLEConnection_button_retry" = "Noch einmal versuchen";
+
+/* No comment provided by engineer. */
+"xib_CreateBLEConnection_cell_search_again" = "Erneut suchen";
+
+/* No comment provided by engineer. */
+"xib_CreateBLEConnection_label_detectint_the_camera" = "Kamera wird gesucht";
+
+/* No comment provided by engineer. */
+"xib_CreateBLEConnection_label_press_and_hold" = "1. Drücken und halten Sie den Button mit der Aufschrift 'PAIR' für 3 Seknden ";
+
+/* No comment provided by engineer. */
+"xib_CreateBLEConnection_label_select_camera" = "Kamera auswählen";
+
+/* No comment provided by engineer. */
+"xib_CreateBLEConnection_label_this_may_takeup" = "Dies kann bis zu einer Minute dauern";
+
+/* No comment provided by engineer. */
+"xib_CreateBLEConnection_label_timout" = "Timeout";
+
+/* No comment provided by engineer. */
+"xib_CreateBLEConnection_label_unable_to_detect_camera" = "Kamera kann nicht gefunden werden";
+
+/* No comment provided by engineer. */
+"xib_DisplayWifiList_button_continue" = "Weiter";
+
+/* No comment provided by engineer. */
+"xib_DisplayWifiList_button_retry" = "Erneut versuchen";
+
+/* No comment provided by engineer. */
+"xib_DisplayWifiList_button_skip_wifi_settup" = "WIFI Setup überspringen";
+
+/* No comment provided by engineer. */
+"xib_DisplayWifiList_cell_other_network" = "Anderes Netzwerk";
+
+/* No comment provided by engineer. */
+"xib_DisplayWifiList_cell_refresh" = "Neu laden";
+
+/* No comment provided by engineer. */
+"xib_DisplayWifiList_label_detected_wifi_network" = "Wi-Fi Netzwerk entdeckt";
+
+/* No comment provided by engineer. */
+"xib_DisplayWifiList_label_password_protected" = "(Es muss passwortgeschützt sein.)";
+
+/* No comment provided by engineer. */
+"xib_DisplayWifiList_label_please_wait" = "Bitte warten";
+
+/* No comment provided by engineer. */
+"xib_DisplayWifiList_label_search_wifi_network" = "Wi-Fi Netzwerke werden gesucht";
+
+/* No comment provided by engineer. */
+"xib_DisplayWifiList_label_select_your_own trusted_network" = "Wählen Sie Ihr eigenes vertrauenswürdiges Netzwerk.";
+
+/* No comment provided by engineer. */
+"xib_DisplayWifiList_label_selected_wifi_network" = "Wi-Fi Netzwerk auswählen, um Kamera zu verbinden";
+
+/* No comment provided by engineer. */
+"xib_DisplayWifiList_label_timeout" = "Timeout";
+
+/* No comment provided by engineer. */
+"xib_DisplayWifiList_label_unable_detect_camera" = "Kamera kann nicht gefunden werden";
+
+/* No comment provided by engineer. */
+"xib_EditCameraPage_button_continue" = "Weiter";
+
+/* No comment provided by engineer. */
+"xib_EditCameraPage_label_camera_detected" = "Kamera entdeckt";
+
+/* No comment provided by engineer. */
+"xib_EditCameraPage_label_make_your_notifcation" = "Bitte benennen Sie den Standort Ihrer Kamera. Dies macht die Benachrichtigung relevanter.";
+
+/* No comment provided by engineer. */
+"xib_EditCameraPage_label_searching" = "Wi-Fi Netzwerke werden gesucht";
+
+/* No comment provided by engineer. */
+"xib_EditCameraPage_label_waitfor" = "Bitte warten";
+
+/* No comment provided by engineer. */
+"xib_EditCameraPage_textfield_camname" = "Eg. Living Room, Nursery";
+
+/* No comment provided by engineer. */
+"xib_forgotpassword_button_text_resetpassword" = "Passwort zurücksetzen";
+
+/* No comment provided by engineer. */
+"xib_forgotpassword_label_text_email" = "Bitte geben Sie uns Ihre E-Mailadresse, damit wir Ihnen einen sicheren Link schicken können, um Ihr Passwort zu ändern";
+
+/* No comment provided by engineer. */
+"xib_forgotpassword_label_text_linktoreset" = "A link to reset your password has been sent to";
+
+/* No comment provided by engineer. */
+"xib_forgotpassword_label_text_toemail" = "jemand@jemand.com";
+
+/* No comment provided by engineer. */
+"xib_forgotpassword_textfield_email" = "E-Mail";
+
+/* No comment provided by engineer. */
+"xib_loginpage_creteacount_button_labletext" = "Konto erstellen";
+
+/* No comment provided by engineer. */
+"xib_loginpage_email_texfield_placeholder" = "Username/E-Mail";
+
+/* No comment provided by engineer. */
+"xib_loginpage_enter_button_labeltext" = "Eingabe";
+
+/* No comment provided by engineer. */
+"xib_loginpage_forgotpassword_button_labeltext" = "Passwort vergessen?";
+
+/* No comment provided by engineer. */
+"xib_loginpage_password_textfield_placeholder" = "Passwort";
+
+/* No comment provided by engineer. */
+"xib_NetworkInfoToCamera_button_continue" = "Weiter";
+
+/* No comment provided by engineer. */
+"xib_NetworkInfoToCamera_button_try_again" = "Noch einmal versuchen";
+
+/* No comment provided by engineer. */
+"xib_NetworkInfoToCamera_cell_confirm" = "Bestätigen";
+
+/* No comment provided by engineer. */
+"xib_NetworkInfoToCamera_cell_confirm_password" = "Passwort Bestätigen";
+
+/* No comment provided by engineer. */
+"xib_NetworkInfoToCamera_cell_enter_wifi_passord" = "Wi-Fi Passwort eingeben";
+
+/* No comment provided by engineer. */
+"xib_NetworkInfoToCamera_cell_name" = "Name";
+
+/* No comment provided by engineer. */
+"xib_NetworkInfoToCamera_cell_none" = "Keine";
+
+/* No comment provided by engineer. */
+"xib_NetworkInfoToCamera_cell_router_password" = "Router Passwort";
+
+/* No comment provided by engineer. */
+"xib_NetworkInfoToCamera_cell_security" = "Sicherheit";
+
+/* No comment provided by engineer. */
+"xib_NetworkInfoToCamera_cell_show_passord" = "Passwort anzeigen";
+
+/* No comment provided by engineer. */
+"xib_NetworkInfoToCamera_label_checking_connection_camera" = "Verbindung zur Kamera wird geprüft";
+
+/* No comment provided by engineer. */
+"xib_NetworkInfoToCamera_label_take_up_a_minute" = "Dies kann bis zu einer Minute dauern";
+
+/* No comment provided by engineer. */
+"xib_NetworkInfoToCamera_label_timeout" = "Timeout";
+
+/* No comment provided by engineer. */
+"xib_NetworkInfoToCamera_label_unable_detect_camera" = "Kamera kann nicht gefunden werden";
+
+/* No comment provided by engineer. */
+"xib_Nofi_button_ignore" = "Ignorieren";
+
+/* No comment provided by engineer. */
+"xib_Nofi_label_change_settings" = "Einstellungen ändern";
+
+/* No comment provided by engineer. */
+"xib_Nofi_label_choose_plan" = "Plan auswählen";
+
+/* No comment provided by engineer. */
+"xib_Nofi_label_goto_camera" = "Gehe zu Kamera";
+
+/* No comment provided by engineer. */
+"xib_Nofi_label_learn_more" = "Mehr erfahren";
+
+/* No comment provided by engineer. */
+"xib_Nofi_label_like_to_do" = "Was möchten Sie tun";
+
+/* No comment provided by engineer. */
+"xib_Nofi_label_play_event" = "Ereignis abspielen";
+
+/* No comment provided by engineer. */
+"xib_Nofi_label_some_movement" = "Am Standort der Kamera wurde eine Bewegung festgestellt.";
+
+/* No comment provided by engineer. */
+"xib_Playback_label_delete" = "Löschen";
+
+/* No comment provided by engineer. */
+"xib_registration_button_title_alreadyaccount" = "Haben Sie bereits ein Konto?";
+
+/* No comment provided by engineer. */
+"xib_registration_button_title_create" = "Erstellen";
+
+/* No comment provided by engineer. */
+"xib_registration_button_title_term" = "Nutzungsbedingungen";
+
+/* No comment provided by engineer. */
+"xib_registration_buttun_title_agree" = "Ich bin einverstanden mit den";
+
+/* No comment provided by engineer. */
+"xib_registration_texfield_placeholder_confirmpassword" = "Passwort bestätigen";
+
+/* No comment provided by engineer. */
+"xib_registration_texfield_placeholder_email" = "E-Mail";
+
+/* No comment provided by engineer. */
+"xib_registration_texfield_placeholder_password" = "Passwort";
+
+/* No comment provided by engineer. */
+"xib_registration_texfield_placeholder_username" = "Username";
+
+/* No comment provided by engineer. */
+"xib_scheluler_cell_by_day" = "Nach Tag";
+
+/* No comment provided by engineer. */
+"xib_scheluler_cell_scheduler" = "Planer";
+
+/* No comment provided by engineer. */
+"xib_settingpage_cell_clock" = "Uhr";
+
+/* No comment provided by engineer. */
+"xib_settingpage_cell_donotdisturb_button_on" = "On";
+
+/* No comment provided by engineer. */
+"xib_settingpage_cell_donotdisturb_label_des" = "Wählen Sie, wie lang Sie keine Benachrichtigungen erhalten möchten. Beachten Sie, dass Sie die Benachrichtigungseinstellungen jeerzeit in den Allgemeinen Einstellungen ändern können";
+
+/* No comment provided by engineer. */
+"xib_settingpage_cell_temperature" = "Temperatur";
+
+/* No comment provided by engineer. */
+"xib_step02_button_continue" = "Weiter";
+
+/* No comment provided by engineer. */
+"xib_step02_label_before" = "Bevor Sie anfangen:";
+
+/* No comment provided by engineer. */
+"xib_step02_label_follow" = "Befolgen Sie die drei einfachen Schritte";
+
+/* No comment provided by engineer. */
+"xib_step02_label_plugin" = "Kamera einstecken und einschalten";
+
+/* No comment provided by engineer. */
+"xib_step02_label_waitfor" = "Warten Sie eine Minute zum Aufwärmen";
+
+/* No comment provided by engineer. */
+"xib_step02_label_whentheLED" = "Wenn die LED zu blinken beginnt, drücken Sie weiter";
+
+/* No comment provided by engineer. */
+"xib_step03_button_no" = "Nein";
+
+/* No comment provided by engineer. */
+"xib_step03_button_yes" = "JA";
+
+/* No comment provided by engineer. */
+"xib_step03_label_detect_camera" = "Kamera suchen";
+
+/* No comment provided by engineer. */
+"xib_step03_label_detecting_WIFI" = "Wi-Fi Kamera wird gesucht";
+
+/* No comment provided by engineer. */
+"xib_step03_label_hubble_cannot_connect" = "Hubble kann sich nicht mit dem Kamera-Wi-Fi verbinden, möchten Sie die Kamera erneut koppeln?";
+
+/* No comment provided by engineer. */
+"xib_step03_label_note" = "(Beachten Sie, dass dies Ihr Wi-Fi für einen kurzen Moment trennt)";
+
+/* No comment provided by engineer. */
+"xib_step03_label_step1" = "1. Drücken und halten Sie den Button 'PAIR' für 3 Sekunden ";
+
+/* No comment provided by engineer. */
+"xib_step03_label_step2" = "2. Schliesse die Kamera über das Wi-Fi des Telefons an";
+
+/* No comment provided by engineer. */
+"xib_step03_label_step3" = "3. Öffnen Sie die iPhone Einstellungen, um ein Wi-Fi Netzwerk auszuwählen";
+
+/* No comment provided by engineer. */
+"xib_step03_label_step4" = "4. Klicken Sie auf das Wi-Fi Icon und wählen Sie Ihre Kamera aus der Liste der Netzwerke.";
+
+/* No comment provided by engineer. */
+"xib_step03_label_step5" = "5. Wenn Sie diese Schritte abgeschlossen haben, kehren Sie bitte zu dieser App zurück und setzen das Setup fort";
+
+/* No comment provided by engineer. */
+"xib_step03_label_this_may_teke" = "Dies kann bis zu einer Minute dauern";
+
+/* No comment provided by engineer. */
+"xib_step03_label_to_detect_your_camera" = "Um Ihre Kamera zu finden, verbinden Sie sie bitte einfach per Wi-Fi mit dem Telefon";
+
+/* No comment provided by engineer. */
+"xib_step04_button_continue" = "Weiter";
+
+/* No comment provided by engineer. */
+"xib_step04_button_skip_WIFI_settup" = "WIFI Setup überspringen";
+
+/* No comment provided by engineer. */
+"xib_step04_label_camera_detected" = "Kamera entdeckt";
+
+/* No comment provided by engineer. */
+"xib_step04_label_make_your_notifcation" = "Bitte benennen Sie den Standort Ihrer Kamera. Dies macht die Benachrichtigung relevanter.";
+
+/* No comment provided by engineer. */
+"xib_step04_textfield_camname" = "z.B. Wohnzimmer, Kinderzimmer";
+
+/* No comment provided by engineer. */
+"xib_step04_textfield_couple_seconds_to_complete" = "Dies kann ein paar Sekunden dauern. Bitte warten...";
+
+/* No comment provided by engineer. */
+"xib_step05_button_continue" = "Weiter";
+
+/* No comment provided by engineer. */
+"xib_step05_button_skip_wifi_settup" = "WIFI Setup überspringen";
+
+/* No comment provided by engineer. */
+"xib_step05_cell_other_network" = "Anderes Netzwerk";
+
+/* No comment provided by engineer. */
+"xib_step05_cell_refresh" = "Neu laden";
+
+/* No comment provided by engineer. */
+"xib_step05_label_detected_wifi_network" = "Wi-Fi Netzwerk entdeckt";
+
+/* No comment provided by engineer. */
+"xib_step05_label_password_protected" = "(Es muss passwortgeschützt sein.)";
+
+/* No comment provided by engineer. */
+"xib_step05_label_please_wait" = "Bitte warten";
+
+/* No comment provided by engineer. */
+"xib_step05_label_search_wifi_network" = "Wi-Fi Netzwerke werden gesucht";
+
+/* No comment provided by engineer. */
+"xib_step05_label_select_your_own trusted_network" = "Wählen Sie Ihr eigenes vertrauenswürdiges Netzwerk.";
+
+/* No comment provided by engineer. */
+"xib_step05_label_selected_wifi_network" = "Wi-Fi Netzwerk auswählen, um Kamera zu verbinden";
+
+/* No comment provided by engineer. */
+"xib_step06_button_continue" = "Weiter";
+
+/* No comment provided by engineer. */
+"xib_step06_cell_confirm" = "Bestätigen";
+
+/* No comment provided by engineer. */
+"xib_step06_cell_confirm_password" = "Passwort bestätigen";
+
+/* No comment provided by engineer. */
+"xib_step06_cell_enter_wifi_passord" = "Wi-Fi Passwort eingeben";
+
+/* No comment provided by engineer. */
+"xib_step06_cell_name" = "Name";
+
+/* No comment provided by engineer. */
+"xib_step06_cell_none" = "Keine";
+
+/* No comment provided by engineer. */
+"xib_step06_cell_router_password" = "Router Passwort";
+
+/* No comment provided by engineer. */
+"xib_step06_cell_security" = "Sicherheit";
+
+/* No comment provided by engineer. */
+"xib_step06_cell_show_passord" = "Passwort anzeigen";
+
+/* No comment provided by engineer. */
+"xib_step06_label_checking_connection_camera" = "Verbindung zur Kamera wird geprüft";
+
+/* No comment provided by engineer. */
+"xib_step06_label_connect_your_camera_and_phone" = "1. Verbinden Sie die Kamera mit dem Wi-Fi Ihres Telefons";
+
+/* No comment provided by engineer. */
+"xib_step06_label_note_disconnect" = "(Beachten Sie, dass dies Ihr Wi-Fi für einen kurzen Moment trennt)";
+
+/* No comment provided by engineer. */
+"xib_step06_label_return_app_and_resume" = "4. Wenn Sie diese Schritte abgeschlossen haben, kehren Sie bitte zu dieser App zurück und setzen das Setup fort";
+
+/* No comment provided by engineer. */
+"xib_step06_label_select_camera_wifi_again" = "Kamera Wi-Fi erneut auswählen";
+
+/* No comment provided by engineer. */
+"xib_step06_label_select_camera_wifi_via_wifi" = "Um Ihre Kamera auszuwählen, verbinden Sie Ihr Telefon einfach über Wi-Fi damit";
+
+/* No comment provided by engineer. */
+"xib_step06_label_select_wifi_network" = "2. Öffnen Sie die Wi-Fi Einstellungen des iPhones, um das Wi-Fi Netzwerk auszuwählen";
+
+/* No comment provided by engineer. */
+"xib_step06_label_select_your_camera" = "3. Klicken Sie auf das Wi-Fi Icon und wählen Sie Ihre Kamera aus der Liste der Netzwerke.";
+
+/* No comment provided by engineer. */
+"xib_step06_label_take_up_a_minute" = "Dies kann bis zu einer Minute dauern";
+
+/* No comment provided by engineer. */
+"xib_step08_label_home_ssid" = "Home ssid";
+
+/* No comment provided by engineer. */
+"xib_step08_textview_camera_configured_to_wifi" = "Your camera is configured to WiFi ";
+
+/* No comment provided by engineer. */
+"xib_step08_textview_once_the_above_step_is_done" = "Once the above step is done, return here to create an account";
+
+/* No comment provided by engineer. */
+"xib_step08_textview_reach_wifi_network" = "How to reach Wi-Fi Network? Select settings in iphone home screen and then select Wi-Fi.";
+
+/* No comment provided by engineer. */
+"xib_step08_textview_switch_back_to_wifi_network" = "Bitte wechseln Sie wieder zum Wi-Fi Netzwerk ";
+
+/* No comment provided by engineer. */
+"xib_step08_textview_switch_wifi_network" = "Please switch to Wi-Fi network :";
+
+/* No comment provided by engineer. */
+"xib_step09_button_already_account" = "Haben Sie bereits ein Konto?";
+
+/* No comment provided by engineer. */
+"xib_step09_button_create" = "Erstellen";
+
+/* No comment provided by engineer. */
+"xib_step09_cell_label_confirm_pass" = "Passwort Bestätigen";
+
+/* No comment provided by engineer. */
+"xib_step09_cell_label_email" = "E-Mail";
+
+/* No comment provided by engineer. */
+"xib_step09_cell_label_password" = "Passwort";
+
+/* No comment provided by engineer. */
+"xib_step09_cell_label_username" = "Username";
+
+/* No comment provided by engineer. */
+"xib_step09_cell_text_field_confirm_pass" = "Passwort Bestätigen";
+
+/* No comment provided by engineer. */
+"xib_step09_cell_textfield_email" = "E-Mail";
+
+/* No comment provided by engineer. */
+"xib_step09_cell_textfield_password" = "Passwort";
+
+/* No comment provided by engineer. */
+"xib_step09_cell_textfield_username" = "Username";
+
+/* No comment provided by engineer. */
+"xib_step09_label_term_of_service" = "Ich stimme den Nutzungsbedingungen zu";
+
+/* No comment provided by engineer. */
+"xib_step10_ble_button_camera_test" = "Camera Test";
+
+/* No comment provided by engineer. */
+"xib_step10_ble_label_checking_connection_to_camera" = "Verbindung zur Kamera wird geprüft";
+
+/* No comment provided by engineer. */
+"xib_step10_ble_label_home_ssid" = "Home SSID";
+
+/* No comment provided by engineer. */
+"xib_step10_ble_label_takeup_a_minute" = "Dies kann bis zu einer Minute dauern";
+
+/* No comment provided by engineer. */
+"xib_step10_ble_label_with" = "mit";
+
+/* No comment provided by engineer. */
+"xib_step10_ble_textview_access_camera_any_time" = "You can access your camera any time from this app from home or work. Or on the web at www.monitoreverywhere.com";
+
+/* No comment provided by engineer. */
+"xib_step10_ble_textview_camera_now_configured" = "Your camera is now configured.";
+
+/* No comment provided by engineer. */
+"xib_step10_ble_textview_return_here_to_test_camera" = "Once the above step is done, return here to test your camera. ";
+
+/* No comment provided by engineer. */
+"xib_step10_ble_textview_select_wifi" = "How to reach Wi-Fi Network? Select settings in iphone home screen and then select Wi-Fi.";
+
+/* No comment provided by engineer. */
+"xib_step10_ble_textview_signed_up" = "Sie sind angemeldet als ";
+
+/* No comment provided by engineer. */
+"xib_step10_ble_textview_switch_back_to_wifi_network" = "Bitte wechseln Sie wieder zum Wi-Fi Netzwerk ";
+
+/* No comment provided by engineer. */
+"xib_step10_ble_textview_switch_to_wifi_network" = "Please switch to Wi-Fi network :";
+
+/* No comment provided by engineer. */
+"xib_step10_button_cancel" = "Abbrechen";
+
+/* No comment provided by engineer. */
+"xib_step10_button_continue" = "Weiter";
+
+/* No comment provided by engineer. */
+"xib_step10_button_resume_settup" = "Setup fortsetzen";
+
+/* No comment provided by engineer. */
+"xib_step10_label_access_home_screen" = "1. Sie erreichen den Startbildschirm, indem Sie auf den Start-Button klicken";
+
+/* No comment provided by engineer. */
+"xib_step10_label_camera_firmware_is_being_upgrade" = "Kamera Firmware wird aktualisiert, bitte lassen Sie die Kamera während dieses Vorgangs eingeschaltet";
+
+/* No comment provided by engineer. */
+"xib_step10_label_change_wifi_network" = "Wie ändere ich das Wi-Fi Netzwerk";
+
+/* No comment provided by engineer. */
+"xib_step10_label_checking_connection_camera" = "Verbindung zur Kamera wird geprüft";
+
+/* No comment provided by engineer. */
+"xib_step10_label_connect_to_defferent_wifi_network" = "Ihr Telefon hat sich mit einem anderen Netzwerk verbunden als Ihre Kamera. Beide müssen sich im selben Netzwerk befinden, um das Setup abzuschliessen. ";
+
+/* No comment provided by engineer. */
+"xib_step10_label_enter_password_if_prompted" = "(und geben Sie das Passwort ein, wenn Sie darum gebeten werden)";
+
+/* No comment provided by engineer. */
+"xib_step10_label_open_wifi_to_view_network" = "3. Öffnen Sie Wi-Fi, um die Netzwerke zu sehen";
+
+/* No comment provided by engineer. */
+"xib_step10_label_re-start_settup" = "Wenn Setup fehlschlägt, drücken Sie bitte den Button unten, um das Setup neu zu starten";
+
+/* No comment provided by engineer. */
+"xib_step10_label_resume_settup" = "Wenn Sie diese Schritte abgeschlossen haben, kehren Sie bitte zu dieser App zurück und setzen das Setup fort";
+
+/* No comment provided by engineer. */
+"xib_step10_label_select_correct_wifi_network" = "2. Wählen Sie das richtige Wi-Fi Netzwerk aus, indem Sie zu den iPhone Einstellungen auf Ihrem Startbildschirm gehen";
+
+/* No comment provided by engineer. */
+"xib_step10_label_select_network_during_camera_settup" = "4. Wählen Sie das Netzwerk aus, das Sie bei der Einrichtung der Kamera verwendet haben";
+
+/* No comment provided by engineer. */
+"xib_step10_label_takeup_5_minute" = "Dies kann bis zu 5 Minuten dauern";
+
+/* No comment provided by engineer. */
+"xib_step10_label_takeup_a_minute" = "Dies kann bis zu einer Minute dauern";
+
+/* No comment provided by engineer. */
+"xib_step10_label_wrong_wifi_network" = "Falsches Wi-Fi Netzwerk";
+
+/* No comment provided by engineer. */
+"xib_step11_button_check_now" = "Jetzt prüfen";
+
+/* No comment provided by engineer. */
+"xib_step11_button_open_camera_settings" = "Kameraeinstellungen öffnen";
+
+/* No comment provided by engineer. */
+"xib_step11_button_open_setting" = "Einstellungen öffnen";
+
+/* No comment provided by engineer. */
+"xib_step11_button_try_again" = "Noch einmal versuchen";
+
+/* No comment provided by engineer. */
+"xib_step11_label_camera_not_found" = "Kamera wurde nicht gefunden";
+
+/* No comment provided by engineer. */
+"xib_step11_label_confirm_password_correct" = "2.Bestätigen Sie, dass das Wi-Fi Passwort korrekt ist.";
+
+/* No comment provided by engineer. */
+"xib_step11_label_connected_to_internet" = "3. Prüfen Sie die Internetverbindung";
+
+/* No comment provided by engineer. */
+"xib_step11_label_restore_your_camera" = "Befolgen Sie diese Schritte, um die Kamera zurückzusetzen";
+
+/* No comment provided by engineer. */
+"xib_step11_label_same_wifi_network" = "1. Belassen Sie Ihr Telefon und die Kamera im selben Wi-Fi Netzwerk";
+
+/* No comment provided by engineer. */
+"xib_step12_button_view_live_camera" = "Live Kamera ansehen";
+
+/* No comment provided by engineer. */
+"xib_step12_label_came_name" = "[Kameraname]";
+
+/* No comment provided by engineer. */
+"xib_step12_label_camera_has_been_found" = "Kamera wurde gefunden";
+
+/* No comment provided by engineer. */
+"xib_step12_label_congratulations" = "Gratulation";
+
+/* No comment provided by engineer. */
+"xib_timeline_cell_all_is_calm" = "Alles ist ruhig zu Hause";
+
+/* No comment provided by engineer. */
+"xib_timeline_cell_number_of_days" = "1, 7, oder 30 Tage";
+
+/* No comment provided by engineer. */
+"xib_timeline_cell_save_the_day" = "Tag speichern";
+
+/* No comment provided by engineer. */
+"xib_timeline_cell_upgrade_to_premium" = "Zu Premium wechseln";
+
+/* No comment provided by engineer. */
+"xib_Zone_button_cancel" = "Abbrechen";
+
+/* No comment provided by engineer. */
+"xib_Zone_button_save" = "Gespeichert";
+
+/* No comment provided by engineer. */
+"yes" = "JA";
+
+/* No comment provided by engineer. */
+"Yes" = "JA";
+
+/* No comment provided by engineer. */
+"Yes_n" = "Ja und nicht mehr nachfragen";
+
+/* No comment provided by engineer. */
+"you_do_not_have_motion_detected_recording_enabled" = "Sie haben keine Bewegungsmelder-Aufnahme aktiviert. Bitte wählen Sie eine der unten stehende Optionen aus";
+

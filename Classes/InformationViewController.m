@@ -56,19 +56,19 @@
     switch (section)
     {
         case 0:
-            sectionName = NSLocalizedString(@"Product", @"Porduct");
+            sectionName = NSLocalizedStringWithDefaultValue(@"product", nil, [NSBundle mainBundle], @"Porduct", nil);
             break;
             
         case 1:
-            sectionName = NSLocalizedString(@"Application version", @"Application version");
+            sectionName = NSLocalizedStringWithDefaultValue(@"application_version", nil, [NSBundle mainBundle], @"Application version", nil);
             break;
             
         case 2:
-            sectionName = NSLocalizedString(@"Firmware version", @"Firmware version");
+            sectionName = NSLocalizedStringWithDefaultValue(@"firmware_version", nil, [NSBundle mainBundle], @"Firmware version", nil);
             break;
             
         case 3:
-            sectionName = NSLocalizedString(@"Copyright", @"Copyright");
+            sectionName = NSLocalizedStringWithDefaultValue(@"copyright", nil, [NSBundle mainBundle], @"Copyright", nil);
             break;
             
         default:
@@ -97,7 +97,7 @@
     switch (indexPath.section)
     {
         case 0:
-            cell.textLabel.text = NSLocalizedString(@"monitor_everywhere", @"Monitor Everywhere");
+            cell.textLabel.text = NSLocalizedStringWithDefaultValue(@"monitor_everywhere", nil, [NSBundle mainBundle], @"Monitor Everywhere", nil);
             break;
             
         case 1:
@@ -109,7 +109,7 @@
             break;
             
         case 3:
-            cell.textLabel.text  = NSLocalizedString(@"monitor_everywhere_all_rights_reserved", @"Monitoreverywhere \u00A9 All rights Reserved");
+            cell.textLabel.text  = NSLocalizedStringWithDefaultValue(@"monitor_everywhere_all_rights_reserved", nil, [NSBundle mainBundle], @"Monitoreverywhere \u00A9 All rights Reserved", nil);
             break;
             
         default:

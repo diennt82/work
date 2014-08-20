@@ -18,13 +18,17 @@
         NSArray *nibArray = [[NSBundle mainBundle]loadNibNamed:@"CameraDetailCell" owner:self options:nil];
         self = [[nibArray objectAtIndex:0] retain];
         self.backgroundColor = COLOR_RGB(43.0, 50.0, 56.0);
+        
+        [self.btnChangeName setTitle:NSLocalizedStringWithDefaultValue(@"xib_camerasettings_cell_button_cameraname", nil, [NSBundle mainBundle], @"Camera Name", nil) forState:UIControlStateNormal];
+        [self.btnChangeImage setTitle:NSLocalizedStringWithDefaultValue(@"xib_camerasettings_cell_button_changeimage", nil, [NSBundle mainBundle], @"Change Image", nil) forState:UIControlStateNormal];
+        [self.btnFirmwareVersion setTitle:NSLocalizedStringWithDefaultValue(@"xib_camerasettings_cell_button_firmwareversion", nil, [NSBundle mainBundle], @"Firmware Version", nil) forState:UIControlStateNormal];
     }
     return self;
 }
 
 - (void)awakeFromNib
 {
-    // Initialization code
+    
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated

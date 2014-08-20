@@ -20,7 +20,7 @@
 #import "UIActionSheet+Blocks.h"
 #import "PublicDefine.h"
 #import "UIImageView+WebCache.h"
-
+#import "UIView+Custom.h"
 
 
 #define ALERT_REMOVE_CAM        5
@@ -93,7 +93,7 @@ typedef enum _WAIT_FOR_UPDATING {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
-        self.title = @"Camera Settings";
+        self.title = NSLocalizedStringWithDefaultValue(@"camera_settings", nil, [NSBundle mainBundle], @"Camera Settings", nil);
     }
     return self;
 }
@@ -157,8 +157,16 @@ typedef enum _WAIT_FOR_UPDATING {
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [self xibDefaultLocalization];
     self.navigationController.navigationBarHidden = NO;
     [self.navigationController.view setUserInteractionEnabled:YES];
+}
+
+- (void)xibDefaultLocalization
+{
+    [self.btnRmoveCamera setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_cameramenu_button_text_cameramenu", nil, [NSBundle mainBundle], @"Remove Camera", nil)];
+    [[self.vwHeaderCamDetail viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_cameramenu_label_camdetail", nil, [NSBundle mainBundle], @"Camera Detail", nil)];
+    [[self.vwHeaderNotSens viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_cameramenu_label_sensity", nil, [NSBundle mainBundle], @"Notification Sensity", nil)];
 }
 
 - (void)didReceiveMemoryWarning
@@ -230,10 +238,10 @@ typedef enum _WAIT_FOR_UPDATING {
 
 - (void) showDialog:(int) dialogType
 {
-    NSString * title = @"Camera";
+    NSString * title = NSLocalizedStringWithDefaultValue(@"alert_title_camera", nil, [NSBundle mainBundle], @"Camera", nil);
     NSString * ok = NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil);
     NSString * cancel = NSLocalizedStringWithDefaultValue(@"cancel", nil, [NSBundle mainBundle], @"Cancel", nil);
-    NSString * msg = @"Message";
+    NSString * msg = NSLocalizedStringWithDefaultValue(@"alert_mess_message", nil, [NSBundle mainBundle], @"Message", nil);
     id alertDelegate = self;
     
 	switch (dialogType) {
@@ -241,7 +249,7 @@ typedef enum _WAIT_FOR_UPDATING {
 		case ALERT_REMOVE_CAM:
 		{
 			BOOL deviceInLocal = _camChannel.profile.isInLocal;
-            title = @"Remove Camera";
+            title = NSLocalizedStringWithDefaultValue(@"alert_title_remove_camera", nil, [NSBundle mainBundle], @"Remove Camera", nil);
             
             if (deviceInLocal)
             {
@@ -258,8 +266,8 @@ typedef enum _WAIT_FOR_UPDATING {
             
         case ALERT_RENAME_REPORT:
         {
-            title = @"Rename Camera";
-            msg           = @"Invaldate name";
+            title = NSLocalizedStringWithDefaultValue(@"alert_title_rename_camera", nil, [NSBundle mainBundle], @"Rename Camera", nil);
+            msg           = NSLocalizedStringWithDefaultValue(@"alert_mess_invaldate_name", nil, [NSBundle mainBundle], @"Invaldate name", nil);
             cancel        = nil;
             alertDelegate = nil;
         }
@@ -267,7 +275,7 @@ typedef enum _WAIT_FOR_UPDATING {
             
         case ALERT_RENAME_CANT_EMPTY:
 		{
-            title = @"Rename Camera";
+            title = NSLocalizedStringWithDefaultValue(@"alert_title_rename_camera", nil, [NSBundle mainBundle], @"Rename Camera", nil);
             msg = NSLocalizedStringWithDefaultValue(@"Camera_name_cant_be_empty",nil, [NSBundle mainBundle],
                                                                @"Camera name cant be empty, please try again", nil);
             cancel = nil;
@@ -277,7 +285,7 @@ typedef enum _WAIT_FOR_UPDATING {
             
         case ALERT_RENAME_OUT_LENGTH:
         {
-            title = @"Rename Camera";
+            title = NSLocalizedStringWithDefaultValue(@"alert_title_rename_camera", nil, [NSBundle mainBundle], @"Rename Camera", nil);
             msg = NSLocalizedStringWithDefaultValue(@"Invalid_Camera_Name_msg", nil, [NSBundle mainBundle],
                                                                @"Camera Name has to be between 5-30 characters", nil);
             cancel = nil;
@@ -793,7 +801,7 @@ typedef enum _WAIT_FOR_UPDATING {
     self.navigationController.view.userInteractionEnabled = YES;
     
     [[[[UIAlertView alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"alert_title_remove_camera", nil, [NSBundle mainBundle], @"Remove Camera", nil)
-                                 message:NSLocalizedString(@"Server_error_1", @"")
+                                 message:NSLocalizedStringWithDefaultValue(@"Server_error_1", nil, [NSBundle mainBundle], @"Server is unreachable. Please try again later.", nil)
                                 delegate:nil
                        cancelButtonTitle:nil
                        otherButtonTitles:NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil),
@@ -1017,7 +1025,7 @@ typedef enum _WAIT_FOR_UPDATING {
     //NSLog(@"SettingsVC - sendCommand: %@, response: %@", command, responseDict);
     
     NSInteger errorCode = -1;
-    NSString *errorMessage = @"Update failed";
+    NSString *errorMessage = NSLocalizedStringWithDefaultValue(@"hud_update_failed", nil, [NSBundle mainBundle], @"Update failed", nil);
     
     if (responseDict)
     {
@@ -1082,15 +1090,15 @@ typedef enum _WAIT_FOR_UPDATING {
     
     if (_alertViewRename == nil)
     {
-        self.alertViewRename = [[UIAlertView alloc] initWithTitle:@"Change Camera Name"
-                                                          message:@"Enter the new camera name."
+        self.alertViewRename = [[UIAlertView alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"alert_title_change_camera_name", nil, [NSBundle mainBundle], @"Change Camera Name", nil)
+                                                          message:NSLocalizedStringWithDefaultValue(@"alert_mess_enter_camera_name", nil, [NSBundle mainBundle], @"Enter the new camera name.", nil)
                                                          delegate:self
                                                 cancelButtonTitle:NSLocalizedStringWithDefaultValue(@"cancel", nil, [NSBundle mainBundle], @"Cancel", nil)
                                                 otherButtonTitles:NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil), nil];
         self.alertViewRename.alertViewStyle = UIAlertViewStylePlainTextInput;
         UITextField *textField = [_alertViewRename textFieldAtIndex:0];
         [textField setText:_cameraName];
-        [textField setPlaceholder:@"Eg. Living Room,Nursery,etc"];
+        [textField setPlaceholder:NSLocalizedStringWithDefaultValue(@"eg_lingving_room_nursery_etc", nil, [NSBundle mainBundle], @"Eg. Living Room, Nursery, etc", nil)];
         self.alertViewRename.tag = ALERT_RENAME_CAMERA;
     }
     
@@ -1101,15 +1109,18 @@ typedef enum _WAIT_FOR_UPDATING {
 {
     NSString *deviceType = [UIDevice currentDevice].model;
     
-    NSArray *arrButtonTitles = @[@"Select image from Photos", [NSString stringWithFormat:@"Take a photo using %@", deviceType], @"Get a live snapshot from camera"];
+    NSString *value1 = NSLocalizedStringWithDefaultValue(@"select_image_from_photos", nil, [NSBundle mainBundle], @"Select image from Photos", nil);
+    NSString *value2 = [NSString stringWithFormat:@"%@ %@", NSLocalizedStringWithDefaultValue(@"take_a_photo_using", nil, [NSBundle mainBundle], @"Take a photo using", nil), deviceType];
+    NSString *value3 = NSLocalizedStringWithDefaultValue(@"get_a_live_snapshot_from_camera", nil, [NSBundle mainBundle], @"Get a live snapshot from camera", nil);
+    NSArray *arrButtonTitles = @[value1, value2, value3];
     
     if ([self.camChannel.profile isNotAvailable])
     {
-        arrButtonTitles = @[@"Select image from Photos", [NSString stringWithFormat:@"Take a photo using %@", deviceType]];
+        arrButtonTitles = @[value1, value2];
     }
     
     [UIActionSheet showInView:self.view
-                    withTitle:@"Change Image"
+                    withTitle:NSLocalizedStringWithDefaultValue(@"alert_title_change_image", nil, [NSBundle mainBundle], @"Change Image", nil)
             cancelButtonTitle:NSLocalizedStringWithDefaultValue(@"cancel", nil, [NSBundle mainBundle], @"Cancel", nil)
        destructiveButtonTitle:nil
             otherButtonTitles:arrButtonTitles
@@ -1122,7 +1133,7 @@ typedef enum _WAIT_FOR_UPDATING {
          
          if(buttonIndex==1 && ![UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypeCamera])
          {
-             NSString *msg = [NSString stringWithFormat:@"Your %@ have not camera.", deviceType];
+             NSString *msg = [NSString stringWithFormat:NSLocalizedStringWithDefaultValue(@"alert_mes_your_have_not_camera", nil, [NSBundle mainBundle], @"Your %@ have not camera.", nil), deviceType];
              Alert(nil, msg);
              return;
          }
@@ -1173,11 +1184,11 @@ typedef enum _WAIT_FOR_UPDATING {
 
 -(void)openViewForSetCamera:(UIImage *)image
 {
-    UIActionSheet *as = [[UIActionSheet alloc] initWithTitle:@"Select Picture"
+    UIActionSheet *as = [[UIActionSheet alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"alert_title_select_picture", nil, [NSBundle mainBundle], @"Select Picture", nil)
                                                     delegate:nil
                                            cancelButtonTitle:NSLocalizedStringWithDefaultValue(@"cancel", nil, [NSBundle mainBundle], @"Cancel", nil)
                                       destructiveButtonTitle:nil
-                                           otherButtonTitles:@"Set Picture", nil];
+                                           otherButtonTitles:NSLocalizedStringWithDefaultValue(@"button_set_picture", nil, [NSBundle mainBundle], @"Set Picture", nil), nil];
     as.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
     if(image)
     {
@@ -1371,7 +1382,7 @@ typedef enum _WAIT_FOR_UPDATING {
             {
                 // NSLog(@"-- %@",responseDictDInfo);
                 hud.mode = MBProgressHUDModeText;
-                [hud setLabelText:@"Upload image successfully"];
+                [hud setLabelText:NSLocalizedStringWithDefaultValue(@"hud_upload_image_successfully", nil, [NSBundle mainBundle], @"Upload image successfully", nil)];
                 
                 [self saveCameraSnapshot:image];
             }
@@ -1507,7 +1518,7 @@ typedef enum _WAIT_FOR_UPDATING {
                 {
                     //numOfRows[indexPath.section] = 2;
                     intTableSectionStatus = 0;
-                    self.sensitivityMessage = @"Error -Load Sensitivity Settings!";
+                    self.sensitivityMessage = NSLocalizedStringWithDefaultValue(@"hud_error_sensitivity_settings", nil, [NSBundle mainBundle], @"Error -Load Sensitivity Settings!", nil);
                 }
             }
         }
@@ -1515,14 +1526,14 @@ typedef enum _WAIT_FOR_UPDATING {
         {
             //numOfRows[indexPath.section] = 2;
             intTableSectionStatus = 0;
-            self.sensitivityMessage = @"Error -Load Sensitivity Settings error!";
+            self.sensitivityMessage = NSLocalizedStringWithDefaultValue(@"hud_error_sensitivity_settings_error", nil, [NSBundle mainBundle], @"Error -Load Sensitivity Settings error!", nil);
         }
     }
     else
     {
        // numOfRows[indexPath.section] = 2;
         intTableSectionStatus=0;
-        self.sensitivityMessage = @"Error -Load Sensitivity Settings error!";
+        self.sensitivityMessage = NSLocalizedStringWithDefaultValue(@"hud_error_sensitivity_settings_error", nil, [NSBundle mainBundle], @"Error -Load Sensitivity Settings error!", nil);
     }
     
     [MBProgressHUD hideAllHUDsForView:self.view animated:YES];

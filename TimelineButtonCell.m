@@ -7,6 +7,7 @@
 //
 
 #import "TimelineButtonCell.h"
+#import "UIView+Custom.h"
 
 @implementation TimelineButtonCell
 
@@ -15,8 +16,20 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         // Initialization code
+        [self xibDefaultLocalization];
     }
     return self;
+}
+
+- (void)awakeFromNib
+{
+    [super awakeFromNib];
+    [self xibDefaultLocalization];
+}
+
+- (void)xibDefaultLocalization
+{
+    [self.timelineCellButtn setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_timeline_cell_save_the_day", nil, [NSBundle mainBundle], @"Save the Day", nil)];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated

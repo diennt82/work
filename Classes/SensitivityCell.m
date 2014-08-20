@@ -10,6 +10,9 @@
 #define ALIGNMENT_LR 40
 
 #import "SensitivityCell.h"
+#import "UIView+Custom.h"
+
+
 @interface SensitivityCell()
 
 @property (retain, nonatomic) IBOutlet UIImageView *imageViewCircleWhite;
@@ -42,6 +45,8 @@
 
 - (void)drawRect:(CGRect)rect
 {
+    [self xibDefaultLocalization];
+    
     [self.btnSwitch setImage:[UIImage imageNamed:@"settings_switch_off"] forState:UIControlStateNormal];
     [self.btnSwitch setImage:[UIImage imageNamed:@"settings_switch_on"] forState:UIControlStateSelected];
     [self.btnSwitch setImage:[UIImage imageNamed:@"settings_switch_on"] forState:UIControlStateHighlighted];
@@ -108,6 +113,13 @@
     }
     
     self.imageViewCircleWhite.center = ((UIImageView *)_imageViewCircleArray[_settingsValue]).center;
+}
+
+- (void)xibDefaultLocalization
+{
+    [[self viewWithTag:101] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_camerasettings_cell_label_low", nil, [NSBundle mainBundle], @"Low", nil)];
+    [[self viewWithTag:102] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_camerasettings_cell_label_medium", nil, [NSBundle mainBundle], @"Medium", nil)];
+    [[self viewWithTag:103] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_camerasettings_cell_label_high", nil, [NSBundle mainBundle], @"High", nil)];
 }
 
 - (void)singleTap: (UITapGestureRecognizer *)recognizer

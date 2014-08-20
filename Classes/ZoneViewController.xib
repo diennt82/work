@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="4514" systemVersion="12F45" targetRuntime="iOS.CocoaTouch" variant="6xAndEarlier" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" variant="6xAndEarlier" propertyAccessControl="none">
     <dependencies>
-        <deployment defaultVersion="1536" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
+        <deployment defaultVersion="1792" identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ZoneViewController">
             <connections>
+                <outlet property="btnCancel" destination="1Tc-A4-FiB" id="XM1-Fj-uFp"/>
+                <outlet property="btnSave" destination="1NQ-68-MaK" id="C4h-Jl-EVS"/>
                 <outlet property="progress" destination="zdx-Pu-Ss4" id="xen-no-HO8"/>
                 <outlet property="view" destination="1" id="3"/>
                 <outlet property="zone1" destination="699-5L-Rej" id="Zk9-PC-qgc"/>

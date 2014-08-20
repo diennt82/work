@@ -10,6 +10,7 @@
 #import "define.h"
 #import <MonitorCommunication/MonitorCommunication.h>
 #import "PublicDefine.h"
+#import "UIView+Custom.h"
 
 @interface EditCamera_VController () <UITextFieldDelegate>
 
@@ -42,6 +43,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self xibDefaultLocalization];
 	// Do any additional setup after loading the view.
     self.navigationItem.hidesBackButton = YES;
     
@@ -72,6 +74,18 @@
     self.tfCamName.delegate = self;
     
     self.tfCamName.text = self.cameraName;
+}
+
+- (void)xibDefaultLocalization
+{
+    [[self.view viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_EditCameraPage_label_camera_detected", nil, [NSBundle mainBundle], @"Camera Detected", nil)];
+    [[self.view viewWithTag:2] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_EditCameraPage_label_make_your_notifcation", nil, [NSBundle mainBundle], @"Please name the location of your camera. This will help make your notification more relevant.", nil)];
+    
+    [self.tfCamName setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_EditCameraPage_textfield_camname", nil, [NSBundle mainBundle], @"Eg. Living Room, Nursery", nil)];
+    [self.btnContinue setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_EditCameraPage_button_continue", nil, [NSBundle mainBundle], @"Continue", nil)];
+    
+    [[self.viewProgress viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_EditCameraPage_label_searching", nil, [NSBundle mainBundle], @"Searching for Wi-Fi Networks", nil)];
+    [[self.viewProgress viewWithTag:2] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_EditCameraPage_label_waitfor", nil, [NSBundle mainBundle], @"Please wait", nil)];
 }
 
 - (void)viewDidUnload

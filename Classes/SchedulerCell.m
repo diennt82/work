@@ -7,6 +7,7 @@
 //
 
 #import "SchedulerCell.h"
+#import "UIView+Custom.h"
 
 @implementation SchedulerCell
 
@@ -17,9 +18,23 @@
         // Initialization code
         //[self.schedulerSwitch setOn:_schedulerSate];
         //[self.byDaySwitch setOn:_byDayState];
+        [self xibDefaultLocalization];
     }
     return self;
 }
+
+- (void)awakeFromNib
+{
+    [super awakeFromNib];
+    [self xibDefaultLocalization];
+}
+
+- (void)xibDefaultLocalization
+{
+    [[self.contentView viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_scheluler_cell_scheduler", nil, [NSBundle mainBundle], @"Scheduler", nil)];
+    [[self.contentView viewWithTag:2] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_scheluler_cell_by_day", nil, [NSBundle mainBundle], @"By Day", nil)];
+}
+
 - (IBAction)schedulerSwitchValueChangedAtion:(id)sender
 {
     //self.schedulerSate = !_schedulerSate;

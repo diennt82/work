@@ -21,6 +21,7 @@
 #import "Step_12_ViewController.h"
 #import "Step_11_ViewController.h"
 #import "Step_02_ViewController.h"
+#import "UIView+Custom.h"
 
 #define SEND_CONF_SUCCESS 1
 #define SEND_CONF_ERROR 2
@@ -133,6 +134,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self xibDefaultLocalization];
     self.trackedViewName = GAI_CATEGORY;
     [self.ib_scollViewGuide setContentSize:CGSizeMake(320, 1401)];
     
@@ -250,6 +252,30 @@
         rect.origin.y -= 80;
         self.btnCancel.frame = rect;
     }
+}
+
+- (void)xibDefaultLocalization
+{
+    [[self.view viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step10_label_checking_connection_camera", nil, [NSBundle mainBundle], @"Checking connection to camera", nil)];
+    [[self.view viewWithTag:695] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step10_label_takeup_a_minute", nil, [NSBundle mainBundle], @"This may take up to a minute", nil)];
+    [[self.view viewWithTag:2] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step10_label_re-start_settup", nil, [NSBundle mainBundle], @"If setup failed, press button below to re-start setup", nil)];
+    [self.btnCancel setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step10_button_cancel", nil, [NSBundle mainBundle], @"Cancel", nil)];
+    
+    [[self.ib_viewGuild viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step10_label_wrong_wifi_network", nil, [NSBundle mainBundle], @"Wrong Wi-Fi Network", nil)];
+    [[self.ib_viewGuild viewWithTag:2] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step10_label_change_wifi_network", nil, [NSBundle mainBundle], @"How to Change Wi-Fi Network", nil)];
+    [[self.ib_viewGuild viewWithTag:3] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step10_label_connect_to_defferent_wifi_network", nil, [NSBundle mainBundle], @"Your phone has reconnected to a different Wi-Fi network than your camera. Both must be on the same network to complete the setup. ", nil)];
+    [[self.ib_viewGuild viewWithTag:4] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step10_label_access_home_screen", nil, [NSBundle mainBundle], @"1. Access your home screen by clicking on the home button", nil)];
+    [[self.ib_viewGuild viewWithTag:5] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step10_label_select_correct_wifi_network", nil, [NSBundle mainBundle], @"2. Select the correct Wi-Fi network by going to the iPhone settings app on your home screen", nil)];
+    [[self.ib_viewGuild viewWithTag:6] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step10_label_open_wifi_to_view_network", nil, [NSBundle mainBundle], @"3. Open Wi-Fi to view networks", nil)];
+    [[self.ib_viewGuild viewWithTag:7] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step10_label_select_network_during_camera_settup", nil, [NSBundle mainBundle], @"4. Select the network which you used during camera setup", nil)];
+    [[self.ib_viewGuild viewWithTag:8] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step10_label_enter_password_if_prompted", nil, [NSBundle mainBundle], @"(and enter password if prompted)", nil)];
+    [[self.ib_viewGuild viewWithTag:9] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step10_label_resume_settup", nil, [NSBundle mainBundle], @"Once you have completed the above steps return to this app and resume setup", nil)];
+    [[self.ib_viewGuild viewWithTag:10] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step10_button_resume_settup", nil, [NSBundle mainBundle], @"Resume Setup", nil)];
+    
+    [[self.viewFwOtaUpgrading viewWithTag:5993] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step10_label_camera_firmware_is_being_upgrade", nil, [NSBundle mainBundle], @"Camera Firmware is being upgraded, please keep the camera power on during this process", nil)];
+    [[self.viewFwOtaUpgrading viewWithTag:5991] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step10_label_takeup_5_minute", nil, [NSBundle mainBundle], @"This may take up to 5 minutes", nil)];
+    [self.btnCancelFirmware setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step10_button_cancel", nil, [NSBundle mainBundle], @"Cancel", nil)];
+    [self.btnContinue setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step10_button_continue", nil, [NSBundle mainBundle], @"Continue", nil)];
 }
 
 - (void)showAdditionalOption:(NSTimer *)timer
