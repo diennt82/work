@@ -1,459 +1,159 @@
-/* 
-  Localizable.strings
-  MBP_ios
+/*
+ Localizable.strings
+ Copyright (c) 2013 Hubble Connected Ltd. All rights reserved.
+ */
 
-  Created by nxcomm on 13/03/13.
-  Copyright (c) 2013 Hubble Connected Ltd. All rights reserved.
-*/
-
-/* No comment provided by engineer. */
 "Account" = "Konto";
-
-/* No comment provided by engineer. */
 "Account_" = "Konto";
-
-/* No comment provided by engineer. */
 "Account_Created" = "Konto Utworzono";
-
-/* No comment provided by engineer. */
 "Add_Camera_Failed" = "Dodanie kamery nie powiodło się";
-
-/* No comment provided by engineer. */
 "AddCam_Error" = "DodKam błąd";
-
-/* No comment provided by engineer. */
 "addcam_error_1" = "Urządzenie nie może podłączyć się do serwera. Prosimy sprawdzić połączenie WIFI i internetowe";
-
-/* No comment provided by engineer. */
 "Baby_Monitor_Setup" = "Ustawienia monitor";
-
-/* No comment provided by engineer. */
 "Back" = "Do tyłu";
-
-/* No comment provided by engineer. */
 "bms_error_404" = "Serwer jest czasowo niedostępny";
-
-/* No comment provided by engineer. */
 "bms_error_601" = "Nieprawidłowa komenda wygasła. Prosimy sprawdzić zapytanie.";
-
-/* No comment provided by engineer. */
 "bms_error_602" = "Brakuje niezbędnych parametrów.";
-
-/* No comment provided by engineer. */
 "bms_error_603" = "Długość parametru wychodzi poza oczekiwane granice.";
-
-/* No comment provided by engineer. */
 "bms_error_611" = "Kamera nie istnieje.";
-
-/* No comment provided by engineer. */
 "bms_error_612" = "Can't start video stream due to camera port is inaccessible. Monitor is re-acquiring the port. Try again after 1 to 2 minutes. (612)";
-
-/* No comment provided by engineer. */
 "bms_error_613" = "Komunikacja z kamerą nie powiodła się.";
-
-/* No comment provided by engineer. */
 "bms_error_614" = "Kamera nie jest gotowa na strumieniowanie";
-
-/* No comment provided by engineer. */
 "bms_error_621" = "Id email nie jest zarejestrowane.";
-
-/* No comment provided by engineer. */
 "bms_error_622" = "Id emaila jest zarejestrowane ale nie jest aktywne.";
-
-/* No comment provided by engineer. */
 "bms_error_623" = "Id emaila jest już aktywowane.";
-
-/* No comment provided by engineer. */
 "bms_error_624" = "Aktywacja nie powiodła się. Albo użytkownik nie jest zarejestrowany albo okres aktywacji minął. Prosimy zarejestrować ponownie.";
-
-/* No comment provided by engineer. */
 "bms_error_625" = "Aktywacja nieuda. Błędy klucz aktywacyjny.";
-
-/* No comment provided by engineer. */
 "bms_error_626" = "Uwierzytelnianie nie powiodło się, albo Id emaila albo hasło jest nieważne.";
-
-/* No comment provided by engineer. */
 "bms_error_627" = "Kamera nie jest skojarzona z żadnym użytkownikiem (email id).";
-
-/* No comment provided by engineer. */
 "bms_error_628" = "Email jest już zarejestrowany";
-
-/* No comment provided by engineer. */
 "bms_error_636" = "Nazwa użytkownika jest już zarejestrowana";
-
-/* No comment provided by engineer. */
 "bms_error_699" = "Pojawił się nieobsłużony wyjątek, prosimy o kontakt z administratorem.";
-
-/* No comment provided by engineer. */
 "bms_error_unknown" = "Nieznany błąd - %d";
-
-/* No comment provided by engineer. */
 "cam_menu_err_1" = "Kamera nie jest osiągalna";
-
-/* No comment provided by engineer. */
 "cam_menu_err_2" = "Zmiana nazwy tej kamery nie powiodła się. Zaloguj się ponownie i spróbuj ponownie";
-
-/* No comment provided by engineer. */
 "cam_menu_err_3" = "Nazwa kamery nie może być pusta, prosimy spróbować ponownie";
-
-/* No comment provided by engineer. */
 "cam_menu_err_4" = "Nie można usunąć nazwy kamery, prosimy zalogować się";
-
-/* No comment provided by engineer. */
 "cam_menu_err_5" = "Zmiana nazwy kamery nie powiodła się. Prosimy spróbować ponownie później";
-
-/* No comment provided by engineer. */
 "cam_rem_msg" = "Potwierdź, że chcesz usunąć tą kamerę z twojego konta. Działanie to przełączy twoją kamerę do ustawień domyślnych. Będziesz potrzebował dodać ponownie kamerę do swojego konta, aby jej używać.";
-
-/* No comment provided by engineer. */
 "cam_rem_msg1" = "Potwierdź, że chcesz usunąć tą kamerę z twojego konta. Kamera nie jest dostępna w tym momencie, będzie przełączona na tryb bezpośredni. Prosimy zasięgnąć informacji w FAQ, aby zresetować ręcznie.";
-
-/* No comment provided by engineer. */
 "Camera_Configured" = "Camera Configured";
-
-/* No comment provided by engineer. */
 "Camera_Detected" = "Camera Detected";
-
-/* No comment provided by engineer. */
 "Camera_fw_upgrade" = "Aktualizacja oprogramowania firmowego kamery";
-
-/* No comment provided by engineer. */
 "Camera_name_cant_be_empty" = "Nazwa kamery nie może być pusta, prosimy spróbować ponownie";
-
-/* No comment provided by engineer. */
 "Cameras_" = "Kamery";
-
-/* No comment provided by engineer. */
 "Cancel" = "Anuluj";
-
-/* No comment provided by engineer. */
 "Cancel_" = "Anuluj";
-
-/* No comment provided by engineer. */
 "cant_start_stream" = "Nie można uruchomić strumienia video, Monitor jest zajęty, spróbuj ponownie później.";
-
-/* No comment provided by engineer. */
 "cant_start_stream2" = "Server request timeout, try again later";
-
-/* No comment provided by engineer. */
 "cant_start_stream_01" = "The session key on camera is mis-matched. Please reset the camera and add the camera again.(%d)";
-
-/* No comment provided by engineer. */
 "Celsius" = "Celsius";
-
-/* No comment provided by engineer. */
 "Change_Camera_Name" = "Zmień nazwę kamery";
-
-/* No comment provided by engineer. */
 "comm_with_camera_timeout" = "Komunikacja z kamerą przekroczyła czas.";
-
-/* No comment provided by engineer. */
 "comm_with_camera_timeout_msg" = "Prosimy spróbować ponownie.";
-
-/* No comment provided by engineer. */
 "Configure_Camera" = "Configure Camera";
-
-/* No comment provided by engineer. */
 "Confirm_remove_cam_local" = "Potwierdź, że chcesz usunąć tą kamerę z twojego konta. Działanie to zresetuje również kamerę do trybu ustawień.";
-
-/* No comment provided by engineer. */
 "Confirm_remove_cam_remote" = "Potwierdź, że chcesz usunąć tą kamerę z twojego konta. Kamera nie jest dostępna w tym momencie, będzie przełączona na tryb bezpośredni. Prosimy zasięgnąć informacji w FAQ, aby zresetować ręcznie.";
-
-/* No comment provided by engineer. */
 "Connecting_to_server" = "Podłączanie do serwera... ";
-
-/* No comment provided by engineer. */
 "Create_Account" = "Stwórz konto";
-
-/* No comment provided by engineer. */
 "Create_Account_Failed" = "Tworzenia konta nie powiodło się";
-
-/* No comment provided by engineer. */
 "Create_Account_Failed_msg" = "User name has to be between 5-20 characters";
-
-/* No comment provided by engineer. */
 "Create_Account_Failed_msg1" = "Password has to be between 8-12 characters";
-
-/* No comment provided by engineer. */
 "Create_Account_Failed_msg2" = "Hasło nie zgadza się";
-
-/* No comment provided by engineer. */
 "Create_Account_Failed_msg3" = "Nieprawidłowy email. Adres email powinien posiadać formę somebody@somewhere.com";
-
-/* No comment provided by engineer. */
 "Create_Account_Failed_msg4" = "Prosimy wybrać sieć Wifi, aby podłączyć";
-
-/* No comment provided by engineer. */
 "Create_Account_Failed_msg5" = "Nazwa użytkownika nie może zawierać znaków specjalnych z wyjątkiem - _ i.";
-
-/* No comment provided by engineer. */
 "Detect_Camera" = "Wykryj kamerę";
-
-/* No comment provided by engineer. */
 "Done" = "Gotowe";
-
-/* No comment provided by engineer. */
 "Edit_" = "Edytuj";
-
-/* No comment provided by engineer. */
 "Email_Format_error" = "Format emaila błędny";
-
-/* No comment provided by engineer. */
 "Email_Format_error_msg" = "Prawidłowy format emaila to forma: someone@somedomain.com. Prosimy spróbować ponownie!";
-
-/* No comment provided by engineer. */
 "Enter_Network_Information" = "Wprowadź informacje sieciowe";
-
-/* No comment provided by engineer. */
 "enter_new_camera_name" = "Enter new camera name";
-
-/* No comment provided by engineer. */
 "Fahrenheit" = "Fahrenheit";
-
-/* No comment provided by engineer. */
 "Fail_to_communicate_with_camera" = "Komunikacja z kamerą nie powiodła się. Próbuj ponownie?";
-
-/* No comment provided by engineer. */
 "Forgot_Password" = "Zapomniane hasło";
-
-/* No comment provided by engineer. */
 "fw_upgrade" = "Oprogramowanie firmowe kamery %@ jest dostępne. Naciśnij OK, aby uaktualnić teraz!";
-
-/* No comment provided by engineer. */
 "fw_upgrade_1" = "Restartowanie kamery...";
-
-/* No comment provided by engineer. */
 "Get_Camera_list_Error" = "Błąd uzyskiwania listy kamery";
-
-/* No comment provided by engineer. */
 "Get_Camera_list_Error_msg" = "Server error: Invalid response";
-
-/* No comment provided by engineer. */
 "Get_Camera_list_Error_msg1" = "Serwer nieosiągalny";
-
-/* No comment provided by engineer. */
 "Go_to_Camera_list" = "Idź do listy kamery";
-
-/* No comment provided by engineer. */
 "High_Quality" = "Wysoka jakość (VGA)";
-
-/* No comment provided by engineer. */
 "information" = "Informacja";
-
-/* No comment provided by engineer. */
 "information_msg" = "Monitorar em toda parte\nApplication version: %1$@\nFirmware version:%2$@,\nMonitorar em toda parte \@ All rights Reserved.";
-
-/* No comment provided by engineer. */
 "Invalid_Camera_Name" = "Invalid Camera Name";
-
-/* No comment provided by engineer. */
 "Invalid_Camera_Name_msg" = "Camera Name has to be between 5-30 characters";
-
-/* No comment provided by engineer. */
 "Invalid_Camera_Name_msg2" = "Camera name is invalid. Please enter [0-9],[a-Z], space, dot, hyphen, underscore & single quote only.";
-
-/* No comment provided by engineer. */
 "Invalid_Server_Response" = "Nieprawidłowa odpowiedź serwera";
-
-/* No comment provided by engineer. */
 "Level1" = "Poziom 1";
-
-/* No comment provided by engineer. */
 "Level1_" = "Poziom 1 (niski)";
-
-/* No comment provided by engineer. */
 "Level2" = "Poziom 2";
-
-/* No comment provided by engineer. */
 "Level3" = "Poziom 3";
-
-/* No comment provided by engineer. */
 "Level4" = "Poziom 4";
-
-/* No comment provided by engineer. */
 "Level4_" = "Poziom 4 (wysoki)";
-
-/* No comment provided by engineer. */
 "Local_Wifi" = "Z lokalnego wi-fi";
-
-/* No comment provided by engineer. */
 "Logging_in_to_server" = "Logowanie do serwera...";
-
-/* No comment provided by engineer. */
 "Login" = "Login";
-
-/* No comment provided by engineer. */
 "Login_Error" = "Błędny login";
-
-/* No comment provided by engineer. */
 "Login_Error_msg" = "Błędna odpowiedź serwera, prosimy spróbować ponownie!";
-
-/* No comment provided by engineer. */
 "Login_Error_msg2" = "Błąd serwera: %@";
-
-/* No comment provided by engineer. */
 "Login_Error_msg3" = "Serwer jest nieosiągalny. Czy chcesz uzyskać dostęp offline do twojej kamery?";
-
-/* No comment provided by engineer. */
 "Logout" = "Wylogowanie";
-
-/* No comment provided by engineer. */
 "melody_1" = "Rock a Bye Baby";
-
-/* No comment provided by engineer. */
 "melody_2" = "Lullaby and Goodnight";
-
-/* No comment provided by engineer. */
 "melody_3" = "Lavender Blue";
-
-/* No comment provided by engineer. */
 "melody_4" = "Twinkle Twinkle Little Star";
-
-/* No comment provided by engineer. */
 "melody_5" = "Hush Little Baby";
-
-/* No comment provided by engineer. */
 "melody_I" = "melodia 1";
-
-/* No comment provided by engineer. */
 "melody_II" = "melodia 2";
-
-/* No comment provided by engineer. */
 "melody_III" = "melodia 3";
-
-/* No comment provided by engineer. */
 "melody_IV" = "melodia 4";
-
-/* No comment provided by engineer. */
 "melody_V" = "melodia 5";
-
-/* No comment provided by engineer. */
 "Lullaby" = "Lullaby";
-
-/* No comment provided by engineer. */
 "network_lost_link" = "Kamera jest odłączana w związku z problemem łączności sieciowej. Próba ponownego podłączenia...";
-
-/* No comment provided by engineer. */
 "New_Name" = "Nowa nazwa";
-
-/* No comment provided by engineer. */
 "Next" = "Następny";
-
-/* No comment provided by engineer. */
 "No" = "Nie";
-
-/* No comment provided by engineer. */
 "Normal_Quality" = "Normalna jakość (QVGA)";
-
-/* No comment provided by engineer. */
 "Not_Available" = "Niedostępny";
-
-/* No comment provided by engineer. */
 "Not_supported" = "Nieobsługiwany";
-
-/* No comment provided by engineer. */
 "Ok" = "Ok";
-
-/* No comment provided by engineer. */
 "quickview_lost_link" = "Sieć utraciła link. Prosimy sprawdzić telefon, kamerę i router Wifi lub zbliżyć się do routera";
-
-/* No comment provided by engineer. */
 "Registration_Error" = "Błąd rejestracji";
-
-/* No comment provided by engineer. */
 "Registration_Error_1" = "Serwer BMS jest nieosiągalny. Prosimy wejść w ustawienia WIFI, aby upewnić się, że urządzenie iOS jest podłączone do sieci router/3G";
-
-/* No comment provided by engineer. */
 "Remote_Camera" = "Zdalna kamera";
-
-/* No comment provided by engineer. */
 "Remote_View_Error" = "Zdalny podgląd Błąd";
-
-/* No comment provided by engineer. */
 "Remote_View_Error_msg" = "Inizjalizowanie zdalnego połączenia nie powiodło się, prosimy spróbować ponownie";
-
-/* No comment provided by engineer. */
 "remove_one_cam" = "Przed dodaniem nowej prosimy usunąć jedną kamerę z bieżącej listy";
-
-/* No comment provided by engineer. */
 "Reset_Password_Error" = "Resetowanie hasła Błąd";
-
-/* No comment provided by engineer. */
 "Retry" = "Spróbuj ponownie";
-
-/* No comment provided by engineer. */
 "Security" = "Bezpieczeństwo";
-
-/* No comment provided by engineer. */
 "Server_error_" = "Błąd serwera: %@";
-
-/* No comment provided by engineer. */
 "Server_error_1" = "Serwer jest nieosiągalny. Prosimy spróbować później.";
-
-/* No comment provided by engineer. */
 "Settings" = "Ustawienia";
-
-/* No comment provided by engineer. */
 "Setup_Complete" = "Ustawienia zakończono";
-
-/* No comment provided by engineer. */
 "Sound_detected" = "Rozpoznano dźwięk";
-
-/* No comment provided by engineer. */
 "Streamer_stopped" = "Strumieniowanie zatrzymano";
-
-/* No comment provided by engineer. */
 "Switch_On_Camera" = "Włącz kamerę";
-
-/* No comment provided by engineer. */
 "Temperature_too_high" = "Temperatura za wysoka";
-
-/* No comment provided by engineer. */
 "Temperature_too_low" = "Temperatura za niska";
-
-/* No comment provided by engineer. */
 "Time_out" = "Czas się skończył";
-
-/* No comment provided by engineer. */
 "Time_out_msg" = "Video było oglądane przez około 5 minut. Czy chcesz kontynuować?";
-
-/* No comment provided by engineer. */
 "udt_relay_connect" = "Connecting through relay... please wait...";
-
-/* No comment provided by engineer. */
 "Unable_to_rename_this_camera" = "Zmiana nazwy tej kamery nie powiodła się. Zaloguj się i spróbuj ponownie";
-
-/* No comment provided by engineer. */
 "version" = "Wersja %@";
-
-/* No comment provided by engineer. */
 "video_rec_not_supported" = "Nagranie video nie jest obsługiwane, nadejdzie wkrótce";
-
-/* No comment provided by engineer. */
 "wifi_not_available" = "Dane mobilne są włączone. Jeśli będziesz kontynuował próbę połączenia, możesz zostać obciążony kosztami przez swojego operatora. Chcesz przejść dalej?";
-
-/* No comment provided by engineer. */
 "Yes" = "Tak";
-
-/* No comment provided by engineer. */
 "Yes_n" = "Yes and don't ask again";
-
 "Camera Name:" = "Nazwa kamery:";
-
 "Camera Volume:" = "Głośność kamery:";
-
 "Camera Brightness:" = "Jasność kamery:";
-
 "Sound Sensitivity Settings:" = "Ustawienia czułości dźwięku:";
-
 "Temperature Unit:" = "Jednostka temperatury:";
-
 "Video Quality:" = "Jakość obrazu:";
-
 "Remove this camera" = "Usuń tę kamerę:";
-
 "Information" = "Informacje";
-
 "Initialize" = "INITIALIZING...";
-/* No comment provided by engineer. */
 "Confirm_Pass_Fail" = "Hasło nie pasuje, proszę wpisać ponownie";

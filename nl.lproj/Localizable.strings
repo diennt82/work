@@ -1,459 +1,159 @@
-/* 
-  Localizable.strings
-  MBP_ios
+/*
+ Localizable.strings
+ Copyright (c) 2013 Hubble Connected Ltd. All rights reserved.
+ */
 
-  Created by nxcomm on 13/03/13.
-  Copyright (c) 2013 Hubble Connected Ltd. All rights reserved.
-*/
-
-/* No comment provided by engineer. */
 "Account" = "Account";
-
-/* No comment provided by engineer. */
 "Account_" = "Account";
-
-/* No comment provided by engineer. */
 "Account_Created" = "Account aangemaakt";
-
-/* No comment provided by engineer. */
 "Add_Camera_Failed" = "Camera toevoegen mislukt";
-
-/* No comment provided by engineer. */
 "AddCam_Error" = "AddCam Fout";
-
-/* No comment provided by engineer. */
 "addcam_error_1" = "Het apparaat is niet in staat om verbinding te maken met de server. Controleer de WIFI en de internetverbinding";
-
-/* No comment provided by engineer. */
 "Baby_Monitor_Setup" = "Monitor instellen";
-
-/* No comment provided by engineer. */
 "Back" = "Terug";
-
-/* No comment provided by engineer. */
 "bms_error_404" = "Server is tijdelijk niet beschikbaar";
-
-/* No comment provided by engineer. */
 "bms_error_601" = "Ongeldige opdracht overgeslagen. Controleer de aanvraag.";
-
-/* No comment provided by engineer. */
 "bms_error_602" = "Vereiste parameter(s) ontbreken.";
-
-/* No comment provided by engineer. */
 "bms_error_603" = "Lengte van de parameter is buiten de verwachte grenzen.";
-
-/* No comment provided by engineer. */
 "bms_error_611" = "Camera bestaat niet.";
-
-/* No comment provided by engineer. */
 "bms_error_612" = "Can't start video stream due to camera port is inaccessible. Monitor is re-acquiring the port. Try again after 1 to 2 minutes. (612)";
-
-/* No comment provided by engineer. */
 "bms_error_613" = "Kan niet communiceren met de camera.";
-
-/* No comment provided by engineer. */
 "bms_error_614" = "Camera is nog niet klaar voor streaming";
-
-/* No comment provided by engineer. */
 "bms_error_621" = "E-mail id is niet geregistreerd.";
-
-/* No comment provided by engineer. */
 "bms_error_622" = "E-mail id is geregistreerd maar niet geactiveerd.";
-
-/* No comment provided by engineer. */
 "bms_error_623" = "E-mail id is al geactiveerd.";
-
-/* No comment provided by engineer. */
 "bms_error_624" = "Activering mislukt. Ofwel de gebruiker is niet geregistreerd of de activeringsperiode is verlopen. Gelieve opnieuw te registreren.";
-
-/* No comment provided by engineer. */
 "bms_error_625" = "Activatie mislukt. Ongeldige activatiecode.";
-
-/* No comment provided by engineer. */
 "bms_error_626" = "De verificatie is mislukt, ofwel de E-mail id of het wachtwoord is ongeldig.";
-
-/* No comment provided by engineer. */
 "bms_error_627" = "Camera is niet geassocieerd met een gebruiker (e-mail id).";
-
-/* No comment provided by engineer. */
 "bms_error_628" = "E-mail is reeds geregistreerd";
-
-/* No comment provided by engineer. */
 "bms_error_636" = "Gebruikersnaam is reeds geregistreerd";
-
-/* No comment provided by engineer. */
 "bms_error_699" = "Niet-verwerkte uitzondering opgetreden, neem contact op met de beheerder.";
-
-/* No comment provided by engineer. */
 "bms_error_unknown" = "Onbekende fout - %d";
-
-/* No comment provided by engineer. */
 "cam_menu_err_1" = "Camera is niet bereikbaar";
-
-/* No comment provided by engineer. */
 "cam_menu_err_2" = "Kan deze camera niet hernoemen. Log opnieuw in en probeer het opnieuw";
-
-/* No comment provided by engineer. */
 "cam_menu_err_3" = "Cameranaam kan niet leeg zijn, probeer het opnieuw";
-
-/* No comment provided by engineer. */
 "cam_menu_err_4" = "Cameranaam kan niet worden verwijderd, log-in";
-
-/* No comment provided by engineer. */
 "cam_menu_err_5" = "Mislukt om de camera te wijzigen. Probeer het later opnieuw";
-
-/* No comment provided by engineer. */
 "cam_rem_msg" = "Bevestig dat u deze camera wilt verwijderen van uw account. Deze actie zal uw camera ook herstellen naar de standaardinstellingen. U moet de camera opnieuw toevoegen aan uw account om het te gebruiken.";
-
-/* No comment provided by engineer. */
 "cam_rem_msg1" = "Bevestig dat u deze camera wilt verwijderen van uw account. De camera is niet toegankelijk op dit moment, het zal niet worden overgeschakeld naar de directe modus. Raadpleeg FAQ om het handmatig te herstellen.";
-
-/* No comment provided by engineer. */
 "Camera_Configured" = "Camera Configured";
-
-/* No comment provided by engineer. */
 "Camera_Detected" = "Camera Detected";
-
-/* No comment provided by engineer. */
 "Camera_fw_upgrade" = "Camera Firmware Upgrade";
-
-/* No comment provided by engineer. */
 "Camera_name_cant_be_empty" = "Cameranaam kan niet leeg zijn, probeer het opnieuw";
-
-/* No comment provided by engineer. */
 "Cameras_" = "Camera's";
-
-/* No comment provided by engineer. */
 "Cancel" = "Annuleren";
-
-/* No comment provided by engineer. */
 "Cancel_" = "Annuleren";
-
-/* No comment provided by engineer. */
 "cant_start_stream" = "Kan videostream niet starten, de Monitor is bezet, probeer het later opnieuw.";
-
-/* No comment provided by engineer. */
 "cant_start_stream2" = "Serveraanvraag time-out, probeer het later opnieuw";
-
-/* No comment provided by engineer. */
 "cant_start_stream_01" = "The session key on camera is mis-matched. Please reset the camera and add the camera again.(%d)";
-
-/* No comment provided by engineer. */
 "Celsius" = "Celsius";
-
-/* No comment provided by engineer. */
 "Change_Camera_Name" = "Wijzig cameranaam";
-
-/* No comment provided by engineer. */
 "comm_with_camera_timeout" = "Communicatie met camera heeft een time-out.";
-
-/* No comment provided by engineer. */
 "comm_with_camera_timeout_msg" = "probeer het opnieuw.";
-
-/* No comment provided by engineer. */
 "Configure_Camera" = "Configureer camera";
-
-/* No comment provided by engineer. */
 "Confirm_remove_cam_local" = "Bevestig dat u deze camera wilt verwijderen van uw account. Deze actie zal ook de camera herstellen in de instel modus.";
-
-/* No comment provided by engineer. */
 "Confirm_remove_cam_remote" = "Bevestig dat u deze camera wilt verwijderen van uw account. De camera is niet toegankelijk op dit moment, het zal niet worden overgeschakeld naar de directe modus. Raadpleeg FAQ om het handmatig te herstellen.";
-
-/* No comment provided by engineer. */
 "Connecting_to_server" = "Verbinding maken met server... ";
-
-/* No comment provided by engineer. */
 "Create_Account" = "Account aanmaken";
-
-/* No comment provided by engineer. */
 "Create_Account_Failed" = "Account aanmaken is mislukt";
-
-/* No comment provided by engineer. */
 "Create_Account_Failed_msg" = "User name has to be between 5-20 characters";
-
-/* No comment provided by engineer. */
 "Create_Account_Failed_msg1" = "Password has to be between 8-12 characters";
-
-/* No comment provided by engineer. */
 "Create_Account_Failed_msg2" = "Wachtwoord komt niet overeen";
-
-/* No comment provided by engineer. */
 "Create_Account_Failed_msg3" = "Ongeldige e-mail. E-mail adres moet in de vorm iemand@ergens.com zijn";
-
-/* No comment provided by engineer. */
 "Create_Account_Failed_msg4" = "Selecteer een Wifi-netwerk om te verbinden";
-
-/* No comment provided by engineer. */
 "Create_Account_Failed_msg5" = "Gebruikersnaam mag geen speciale tekens bevatten behalve - _ en.";
-
-/* No comment provided by engineer. */
 "Detect_Camera" = "Detecteer Camera";
-
-/* No comment provided by engineer. */
 "Done" = "Voltooid";
-
-/* No comment provided by engineer. */
 "Edit_" = "Bewerken";
-
-/* No comment provided by engineer. */
 "Email_Format_error" = "E-mail Formatteringfout";
-
-/* No comment provided by engineer. */
 "Email_Format_error_msg" = "Juiste e-mail formaat is in de vorm: iemand@eendomein.com. Probeer het opnieuw!";
-
-/* No comment provided by engineer. */
 "Enter_Network_Information" = "Voer netwerk informatie in";
-
-/* No comment provided by engineer. */
 "enter_new_camera_name" = "Enter new camera name";
-
-/* No comment provided by engineer. */
 "Fahrenheit" = "Fahrenheit";
-
-/* No comment provided by engineer. */
 "Fail_to_communicate_with_camera" = "Mislukt om te communiceren met de camera. Opnieuw proberen?";
-
-/* No comment provided by engineer. */
 "Forgot_Password" = "Wachtwoord vergeten";
-
-/* No comment provided by engineer. */
 "fw_upgrade" = "Een camera firmware %@ is beschikbaar. Druk op OK om nu te upgraden!";
-
-/* No comment provided by engineer. */
 "fw_upgrade_1" = "Camera herstarten...";
-
-/* No comment provided by engineer. */
 "Get_Camera_list_Error" = "Ontvang camera lijst fout";
-
-/* No comment provided by engineer. */
 "Get_Camera_list_Error_msg" = "Server error: Invalid response";
-
-/* No comment provided by engineer. */
 "Get_Camera_list_Error_msg1" = "Server niet bereikbaar";
-
-/* No comment provided by engineer. */
 "Go_to_Camera_list" = "Ga naar camera lijst";
-
-/* No comment provided by engineer. */
 "High_Quality" = "Hoge kwaliteit (VGA)";
-
-/* No comment provided by engineer. */
 "information" = "Informatie";
-
-/* No comment provided by engineer. */
 "information_msg" = "Overal toezicht houdene\nApplicatie versie: %1$@\nFirmware versie:%2$@,\nOveral toezicht houden \@ Alle Rechten Voorbehouden.";
-
-/* No comment provided by engineer. */
 "Invalid_Camera_Name" = "Invalid Camera Name";
-
-/* No comment provided by engineer. */
 "Invalid_Camera_Name_msg" = "Camera Name has to be between 5-30 characters";
-
-/* No comment provided by engineer. */
 "Invalid_Camera_Name_msg2" = "Camera name is invalid. Please enter [0-9],[a-Z], space, dot, hyphen, underscore & single quote only.";
-
-/* No comment provided by engineer. */
 "Invalid_Server_Response" = "Ongeldige server reactie ";
-
-/* No comment provided by engineer. */
 "Level1" = "Niveau 1";
-
-/* No comment provided by engineer. */
 "Level1_" = "Niveau 1 (Laag)";
-
-/* No comment provided by engineer. */
 "Level2" = "Niveau 2";
-
-/* No comment provided by engineer. */
 "Level3" = "Niveau 3";
-
-/* No comment provided by engineer. */
 "Level4" = "Niveau 4";
-
-/* No comment provided by engineer. */
 "Level4_" = "Niveau 4 (hoog)";
-
-/* No comment provided by engineer. */
 "Local_Wifi" = "Van lokaal WiFi";
-
-/* No comment provided by engineer. */
 "Logging_in_to_server" = "Aanmelden bij de server ...";
-
-/* No comment provided by engineer. */
 "Login" = "Inloggen";
-
-/* No comment provided by engineer. */
 "Login_Error" = "Inlog fout";
-
-/* No comment provided by engineer. */
 "Login_Error_msg" = "Serverantwoord ongeldig, probeer het opnieuw!";
-
-/* No comment provided by engineer. */
 "Login_Error_msg2" = "Serverfout: %@";
-
-/* No comment provided by engineer. */
 "Login_Error_msg3" = "Server is niet bereikbaar. Wilt u online toegang tot uw camera's krijgen?";
-
-/* No comment provided by engineer. */
 "Logout" = "Afmelden";
-
-/* No comment provided by engineer. */
 "melody_1" = "Rock a Bye Baby";
-
-/* No comment provided by engineer. */
 "melody_2" = "Slaapliedje en welterusten";
-
-/* No comment provided by engineer. */
 "melody_3" = "Lavendel blauw";
-
-/* No comment provided by engineer. */
 "melody_4" = "Twinkle Twinkle Little Star";
-
-/* No comment provided by engineer. */
 "melody_5" = "Hush Little Baby";
-
-/* No comment provided by engineer. */
 "melody_I" = "melodie 1";
-
-/* No comment provided by engineer. */
 "melody_II" = "melodie 2";
-
-/* No comment provided by engineer. */
 "melody_III" = "melodie 3";
-
-/* No comment provided by engineer. */
 "melody_IV" = "melodie 4";
-
-/* No comment provided by engineer. */
 "melody_V" = "melodie 5";
-
-/* No comment provided by engineer. */
 "Lullaby" = "Slaapliedje";
-
-/* No comment provided by engineer. */
 "network_lost_link" = "Cameraverbinding verbroken door een probleem met de netwerkverbinding. Probeert om opnieuw te verbinden...";
-
-/* No comment provided by engineer. */
 "New_Name" = "Nieuwe naam";
-
-/* No comment provided by engineer. */
 "Next" = "Volgende";
-
-/* No comment provided by engineer. */
 "No" = "Nee";
-
-/* No comment provided by engineer. */
 "Normal_Quality" = "Normale kwaliteit (QVGA)";
-
-/* No comment provided by engineer. */
 "Not_Available" = "Niet beschikbaar";
-
-/* No comment provided by engineer. */
 "Not_supported" = "Niet ondersteund";
-
-/* No comment provided by engineer. */
 "Ok" = "Ok";
-
-/* No comment provided by engineer. */
 "quickview_lost_link" = "Netwerk heeft de link verloren. Controleer de telefoon, camera en Wifi router of verplaats het dichter bij de router";
-
-/* No comment provided by engineer. */
 "Registration_Error" = "Registratiefout";
-
-/* No comment provided by engineer. */
 "Registration_Error_1" = "BMS server is onbereikbaar. Gelieve naar de WIFI instelling te gaan om ervoor te zorgen dat uw iOS-apparaat is aangesloten op de router/het 3G netwerk";
-
-/* No comment provided by engineer. */
 "Remote_Camera" = "Remote camera";
-
-/* No comment provided by engineer. */
 "Remote_View_Error" = "Remote weergavefout";
-
-/* No comment provided by engineer. */
 "Remote_View_Error_msg" = "Initialiseren van verbinding op afstand is mislukt, probeer het opnieuw";
-
-/* No comment provided by engineer. */
 "remove_one_cam" = "Gelieve eerst een camera uit de huidige lijst te verwijderen voordat u de nieuwe nieuwe toevoegt";
-
-/* No comment provided by engineer. */
 "Reset_Password_Error" = "Wachtwoord herstelfout";
-
-/* No comment provided by engineer. */
 "Retry" = "Opnieuw proberen";
-
-/* No comment provided by engineer. */
 "Security" = "Veiligheid";
-
-/* No comment provided by engineer. */
 "Server_error_" = "Serverfout: %@";
-
-/* No comment provided by engineer. */
 "Server_error_1" = "Server is niet bereikbaar. Probeer het later opnieuw.";
-
-/* No comment provided by engineer. */
 "Settings" = "Instellingen";
-
-/* No comment provided by engineer. */
 "Setup_Complete" = "Installatie voltooid";
-
-/* No comment provided by engineer. */
 "Sound_detected" = "Geluid gedetecteerd";
-
-/* No comment provided by engineer. */
 "Streamer_stopped" = "Streamer gestopt";
-
-/* No comment provided by engineer. */
 "Switch_On_Camera" = "Schakel camera aan";
-
-/* No comment provided by engineer. */
 "Temperature_too_high" = "Temperatuur te hoog";
-
-/* No comment provided by engineer. */
 "Temperature_too_low" = "Temperatuur te laag";
-
-/* No comment provided by engineer. */
 "Time_out" = "Time-out";
-
-/* No comment provided by engineer. */
 "Time_out_msg" = "De video is gedurende ongeveer 5 minuten bekeken. Wilt u doorgaan?";
-
-/* No comment provided by engineer. */
 "udt_relay_connect" = "Verbinden doormiddel van relays... een moment geduld...";
-
-/* No comment provided by engineer. */
 "Unable_to_rename_this_camera" = "Kan deze camera niet hernoemen. Log in en probeer het opnieuw";
-
-/* No comment provided by engineer. */
 "version" = "Versie %@";
-
-/* No comment provided by engineer. */
 "video_rec_not_supported" = "Video-opname wordt niet ondersteund, wordt snel verwacht";
-
-/* No comment provided by engineer. */
 "wifi_not_available" = "Mobile data is ingeschakeld. Als u verder gaan met verbinden kan het zijn dat uw provider kosten in rekening brengt. Wilt u verder gaan?";
-
-/* No comment provided by engineer. */
 "Yes" = "Ja";
-
-/* No comment provided by engineer. */
 "Yes_n" = "Yes and don't ask again";
-
 "Camera Name:" = "Camera Naam:";
-
 "Camera Volume:" = "Camera Volume:";
-
 "Camera Brightness:" = "Camera Helderheid:";
-
 "Sound Sensitivity Settings:" = "Geluidssensitiviteit Instellingen:";
-
 "Temperature Unit:" = "Temperatuureenheid:";
-
 "Video Quality:" = "Videokwaliteit:";
-
 "Remove this camera" = "Verwijder deze camera";
-
 "Information" = "Informatie";
-
 "Initialize" = "INITIALIZING...";
-/* No comment provided by engineer. */
 "Confirm_Pass_Fail" = "Wachtwoord komt niet overeen, vul het opnieuw in!";

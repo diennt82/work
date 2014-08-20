@@ -1,467 +1,159 @@
-/* 
-  Localizable.strings
-  MBP_ios
+/*
+ Localizable.strings
+ Copyright (c) 2013 Hubble Connected Ltd. All rights reserved.
+ */
 
-  Created by nxcomm on 13/03/13.
-  Copyright (c) 2013 Hubble Connected Ltd. All rights reserved.
-*/
-
-/* No comment provided by engineer. */
 "Account" = "Konto";
-
-/* No comment provided by engineer. */
 "Account_" = "Konto";
-
-/* No comment provided by engineer. */
 "Account_Created" = "Konto skapat";
-
-/* No comment provided by engineer. */
 "Add_Camera_Failed" = "Det misslyckades att lägga till kamera";
-
-/* No comment provided by engineer. */
 "AddCam_Error" = "Lägg till Kam fel";
-
-/* No comment provided by engineer. */
 "addcam_error_1" = "Enheten kan inte ansluta till servern. Kontrollera WIFI och internetanslutning";
-
-/* No comment provided by engineer. */
 "Baby_Monitor_Setup" = "Monitor inställning";
-
-/* No comment provided by engineer. */
 "Back" = "Tillbaka";
-
-/* No comment provided by engineer. */
 "bms_error_404" = "Servern är tillfälligt inte tillgänglig";
-
-/* No comment provided by engineer. */
 "bms_error_601" = "Felaktigt kommando lämnat. Kontrollera förfrågan.";
-
-/* No comment provided by engineer. */
 "bms_error_602" = "Erforderlig(a)  parameter(rar) saknas.";
-
-/* No comment provided by engineer. */
 "bms_error_603" = "Längden på parametern ligger utanför de förväntade gränserna.";
-
-/* No comment provided by engineer. */
 "bms_error_611" = "Kameran finns inte.";
-
-/* No comment provided by engineer. */
 "bms_error_612" = "Can't start video stream due to camera port is inaccessible. Monitor is re-acquiring the port. Try again after 1 to 2 minutes. (612)";
-
-/* No comment provided by engineer. */
 "bms_error_613" = "Kan inte kommunicera med kameran.";
-
-/* No comment provided by engineer. */
 "bms_error_614" = "Kameran är inte klar för direktuppspelning";
-
-/* No comment provided by engineer. */
 "bms_error_621" = "E-post-Id är inte registrerat.";
-
-/* No comment provided by engineer. */
 "bms_error_622" = "E-post-Id är registrerat men inte aktiverat.";
-
-/* No comment provided by engineer. */
 "bms_error_623" = "E-post-Id har redan aktiverats.";
-
-/* No comment provided by engineer. */
 "bms_error_624" = "Aktiveringen misslyckades. Antingen är inte användaren registrerad eller också har aktiveringstiden gått ut. Registrera dig igen.";
-
-/* No comment provided by engineer. */
 "bms_error_625" = "Aktiveringen misslyckades. Felaktig aktiveringsnyckel.";
-
-/* No comment provided by engineer. */
 "bms_error_626" = "Verifiering misslyckades, antingen är e-post-Id eller -lösenord felaktigt.";
-
-/* No comment provided by engineer. */
 "bms_error_627" = "Kameran är inte associerad med någon användare (e-post-id).";
-
-/* No comment provided by engineer. */
 "bms_error_628" = "E-posten är redan registrerad";
-
-/* No comment provided by engineer. */
 "bms_error_636" = "Användarnamnet är redan registrerat";
-
-/* No comment provided by engineer. */
 "bms_error_699" = "Ohanterbart undantag uppstod, kontakta administratören.";
-
-/* No comment provided by engineer. */
 "bms_error_unknown" = "Okänt fel - %d";
-
-/* No comment provided by engineer. */
 "cam_menu_err_1" = "Kameran kan inte nås";
-
-/* No comment provided by engineer. */
 "cam_menu_err_2" = "Kan inte döpa om den här kameran. Logga in och försök igen";
-
-/* No comment provided by engineer. */
 "cam_menu_err_3" = "Kameranamnet kan vara tomt, var god försök igen";
-
-/* No comment provided by engineer. */
 "cam_menu_err_4" = "Kamera namnet kan inte tas bort, var god logga in";
-
-/* No comment provided by engineer. */
 "cam_menu_err_5" = "Det misslyckades att ändra kameranamn. Försök igen senare";
-
-/* No comment provided by engineer. */
 "cam_rem_msg" = "Bekräfta att du vill ta bort den här kameran från ditt konto. Den här åtgärden kommer även att koppla om din kamera till standardinställningarna. Du måste lägga till kameran i ditt konto igen för att kunna använda den.";
-
-/* No comment provided by engineer. */
 "cam_rem_msg1" = "Bekräfta att du vill ta bort den här kameran från ditt konto. Kameran är inte tillgänglig just nu, den kommer inte att kopplas om till direkt mod Se FAQ för att återställa den manuellt.";
-
-/* No comment provided by engineer. */
 "Camera_Configured" = "Camera Configured";
-
-/* No comment provided by engineer. */
 "Camera_Detected" = "Camera Detected";
-
-/* No comment provided by engineer. */
 "Camera_fw_upgrade" = "Kamera programvaruuppgradering";
-
-/* No comment provided by engineer. */
 "Camera_name_cant_be_empty" = "Kameranamnet kan vara tomt, var god försök igen";
-
-/* No comment provided by engineer. */
 "Cameras_" = "Kameror";
-
-/* No comment provided by engineer. */
 "Cancel" = "Annullera";
-
-/* No comment provided by engineer. */
 "Cancel_" = "Annullera";
-
-/* No comment provided by engineer. */
 "cant_start_stream" = "Kan inte starta videouppspelning, monitorn är upptagen, försök igen senare.";
-
-/* No comment provided by engineer. */
 "cant_start_stream2" = "Serverförfrågan timeout, försök igen senare";
-
-/* No comment provided by engineer. */
 "cant_start_stream_01" = "The session key on camera is mis-matched. Please reset the camera and add the camera again.(%d)";
-
-/* No comment provided by engineer. */
 "Celsius" = "Celsius";
-
-/* No comment provided by engineer. */
 "Change_Camera_Name" = "Ändra kameranamn";
-
-/* No comment provided by engineer. */
 "comm_with_camera_timeout" = "Kommunikationen med kameran har timeout.";
-
-/* No comment provided by engineer. */
 "comm_with_camera_timeout_msg" = "Var god försök igen.";
-
-/* No comment provided by engineer. */
 "Configure_Camera" = "Konfigurera kameran";
-
-/* No comment provided by engineer. */
 "Confirm_remove_cam_local" = "Bekräfta att du vill ta bort den här kameran från ditt konto. Den här åtgärden kommer även att återställa kameran till inställningsmod.";
-
-/* No comment provided by engineer. */
 "Confirm_remove_cam_remote" = "Bekräfta att du vill ta bort den här kameran från ditt konto. Kameran är inte tillgänglig just nu, den kommer inte att kopplas om till direkt mod Se FAQ för att återställa den manuellt.";
-
-/* No comment provided by engineer. */
 "Connecting_to_server" = "Ansluter till servern... ";
-
-/* No comment provided by engineer. */
 "Create_Account" = "Skapa konto";
-
-/* No comment provided by engineer. */
 "Create_Account_Failed" = "Det misslyckades att skapa konto";
-
-/* No comment provided by engineer. */
 "Create_Account_Failed_msg" = "User name has to be between 5-20 characters";
-
-/* No comment provided by engineer. */
 "Create_Account_Failed_msg1" = "Password has to be between 8-12 characters";
-
-/* No comment provided by engineer. */
 "Create_Account_Failed_msg2" = "Lösenordet stämmer inte";
-
-/* No comment provided by engineer. */
 "Create_Account_Failed_msg3" = "Felaktig e-post. E-postadressen skall vara i formen namn@var.com";
-
-/* No comment provided by engineer. */
 "Create_Account_Failed_msg4" = "Välj ett Wifi-nätverk att ansluta till";
-
-/* No comment provided by engineer. */
 "Create_Account_Failed_msg5" = "Användarnamn får inte innehålla specialtecken förutom - _ och.";
-
-/* No comment provided by engineer. */
 "Detect_Camera" = "Upptäck kamera";
-
-/* No comment provided by engineer. */
 "Done" = "Klar";
-
-/* No comment provided by engineer. */
 "Edit_" = "Redigera";
-
-/* No comment provided by engineer. */
 "Email_Format_error" = "Email Format error";
-
-/* No comment provided by engineer. */
 "Email_Format_error_msg" = "Korrekt e-postformat är i formen: någon@någondomain.com. Var god försök igen!";
-
-/* No comment provided by engineer. */
 "Enter_Network_Information" = "Mata in nätverksinformation";
-
-/* No comment provided by engineer. */
 "enter_new_camera_name" = "Enter new camera name";
-
-/* No comment provided by engineer. */
 "Fahrenheit" = "Fahrenheit";
-
-/* No comment provided by engineer. */
 "Fail_to_communicate_with_camera" = "Det misslyckades att kommunicera med kameran. Försök igen?";
-
-/* No comment provided by engineer. */
 "Forgot_Password" = "Glömt lösenord";
-
-/* No comment provided by engineer. */
 "fw_upgrade" = "En kameraprogramvara%@ finns tillgänglig. Tryck på OK för att uppgradera nu!";
-
-/* No comment provided by engineer. */
 "fw_upgrade_1" = "Starta om kamera...";
-
-/* No comment provided by engineer. */
 "Get_Camera_list_Error" = "Hämta kamerans fellista";
-
-/* No comment provided by engineer. */
 "Get_Camera_list_Error_msg" = "Server error: Invalid response";
-
-/* No comment provided by engineer. */
 "Get_Camera_list_Error_msg1" = "Servern kan inte nås";
-
-/* No comment provided by engineer. */
 "Go_to_Camera_list" = "Gå till kameralistan";
-
-/* No comment provided by engineer. */
 "High_Quality" = "High Quality (VGA)";
-
-/* No comment provided by engineer. */
 "information" = "Information";
-
-/* No comment provided by engineer. */
 "information_msg" = "Monitor Everywhere\nProgramversion: %1$@\nOperativsystemversion:%2$@,\nMonitoreverywhere \@ Upphovsrättskyddat.";
-
-/* No comment provided by engineer. */
 "Invalid_Camera_Name" = "Invalid Camera Name";
-
-/* No comment provided by engineer. */
 "Invalid_Camera_Name_msg" = "Camera Name has to be between 5-30 characters";
-
-/* No comment provided by engineer. */
 "Invalid_Camera_Name_msg2" = "Camera name is invalid. Please enter [0-9],[a-Z], space, dot, hyphen, underscore & single quote only.";
-
-/* No comment provided by engineer. */
 "Invalid_Server_Response" = "Felaktigt svar från servern";
-
-/* No comment provided by engineer. */
 "Level1" = "Nivå 1";
-
-/* No comment provided by engineer. */
 "Level1_" = "Nivå 1 (låg)";
-
-/* No comment provided by engineer. */
 "Level2" = "Nivå 2";
-
-/* No comment provided by engineer. */
 "Level3" = "Nivå 3";
-
-/* No comment provided by engineer. */
 "Level4" = "Nivå 4";
-
-/* No comment provided by engineer. */
 "Level4_" = "Nivå 4 (hög)";
-
-/* No comment provided by engineer. */
 "Local_Wifi" = "Från lokalt wifi-nätverk";
-
-/* No comment provided by engineer. */
 "Logging_in_to_server" = "Loggar in på server...";
-
-/* No comment provided by engineer. */
 "Login" = "Logga in";
-
-/* No comment provided by engineer. */
 "Login_Error" = "Inloggningsfel";
-
-/* No comment provided by engineer. */
 "Login_Error_msg" = "Felaktigt serversvar, var god försök igen!";
-
-/* No comment provided by engineer. */
 "Login_Error_msg2" = "Serverfel: %@";
-
-/* No comment provided by engineer. */
 "Login_Error_msg3" = "Servern kan inte nås. Vill du ha åtkomst till dina kameror offline?";
-
-/* No comment provided by engineer. */
 "Logout" = "Logga ut";
-
-/* No comment provided by engineer. */
 "melody_1" = "Rock a Bye Baby";
-
-/* No comment provided by engineer. */
 "melody_2" = "Vaggvisa och godnatt";
-
-/* No comment provided by engineer. */
 "melody_3" = "Lavendelblå";
-
-/* No comment provided by engineer. */
 "melody_4" = "Twinkle Twinkle Little Star";
-
-/* No comment provided by engineer. */
 "melody_5" = "Hush Little Baby";
-
-/* No comment provided by engineer. */
 "melody_I" = "melodi 1";
-
-/* No comment provided by engineer. */
 "melody_II" = "melodi 2";
-
-/* No comment provided by engineer. */
 "melody_III" = "melodi 3";
-
-/* No comment provided by engineer. */
 "melody_IV" = "melodi 4";
-
-/* No comment provided by engineer. */
 "melody_V" = "melodi 5";
-
-/* No comment provided by engineer. */
 "Lullaby" = "Vaggvisa";
-
-/* No comment provided by engineer. */
 "network_lost_link" = "Kameran kopplades bort på grund av nätverksanslutningsproblem. Försöker ansluta igen...";
-
-/* No comment provided by engineer. */
 "New_Name" = "Nytt namn";
-
-/* No comment provided by engineer. */
 "Next" = "Nästa";
-
-/* No comment provided by engineer. */
 "No" = "Nej";
-
-/* No comment provided by engineer. */
 "Normal_Quality" = "Normal kvalitet (QVGA)";
-
-/* No comment provided by engineer. */
 "Not_Available" = "Normal kvalitet (QVGA)";
-
-/* No comment provided by engineer. */
 "Not_supported" = "Stöds inte";
-
-/* No comment provided by engineer. */
 "Ok" = "Ok";
-
-/* No comment provided by engineer. */
 "quickview_lost_link" = "Nätverket tappade länken. Kontrollera telefon, kamera och Wifi-router eller flytta närmare till routern";
-
-/* No comment provided by engineer. */
 "Registration_Error" = "Registreringsfel";
-
-/* No comment provided by engineer. */
 "Registration_Error_1" = "BMS-server kan inte nås. Gå till WIFI-inställningar för att säkerställa att iOS-enhet är ansluten till router/3G-nätverk";
-
-/* No comment provided by engineer. */
 "Remote_Camera" = "Fjärrkamera";
-
-/* No comment provided by engineer. */
 "Remote_View_Error" = "Fjärrvisningsfel";
-
-/* No comment provided by engineer. */
 "Remote_View_Error_msg" = "Initiering av fjärranslutning misslyckades, var god försök igen";
-
-/* No comment provided by engineer. */
 "remove_one_cam" = "Ta bort en kamera från den aktuella listan innan du lägger till den nya";
-
-/* No comment provided by engineer. */
 "Reset_Password_Error" = "Återställ lösenordsfel";
-
-/* No comment provided by engineer. */
 "Retry" = "Försök igen";
-
-/* No comment provided by engineer. */
 "Security" = "Säkerhet";
-
-/* No comment provided by engineer. */
 "Server_error_" = "Serverfel: %@";
-
-/* No comment provided by engineer. */
 "Server_error_1" = "Servern kan inte nås. Försök igen senare.";
-
-/* No comment provided by engineer. */
 "Settings" = "Inställningar";
-
-/* No comment provided by engineer. */
 "Setup_Complete" = "Inställning komplett";
-
-/* No comment provided by engineer. */
 "Sound_detected" = "Ljud upptäckt";
-
-/* No comment provided by engineer. */
 "Streamer_stopped" = "Uppspelning stoppad";
-
-/* No comment provided by engineer. */
 "Switch_On_Camera" = "Sätt På kamera";
-
-/* No comment provided by engineer. */
 "Temperature_too_high" = "Temperatur för hög";
-
-/* No comment provided by engineer. */
 "Temperature_too_low" = "Temperatur för låg";
-
-/* No comment provided by engineer. */
 "Time_out" = "Time Out!";
-
-/* No comment provided by engineer. */
 "Time_out_msg" = "Videon har visats under omkring 5 minuter. Vill du fortsätta?";
-
-/* No comment provided by engineer. */
 "udt_relay_connect" = "Ansluter genom vidarekoppling...vänta...";
-
-/* No comment provided by engineer. */
 "Unable_to_rename_this_camera" = "Kan inte döpa om den här kameran. Logga in och försök igen";
-
-/* No comment provided by engineer. */
 "version" = "Version %@";
-
-/* No comment provided by engineer. */
 "video_rec_not_supported" = "Videoinspelning stöds inte, kommer snart";
-
-/* No comment provided by engineer. */
 "wifi_not_available" = "Datamottagning med mobil har aktiverats. Om du fortsätter och ansluter kan du komma att debiteras för uppkopplingstiden. Vill du fortsätta?";
-
-/* No comment provided by engineer. */
 "Yes" = "Ja";
-
-/* No comment provided by engineer. */
 "Yes_n" = "Yes and don't ask again";
-
-/* No comment provided by engineer. */
 "Camera Name:" = "Kameranamn:";
-
-/* No comment provided by engineer. */
 "Camera Volume:" = "Volym:";
-
-/* No comment provided by engineer. */
 "Camera Brightness:" = "Ljusstyrka:";
-
-/* No comment provided by engineer. */
 "Sound Sensitivity Settings:" = "Inställning för ljudkänslighet:";
-
-/* No comment provided by engineer. */
 "Temperature Unit:" = "Temperaturenhet:";
-
-/* No comment provided by engineer. */
 "Video Quality:" = "Bildkvalitet:";
-
-/* No comment provided by engineer. */
 "Remove this camera" = "Ta bort kameran";
-
-/* No comment provided by engineer. */
 "Information" = "Information";
-
 "Initialize" = "INITIALISERAR...";
-/* No comment provided by engineer. */
 "Confirm_Pass_Fail" = "Lösenorden är olika. Skriv in igen.";
