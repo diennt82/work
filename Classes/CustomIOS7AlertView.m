@@ -23,9 +23,6 @@ CGFloat buttonHeight = 0;
 CGFloat buttonSpacerHeight = 0;
 
 @synthesize parentView, containerView, dialogView, buttonView, onButtonTouchUpInside;
-//@synthesize delegate;
-//@synthesize buttonTitles;
-//@synthesize useMotionEffects;
 
 - (id)initWithParentView: (UIView *)_parentView
 {
@@ -45,7 +42,7 @@ CGFloat buttonSpacerHeight = 0;
 
         self.delegate = self;
         self.useMotionEffects = false;
-        self.buttonTitles = @[@"Close"];
+        self.buttonTitles = @[LocStr(@"Close")];
 
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceOrientationDidChange:) name:UIDeviceOrientationDidChangeNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
@@ -132,7 +129,7 @@ CGFloat buttonSpacerHeight = 0;
 // Default button behaviour
 - (void)customIOS7dialogButtonTouchUpInside: (CustomIOS7AlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    NSLog(@"Button Clicked! %d, %d", buttonIndex, [alertView tag]);
+    DLog(@"Button Clicked! %d, %d", buttonIndex, [alertView tag]);
     [self close];
 }
 
