@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5053" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
         <deployment defaultVersion="1792" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
@@ -7,7 +7,12 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="EditCamera_VController">
             <connections>
-                <outlet property="btnContinue" destination="q80-YP-0nl" id="cji-gg-6zg"/>
+                <outlet property="cameraDetectedLabel" destination="S0f-z0-HPA" id="Jcm-X0-ia3"/>
+                <outlet property="cameraNameTextField" destination="7Ke-md-irf" id="dvc-U0-hLE"/>
+                <outlet property="continueButton" destination="q80-YP-0nl" id="lar-8k-wtX"/>
+                <outlet property="instructionLabel" destination="dlA-6D-tyy" id="Gjv-Cf-Ge0"/>
+                <outlet property="pleaseWaitLabel" destination="rAp-IY-cjy" id="FEq-Mq-CJ7"/>
+                <outlet property="searchForWiFiLabel" destination="Uyp-JJ-4sr" id="2Xq-rA-xsT"/>
                 <outlet property="tfCamName" destination="7Ke-md-irf" id="Sbd-jB-8ZH"/>
                 <outlet property="view" destination="3" id="20"/>
                 <outlet property="viewProgress" destination="9wo-Q9-77n" id="IVm-Bw-7Nf"/>

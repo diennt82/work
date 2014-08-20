@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.iPad.XIB" version="3.0" toolsVersion="4514" systemVersion="12F45" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.iPad.XIB" version="3.0" toolsVersion="5056" systemVersion="13E28" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none">
     <dependencies>
-        <deployment defaultVersion="1536" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
+        <deployment defaultVersion="1792" identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="EditCamera_VController">
             <connections>
-                <outlet property="btnContinue" destination="p0K-QE-HUF" id="Vis-4Z-O6l"/>
+                <outlet property="cameraDetectedLabel" destination="C6p-el-4SJ" id="8OW-ZZ-wPw"/>
+                <outlet property="cameraNameTextField" destination="7MO-Cg-cJK" id="gIs-E7-uNG"/>
+                <outlet property="continueButton" destination="p0K-QE-HUF" id="Uan-jb-ond"/>
+                <outlet property="instructionLabel" destination="1tB-0J-a2M" id="Pyf-XI-Cqn"/>
+                <outlet property="pleaseWaitLabel" destination="8Cq-YG-Vog" id="ReB-Jv-sKL"/>
+                <outlet property="searchForWiFiLabel" destination="jnz-Rc-Zum" id="Rhb-tS-fBi"/>
                 <outlet property="tfCamName" destination="7MO-Cg-cJK" id="ejb-FG-mnF"/>
                 <outlet property="view" destination="3" id="9"/>
                 <outlet property="viewProgress" destination="UCb-DM-u6r" id="I6K-xt-58f"/>
