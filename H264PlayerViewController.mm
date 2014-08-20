@@ -2078,7 +2078,7 @@ double _ticks = 0;
                 if (self.selectedChannel.profile.isInLocal)
                 {
 //                    [self showTimelineView];
-                    self.messageStreamingState = @"Camera is not accessible";
+                    self.messageStreamingState = NSLocalizedStringWithDefaultValue(@"camera_is_not_accessible", nil, [NSBundle mainBundle], @"Camera is not accessible", nil);
                 }
                 
                 break;
@@ -3256,14 +3256,14 @@ double _ticks = 0;
                                                               withObject:nil
                                                            waitUntilDone:NO];
                                        
-                                       self.messageStreamingState = @"Low data bandwidth detected. Trying to connect...";
+                                       self.messageStreamingState = NSLocalizedStringWithDefaultValue(@"low_data_bandwidth_detected", nil, [NSBundle mainBundle], @"Low data bandwidth detected. Trying to connect...", nil);
                                    }
                                    else
                                    {
                                        //handle Bad response
                                        NSLog(@"%s ERROR: %@", __FUNCTION__, [responseDict objectForKey:@"message"]);
 #if 1
-                                       self.messageStreamingState = @"Camera is not accessible";
+                                       self.messageStreamingState = NSLocalizedStringWithDefaultValue(@"camera_is_not_accessible", nil, [NSBundle mainBundle], @"Camera is not accessible", nil);
                                        _isShowTextCameraIsNotAccesible = YES;
                                        
                                        dispatch_async(dispatch_get_main_queue(), ^{
@@ -3284,7 +3284,7 @@ double _ticks = 0;
                                else
                                {
                                    NSLog(@"SERVER unreachable (timeout) ");
-                                   self.messageStreamingState = @"Camera is not accessible";
+                                   self.messageStreamingState = NSLocalizedStringWithDefaultValue(@"camera_is_not_accessible", nil, [NSBundle mainBundle], @"Camera is not accessible", nil);
                                    _isShowTextCameraIsNotAccesible = YES;
 #if 1
                                    dispatch_async(dispatch_get_main_queue(), ^{

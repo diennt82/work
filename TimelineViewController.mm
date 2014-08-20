@@ -59,7 +59,7 @@
     self = [super initWithStyle:style];
     if (self) {
         // Custom initialization
-        self.title = @"Timeline";
+        self.title = NSLocalizedStringWithDefaultValue(@"timeline", nil, [NSBundle mainBundle], @"Timeline", nil);
     }
     return self;
 }
@@ -84,7 +84,7 @@
     //could be nul here
     NSLog(@"%@, %@", _camChannel, ((H264PlayerViewController *)_parentVC).selectedChannel);
     
-    self.stringIntelligentMessage = @"Loading...";
+    self.stringIntelligentMessage = NSLocalizedStringWithDefaultValue(@"loading", nil, [NSBundle mainBundle], @"Loading...", nil);
     
     self.is12hr = [[NSUserDefaults standardUserDefaults] boolForKey:IS_12_HR];
     
@@ -185,7 +185,7 @@
         self.isLoading = TRUE;
         self.isEventAlready = FALSE;
         self.events = nil;
-        self.stringIntelligentMessage = @"Loading...";
+        self.stringIntelligentMessage = NSLocalizedStringWithDefaultValue(@"loading", nil, [NSBundle mainBundle], @"Loading...", nil);;
         
         self.eventPage = 1;
         self.shouldLoadMore = YES;
@@ -209,7 +209,7 @@
     
     if (_events && self.events.count == 0 )
     {
-        self.stringIntelligentMessage = @"There is currently no new event";
+        self.stringIntelligentMessage = NSLocalizedStringWithDefaultValue(@"there_is_currently_no_new_event", nil, [NSBundle mainBundle], @"There is currently no new event", nil);
         self.stringCurrentDate = @"";
     }
     else
@@ -218,7 +218,7 @@
         
         if ([self.camChannel.profile isNotAvailable])
         {
-            self.stringIntelligentMessage = @"Monitor is offline";
+            self.stringIntelligentMessage = NSLocalizedStringWithDefaultValue(@"monitor_is_offline", nil, [NSBundle mainBundle], @"Monitor is offline", nil);
             self.stringCurrentDate = @"";
         }
     }
@@ -258,7 +258,7 @@
     
     if (_events && self.events.count == 0 )
     {
-        self.stringIntelligentMessage = @"There is currently no new event";
+        self.stringIntelligentMessage = NSLocalizedStringWithDefaultValue(@"there_is_currently_no_new_event", nil, [NSBundle mainBundle], @"There is currently no new event", nil);
         self.stringCurrentDate = @"";
     }
     else
@@ -267,7 +267,7 @@
         
         if ([self.camChannel.profile isNotAvailable])
         {
-            self.stringIntelligentMessage = @"Monitor is offline";
+            self.stringIntelligentMessage = NSLocalizedStringWithDefaultValue(@"monitor_is_offline", nil, [NSBundle mainBundle], @"Monitor is offline", nil);
             self.stringCurrentDate = @"";
         }
         
@@ -749,7 +749,7 @@
         }
     }
     
-    self.stringIntelligentMessage = [NSString stringWithFormat:@"%@ at %@", self.stringIntelligentMessage, self.camChannel.profile.name];
+    self.stringIntelligentMessage = [NSString stringWithFormat:@"%@ %@ %@", self.stringIntelligentMessage, NSLocalizedStringWithDefaultValue(@"at", nil, [NSBundle mainBundle], @"at", nil), self.camChannel.profile.name];
 }
 
 
@@ -1242,7 +1242,24 @@
         
         //Make the string first-letter-capitalized
         NSString *text = eventInfo.alert_name;
-        NSString *capitalized = [[[text substringToIndex:1] uppercaseString] stringByAppendingString:[text substringFromIndex:1]];
+//        NSString *capitalized = [[[text substringToIndex:1] uppercaseString] stringByAppendingString:[text substringFromIndex:1]];
+        NSString *capitalized = @"";
+        if ([text isEqualToString:@"motion detected"])
+        {
+            capitalized = NSLocalizedStringWithDefaultValue(@"timeline_event_motion_detected", nil, [NSBundle mainBundle], @"Motion detected", nil);
+        }
+        else if ([text isEqualToString:@"sound detected"])
+        {
+            capitalized = NSLocalizedStringWithDefaultValue(@"timeline_event_sound_detected", nil, [NSBundle mainBundle], @"Sound detected", nil);
+        }
+        else if ([text isEqualToString:@"high temperature detected"])
+        {
+            capitalized = NSLocalizedStringWithDefaultValue(@"timeline_event_high_temperature_detected", nil, [NSBundle mainBundle], @"High temperature detected", nil);
+        }
+        else if ([text isEqualToString:@"low temperature detected"])
+        {
+            capitalized = NSLocalizedStringWithDefaultValue(@"timeline_event_low_temperature_detected", nil, [NSBundle mainBundle], @"Low temperature detected", nil);
+        }
         
         cell.eventLabel.text =capitalized;
         

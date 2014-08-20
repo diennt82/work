@@ -62,17 +62,17 @@
     {
         [self.btnSetupWithWifi setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
         [self.btnSetupWithWifi setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
-        self.btnSetupWithWifi.titleLabel.text = NSLocalizedString(@"Setup with WIFI", @"Setup with WIFI");
+        [self.btnSetupWithWifi setTitle:NSLocalizedStringWithDefaultValue(@"Setup with WIFI", nil, [NSBundle mainBundle], @"Setup with WIFI", nil) forState:UIControlStateNormal];
         self.btnSetupWithWifi.hidden = NO;
         
-        self.btnTestCamera.titleLabel.text = NSLocalizedString(@"Re-try setup with Bluetooth", @"Re-try setup with Bluetooth");
+        [self.btnTestCamera setTitle:NSLocalizedStringWithDefaultValue(@"Re-try setup with Bluetooth", nil, [NSBundle mainBundle], @"Re-try setup with Bluetooth", nil) forState:UIControlStateNormal];
         
         //stringModel = @"Mbp83";
     }
     else
     {
         //stringModel = @"Focus66";
-        self.btnTestCamera.titleLabel.text = NSLocalizedString(@"Try Again", @"Try Again");
+        [self.btnTestCamera setTitle:NSLocalizedStringWithDefaultValue(@"Try Again", nil, [NSBundle mainBundle], @"Try Again", nil) forState:UIControlStateNormal];
     }
     
 //   NSString *fwVersion = [[NSUserDefaults standardUserDefaults] stringForKey:FW_VERSION];

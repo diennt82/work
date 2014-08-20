@@ -850,7 +850,7 @@
     NSDateFormatter* df_local = [[NSDateFormatter alloc] init];
     [df_local setTimeZone:[NSTimeZone localTimeZone]];
     df_local.dateFormat = @"hh:mm a, dd-MM-yyyy";
-    mess = [NSString stringWithFormat:@"%@ at %@", alertMess, [df_local stringFromDate:eventDate]];
+    mess = [NSString stringWithFormat:@"%@ %@ %@", alertMess, NSLocalizedStringWithDefaultValue(@"at", nil, [NSBundle mainBundle], @"at", nil), [df_local stringFromDate:eventDate]];
     [df_local release];
     [dateFormater release];
     return mess;

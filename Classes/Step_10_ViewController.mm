@@ -1406,18 +1406,18 @@
                 self.btnContinue.hidden = NO;
                 self.btnCancelFirmware.hidden = NO;
                 
-                NSString *msg1 = @"Firmware upgrade could not be completed.";
+                NSString *msg1 = NSLocalizedStringWithDefaultValue(@"alert_mes_firmware_upgrade_completed", nil, [NSBundle mainBundle], @"Firmware upgrade could not be completed.", nil);
                 
                 if (_fwUpgradeStatus == FIRMWARE_UPGRADE_FAILED)
                 {
-                    msg1 = @"Incorrect Firmware version.";
+                    msg1 = NSLocalizedStringWithDefaultValue(@"alert_mes_incorrect_firmware_version", nil, [NSBundle mainBundle], @"Incorrect Firmware version.", nil);
                 }
                 else if(_fwUpgradeStatus == FIRMWARE_UPGRADE_REBOOT)
                 {
-                    msg1 = @"Camera offline after upgrading.";
+                    msg1 = NSLocalizedStringWithDefaultValue(@"alert_mes_camera_offline_after_upgrading", nil, [NSBundle mainBundle], @"Camera offline after upgrading.", nil);
                 }
                 
-                msg1 = [NSString stringWithFormat:@"%@\n\rPlease manually off and on the camera.", msg1];
+                msg1 = [NSString stringWithFormat:NSLocalizedStringWithDefaultValue(@"alert_mes_please_manually_off_and_on_the_camera", nil, [NSBundle mainBundle], @"%@\n\rPlease manually off and on the camera.", nil), msg1];
                 UILabel *lblTmp = (UILabel *)[_viewFwOtaUpgrading viewWithTag:TAG_VIEW_FW_UPGRADE_MESSAGE];
                 lblTmp.text = msg1;
                 

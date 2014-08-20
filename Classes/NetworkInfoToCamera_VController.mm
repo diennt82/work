@@ -85,19 +85,19 @@
     [self.btnContinue setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
     [self.btnContinue setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
     [self.btnContinue addTarget:self action:@selector(btnContinueTouchUpInsideAction:) forControlEvents:UIControlEventTouchUpInside];
-    [self.btnContinue setTitle:NSLocalizedString(@"continue", @"Continue") forState:UIControlStateNormal];
+    [self.btnContinue setTitle:NSLocalizedStringWithDefaultValue(@"continue", nil, [NSBundle mainBundle], @"Continue", nil) forState:UIControlStateNormal];
     
     self.btnTryAgain = (UIButton *)[_viewError viewWithTag:559];
     [self.btnTryAgain setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
     [self.btnTryAgain setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
     [self.btnTryAgain addTarget:self action:@selector(btnTryAgainTouchUpInsideAction:) forControlEvents:UIControlEventTouchUpInside];
-    [self.btnTryAgain setTitle:NSLocalizedString(@"Re-try setup with Bluetooth", @"Re-try setup with Bluetooth") forState:UIControlStateNormal];
+    [self.btnTryAgain setTitle:NSLocalizedStringWithDefaultValue(@"Re-try setup with Bluetooth", nil, [NSBundle mainBundle], @"Re-try setup with Bluetooth", nil) forState:UIControlStateNormal];
     
     self.btnSetupWithWifi = (UIButton *)[_viewError viewWithTag:BTN_SETUP_WIFI];
     [self.btnSetupWithWifi setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
     [self.btnSetupWithWifi setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
     [self.btnSetupWithWifi addTarget:self action:@selector(btnSetupWithWifiAction:) forControlEvents:UIControlEventTouchUpInside];
-    [self.btnSetupWithWifi setTitle:NSLocalizedString(@"Setup with WIFI", @"Setup with WIFI") forState:UIControlStateNormal];
+    [self.btnSetupWithWifi setTitle: NSLocalizedStringWithDefaultValue(@"Setup with WIFI", nil, [NSBundle mainBundle], @"Setup with WIFI", nil) forState:UIControlStateNormal];
     
     UIImageView *imageView = (UIImageView *)[_viewProgress viewWithTag:595];
     imageView.animationImages =[NSArray arrayWithObjects:
@@ -238,11 +238,9 @@
     [[self.viewError viewWithTag:559] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_NetworkInfoToCamera_button_try_again", nil, [NSBundle mainBundle], @"Try Again", nil)];
     [[self.viewError viewWithTag:599] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_NetworkInfoToCamera_button_continue", nil, [NSBundle mainBundle], @"Continue", nil)];
     
-//    [[self.ssidCell viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_NetworkInfoToCamera_cell_name", nil, [NSBundle mainBundle], @"Name", nil)];
     self.lblNameTitle.text = NSLocalizedStringWithDefaultValue(@"xib_NetworkInfoToCamera_cell_name", nil, [NSBundle mainBundle], @"Name", nil);
 
     [[self.securityCell viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_NetworkInfoToCamera_cell_none", nil, [NSBundle mainBundle], @"None", nil)];
-//    [[self.securityCell viewWithTag:2] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_NetworkInfoToCamera_cell_security", nil, [NSBundle mainBundle], @"Security", nil)];
     self.lblSecurityTitle.text = NSLocalizedStringWithDefaultValue(@"xib_NetworkInfoToCamera_cell_security", nil, [NSBundle mainBundle], @"Security", nil);
     
     [[self.passwordCell viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_NetworkInfoToCamera_cell_router_password", nil, [NSBundle mainBundle], @"Router Password", nil)];

@@ -1111,10 +1111,10 @@
     _timeOut = nil;
     [self resetAllTimer];
     [self.progressView setHidden:YES];
-    NSString * msg_pw_wrong = @"Password input don't correctly, try again";
+    NSString * msg_pw_wrong = NSLocalizedStringWithDefaultValue(@"alert_mes_password_input_not_correctly", nil, [NSBundle mainBundle], @"Password input don't correctly, try again", nil);
     //ERROR condition
     UIAlertView *alertViewPassword = [[UIAlertView alloc]
-                           initWithTitle:@"Confirm Password Failed"
+                           initWithTitle:NSLocalizedStringWithDefaultValue(@"alert_title_confirm_password_failed", nil, [NSBundle mainBundle], @"Confirm Password Failed", nil)
                            message:msg_pw_wrong
                            delegate:self
                            cancelButtonTitle:NSLocalizedStringWithDefaultValue(@"cancel", nil, [NSBundle mainBundle], @"Cancel", nil)
@@ -1184,7 +1184,7 @@
     UIAlertView *alertViewBack = [[UIAlertView alloc]
                           initWithTitle:NSLocalizedStringWithDefaultValue(@"Upgrade_done" ,nil, [NSBundle mainBundle],
                                                                           @"Upgrade Done" , nil)
-                          message:@"Press OK to retry installing the camera."
+                          message:NSLocalizedStringWithDefaultValue(@"alert_mes_retry_installing_the_camera", nil, [NSBundle mainBundle], @"Press OK to retry installing the camera.", nil)
                           delegate:self
                           cancelButtonTitle:NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil)
                           otherButtonTitles:nil];
