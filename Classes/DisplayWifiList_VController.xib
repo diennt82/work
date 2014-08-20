@@ -1,16 +1,27 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5053" systemVersion="12F45" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
-        <deployment defaultVersion="1536" identifier="iOS"/>
+        <deployment defaultVersion="1792" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="DisplayWifiList_VController">
             <connections>
-                <outlet property="btnContinue" destination="F8K-jw-sqC" id="mmF-xT-2iZ"/>
                 <outlet property="cellOtherNetwork" destination="atd-dz-3i4" id="Tak-9Y-y0q"/>
                 <outlet property="cellRefresh" destination="1Py-Td-ydc" id="rPg-6B-6w4"/>
-                <outlet property="mTableView" destination="sAL-RN-NJK" id="SHO-Hp-Kb5"/>
+                <outlet property="continueButton" destination="F8K-jw-sqC" id="NOG-il-EIx"/>
+                <outlet property="detectedWifiNetworkLabel" destination="6es-vv-mQV" id="DRF-1r-v8e"/>
+                <outlet property="mustBePasswordProtectedLabel" destination="3Lz-oA-jLw" id="dwJ-yN-M2s"/>
+                <outlet property="otherNetworkLabel" destination="JB8-2e-5Lh" id="9KB-MB-Sru"/>
+                <outlet property="pleaseWaitLabel" destination="YFz-07-oVe" id="GOe-Xa-QZ9"/>
+                <outlet property="refreshLabel" destination="tJj-B6-ax9" id="a4i-HQ-2z4"/>
+                <outlet property="retryButton" destination="aLG-mM-NZl" id="Ylq-Em-TfG"/>
+                <outlet property="searchingForWifiNetworksLabel" destination="oDK-1U-3pP" id="SCh-7V-UEl"/>
+                <outlet property="selectWifiLabel" destination="fVn-xZ-SOb" id="fVB-or-xfh"/>
+                <outlet property="selectYourOwnNetworkLabel" destination="afy-DX-Kyc" id="moK-CO-Jdf"/>
+                <outlet property="tableView" destination="sAL-RN-NJK" id="4Ep-g8-trq"/>
+                <outlet property="timeoutLabel" destination="U1Y-zy-Kx9" id="wlU-tK-hYg"/>
+                <outlet property="unableToDetectCameraLabel" destination="ZHi-Dc-IAD" id="b2d-de-yNV"/>
                 <outlet property="view" destination="3" id="16"/>
                 <outlet property="viewError" destination="ycG-K6-zpc" id="0rf-wk-72L"/>
                 <outlet property="viewProgress" destination="ttw-sK-TZu" id="nl0-TY-ydR"/>
@@ -34,6 +45,13 @@
                 </label>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select your own trusted network." lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="afy-DX-Kyc">
                     <rect key="frame" x="35" y="151" width="265" height="21"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="16"/>
+                    <color key="textColor" red="0.50196078430000002" green="0.50196078430000002" blue="0.50196078430000002" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="(It must be password protected.)" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="3Lz-oA-jLw">
+                    <rect key="frame" x="35" y="176" width="265" height="21"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="16"/>
                     <color key="textColor" red="0.50196078430000002" green="0.50196078430000002" blue="0.50196078430000002" alpha="1" colorSpace="calibratedRGB"/>
@@ -68,13 +86,6 @@
                         <action selector="btnContinueTouchUpInsideAction:" destination="-1" eventType="touchUpInside" id="tcY-cb-gOk"/>
                     </connections>
                 </button>
-                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="(It must be password protected.)" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="3Lz-oA-jLw">
-                    <rect key="frame" x="35" y="176" width="265" height="21"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="16"/>
-                    <color key="textColor" red="0.50196078430000002" green="0.50196078430000002" blue="0.50196078430000002" alpha="1" colorSpace="calibratedRGB"/>
-                    <nil key="highlightedColor"/>
-                </label>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
