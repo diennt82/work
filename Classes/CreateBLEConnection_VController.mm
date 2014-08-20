@@ -15,6 +15,7 @@
 #import "MBProgressHUD.h"
 #import "define.h"
 #import "Step_02_ViewController.h"
+#import "UIView+Custom.h"
 
 #define BTN_RETRY_TAG       599
 #define BTN_SETUP_WIFI      699
@@ -67,7 +68,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+    [self xibDefaultLocalization];
     self.navigationItem.hidesBackButton = YES;
     
     UIImage *hubbleLogoBack = [UIImage imageNamed:@"Hubble_back_text"];
@@ -82,19 +83,19 @@
     [self.btnConnect setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
     [self.btnConnect setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
     self.btnConnect.enabled = NO;
-    self.btnConnect.titleLabel.text = NSLocalizedString(@"Connect", @"Connect");
+    [self.btnConnect setTitle:NSLocalizedStringWithDefaultValue(@"Connect", nil, [NSBundle mainBundle], @"Connect", nil) forState:UIControlStateNormal];
     
     self.btnRetry = (UIButton *)[_viewError viewWithTag:BTN_RETRY_TAG];
     [self.btnRetry setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
     [self.btnRetry setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
     [self.btnRetry addTarget:self action:@selector(btnRetryTouchUpInsideAction:) forControlEvents:UIControlEventTouchUpInside];
-    self.btnRetry.titleLabel.text = NSLocalizedString(@"Re-try setup with Bluetooth", @"Re-try setup with Bluetooth");
+    [self.btnRetry setTitle:NSLocalizedStringWithDefaultValue(@"Re-try setup with Bluetooth", nil, [NSBundle mainBundle], @"Re-try setup with Bluetooth", nil) forState:UIControlStateNormal];
     
     self.btnSetupWithWifi = (UIButton *)[_viewError viewWithTag:BTN_SETUP_WIFI];
     [self.btnSetupWithWifi setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
     [self.btnSetupWithWifi setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
     [self.btnSetupWithWifi addTarget:self action:@selector(btnSetupWithWifiAction:) forControlEvents:UIControlEventTouchUpInside];
-    self.btnSetupWithWifi.titleLabel.text = NSLocalizedString(@"Setup with WIFI", @"Setup with WIFI");
+    [self.btnSetupWithWifi setTitle:NSLocalizedStringWithDefaultValue(@"Setup with WIFI", nil, [NSBundle mainBundle], @"Setup with WIFI", nil) forState:UIControlStateNormal];
     
     self.currentBLEList = [[NSMutableArray alloc] init];
     
@@ -125,6 +126,22 @@
     CAMERA_TAG tag = (CAMERA_TAG)[[userDefaults objectForKey:SET_UP_CAMERA_TAG] intValue];
     UIImage *iconImage = [self convertToCamaraImage:tag];
     [self.cameraIcon setImage:iconImage];
+}
+
+- (void)xibDefaultLocalization
+{
+    [[self.view viewWithTag:10] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_CreateBLEConnection_label_select_camera", nil, [NSBundle mainBundle], @"Select Camera", nil)];
+    [self.btnConnect setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step03_button_yes", nil, [NSBundle mainBundle], @"Yes", nil)];
+    
+    [[self.viewPairNDetecting viewWithTag:10] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_CreateBLEConnection_label_detectint_the_camera", nil, [NSBundle mainBundle], @"Detecting the Camera", nil)];
+    [[self.viewPairNDetecting viewWithTag:11] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_CreateBLEConnection_label_press_and_hold", nil, [NSBundle mainBundle], @"Press and hold the button marked 'PAIR' for 3 seconds ", nil)];
+    [[self.viewPairNDetecting viewWithTag:12] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_CreateBLEConnection_label_this_may_takeup", nil, [NSBundle mainBundle], @"This may take up to a minute", nil)];
+    
+    [[self.viewError viewWithTag:10] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_CreateBLEConnection_label_unable_to_detect_camera", nil, [NSBundle mainBundle], @"Unable to Detect Camera", nil)];
+    [[self.viewError viewWithTag:11] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_CreateBLEConnection_label_timout", nil, [NSBundle mainBundle], @"Timeout", nil)];
+    [[self.viewError viewWithTag:599] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_CreateBLEConnection_button_retry", nil, [NSBundle mainBundle], @"Retry", nil)];
+    
+    [[self.searchAgainCell viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_CreateBLEConnection_cell_search_again", nil, [NSBundle mainBundle], @"Search Again", nil)];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -298,7 +315,7 @@
     else
     {
         MBProgressHUD *hub = [MBProgressHUD showHUDAddedTo:self.view animated:NO];
-        hub.labelText = @"Disconnecting BLE...";
+        hub.labelText = NSLocalizedStringWithDefaultValue(@"hud_disconnecting_BLE", nil, [NSBundle mainBundle], @"Disconnecting BLE...", nil);
         /*
          * -- In State CONNECTED --
          * wait for return from delegate,

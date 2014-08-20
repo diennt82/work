@@ -14,12 +14,14 @@
 #import "MBProgressHUD.h"
 #import "Step_10_ViewController.h"
 #import "PublicDefine.h"
+#import "UIView+Custom.h"
 
 @interface Step_04_ViewController () <UITextFieldDelegate, UIAlertViewDelegate>
 
 @property (retain, nonatomic) IBOutlet UITextField *tfCamName;
 @property (retain, nonatomic) IBOutlet UIButton *btnContinue;
 @property (retain, nonatomic) IBOutlet UIButton *btnSkipWIFISetup;
+@property (assign, nonatomic) IBOutlet UIImageView *lineImageView;
 
 //@property (retain, nonatomic) CustomIOS7AlertView *alertView;
 
@@ -40,6 +42,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self xibDefaultLocalization];
 	// Do any additional setup after loading the view.
     self.navigationItem.hidesBackButton = YES;
     
@@ -71,6 +74,26 @@
     }
     
     self.tfCamName.text = self.cameraName;
+    
+    if (isiPhone4)
+    {
+        self.tfCamName.frame = CGRectOffset(self.tfCamName.frame, 0, -75);
+        self.lineImageView.frame = CGRectOffset(self.lineImageView.frame, 0, -75);
+        self.btnSkipWIFISetup.frame = CGRectOffset(self.btnSkipWIFISetup.frame, 0, -75);
+        self.btnContinue.frame = CGRectOffset(self.btnContinue.frame, 0, -80);
+    }
+}
+
+- (void)xibDefaultLocalization
+{
+    [[self.view viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step04_label_camera_detected", nil, [NSBundle mainBundle], @"Camera Detected", nil)];
+    [[self.view viewWithTag:2] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step04_label_make_your_notifcation", nil, [NSBundle mainBundle], @"Please name the location of your camera. This will help make your notification more relevant.", nil)];
+    
+    [self.tfCamName setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step04_textfield_camname", nil, [NSBundle mainBundle], @"Eg. Living Room, Nursery", nil)];
+    [self.btnContinue setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step04_button_continue", nil, [NSBundle mainBundle], @"Continue", nil)];
+    [self.btnSkipWIFISetup setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step04_button_skip_WIFI_settup", nil, [NSBundle mainBundle], @"Skip WIFI Setup", nil)];
+    
+    [[self.progressView viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step04_textfield_couple_seconds_to_complete", nil, [NSBundle mainBundle], @"This will take a couple seconds to complete. Please wait...", nil)];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -555,7 +578,7 @@
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(20, 85, 200, 41)];// autorelease];
     label.textAlignment = NSTextAlignmentCenter;
     label.numberOfLines = 2;
-    label.text = @"Waiting for configure camera...";
+    label.text = NSLocalizedStringWithDefaultValue(@"waiting_for_configure_camera", nil, [NSBundle mainBundle], @"Waiting for configure camera...", nil);
     [demoView addSubview:label];
     [label release];
     

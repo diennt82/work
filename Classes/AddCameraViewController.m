@@ -78,6 +78,10 @@
         [_delegate sendActionCommand:TRUE];
         self.delegate = nil;
     }];
+    
+    self.titleLabel.text = NSLocalizedStringWithDefaultValue(@"xib_addcamera_label_get_start", nil, [NSBundle mainBundle], @"Get Started", nil);
+    self.desLabel.text = NSLocalizedStringWithDefaultValue(@"xib_addcamera_label_des", nil, [NSBundle mainBundle], @"Please select the camera you would like to install", nil);
+    [self.btnCancel setTitle:NSLocalizedStringWithDefaultValue(@"xib_addcamera_button_cancel", nil, [NSBundle mainBundle], @"Cancel", nil) forState:UIControlStateNormal];
 }
 
 - (IBAction)btnCancelTouchUpInsideAction:(id)sender

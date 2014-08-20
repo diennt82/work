@@ -13,6 +13,7 @@
 {
     int debugEnabledCount;
 }
+
 @property (nonatomic, assign) id parentVC;
 
 @end

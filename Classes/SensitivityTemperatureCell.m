@@ -12,6 +12,7 @@
 #define TEMP_HIGH_MAX 40
 
 #import "SensitivityTemperatureCell.h"
+#import "UIView+Custom.h"
 
 @interface SensitivityTemperatureCell()
 
@@ -59,6 +60,8 @@
 
 - (void)drawRect:(CGRect)rect
 {
+    [self xibDefaultLocalization];
+    
     [self.btnTypeTemperature setImage:[UIImage imageNamed:@"settings_temp_c"] forState:UIControlStateNormal];
     [self.btnTypeTemperature setImage:[UIImage imageNamed:@"settings_temp_f"] forState:UIControlStateSelected];
     [self.btnTypeTemperature setImage:[UIImage imageNamed:@"settings_temp_f"] forState:UIControlStateHighlighted];
@@ -124,8 +127,14 @@
         [self.imgViewRight setBackgroundColor:COLOR_RGB(255.0,(33-tempValueInCel)*20,(33-tempValueInCel)*10)];
     }else{
         [self.imgViewRight setBackgroundColor:[UIColor lightGrayColor]];
-    }    
+    }
+}
 
+- (void)xibDefaultLocalization
+{
+    [[self viewWithTag:101] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_camerasettings_cell_label_temperature", nil, [NSBundle mainBundle], @"Temperature", nil)];
+    [[self viewWithTag:102] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_camerasettings_cell_label_low", nil, [NSBundle mainBundle], @"Low", nil)];
+    [[self viewWithTag:103] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_camerasettings_cell_label_high", nil, [NSBundle mainBundle], @"High", nil)];
 }
 
 - (IBAction)btnTypeTempTouchUpInsideAction:(UIButton *)sender

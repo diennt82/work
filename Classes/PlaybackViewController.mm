@@ -17,6 +17,7 @@
 #import "TimelineDatabase.h"
 #import "MBProgressHUD.h"
 #import "MBP_iosAppDelegate.h"
+#import "UIView+Custom.h"
 
 #define START 0
 #define END   100.0
@@ -32,6 +33,7 @@
 @property (nonatomic) double timeStarting;
 @property (nonatomic, assign) NSTimer *timerWatcher;
 @property (nonatomic) BOOL isSeekBackward;
+@property (nonatomic, assign) IBOutlet UILabel  *lblDelete;
 @end
 
 @implementation PlaybackViewController
@@ -62,6 +64,7 @@
                                     options:nil];
     }
     
+    [self.lblDelete setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_Playback_label_delete", nil, [NSBundle mainBundle], @"Delete", nil)];
     [self applyFont];
     [self.view addSubview:_ib_myOverlay];
     self.ib_myOverlay.hidden = YES;
@@ -86,6 +89,7 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationNone];
     [self.navigationController.navigationBar setHidden:YES];
     //Here is show indicator

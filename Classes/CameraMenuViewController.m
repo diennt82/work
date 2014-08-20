@@ -20,7 +20,7 @@
 #import "UIActionSheet+Blocks.h"
 #import "PublicDefine.h"
 #import "UIImageView+WebCache.h"
-
+#import "UIView+Custom.h"
 
 
 #define ALERT_REMOVE_CAM        5
@@ -82,6 +82,7 @@ typedef enum _WAIT_FOR_UPDATING {
 @property (nonatomic) WAIT_FOR_UPDATING shoulfWaitForUpdatingType;
 @property (nonatomic) BOOL backGroundUpdateExecuting;
 @property (retain, nonatomic) SensitivityTemperatureCell *sensitivityTemperatureCell;
+@property (nonatomic) BOOL isNewDeviceSettingsCommand;
 
 @end
 
@@ -92,7 +93,7 @@ typedef enum _WAIT_FOR_UPDATING {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
-        self.title = @"Camera Settings";
+        self.title = NSLocalizedStringWithDefaultValue(@"camera_settings", nil, [NSBundle mainBundle], @"Camera Settings", nil);
     }
     return self;
 }
@@ -108,9 +109,9 @@ typedef enum _WAIT_FOR_UPDATING {
     self.tableViewSettings.delegate = self;
     self.tableViewSettings.dataSource = self;
     
-    [self.btnRmoveCamera setBackgroundImage:[UIImage imageNamed:@"remove_camera"]
+    [self.btnRmoveCamera setBackgroundImage:[UIImage imageNamed:@"enter"]
                                    forState:UIControlStateNormal];
-    [self.btnRmoveCamera setBackgroundImage:[UIImage imageNamed:@"remove_camera_pressed"]
+    [self.btnRmoveCamera setBackgroundImage:[UIImage imageNamed:@"enter_pressed"]
                                    forState:UIControlEventTouchDown];
     
     self.stringFW_Version = NSLocalizedStringWithDefaultValue(@"firmware_version", nil, [NSBundle mainBundle],
@@ -151,14 +152,21 @@ typedef enum _WAIT_FOR_UPDATING {
     vwSnapshot.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     vwSnapshot.hidden = YES;
     [self.view addSubview:vwSnapshot];
-    
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [self xibDefaultLocalization];
     self.navigationController.navigationBarHidden = NO;
     [self.navigationController.view setUserInteractionEnabled:YES];
+}
+
+- (void)xibDefaultLocalization
+{
+    [self.btnRmoveCamera setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_cameramenu_button_text_cameramenu", nil, [NSBundle mainBundle], @"Remove Camera", nil)];
+    [[self.vwHeaderCamDetail viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_cameramenu_label_camdetail", nil, [NSBundle mainBundle], @"Camera Detail", nil)];
+    [[self.vwHeaderNotSens viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_cameramenu_label_sensity", nil, [NSBundle mainBundle], @"Notification Sensity", nil)];
 }
 
 - (void)didReceiveMemoryWarning
@@ -230,10 +238,10 @@ typedef enum _WAIT_FOR_UPDATING {
 
 - (void) showDialog:(int) dialogType
 {
-    NSString * title = @"Camera";
+    NSString * title = NSLocalizedStringWithDefaultValue(@"alert_title_camera", nil, [NSBundle mainBundle], @"Camera", nil);
     NSString * ok = NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil);
     NSString * cancel = NSLocalizedStringWithDefaultValue(@"cancel", nil, [NSBundle mainBundle], @"Cancel", nil);
-    NSString * msg = @"Message";
+    NSString * msg = NSLocalizedStringWithDefaultValue(@"alert_mess_message", nil, [NSBundle mainBundle], @"Message", nil);
     id alertDelegate = self;
     
 	switch (dialogType) {
@@ -241,7 +249,7 @@ typedef enum _WAIT_FOR_UPDATING {
 		case ALERT_REMOVE_CAM:
 		{
 			BOOL deviceInLocal = _camChannel.profile.isInLocal;
-            title = @"Remove Camera";
+            title = NSLocalizedStringWithDefaultValue(@"alert_title_remove_camera", nil, [NSBundle mainBundle], @"Remove Camera", nil);
             
             if (deviceInLocal)
             {
@@ -258,8 +266,8 @@ typedef enum _WAIT_FOR_UPDATING {
             
         case ALERT_RENAME_REPORT:
         {
-            title = @"Rename Camera";
-            msg           = @"Invaldate name";
+            title = NSLocalizedStringWithDefaultValue(@"alert_title_rename_camera", nil, [NSBundle mainBundle], @"Rename Camera", nil);
+            msg           = NSLocalizedStringWithDefaultValue(@"alert_mess_invaldate_name", nil, [NSBundle mainBundle], @"Invaldate name", nil);
             cancel        = nil;
             alertDelegate = nil;
         }
@@ -267,7 +275,7 @@ typedef enum _WAIT_FOR_UPDATING {
             
         case ALERT_RENAME_CANT_EMPTY:
 		{
-            title = @"Rename Camera";
+            title = NSLocalizedStringWithDefaultValue(@"alert_title_rename_camera", nil, [NSBundle mainBundle], @"Rename Camera", nil);
             msg = NSLocalizedStringWithDefaultValue(@"Camera_name_cant_be_empty",nil, [NSBundle mainBundle],
                                                                @"Camera name cant be empty, please try again", nil);
             cancel = nil;
@@ -277,7 +285,7 @@ typedef enum _WAIT_FOR_UPDATING {
             
         case ALERT_RENAME_OUT_LENGTH:
         {
-            title = @"Rename Camera";
+            title = NSLocalizedStringWithDefaultValue(@"alert_title_rename_camera", nil, [NSBundle mainBundle], @"Rename Camera", nil);
             msg = NSLocalizedStringWithDefaultValue(@"Invalid_Camera_Name_msg", nil, [NSBundle mainBundle],
                                                                @"Camera Name has to be between 5-30 characters", nil);
             cancel = nil;
@@ -435,13 +443,31 @@ typedef enum _WAIT_FOR_UPDATING {
     }
     else{
         if(indexPath.section==0 && intTableSectionStatus==1){
-            return 198;
+            return 280;
         }
         else if(indexPath.section==1 && intTableSectionStatus==2){
+#if 1
+            if (indexPath.row == 1) // Sound
+            {
+                return 120;
+            }
+            else if (indexPath.row == 0) // Motion
+            {
+                if (_isNewDeviceSettingsCommand)
+                {
+                    return 190;
+                }
+                else
+                {
+                    return 120;
+                }
+            }
+#else
             if(indexPath.row==0 || indexPath.row==1)
             {
                 return 120;
             }
+#endif
             else{
                 return 227;
             }
@@ -450,185 +476,6 @@ typedef enum _WAIT_FOR_UPDATING {
 
     return 0;
 }
-
-/*- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    cell.backgroundColor = [UIColor colorWithRed:249/255.0 green:249/255.0 blue:249/255.0 alpha:1];
-}*/
-
-/*
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-#if ENABLE_CHANGE_IMAGE
-    if (indexPath.row == 0 ||
-        indexPath.row == 2)
-    {
-        static NSString *CellIdentifier = @"CameraSettingsCell";
-        CameraSettingsCell *cell = [self.tableViewSettings dequeueReusableCellWithIdentifier:CellIdentifier];
-        
-        NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"CameraSettingsCell" owner:nil options:nil];
-        
-        for (id curObj in objects)
-        {
-            
-            if([curObj isKindOfClass:[UITableViewCell class]])
-            {
-                cell = (CameraSettingsCell *)curObj;
-                break;
-            }
-        }
-        
-        if (indexPath.row == 0)
-        {
-            if (self.camChannel.profile.name.length > 10)
-            {
-                cell.valueLabel.frame = CGRectMake(cell.valueLabel.frame.origin.x, cell.valueLabel.frame.origin.y, cell.valueLabel.frame.size.width, cell.valueLabel.frame.size.height * 2);
-                cell.nameLabel.frame = CGRectMake(cell.nameLabel.frame.origin.x, cell.valueLabel.center.y - cell.nameLabel.frame.size.height / 2, cell.nameLabel.frame.size.width, cell.nameLabel.frame.size.height);
-            }
-            
-            cell.nameLabel.text = @"Name";
-            cell.valueLabel.text = self.camChannel.profile.name;
-        }
-        else
-        {
-            cell.nameLabel.text = _stringFW_Version;
-            cell.valueLabel.text = self.camChannel.profile.fw_version;
-        }
-        
-        return cell;
-    }
-    else // indexPath.row == 1
-    {
-        static NSString *CellIdentifier = @"Cell";
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        if (cell == nil) {
-            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-        }
-        
-        // Configure the cell...
-        cell.textLabel.text = @"Change Image";
-        cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:17];
-        cell.textLabel.textColor = [UIColor colorWithRed:128/255.0 green:128/255.0 blue:128/255.0 alpha:1];
-        
-        return cell;
-    }
-#else
-    if (indexPath.row == 0 ||
-        indexPath.row == 1)
-    {
-        static NSString *CellIdentifier = @"CameraSettingsCell";
-        CameraSettingsCell *cell = [self.tableViewSettings dequeueReusableCellWithIdentifier:CellIdentifier];
-        
-        NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"CameraSettingsCell" owner:nil options:nil];
-        
-        for (id curObj in objects)
-        {
-            
-            if([curObj isKindOfClass:[UITableViewCell class]])
-            {
-                cell = (CameraSettingsCell *)curObj;
-                break;
-            }
-        }
-        
-        if (indexPath.row == 0)
-        {
-            if (_isChangingName)
-            {
-                static NSString *CellIdentifier = @"Cell";
-                UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-                if (cell == nil) {
-                    cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-                }
-                
-                // Configure the cell...
-                cell.textLabel.text = @"Name";
-                
-                UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc]
-                                                    initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-                // Spacer is a 1x1 transparent png
-                UIImage *spacer = [UIImage imageNamed:@"spacer"];
-                
-                UIGraphicsBeginImageContext(spinner.frame.size);
-                
-                [spacer drawInRect:CGRectMake(0, 0, spinner.frame.size.width, spinner.frame.size.height)];
-                UIImage* resizedSpacer = UIGraphicsGetImageFromCurrentImageContext();
-                
-                UIGraphicsEndImageContext();
-                cell.imageView.image = resizedSpacer;
-                spinner.frame = CGRectMake(UIScreen.mainScreen.bounds.size.width - spinner.frame.size.width - 30, 0, spinner.frame.size.width, spinner.frame.size.height);
-                [cell.imageView addSubview:spinner];
-                [spinner startAnimating];
-                
-                return cell;
-            }
-            else
-            {
-                if (self.camChannel.profile.name.length > 10)
-                {
-                    cell.valueLabel.frame = CGRectMake(cell.valueLabel.frame.origin.x, cell.valueLabel.frame.origin.y, cell.valueLabel.frame.size.width, cell.valueLabel.frame.size.height * 2);
-                    cell.nameLabel.frame = CGRectMake(cell.nameLabel.frame.origin.x, cell.valueLabel.center.y - cell.nameLabel.frame.size.height / 2, cell.nameLabel.frame.size.width, cell.nameLabel.frame.size.height);
-                }
-                
-                cell.nameLabel.text = @"Name";
-                cell.valueLabel.text = self.camChannel.profile.name;
-            }
-        }
-        else
-        {
-            if (_isLoading)
-            {
-                static NSString *CellIdentifier = @"Cell";
-                UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-                if (cell == nil) {
-                    cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-                }
-                
-                // Configure the cell...
-                cell.textLabel.text = _stringFW_Version;
-                
-                UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc]
-                                                    initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-                // Spacer is a 1x1 transparent png
-                UIImage *spacer = [UIImage imageNamed:@"spacer"];
-                
-                UIGraphicsBeginImageContext(spinner.frame.size);
-                
-                [spacer drawInRect:CGRectMake(0, 0, spinner.frame.size.width, spinner.frame.size.height)];
-                UIImage* resizedSpacer = UIGraphicsGetImageFromCurrentImageContext();
-                
-                UIGraphicsEndImageContext();
-                cell.imageView.image = resizedSpacer;
-                spinner.frame = CGRectMake(UIScreen.mainScreen.bounds.size.width - spinner.frame.size.width - 30, 0, spinner.frame.size.width, spinner.frame.size.height);
-                [cell.imageView addSubview:spinner];
-                [spinner startAnimating];
-                
-                return cell;
-            }
-            else
-            {
-                cell.nameLabel.text = _stringFW_Version;
-                cell.valueLabel.text = self.camChannel.profile.fw_version;
-            }
-        }
-        
-        return cell;
-    }
-    else
-    {
-        static NSString *CellIdentifier = @"Cell";
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        if (cell == nil) {
-            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-        }
-        
-        // Configure the cell...
-        
-        return cell;
-    }
-#endif
-}
- */
 
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -641,12 +488,14 @@ typedef enum _WAIT_FOR_UPDATING {
             camDetCell = [[[CameraDetailCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier] autorelease];
             [camDetCell.btnChangeImage addTarget:self action:@selector(btnChangeCameraIcon) forControlEvents:UIControlEventTouchUpInside];
             [camDetCell.btnChangeName addTarget:self action:@selector(btnChangeCameraName) forControlEvents:UIControlEventTouchUpInside];
+            [camDetCell.btnRemoveCamera addTarget:self action:@selector(btnRemoveCameraTouchUpInsideAction:) forControlEvents:UIControlEventTouchUpInside];
             
             camDetCell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         
         camDetCell.lblCameraName.text = self.camChannel.profile.name;
         camDetCell.lblCamVer.text = self.camChannel.profile.fw_version;
+        camDetCell.lblCamModel.text = [self.camChannel.profile getModel];
         return camDetCell;
 
     }
@@ -678,7 +527,8 @@ typedef enum _WAIT_FOR_UPDATING {
                 cell.nameLabel.text = NSLocalizedStringWithDefaultValue(@"motion", nil, [NSBundle mainBundle], @"Motion", nil);
                 cell.switchValue   = _sensitivityInfo.motionOn;
                 cell.settingsValue = _sensitivityInfo.motionValue;
-
+                cell.recordingValue = _sensitivityInfo.motionVideoRecordingOn;
+                cell.captureSnapshotValue = _sensitivityInfo.motionCaptureSnapshotOn;
             }
             else
             {
@@ -951,7 +801,7 @@ typedef enum _WAIT_FOR_UPDATING {
     self.navigationController.view.userInteractionEnabled = YES;
     
     [[[[UIAlertView alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"alert_title_remove_camera", nil, [NSBundle mainBundle], @"Remove Camera", nil)
-                                 message:NSLocalizedString(@"Server_error_1", @"")
+                                 message:NSLocalizedStringWithDefaultValue(@"Server_error_1", nil, [NSBundle mainBundle], @"Server is unreachable. Please try again later.", nil)
                                 delegate:nil
                        cancelButtonTitle:nil
                        otherButtonTitles:NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil),
@@ -1097,6 +947,22 @@ typedef enum _WAIT_FOR_UPDATING {
     [self performSelectorInBackground:@selector(sendToServerTheCommand:) withObject:cmd];
 }
 
+- (void)reportChangedAdditionalOptionsValue:(NSArray *)values atRow:(NSInteger)rowIdx
+{
+    [self showUpdatingProgressHUD];
+    NSString *cmd = @"action=command&command=";
+    
+    if (rowIdx == 0) // Motion
+    {
+        cmd = [cmd stringByAppendingFormat:@"set_recording_parameter&value=%d%d", [values[0] integerValue], 1];
+        
+        self.sensitivityInfo.motionVideoRecordingOn = [values[0] boolValue];
+        self.sensitivityInfo.motionCaptureSnapshotOn = TRUE;//[values[1] boolValue];
+        
+        [self performSelectorInBackground:@selector(sendToServerTheCommand:) withObject:cmd];
+    }
+}
+
 #pragma  mark - Sensitivity temperature cell delegate
 
 - (void)valueChangedTypeTemperaure:(BOOL)isFahrenheit // NOT need to receive
@@ -1159,7 +1025,7 @@ typedef enum _WAIT_FOR_UPDATING {
     //NSLog(@"SettingsVC - sendCommand: %@, response: %@", command, responseDict);
     
     NSInteger errorCode = -1;
-    NSString *errorMessage = @"Update failed";
+    NSString *errorMessage = NSLocalizedStringWithDefaultValue(@"hud_update_failed", nil, [NSBundle mainBundle], @"Update failed", nil);
     
     if (responseDict)
     {
@@ -1224,15 +1090,15 @@ typedef enum _WAIT_FOR_UPDATING {
     
     if (_alertViewRename == nil)
     {
-        self.alertViewRename = [[UIAlertView alloc] initWithTitle:@"Change Camera Name"
-                                                          message:@"Enter the new camera name."
+        self.alertViewRename = [[UIAlertView alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"alert_title_change_camera_name", nil, [NSBundle mainBundle], @"Change Camera Name", nil)
+                                                          message:NSLocalizedStringWithDefaultValue(@"alert_mess_enter_camera_name", nil, [NSBundle mainBundle], @"Enter the new camera name.", nil)
                                                          delegate:self
                                                 cancelButtonTitle:NSLocalizedStringWithDefaultValue(@"cancel", nil, [NSBundle mainBundle], @"Cancel", nil)
                                                 otherButtonTitles:NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil), nil];
         self.alertViewRename.alertViewStyle = UIAlertViewStylePlainTextInput;
         UITextField *textField = [_alertViewRename textFieldAtIndex:0];
         [textField setText:_cameraName];
-        [textField setPlaceholder:@"Eg. Living Room,Nursery,etc"];
+        [textField setPlaceholder:NSLocalizedStringWithDefaultValue(@"eg_lingving_room_nursery_etc", nil, [NSBundle mainBundle], @"Eg. Living Room, Nursery, etc", nil)];
         self.alertViewRename.tag = ALERT_RENAME_CAMERA;
     }
     
@@ -1243,15 +1109,18 @@ typedef enum _WAIT_FOR_UPDATING {
 {
     NSString *deviceType = [UIDevice currentDevice].model;
     
-    NSArray *arrButtonTitles = @[@"Select image from Photos", [NSString stringWithFormat:@"Take a photo using %@", deviceType], @"Get a live snapshot from camera"];
+    NSString *value1 = NSLocalizedStringWithDefaultValue(@"select_image_from_photos", nil, [NSBundle mainBundle], @"Select image from Photos", nil);
+    NSString *value2 = [NSString stringWithFormat:@"%@ %@", NSLocalizedStringWithDefaultValue(@"take_a_photo_using", nil, [NSBundle mainBundle], @"Take a photo using", nil), deviceType];
+    NSString *value3 = NSLocalizedStringWithDefaultValue(@"get_a_live_snapshot_from_camera", nil, [NSBundle mainBundle], @"Get a live snapshot from camera", nil);
+    NSArray *arrButtonTitles = @[value1, value2, value3];
     
     if ([self.camChannel.profile isNotAvailable])
     {
-        arrButtonTitles = @[@"Select image from Photos", [NSString stringWithFormat:@"Take a photo using %@", deviceType]];
+        arrButtonTitles = @[value1, value2];
     }
     
     [UIActionSheet showInView:self.view
-                    withTitle:@"Change Image"
+                    withTitle:NSLocalizedStringWithDefaultValue(@"alert_title_change_image", nil, [NSBundle mainBundle], @"Change Image", nil)
             cancelButtonTitle:NSLocalizedStringWithDefaultValue(@"cancel", nil, [NSBundle mainBundle], @"Cancel", nil)
        destructiveButtonTitle:nil
             otherButtonTitles:arrButtonTitles
@@ -1264,7 +1133,7 @@ typedef enum _WAIT_FOR_UPDATING {
          
          if(buttonIndex==1 && ![UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypeCamera])
          {
-             NSString *msg = [NSString stringWithFormat:@"Your %@ have not camera.", deviceType];
+             NSString *msg = [NSString stringWithFormat:NSLocalizedStringWithDefaultValue(@"alert_mes_your_have_not_camera", nil, [NSBundle mainBundle], @"Your %@ have not camera.", nil), deviceType];
              Alert(nil, msg);
              return;
          }
@@ -1315,11 +1184,11 @@ typedef enum _WAIT_FOR_UPDATING {
 
 -(void)openViewForSetCamera:(UIImage *)image
 {
-    UIActionSheet *as = [[UIActionSheet alloc] initWithTitle:@"Select Picture"
+    UIActionSheet *as = [[UIActionSheet alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"alert_title_select_picture", nil, [NSBundle mainBundle], @"Select Picture", nil)
                                                     delegate:nil
                                            cancelButtonTitle:NSLocalizedStringWithDefaultValue(@"cancel", nil, [NSBundle mainBundle], @"Cancel", nil)
                                       destructiveButtonTitle:nil
-                                           otherButtonTitles:@"Set Picture", nil];
+                                           otherButtonTitles:NSLocalizedStringWithDefaultValue(@"button_set_picture", nil, [NSBundle mainBundle], @"Set Picture", nil), nil];
     as.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
     if(image)
     {
@@ -1513,7 +1382,7 @@ typedef enum _WAIT_FOR_UPDATING {
             {
                 // NSLog(@"-- %@",responseDictDInfo);
                 hud.mode = MBProgressHUDModeText;
-                [hud setLabelText:@"Upload image successfully"];
+                [hud setLabelText:NSLocalizedStringWithDefaultValue(@"hud_upload_image_successfully", nil, [NSBundle mainBundle], @"Upload image successfully", nil)];
                 
                 [self saveCameraSnapshot:image];
             }
@@ -1551,8 +1420,8 @@ typedef enum _WAIT_FOR_UPDATING {
 
 - (void)getSensitivityInfoFromServer
 {
-    //self.selectedReg = [[NSUserDefaults standardUserDefaults] stringForKey:@"REG"];
-    //NSString *apiKey = [[NSUserDefaults standardUserDefaults] stringForKey:@"PortalApiKey"];
+    NSString *cmd = @"action=command&command=camera_parameter_setting";
+    self.isNewDeviceSettingsCommand = TRUE;
     
     if(self.sensitivityInfo==nil){
         SensitivityInfo *senInfo = [[SensitivityInfo alloc] init];
@@ -1566,8 +1435,23 @@ typedef enum _WAIT_FOR_UPDATING {
     }
     
     NSDictionary *responseDict = [_jsonCommBlock sendCommandBlockedWithRegistrationId:self.camChannel.profile.registrationID
-                                                                      andCommand:@"action=command&command=device_setting"
+                                                                      andCommand:cmd
                                                                        andApiKey:_apiKey];
+    NSLog(@"%s responseDict:%@", __func__, responseDict);
+    
+    if (responseDict &&
+        [[responseDict objectForKey:@"status"] integerValue] == 200 &&
+        [[[[responseDict objectForKey: @"data"] objectForKey: @"device_response"] objectForKey: @"body"] isEqualToString:@"NA"])
+    {
+        cmd = @"action=command&command=device_setting";
+        
+        responseDict = [_jsonCommBlock sendCommandBlockedWithRegistrationId:self.camChannel.profile.registrationID
+                                                                 andCommand:cmd
+                                                                  andApiKey:_apiKey];
+        self.isNewDeviceSettingsCommand = FALSE;
+    }
+    
+    NSLog(@"%s responseDict:%@", __func__, responseDict);
     
     self.isLoading = FALSE;
     
@@ -1576,8 +1460,10 @@ typedef enum _WAIT_FOR_UPDATING {
         if ([[responseDict objectForKey:@"status"] integerValue] == 200)
         {
             // "body": "error_in_control_command : 701"
-            // "body:: "device_setting: ms=1,me=70,vs=1,vt=80,hs=0,ls=1,ht=30,lt=18"
+            // "body": "device_setting: ms=1,me=70,vs=1,vt=80,hs=0,ls=1,ht=30,lt=18"
+            // "body": "camera_parameter_setting: ms=1,me=70,vs=1,vt=80,hs=0,ls=1,ht=30,lt=18,mvr=1,cs=1" --> new command.
             NSString *body = [[[responseDict objectForKey: @"data"] objectForKey: @"device_response"] objectForKey: @"body"];
+            //NSString *body = @"camera_parameter_setting: ms=1,me=70,vs=1,vt=80,hs=0,ls=1,ht=30,lt=18,mvr=0,cs=1";
             
             if ([body hasPrefix:@"error"])
             {
@@ -1596,7 +1482,14 @@ typedef enum _WAIT_FOR_UPDATING {
                     
                     for (int i = 0; i < settingsArray.count; ++i)
                     {
-                        settingsArray[i] = [settingsArray[i] substringFromIndex:3];
+                        if (_isNewDeviceSettingsCommand && i == 8)
+                        {
+                            settingsArray[i] = [settingsArray[i] substringFromIndex:4];
+                        }
+                        else
+                        {
+                            settingsArray[i] = [settingsArray[i] substringFromIndex:3];
+                        }
                     }
                     
                     self.sensitivityInfo.motionOn      = [settingsArray[0] integerValue];
@@ -1615,14 +1508,17 @@ typedef enum _WAIT_FOR_UPDATING {
                     
                     self.sensitivityInfo.tempIsFahrenheit = [[NSUserDefaults standardUserDefaults] boolForKey:IS_FAHRENHEIT];
                     NSLog(@"%s, mv:%d, sv:%d", __FUNCTION__, _sensitivityInfo.motionValue, _sensitivityInfo.soundValue);
-                    //numOfRows[indexPath.section] = 4;
-                    //self.isExistSensitivityData = TRUE;
+
+                    if (_isNewDeviceSettingsCommand) {
+                        self.sensitivityInfo.motionVideoRecordingOn = [settingsArray[8] boolValue];
+                        self.sensitivityInfo.motionCaptureSnapshotOn = [settingsArray[9] boolValue];
+                    }
                 }
                 else
                 {
                     //numOfRows[indexPath.section] = 2;
                     intTableSectionStatus = 0;
-                    self.sensitivityMessage = @"Error -Load Sensitivity Settings!";
+                    self.sensitivityMessage = NSLocalizedStringWithDefaultValue(@"hud_error_sensitivity_settings", nil, [NSBundle mainBundle], @"Error -Load Sensitivity Settings!", nil);
                 }
             }
         }
@@ -1630,14 +1526,14 @@ typedef enum _WAIT_FOR_UPDATING {
         {
             //numOfRows[indexPath.section] = 2;
             intTableSectionStatus = 0;
-            self.sensitivityMessage = @"Error -Load Sensitivity Settings error!";
+            self.sensitivityMessage = NSLocalizedStringWithDefaultValue(@"hud_error_sensitivity_settings_error", nil, [NSBundle mainBundle], @"Error -Load Sensitivity Settings error!", nil);
         }
     }
     else
     {
        // numOfRows[indexPath.section] = 2;
         intTableSectionStatus=0;
-        self.sensitivityMessage = @"Error -Load Sensitivity Settings error!";
+        self.sensitivityMessage = NSLocalizedStringWithDefaultValue(@"hud_error_sensitivity_settings_error", nil, [NSBundle mainBundle], @"Error -Load Sensitivity Settings error!", nil);
     }
     
     [MBProgressHUD hideAllHUDsForView:self.view animated:YES];

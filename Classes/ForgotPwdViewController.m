@@ -8,6 +8,7 @@
 
 #import "ForgotPwdViewController.h"
 #import <MonitorCommunication/MonitorCommunication.h>
+#import "UIView+Custom.h"
 
 @interface ForgotPwdViewController ()
 
@@ -61,9 +62,20 @@
     [self.view addSubview:passwordLinkSent];
 }
 
+- (void)xibDefaultLocalization
+{
+    [[self.view viewWithTag:101] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_forgotpassword_label_text_email", nil, [NSBundle mainBundle], @"Please enter your email address so we can send you a secure link to reset your password", nil)];
+    [userEmailTF setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_forgotpassword_textfield_email", nil, [NSBundle mainBundle], @"Email", nil)];
+    [[self.view viewWithTag:102] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_forgotpassword_button_text_resetpassword", nil, [NSBundle mainBundle], @"Reset my password", nil)];
+    
+    [[self.view viewWithTag:201] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_forgotpassword_label_text_linktoreset", nil, [NSBundle mainBundle], @"A link to reset your password has been sent to", nil)];
+    [toEmail setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_forgotpassword_label_text_toemail", nil, [NSBundle mainBundle], @"someone@somewhere.com", nil)];
+}
+
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [self xibDefaultLocalization];
     self.navigationController.navigationBarHidden = NO;
     [userEmailTF becomeFirstResponder];
 }

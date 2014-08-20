@@ -14,6 +14,7 @@
 #import "BLEConnectionManager.h"
 #import "MBP_iosViewController.h"
 #import "define.h"
+#import "UIView+Custom.h"
 
 @interface Step_10_ViewController_ble ()
 
@@ -57,7 +58,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+    [self xibDefaultLocalization];
 #if 1
     //Disconnect BLE
     NSLog(@"%s BLE deletgate:%@", __FUNCTION__, [BLEConnectionManager getInstanceBLE].delegate);
@@ -143,6 +144,22 @@
 #endif
     // 2 of 3. no need to schedule timer here.
     [self wait_for_camera_to_reboot:nil];
+}
+
+- (void)xibDefaultLocalization
+{
+    [[self.view viewWithTag:3] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step10_ble_label_with", nil, [NSBundle mainBundle], @"with", nil)];
+    [[self.view viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step10_ble_textview_signed_up", nil, [NSBundle mainBundle], @"You are signed up as ", nil)];
+    [[self.view viewWithTag:2] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step10_ble_textview_access_camera_any_time", nil, [NSBundle mainBundle], @"You can access your camera any time from this app from home or work. Or on the web at www.monitoreverywhere.com", nil)];
+    [[self.progressView viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step10_ble_label_checking_connection_to_camera", nil, [NSBundle mainBundle], @"Checking connection to camera", nil)];
+    [[self.progressView viewWithTag:695] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step10_ble_label_takeup_a_minute", nil, [NSBundle mainBundle], @"This may take up to a minute", nil)];
+    [[cameraAddedView viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step10_ble_textview_return_here_to_test_camera", nil, [NSBundle mainBundle], @"Once the above step is done, return here to test your camera. ", nil)];
+    [[cameraAddedView viewWithTag:2] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step10_ble_textview_switch_back_to_wifi_network", nil, [NSBundle mainBundle], @"Please switch back to the Wi-Fi network ", nil)];
+    [[cameraAddedView viewWithTag:4] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step10_ble_textview_camera_now_configured", nil, [NSBundle mainBundle], @"Your camera is now configured.", nil)];
+    [[cameraAddedView viewWithTag:6] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step10_ble_textview_select_wifi", nil, [NSBundle mainBundle], @"How to reach Wi-Fi Network? Select settings in iphone home screen and then select Wi-Fi.", nil)];
+    [[cameraAddedView viewWithTag:7] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step10_ble_textview_switch_to_wifi_network", nil, [NSBundle mainBundle], @"Please switch to Wi-Fi network :", nil)];
+    [[cameraAddedView viewWithTag:3] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step10_ble_button_camera_test", nil, [NSBundle mainBundle], @"Camera Test", nil)];
+    [[cameraAddedView viewWithTag:5] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step10_ble_label_home_ssid", nil, [NSBundle mainBundle], @"Home SSID", nil)];
 }
 
 - (void)hubbleItemAction: (id)sender

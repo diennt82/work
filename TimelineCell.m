@@ -8,6 +8,7 @@
 
 #import "TimelineCell.h"
 #import "define.h"
+#import "UIView+Custom.h"
 
 @implementation TimelineCell
 
@@ -16,8 +17,20 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         // Initialization code
+        [self xibDefaultLocalization];
     }
     return self;
+}
+
+- (void)awakeFromNib
+{
+    [super awakeFromNib];
+    [self xibDefaultLocalization];
+}
+
+- (void)xibDefaultLocalization
+{
+    [self.eventLabel setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_timeline_cell_all_is_calm", nil, [NSBundle mainBundle], @"All is calm at home ", nil)];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated

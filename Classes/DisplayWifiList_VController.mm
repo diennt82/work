@@ -13,6 +13,7 @@
 #import "Step_10_ViewController_ble.h"
 #import "MBProgressHUD.h"
 #import "Step_02_ViewController.h"
+#import "UIView+Custom.h"
 
 #define BLE_TIMEOUT_PROCESS 1*60
 #define BTN_RETRY_TAG       599
@@ -74,6 +75,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self xibDefaultLocalization];
 	// Do any additional setup after loading the view.
     self.navigationItem.hidesBackButton = YES;
     
@@ -88,26 +90,26 @@
     
     [self.btnContinue setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
     [self.btnContinue setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
-    self.btnContinue.titleLabel.text = NSLocalizedString(@"continue", @"Continue");
+    [self.btnContinue setTitle:NSLocalizedStringWithDefaultValue(@"continue", nil, [NSBundle mainBundle], @"Continue", nil)forState:UIControlStateNormal];
     self.btnContinue.enabled = NO;
     
     self.btnRetry = (UIButton *)[_viewError viewWithTag:BTN_RETRY_TAG];
     [self.btnRetry setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
     [self.btnRetry setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
-    self.btnRetry.titleLabel.text = NSLocalizedString(@"Re-try setup with Bluetooth", @"Re-try setup with Bluetooth");
+    [self.btnRetry setTitle:NSLocalizedStringWithDefaultValue(@"Re-try setup with Bluetooth", nil, [NSBundle mainBundle], @"Re-try setup with Bluetooth", nil) forState:UIControlStateNormal];
     
     self.btnSetupWithWifi = (UIButton *)[_viewError viewWithTag:BTN_SETUP_WIFI];
     [self.btnSetupWithWifi setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
     [self.btnSetupWithWifi setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
-    self.btnSetupWithWifi.titleLabel.text = NSLocalizedString(@"Setup with WIFI", @"Setup with WIFI");
+    [self.btnSetupWithWifi setTitle:NSLocalizedStringWithDefaultValue(@"skip_wifi_setup", nil, [NSBundle mainBundle], @"Skip WIFI Setup", nil) forState:UIControlStateNormal];
     
     if ([[NSUserDefaults standardUserDefaults] integerForKey:SET_UP_CAMERA] == SETUP_CAMERA_FOCUS73)
     {
         NSString *contTitle = NSLocalizedStringWithDefaultValue(@"continue", nil, [NSBundle mainBundle], @"Continue", nil);
-        self.btnContinue.titleLabel.text = contTitle;
+        [self.btnContinue setTitle:contTitle forState:UIControlStateNormal];
         
         NSString *skipWIFISetup = NSLocalizedStringWithDefaultValue(@"skip_wifi_setup", nil, [NSBundle mainBundle], @"Skip WIFI Setup", nil);
-        self.btnSkipWIFISetup.titleLabel.text = skipWIFISetup;
+        [self.btnSkipWIFISetup setTitle:skipWIFISetup forState:UIControlStateNormal];
         self.btnSkipWIFISetup.hidden = NO;
     }
     
@@ -128,6 +130,29 @@
     [imageView startAnimating];
     
     [self showIndicator];
+}
+
+- (void)xibDefaultLocalization
+{
+    [[self.view viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_DisplayWifiList_label_selected_wifi_network", nil, [NSBundle mainBundle], @"Select Wi-Fi Network to Connect Camera", nil)];
+    [[self.view viewWithTag:2] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_DisplayWifiList_label_select_your_own trusted_network", nil, [NSBundle mainBundle], @"Select your own trusted network.", nil)];
+    [[self.view viewWithTag:3] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_DisplayWifiList_label_password_protected", nil, [NSBundle mainBundle], @"(It must be password protected.)", nil)];
+    [[self.view viewWithTag:4] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_DisplayWifiList_label_detected_wifi_network", nil, [NSBundle mainBundle], @"Detected Wi-Fi Network", nil)];
+    
+    [self.btnSkipWIFISetup setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_DisplayWifiList_button_skip_wifi_settup", nil, [NSBundle mainBundle], @"Skip WIFI Setup", nil)];
+    [self.btnContinue setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_DisplayWifiList_button_continue", nil, [NSBundle mainBundle], @"Continue", nil)];
+    
+    [[self.viewProgress viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_DisplayWifiList_label_search_wifi_network", nil, [NSBundle mainBundle], @"Searching for Wi-Fi Networks", nil)];
+    [[self.viewProgress viewWithTag:2] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_DisplayWifiList_label_please_wait", nil, [NSBundle mainBundle], @"Please wait", nil)];
+    
+    [[self.viewError viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_DisplayWifiList_label_unable_detect_camera", nil, [NSBundle mainBundle], @"Unable to Detect Camera", nil)];
+    [[self.viewError viewWithTag:2] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_DisplayWifiList_label_timeout", nil, [NSBundle mainBundle], @"Timeout", nil)];
+    UIButton *button = (UIButton *)[self.viewError viewWithTag:599];
+    [button setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_DisplayWifiList_button_retry", nil, [NSBundle mainBundle], @"Retry", nil)];
+    
+    [[self.cellOtherNetwork viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_DisplayWifiList_cell_other_network", nil, [NSBundle mainBundle], @"Other Network", nil)];
+    
+    [[self.cellRefresh viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_DisplayWifiList_cell_refresh", nil, [NSBundle mainBundle], @"Refresh", nil)];
 }
 
 -(void) viewWillAppear:(BOOL)animated
@@ -227,7 +252,7 @@
 - (IBAction)btnSkipWIFISetupTouchUpInsideAction:(id)sender
 {
     MBProgressHUD *hub = [MBProgressHUD showHUDAddedTo:self.view animated:NO];
-    hub.labelText = @"Configure camera...";
+    hub.labelText = NSLocalizedStringWithDefaultValue(@"hud_configure_camera", nil, [NSBundle mainBundle], @"Configure camera...", nil);
     
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:HOST_SSID];
     [[NSUserDefaults standardUserDefaults] synchronize];
@@ -355,11 +380,17 @@
 
 - (void)showDialogToConfirm: (NSString *)homeWifi selectedWifi: (NSString *)selectedWifi
 {
-    NSString * msg = [NSString stringWithFormat:@"You have selected wifi %@ which is not the same as your Home wifi, %@. If you choose to continue, there will more steps to setup your camera. Do you want to proceed?", selectedWifi, homeWifi];
+    NSString *wifi = selectedWifi;
+    if ([selectedWifi isEqualToString:@"Other Network"])
+    {
+        wifi = NSLocalizedStringWithDefaultValue(@"xib_DisplayWifiList_cell_other_network", nil, [NSBundle mainBundle], @"Other Network", nil);
+    }
+    NSString * msg = [NSString stringWithFormat:NSLocalizedStringWithDefaultValue(@"alert_mes_dialog_to_confirm_selected_wifi", nil, [NSBundle mainBundle], @"You have selected wifi %@ which is not the same as your Home wifi, %@. If you choose to continue, there will more steps to setup your camera. Do you want to proceed?", nil), wifi, homeWifi];
+    
     NSString *contTitle = NSLocalizedStringWithDefaultValue(@"continue", nil, [NSBundle mainBundle], @"Continue", nil);
     NSString *cancelString = NSLocalizedStringWithDefaultValue(@"cancel", nil, [NSBundle mainBundle], @"Cancel", nil);
     
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Notice"
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"notice", nil, [NSBundle mainBundle], @"Notice", nil)
                                                         message:msg
                                                        delegate:self
                                               cancelButtonTitle:cancelString

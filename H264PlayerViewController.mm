@@ -81,7 +81,12 @@ double _ticks = 0;
     singleTap.numberOfTouchesRequired = 1;
     [self.imageViewStreamer addGestureRecognizer:singleTap];
     [singleTap release];
-    
+#if 1
+    self.tapGestureTemperature = [[UITapGestureRecognizer alloc] initWithTarget:self
+                                                                                            action:@selector(changeDegreeTemperatureType:)];
+    self.tapGestureTemperature.numberOfTapsRequired = 1;
+    self.tapGestureTemperature.numberOfTouchesRequired = 1;
+#endif
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
     self.apiKey = [userDefaults stringForKey:@"PortalApiKey"];
@@ -151,6 +156,9 @@ double _ticks = 0;
 {
     [super viewDidAppear:animated];
     _syncPortraitAndLandscape = NO;
+    
+    UITapGestureRecognizer *tapGestureTemperature = [[UITapGestureRecognizer alloc] initWithTarget:self
+                                                                                            action:@selector(changeDegreeTemperatureType:)];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -252,6 +260,7 @@ double _ticks = 0;
         //update position text recording
         // update position button
         //Touch to Talk (size = 75, bottom align = 30
+#if 0
         CGSize holdTTButtonSize = self.ib_buttonTouchToTalk.bounds.size;
         CGSize viewRecordSize   = self.ib_viewRecordTTT.bounds.size;
         CGSize directionPadSize = self.imgViewDrectionPad.bounds.size;
@@ -282,7 +291,7 @@ double _ticks = 0;
         
         [self.ib_viewRecordTTT setFrame:CGRectMake(alignXButtonRecord, alignYButtonRecord, viewRecordSize.width, viewRecordSize.height)];
         [_imgViewDrectionPad setFrame:CGRectMake(alignXButtonDirectionPad, alignYButtonDirectionPad, directionPadSize.width, directionPadSize.height)];
-        
+#endif
         [self.ib_labelTouchToTalk setTextColor:[UIColor holdToTalkTextColor]];
     }
     else
@@ -416,7 +425,7 @@ double _ticks = 0;
     self.scrollView.maximumZoomScale = MAXIMUM_ZOOMING_SCALE;
     self.scrollView.minimumZoomScale = MINIMUM_ZOOMING_SCALE;
     [self centerScrollViewContents];
-    [self resetZooming];
+    //[self resetZooming];
     
     
     
@@ -527,8 +536,7 @@ double _ticks = 0;
     {
         CamProfile *cp = self.selectedChannel.profile;
         
-        if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7)
-        {
+        if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
             [self setTitle:cp.name];
             [self.navigationController.navigationBar setBarStyle:UIBarStyleDefault];
         }
@@ -992,7 +1000,7 @@ double _ticks = 0;
                 }
                 else
                 {
-                    self.imgViewDrectionPad.image = [UIImage imageNamed:@"camera_action_pan_bg@5.png"];
+                    self.imgViewDrectionPad.image = [UIImage imageNamed:@"camera_action_pan_bg_5.png"];
                 }
                 
                 if (![_cameraModel isEqualToString:CP_MODEL_0073])
@@ -1870,7 +1878,7 @@ double _ticks = 0;
 #ifdef SHOW_DEBUG_INFO
         _viewVideoIn = @"L";
 #endif
-        self.ib_labelTouchToTalk.text = @"Touch to Talk";
+        self.ib_labelTouchToTalk.text = NSLocalizedStringWithDefaultValue(@"text_touch_to_talk", nil, [NSBundle mainBundle], @"Touch to Talk", nil);
         self.stringStatePTT = @"Touch to Talk";
         
         
@@ -1917,7 +1925,7 @@ double _ticks = 0;
         }
 #endif
         
-        self.ib_labelTouchToTalk.text = @"Touch to Talk";
+        self.ib_labelTouchToTalk.text = NSLocalizedStringWithDefaultValue(@"text_touch_to_talk", nil, [NSBundle mainBundle], @"Touch to Talk", nil);
         self.stringStatePTT = @"Touch to Talk";
     }
     else
@@ -2070,7 +2078,7 @@ double _ticks = 0;
                 if (self.selectedChannel.profile.isInLocal)
                 {
 //                    [self showTimelineView];
-                    self.messageStreamingState = @"Camera is not accessible";
+                    self.messageStreamingState = NSLocalizedStringWithDefaultValue(@"camera_is_not_accessible", nil, [NSBundle mainBundle], @"Camera is not accessible", nil);
                 }
                 
                 break;
@@ -2896,8 +2904,8 @@ double _ticks = 0;
     
     NSLog(@"%s isEarlierView:%d", __FUNCTION__, _earlierNavi.isEarlierView);
     
-    NSString *stringTemperature = [NSString stringWithFormat:@"%d", (int)roundf([temperature floatValue])];
-    _degreeCString = stringTemperature;
+    _degreeCString = [NSString stringWithFormat:@"%d", (int)roundf([temperature floatValue])];
+    //_degreeCString = stringTemperature;
     
     int degreeF = (int) [self temperatureToFfromC:[temperature floatValue]];
     
@@ -2911,7 +2919,25 @@ double _ticks = 0;
     {
         return;
     }
+#if 1
+    UILabel *lblTemperatureValue = (UILabel *)[_viewTemperature viewWithTag:TAG_TEMPERATURE_VALUE];
+    lblTemperatureValue.text = _isDegreeFDisplay?_degreeFString:_degreeCString;
     
+    UILabel *lblTemperatureType = (UILabel *)[_viewTemperature viewWithTag:TAG_TEMPERATURE_TYPE];
+    lblTemperatureType.text = _isDegreeFDisplay?@"°F":@"°C";
+    
+    if (self.selectedItemMenu == INDEX_TEMP &&
+        ![self.stringTemperature isEqualToString:TEMP_NULL])
+    {
+        [MBProgressHUD hideHUDForView:self.view animated:NO];
+        self.viewTemperature.hidden = NO;
+        [self.view bringSubviewToFront:_viewTemperature];
+    }
+    else
+    {
+        self.viewTemperature.hidden = YES;
+    }
+#else
     // start
     [self.ib_temperature.subviews makeObjectsPerformSelector: @selector(removeFromSuperview)];
     
@@ -3041,6 +3067,19 @@ double _ticks = 0;
     }
     
     [degreeCelsius release];
+#endif
+}
+
+- (void)changeDegreeTemperatureType:(id )sender
+{
+    [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
+                                                    withAction:@"Changes Temperature type"
+                                                     withLabel:@"Temperature"
+                                                     withValue:[NSNumber numberWithBool:_isDegreeFDisplay]];
+    
+    _isDegreeFDisplay = !_isDegreeFDisplay;
+    
+    [self setTemperatureState_Fg:_stringTemperature];
 }
 
 #pragma mark - Melody
@@ -3217,14 +3256,14 @@ double _ticks = 0;
                                                               withObject:nil
                                                            waitUntilDone:NO];
                                        
-                                       self.messageStreamingState = @"Low data bandwidth detected. Trying to connect...";
+                                       self.messageStreamingState = NSLocalizedStringWithDefaultValue(@"low_data_bandwidth_detected", nil, [NSBundle mainBundle], @"Low data bandwidth detected. Trying to connect...", nil);
                                    }
                                    else
                                    {
                                        //handle Bad response
                                        NSLog(@"%s ERROR: %@", __FUNCTION__, [responseDict objectForKey:@"message"]);
 #if 1
-                                       self.messageStreamingState = @"Camera is not accessible";
+                                       self.messageStreamingState = NSLocalizedStringWithDefaultValue(@"camera_is_not_accessible", nil, [NSBundle mainBundle], @"Camera is not accessible", nil);
                                        _isShowTextCameraIsNotAccesible = YES;
                                        
                                        dispatch_async(dispatch_get_main_queue(), ^{
@@ -3245,7 +3284,7 @@ double _ticks = 0;
                                else
                                {
                                    NSLog(@"SERVER unreachable (timeout) ");
-                                   self.messageStreamingState = @"Camera is not accessible";
+                                   self.messageStreamingState = NSLocalizedStringWithDefaultValue(@"camera_is_not_accessible", nil, [NSBundle mainBundle], @"Camera is not accessible", nil);
                                    _isShowTextCameraIsNotAccesible = YES;
 #if 1
                                    dispatch_async(dispatch_get_main_queue(), ^{
@@ -4319,12 +4358,14 @@ double _ticks = 0;
     }
     
     // Remove all subviews before reloading the xib
+#if 1
     NSArray *viewsToRemove = [self.view subviews];
     for (UIView *v in viewsToRemove) {
         [v removeFromSuperview];
     }
+#endif
     
-	if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight)
+	if (UIInterfaceOrientationIsLandscape(orientation))
 	{
         _isLandScapeMode = YES;
         //load new nib for landscape iPad
@@ -4427,7 +4468,7 @@ double _ticks = 0;
                 [melodyVC setCurrentMelodyIndex:self.melodyViewController.melodyIndex andPlaying:self.melodyViewController.playing];
             }
             
-            [self release];
+            //[self release];
             [[NSBundle mainBundle] loadNibNamed:@"H264PlayerViewController"
                                           owner:self
                                         options:nil];
@@ -4619,6 +4660,8 @@ double _ticks = 0;
         self.btnSendingLog.enabled = YES;
         self.ib_btShowDebugInfo.enabled = YES;
     }
+    
+    [self.viewTemperature addGestureRecognizer:_tapGestureTemperature];
 }
 
 
@@ -5414,7 +5457,13 @@ double _ticks = 0;
             {
                 if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
                 {
-                    rect = CGRectMake(SCREEN_HEIGHT - 236, SCREEN_WIDTH - 400, 236, 165);
+                    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8.0")) {
+                        rect = CGRectMake(SCREEN_WIDTH - 236, SCREEN_HEIGHT - 400, 236, 165);
+                    }
+                    else
+                    {
+                        rect = CGRectMake(SCREEN_HEIGHT - 236, SCREEN_WIDTH - 400, 236, 165);
+                    }
                 }
                 else
                 {
@@ -5427,17 +5476,20 @@ double _ticks = 0;
                         rect = CGRectMake(393, 78, 175, 165);
                     }
                 }
+                
+                //NSLog(@"%s rect:%@, SCREEN_HEIGHT:%f, SCREEN_WIDTH:%f", __FUNCTION__, NSStringFromCGRect(rect), SCREEN_HEIGHT, SCREEN_WIDTH);
             }
             else
             {
-                if (isiOS7AndAbove)
-                {
+                if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
                     rect = CGRectMake(0, self.ib_ViewTouchToTalk.frame.origin.y - 5, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
                 }
                 else
                 {
                     rect = CGRectMake(0, self.ib_ViewTouchToTalk.frame.origin.y - 30 - 44, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
                 }
+                
+                //NSLog(@"%s rect:%@, SCREEN_HEIGHT:%f, SCREEN_WIDTH:%f", __FUNCTION__, NSStringFromCGRect(rect), SCREEN_HEIGHT, SCREEN_WIDTH);
             }
             
             self.melodyViewController.view.frame = rect;
@@ -5471,10 +5523,16 @@ double _ticks = 0;
                 MBProgressHUD *hub = [MBProgressHUD showHUDAddedTo:self.view animated:NO];
                 [hub setLabelText:NSLocalizedStringWithDefaultValue(@"loading", nil, [NSBundle mainBundle], @"Loading...", nil)];
             }
+#if 1
+            self.viewTemperature.hidden = NO;
+            [self.view bringSubviewToFront:_viewTemperature];
+#else
             [ib_switchDegree setHidden:NO];
             [self.view bringSubviewToFront:ib_switchDegree];
+#endif
             
             [self setTemperatureState_Fg:_stringTemperature];
+            
             if (_existTimerTemperature == FALSE)
             {
                 self.existTimerTemperature = TRUE;
@@ -5504,9 +5562,12 @@ double _ticks = 0;
     [self.imgViewDrectionPad setHidden:YES];
     self.imageViewKnob.hidden = YES;
     self.imageViewHandle.hidden = YES;
-    
+#if 1
+    self.viewTemperature.hidden = YES;
+#else
     [self.ib_temperature setHidden:YES];
     [self.ib_temperature setBackgroundColor:[UIColor clearColor]];
+#endif
     
     [self.ib_ViewTouchToTalk setHidden:YES];
     [self.ib_ViewTouchToTalk setBackgroundColor:[UIColor clearColor]];
@@ -5581,6 +5642,8 @@ double _ticks = 0;
     NSLog(@"%s", __FUNCTION__);
     
     [_btnSendingLog release];
+    [_viewTemperature release];
+    [_tapGestureTemperature release];
     [super dealloc];
 }
 
@@ -5678,7 +5741,7 @@ double _ticks = 0;
         }
         else
         {
-            imageHoldedToTalk = [UIImage imageNamed:@"camera_action_mic_pressed@5.png"];
+            imageHoldedToTalk = [UIImage imageNamed:@"camera_action_mic_pressed_5.png"];
         }
         
         [self.ib_buttonTouchToTalk setBackgroundImage:imageHoldedToTalk forState:UIControlEventTouchDown];
@@ -5741,7 +5804,7 @@ double _ticks = 0;
         }
         else
         {
-            imageNormal = [UIImage imageNamed:@"camera_action_mic@5.png"];
+            imageNormal = [UIImage imageNamed:@"camera_action_mic_5.png"];
         }
         
         [self.ib_buttonTouchToTalk setBackgroundImage:imageNormal forState:UIControlEventTouchDown];
@@ -5749,7 +5812,7 @@ double _ticks = 0;
         [self.ib_buttonTouchToTalk setBackgroundImage:imageNormal forState:UIControlEventTouchUpInside];
         //[self applyFont];
         self.disableAutorotateFlag = FALSE;
-        [self.ib_labelTouchToTalk setText:@"Touch to Talk"];
+        [self.ib_labelTouchToTalk setText:NSLocalizedStringWithDefaultValue(@"text_touch_to_talk", nil, [NSBundle mainBundle], @"Touch to Talk", nil)];
         self.stringStatePTT = @"Touch to Talk";
     }
 }
@@ -6159,6 +6222,8 @@ double _ticks = 0;
     [self changeAction:nil];
 }
 
+#if 1
+#else
 - (IBAction)switchDegreePressed:(id)sender
 {
     //[[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView changes Temperature type" withProperties:nil];
@@ -6176,6 +6241,7 @@ double _ticks = 0;
     
     [self setTemperatureState_Fg:_stringTemperature];
 }
+#endif
 
 - (IBAction)showInfoDebug:(id)sender
 {

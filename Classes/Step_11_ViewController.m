@@ -10,6 +10,8 @@
 //#import "KISSMetricsAPI.h"
 #import "define.h"
 #import "PublicDefine.h"
+#import "UIView+Custom.h"
+
 #define GAI_CATEGORY    @"Step 11 view"
 #import "Step_02_ViewController.h"
 
@@ -36,6 +38,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self xibDefaultLocalization];
     self.navigationItem.hidesBackButton = YES;
     self.trackedViewName = GAI_CATEGORY;
     
@@ -59,17 +62,17 @@
     {
         [self.btnSetupWithWifi setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
         [self.btnSetupWithWifi setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
-        self.btnSetupWithWifi.titleLabel.text = NSLocalizedString(@"Setup with WIFI", @"Setup with WIFI");
+        [self.btnSetupWithWifi setTitle:NSLocalizedStringWithDefaultValue(@"Setup with WIFI", nil, [NSBundle mainBundle], @"Setup with WIFI", nil) forState:UIControlStateNormal];
         self.btnSetupWithWifi.hidden = NO;
         
-        self.btnTestCamera.titleLabel.text = NSLocalizedString(@"Re-try setup with Bluetooth", @"Re-try setup with Bluetooth");
+        [self.btnTestCamera setTitle:NSLocalizedStringWithDefaultValue(@"Re-try setup with Bluetooth", nil, [NSBundle mainBundle], @"Re-try setup with Bluetooth", nil) forState:UIControlStateNormal];
         
         //stringModel = @"Mbp83";
     }
     else
     {
         //stringModel = @"Focus66";
-        self.btnTestCamera.titleLabel.text = NSLocalizedString(@"Try Again", @"Try Again");
+        [self.btnTestCamera setTitle:NSLocalizedStringWithDefaultValue(@"Try Again", nil, [NSBundle mainBundle], @"Try Again", nil) forState:UIControlStateNormal];
     }
     
 //   NSString *fwVersion = [[NSUserDefaults standardUserDefaults] stringForKey:FW_VERSION];
@@ -83,6 +86,19 @@
                                                     withAction:@"viewDidLoad"
                                                      withLabel:[NSString stringWithFormat:@"Add camera failed:%@", _errorCode]
                                                      withValue:nil];
+}
+
+- (void)xibDefaultLocalization
+{
+    [[self.view viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step11_label_camera_not_found", nil, [NSBundle mainBundle], @"Camera Not Found", nil)];
+    [[self.view viewWithTag:2] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step11_label_restore_your_camera", nil, [NSBundle mainBundle], @"Follow these steps to restore your camera", nil)];
+    [[self.view viewWithTag:3] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step11_label_same_wifi_network", nil, [NSBundle mainBundle], @"1. Keep your phone and camera on the same Wi-Fi network", nil)];
+    [[self.view viewWithTag:4] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step11_label_confirm_password_correct", nil, [NSBundle mainBundle], @"2. Confirm the Wi-Fi password is correct.", nil)];
+    [[self.view viewWithTag:5] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step11_label_connected_to_internet", nil, [NSBundle mainBundle], @"3. Check if you are connected to internet", nil)];
+    [[self.view viewWithTag:6] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step11_button_open_setting", nil, [NSBundle mainBundle], @"Open settings", nil)];
+    [[self.view viewWithTag:7] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step11_button_open_camera_settings", nil, [NSBundle mainBundle], @"Open camera settings", nil)];
+    [[self.view viewWithTag:8] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step11_button_check_now", nil, [NSBundle mainBundle], @"Check now", nil)];
+    [[self.view viewWithTag:9] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step11_button_try_again", nil, [NSBundle mainBundle], @"Try Again", nil)];
 }
 
 - (void)didReceiveMemoryWarning

@@ -7,6 +7,7 @@
 //
 
 #import "TimeLinePremiumCell.h"
+#import "UIView+Custom.h"
 
 @implementation TimeLinePremiumCell
 
@@ -15,6 +16,7 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         // Initialization code
+        [self xibDefaultLocalization];
     }
     return self;
 }
@@ -24,6 +26,18 @@
     [super setSelected:selected animated:animated];
 
     // Configure the view for the selected state
+}
+
+- (void)awakeFromNib
+{
+    [super awakeFromNib];
+    [self xibDefaultLocalization];
+}
+
+- (void)xibDefaultLocalization
+{
+    [self.ib_labelPremium setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_timeline_cell_upgrade_to_premium", nil, [NSBundle mainBundle], @"Upgrade to Premium", nil)];
+    [self.ib_labelDayPremium setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_timeline_cell_number_of_days", nil, [NSBundle mainBundle], @"1, 7, or 30 days", nil)];
 }
 
 - (void)dealloc {

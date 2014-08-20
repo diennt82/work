@@ -18,6 +18,7 @@
 #import "EarlierViewController.h"
 #import "UIDeviceHardware.h"
 #import "MBP_iosViewController.h"
+#import "UIView+Custom.h"
 
 #define MAX_CAM_ALLOWED     4
 #define CAMERA_TAG_66       566
@@ -100,6 +101,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self xibDefaultLocalization];
 #if 0
     self.navigationController.navigationBarHidden = YES;
 #endif
@@ -130,6 +132,13 @@
     self.ibTableListCamera.delegate = self;
 
     //[self updateBottomButton];
+    
+}
+
+- (void)xibDefaultLocalization
+{
+    [self.ibTextAddCamera setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_cameraspage_button_text_addcamera", nil, [NSBundle mainBundle], @"Add Camera", nil)];
+    [self.ibTextBuyCamera setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_cameraspage_button_text_buycamera", nil, [NSBundle mainBundle], @"Buy Camera", nil)];
 }
 
 #pragma mark - Actions
@@ -410,6 +419,11 @@
 #endif
     
     return 108;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 1;
 }
 
 - (CGFloat )tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section

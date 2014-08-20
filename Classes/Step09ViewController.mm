@@ -20,6 +20,7 @@
 //#import "Reachability.h"
 #import "Step_10_ViewController.h"
 #import <MonitorCommunication/MonitorCommunication.h>
+#import "UIView+Custom.h"
 
 @interface Step09ViewController () <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate>
 
@@ -53,6 +54,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self xibDefaultLocalization];
     // Do any additional setup after loading the view from its nib.
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
@@ -85,6 +87,25 @@
     ((UITextField *)[_cellPassword viewWithTag:TAG_PASS]).delegate = self;
     ((UITextField *)[_cellConfirmPassword viewWithTag:TAG_CPASS]).delegate = self;
     ((UITextField *)[_cellEmail viewWithTag:TAG_EMAIL]).delegate = self;
+}
+
+- (void)xibDefaultLocalization
+{
+    [[self.view viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step09_label_term_of_service", nil, [NSBundle mainBundle], @"I agree with the Terms of Services", nil)];
+    [[self.view viewWithTag:2] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step09_button_create", nil, [NSBundle mainBundle], @"Create", nil)];
+    [[self.view viewWithTag:3] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step09_button_already_account", nil, [NSBundle mainBundle], @"Already have a Account?", nil)];
+    
+    [[self.cellUsername viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step09_cell_label_username", nil, [NSBundle mainBundle], @"Username", nil)];
+    [[self.cellUsername viewWithTag:201] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step09_cell_textfield_username", nil, [NSBundle mainBundle], @"Username", nil)];
+    
+    [[self.cellPassword viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step09_cell_label_password", nil, [NSBundle mainBundle], @"Password", nil)];
+    [[self.cellPassword viewWithTag:202] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step09_cell_textfield_password", nil, [NSBundle mainBundle], @"Password", nil)];
+    
+    [[self.cellConfirmPassword viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step09_cell_label_confirm_pass", nil, [NSBundle mainBundle], @"Confirm Pass", nil)];
+    [[self.cellConfirmPassword viewWithTag:203] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step09_cell_text_field_confirm_pass", nil, [NSBundle mainBundle], @"Confirm Pass", nil)];
+    
+    [[self.cellEmail viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step09_cell_label_email", nil, [NSBundle mainBundle], @"Email", nil)];
+    [[self.cellEmail viewWithTag:204] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step09_cell_textfield_email", nil, [NSBundle mainBundle], @"Email", nil)];
 }
 
 #pragma mark - Action

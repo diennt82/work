@@ -15,6 +15,7 @@
 #import "CustomIOS7AlertView.h"
 #import "Step_10_ViewController.h"
 #import "PublicDefine.h"
+#import "UIView+Custom.h"
 
 #define ALERT_CONFIRM_TAG       555
 #define ALERT_RETRY_WIFI_TAG    559
@@ -65,6 +66,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self xibDefaultLocalization];
 	// Do any additional setup after loading the view.
     self.navigationItem.hidesBackButton = YES;
     
@@ -119,6 +121,25 @@
                                                                                   @"Skip WIFI Setup", nil);
         self.btnSkipWifiSetup.hidden = NO;
     }
+}
+
+- (void)xibDefaultLocalization
+{
+    [[self.view viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step05_label_selected_wifi_network", nil, [NSBundle mainBundle], @"Select Wi-Fi Network to Connect Camera", nil)];
+    [[self.view viewWithTag:2] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step05_label_select_your_own trusted_network", nil, [NSBundle mainBundle], @"Select your own trusted network.", nil)];
+    [[self.view viewWithTag:3] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step05_label_password_protected", nil, [NSBundle mainBundle], @"(It must be password protected.)", nil)];
+    [[self.view viewWithTag:4] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step05_label_detected_wifi_network", nil, [NSBundle mainBundle], @"Detected Wi-Fi Network", nil)];
+    
+    [self.btnSkipWifiSetup setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step05_button_skip_wifi_settup", nil, [NSBundle mainBundle], @"Skip WIFI Setup", nil)];
+    [self.btnContinue setTitle:NSLocalizedStringWithDefaultValue(@"xib_step05_button_continue", nil, [NSBundle mainBundle], @"Continue", nil) forState:UIControlStateNormal];
+    
+    [[self.viewProgress viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step05_label_search_wifi_network", nil, [NSBundle mainBundle], @"Searching for Wi-Fi Networks", nil)];
+
+    [[self.viewProgress viewWithTag:2] setLocalizationText: NSLocalizedStringWithDefaultValue(@"xib_step05_label_please_wait", nil, [NSBundle mainBundle], @"Please wait", nil)];
+    
+    [[self.cellOtherNetwork viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step05_cell_other_network", nil, [NSBundle mainBundle], @"Other Network", nil)];
+    
+    [[self.cellRefresh viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step05_cell_refresh", nil, [NSBundle mainBundle], @"Refresh", nil)];
 }
 
 - (void)viewDidUnload
@@ -240,7 +261,12 @@
 
 - (void)showDialogToConfirm: (NSString *)homeWifi selectedWifi: (NSString *)selectedWifi
 {
-    NSString * msg = [NSString stringWithFormat:@"You have selected wifi %@ which is not the same as your Home wifi, %@. If you choose to continue, there will more steps to setup your camera. Do you want to proceed?", selectedWifi, homeWifi];
+    NSString *wifi = selectedWifi;
+    if ([selectedWifi isEqualToString:@"Other Network"])
+    {
+        wifi = NSLocalizedStringWithDefaultValue(@"xib_step05_cell_other_network", nil, [NSBundle mainBundle], @"Other Network", nil);
+    }
+    NSString * msg = [NSString stringWithFormat:NSLocalizedStringWithDefaultValue(@"alert_mes_dialog_to_confirm_selected_wifi", nil, [NSBundle mainBundle], @"You have selected wifi %@ which is not the same as your Home wifi, %@. If you choose to continue, there will more steps to setup your camera. Do you want to proceed?", nil), wifi, homeWifi];
     
     UIAlertView *alertViewNotice = [[UIAlertView alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"notice", nil, [NSBundle mainBundle],  @"Notice", nil)
                                                         message:msg
@@ -305,8 +331,7 @@
                                                        @"Fail to communicate with camera. Retry?", nil);
     
     NSString * cancel = NSLocalizedStringWithDefaultValue(@"cancel", nil, [NSBundle mainBundle], @"Cancel", nil);
-    NSString * retry = NSLocalizedStringWithDefaultValue(@"Retry",nil, [NSBundle mainBundle],
-                                                         @"Retry", nil);
+    NSString * retry = NSLocalizedStringWithDefaultValue(@"Retry",nil, [NSBundle mainBundle], @"Retry", nil);
     UIAlertView *myAlert = [[UIAlertView alloc] initWithTitle:msg
                                                       message:@""
                                                      delegate:self
@@ -657,7 +682,7 @@
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(20, 85, 200, 41)];// autorelease];
     label.textAlignment = NSTextAlignmentCenter;
     label.numberOfLines = 2;
-    label.text = @"Waiting for configure camera...";
+    label.text = NSLocalizedStringWithDefaultValue(@"waiting_for_configure_camera", nil, [NSBundle mainBundle], @"Waiting for configure camera...", nil);
     [demoView addSubview:label];
     [label release];
     

@@ -7,9 +7,11 @@
 //
 
 #import "ZoneViewController.h"
+#import "UIView+Custom.h"
 
 @interface ZoneViewController ()
-
+@property (nonatomic, assign) IBOutlet UIButton *btnSave;
+@property (nonatomic, assign) IBOutlet UIButton *btnCancel;
 @end
 
 @implementation ZoneViewController
@@ -55,6 +57,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self xibDefaultLocalization];
     // Do any additional setup after loading the view from its nib.
 //    self.zoneArray = [[NSMutableArray alloc] initWithCapacity:NUM_OF_ZONES];
 //    
@@ -73,6 +76,12 @@
     
     
     
+}
+
+- (void)xibDefaultLocalization
+{
+    [self.btnSave setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_Zone_button_save", nil, [NSBundle mainBundle], @"Save", nil)];
+    [self.btnCancel setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_Zone_button_cancel", nil, [NSBundle mainBundle], @"Cancel", nil)];
 }
 
 -(void) viewWillAppear:(BOOL)animated

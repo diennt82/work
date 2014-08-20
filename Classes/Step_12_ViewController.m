@@ -10,6 +10,7 @@
 //#import "KISSMetricsAPI.h"
 #import "define.h"
 #import "PublicDefine.h"
+#import "UIView+Custom.h"
 
 #define GAI_CATEGORY @"Step 12 view"
 
@@ -26,6 +27,7 @@
 -(void) viewDidLoad
 {
     [super viewDidLoad];
+    [self xibDefaultLocalization];
     self.navigationItem.hidesBackButton = YES;
     self.trackedViewName = GAI_CATEGORY;
     
@@ -63,6 +65,15 @@
                                                     withAction:@"viewDidLoad"
                                                      withLabel:nil
                                                      withValue:nil];
+}
+
+- (void)xibDefaultLocalization
+{
+    [[self.view viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step12_label_congratulations", nil, [NSBundle mainBundle], @"Congratulations", nil)];
+    [[self.view viewWithTag:2] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step12_label_came_name", nil, [NSBundle mainBundle], @"[Camera name]", nil)];
+    [[self.view viewWithTag:3] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step12_label_camera_has_been_found", nil, [NSBundle mainBundle], @"Camera has been found", nil)];
+
+    [self.btnWatchLiveCamera setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step12_button_view_live_camera", nil, [NSBundle mainBundle], @"View Live Camera", nil)];
 }
 
 -(void) viewWillAppear:(BOOL)animated

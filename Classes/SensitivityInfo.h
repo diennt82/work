@@ -22,4 +22,7 @@
 @property (nonatomic) NSInteger tempHighValue;
 @property (nonatomic) BOOL tempHighOn;
 
+@property (nonatomic) BOOL motionVideoRecordingOn;
+@property (nonatomic) BOOL motionCaptureSnapshotOn;
+
 @end
