@@ -22,7 +22,15 @@
 
 @interface Step_10_ViewController_ble ()
 
-@property (nonatomic, weak) IBOutlet UIView *cameraAddedView;
+@property (nonatomic, strong) IBOutlet UIView *cameraAddedView;
+@property (nonatomic, strong) IBOutlet UIView *progressView;
+
+@property (nonatomic, weak) IBOutlet UILabel *youAreSignedUpAsLabel;
+@property (nonatomic, weak) IBOutlet UILabel *userInfoLabel;
+@property (nonatomic, weak) IBOutlet UILabel *instructionLabel;
+
+@property (nonatomic, weak) IBOutlet UILabel *checkingConnectionLabel;
+@property (nonatomic, weak) IBOutlet UILabel *mayTakeAMinuteLabel;
 
 @property (nonatomic, strong) UserAccount *userAccount;
 @property (nonatomic, strong) ScanForCamera *scanner;
@@ -38,46 +46,35 @@
 {
     [super viewDidLoad];
     
-    //Disconnect BLE
-    NSLog(@"Disconnect BLE ");
+    // Disconnect BLE
+    DLog(@"Disconnect BLE");
     BLEConnectionManager.instanceBLE.needReconnect = NO;
     [BLEConnectionManager.instanceBLE.uartPeripheral didDisconnect];
     BLEConnectionManager.instanceBLE.delegate = nil;
     
-    //Keep screen on
+    // Keep screen on
     [UIApplication sharedApplication].idleTimerDisabled = YES;
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
-    // can be user email or user name here --
-    _userNameLabel.text = (NSString *) [userDefaults objectForKey:@"PortalUsername"];
-    _userEmailLabel.text = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
+    // TODO: Setup as an attributed string so that name and email are in blue
+    NSString *userInfoStr = LocStr(@"\"%@\" with %@");
+    userInfoStr = [NSString stringWithFormat:userInfoStr, [userDefaults objectForKey:@"PortalUsername"], [userDefaults objectForKey:@"PortalUseremail"]];
+    _userInfoLabel.text = userInfoStr;
+    
+    _checkingConnectionLabel.text = LocStr(@"Checking connection to camera");
+    _mayTakeAMinuteLabel.text = LocStr(@"This may take up to a minute");
     
     self.cameraMac = (NSString *) [userDefaults objectForKey:@"CameraMacWithQuote"];
     self.stringUDID = [userDefaults stringForKey:CAMERA_UDID];
     
-    if ( !_progressView )
-    {
-        NSLog(@"progressView = nil!!!!");
-    }
-    
-    self.navigationItem.hidesBackButton = YES;
-    
-    UIImage *hubbleLogoBack = [UIImage imageNamed:@"Hubble_back_text"];
-    UIBarButtonItem *barBtnHubble = [[UIBarButtonItem alloc] initWithImage:hubbleLogoBack
-                                                                     style:UIBarButtonItemStyleBordered
-                                                                    target:self
-                                                                    action:@selector(hubbleItemAction:)];
-    [barBtnHubble setTintColor:[UIColor colorWithPatternImage:hubbleLogoBack]];
-    
-    self.navigationItem.leftBarButtonItem = barBtnHubble;
-    
     UIImageView *imageView = (UIImageView *)[self.progressView viewWithTag:595];
-    imageView.animationImages =[NSArray arrayWithObjects:
-                                [UIImage imageNamed:@"setup_camera_c1"],
-                                [UIImage imageNamed:@"setup_camera_c2"],
-                                [UIImage imageNamed:@"setup_camera_c3"],
-                                [UIImage imageNamed:@"setup_camera_c4"],
-                                nil];
+    imageView.animationImages = @[
+                                  [UIImage imageNamed:@"setup_camera_c1"],
+                                  [UIImage imageNamed:@"setup_camera_c2"],
+                                  [UIImage imageNamed:@"setup_camera_c3"],
+                                  [UIImage imageNamed:@"setup_camera_c4"]
+                                  ];
+    
     imageView.animationDuration = 1.5;
     imageView.animationRepeatCount = 0;
     
@@ -86,7 +83,7 @@
     self.progressView.hidden = NO;
     [self.view bringSubviewToFront:self.progressView];
     
-    //CameraTest: try to search for camera now..
+    // CameraTest: try to search for camera now..
     [NSTimer scheduledTimerWithTimeInterval: SCAN_CAM_TIMEOUT_BLE
                                      target:self
                                    selector:@selector(setStopScanning:)
@@ -95,11 +92,6 @@
     
     // 2 of 3. no need to schedule timer here
     [self waitForCameraToReboot:nil];
-}
-
-- (void)hubbleItemAction:(id)sender
-{
-    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)startAnimationWithOrientation
@@ -140,7 +132,7 @@
 
 - (void)silentRetryTimeout:(NSTimer *)expired
 {
-    //TIMEOUT --
+    // TIMEOUT --
     self.shouldRetrySilently = NO;
 }
 
@@ -148,24 +140,24 @@
 
 -(void)setStopScanning:(NSTimer *)exp
 {
-    self.shouldStopScanning = TRUE;
+    self.shouldStopScanning = YES;
 }
 
 - (void)waitForCameraToReboot:(NSTimer *)exp
 {
     if ( _shouldStopScanning ) {
         self.shouldStopScanning = NO;
-        NSLog(@" stop scanning now.. should be 4 mins");
+        DLog(@"stop scanning now.. should be 4 mins");
 		[self setupFailed];
 		return;
     }
     else {
-        NSLog(@"Continue scan...");
+        DLog(@"Continue scan...");
     }
     
     if ([self checkItOnline]) {
-        //Found it online
-        NSLog(@"Found it online");
+        // Found it online
+        DLog(@"Found it online");
         [self setupCompleted];
         return;
     }
@@ -181,7 +173,7 @@
 
 - (BOOL)checkItOnline
 {
-    NSLog(@"--> Try to search IP online...");
+    DLog(@"--> Try to search IP online...");
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString * userEmail  = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
     NSString * userPass   = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
@@ -199,7 +191,7 @@
         return YES;
     }
     
-    self.errorCode =@"NotAvail";
+    self.errorCode = @"NotAvail";
     
     return NO;
 }
@@ -213,9 +205,9 @@
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
-    NSString *apiKey    = [userDefaults objectForKey:@"PortalApiKey"];
-    NSString *udid      = [userDefaults objectForKey:CAMERA_UDID];
-    NSString *hostSSID  = [userDefaults objectForKey:HOST_SSID];
+    NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
+    NSString *udid = [userDefaults objectForKey:CAMERA_UDID];
+    NSString *hostSSID = [userDefaults objectForKey:HOST_SSID];
     
     NSDictionary *responseDict = [jsonCommBlocked updateDeviceBasicInfoBlockedWithRegistrationId:udid
                                                                                        deviceName:nil
@@ -229,7 +221,7 @@
     
     if (responseDict) {
         if ([responseDict[@"status"] integerValue] == 200) {
-            NSString *bodyKey = [[responseDict objectForKey:@"data"] objectForKey:@"host_ssid"];
+            NSString *bodyKey = [responseDict[@"data"] objectForKey:@"host_ssid"];
             if (![bodyKey isEqual:[NSNull null]]) {
                 if ([bodyKey isEqualToString:hostSSID]) {
                     updateFailed = NO;
@@ -239,10 +231,10 @@
     }
     
     if (updateFailed) {
-        NSLog(@"Step10VC - updatesBasicInfoForCamera: %@", responseDict);
+        DLog(@"Step10VC - updatesBasicInfoForCamera: %@", responseDict);
     }
     else {
-        NSLog(@"Step10VC - updatesBasicInforForCamera successfully!");
+        DLog(@"Step10VC - updatesBasicInforForCamera successfully!");
     }
 }
 
@@ -251,19 +243,14 @@
     // Try to update host ssid to server
     [self updatesBasicInfoForCamera];
     
-    // Load step 12
-    NSLog(@"Load step 12");
-    
-    // Load the next xib
     Step_12_ViewController *step12ViewController = [[Step_12_ViewController alloc] initWithNibName:@"Step_12_ViewController" bundle:nil];
     [self.navigationController pushViewController:step12ViewController animated:NO];
 }
 
 - (void)  setupFailed
 {
- 	NSLog(@"Setup has failed - remove cam on server");
+ 	DLog(@"Setup has failed - remove cam on server");
 	// send a command to remove camera
-	//NSString *mac = [Util strip_colon_fr_mac:self.cameraMac];
 	
     BMS_JSON_Communication *jsonComm = [[BMS_JSON_Communication alloc] initWithObject:self
                                                                               Selector:@selector(removeCamSuccessWithResponse:)
@@ -274,10 +261,6 @@
     [jsonComm deleteDeviceWithRegistrationId:_stringUDID
                                    andApiKey:[userDefaults objectForKey:@"PortalApiKey"]];
     
-    //Load step 11
-    NSLog(@"Load step 11");
-    
-    //Load the next xib
     Step_11_ViewController *step11ViewController = nil;
     step11ViewController = [[Step_11_ViewController alloc] initWithNibName:@"Step_11_ViewController" bundle:nil];
     step11ViewController.errorCode = self.errorCode;
@@ -286,17 +269,17 @@
 
 - (void)removeCamSuccessWithResponse:(NSDictionary *)responseData
 {
-	NSLog(@"removeCam success");
+	DLog(@"removeCam success");
 }
 
 - (void)removeCamFailedWithError:(NSDictionary *)errorResponse
 {
-	NSLog(@"removeCam failed Server error: %@", errorResponse[@"message"]);
+	DLog(@"removeCam failed Server error: %@", errorResponse[@"message"]);
 }
 
 - (void)removeCamFailedServerUnreachable
 {
-	NSLog(@"server unreachable");
+	DLog(@"server unreachable");
 }
 
 @end
