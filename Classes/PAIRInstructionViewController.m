@@ -11,7 +11,10 @@
 
 @interface PAIRInstructionViewController ()
 
-@property (nonatomic, weak) IBOutlet UIButton *btnSearchCamera;
+@property (nonatomic, weak) IBOutlet UIButton *searchCameraButton;
+@property (nonatomic, weak) IBOutlet UILabel *pairLabel;
+@property (nonatomic, weak) IBOutlet UILabel *detectingCameraLabel;
+@property (nonatomic, weak) IBOutlet UILabel *instructionLabel;
 
 @end
 
@@ -34,19 +37,22 @@
     
     self.navigationItem.leftBarButtonItem = barBtnHubble;
     
-    [self.btnSearchCamera setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
-    [self.btnSearchCamera setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
+    [self.searchCameraButton setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
+    [self.searchCameraButton setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
+    
+    _pairLabel.text = LocStr(@"Pair");
+    _detectingCameraLabel.text = LocStr(@"Detecting the Camera");
+    _instructionLabel.text = LocStr(@"Press and hold the button marked 'PAIR' for 3 seconds and then click the Search button (below) to continue");
+    [_searchCameraButton setTitle:LocStr(@"Search for Camera") forState:UIControlStateNormal];
 }
 
 #pragma mark - Actions
 
 - (IBAction)btnSearchCameraTouchUpInsideAction:(id)sender
 {
-    NSLog(@"Load step Create BLE Connection");
-    
-    //Load the next xib
+    DLog(@"Load step Create BLE Connection");
     CreateBLEConnection_VController *step03ViewController = [[CreateBLEConnection_VController alloc] initWithNibName:@"CreateBLEConnection_VController" bundle:nil];
-    [self.navigationController pushViewController:step03ViewController animated:NO];
+    [self.navigationController pushViewController:step03ViewController animated:YES];
 }
 
 - (void)hubbleItemAction: (id)sender
