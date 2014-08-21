@@ -64,11 +64,22 @@
     self.screenWidth = [UIScreen mainScreen].bounds.size.width;
     UILabel *lblVersion = (UILabel *)[self.view viewWithTag:559];
     
-#ifdef VTECH
-    lblVersion.text = [NSString stringWithFormat:LocStr(@"VTech Connect v%@"), [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]];
-#else
-    lblVersion.text = [NSString stringWithFormat:LocStr(@"Hubble Home v%@"), [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]];
-#endif
+//    // Read the app name from the InfoPlist.strings file.
+//#ifdef VTECH
+//    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"InfoPlist" ofType:@"strings"];
+//#else
+//    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"InfoPlist" ofType:@"strings"];
+//#endif
+//    
+//    NSDictionary *info = [NSDictionary dictionaryWithContentsOfFile:filePath];
+//    NSString *appName = [info objectForKey:@"CFBundleDisplayName"];
+    
+    // Read app version from the main app .plist file.
+    NSDictionary *info = [[NSBundle mainBundle] infoDictionary];
+    NSString *appName = info[@"CFBundleDisplayName"];
+    NSString *version = info[@"CFBundleShortVersionString"];
+    
+    lblVersion.text = [NSString stringWithFormat:LocStr(@"%@ v%@"), appName, version];
     
     _emailLabel.text = LocStr(@"Email");
     _changePasswordLabel.text = LocStr(@"Change Password");
