@@ -1034,6 +1034,12 @@
 "xib_Nofi_label_some_movement" = "Am Standort der Kamera wurde eine Bewegung festgestellt.";
 
 /* No comment provided by engineer. */
+"xib_Playback_label_delete" = "Delete";
+
+/* No comment provided by engineer. */
+"xib_Playback_label_download" = "Download";
+
+/* No comment provided by engineer. */
 "xib_Playback_label_delete" = "Löschen";
 
 /* No comment provided by engineer. */
