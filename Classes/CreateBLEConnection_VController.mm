@@ -19,7 +19,7 @@
 
 #define BTN_RETRY_TAG       599
 #define BTN_SETUP_WIFI      699
-#define BLE_TIMEOUT_PROCESS 1.5*60
+#define BLE_TIMEOUT_PROCESS 1*60
 #define SETUP_UNKNOW        0
 #define SETUP_BLE           1
 #define SETUP_LAN           2
@@ -1052,7 +1052,7 @@
         case MBP_85_TAG:
             return [UIImage imageNamed:@"blesetup_focus85"];
         case SCOUT_73_TAG:
-            return [UIImage imageNamed:@"camera_scout85"];
+            return [UIImage imageNamed:@"wifisetup_scout85"];
         default:
             break;
     }
