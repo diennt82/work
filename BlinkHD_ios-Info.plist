@@ -41,11 +41,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>03.26.2</string>
+	<string>03.26.3</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>42</string>
+	<string>43</string>
 	<key>IBCustomFonts</key>
 	<dict>
 		<key>Avenir-Heavy</key>
