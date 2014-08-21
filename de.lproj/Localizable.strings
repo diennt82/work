@@ -380,6 +380,9 @@
 "hud_error_sensitivity_settings_error" = "Error -Load Sensitivity Settings error!";
 
 /* No comment provided by engineer. */
+"hud_logout" = "Log out...";
+
+/* No comment provided by engineer. */
 "hud_please_wait" = "Bitte warten ...";
 
 /* No comment provided by engineer. */
