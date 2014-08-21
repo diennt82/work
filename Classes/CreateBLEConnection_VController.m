@@ -14,19 +14,27 @@
 #import "CustomIOS7AlertView.h"
 #import "PublicDefine.h"
 
-#define BTN_CONTINUE_TAG 599
-#define BLE_TIMEOUT_PROCESS 1*60
-
 @interface CreateBLEConnection_VController () <CustomIOS7AlertViewDelegate>
 
-@property (nonatomic, weak) IBOutlet UIButton *btnConnect;
-@property (nonatomic, weak) IBOutlet UIView *viewProgress;
-@property (nonatomic, weak) IBOutlet UITableViewCell *searchAgainCell;
-@property (nonatomic, weak) IBOutlet UIView *viewError;
-@property (nonatomic, weak) IBOutlet UIView *viewPairNDetecting;
+@property (nonatomic, weak) IBOutlet UITableView *tableView;
+@property (nonatomic, weak) IBOutlet UIButton *connectButton;
+@property (nonatomic, weak) IBOutlet UILabel *selectCameraLabel;
+@property (nonatomic, weak) IBOutlet UILabel *detectingCameraLabel;
+@property (nonatomic, weak) IBOutlet UILabel *instructionLabel;
+@property (nonatomic, weak) IBOutlet UILabel *mayTakeAMinuteLabel;
+@property (nonatomic, weak) IBOutlet UILabel *detectingViaBluetoothLabel;
+@property (nonatomic, weak) IBOutlet UILabel *mayTakeAMinuteLabel2;
+@property (nonatomic, weak) IBOutlet UILabel *unableToDetectCameraLabel;
+@property (nonatomic, weak) IBOutlet UILabel *timeoutLabel;
+@property (nonatomic, weak) IBOutlet UIButton *retryButton;
+@property (nonatomic, weak) IBOutlet UILabel *searchAgainLabel;
 
-@property (nonatomic, strong) UIButton *btnContinue;
-@property (nonatomic, strong) UIView *viewSearching;
+@property (nonatomic, strong) IBOutlet UIView *viewProgress;
+@property (nonatomic, strong) IBOutlet UIView *viewError;
+@property (nonatomic, strong) IBOutlet UIView *viewPairNDetecting;
+@property (nonatomic, strong) IBOutlet UITableViewCell *searchAgainCell;
+
+@property (nonatomic, strong) UIView *searchingView;
 
 @property (nonatomic, strong) CBPeripheral *selectedPeripheral;
 @property (nonatomic, strong) CustomIOS7AlertView *alertView;
@@ -47,6 +55,12 @@
 
 @implementation CreateBLEConnection_VController
 
+#define RETRY_BUTTON_TAG        599
+#define SEARCHING_VIEW_TAG      675
+#define SETUP_CAMERA_IMAGE_TAG  575
+
+#define BLE_TIMEOUT_PROCESS 1*60
+
 #pragma mark - UIViewController methods
 
 - (void)viewDidLoad
@@ -65,18 +79,29 @@
     
     self.navigationItem.leftBarButtonItem = barBtnHubble;
     
-    [_btnConnect setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
-    [_btnConnect setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
-    _btnConnect.enabled = NO;
+    [_connectButton setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
+    [_connectButton setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
+    _connectButton.enabled = NO;
     
-    self.btnContinue = (UIButton *)[_viewError viewWithTag:BTN_CONTINUE_TAG];
-    [_btnContinue setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
-    [_btnContinue setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
-    [_btnContinue addTarget:self action:@selector(btnContinueTouchUpInsideAction:) forControlEvents:UIControlEventTouchUpInside];
+    [_retryButton setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
+    [_retryButton setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
+    [_retryButton addTarget:self action:@selector(retryButtonAction) forControlEvents:UIControlEventTouchUpInside];
     
     self.currentBLEList = [[NSMutableArray alloc] init];
     
-    UIImageView *imageView  = (UIImageView *)[_viewProgress viewWithTag:575];
+    _selectCameraLabel.text = LocStr(@"Select camera");
+    _detectingCameraLabel.text = LocStr(@"Detecting the camera");
+    _instructionLabel.text = LocStr(@"Press and hold the button marked 'PAIR' for 3 seconds");
+    _mayTakeAMinuteLabel.text = LocStr(@"This may take up to a minute");
+    _detectingViaBluetoothLabel.text = LocStr(@"Detecting camera via Bluetooth");
+    _mayTakeAMinuteLabel2.text = LocStr(@"This may take up to a minute");
+    _unableToDetectCameraLabel.text = LocStr(@"Unable to detect camera");
+    _timeoutLabel.text = LocStr(@"Timeout");
+    _searchAgainLabel.text = LocStr(@"Search again");
+    [_connectButton setTitle:LocStr(@"Connect") forState:UIControlStateNormal];
+    [_retryButton setTitle:LocStr(@"Retry") forState:UIControlStateNormal];
+    
+    UIImageView *imageView  = (UIImageView *)[_viewProgress viewWithTag:SETUP_CAMERA_IMAGE_TAG];
     imageView.animationImages = @[[UIImage imageNamed:@"setup_camera_c1"],
                                   [UIImage imageNamed:@"setup_camera_c2"],
                                   [UIImage imageNamed:@"setup_camera_c3"],
@@ -84,9 +109,9 @@
     imageView.animationDuration = 1.5f;
     imageView.animationRepeatCount = 0;
 
-    self.viewSearching = (UIView *)[self.viewPairNDetecting viewWithTag:675];
+    self.searchingView = (UIView *)[self.viewPairNDetecting viewWithTag:SEARCHING_VIEW_TAG];
     
-    UIImageView *imgView  = (UIImageView *)[_viewSearching viewWithTag:575];
+    UIImageView *imgView  = (UIImageView *)[_searchingView viewWithTag:SETUP_CAMERA_IMAGE_TAG];
     imgView.animationImages = @[[UIImage imageNamed:@"setup_camera_c1"],
                                   [UIImage imageNamed:@"setup_camera_c2"],
                                   [UIImage imageNamed:@"setup_camera_c3"],
@@ -98,10 +123,10 @@
     [self.view bringSubviewToFront:_viewPairNDetecting];
     
     [imgView startAnimating];
-    
     [imageView startAnimating];
+    
     self.homeWifiSSID = [CameraPassword fetchSSIDInfo];
-    NSLog(@"homeWifiSSID: %@", self.homeWifiSSID);
+    DLog(@"homeWifiSSID: %@", self.homeWifiSSID);
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setObject:_homeWifiSSID forKey:HOME_SSID];
@@ -120,7 +145,7 @@
         _viewProgress.frame = rect;
     }
     
-    [self createBLEConnectionRescan:FALSE];
+    [self createBLEConnectionRescan:NO];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -128,7 +153,7 @@
     NSArray *viewControllers = self.navigationController.viewControllers;
 	if ([viewControllers indexOfObject:self] == NSNotFound) {
 		// View is disappearing because it was popped from the stack
-		NSLog(@"View controller was popped --- We are closing down..task_cancelled = YES");
+		DLog(@"View controller was popped --- We are closing down..task_cancelled = YES");
         [[NSNotificationCenter defaultCenter] removeObserver:self];
 	}
     
@@ -146,19 +171,19 @@
     [BLEConnectionManager.instanceBLE.cm stopScan];
     
     if ( BLEConnectionManager.instanceBLE.state == CONNECTING ) {
-        NSLog(@"BLE is connecting... return.");
+        DLog(@"BLE is connecting... return.");
         return;
     }
     
-    NSLog(@"CreateBLE VC - btnConnectTouchUpInsideAction: %@", _selectedPeripheral);
+    DLog(@"CreateBLE VC - btnConnectTouchUpInsideAction: %@", _selectedPeripheral);
     [BLEConnectionManager.instanceBLE connectToBLEWithPeripheral:_selectedPeripheral];
     
     [self createHubbleAlertView];
 }
 
-- (IBAction)btnContinueTouchUpInsideAction:(id)sender
+- (void)retryButtonAction
 {
-    NSLog(@"CreateBLE VC - btnContinueTouchUpInsideAction - refreshCamBLE");
+    DLog(@"CreateBLE VC - retryButtonAction - refreshCamBLE");
     [_viewError removeFromSuperview];
     self.shouldTimeoutProcessing = NO;
     [self createBLEConnectionRescan:_rescanFlag];
@@ -168,7 +193,7 @@
 {
     self.isBackPress = YES;
     ConnectionState stateConnectBLE = BLEConnectionManager.instanceBLE.state;
-    NSLog(@"CreateBLE VC - hubbleItemAction - stateConnectBLE: %d", stateConnectBLE);
+    DLog(@"CreateBLE VC - hubbleItemAction - stateConnectBLE: %d", stateConnectBLE);
     if ( stateConnectBLE != CONNECTED ) {
         // in state : SCANNING OR IDLE
         self.isBackPress = NO;
@@ -198,7 +223,7 @@
     }
 }
 
-- (IBAction)refreshCamBLE:(id)sender
+- (void)refreshCamBLE
 {
     [self createBLEConnectionRescan:YES];
 }
@@ -236,7 +261,7 @@
         
         // You may use a Block, rather than a delegate.
         [_alertView setOnButtonTouchUpInside:^(CustomIOS7AlertView *alertView, int buttonIndex) {
-            NSLog(@"Block: Button at position %d is clicked on alertView %d.", buttonIndex, [alertView tag]);
+            DLog(@"Block: Button at position %d is clicked on alertView %d.", buttonIndex, [alertView tag]);
             [alertView close];
         }];
         
@@ -249,7 +274,7 @@
 
 - (void)customIOS7dialogButtonTouchUpInside:(CustomIOS7AlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    NSLog(@"Delegate: Button at position %d is clicked on alertView %d.", buttonIndex, alertView.tag);
+    DLog(@"Delegate: Button at position %d is clicked on alertView %d.", buttonIndex, alertView.tag);
     [alertView close];
 }
 
@@ -273,7 +298,7 @@
     
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(20, 85, 200, 21)];// autorelease];
     label.textAlignment = NSTextAlignmentCenter;
-    label.text = @"Connecting to Camera";
+    label.text = LocStr(@"Connecting to camera");
     [demoView addSubview:label];
     
     return demoView;
@@ -283,7 +308,7 @@
 
 - (void)createBLEConnectionRescan:(BOOL)rescanFlag
 {
-    NSLog(@"CreateBLE VC - createBLEConnectionRescan: %d", rescanFlag);
+    DLog(@"CreateBLE VC - createBLEConnectionRescan: %d", rescanFlag);
     
     if (rescanFlag) {
         [self.view addSubview:_viewProgress];
@@ -300,7 +325,7 @@
         [_currentBLEList removeAllObjects];
     }
     
-    [self.ib_tableListBLE reloadData];
+    [self.tableView reloadData];
 
     self.taskCancelled = NO;
     
@@ -333,27 +358,19 @@
                                                                   repeats:NO];
 }
 
-- (void)checkConnectionToCamera:(NSTimer *)expired
-{
-    // just clear waring
-    if ( expired ) {
-        [expired invalidate];
-    }
-}
-
 - (void)scanCameraBLEDone
 {
-    NSLog(@"CreateBLEConnection_VC - scanCameraBLEDone - task_cancelled: %d, - _currentBLEList count: %d, - shouldTimeoutProcessing: %d", _taskCancelled, _currentBLEList.count, _shouldTimeoutProcessing);
+    DLog(@"CreateBLEConnection_VC - scanCameraBLEDone - task_cancelled: %d, - _currentBLEList count: %d, - shouldTimeoutProcessing: %d", _taskCancelled, _currentBLEList.count, _shouldTimeoutProcessing);
     
     if ( _taskCancelled ) {
         return;
     }
     
-    _viewSearching.hidden = NO;
+    _searchingView.hidden = NO;
     
     if ( _currentBLEList.count == 0) {
         // No camera found
-        NSLog(@"No BLE device found! schedule next check ");
+        DLog(@"No BLE device found! schedule next check ");
         
         // Check again
         self.timerScanCameraBLEDone = [NSTimer scheduledTimerWithTimeInterval:5.0
@@ -370,15 +387,13 @@
         
         if ( _currentBLEList.count == 1 ) {
             // connect directly
-            //Update UI
             [_viewProgress removeFromSuperview];
             [_viewPairNDetecting removeFromSuperview];
-            [_ib_lableStage setText:@"Select a device to connect"];
-            [_ib_tableListBLE reloadData];
+            [_tableView reloadData];
             
-            _btnConnect.enabled = YES;
+            _connectButton.enabled = YES;
             self.selectedPeripheral = (CBPeripheral *)[_currentBLEList firstObject];
-            NSLog(@"Found 1 %@, connect now", _selectedPeripheral.name);
+            DLog(@"Found 1 %@, connect now", _selectedPeripheral.name);
             
             [BLEConnectionManager.instanceBLE connectToBLEWithPeripheral:_selectedPeripheral];
             
@@ -386,16 +401,12 @@
         }
         else {
             // Equal or more than 2
-            NSLog(@"Found more than 1 valid devices -> Show lists");
+            DLog(@"Found more than 1 valid devices -> Show lists");
             
-            // Update UI
             [_viewProgress removeFromSuperview];
             [_viewPairNDetecting removeFromSuperview];
-            
-            [_ib_lableStage setText:@"Select a device to connect"];
-            
-            [_ib_tableListBLE reloadData];
-            _btnConnect.enabled = YES;
+            [_tableView reloadData];
+            _connectButton.enabled = YES;
         }
     }
 }
@@ -408,9 +419,7 @@
     }
 }
 
-/* 
- This is called when BLE is connected & RX, TX characteristic is found
- */
+// This is called when BLE is connected & RX, TX characteristic is found
 - (void)updateUIConnection:(NSTimer *)info
 {
     if (BLEConnectionManager.instanceBLE.state == CONNECTED) {
@@ -418,7 +427,7 @@
         [self moveToNextStep];
     }
     else {
-        NSLog(@"updateUIConnection : BLE state is %d, not CONNECTED", BLEConnectionManager.instanceBLE.state);
+        DLog(@"updateUIConnection : BLE state is %d, not CONNECTED", BLEConnectionManager.instanceBLE.state);
     }
 }
 
@@ -431,47 +440,22 @@
 
 - (void)becomeActive
 {
-    if ( _showProgressNextTime ) {
-        NSLog(@"cshow progress 03");
-        [self showProgress:nil];
-    }
-    
     self.taskCancelled = NO;
-    [self checkConnectionToCamera:nil];
-}
-
-- (void)showProgress:(NSTimer *)exp
-{
-    NSLog(@"show progress ");
-    
-    if ( _inProgress ) {
-        NSLog(@"show progress 01 ");
-        self.inProgress.hidden = NO;
-        [self.view bringSubviewToFront:_inProgress];
-    }
-}
-
-- (void)hideProgess
-{
-    NSLog(@"hide progress");
-    if ( _inProgress ) {
-        _inProgress.hidden = YES;
-    }
 }
 
 #pragma mark - BLEConnectionManagerDelegate
 
 - (void)bleDisconnected
 {
-    NSLog(@"CreateBLEConnection_VC - bleDisconnected - _isBackPress: %d, -shouldTimeout: %d", _isBackPress, _shouldTimeoutProcessing);
+    DLog(@"CreateBLEConnection_VC - bleDisconnected - _isBackPress: %d, -shouldTimeout: %d", _isBackPress, _shouldTimeoutProcessing);
     
     if (!_isBackPress) {
         if (_shouldTimeoutProcessing) {
-            NSLog(@"CreateBLEConnection_VC - bleDisconnected - Timeout, popup the error view");
+            DLog(@"CreateBLEConnection_VC - bleDisconnected - Timeout, popup the error view");
         }
         else {
             //if button back don't press
-            NSLog(@"BLE device is DISCONNECTED - Reconnect  ");
+            DLog(@"BLE device is DISCONNECTED - Reconnect  ");
             NSDate *date = [NSDate dateWithTimeInterval:2.0 sinceDate:[NSDate date]];
             [[NSRunLoop currentRunLoop] runUntilDate:date];
             
@@ -485,13 +469,13 @@
             self.timerTimeoutConnectBLE = nil;
         }
 
-        NSLog(@"CreateBLEConnection_VC - bleDisconnected - _isBackPress = TRUE");
+        DLog(@"CreateBLEConnection_VC - bleDisconnected - _isBackPress = TRUE");
     }
 }
 
 - (void)didConnectToBle:(CBUUID *)serviceId
 {
-    NSLog(@"BLE device connected - performSelector now");
+    DLog(@"BLE device connected - performSelector now");
     
     [self performSelectorOnMainThread:@selector(updateUIConnection:) withObject:nil waitUntilDone:NO];
 }
@@ -503,26 +487,26 @@
 
 - (void)didReceiveData:(NSString *)stringResponse
 {
-    NSLog(@"Receive string %@", stringResponse);
+    DLog(@"Receive string %@", stringResponse);
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
     if ( !stringResponse ) {
-        //check which step it is
+        // check which step it is
         NSString * udid = [userDefaults objectForKey:CAMERA_UDID];
         NSString *  version = [userDefaults objectForKey:FW_VERSION];
         
         if ( udid ) {
             if ( version ) {
-                NSLog(@"Receive nil string from no where.");
+                DLog(@"Receive nil string from no where.");
                 return;
             }
             else {
-                //Retry GetVersion
+                // Retry GetVersion
                 [self sendCommandGetVersion];
             }
         }
         else {
-            //Retry Camera UDID & version
+            // Retry Camera UDID & version
             if ( [self sendCommandGetUDID:nil] ) {
                 
                 [self sendCommandGetVersion];
@@ -532,9 +516,9 @@
     else if ([stringResponse rangeOfString:GET_VERSION].location != NSNotFound)
     {
         [self customIOS7dialogButtonTouchUpInside:_alertView clickedButtonAtIndex:0];
-        //sucucessfull when writing version
-        //dismiss statusDialog
-        NSLog(@"CreateBLEConnection_VC -get version successfull: %@", stringResponse);
+        
+        // sucucessful when writing version, dismiss statusDialog
+        DLog(@"CreateBLEConnection_VC -get version successfull: %@", stringResponse);
         NSRange colonRange = [stringResponse rangeOfString:@": "];
         
         if (colonRange.location != NSNotFound) {
@@ -549,17 +533,14 @@
             [userDefaults synchronize];
         }
         else {
-            NSLog(@"CreateBLEConnection_VC - get version NOT found");
+            DLog(@"CreateBLEConnection_VC - get version NOT found");
         }
         
-        NSLog(@"Load step 40 - EditCamera_VC");
-
-        //Load the next xib
         EditCamera_VController *step04ViewController = [[EditCamera_VController alloc] initWithNibName:@"EditCamera_VController" bundle:nil];
         step04ViewController.cameraMac = self.cameraMac;
         step04ViewController.cameraName = self.cameraName;
         
-        NSLog(@"Load step 41 - EditCamera_VC");
+        DLog(@"Load step 41 - EditCamera_VC");
         [self.navigationController pushViewController:step04ViewController animated:NO];
         
         [[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -577,14 +558,11 @@
     else if ( [stringResponse rangeOfString:GET_UDID].location != NSNotFound ) {
         //get_udid: 01008344334C32B0A0VFFRBSVA
         NSString *stringUDID = [stringResponse substringFromIndex:GET_UDID.length + 2];
-        NSLog(@"Get UDID successfully - udid: %@", stringUDID);
+        DLog(@"Get UDID successfully - udid: %@", stringUDID);
         
         self.cameraMac = [stringUDID substringWithRange:NSMakeRange(6, 12)];
         
-        /*
-         * Make sure a valid camera name.
-         */
-
+        // Make sure a valid camera name.
         if ( _selectedPeripheral.name ) {
             self.cameraName = _selectedPeripheral.name;
         }
@@ -598,19 +576,19 @@
         [userDefaults synchronize];
     }
     else {
-        NSLog(@"CreateBLEConnectionVC - didReceiveData - Unknown error");
+        DLog(@"CreateBLEConnectionVC - didReceiveData - Unknown error");
     }
 }
 
 - (void)moveToNextStep
 {
-    //First time enter, try to flush BLE buffer
+    // First time enter, try to flush BLE buffer
     
     // FLUSH ---
     BLEConnectionManager.instanceBLE.delegate = self;
     
     if (BLEConnectionManager.instanceBLE.state == CONNECTED) {
-        NSLog(@"Clear Udid");
+        DLog(@"Clear UDID");
         
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         [userDefaults removeObjectForKey:CAMERA_UDID];
@@ -631,8 +609,8 @@
         return;
     }
     
-    NSLog(@"Now, send command get version");
-    //first get mac address of camera
+    DLog(@"Now, send command get version");
+    // first get mac address of camera
     BLEConnectionManager.instanceBLE.delegate = self;
     [BLEConnectionManager.instanceBLE.uartPeripheral writeString:GET_VERSION withTimeOut:SHORT_TIME_OUT_SEND_COMMAND];
     
@@ -645,11 +623,10 @@
 
 - (BOOL)sendCommandGetUDID:(NSTimer *)info
 {
-    NSLog(@"now, Send command get udid");
+    DLog(@"now, Send command get udid");
     
-    if (BLEConnectionManager.instanceBLE.state != CONNECTED)
-    {
-        NSLog(@"sendCommandGetUDID:  BLE disconnected - ");
+    if (BLEConnectionManager.instanceBLE.state != CONNECTED) {
+        DLog(@"sendCommandGetUDID:  BLE disconnected - ");
         return NO;
     }
     
@@ -662,7 +639,7 @@
     
     while (BLEConnectionManager.instanceBLE.uartPeripheral.isBusy) {
         if (debugLog) {
-            NSLog(@"sendCommandGetUDID:  wait for result...");
+            DLog(@"sendCommandGetUDID:  wait for result...");
             debugLog = NO;
         }
         
@@ -729,10 +706,10 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 1 && indexPath.row == 0) {
-        [self refreshCamBLE:nil];
+        [self refreshCamBLE];
     }
     else {
-        _btnConnect.enabled = YES;
+        _connectButton.enabled = YES;
         self.selectedPeripheral = (CBPeripheral *)BLEConnectionManager.instanceBLE.listBLEs[indexPath.row];
     }
 }

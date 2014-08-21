@@ -278,7 +278,7 @@
 
     if (checkFailed) {
         // ERROR condition
-        UIAlertView *alertViewError = [[UIAlertView alloc] initWithTitle:LocStr(@"Create_Account_Failed")
+        UIAlertView *alertViewError = [[UIAlertView alloc] initWithTitle:LocStr(@"Create Account Failed")
                                                                  message:msg
                                                                 delegate:nil
                                                        cancelButtonTitle:nil

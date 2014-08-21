@@ -30,7 +30,7 @@
     [self.searchCameraButton setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
     
     _pairLabel.text = LocStr(@"Pair");
-    _detectingCameraLabel.text = LocStr(@"Detecting the Camera");
+    _detectingCameraLabel.text = LocStr(@"Detecting the camera");
     _instructionLabel.text = LocStr(@"Press and hold the button marked 'PAIR' for 3 seconds and then click the Search button (below) to continue");
     [_searchCameraButton setTitle:LocStr(@"Search for Camera") forState:UIControlStateNormal];
 }
