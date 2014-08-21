@@ -68,7 +68,6 @@ typedef enum _WAIT_FOR_UPDATING {
 
 
 @property (retain, nonatomic) IBOutlet UITableView *tableViewSettings;
-@property (retain, nonatomic) IBOutlet UIButton *btnRmoveCamera;
 @property (retain, nonatomic) IBOutlet UIView *viewProgress;
 
 @property (retain, nonatomic) NSString *stringFW_Version;
@@ -108,11 +107,6 @@ typedef enum _WAIT_FOR_UPDATING {
     
     self.tableViewSettings.delegate = self;
     self.tableViewSettings.dataSource = self;
-    
-    [self.btnRmoveCamera setBackgroundImage:[UIImage imageNamed:@"enter"]
-                                   forState:UIControlStateNormal];
-    [self.btnRmoveCamera setBackgroundImage:[UIImage imageNamed:@"enter_pressed"]
-                                   forState:UIControlEventTouchDown];
     
     self.stringFW_Version = NSLocalizedStringWithDefaultValue(@"firmware_version", nil, [NSBundle mainBundle],
                                                    @"Firmware version", nil);
@@ -164,7 +158,6 @@ typedef enum _WAIT_FOR_UPDATING {
 
 - (void)xibDefaultLocalization
 {
-    [self.btnRmoveCamera setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_cameramenu_button_text_cameramenu", nil, [NSBundle mainBundle], @"Remove Camera", nil)];
     [[self.vwHeaderCamDetail viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_cameramenu_label_camdetail", nil, [NSBundle mainBundle], @"Camera Detail", nil)];
     [[self.vwHeaderNotSens viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_cameramenu_label_sensity", nil, [NSBundle mainBundle], @"Notification Sensity", nil)];
 }
@@ -177,7 +170,6 @@ typedef enum _WAIT_FOR_UPDATING {
 
 - (void)dealloc {
     [_tableViewSettings release];
-    [_btnRmoveCamera release];
     [_viewProgress release];
     [_viewPorgress release];
     [_alertViewRename release];
@@ -227,7 +219,6 @@ typedef enum _WAIT_FOR_UPDATING {
 {
     //self.navigationItem.hidesBackButton = YES;
     //self.view.userInteractionEnabled = NO;
-    self.btnRmoveCamera.enabled = NO;
     
     //self.viewProgress.frame = UIScreen.mainScreen.bounds;
     //self.viewProgress.hidden = NO;
@@ -372,8 +363,6 @@ typedef enum _WAIT_FOR_UPDATING {
             self.navigationController.view.userInteractionEnabled = NO;
             [self removeRemoteCamera];
         }
-        
-        self.btnRmoveCamera.enabled = YES;
     }
     else// if(ALERT_RENAME_REPORT)
     {

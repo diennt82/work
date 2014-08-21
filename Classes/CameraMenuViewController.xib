@@ -7,7 +7,6 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CameraMenuViewController">
             <connections>
-                <outlet property="btnRmoveCamera" destination="Ntm-t1-RWB" id="Amo-rE-0Wc"/>
                 <outlet property="btnSnapshotOK" destination="Lde-sO-rIK" id="hOV-v3-K92"/>
                 <outlet property="btnSnapshotRefresh" destination="vTy-Y5-p8L" id="Q07-at-YuG"/>
                 <outlet property="imgVSnapshot" destination="1WO-p0-Od7" id="dcm-v7-cDG"/>
@@ -26,23 +25,12 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" rowHeight="45" sectionHeaderHeight="40" sectionFooterHeight="1" id="fn0-nR-x3P">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="491"/>
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <color key="backgroundColor" cocoaTouchSystemColor="lightTextColor"/>
                     <color key="separatorColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                     <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                 </tableView>
-                <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Ntm-t1-RWB">
-                    <rect key="frame" x="20" y="499" width="280" height="55"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                    <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="20"/>
-                    <state key="normal" title="Remove Camera" backgroundImage="enter.png">
-                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                    <connections>
-                        <action selector="btnRemoveCameraTouchUpInsideAction:" destination="-1" eventType="touchUpInside" id="duM-5W-MRg"/>
-                    </connections>
-                </button>
                 <view hidden="YES" userInteractionEnabled="NO" alpha="0.80000001192092896" contentMode="scaleToFill" id="npz-Oy-IKH">
                     <rect key="frame" x="60" y="184" width="200" height="200"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
@@ -226,7 +214,6 @@
         </view>
     </objects>
     <resources>
-        <image name="enter.png" width="270" height="50"/>
         <image name="general.png" width="25" height="25"/>
         <image name="sensitivity.png" width="25" height="25"/>
     </resources>
