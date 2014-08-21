@@ -55,7 +55,7 @@
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 
     self.aryDatePrefix = [[NSArray alloc] initWithObjects:@"th", @"st", @"nd", @"rd",@"th",@"th", @"th", @"th", @"th", @"th",nil];
-    self.stringIntelligentMessage = @"Loading...";
+    self.stringIntelligentMessage = LocStr(@"Loading...");
     self.isLoading = YES;
     self.is12hr = [[NSUserDefaults standardUserDefaults] boolForKey:@"IS_12_HR"];
     self.eventPage = 1;
@@ -99,7 +99,7 @@
         self.isLoading = YES;
         self.isEventAlready = NO;
         self.events = nil;
-        self.stringIntelligentMessage = @"Loading...";
+        self.stringIntelligentMessage = LocStr(@"Loading...");
         self.eventPage = 1;
         
         [self loadEvents:_camChannel];
@@ -137,7 +137,7 @@
     
     if (_events.count == 0) {
         self.isEventAlready = YES;
-        self.stringIntelligentMessage = @"There are no events";
+        self.stringIntelligentMessage = LocStr(@"There are no events");
         self.stringCurrentDate = @"";
     }
     else {
@@ -233,7 +233,7 @@
                     NSString *dataStr1 = nil;
                     
                     if (event[@"data"] != [NSNull null]) {
-                        NSArray *data  = (NSArray *)event[@"data"] ;
+                        NSArray *data = (NSArray *)event[@"data"] ;
                         NSError *error = nil;
                         NSData *jsonData = [NSJSONSerialization dataWithJSONObject:data options:NSJSONWritingPrettyPrinted error:&error];
                         
@@ -291,44 +291,44 @@
 {
     if (numberOfVOX >= 4) {
         if (numberOfMovement >= 4) {
-            self.stringIntelligentMessage = @"There has been a lot of noise/movement";
+            self.stringIntelligentMessage = LocStr(@"There has been a lot of noise/movement");
         }
         else if (numberOfMovement >= 2) {
-            self.stringIntelligentMessage = @"There has been a lot of noise and some movement";
+            self.stringIntelligentMessage = LocStr(@"There has been a lot of noise and some movement");
         }
         else if (numberOfMovement == 1) {
-            self.stringIntelligentMessage = @"There has been a lot of noise and little movement";
+            self.stringIntelligentMessage = LocStr(@"There has been a lot of noise and little movement");
         }
         else {
-            self.stringIntelligentMessage = @"There has been a lot of noise";
+            self.stringIntelligentMessage = LocStr(@"There has been a lot of noise");
         }
     }
     else {
         // numberOfVOX >= 0
         if (numberOfMovement >= 4) {
-            self.stringIntelligentMessage = @"There has been a lot of movement";
+            self.stringIntelligentMessage = LocStr(@"There has been a lot of movement");
         }
         else if (numberOfMovement >= 2) {
-            self.stringIntelligentMessage = @"There has been some movement";
+            self.stringIntelligentMessage = LocStr(@"There has been some movement");
         }
         else if (numberOfMovement == 1) {
-            self.stringIntelligentMessage = @"There has been a little movement";
+            self.stringIntelligentMessage = LocStr(@"There has been a little movement");
         }
         else {
             if (numberOfVOX >= 2) {
-                self.stringIntelligentMessage = @"There has been some noise";
+                self.stringIntelligentMessage = LocStr(@"There has been some noise");
             }
             else if (numberOfVOX >= 1) {
-                self.stringIntelligentMessage = @"There has been a little noise";
+                self.stringIntelligentMessage = LocStr(@"There has been a little noise");
             }
             else {
-                self.stringIntelligentMessage = @"All is calm";
+                self.stringIntelligentMessage = LocStr(@"All is calm");
             }
         }
     }
 
     if ( _camChannel.profile.name ) {
-        self.stringIntelligentMessage = [NSString stringWithFormat:@"%@ at %@", _stringIntelligentMessage, _camChannel.profile.name];
+        self.stringIntelligentMessage = [NSString stringWithFormat:LocStr(@"%@ at %@"), _stringIntelligentMessage, _camChannel.profile.name];
     }
 }
 
@@ -345,7 +345,6 @@
     [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
     
     NSString *dateInStringFormated = [dateFormatter stringFromDate:_currentDate];
-    
     dateInStringFormated = [NSString urlEncode:dateInStringFormated usingEncoding:NSUTF8StringEncoding];
     
     if ( !_jsonComm ) {
@@ -364,34 +363,32 @@
                                                                             size:nil
                                                                           apiKey:apiKey];
     if (responseDict) {
-        NSArray *events = [[responseDict objectForKey:@"data"] objectForKey:@"events"];
+        NSArray *events = [responseDict[@"data"] objectForKey:@"events"];
         
-        if ( events.count > 0 ) {
-            for (NSDictionary *event in events) {
-                EventInfo *eventInfo = [[EventInfo alloc] init];
-                eventInfo.alertName = [event objectForKey:@"alert_name"];
-                eventInfo.value      = [event objectForKey:@"value"];
-                eventInfo.timeStamp = [event objectForKey:@"time_stamp"];
-                eventInfo.alert      = [[event objectForKey:@"alert"] integerValue];
+        for (NSDictionary *event in events) {
+            EventInfo *eventInfo = [[EventInfo alloc] init];
+            eventInfo.alertName = [event objectForKey:@"alert_name"];
+            eventInfo.value      = [event objectForKey:@"value"];
+            eventInfo.timeStamp = [event objectForKey:@"time_stamp"];
+            eventInfo.alert      = [[event objectForKey:@"alert"] integerValue];
+            
+            NSArray *clipsInEvent = [event objectForKey:@"data"];
+            
+            if (![clipsInEvent isEqual:[NSNull null]]) {
+                ClipInfo *clipInfo = [[ClipInfo alloc] init];
+                clipInfo.urlImage = [[clipsInEvent objectAtIndex:0] objectForKey:@"image"];
+                clipInfo.urlFile = [[clipsInEvent objectAtIndex:0] objectForKey:@"file"];
                 
-                NSArray *clipsInEvent = [event objectForKey:@"data"];
-                
-                if (![clipsInEvent isEqual:[NSNull null]]) {
-                    ClipInfo *clipInfo = [[ClipInfo alloc] init];
-                    clipInfo.urlImage = [[clipsInEvent objectAtIndex:0] objectForKey:@"image"];
-                    clipInfo.urlFile = [[clipsInEvent objectAtIndex:0] objectForKey:@"file"];
-                    
-                    eventInfo.clipInfo = clipInfo;
-                }
-                else {
-                    DLog(@"Event has no data");
-                }
-                
-                [self.events addObject:eventInfo];
-                shouldUpdateTableView = YES;
-                
-                [self.clipsInEachEvent addObject:clipsInEvent];
+                eventInfo.clipInfo = clipInfo;
             }
+            else {
+                DLog(@"Event has no data");
+            }
+            
+            [self.events addObject:eventInfo];
+            shouldUpdateTableView = YES;
+            
+            [self.clipsInEachEvent addObject:clipsInEvent];
         }
     }
     
@@ -638,7 +635,7 @@
             else {
                 df_local.dateFormat = @"H:mm";
             }
-            cell.eventTimeLabel.text = [NSString stringWithFormat:@"%@ Yesterday",[df_local stringFromDate:eventDate]];
+            cell.eventTimeLabel.text = [NSString stringWithFormat:LocStr(@"%@ Yesterday"),[df_local stringFromDate:eventDate]];
         }
         else {
             df_local.dateFormat = @"d";
@@ -699,12 +696,22 @@
         [cell.eventTimeLabel setTextColor:[UIColor timeLineColor]];
         return cell;
     }
+    else {
+        static NSString *CellIdentifier = @"Cell";
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        if (cell == nil) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        }
+        
+        cell.textLabel.text = LocStr(@"Unknown");
+        return cell;
+    }
 }
 
 - (void)showDialogToConfirm
 {
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Notice"
-                                                        message:@"Video clip is not ready, please try again later."
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:LocStr(@"Notice")
+                                                        message:LocStr(@"Video clip is not ready, please try again later.")
                                                        delegate:self
                                               cancelButtonTitle:@"Cancel"
                                               otherButtonTitles:nil, nil];
