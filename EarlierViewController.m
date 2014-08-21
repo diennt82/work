@@ -7,7 +7,6 @@
 //
 
 #import "EarlierViewController.h"
-#import "SavedEventViewController.h"
 #import "MHTabBarController.h"
 #import "UIColor+Hubble.h"
 #import "PublicDefine.h"
