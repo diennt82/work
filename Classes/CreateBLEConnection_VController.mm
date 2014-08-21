@@ -19,7 +19,7 @@
 
 #define BTN_RETRY_TAG       599
 #define BTN_SETUP_WIFI      699
-#define BLE_TIMEOUT_PROCESS 45
+#define BLE_TIMEOUT_PROCESS 30
 #define SETUP_UNKNOW        0
 #define SETUP_BLE           1
 #define SETUP_LAN           2
@@ -369,8 +369,15 @@
     [self.viewPairNDetecting removeFromSuperview];
     [self customIOS7dialogButtonTouchUpInside:_alertView clickedButtonAtIndex:0];
     
-    [self.view addSubview:_viewError];
-    [self.view bringSubviewToFront:_viewError];
+    if (_cameraType == SETUP_CAMERA_FOCUS73)
+    {
+        [self btnSetupWithWifiAction:_btnSetupWithWifi];
+    }
+    else
+    {
+        [self.view addSubview:_viewError];
+        [self.view bringSubviewToFront:_viewError];
+    }
 }
 
 #pragma mark - Hubble alert view & delegate
