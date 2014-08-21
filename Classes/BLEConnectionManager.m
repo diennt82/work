@@ -73,11 +73,11 @@
     //    scanForPeripheralsWithServices:@[UARTPeripheral.uartServiceUUID]
     
     if ( _cm.state == CBCentralManagerStatePoweredOn ) {
-        NSLog(@"Scanning started");
+        DLog(@"Scanning started");
         [_cm scanForPeripheralsWithServices:nil options:@{CBCentralManagerScanOptionAllowDuplicatesKey:@NO}];
     }
     else {
-        NSLog(@"can't scan");
+        DLog(@"can't scan");
     }
     
     [_listBLEs removeAllObjects];
@@ -94,7 +94,7 @@
 
 - (void)stopScanBLE
 {
-    NSLog(@"Stop scanning!!");
+    DLog(@"Stop scanning!!");
     [self.cm stopScan];
 }
 
@@ -122,7 +122,7 @@
  */
 - (void)connectToBLEWithPeripheral:(CBPeripheral *)peripheral
 {
-    NSLog(@"Connect to BLE with name is %@", peripheral.name);
+    DLog(@"Connect to BLE with name is %@", peripheral.name);
     
     self.state = CONNECTING;
     self.uartPeripheral = [[UARTPeripheral alloc] initWithPeripheral:peripheral delegate:self];
@@ -142,12 +142,12 @@
 
 - (void)didReceiveRawData:(NSData *)data
 {
-    NSLog(@"BLEManager - didReceiveRawData: %@", data);
+    DLog(@"BLEManager - didReceiveRawData: %@", data);
 }
 
 - (void)onReceiveDataError:(int)error_code forCommand:(NSString *)commandToCamera
 {
-    NSLog(@"Error code is %d and command  %@***************************", error_code, commandToCamera);
+    DLog(@"Error code is %d and command  %@***************************", error_code, commandToCamera);
     
     if (error_code == READ_TIME_OUT) {
         /*20140402_stephen request: dont disconnect, just re-send the command*/
@@ -177,12 +177,12 @@
 {
     if (central.state == CBCentralManagerStatePoweredOn) {
         // In a real app, you'd deal with all the states correctly
-        NSLog(@"BLE IS ON ");
+        DLog(@"BLE IS ON ");
         self.isOnBLE = YES;
         [self scan];
     }
     else {
-        NSLog(@"BLE not power on");
+        DLog(@"BLE not power on");
         self.isOnBLE = NO;
     }
 }
@@ -196,7 +196,7 @@
             [peripheral.name hasPrefix:@"CameraHD-0854"] ||
             [peripheral.name hasPrefix:@"CameraHD-0085"])
         {
-            NSLog(@"Did discover peripheral name %@ and peripheral is %@", peripheral.name, peripheral);
+            DLog(@"Did discover peripheral name %@ and peripheral is %@", peripheral.name, peripheral);
             
             if ( ![_listBLEs containsObject:peripheral] ) {
                 [_listBLEs addObject:peripheral];
@@ -205,29 +205,29 @@
                     [_delegate didReceiveBLEList:_listBLEs];
                 }
                 else {
-                    NSLog(@"BLE manager - didDiscoverPeripheral - self.delegate == nil");
+                    DLog(@"BLE manager - didDiscoverPeripheral - self.delegate == nil");
                 }
             }
             else {
-                NSLog(@"BLE manager - didDiscoverPeripheral - list contains peripheral");
+                DLog(@"BLE manager - didDiscoverPeripheral - list contains peripheral");
             }
         }
     }
     else if ( _scanMode == SCAN_FOR_SINGLE_DEVICE ) {
-        NSLog(@"Did discover Single device :  name %@ and peripheral is %@", peripheral.name, peripheral);
-        NSLog(@"Connect again!!");
+        DLog(@"Did discover Single device :  name %@ and peripheral is %@", peripheral.name, peripheral);
+        DLog(@"Connect again!!");
         
         //called if found that service id?
         [self connectToBLEWithPeripheral:peripheral];
     }
     else {
-        NSLog(@"BLE manager - didDiscoverPeripheral - scanMode: %d", _scanMode);
+        DLog(@"BLE manager - didDiscoverPeripheral - scanMode: %d", _scanMode);
     }
 }
 
 - (void) centralManager:(CBCentralManager *)central didConnectPeripheral:(CBPeripheral *)peripheral
 {
-    NSLog(@"Did connect peripheral %@", peripheral.name);
+    DLog(@"Did connect peripheral %@", peripheral.name);
     if ([_uartPeripheral.peripheral isEqual:peripheral]) {
         [_uartPeripheral didConnect];
     }
@@ -235,7 +235,7 @@
 
 - (void)centralManager:(CBCentralManager *)central didFailToConnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error
 {
-    NSLog(@" FailToConnectPeripheral %@ with error: %@", peripheral.name , error.description);
+    DLog(@" FailToConnectPeripheral %@ with error: %@", peripheral.name , error.description);
     self.state = DISCONNECTED;
 }
 
@@ -244,7 +244,7 @@
  */
 - (void) centralManager:(CBCentralManager *)central didDisconnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error
 {
-    NSLog(@"didDisconnectPeripheral %@ with error: %@", peripheral.name , error.description);
+    DLog(@"didDisconnectPeripheral %@ with error: %@", peripheral.name , error.description);
     
     self.state = DISCONNECTED;
     self.isOnBLE = NO;
@@ -265,7 +265,7 @@
         }
         
         if ( _needReconnect ) {
-            NSLog(@" delegate = nil, rescan myself");
+            DLog(@" delegate = nil, rescan myself");
             [self reScanForPeripheral:[UARTPeripheral uartServiceUUID]];
         }
     }
@@ -274,6 +274,7 @@
 // Just Clean a warning!
 - (void)didConnect
 {
+    
 }
 
 @end
