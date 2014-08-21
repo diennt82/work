@@ -485,9 +485,13 @@
 - (UIImage *)convertToCamaraImage:(CAMERA_TAG)cameraTad {
     switch (cameraTad) {
         case FORCUS_66_TAG:
-            return [UIImage imageNamed:@"camera_ble3.png"];
+            return [UIImage imageNamed:@"camera_ble3"];
         case SCOUT_73_TAG:
-            return [UIImage imageNamed:@"wifisetup_scout85.png"];
+            return [UIImage imageNamed:@"wifisetup_scout85"];
+        case MBP_83_TAG:
+            return [UIImage imageNamed:@"camera_ble2"];
+        case MBP_85_TAG:
+            return [UIImage imageNamed:@"blesetup_focus85"];
         default:
             break;
     }

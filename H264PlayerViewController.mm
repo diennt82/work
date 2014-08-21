@@ -993,6 +993,7 @@ double _ticks = 0;
                 
                 self.imageViewStreamer.userInteractionEnabled = YES;
                 self.imgViewDrectionPad.userInteractionEnabled = YES;
+                [self showControlMenu];
                 
                 if (isiPhone4)
                 {
