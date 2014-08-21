@@ -440,8 +440,8 @@
 
 - (void)showDialogChangePassword
 {
-    CustomIOS7AlertView *alert = [[CustomIOS7AlertView alloc] init];
-    [alert setBackgroundColor:[UIColor whiteColor]];
+    self.customAlertView = [[CustomIOS7AlertView alloc] init];
+    [self.customAlertView setBackgroundColor:[UIColor whiteColor]];
     
     UIView *alertContenerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 150)];
     UITextField *tfOldPass = [[UITextField alloc] initWithFrame:CGRectMake(10, 40, 280, 30)];
@@ -469,14 +469,14 @@
     [alertContenerView addSubview:tfNewPass];
     [alertContenerView addSubview:tfConfPass];
     
-    [alert setContainerView:alertContenerView];
+    [self.customAlertView setContainerView:alertContenerView];
     
-    [alert setButtonTitles:[NSMutableArray arrayWithObjects:
+    [self.customAlertView setButtonTitles:[NSMutableArray arrayWithObjects:
                             NSLocalizedStringWithDefaultValue(@"cancel", nil, [NSBundle mainBundle], @"Cancel", nil),
                             NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil), nil]];
-    [alert setDelegate:self];
+    [self.customAlertView setDelegate:self];
     
-    [alert setOnButtonTouchUpInside:^(CustomIOS7AlertView *alertView, int buttonIndex)
+    [self.customAlertView setOnButtonTouchUpInside:^(CustomIOS7AlertView *alertView, int buttonIndex)
     {
         [alertView close];
         
@@ -519,10 +519,7 @@
         [tfConfPass release];
         [alertView release];
     }];
-    [alert show];
-    self.customAlertView = alert;
-    
-    [alert release];
+    [self.customAlertView show];
 }
 
 - (void)customIOS7dialogButtonTouchUpInside:(id)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
