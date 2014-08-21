@@ -21,8 +21,7 @@
 {
     [super viewDidLoad];
     
-    self.title =  NSLocalizedStringWithDefaultValue(@"Forgot_Password",nil, [NSBundle mainBundle],
-                                                                   @"Forgot Password", nil);
+    self.title =  LocStr(@"Forgot Password");
     _passwordLinkSent.hidden = YES;
     [self.view addSubview:_passwordLinkSent];
 }
@@ -73,9 +72,11 @@
 - (IBAction)handleNextButton:(id)sender
 {
     if(![self checkEmailValidation:_userEmailTF.text]) {
-        NSString *strMsg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg3",nil, [NSBundle mainBundle], @"Create_Account_Failed_msg3", nil);
-        //NSString *strMsg = @"Please enter valid email.";
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:strMsg delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil
+                                                            message:LocStr(@"Invalid email. Email address should be in the form somebody@somewhere.com")
+                                                           delegate:nil
+                                                  cancelButtonTitle:LocStr(@"Ok")
+                                                  otherButtonTitles:nil];
         [alertView show];
         return;
     }
@@ -113,14 +114,11 @@
     [self.navigationItem setHidesBackButton:YES];
     
     _toEmail.text  = _userEmail;
-    NSString * msg = NSLocalizedStringWithDefaultValue(@"Login" ,nil, [NSBundle mainBundle],
-                                                       @"Login" , nil);
     
-    UIBarButtonItem *loginButton =
-    [[UIBarButtonItem alloc] initWithTitle:msg
-                                     style:UIBarButtonItemStylePlain
-                                    target:self
-                                    action:@selector(handleLoginButton:)];
+    UIBarButtonItem *loginButton = [[UIBarButtonItem alloc] initWithTitle:LocStr(@"Login")
+                                                                    style:UIBarButtonItemStylePlain
+                                                                   target:self
+                                                                   action:@selector(handleLoginButton:)];
     self.navigationItem.rightBarButtonItem = loginButton;
 }
 
@@ -129,19 +127,14 @@
     self.navigationItem.leftBarButtonItem.enabled = YES ;
     self.navigationItem.rightBarButtonItem.enabled = YES;
     
-	NSLog(@"ForgotPwdVC -  forgotFailedWithError code: %d", [[errorResponse objectForKey:@"status"] intValue]);
+	DLog(@"ForgotPwdVC -  forgotFailedWithError code: %d", [errorResponse[@"status"] intValue]);
     
-    NSString *msg1 = NSLocalizedStringWithDefaultValue(@"Reset_Password_Error",nil, [NSBundle mainBundle],
-                                                        @"Reset Password Error" , nil);
-    
-    NSString *ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
-                                                      @"Ok", nil);
-	//ERROR condition
-	[[[UIAlertView alloc] initWithTitle:msg1
-                               message:[NSString stringWithFormat:LocStr(@"Server error: %@"), [errorResponse objectForKey:@"message"]]
-                              delegate:nil
-                     cancelButtonTitle:ok
-                     otherButtonTitles:nil] show];
+	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:LocStr(@"Reset Password Error")
+                                                    message:[NSString stringWithFormat:LocStr(@"Server error: %@"), errorResponse[@"message"]]
+                                                   delegate:nil
+                                          cancelButtonTitle:nil
+                                          otherButtonTitles:LocStr(@"Ok"), nil];
+    [alert show];
 }
 
 - (void)forgotFailedServerUnreachable
@@ -149,23 +142,13 @@
     self.navigationItem.leftBarButtonItem.enabled = YES ;
     self.navigationItem.rightBarButtonItem.enabled = YES;
     
-	NSLog(@"ForgotPwdVC -  forgotFailedServerUnreachable");
+	DLog(@"ForgotPwdVC -  forgotFailedServerUnreachable");
 
-    NSString *msg1 = NSLocalizedStringWithDefaultValue(@"Reset_Password_Error",nil, [NSBundle mainBundle],
-                                                        @"Reset Password Error" , nil);
-    
-    NSString *msg = NSLocalizedStringWithDefaultValue(@"Server_error_1" ,nil, [NSBundle mainBundle],
-                                                       @"Server is unreachable. Please try again later." , nil);
-    
-    NSString *ok = NSLocalizedStringWithDefaultValue(@"Ok",nil, [NSBundle mainBundle],
-                                                      @"Ok", nil);
-	//ERROR condition
-	UIAlertView *alert = [[UIAlertView alloc]
-						  initWithTitle:msg1
-						  message:msg
-						  delegate:nil
-						  cancelButtonTitle:ok
-						  otherButtonTitles:nil];
+	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:LocStr(@"Reset Password Error")
+                                                    message:LocStr(@"Server is unreachable. Please try again later.")
+                                                   delegate:nil
+                                          cancelButtonTitle:nil
+                                          otherButtonTitles:LocStr(@"Ok"), nil];
 	[alert show];
 }
 
