@@ -11,8 +11,6 @@
 #import "TimelineViewController.h"
 #import "TimelineCell.h"
 #import "TimelineActivityCell.h"
-#import "TimelineButtonCell.h"
-#import "TimeLinePremiumCell.h"
 #import "TimelineDatabase.h"
 #import "PlaybackViewController.h"
 #import "PlaylistInfo.h"
