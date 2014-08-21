@@ -530,6 +530,9 @@
 "now" = "Jetzt";
 
 /* No comment provided by engineer. */
+"off" = "OFF";
+
+/* No comment provided by engineer. */
 "offline" = "Offline";
 
 /* No comment provided by engineer. */
@@ -537,6 +540,9 @@
 
 /* No comment provided by engineer. */
 "old_password" = "Altes Passwort";
+
+/* No comment provided by engineer. */
+"on" = "ON";
 
 /* No comment provided by engineer. */
 "online" = "Online";
@@ -1053,9 +1059,6 @@
 
 /* No comment provided by engineer. */
 "xib_settingpage_cell_clock" = "Uhr";
-
-/* No comment provided by engineer. */
-"xib_settingpage_cell_donotdisturb_button_on" = "On";
 
 /* No comment provided by engineer. */
 "xib_settingpage_cell_donotdisturb_label_des" = "Wählen Sie, wie lang Sie keine Benachrichtigungen erhalten möchten. Beachten Sie, dass Sie die Benachrichtigungseinstellungen jeerzeit in den Allgemeinen Einstellungen ändern können";
