@@ -1614,7 +1614,7 @@
             df_local.dateFormat = @"H:mm";
         }
         
-        str  = [NSString stringWithFormat:@"%@ Yesterday",[df_local stringFromDate:eventDate]];
+        str  = [NSString stringWithFormat:@"%@ %@",[df_local stringFromDate:eventDate], NSLocalizedStringWithDefaultValue(@"yesterday", nil, [NSBundle mainBundle], @"Yesterday", nil)];
     }
     else
     {

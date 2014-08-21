@@ -1439,5 +1439,8 @@
 "Yes_n" = "Ja und nicht mehr nachfragen";
 
 /* No comment provided by engineer. */
+"yesterday" = "Yesterday";
+
+/* No comment provided by engineer. */
 "you_do_not_have_motion_detected_recording_enabled" = "Sie haben keine Bewegungsmelder-Aufnahme aktiviert. Bitte wählen Sie eine der unten stehende Optionen aus";
 
