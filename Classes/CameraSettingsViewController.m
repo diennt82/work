@@ -25,7 +25,7 @@
 {
     [super viewDidLoad];
 
-    self.title = @"Camera Settings";
+    self.title = LocStr(@"Camera Settings");
     
     valueSettings[0] = self.volumeValue;
     valueSettings[1] = self.brightnessValue;
@@ -64,13 +64,13 @@
     switch (section)
     {
         case 0:
-            return @"Volume";
+            return LocStr(@"Volume");
             
         case 1:
-            return @"Brightness";
+            return LocStr(@"Brightness");
             
         case 2:
-            return @"Sound Sensitivity";
+            return LocStr(@"Sound Sensitivity");
             
         default:
             break;
@@ -142,22 +142,22 @@
             switch (indexPath.row)
            {
                 case 0:
-                   cell.nameLabel.text = @"Temperature Unit";
+                   cell.nameLabel.text = LocStr(@"Temperature Unit");
                    if (self.temperatureType == 0) {
-                       cell.valueLabel.text = @"˚F";
+                       cell.valueLabel.text = LocStr(@"˚F");
                    }
                    else {
-                       cell.valueLabel.text = @"˚C";
+                       cell.valueLabel.text = LocStr(@"˚C");
                    }
                     break;
                    
                case 1:
-                   cell.nameLabel.text = @"Video Quality";
+                   cell.nameLabel.text = LocStr(@"Video Quality");
                    if (self.qualityType == 0) {
-                       cell.valueLabel.text = @"Normal Quality";
+                       cell.valueLabel.text = LocStr(@"Normal Quality");
                    }
                    else {
-                       cell.valueLabel.text = @"High Quality";
+                       cell.valueLabel.text = LocStr(@"High Quality");
                    }
                    
                    break;
@@ -179,7 +179,7 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
     
-    cell.textLabel.text = @"Default";
+    cell.textLabel.text = LocStr(@"Default");
     
     return cell;
 }
@@ -210,14 +210,14 @@
         {
             case 0:
             {
-                valuesViewController.valueArray = [NSArray arrayWithObjects:@"Fahrenheit", @"Celsius", nil];
+                valuesViewController.valueArray = @[ LocStr(@"Fahrenheit"), LocStr(@"Celsius") ];
                 valuesViewController.selectedValue = self.temperatureType;
             }
                 break;
                 
             case 1:
             {
-                valuesViewController.valueArray = [NSArray arrayWithObjects:@"Normal Quality", @"High Quality", nil];
+                valuesViewController.valueArray = @[ LocStr(@"Normal Quality"), LocStr(@"High Quality") ];
                 valuesViewController.selectedValue = self.qualityType;
             }
                 break;
