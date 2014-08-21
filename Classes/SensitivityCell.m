@@ -47,17 +47,29 @@
 {
     [self xibDefaultLocalization];
     
-    [self.btnSwitch setImage:[UIImage imageNamed:@"settings_switch_off"] forState:UIControlStateNormal];
-    [self.btnSwitch setImage:[UIImage imageNamed:@"settings_switch_on"] forState:UIControlStateSelected];
-    [self.btnSwitch setImage:[UIImage imageNamed:@"settings_switch_on"] forState:UIControlStateHighlighted];
+    NSString *on = [NSString stringWithFormat:@" %@", NSLocalizedStringWithDefaultValue(@"on", nil, [NSBundle mainBundle], @"ON", nil)];
+    NSString *off = [NSString stringWithFormat:@" %@", NSLocalizedStringWithDefaultValue(@"off", nil, [NSBundle mainBundle], @"OFF", nil)];
     
-    [self.btnVideoRecording setImage:[UIImage imageNamed:@"settings_switch_off"] forState:UIControlStateNormal];
-    [self.btnVideoRecording setImage:[UIImage imageNamed:@"settings_switch_on"] forState:UIControlStateSelected];
-    [self.btnVideoRecording setImage:[UIImage imageNamed:@"settings_switch_on"] forState:UIControlStateHighlighted];
+    [self.btnSwitch setBackgroundImage:[UIImage imageNamed:@"settings_switch_off"] forState:UIControlStateNormal];
+    [self.btnSwitch setBackgroundImage:[UIImage imageNamed:@"settings_switch_on"] forState:UIControlStateSelected];
+    [self.btnSwitch setBackgroundImage:[UIImage imageNamed:@"settings_switch_on"] forState:UIControlStateHighlighted];
+    [self.btnSwitch setTitle:off forState:UIControlStateNormal];
+    [self.btnSwitch setTitle:on forState:UIControlStateSelected];
+    [self.btnSwitch setTitle:on forState:UIControlStateHighlighted];
     
-    [self.btnCaptureSnapshot setImage:[UIImage imageNamed:@"settings_switch_off"] forState:UIControlStateNormal];
-    [self.btnCaptureSnapshot setImage:[UIImage imageNamed:@"settings_switch_on"] forState:UIControlStateSelected];
-    [self.btnCaptureSnapshot setImage:[UIImage imageNamed:@"settings_switch_on"] forState:UIControlStateHighlighted];
+    [self.btnVideoRecording setBackgroundImage:[UIImage imageNamed:@"settings_switch_off"] forState:UIControlStateNormal];
+    [self.btnVideoRecording setBackgroundImage:[UIImage imageNamed:@"settings_switch_on"] forState:UIControlStateSelected];
+    [self.btnVideoRecording setBackgroundImage:[UIImage imageNamed:@"settings_switch_on"] forState:UIControlStateHighlighted];
+    [self.btnVideoRecording setTitle:off forState:UIControlStateNormal];
+    [self.btnVideoRecording setTitle:on forState:UIControlStateSelected];
+    [self.btnVideoRecording setTitle:on forState:UIControlStateHighlighted];
+    
+    [self.btnCaptureSnapshot setBackgroundImage:[UIImage imageNamed:@"settings_switch_off"] forState:UIControlStateNormal];
+    [self.btnCaptureSnapshot setBackgroundImage:[UIImage imageNamed:@"settings_switch_on"] forState:UIControlStateSelected];
+    [self.btnCaptureSnapshot setBackgroundImage:[UIImage imageNamed:@"settings_switch_on"] forState:UIControlStateHighlighted];
+    [self.btnCaptureSnapshot setTitle:off forState:UIControlStateNormal];
+    [self.btnCaptureSnapshot setTitle:on forState:UIControlStateSelected];
+    [self.btnCaptureSnapshot setTitle:on forState:UIControlStateHighlighted];
     
     self.btnSwitch.selected          = _switchValue;
     self.btnVideoRecording.enabled   = _switchValue;

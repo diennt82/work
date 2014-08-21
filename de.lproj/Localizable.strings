@@ -380,6 +380,9 @@
 "hud_error_sensitivity_settings_error" = "Error -Load Sensitivity Settings error!";
 
 /* No comment provided by engineer. */
+"hud_logout" = "Log out...";
+
+/* No comment provided by engineer. */
 "hud_please_wait" = "Bitte warten ...";
 
 /* No comment provided by engineer. */
@@ -530,6 +533,9 @@
 "now" = "Jetzt";
 
 /* No comment provided by engineer. */
+"off" = "OFF";
+
+/* No comment provided by engineer. */
 "offline" = "Offline";
 
 /* No comment provided by engineer. */
@@ -537,6 +543,9 @@
 
 /* No comment provided by engineer. */
 "old_password" = "Altes Passwort";
+
+/* No comment provided by engineer. */
+"on" = "ON";
 
 /* No comment provided by engineer. */
 "online" = "Online";
@@ -812,6 +821,12 @@
 "xib_camerasettings_cell_button_firmwareversion" = "Firmwareversion";
 
 /* No comment provided by engineer. */
+"xib_camerasettings_cell_button_model_id" = "Model ID";
+
+/* No comment provided by engineer. */
+"xib_camerasettings_cell_button_remove_camera" = "Remove Camera";
+
+/* No comment provided by engineer. */
 "xib_camerasettings_cell_label_high" = "Hohe Qualität";
 
 /* No comment provided by engineer. */
@@ -1053,9 +1068,6 @@
 
 /* No comment provided by engineer. */
 "xib_settingpage_cell_clock" = "Uhr";
-
-/* No comment provided by engineer. */
-"xib_settingpage_cell_donotdisturb_button_on" = "On";
 
 /* No comment provided by engineer. */
 "xib_settingpage_cell_donotdisturb_label_des" = "Wählen Sie, wie lang Sie keine Benachrichtigungen erhalten möchten. Beachten Sie, dass Sie die Benachrichtigungseinstellungen jeerzeit in den Allgemeinen Einstellungen ändern können";
@@ -1425,6 +1437,9 @@
 
 /* No comment provided by engineer. */
 "Yes_n" = "Ja und nicht mehr nachfragen";
+
+/* No comment provided by engineer. */
+"yesterday" = "Yesterday";
 
 /* No comment provided by engineer. */
 "you_do_not_have_motion_detected_recording_enabled" = "Sie haben keine Bewegungsmelder-Aufnahme aktiviert. Bitte wählen Sie eine der unten stehende Optionen aus";
