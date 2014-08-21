@@ -12,8 +12,8 @@
 
 @interface CameraNameViewController () <UITextFieldDelegate, UIAlertViewDelegate>
 
-@property (nonatomic, weak) IBOutlet UITableViewCell *nameCell;
-@property (nonatomic, weak) IBOutlet UIView *viewProgress;
+@property (nonatomic, strong) IBOutlet UIView *viewProgress;
+@property (nonatomic, strong) IBOutlet UITableViewCell *nameCell;
 
 @end
 
@@ -25,7 +25,7 @@
 {
     [super viewDidLoad];
 
-    self.title = @"Name";
+    self.title = LocStr(@"Name");
     UIBarButtonItem *doneBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
                                                                                        target:self
                                                                                        action:@selector(doneAction:)];
@@ -35,7 +35,7 @@
 
 - (void)viewDidAppear:(BOOL)animated
 {
-    UITextField *nameTF = (UITextField *) [self.nameCell viewWithTag:59];
+    UITextField *nameTF = (UITextField *)[_nameCell viewWithTag:59];
     [nameTF becomeFirstResponder];
     nameTF.clearButtonMode = UITextFieldViewModeWhileEditing;
 }
@@ -46,7 +46,7 @@
     self.navigationItem.hidesBackButton = YES;
     [self.view addSubview:_viewProgress];
     [self.view bringSubviewToFront:_viewProgress];
-    NSString *cameraName = ((UITextField *)[self.nameCell viewWithTag:59]).text;
+    NSString *cameraName = ((UITextField *)[_nameCell viewWithTag:59]).text;
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString *apiKey = [userDefaults stringForKey:@"PortalApiKey"];
@@ -68,19 +68,21 @@
             [self.navigationController popViewControllerAnimated:YES];
         }
         else {
-            [[[UIAlertView alloc] initWithTitle:@"Change Camera Name"
-                                       message:[responseDict objectForKey:@"message"]
-                                      delegate:self
-                             cancelButtonTitle:nil
-                               otherButtonTitles:@"OK", nil] show];
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:LocStr(@"Change camera name")
+                                                                message:responseDict[@"message"]
+                                                               delegate:self
+                                                      cancelButtonTitle:nil
+                                                      otherButtonTitles:LocStr(@"Ok"), nil];
+            [alertView show];
         }
     }
     else {
-        [[[UIAlertView alloc] initWithTitle:@"Change Camera Name"
-                                     message:@"Server Error"
-                                    delegate:self
-                           cancelButtonTitle:nil
-                           otherButtonTitles:@"OK", nil] show];
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:LocStr(@"Change camera name")
+                                                            message:LocStr(@"Server error")
+                                                           delegate:self
+                                                  cancelButtonTitle:nil
+                                                  otherButtonTitles:LocStr(@"Ok"), nil];
+        [alertView show];
     }
 }
 
@@ -90,8 +92,8 @@
         return NO;
     }
     
-    NSString * regex = @"[a-zA-Z0-9._-]+";
-    NSPredicate * validatedName = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
+    NSString *regex = @"[a-zA-Z0-9._-]+";
+    NSPredicate *validatedName = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
     BOOL isValidatedName = [validatedName evaluateWithObject:cameraNames];
     
     return isValidatedName;
@@ -152,6 +154,5 @@
 {
     return NO;
 }
-
 
 @end
