@@ -418,16 +418,7 @@
         return 1;
     }
     
-    /*
-     * For CUE to start tableView has 2 sections.
-     * For full feature tableView has 4 sections. The last sections are Buttons
-     */
-    if (CUE_RELEASE_FLAG) {
-        return 2;
-    }
-    else {
-        return 4;
-    }
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -442,12 +433,6 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    if (section == 3) {
-        return 15;
-    }
-    else if (section == 2) {
-        return 8;
-    }
     return 0;
 }
 
@@ -491,10 +476,10 @@
 
 - (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 0 || indexPath.section == 2) {
+    if ( indexPath.section == 0 ) {
         return NO;
     }
-    else if (indexPath.section == 1) {
+    else if ( indexPath.section == 1 ) {
         if ( _events.count > 0 ) {
             EventInfo *eventInfo = (EventInfo *)[_events objectAtIndex:indexPath.row];
             
@@ -529,7 +514,7 @@
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ((indexPath.section == 1) && (indexPath.row == _events.count - 1) && !_isLoading) {
+    if ( indexPath.section == 1 && indexPath.row == _events.count - 1 && !_isLoading) {
         DLog(@"fetching more events...");
         self.isLoading = YES;
         [self performSelectorInBackground:@selector(loadMoreEvents) withObject:_camChannel];
@@ -712,43 +697,6 @@
         [cell.eventLabel setTextColor:[UIColor timeLineColor]];
         [cell.eventTimeLabel setFont:[UIFont systemFontOfSize:13]];
         [cell.eventTimeLabel setTextColor:[UIColor timeLineColor]];
-        return cell;
-    }
-    else if (indexPath.section == 2) {
-        static NSString *CellIdentifier = @"TimelineButtonCell";
-        TimelineButtonCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        
-        NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"TimelineButtonCell" owner:nil options:nil];
-        for (id curObj in objects) {
-            if([curObj isKindOfClass:[UITableViewCell class]]) {
-                cell = (TimelineButtonCell *)curObj;
-                break;
-            }
-        }
-        
-        [cell.timelineCellButtn setBackgroundImage:[UIImage imageNamed:@"save"] forState:UIControlStateNormal];
-        [cell.timelineCellButtn setBackgroundImage:[UIImage imageNamed:@"save_pressed"] forState:UIControlEventTouchDown];
-        [cell.timelineCellButtn setTitle:@"Save the Day" forState:UIControlStateNormal];
-        [cell.timelineCellButtn.titleLabel setFont:[UIFont boldSystemFontOfSize:20]];
-        return cell;
-    }
-    else {
-        static NSString *CellIdentifier = @"TimeLinePremiumCell";
-        TimeLinePremiumCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        
-        NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"TimeLinePremiumCell" owner:nil options:nil];
-        for (id curObj in objects) {
-            if([curObj isKindOfClass:[UITableViewCell class]]) {
-                cell = (TimeLinePremiumCell *)curObj;
-                break;
-            }
-        }
-        
-        [cell.titleLabel setFont:[UIFont boldSystemFontOfSize:20]];
-        cell.titleLabel.textColor = [UIColor whiteColor];
-        [cell.subtitleLabel setFont:[UIFont boldSystemFontOfSize:12]];
-        cell.subtitleLabel.textColor = [UIColor whiteColor];
-        
         return cell;
     }
 }

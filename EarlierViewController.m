@@ -56,25 +56,16 @@
     }
     
     self.timelineVC = [[TimelineViewController alloc] initWithNibName:@"TimelineViewController" bundle:nil];
-    _timelineVC.title = @"Timeline";
+    _timelineVC.title = LocStr(@"Timeline");
+    
     if ( [_parentVC conformsToProtocol:@protocol(TimelineVCDelegate)] ) {
         _timelineVC.timelineVCDelegate = (id<TimelineVCDelegate>)_parentVC;
     }
     _timelineVC.parentVC = _parentVC;
 
-    NSArray *viewControllers;
-    if (CUE_RELEASE_FLAG) {
-        viewControllers = @[_timelineVC];
-    }
-    else {
-        SavedEventViewController *savedViewController = [[SavedEventViewController alloc] initWithNibName:@"SavedEventViewController" bundle:nil];
-        [savedViewController setTitle:@"Saved"];
-        viewControllers = @[_timelineVC, savedViewController];
-    }
-    
     _tabBarController = [[MHTabBarController alloc] init];
 	_tabBarController.delegate = self;
-	_tabBarController.viewControllers = viewControllers;
+	_tabBarController.viewControllers = @[_timelineVC];
     
     [self.view addSubview:_tabBarController.view];
     

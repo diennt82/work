@@ -52,16 +52,8 @@ static const NSInteger TagOffset = 1000;
 	tabButtonsContainerView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	[self.view addSubview:tabButtonsContainerView];
     
-    if (CUE_RELEASE_FLAG)
-    {
-        self.tabBarWidth = SCREEN_WIDTH;
-        self.viewContronlersMin = 1;
-    }
-    else
-    {
-        self.tabBarWidth = SCREEN_WIDTH / 2;
-        self.viewContronlersMin = 2;
-    }
+    self.tabBarWidth = SCREEN_WIDTH;
+    self.viewContronlersMin = 1;
     
 	rect.origin.y = self.tabBarHeight + 64;
 	rect.size.height = self.view.bounds.size.height - self.tabBarHeight;// - 64;

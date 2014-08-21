@@ -161,7 +161,6 @@
 #define FW_VERSION  @"firmware_version"
 #define CAMERA_SSID @"camera_ssid"
 #define REG_ID      @"RegistrationID"
-#define CUE_RELEASE_FLAG 1
 #define CES128_ENCRYPTION_PASSWORD @"Super-LovelyDuck"
 #define SENDING_CAMERA_LOG_PASSWORD @"8888"
 #define _push_dev_token @"PUSH_NOTIFICATION_DEVICE_TOKEN"
