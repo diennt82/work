@@ -818,6 +818,12 @@
 "xib_camerasettings_cell_button_firmwareversion" = "Firmwareversion";
 
 /* No comment provided by engineer. */
+"xib_camerasettings_cell_button_model_id" = "Model ID";
+
+/* No comment provided by engineer. */
+"xib_camerasettings_cell_button_remove_camera" = "Remove Camera";
+
+/* No comment provided by engineer. */
 "xib_camerasettings_cell_label_high" = "Hohe Qualität";
 
 /* No comment provided by engineer. */
