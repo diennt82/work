@@ -20,12 +20,12 @@
 
 @interface Account_ViewController () <MFMailComposeViewControllerDelegate, UIAlertViewDelegate, CustomIOS7AlertViewDelegate>
 
-@property (retain, nonatomic) IBOutlet UITableViewCell * userEmailCell;
-@property (retain, nonatomic) IBOutlet UITableViewCell * versionCell;
-@property (retain, nonatomic) IBOutlet UITableView * accountInfo;
-@property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellChangePassword;
+@property (assign, nonatomic) IBOutlet UITableViewCell * userEmailCell;
+@property (assign, nonatomic) IBOutlet UITableViewCell * versionCell;
+@property (assign, nonatomic) IBOutlet UITableView * accountInfo;
+@property (assign, nonatomic) IBOutlet UITableViewCell *tableViewCellChangePassword;
 
-@property (nonatomic,strong) NSString *strNewChangedPass;
+@property (nonatomic, retain) NSString *strNewChangedPass;
 @property (nonatomic, retain) CustomIOS7AlertView *customAlertView;
 
 @end
@@ -47,6 +47,8 @@
 -(void) dealloc
 {
     [_tableViewCellChangePassword release];
+    [_customAlertView release];
+    [_strNewChangedPass release];
     [super dealloc];
 }
 
@@ -469,68 +471,62 @@
     [alertContenerView addSubview:tfNewPass];
     [alertContenerView addSubview:tfConfPass];
     
-    [alert setContainerView:alertContenerView];
-    
-    [alert setButtonTitles:[NSMutableArray arrayWithObjects:
-                            NSLocalizedStringWithDefaultValue(@"cancel", nil, [NSBundle mainBundle], @"Cancel", nil),
-                            NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil), nil]];
-    [alert setDelegate:self];
-    
+    alert.containerView = alertContenerView;
+    alert.buttonTitles = [NSMutableArray arrayWithObjects:
+                          NSLocalizedStringWithDefaultValue(@"cancel", nil, [NSBundle mainBundle], @"Cancel", nil),
+                          NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil), nil];
+    alert.delegate = self;
     [alert setOnButtonTouchUpInside:^(CustomIOS7AlertView *alertView, int buttonIndex)
-    {
-        [alertView close];
-        
-        if(buttonIndex==1)
-        {
-            NSString *password = tfNewPass.text;
-            NSString *passwordConfrm = tfConfPass.text;
-            NSString *oldPass = tfOldPass.text;
-            
-            //FIXME: lenght >= 8 chars, provide correct popup message
-            
-            if ((password && password.length > 0)  &&
-                (passwordConfrm && passwordConfrm.length > 0) &&
-                (oldPass && oldPass.length > 0) &&
-                [password isEqualToString:passwordConfrm])
-                
-            {
-                self.strNewChangedPass = password;
-                //[self doChangePassword:password];
-                [self checkOldPass:oldPass NewPass:password];
-            }
-            else
-            {
-                if(tfOldPass.text.length == 0)
-                {
-                    NSDictionary *dictError = [NSDictionary dictionaryWithObjectsAndKeys:
-                                               NSLocalizedStringWithDefaultValue(@"alert_mes_please_enter_correct_old_password", nil, [NSBundle mainBundle], @"Please enter correct old password", nil), @"message", nil];
-                    [self changePasswordFialedWithError:dictError];
-                }
-                else
-                {
-                    NSDictionary *dictError = [NSDictionary dictionaryWithObjectsAndKeys:
-                                               NSLocalizedStringWithDefaultValue(@"alert_mes_password_is_not_match_or_empty", nil, [NSBundle mainBundle], @"Validation failed: Password is not match or empty", nil), @"message", nil];
-                    [self changePasswordFialedWithError:dictError];
-                }
-            }
-        }
-        [tfOldPass release];
-        [tfNewPass release];
-        [tfConfPass release];
-        [alertView release];
-    }];
+     {
+         if(buttonIndex==1)
+         {
+             NSString *password = tfNewPass.text;
+             NSString *passwordConfrm = tfConfPass.text;
+             NSString *oldPass = tfOldPass.text;
+             
+             //FIXME: lenght >= 8 chars, provide correct popup message
+             
+             if ((password && password.length > 0)  &&
+                 (passwordConfrm && passwordConfrm.length > 0) &&
+                 (oldPass && oldPass.length > 0) &&
+                 [password isEqualToString:passwordConfrm])
+                 
+             {
+                 self.strNewChangedPass = password;
+                 //[self doChangePassword:password];
+                 [self checkOldPass:oldPass NewPass:password];
+             }
+             else
+             {
+                 if(tfOldPass.text.length == 0)
+                 {
+                     NSDictionary *dictError = [NSDictionary dictionaryWithObjectsAndKeys:
+                                                NSLocalizedStringWithDefaultValue(@"alert_mes_please_enter_correct_old_password", nil, [NSBundle mainBundle], @"Please enter correct old password", nil), @"message", nil];
+                     [self changePasswordFialedWithError:dictError];
+                 }
+                 else
+                 {
+                     NSDictionary *dictError = [NSDictionary dictionaryWithObjectsAndKeys:
+                                                NSLocalizedStringWithDefaultValue(@"alert_mes_password_is_not_match_or_empty", nil, [NSBundle mainBundle], @"Validation failed: Password is not match or empty", nil), @"message", nil];
+                     [self changePasswordFialedWithError:dictError];
+                 }
+             }
+         }
+         [alertView close];
+     }];
+    [tfOldPass release];
+    [tfNewPass release];
+    [tfConfPass release];
+    [lblTitle release];
+    [alertContenerView release];
     [alert show];
     self.customAlertView = alert;
-    
     [alert release];
 }
 
 - (void)customIOS7dialogButtonTouchUpInside:(id)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     NSLog(@"%s buttonIndex:%d", __FUNCTION__, buttonIndex);
-    
-    [alertView setDelegate:nil];
-    [alertView close];
 }
 
 -(void)checkOldPass:(NSString *)strOldPass NewPass:(NSString *)strNewPass

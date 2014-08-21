@@ -108,26 +108,30 @@ CGFloat buttonSpacerHeight = 0;
         [[[[UIApplication sharedApplication] windows] firstObject] addSubview:self];
     }
 
-    [UIView animateWithDuration:0.2f delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
+    [UIView animateWithDuration:0.2f
+                          delay:0.0
+                        options:UIViewAnimationOptionCurveEaseInOut
 					 animations:^{
 						 self.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.4f];
                          dialogView.layer.opacity = 1.0f;
                          dialogView.layer.transform = CATransform3DMakeScale(1, 1, 1);
 					 }
-					 completion:NULL
+					 completion:^(BOOL finished) {
+                         
+                     }
      ];
 }
 
 // Button has been touched
 - (IBAction)customIOS7dialogButtonTouchUpInside:(id)sender
 {
-    if (_delegate != NULL) {
-        [_delegate customIOS7dialogButtonTouchUpInside:self clickedButtonAtIndex:[sender tag]];
+    if (self.delegate) {
+        [self.delegate customIOS7dialogButtonTouchUpInside:self clickedButtonAtIndex:[sender tag]];
     }
-
     if (onButtonTouchUpInside != NULL) {
         onButtonTouchUpInside(self, [sender tag]);
     }
+    [self close];
 }
 
 // Default button behaviour
@@ -155,6 +159,7 @@ CGFloat buttonSpacerHeight = 0;
                          dialogView.layer.opacity = 0.0f;
 					 }
 					 completion:^(BOOL finished) {
+                         self.delegate = nil;
                          for (UIView *v in [self subviews]) {
                              [v removeFromSuperview];
                          }
@@ -310,6 +315,12 @@ CGFloat buttonSpacerHeight = 0;
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+    
+    [parentView release];
+    [dialogView release];
+    [containerView release];
+    [buttonView release];
+    [_buttonTitles release];
     
     [super dealloc];
 }
