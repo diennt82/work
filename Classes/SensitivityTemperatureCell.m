@@ -88,18 +88,27 @@
     self.lblTempValueLeft.text = [NSString stringWithFormat:@"%ld", lroundf(_tempValueLeft)];
     self.lblTemperatureValueRight.text = [NSString stringWithFormat:@"%ld", lroundf(_tempValueRight)];
     
-    [self.btnSwitchLeft setImage:[UIImage imageNamed:@"settings_switch_off"] forState:UIControlStateNormal];
-    [self.btnSwitchLeft setImage:[UIImage imageNamed:@"settings_switch_on"] forState:UIControlStateSelected];
-    [self.btnSwitchLeft setImage:[UIImage imageNamed:@"settings_switch_on"] forState:UIControlStateHighlighted];
+    NSString *on = [NSString stringWithFormat:@" %@", NSLocalizedStringWithDefaultValue(@"on", nil, [NSBundle mainBundle], @"ON", nil)];
+    NSString *off = [NSString stringWithFormat:@" %@", NSLocalizedStringWithDefaultValue(@"off", nil, [NSBundle mainBundle], @"OFF", nil)];
+    
+    [self.btnSwitchLeft setBackgroundImage:[UIImage imageNamed:@"settings_switch_off"] forState:UIControlStateNormal];
+    [self.btnSwitchLeft setBackgroundImage:[UIImage imageNamed:@"settings_switch_on"] forState:UIControlStateSelected];
+    [self.btnSwitchLeft setBackgroundImage:[UIImage imageNamed:@"settings_switch_on"] forState:UIControlStateHighlighted];
+    [self.btnSwitchLeft setTitle:off forState:UIControlStateNormal];
+    [self.btnSwitchLeft setTitle:on forState:UIControlStateSelected];
+    [self.btnSwitchLeft setTitle:on forState:UIControlStateHighlighted];
     
     self.btnSwitchLeft.selected = _isSwitchOnLeft;
     
     self.btnMinusLeft.enabled = _isSwitchOnLeft;
     self.btnPlusLeft.enabled = _isSwitchOnLeft;
     
-    [self.btnSwitchRight setImage:[UIImage imageNamed:@"settings_switch_off"] forState:UIControlStateNormal];
-    [self.btnSwitchRight setImage:[UIImage imageNamed:@"settings_switch_on"] forState:UIControlStateSelected];
-    [self.btnSwitchRight setImage:[UIImage imageNamed:@"settings_switch_on"] forState:UIControlStateHighlighted];
+    [self.btnSwitchRight setBackgroundImage:[UIImage imageNamed:@"settings_switch_off"] forState:UIControlStateNormal];
+    [self.btnSwitchRight setBackgroundImage:[UIImage imageNamed:@"settings_switch_on"] forState:UIControlStateSelected];
+    [self.btnSwitchRight setBackgroundImage:[UIImage imageNamed:@"settings_switch_on"] forState:UIControlStateHighlighted];
+    [self.btnSwitchRight setTitle:off forState:UIControlStateNormal];
+    [self.btnSwitchRight setTitle:on forState:UIControlStateSelected];
+    [self.btnSwitchRight setTitle:on forState:UIControlStateHighlighted];
     
     self.btnSwitchRight.selected = _isSwitchOnRight;
     

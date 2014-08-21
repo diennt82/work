@@ -24,6 +24,7 @@
 @property (retain, nonatomic) IBOutlet UITableViewCell * versionCell;
 @property (retain, nonatomic) IBOutlet UITableView * accountInfo;
 @property (retain, nonatomic) IBOutlet UITableViewCell *tableViewCellChangePassword;
+@property (nonatomic, assign) IBOutlet UIButton *logoutButton;
 
 @property (nonatomic,strong) NSString *strNewChangedPass;
 @property (nonatomic, retain) CustomIOS7AlertView *customAlertView;
@@ -92,7 +93,7 @@
 
 - (void)xibDefaultLocalization
 {
-    [[self.view viewWithTag:101] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_accountpage_button_text_logout", nil, [NSBundle mainBundle], @"Logout", nil)];
+    [self.logoutButton setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_accountpage_button_text_logout", nil, [NSBundle mainBundle], @"Logout", nil)];
 }
 
 -(void)loadUserData
@@ -111,7 +112,7 @@
     NSLog(@"LOG OUT>>>>");
     
     MBProgressHUD *hub = [MBProgressHUD showHUDAddedTo:self.view animated:NO];
-    hub.labelText = @"Log out...";
+    hub.labelText = NSLocalizedStringWithDefaultValue(@"hud_logout", nil, [NSBundle mainBundle], @"Log out...", nil);
     
     MenuViewController *tabBarController = (MenuViewController *)self.parentVC;
     
@@ -440,8 +441,8 @@
 
 - (void)showDialogChangePassword
 {
-    CustomIOS7AlertView *alert = [[CustomIOS7AlertView alloc] init];
-    [alert setBackgroundColor:[UIColor whiteColor]];
+    self.customAlertView = [[CustomIOS7AlertView alloc] init];
+    [self.customAlertView setBackgroundColor:[UIColor whiteColor]];
     
     UIView *alertContenerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 150)];
     UITextField *tfOldPass = [[UITextField alloc] initWithFrame:CGRectMake(10, 40, 280, 30)];
@@ -469,14 +470,14 @@
     [alertContenerView addSubview:tfNewPass];
     [alertContenerView addSubview:tfConfPass];
     
-    [alert setContainerView:alertContenerView];
+    [self.customAlertView setContainerView:alertContenerView];
     
-    [alert setButtonTitles:[NSMutableArray arrayWithObjects:
+    [self.customAlertView setButtonTitles:[NSMutableArray arrayWithObjects:
                             NSLocalizedStringWithDefaultValue(@"cancel", nil, [NSBundle mainBundle], @"Cancel", nil),
                             NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil), nil]];
-    [alert setDelegate:self];
+    [self.customAlertView setDelegate:self];
     
-    [alert setOnButtonTouchUpInside:^(CustomIOS7AlertView *alertView, int buttonIndex)
+    [self.customAlertView setOnButtonTouchUpInside:^(CustomIOS7AlertView *alertView, int buttonIndex)
     {
         [alertView close];
         
@@ -519,10 +520,7 @@
         [tfConfPass release];
         [alertView release];
     }];
-    [alert show];
-    self.customAlertView = alert;
-    
-    [alert release];
+    [self.customAlertView show];
 }
 
 - (void)customIOS7dialogButtonTouchUpInside:(id)alertView clickedButtonAtIndex:(NSInteger)buttonIndex

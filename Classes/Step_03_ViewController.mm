@@ -116,7 +116,7 @@
     [[self.view viewWithTag:17] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step03_label_note", nil, [NSBundle mainBundle], @"(Note that this will disconnect your own Wi-Fi for a short while)", nil)];
     
     [[self.inProgress viewWithTag:10] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step03_label_detecting_WIFI", nil, [NSBundle mainBundle], @"Detecting Wi-Fi Camera", nil)];
-    [[self.inProgress viewWithTag:11] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step03_label_this_may_teke", nil, [NSBundle mainBundle], @"This may take up to a minute", nil)];
+    [[self.inProgress viewWithTag:11] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step03_label_this_may_teke", nil, [NSBundle mainBundle], @"This may take up to 3 minutes", nil)];
     
     [[self.timoutView viewWithTag:10] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step03_label_hubble_cannot_connect", nil, [NSBundle mainBundle], @"Hubble can't connect to camera wifi, do you want to pair with camera again?", nil)];
     [[self.timoutView viewWithTag:11] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step03_button_yes", nil, [NSBundle mainBundle], @"Yes", nil)];
@@ -485,9 +485,13 @@
 - (UIImage *)convertToCamaraImage:(CAMERA_TAG)cameraTad {
     switch (cameraTad) {
         case FORCUS_66_TAG:
-            return [UIImage imageNamed:@"camera_ble3.png"];
+            return [UIImage imageNamed:@"camera_ble3"];
         case SCOUT_73_TAG:
-            return [UIImage imageNamed:@"wifisetup_scout85.png"];
+            return [UIImage imageNamed:@"wifisetup_scout85"];
+        case MBP_83_TAG:
+            return [UIImage imageNamed:@"camera_ble2"];
+        case MBP_85_TAG:
+            return [UIImage imageNamed:@"blesetup_focus85"];
         default:
             break;
     }

@@ -65,7 +65,7 @@
     self = [super init];
     if (self) {
         // Custom initialization
-        self.title = @"Cameras";
+        self.title = NSLocalizedStringWithDefaultValue(@"cameras", nil, [NSBundle mainBundle], @"Cameras", nil);
     }
     return self;
 }
@@ -77,7 +77,7 @@
     self = [super init];
     if (self) {
         // Custom initialization
-        self.title = @"Cameras";
+        self.title = NSLocalizedStringWithDefaultValue(@"cameras", nil, [NSBundle mainBundle], @"Cameras", nil);
         self.parentVC = (MenuViewController *)parentVC;
         self.ibTableListCamera.delegate = self;
     }
@@ -91,7 +91,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nil];
     if (self) {
         // Custom initialization
-        self.title = @"Cameras";
+        self.title = NSLocalizedStringWithDefaultValue(@"cameras", nil, [NSBundle mainBundle], @"Cameras", nil);
         self.parentVC = (MenuViewController *)parentVC;
         self.ibTableListCamera.delegate = self;
     }
@@ -551,11 +551,12 @@
         
         CamChannel *ch = (CamChannel *)[_camChannels objectAtIndex:indexPath.row];
 #if 1
-        UIImage *imgCamera = [UIImage imageNamed:@"camera_focus_66"];
+        UIImage *imgCamera = [UIImage imageNamed:@"camera_mbp_83"];
+        NSString *cameraModel = [ch.profile getModel];
         
-        if ([[ch.profile getModel] hasPrefix:CP_MODEL_008])
+        if ([cameraModel isEqualToString:CP_MODEL_CONCURRENT])
         {
-            imgCamera = [UIImage imageNamed:@"camera_mbp_83"];
+            imgCamera = [UIImage imageNamed:@"camera_focus_66"];
         }
 #else
         NSString *strPath = [strDocDirPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.jpg",ch.profile.registrationID]];

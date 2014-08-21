@@ -22,6 +22,8 @@
         [self.btnChangeName setTitle:NSLocalizedStringWithDefaultValue(@"xib_camerasettings_cell_button_cameraname", nil, [NSBundle mainBundle], @"Camera Name", nil) forState:UIControlStateNormal];
         [self.btnChangeImage setTitle:NSLocalizedStringWithDefaultValue(@"xib_camerasettings_cell_button_changeimage", nil, [NSBundle mainBundle], @"Change Image", nil) forState:UIControlStateNormal];
         [self.btnFirmwareVersion setTitle:NSLocalizedStringWithDefaultValue(@"xib_camerasettings_cell_button_firmwareversion", nil, [NSBundle mainBundle], @"Firmware Version", nil) forState:UIControlStateNormal];
+        [self.btnModelID setTitle:NSLocalizedStringWithDefaultValue(@"xib_camerasettings_cell_button_model_id", nil, [NSBundle mainBundle], @"Model ID", nil) forState:UIControlStateNormal];
+        [self.btnRemoveCamera setTitle:NSLocalizedStringWithDefaultValue(@"xib_camerasettings_cell_button_remove_camera", nil, [NSBundle mainBundle], @"Remove Camera", nil) forState:UIControlStateNormal];
     }
     return self;
 }

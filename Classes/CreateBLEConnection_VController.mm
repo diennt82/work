@@ -19,7 +19,7 @@
 
 #define BTN_RETRY_TAG       599
 #define BTN_SETUP_WIFI      699
-#define BLE_TIMEOUT_PROCESS 1.5*60
+#define BLE_TIMEOUT_PROCESS 45
 #define SETUP_UNKNOW        0
 #define SETUP_BLE           1
 #define SETUP_LAN           2
@@ -135,7 +135,7 @@
     
     [[self.viewPairNDetecting viewWithTag:10] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_CreateBLEConnection_label_detectint_the_camera", nil, [NSBundle mainBundle], @"Detecting the Camera", nil)];
     [[self.viewPairNDetecting viewWithTag:11] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_CreateBLEConnection_label_press_and_hold", nil, [NSBundle mainBundle], @"Press and hold the button marked 'PAIR' for 3 seconds ", nil)];
-    [[self.viewPairNDetecting viewWithTag:12] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_CreateBLEConnection_label_this_may_takeup", nil, [NSBundle mainBundle], @"This may take up to a minute", nil)];
+    [[self.viewPairNDetecting viewWithTag:12] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_CreateBLEConnection_label_this_may_takeup", nil, [NSBundle mainBundle], @"This may take up to 3 minutes", nil)];
     
     [[self.viewError viewWithTag:10] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_CreateBLEConnection_label_unable_to_detect_camera", nil, [NSBundle mainBundle], @"Unable to Detect Camera", nil)];
     [[self.viewError viewWithTag:11] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_CreateBLEConnection_label_timout", nil, [NSBundle mainBundle], @"Timeout", nil)];
@@ -1052,7 +1052,7 @@
         case MBP_85_TAG:
             return [UIImage imageNamed:@"blesetup_focus85"];
         case SCOUT_73_TAG:
-            return [UIImage imageNamed:@"camera_scout85"];
+            return [UIImage imageNamed:@"wifisetup_scout85"];
         default:
             break;
     }
