@@ -136,7 +136,7 @@
             
             if (_everydayFlag == TRUE)
             {
-                labelTitle.text = @"Everyday";
+                labelTitle.text = NSLocalizedStringWithDefaultValue(@"everyday", nil, [NSBundle mainBundle], @"Everyday", nil);
             }
             else
             {
