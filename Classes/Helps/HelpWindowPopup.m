@@ -119,6 +119,19 @@
     
     NSData *htmlData = [self.htmlString dataUsingEncoding:NSUTF8StringEncoding];
     [self.webView loadData:htmlData MIMEType:@"text/html" textEncodingName:@"UTF-8" baseURL:[NSURL URLWithString:@""]];
+    
+    
+    self.layer.opacity = 0.5f;
+    self.layer.transform = CATransform3DMakeScale(1.3f, 1.3f, 1.0f);
+    [UIView animateWithDuration:0.2f delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
+					 animations:^{
+                         self.layer.opacity = 1.0f;
+                         self.layer.transform = CATransform3DMakeScale(1, 1, 1);
+					 }
+					 completion:^(BOOL finished) {
+                         
+					 }
+    ];
 }
 
 - (void)dismiss
@@ -127,17 +140,27 @@
     {
         [self.delegate willDismiss:self];
     }
-    self.overlayWindow.shown = NO;
-    [self.overlayWindow setNeedsDisplay];
-    dispatch_async(dispatch_get_main_queue(), ^(void) {
-        [self removeFromSuperview];
-        self.overlayWindow.dialog = nil;
-        
-        UIWindow *window = [[UIApplication sharedApplication] delegate].window;
-        [window makeKeyAndVisible];
-        [window.rootViewController preferredStatusBarStyle];
-        [window.rootViewController setNeedsStatusBarAppearanceUpdate];
-    });
+    
+    self.layer.transform = CATransform3DMakeScale(1, 1, 1);
+//    [UIView animateWithDuration:0.2f delay:0.0 options:UIViewAnimationOptionTransitionNone
+//					 animations:^{
+//                         self.layer.transform = CATransform3DMakeScale(0.0f, 0.0f, 1.0f);
+//                         self.layer.opacity = 0.0f;
+//					 }
+//					 completion:^(BOOL finished) {
+//                         self.overlayWindow.shown = NO;
+//                         [self.overlayWindow setNeedsDisplay];
+//                         dispatch_async(dispatch_get_main_queue(), ^(void) {
+    [self removeFromSuperview];
+    self.overlayWindow.dialog = nil;
+    
+    UIWindow *window = [[UIApplication sharedApplication] delegate].window;
+    [window makeKeyAndVisible];
+    [window.rootViewController preferredStatusBarStyle];
+    [window.rootViewController setNeedsStatusBarAppearanceUpdate];
+//                         });
+//					 }
+//    ];
 }
 
 - (BOOL)isShowing
