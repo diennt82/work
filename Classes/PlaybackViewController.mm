@@ -55,6 +55,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self xibDefaultLocalization];
     // Do any additional setup after loading the view from its nib.
     //load new nib for landscape iPad
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
@@ -85,6 +86,13 @@
     
     [[NSUserDefaults standardUserDefaults] setObject:clip_info.registrationID forKey:PLAYBACK_IN_VEW];
     [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+- (void)xibDefaultLocalization
+{
+    [self.lblDelete setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_Playback_label_delete", nil, [NSBundle mainBundle], @"Delete", nil)];
+    [[self.ib_viewOverlayVideo viewWithTag:2] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_Playback_label_download", nil, [NSBundle mainBundle], @"Download", nil)];
+    [[self.ib_viewOverlayVideo viewWithTag:3] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_Playback_label_share", nil, [NSBundle mainBundle], @"Share", nil)];
 }
 
 - (void)viewWillAppear:(BOOL)animated

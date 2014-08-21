@@ -209,6 +209,9 @@
 "camera_settings" = "Kameraeinstellungen";
 
 /* No comment provided by engineer. */
+"cameras" = "Cameras";
+
+/* No comment provided by engineer. */
 "cancel" = "Abbrechen";
 
 /* No comment provided by engineer. */
@@ -317,6 +320,9 @@
 "error" = "Fehler";
 
 /* No comment provided by engineer. */
+"everyday" = "Everyday";
+
+/* No comment provided by engineer. */
 "fahrenheit" = "Fahrenheit";
 
 /* No comment provided by engineer. */
@@ -402,6 +408,9 @@
 
 /* No comment provided by engineer. */
 "hud_upload_image_successfully" = "Upload image successfully";
+
+/* No comment provided by engineer. */
+"hud_uploading_image" = "Uploading image ...";
 
 /* No comment provided by engineer. */
 "information" = "Information";
@@ -1032,6 +1041,12 @@
 
 /* No comment provided by engineer. */
 "xib_Nofi_label_some_movement" = "Am Standort der Kamera wurde eine Bewegung festgestellt.";
+
+/* No comment provided by engineer. */
+"xib_Playback_label_delete" = "Delete";
+
+/* No comment provided by engineer. */
+"xib_Playback_label_download" = "Download";
 
 /* No comment provided by engineer. */
 "xib_Playback_label_delete" = "Löschen";

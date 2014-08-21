@@ -65,7 +65,7 @@
     self = [super init];
     if (self) {
         // Custom initialization
-        self.title = @"Cameras";
+        self.title = NSLocalizedStringWithDefaultValue(@"cameras", nil, [NSBundle mainBundle], @"Cameras", nil);
     }
     return self;
 }
@@ -77,7 +77,7 @@
     self = [super init];
     if (self) {
         // Custom initialization
-        self.title = @"Cameras";
+        self.title = NSLocalizedStringWithDefaultValue(@"cameras", nil, [NSBundle mainBundle], @"Cameras", nil);
         self.parentVC = (MenuViewController *)parentVC;
         self.ibTableListCamera.delegate = self;
     }
@@ -91,7 +91,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nil];
     if (self) {
         // Custom initialization
-        self.title = @"Cameras";
+        self.title = NSLocalizedStringWithDefaultValue(@"cameras", nil, [NSBundle mainBundle], @"Cameras", nil);
         self.parentVC = (MenuViewController *)parentVC;
         self.ibTableListCamera.delegate = self;
     }
