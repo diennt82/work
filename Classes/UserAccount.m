@@ -237,7 +237,7 @@
     else {
         DLog(@"Error - body content status: %d", status);
 
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:LocStr(@"Get Camera list Error")
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:LocStr(@"Camera list error")
                                                         message:LocStr(@"Server error: Invalid response")
                                                        delegate:nil
                                               cancelButtonTitle:nil
@@ -254,7 +254,7 @@
 {
     DLog(@"UserAccount - getCamListFailure with error code:%d", [errorResponse[@"status"] intValue]);
     
-	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:LocStr(@"Get Camera list Error")
+	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:LocStr(@"Camera list error")
                                                     message:[NSString stringWithFormat:LocStr(@"Server error: %@"), errorResponse[@"message"]]
                                                    delegate:nil
                                           cancelButtonTitle:nil
@@ -270,7 +270,7 @@
 {
 	NSLog(@"UserAccount - getCamListServerUnreachable");
     
-	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:LocStr(@"Get Camera list Error")
+	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:LocStr(@"Camera list error")
                                                     message:LocStr(@"Server unreachable")
                                                    delegate:nil
                                           cancelButtonTitle:nil
