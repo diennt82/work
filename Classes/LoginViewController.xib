@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
-        <deployment defaultVersion="1552" identifier="iOS"/>
+        <deployment defaultVersion="1792" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="LoginViewController">
             <connections>
-                <outlet property="buttonEnter" destination="mqZ-hz-y6A" id="bls-jh-osZ"/>
+                <outlet property="createAccountButton" destination="cP0-2H-cVD" id="dZU-0q-zEn"/>
+                <outlet property="enterButton" destination="mqZ-hz-y6A" id="JFi-jp-dRT"/>
+                <outlet property="forgotPasswordButton" destination="W1Z-YE-5aX" id="7k1-sk-Jw0"/>
                 <outlet property="imgViewLoading" destination="eKW-5t-cDZ" id="v57-1s-meM"/>
-                <outlet property="tfEmail" destination="SjK-YD-BHM" id="68O-BM-hEp"/>
-                <outlet property="tfPassword" destination="Mj1-qu-9zW" id="3Sg-7V-Ckp"/>
+                <outlet property="passwordTextField" destination="Mj1-qu-9zW" id="pVb-2B-KHs"/>
+                <outlet property="usernameEmailTextField" destination="SjK-YD-BHM" id="wtf-th-PF9"/>
                 <outlet property="view" destination="1" id="3"/>
                 <outlet property="viewProgress" destination="5mk-dv-l1L" id="yLm-bl-Ttm"/>
             </connections>
