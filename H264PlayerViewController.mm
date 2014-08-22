@@ -784,9 +784,14 @@ double _ticks = 0;
                           withString:NSLocalizedStringWithDefaultValue(@"help_text_go_to_photos_application", nil, [NSBundle mainBundle], @"A. Your recorded video footage and snapshots are all stored inside your Photos application. Please go to ‘Photos' application to view them", nil)
                              options:nil range:NSMakeRange(0, html.length)];
     
+    CGFloat height = 280;
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        height = 420;
+    }
     HelpWindowPopup *popup = [[HelpWindowPopup alloc] initWithTitle:@"Video Screen Help"
                                                       andHtmlString:html
-                                                          andHeight:280];
+                                                          andHeight:height];
     popup.delegate = self;
     [popup show];
     self.helpPopup = popup;
@@ -4406,11 +4411,14 @@ double _ticks = 0;
 -(void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
     [self applyFont];
-    CGRect rect = self.ib_lbCameraNotAccessible.frame;
-    rect.origin.x = (self.scrollView.frame.size.width - rect.size.width) / 2;
-    rect.origin.y = (self.scrollView.frame.size.height - rect.size.height) / 2 + 55;
-    self.ib_lbCameraNotAccessible.frame = rect;
-    self.ib_openHelpButton.frame = rect;
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+    {
+        CGRect rect = self.ib_lbCameraNotAccessible.frame;
+        rect.origin.x = (self.scrollView.frame.size.width - rect.size.width) / 2;
+        rect.origin.y = (self.scrollView.frame.size.height - rect.size.height) / 2 + 55;
+        self.ib_lbCameraNotAccessible.frame = rect;
+        self.ib_openHelpButton.frame = rect;
+    }
 }
 
 -(void) checkOrientation
