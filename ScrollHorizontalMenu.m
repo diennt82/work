@@ -27,7 +27,7 @@
 
 @implementation ScrollHorizontalMenu
 
--(void) awakeFromNib
+- (void)awakeFromNib
 {
     self.currentTappedButtonIndex = -1;
     self.bounces = YES;
@@ -39,7 +39,7 @@
     [self reloadData:NO];
 }
 
--(void) reloadData:(BOOL)isLand
+- (void)reloadData:(BOOL)isLand
 {
     NSArray *viewsToRemove = [self subviews];
 	for (UIView *v in viewsToRemove) {
