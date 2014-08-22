@@ -734,27 +734,56 @@ double _ticks = 0;
     [html appendString:@"   <body>"];
     [html appendString:@"       <div style='margin-left:5px;'>"];
     [html appendString:@"       <ul class=\"first_deep\">"];
-    [html appendString:@"           <li>Q. Why can’t I access my camera? Why do I keep seeing the warning message \"Low bandwidth detected\"?"];
-    [html appendString:@"           </li>"];
-    [html appendString:@"           <li>A. This could be due to one of the following reasons:"];
+    [html appendString:@"           <li>#h1#</li>"];
+    [html appendString:@"           <li>#h2#"];
     [html appendString:@"               <ul class=\"second_deep\">"];
-    [html appendString:@"                   <li>The upload bandwidth of your broadband network is too low</li>"];
-    [html appendString:@"                   <li>The minimum upload bandwidth required is about 600kbps</li>"];
-    [html appendString:@"                   <li>Please check your upload bandwidth with your Internet Service Provider or use an online bandwidth speed test tool, such as http://www.speedtest.net</li>"];
-    [html appendString:@"                   <li>Your camera may be too far away from your router. Please try reducing the distance between the router and camera</li>"];
-    [html appendString:@"                   <li>If you are using a mobile network (3G), the bandwidth may be limited</li>"];
-    [html appendString:@"                   <li>If you are running other applications (eg. games), they could be consuming a lot of bandwidth. This can impact on the performance of the Hubble app. Please try closing any unnecessary applications before using the Hubble app</li>"];
+    [html appendString:@"                   <li>#h2c1#</li>"];
+    [html appendString:@"                   <li>#h2c2#</li>"];
+    [html appendString:@"                   <li>#h2c3#</li>"];
+    [html appendString:@"                   <li>#h2c4#</li>"];
+    [html appendString:@"                   <li>#h2c5#</li>"];
+    [html appendString:@"                   <li>#h2c6#</li>"];
     [html appendString:@"               </ul>"];
     [html appendString:@"           </li>"];
     [html appendString:@"           <br/>"];
-    [html appendString:@"           <li>Q. Where can I find my recorded videos and snapshots?"];
-    [html appendString:@"           </li>"];
-    [html appendString:@"           <li>A. Your recorded video footage and snapshots are all stored inside your Photos application. Please go to ‘Photos' application to view them"];
-    [html appendString:@"           </li>"];
+    [html appendString:@"           <li>#h3#</li>"];
+    [html appendString:@"           <li>#h4#</li>"];
     [html appendString:@"       </ul>"];
     [html appendString:@"       </div>"];
     [html appendString:@"   </body>"];
     [html appendString:@"</html>"];
+    
+    [html replaceOccurrencesOfString:@"#h1#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_Q__why_can’t_access_my_camera", nil, [NSBundle mainBundle], @"Q. Why can’t I access my camera? Why do I keep seeing the warning message \"Low bandwidth detected\"?", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
+    [html replaceOccurrencesOfString:@"#h2#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_following_reasons", nil, [NSBundle mainBundle], @"A. This could be due to one of the following reasons:", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
+    [html replaceOccurrencesOfString:@"#h2c1#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_network_is_too_low", nil, [NSBundle mainBundle], @"The upload bandwidth of your broadband network is too low", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
+    [html replaceOccurrencesOfString:@"#h2c2#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_the_minimum_upload_bandwidth", nil, [NSBundle mainBundle], @"The minimum upload bandwidth required is about 600kbps", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
+    [html replaceOccurrencesOfString:@"#h2c3#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_online_bandwidth_speed_test_tool", nil, [NSBundle mainBundle], @"Please check your upload bandwidth with your Internet Service Provider or use an online bandwidth speed test tool, such as http://www.speedtest.net", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
+    [html replaceOccurrencesOfString:@"#h2c4#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_camera_may_be_too_far", nil, [NSBundle mainBundle], @"Your camera may be too far away from your router. Please try reducing the distance between the router and camera", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
+    [html replaceOccurrencesOfString:@"#h2c5#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_using_a_mobile_network_3G", nil, [NSBundle mainBundle], @"If you are using a mobile network (3G), the bandwidth may be limited", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
+    [html replaceOccurrencesOfString:@"#h2c6#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_closing_any_unnecessary_applications", nil, [NSBundle mainBundle], @"If you are running other applications (eg. games), they could be consuming a lot of bandwidth. This can impact on the performance of the Hubble app. Please try closing any unnecessary applications before using the Hubble app", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
+    [html replaceOccurrencesOfString:@"#h3#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_where_my_recorded", nil, [NSBundle mainBundle], @"Q. Where can I find my recorded videos and snapshots?", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
+    [html replaceOccurrencesOfString:@"#h4#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_go_to_photos_application", nil, [NSBundle mainBundle], @"A. Your recorded video footage and snapshots are all stored inside your Photos application. Please go to ‘Photos' application to view them", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
+    
     HelpWindowPopup *popup = [[HelpWindowPopup alloc] initWithTitle:@"Video Screen Help"
                                                       andHtmlString:html
                                                           andHeight:280];
@@ -2126,7 +2155,7 @@ double _ticks = 0;
                 if (self.selectedChannel.profile.isInLocal)
                 {
 //                    [self showTimelineView];
-                    self.messageStreamingState = NSLocalizedStringWithDefaultValue(@"camera_is_not_accessible", nil, [NSBundle mainBundle], @"Camera is not accessible", nil);
+                    self.messageStreamingState = NSLocalizedStringWithDefaultValue(@"camera_is_not_accessible", nil, [NSBundle mainBundle], @"Camera is not accessible...", nil);
                 }
                 
                 break;
@@ -3311,7 +3340,7 @@ double _ticks = 0;
                                        //handle Bad response
                                        NSLog(@"%s ERROR: %@", __FUNCTION__, [responseDict objectForKey:@"message"]);
 #if 1
-                                       self.messageStreamingState = NSLocalizedStringWithDefaultValue(@"camera_is_not_accessible", nil, [NSBundle mainBundle], @"Camera is not accessible", nil);
+                                       self.messageStreamingState = NSLocalizedStringWithDefaultValue(@"camera_is_not_accessible", nil, [NSBundle mainBundle], @"Camera is not accessible...", nil);
                                        _isShowTextCameraIsNotAccesible = YES;
                                        
                                        dispatch_async(dispatch_get_main_queue(), ^{
@@ -3332,7 +3361,7 @@ double _ticks = 0;
                                else
                                {
                                    NSLog(@"SERVER unreachable (timeout) ");
-                                   self.messageStreamingState = NSLocalizedStringWithDefaultValue(@"camera_is_not_accessible", nil, [NSBundle mainBundle], @"Camera is not accessible", nil);
+                                   self.messageStreamingState = NSLocalizedStringWithDefaultValue(@"camera_is_not_accessible", nil, [NSBundle mainBundle], @"Camera is not accessible...", nil);
                                    _isShowTextCameraIsNotAccesible = YES;
 #if 1
                                    dispatch_async(dispatch_get_main_queue(), ^{
@@ -7374,7 +7403,7 @@ double _ticks = 0;
         {
             NSLog(@"SERVER unreachable (timeout) ");
 //            [self showTimelineView];
-            self.messageStreamingState = NSLocalizedStringWithDefaultValue(@"camera_is_not_accessible", nil, [NSBundle mainBundle], @"Camera is not accessible", nil);
+            self.messageStreamingState = NSLocalizedStringWithDefaultValue(@"camera_is_not_accessible", nil, [NSBundle mainBundle], @"Camera is not accessible...", nil);
             _isShowTextCameraIsNotAccesible = YES;
             [self messageNotAccesible:NO];
             [self performSelector:@selector(setupCamera) withObject:nil afterDelay:10];

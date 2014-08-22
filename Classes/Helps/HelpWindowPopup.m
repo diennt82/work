@@ -120,18 +120,18 @@
     NSData *htmlData = [self.htmlString dataUsingEncoding:NSUTF8StringEncoding];
     [self.webView loadData:htmlData MIMEType:@"text/html" textEncodingName:@"UTF-8" baseURL:[NSURL URLWithString:@""]];
     
-    
-    self.layer.opacity = 0.5f;
-    self.layer.transform = CATransform3DMakeScale(1.3f, 1.3f, 1.0f);
-    [UIView animateWithDuration:0.2f delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
-					 animations:^{
-                         self.layer.opacity = 1.0f;
-                         self.layer.transform = CATransform3DMakeScale(1, 1, 1);
-					 }
-					 completion:^(BOOL finished) {
-                         
-					 }
-    ];
+//    
+//    self.layer.opacity = 0.5f;
+//    self.layer.transform = CATransform3DMakeScale(1.3f, 1.3f, 1.0f);
+//    [UIView animateWithDuration:0.2f delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
+//					 animations:^{
+//                         self.layer.opacity = 1.0f;
+//                         self.layer.transform = CATransform3DMakeScale(1, 1, 1);
+//					 }
+//					 completion:^(BOOL finished) {
+//                         self.transform = transform;
+//					 }
+//    ];
 }
 
 - (void)dismiss

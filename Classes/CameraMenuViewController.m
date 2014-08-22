@@ -853,21 +853,35 @@ typedef enum _WAIT_FOR_UPDATING {
     [html appendString:@"   <body>"];
     [html appendString:@"       <div style='margin-left:5px;'>"];
     [html appendString:@"       <ul class=\"first_deep\">"];
-    [html appendString:@"           <li><b>Camera Name:</b>"];
+    [html appendString:@"           <li><b>#h1#</b>"];
     [html appendString:@"               <ul class=\"second_deep\">"];
-    [html appendString:@"                   <li>User can change the name of the camera</li>"];
+    [html appendString:@"                   <li>#h1c1#</li>"];
     [html appendString:@"               </ul>"];
     [html appendString:@"           </li>"];
     [html appendString:@"           <br/>"];
-    [html appendString:@"           <li><b>Change Image:</b>"];
+    [html appendString:@"           <li><b>#h2#</b>"];
     [html appendString:@"               <ul class=\"second_deep\">"];
-    [html appendString:@"                   <li>User can change the thumbnail image shown on the camera list screen</li>"];
+    [html appendString:@"                   <li>#h2c1#</li>"];
     [html appendString:@"               </ul>"];
     [html appendString:@"           </li>"];
     [html appendString:@"       </ul>"];
     [html appendString:@"       </div>"];
     [html appendString:@"   </body>"];
     [html appendString:@"</html>"];
+
+    [html replaceOccurrencesOfString:@"#h1#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_camera_name", nil, [NSBundle mainBundle], @"Camera Name:", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
+    [html replaceOccurrencesOfString:@"#h1c1#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_can_change_name", nil, [NSBundle mainBundle], @"User can change the name of the camera", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
+    [html replaceOccurrencesOfString:@"#h2#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_change_image", nil, [NSBundle mainBundle], @"Change Image:", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
+    [html replaceOccurrencesOfString:@"#h2c1#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_can_change_thumbnail", nil, [NSBundle mainBundle], @"User can change the thumbnail image shown on the camera list screen", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
+    
     HelpWindowPopup *popup = [[HelpWindowPopup alloc] initWithTitle:@"Camera Details Help"
                                                          andHtmlString:html];
     [popup show];
@@ -890,31 +904,63 @@ typedef enum _WAIT_FOR_UPDATING {
     [html appendString:@"   <body>"];
     [html appendString:@"       <div style='margin-left:5px;'>"];
     [html appendString:@"       <ul class=\"first_deep\">"];
-    [html appendString:@"           <li><b>Motion Detection Sensitivity:</b>"];
+    [html appendString:@"           <li><b>#h1#</b>"];
     [html appendString:@"               <ul class=\"second_deep\">"];
-    [html appendString:@"                   <li>Motion detection is triggered when 2 consecutive seconds of motion have been detected by your camera</li>"];
-    [html appendString:@"                   <li>The sensitivity level determines how much change in activity your camera needs to detect in order for a motion detection notification to be sent</li>"];
+    [html appendString:@"                   <li>#h1c1#</li>"];
+    [html appendString:@"                   <li>#h1c2#</li>"];
     [html appendString:@"               </ul>"];
     [html appendString:@"           </li>"];
     [html appendString:@"           <br/>"];
-    [html appendString:@"           <li><b>Sound Detection Sensitivity:</b>"];
+    [html appendString:@"           <li><b>#h2#</b>"];
     [html appendString:@"               <ul class=\"second_deep\">"];
-    [html appendString:@"                   <li>High: Your camera triggers a notification whenever it detects a sound below the low audio threshold that lasts for 0.5 seconds or more</li>"];
-    [html appendString:@"                   <li>Medium : Your camera triggers a notification whenever it detects a sound above the high audio threshold that lasts for 2 seconds or more</li>"];
-    [html appendString:@"                   <li>Low : Your camera triggers a notification whenever it detects a sound below the low audio threshold that lasts for 3 seconds or more</li>"];
-    [html appendString:@"                   <li>Each time sound is detected, your camera will pause the monitoring of sound levels for approximately 60 seconds before it resumes monitoring them again</li>"];
+    [html appendString:@"                   <li>#h2c1#</li>"];
+    [html appendString:@"                   <li>#h2c2#</li>"];
+    [html appendString:@"                   <li>#h2c3#</li>"];
+    [html appendString:@"                   <li>#h2c4#</li>"];
     [html appendString:@"               </ul>"];
     [html appendString:@"           </li>"];
     [html appendString:@"           <br/>"];
-    [html appendString:@"           <li><b>Temperature:</b>"];
+    [html appendString:@"           <li><b>#h3#</b>"];
     [html appendString:@"               <ul class=\"second_deep\">"];
-    [html appendString:@"                   <li>You will receive a notification every 30 minutes (on average) whenever the temperature falls outside the range you have selected</li>"];
+    [html appendString:@"                   <li>#h3c1#</li>"];
     [html appendString:@"               </ul>"];
     [html appendString:@"           </li>"];
     [html appendString:@"       </ul>"];
     [html appendString:@"       </div>"];
     [html appendString:@"   </body>"];
     [html appendString:@"</html>"];
+    
+    [html replaceOccurrencesOfString:@"#h1#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_motion_detection_sensitivity", nil, [NSBundle mainBundle], @"Motion Detection Sensitivity:", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
+    [html replaceOccurrencesOfString:@"#h1c1#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_motion_detection_is_triggered", nil, [NSBundle mainBundle], @"Motion detection is triggered when 2 consecutive seconds of motion have been detected by your camera", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
+    [html replaceOccurrencesOfString:@"#h1c2#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_the_sensitivity_level_determines", nil, [NSBundle mainBundle], @"The sensitivity level determines how much change in activity your camera needs to detect in order for a motion detection notification to be sent", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
+    [html replaceOccurrencesOfString:@"#h2#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_sound_detection_sensitivity", nil, [NSBundle mainBundle], @"Sound Detection Sensitivity:", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
+    [html replaceOccurrencesOfString:@"#h2c1#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_camera_triggers_notification_high", nil, [NSBundle mainBundle], @"High: Your camera triggers a notification whenever it detects a sound below the low audio threshold that lasts for 0.5 seconds or more", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
+    [html replaceOccurrencesOfString:@"#h2c2#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_camera_triggers_notification_medium", nil, [NSBundle mainBundle], @"Medium : Your camera triggers a notification whenever it detects a sound above the high audio threshold that lasts for 2 seconds or more", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
+    [html replaceOccurrencesOfString:@"#h2c3#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_camera_triggers_notification_low", nil, [NSBundle mainBundle], @"Low : Your camera triggers a notification whenever it detects a sound below the low audio threshold that lasts for 3 seconds or more", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
+    [html replaceOccurrencesOfString:@"#h2c4#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_each_time_sound_is_detected", nil, [NSBundle mainBundle], @"Each time sound is detected, your camera will pause the monitoring of sound levels for approximately 60 seconds before it resumes monitoring them again", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
+    [html replaceOccurrencesOfString:@"#h3#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_temperature", nil, [NSBundle mainBundle], @"Temperature:", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
+    [html replaceOccurrencesOfString:@"#h3c1#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_receive_notification_every_30_minute", nil, [NSBundle mainBundle], @"You will receive a notification every 30 minutes (on average) whenever the temperature falls outside the range you have selected", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
+    
     HelpWindowPopup *popup = [[HelpWindowPopup alloc] initWithTitle:@"Notification Sensitivity Help"
                                                          andHtmlString:html];
     [popup show];

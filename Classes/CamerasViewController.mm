@@ -273,31 +273,62 @@
     [html appendString:@"   <body>"];
     [html appendString:@"       <div style='margin-left:5px;'>"];
     [html appendString:@"       <ul class=\"first_deep\">"];
-    [html appendString:@"           <li><b>Offline:</b>"];
+    [html appendString:@"           <li><b>#h1#</b>"];
     [html appendString:@"               <ul class=\"second_deep\">"];
-    [html appendString:@"                   <li>Your camera is OFF / LED light on the camera is OFF</li>"];
-    [html appendString:@"                   <li>Please check your camera’s power status and that the ON/OFF switch is set to ON</li>"];
-    [html appendString:@"                   <li>Camera is not connected to the internet</li>"];
-    [html appendString:@"                   <li>Please check your router to ensure it is connected to internet</li>"];
+    [html appendString:@"                   <li>#h1c1#</li>"];
+    [html appendString:@"                   <li>#h1c2#</li>"];
+    [html appendString:@"                   <li>#h1c3#</li>"];
+    [html appendString:@"                   <li>#h1c4#</li>"];
     [html appendString:@"               </ul>"];
     [html appendString:@"           </li>"];
     [html appendString:@"           <br/>"];
-    [html appendString:@"           <li><b>Online:</b>"];
+    [html appendString:@"           <li><b>#h2#</b>"];
     [html appendString:@"               <ul class=\"second_deep\">"];
-    [html appendString:@"                   <li>Camera is online and operational</li>"];
+    [html appendString:@"                   <li>#h2c1#</li>"];
     [html appendString:@"               </ul>"];
     [html appendString:@"           </li>"];
     [html appendString:@"           <br/>"];
-    [html appendString:@"           <li><b>Firmware Upgrade in Progress:</b>"];
+    [html appendString:@"           <li><b>#h3#</b>"];
     [html appendString:@"               <ul class=\"second_deep\">"];
-    [html appendString:@"                   <li>Your camera is upgrading to the latest firmware version. Please do not turn the camera off during this process</li>"];
-    [html appendString:@"                   <li>This upgrade may take around 3-5 minutes to complete</li>"];
+    [html appendString:@"                   <li>#h3c1#</li>"];
+    [html appendString:@"                   <li>#h3c2#</li>"];
     [html appendString:@"               </ul>"];
     [html appendString:@"           </li>"];
     [html appendString:@"       </ul>"];
     [html appendString:@"       </div>"];
     [html appendString:@"   </body>"];
     [html appendString:@"</html>"];
+    
+    [html replaceOccurrencesOfString:@"#h1#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_offline", nil, [NSBundle mainBundle], @"Offline:", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
+    [html replaceOccurrencesOfString:@"#h1c1#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_camera_is_OFF", nil, [NSBundle mainBundle], @"Your camera is OFF / LED light on the camera is OFF", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
+    [html replaceOccurrencesOfString:@"#h1c2#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_check_your_camera_power", nil, [NSBundle mainBundle], @"Please check your camera’s power status and that the ON/OFF switch is set to ON", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
+    [html replaceOccurrencesOfString:@"#h1c3#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_camera_is_not_connected", nil, [NSBundle mainBundle], @"Camera is not connected to the internet", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
+    [html replaceOccurrencesOfString:@"#h1c4#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_check_router_to_ensure", nil, [NSBundle mainBundle], @"Please check your router to ensure it is connected to internet", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
+    [html replaceOccurrencesOfString:@"#h2#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_online", nil, [NSBundle mainBundle], @"Online:", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
+    [html replaceOccurrencesOfString:@"#h2c1#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_camera_is_online_and_operational", nil, [NSBundle mainBundle], @"Camera is online and operational", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
+    [html replaceOccurrencesOfString:@"#h3#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_firmware_upgrade", nil, [NSBundle mainBundle], @"Firmware Upgrade in Progress:", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
+    [html replaceOccurrencesOfString:@"#h3c1#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_camera_upgrading_to_the_latest", nil, [NSBundle mainBundle], @"Your camera is upgrading to the latest firmware version. Please do not turn the camera off during this process", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
+    [html replaceOccurrencesOfString:@"#h3c2#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_upgrade_may_take_around_3-5_minutes", nil, [NSBundle mainBundle], @"This upgrade may take around 3-5 minutes to complete", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
     
     CamerasListHelpWindowPopup *popup = [[CamerasListHelpWindowPopup alloc] initWithTitle:@"Camera Status Help"
                                                       andHtmlString:html];
