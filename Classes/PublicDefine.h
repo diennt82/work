@@ -195,6 +195,9 @@
 #define SYSTEM_VERSION_LESS_THAN(v)                 ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedAscending)
 #define SYSTEM_VERSION_LESS_THAN_OR_EQUAL_TO(v)     ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedDescending)
 
+#define MIN_TIME_OFFSET_USING_CELSIUS -3.0f
+#define MAX_TIME_OFSSET_USING_CELSIUS 8.0f
+
 #endif /* PUBLICDEFINE_H_ */
 
 

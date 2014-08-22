@@ -211,6 +211,17 @@
     [NetworkClock sharedNetworkClock]; // Just gather up the ntp servers...
     [NSDate networkDate];              // Start ntp process...
     
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:IS_FAHRENHEIT] == nil)
+    {
+        NSTimeZone *timeZone = [NSTimeZone localTimeZone];
+        float offset = [timeZone secondsFromGMT] / 3600.0;
+        if (offset < MIN_TIME_OFFSET_USING_CELSIUS || offset > MAX_TIME_OFSSET_USING_CELSIUS)
+        {
+            [[NSUserDefaults standardUserDefaults] setObject:@(YES) forKey:IS_FAHRENHEIT];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+        }
+    }
+    
     return YES;
 }
 
