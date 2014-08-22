@@ -82,6 +82,7 @@ typedef enum _WAIT_FOR_UPDATING {
 @property (nonatomic) BOOL backGroundUpdateExecuting;
 @property (retain, nonatomic) SensitivityTemperatureCell *sensitivityTemperatureCell;
 @property (nonatomic) BOOL isNewDeviceSettingsCommand;
+@property (nonatomic, retain) NSString *camModelId;
 
 @end
 
@@ -175,6 +176,7 @@ typedef enum _WAIT_FOR_UPDATING {
     [_alertViewRename release];
     [_jsonCommBlock release];
     [_sensitivityTemperatureCell release];
+    [_camModelId release];
     
     [super dealloc];
 }
@@ -484,7 +486,8 @@ typedef enum _WAIT_FOR_UPDATING {
         
         camDetCell.lblCameraName.text = self.camChannel.profile.name;
         camDetCell.lblCamVer.text = self.camChannel.profile.fw_version;
-        camDetCell.lblCamModel.text = [self.camChannel.profile getModel];
+        [self performSelectorInBackground:@selector(getModelID:) withObject:camDetCell];
+        
         return camDetCell;
 
     }
@@ -682,6 +685,44 @@ typedef enum _WAIT_FOR_UPDATING {
     
     [jsonComm deleteDeviceWithRegistrationId:_camChannel.profile.registrationID
                                    andApiKey:_apiKey];
+}
+
+- (void)getModelID:(id)obj
+{
+    if (self.camModelId)
+    {
+        if ([obj isKindOfClass:[CameraDetailCell class]])
+        {
+            CameraDetailCell *cell = obj;
+            cell.lblCamModel.text = self.camModelId;
+        }
+        return;
+    }
+    BMS_JSON_Communication *comm = [[BMS_JSON_Communication alloc] initWithObject:self
+                                                                         Selector:nil
+                                                                     FailSelector:nil
+                                                                        ServerErr:nil];
+    NSDictionary *responseDict = [comm sendCommandBlockedWithRegistrationId:self.camChannel.profile.registrationID
+                                                                           andCommand:@"get_model"
+                                                                            andApiKey:[[NSUserDefaults standardUserDefaults] objectForKey:@"PortalApiKey"]];
+    if (responseDict != nil)
+    {
+        NSInteger status = [[responseDict objectForKey:@"status"] intValue];
+        
+        if (status == 200)
+        {
+            NSString *modelID = [[[responseDict objectForKey:@"data"] objectForKey:@"device_response"] objectForKey:@"body"];
+            self.camModelId = [modelID stringByReplacingOccurrencesOfString:@"get_model: " withString:@""];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if ([obj isKindOfClass:[CameraDetailCell class]])
+                {
+                    CameraDetailCell *cell = obj;
+                    cell.lblCamModel.text = self.camModelId;
+                }
+            });
+        }
+    }
+    [comm release];
 }
 
 - (void)changeCameraName_bg
