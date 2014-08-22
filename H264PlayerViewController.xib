@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
         <deployment version="1792" defaultVersion="1792" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
@@ -11,7 +11,6 @@
                 <outlet property="customIndicator" destination="lYe-kn-40s" id="NcO-oH-O9u"/>
                 <outlet property="horizMenu" destination="nTa-Ux-yAc" id="LjA-m3-wgi"/>
                 <outlet property="ib_ViewTouchToTalk" destination="0Cv-wD-bGw" id="Lv4-uh-jCJ"/>
-                <outlet property="ib_btShowDebugInfo" destination="cZ8-Qy-b4y" id="bsG-G4-FMF"/>
                 <outlet property="ib_buttonChangeAction" destination="a87-FB-kFc" id="3qp-8W-gCx"/>
                 <outlet property="ib_buttonTouchToTalk" destination="hJo-ff-gYM" id="eHq-3e-cU6"/>
                 <outlet property="ib_changeToMainRecording" destination="mlu-Gl-5qe" id="Qpr-r3-kIH"/>
@@ -29,7 +28,6 @@
                 <outlet property="imgViewDrectionPad" destination="78" id="79"/>
                 <outlet property="menuBackgroundView" destination="FjV-oH-Nmt" id="BYR-CN-g85"/>
                 <outlet property="scrollView" destination="q8e-SH-sqy" id="DnR-XY-J8P"/>
-                <outlet property="sendLogButton" destination="CAA-Jc-BeY" id="6Z2-NG-dAW"/>
                 <outlet property="view" destination="1" id="3"/>
                 <outlet property="viewDebugInfo" destination="4Wi-b3-XAk" id="8dE-Ru-wNI"/>
             </connections>
@@ -223,27 +221,8 @@
                     <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                     <size key="shadowOffset" width="1" height="1"/>
                 </label>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" id="cZ8-Qy-b4y">
-                    <rect key="frame" x="0.0" y="209" width="43" height="42"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <state key="normal">
-                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                    <connections>
-                        <action selector="showInfoDebug:" destination="-1" eventType="touchUpInside" id="wtC-gZ-E0F"/>
-                    </connections>
-                </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="CAA-Jc-BeY">
-                    <rect key="frame" x="270" y="209" width="46" height="30"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                    <state key="normal">
-                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                    <connections>
-                        <action selector="btnSendingLogTouchUpInside:" destination="-1" eventType="touchUpInside" id="He4-CO-aGX"/>
-                    </connections>
-                </button>
             </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
         </view>

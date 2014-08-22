@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.iPad.XIB" version="3.0" toolsVersion="5056" systemVersion="13D65" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.iPad.XIB" version="3.0" toolsVersion="5056" systemVersion="13E28" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none">
     <dependencies>
         <deployment defaultVersion="1792" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
@@ -12,7 +12,6 @@
                 <outlet property="customIndicator" destination="Csm-gN-pH3" id="ANm-cK-kVq"/>
                 <outlet property="horizMenu" destination="ftH-qh-QfZ" id="JdE-S9-yCk"/>
                 <outlet property="ib_ViewTouchToTalk" destination="2Nr-tN-W6C" id="wAW-Ms-mzf"/>
-                <outlet property="ib_btShowDebugInfo" destination="ZlS-dN-ndj" id="0MS-Rp-SmD"/>
                 <outlet property="ib_buttonChangeAction" destination="BX4-hy-z0K" id="ni3-A3-Kla"/>
                 <outlet property="ib_buttonTouchToTalk" destination="lXc-a4-3SJ" id="OKO-BT-9GI"/>
                 <outlet property="ib_changeToMainRecording" destination="19u-Y0-9Ah" id="foQ-Sd-lbO"/>
@@ -30,7 +29,6 @@
                 <outlet property="imgViewDrectionPad" destination="zCV-Q4-o8H" id="dNg-f3-8tI"/>
                 <outlet property="menuBackgroundView" destination="YG0-em-BhL" id="9Ry-L6-2P5"/>
                 <outlet property="scrollView" destination="8e4-vn-esd" id="hep-FH-h8A"/>
-                <outlet property="sendLogButton" destination="h68-lY-yqv" id="PfB-BU-3LW"/>
                 <outlet property="view" destination="xau-3d-KYv" id="er6-iW-ZJ5"/>
                 <outlet property="viewDebugInfo" destination="q5L-bd-0P8" id="T6R-23-wHV"/>
             </connections>
@@ -225,28 +223,8 @@
                     <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                     <size key="shadowOffset" width="1" height="1"/>
                 </label>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="ZlS-dN-ndj">
-                    <rect key="frame" x="10" y="704" width="61" height="61"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <state key="normal">
-                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                    <connections>
-                        <action selector="showInfoDebug:" destination="-1" eventType="touchUpInside" id="p3n-cX-3hk"/>
-                    </connections>
-                </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="h68-lY-yqv">
-                    <rect key="frame" x="961" y="725" width="55" height="30"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                    <state key="normal">
-                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                    <connections>
-                        <action selector="btnSendingLogTouchUpInside:" destination="-1" eventType="touchUpInside" id="8ie-6g-LEc"/>
-                    </connections>
-                </button>
             </subviews>
-            <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
             <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
         </view>
     </objects>

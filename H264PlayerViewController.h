@@ -29,34 +29,6 @@
 
 @interface H264PlayerViewController: GAITrackedViewController <PlayerCallbackHandler, ScanForCameraNotifier, StunClientDelegate, MelodyVCDelegate, UIScrollViewDelegate, ScrollHorizontalMenuDelegate, AudioOutStreamerDelegate>
 
-@property (nonatomic, weak) IBOutlet ScrollHorizontalMenu *horizMenu;
-@property (nonatomic, weak) IBOutlet UIView *menuBackgroundView;
-
-// Touch to talk
-@property (nonatomic, weak) IBOutlet UIView *ib_ViewTouchToTalk;
-@property (nonatomic, weak) IBOutlet UIButton *ib_buttonTouchToTalk;
-@property (nonatomic, weak) IBOutlet UILabel *ib_labelTouchToTalk;
-
-// Recording
-@property (nonatomic, weak) IBOutlet UIView *ib_viewRecordTTT;
-@property (nonatomic, weak) IBOutlet UIButton *ib_processRecordOrTakePicture;
-@property (nonatomic, weak) IBOutlet UIButton *ib_buttonChangeAction;
-
-@property (nonatomic, weak) IBOutlet UIButton *ib_changeToMainRecording;
-@property (nonatomic, weak) IBOutlet UILabel *ib_labelRecordVideo;
-@property (nonatomic, weak) IBOutlet UILabel *ib_temperature;
-@property (nonatomic, weak) IBOutlet UIScrollView *scrollView;
-@property (nonatomic, weak) IBOutlet UIImageView *imgViewDrectionPad;
-@property (nonatomic, weak) IBOutlet UIActivityIndicatorView *activityIndicator;
-@property (nonatomic, weak) IBOutlet UIActivityIndicatorView *activityStopStreamingProgress;
-@property (nonatomic, weak) IBOutlet UIImageView *customIndicator;
-@property (nonatomic, weak) IBOutlet UILabel *ib_lbCameraNotAccessible;
-@property (nonatomic, weak) IBOutlet UILabel *ib_lbCameraName;
-
-@property (nonatomic, weak) IBOutlet UIButton *ib_btShowDebugInfo;
-@property (nonatomic, weak) IBOutlet UIButton *sendLogButton;
-@property (nonatomic, weak) IBOutlet UIImageView *imageViewVideo;
-
 @property (nonatomic, strong) NSMutableArray *itemImages;
 @property (nonatomic, strong) NSMutableArray *itemSelectedImages;
 @property (nonatomic, strong) NSTimer *alertTimer;
