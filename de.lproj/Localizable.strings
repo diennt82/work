@@ -437,7 +437,7 @@
 "help_text_online" = "Online:";
 
 /* No comment provided by engineer. */
-"help_text_online_bandwidth_speed_test_tool" = "Please check your upload bandwidth with your Internet Service Provider or use an online bandwidth speed test tool, such as http://www.speedtest.net";
+"help_text_online_bandwidth_speed_test_tool" = "Please check your upload bandwidth with your Internet Service Provider or use an online bandwidth speed test tool, such as <a href=\"http://www.speedtest.net\">http://www.speedtest.net</a>";
 
 /* No comment provided by engineer. */
 "help_text_Q__why_can’t_access_my_camera" = "Q. Why can’t I access my camera? Why do I keep seeing the warning message \"Low bandwidth detected\"?";

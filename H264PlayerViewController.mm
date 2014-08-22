@@ -766,7 +766,7 @@ double _ticks = 0;
                           withString:NSLocalizedStringWithDefaultValue(@"help_text_the_minimum_upload_bandwidth", nil, [NSBundle mainBundle], @"The minimum upload bandwidth required is about 600kbps", nil)
                              options:nil range:NSMakeRange(0, html.length)];
     [html replaceOccurrencesOfString:@"#h2c3#"
-                          withString:NSLocalizedStringWithDefaultValue(@"help_text_online_bandwidth_speed_test_tool", nil, [NSBundle mainBundle], @"Please check your upload bandwidth with your Internet Service Provider or use an online bandwidth speed test tool, such as http://www.speedtest.net", nil)
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_online_bandwidth_speed_test_tool", nil, [NSBundle mainBundle], @"Please check your upload bandwidth with your Internet Service Provider or use an online bandwidth speed test tool, such as <a href=\"http://www.speedtest.net\">http://www.speedtest.net</a>", nil)
                              options:nil range:NSMakeRange(0, html.length)];
     [html replaceOccurrencesOfString:@"#h2c4#"
                           withString:NSLocalizedStringWithDefaultValue(@"help_text_camera_may_be_too_far", nil, [NSBundle mainBundle], @"Your camera may be too far away from your router. Please try reducing the distance between the router and camera", nil)

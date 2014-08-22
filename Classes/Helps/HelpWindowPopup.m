@@ -269,6 +269,19 @@
     
 }
 
+- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
+{
+//    file:///
+//    http://www.speedtest.net/
+    NSString *url = [request.URL absoluteString];
+    if ([url hasPrefix:@"file:"])
+    {
+        return YES;
+    }
+    [[UIApplication sharedApplication] openURL:request.URL];
+    [self dismiss];
+    return NO;
+}
 @end
 
 @implementation MBP_PopupOverlayWindow
