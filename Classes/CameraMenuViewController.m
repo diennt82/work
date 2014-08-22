@@ -159,7 +159,7 @@ typedef enum _WAIT_FOR_UPDATING {
 - (void)xibDefaultLocalization
 {
     [[self.vwHeaderCamDetail viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_cameramenu_label_camdetail", nil, [NSBundle mainBundle], @"Camera Detail", nil)];
-    [[self.vwHeaderNotSens viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_cameramenu_label_sensity", nil, [NSBundle mainBundle], @"Notification Sensity", nil)];
+    [[self.vwHeaderNotSens viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_cameramenu_label_sensity", nil, [NSBundle mainBundle], @"Notification Sensitivity", nil)];
 }
 
 - (void)didReceiveMemoryWarning
