@@ -703,7 +703,7 @@
     {
         if ([camAlert.alertType isEqualToString:ALERT_TYPE_REMOVED_CAM] && ![self isStayingCameraSettingsPage])
         {
-            [self gotoCamerasListPage:camAlert.registrationID];
+            [self refreshCamerasListPage:camAlert.registrationID];
             return;
         }
     }
@@ -955,7 +955,7 @@
             {
                 case 0:
                 {
-                    [self gotoCamerasListPage:pushNotiAlert.camAlert.registrationID];
+                    [self refreshCamerasListPage:pushNotiAlert.camAlert.registrationID];
                 }
                     break;
                 case 1:
@@ -1120,19 +1120,13 @@
     self.pushAlert = nil;
 }
 
-- (void)gotoCamerasListPage:(NSString *)registrationId {
-#if 1
-    [self popAllViewControllers];
-#else
-    [self dismissMenuHubbleView];
-    [self dismissNotificationViewController];
-#endif
-    
+- (void)refreshCamerasListPage:(NSString *)registrationId {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setObject:registrationId forKey:REG_ID];
     [userDefaults synchronize];
     
-    [self sendStatus:SHOW_CAMERA_LIST2];
+    NSLog(@"%s", __FUNCTION__);
+    [self.menuVC refreshCameraList];
 }
 
 - (void)gotoSelectedCameraPage:(NSString *)registrationId {
@@ -1542,7 +1536,7 @@
         {
             if (![self isStayingCameraSettingsPage])
             {
-                [self gotoCamerasListPage:self.camAlert.registrationID];
+                [self refreshCamerasListPage:self.camAlert.registrationID];
             }
             else
             {
