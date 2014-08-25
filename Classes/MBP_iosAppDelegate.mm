@@ -210,29 +210,10 @@
     
     [NetworkClock sharedNetworkClock]; // Just gather up the ntp servers...
     [NSDate networkDate];              // Start ntp process...
-    [NSTimer scheduledTimerWithTimeInterval:30 target:self selector:@selector(timerTick:) userInfo:nil repeats:YES];
+    
     return YES;
 }
 
-- (void)timerTick:(NSTimer *)timer {
-    [self test];
-}
-
-- (void)test {
-    NSMutableDictionary *userInfo = [[NSMutableDictionary alloc] init];
-    [userInfo setObject:@"8" forKey:@"alert"];
-    NSMutableDictionary *aps = [[NSMutableDictionary alloc] init];
-    [aps setObject:@"Removed CameraHD-006681E8FC device from account" forKey:@"alert"];
-    [userInfo setObject:aps forKey:@"aps"];
-    [aps release];
-    [userInfo setObject:@"CameraHD-006681E8FC" forKey:@"cameraname"];
-    [userInfo setObject:@"01006644334C81E8FCPRMRBULM" forKey:@"mac"];
-    [userInfo setObject:@"2014-08-25T10:25:16+00:00" forKey:@"time"];
-    [userInfo setObject:@"HubbleHome" forKey:@"val"];
-    
-    [self application:[UIApplication sharedApplication] didReceiveRemoteNotification:userInfo];
-    [userInfo release];
-}
 void HandleException(NSException *exception) {
     NSLog(@"App crashing with exception: %@", exception);
     //Save somewhere that your app has crashed.
