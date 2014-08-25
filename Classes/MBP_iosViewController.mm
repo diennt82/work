@@ -966,7 +966,14 @@
             {
                 case 0:
                 {
-                    [self refreshCamerasListPage:pushNotiAlert.camAlert.registrationID];
+                    if ([self isStayingCamerasListPage])
+                    {
+                        [self refreshCamerasListPage:pushNotiAlert.camAlert.registrationID];
+                    }
+                    else
+                    {
+                        [self gotoCamerasListPage:pushNotiAlert.camAlert.registrationID];
+                    }
                 }
                     break;
                 case 1:
@@ -1138,6 +1145,20 @@
     
     NSLog(@"%s", __FUNCTION__);
     [self.menuVC refreshCameraList];
+}
+
+- (void)gotoCamerasListPage:(NSString *)registrationId {
+#if 1
+     [self popAllViewControllers];
+#else
+    [self dismissMenuHubbleView];
+    [self dismissNotificationViewController];
+#endif
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setObject:registrationId forKey:REG_ID];
+    [userDefaults synchronize];
+    
+    [self sendStatus:SHOW_CAMERA_LIST2];
 }
 
 - (void)gotoSelectedCameraPage:(NSString *)registrationId {
