@@ -18,9 +18,12 @@
 
 @property (nonatomic, weak) IBOutlet UIImageView *imageViewSnapshot;
 @property (nonatomic, weak) IBOutlet UILabel *messageLabel;
+@property (weak, nonatomic) IBOutlet UILabel *instructionLabel;
 @property (nonatomic, weak) IBOutlet UILabel *timeLabel;
 @property (nonatomic, weak) IBOutlet UIButton *playEnventBtn;
+@property (weak, nonatomic) IBOutlet UILabel *playEventButtonLabel;
 @property (nonatomic, weak) IBOutlet UIButton *goToCameraBtn;
+@property (weak, nonatomic) IBOutlet UILabel *goToCameraButtonLabel;
 @property (nonatomic, weak) IBOutlet UIButton *changeSettingsBtn;
 @property (nonatomic, weak) IBOutlet UILabel *lblChangeSetting;
 @property (nonatomic, weak) IBOutlet UIButton *ignoreBtn;
@@ -36,7 +39,6 @@
 
 @property (nonatomic) BOOL isBackgroundTaskRunning;
 @property (nonatomic) BOOL eventsListAlready;
-@property (nonatomic) BOOL isFreeUser;
 @property (nonatomic) BOOL isReturnFrmPlayback;
 
 @end
@@ -46,19 +48,15 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
     
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        [[NSBundle mainBundle] loadNibNamed:@"NotifViewController~iPad"
-                                      owner:self
-                                    options:nil];
-    }
+    _instructionLabel.text = LocStr(@"What would you like to do?");
+    _playEventButtonLabel.text = LocStr(@"Play event");
+    _goToCameraButtonLabel.text = LocStr(@"Go to camera");
     
     [_playEnventBtn setImage:[UIImage imageNamed:@"alert_play"] forState:UIControlStateNormal];
     [_playEnventBtn setImage:[UIImage imageNamed:@"alert_play_pressed"] forState:UIControlEventTouchDown];
     
     //[self layoutImageAndTextForButton:_playEnventBtn];
-    
     
     [_goToCameraBtn setImage:[UIImage imageNamed:@"alert_camera"] forState:UIControlStateNormal];
     [_goToCameraBtn setImage:[UIImage imageNamed:@"alert_camera_pressed"] forState:UIControlEventTouchDown];
@@ -80,7 +78,6 @@
     
     //[self layoutImageAndTextForButton:_learnMoreBtn];
     
-    self.isFreeUser = NO; // Registered User
     [_playEnventBtn setEnabled:NO];
     _isReturnFrmPlayback = FALSE;
     
@@ -99,9 +96,9 @@
     df_local.dateFormat = @"hh:mm a, dd-MM-yyyy";
     
     _timeLabel.text = [df_local stringFromDate:eventDate];
-    _messageLabel.text = [NSString stringWithFormat:@"There was some movement at %@.",_cameraName];
+    _messageLabel.text = [NSString stringWithFormat:LocStr(@"There was some movement at %@."), _cameraName];
     
-    NSLog(@"notif view timelable is %@",_timeLabel.text); 
+    DLog(@"notif view timelable is %@",_timeLabel.text); 
     
     if (_camChannel) {
         _lblChangeSetting.hidden = NO;
@@ -114,7 +111,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    NSLog(@"%s _isReturnFrmPlayback:%d", __FUNCTION__, _isReturnFrmPlayback);
+    DLog(@"%s _isReturnFrmPlayback:%d", __FUNCTION__, _isReturnFrmPlayback);
     
     self.navigationController.navigationBarHidden = YES;
     
@@ -125,18 +122,18 @@
     else {
         _isBackgroundTaskRunning = YES;
     }
-    
-#if 0
-    if (_eventsListAlready == NO) {
+
+    /*
+    if ( !_eventsListAlready ) {
         //load events from server
         // 1. Load latest snapshot event & events list
         [self performSelectorInBackground:@selector(getEventSnapshot) withObject:nil];
         self.eventsListAlready = YES;
     }
-#endif
+     */
 }
 
-- (void)layoutImageAndTextForButton: (UIButton *)button
+- (void)layoutImageAndTextForButton:(UIButton *)button
 {
     // the space between the image and text
     CGFloat spacing = 6.0;
@@ -152,53 +149,41 @@
     button.imageEdgeInsets = UIEdgeInsetsMake(-(titleSize.height + spacing), 0.0, 0.0, -titleSize.width);
 }
 
-- (void)showDialogToConfirm
-{
-    NSString *msg = [NSString stringWithFormat:@"Video clip is not ready, please try again later."];
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Notice"
-                                                        message:msg
-                                                       delegate:self
-                                              cancelButtonTitle:@"Cancel"
-                                              otherButtonTitles:nil, nil];
-    [alertView show];
-}
-
 #pragma mark - Action
 
 - (IBAction)playEventTouchAction:(id)sender
 {
-    if (!_isFreeUser) {
-        if (![_clipsInEvent isEqual:[NSNull null]] && _clipsInEvent.count > 0) {
-            NSString *urlFile = [[_clipsInEvent objectAtIndex:0] objectForKey:@"file"];
+    if (![_clipsInEvent isEqual:[NSNull null]] && _clipsInEvent.count > 0) {
+        NSString *urlFile = [[_clipsInEvent objectAtIndex:0] objectForKey:@"file"];
+        
+        if (![urlFile isEqual:[NSNull null]] && ![urlFile isEqualToString:@""]) {
+            PlaylistInfo *clipInfo = [[PlaylistInfo alloc] init];
+            clipInfo.urlFile = urlFile;
+            clipInfo.macAddr = _cameraMacNoColon;
+            clipInfo.alertType = _alertType;
+            clipInfo.alertVal = _alertVal;
+            clipInfo.registrationID = _registrationID;
             
-            if (![urlFile isEqual:[NSNull null]] && ![urlFile isEqualToString:@""]) {
-                PlaylistInfo *clipInfo = [[PlaylistInfo alloc] init];
-                clipInfo.urlFile = urlFile;
-                clipInfo.macAddr = _cameraMacNoColon;
-                clipInfo.alertType = _alertType;
-                clipInfo.alertVal = _alertVal;
-                clipInfo.registrationID = _registrationID;
-                
-                PlaybackViewController *playbackViewController = [[PlaybackViewController alloc] initWithNibName:@"PlaybackViewController" bundle:nil];
-                [playbackViewController setClipInfo:clipInfo];
-                
-                NSLog(@"Push the view controller.- %@", self.parentViewController);
-                _isReturnFrmPlayback = TRUE;
-                [self.navigationController pushViewController:playbackViewController animated:YES];
-            }
-            else {
-                NSLog(@"URL file is not correct");
-                [self showDialogToConfirm];
-            }
+            PlaybackViewController *playbackViewController = [[PlaybackViewController alloc] initWithNibName:@"PlaybackViewController" bundle:nil];
+            [playbackViewController setClipInfo:clipInfo];
+            
+            DLog(@"Push the view controller.- %@", self.parentViewController);
+            _isReturnFrmPlayback = TRUE;
+            [self.navigationController pushViewController:playbackViewController animated:YES];
         }
         else {
-            NSLog(@"There was no clip in event");
+            DLog(@"URL file is not correct");
+            
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil
+                                                                message:LocStr(@"Video clip is not available, please try again later.")
+                                                               delegate:nil
+                                                      cancelButtonTitle:nil
+                                                      otherButtonTitles:LocStr(@"Ok"), nil];
+            [alertView show];
         }
     }
     else {
-        _messageLabel.text = @"You do not have motion detected recording enabled. Please choose an option below";
-        _viewFront.hidden = YES;
-        _viewBehide.hidden = NO;
+        DLog(@"There was no clip in event");
     }
 }
 
@@ -267,59 +252,52 @@
                                                                           offset:nil
                                                                             size:nil
                                                                           apiKey:apiKey];
-    NSLog(@"Notif - responseDict: %@", responseDict);
+    DLog(@"Notif - responseDict: %@", responseDict);
     
     if ( responseDict ) {
         if ([responseDict[@"status"] integerValue] == 200) {
             //4 44334C31A004 20130914055827490 2013-09-14T05:59:05+00:00 Camera-31a004
             
-            // work
-            NSMutableArray *events = [[responseDict objectForKey:@"data"] objectForKey:@"events"];
-            
-            if ( events.count > 0 ) {
-                for (NSDictionary *event in events) {
-                    //if ([[event objectForKey:@"value"] isEqual:_alertVal])
-                    if ([[NSString stringWithFormat:@"%@", event[@"value"]] isEqualToString:_alertVal]) {
-                        // This is the event. Get clips in this event
-                        self.clipsInEvent = event[@"data"];
-                        self.alertTime = event[@"time_stamp"];
-                        self.event = event;
+            NSMutableArray *events = [responseDict[@"data"] objectForKey:@"events"];
+            for ( NSDictionary *event in events ) {
+                //if ([[event objectForKey:@"value"] isEqual:_alertVal])
+                if ([[NSString stringWithFormat:@"%@", event[@"value"]] isEqualToString:_alertVal]) {
+                    // This is the event. Get clips in this event
+                    self.clipsInEvent = event[@"data"];
+                    self.alertTime = event[@"time_stamp"];
+                    self.event = event;
+                    
+                    if (![_clipsInEvent isEqual:[NSNull null]] && _clipsInEvent.count > 0) {
+                        // Get snapshot of event
+                        NSString *urlImgString = [[_clipsInEvent objectAtIndex:0] objectForKey:@"image"];
                         
-                        if (![_clipsInEvent isEqual:[NSNull null]] && _clipsInEvent.count > 0) {
-                            // Get snapshot of event
-                            NSString *urlImgString = [[_clipsInEvent objectAtIndex:0] objectForKey:@"image"];
+                        if (![urlImgString isEqual:[NSNull null]] && ![urlImgString isEqualToString:@""]) {
+                            UIImage *tmpImage = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:urlImgString]]];
                             
-                            if (![urlImgString isEqual:[NSNull null]] && ![urlImgString isEqualToString:@""]) {
-                                UIImage *tmpImage = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:urlImgString]]];
-                                
-                                if ( tmpImage ) {
-                                    [_imageViewSnapshot performSelectorOnMainThread:@selector(setImage:)
-                                                                         withObject:tmpImage
-                                                                      waitUntilDone:YES];
-                                }
-                            }
-                            else {
-                                NSLog(@"Image snapshot url is null. Use default");
+                            if ( tmpImage ) {
+                                [_imageViewSnapshot performSelectorOnMainThread:@selector(setImage:)
+                                                                     withObject:tmpImage
+                                                                  waitUntilDone:YES];
                             }
                         }
                         else {
-                            NSLog(@"Event has no data");
+                            DLog(@"Image snapshot url is null. Use default");
                         }
-                        
-                        break;
                     }
+                    else {
+                        DLog(@"Event has no data");
+                    }
+                    
+                    break;
                 }
-            }
-            else {
-                NSLog(@"Events empty!");
             }
         }
         else {
-            NSLog(@"Response status != 200");
+            DLog(@"Response status != 200");
         }
     }
     else {
-        NSLog(@"responseDict is nil");
+        DLog(@"responseDict is nil");
     }
     
     [_activityIndicatorViewLoading stopAnimating];
@@ -339,7 +317,7 @@
     else {
         dispatch_async(dispatch_get_main_queue(), ^{
             [self cancelTaskDoInBackground];
-            NSLog(@"url is %@", urlFile);
+            DLog(@"url is %@", urlFile);
             [_playEnventBtn setEnabled:YES];
         });
     }

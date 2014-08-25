@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.iPad.XIB" version="3.0" toolsVersion="5053" systemVersion="13D65" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.iPad.XIB" version="3.0" toolsVersion="5056" systemVersion="13E28" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
@@ -10,11 +10,14 @@
                 <outlet property="changeSettingsBtn" destination="13b-6r-uSB" id="cOE-IQ-HUX"/>
                 <outlet property="choosePlanBtn" destination="hcK-7W-cGn" id="Sio-4w-lrv"/>
                 <outlet property="goToCameraBtn" destination="qIT-pN-AcD" id="luv-OE-E0E"/>
+                <outlet property="goToCameraButtonLabel" destination="Whk-3z-SFV" id="OB5-3e-8d3"/>
                 <outlet property="ignoreBtn" destination="Lv5-UZ-pdI" id="J4b-2F-u8D"/>
                 <outlet property="imageViewSnapshot" destination="Vyf-qf-dXH" id="xa6-kM-gWo"/>
+                <outlet property="instructionLabel" destination="gHh-1S-28n" id="hOl-Y1-efY"/>
                 <outlet property="learnMoreBtn" destination="Agm-nm-0bL" id="xj0-jF-XDO"/>
                 <outlet property="messageLabel" destination="FpN-66-VdS" id="pFq-hT-s62"/>
                 <outlet property="playEnventBtn" destination="YYD-PR-GeH" id="bgR-Hb-S2O"/>
+                <outlet property="playEventButtonLabel" destination="XKm-0R-Sfv" id="CtO-HG-VEB"/>
                 <outlet property="timeLabel" destination="kSO-oz-TH8" id="rmY-Qf-m0E"/>
                 <outlet property="view" destination="308-s7-cxY" id="t41-Zj-pPj"/>
                 <outlet property="viewBehide" destination="6Xl-hD-FOL" id="C2J-B1-MfD"/>
