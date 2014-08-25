@@ -703,6 +703,17 @@
     {
         if ([camAlert.alertType isEqualToString:ALERT_TYPE_REMOVED_CAM] && ![self isStayingCameraSettingsPage])
         {
+            NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
+            NSString *justRemovedMac = [userDefault objectForKey:CAM_MAC_JUST_REMOVED];
+            if (justRemovedMac)
+            {
+                if ([justRemovedMac hasPrefix:camAlert.cameraMacNoColon])
+                {
+                    [userDefault setObject:nil forKey:CAM_MAC_JUST_REMOVED];
+                    [userDefault synchronize];
+                    return;
+                }
+            }
             [self refreshCamerasListPage:camAlert.registrationID];
             return;
         }

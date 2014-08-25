@@ -85,5 +85,7 @@
 #define ENABLE_DO_NOT_DISTURB   @"EnableDoNotDisturb"
 #define TIME_TO_EXPIRED         @"TimeToExpire"
 
+#define CAM_MAC_JUST_REMOVED    @"cam_mac_just_removed"
+#define CAM_JUST_REMOVED_SUFIX_MARK @"##@@##"
 
 #endif

@@ -10,6 +10,7 @@
 #import "MBP_iosAppDelegate.h"
 #import "GAI.h"
 #import "PublicDefine.h"
+#import "define.h"
 
 @interface UserAccount()
 
@@ -377,6 +378,22 @@
         }
         
         [self sync_online_and_offline_data:camProfiles];
+        
+        NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
+        NSString *justRemovedMac = [userDefault objectForKey:CAM_MAC_JUST_REMOVED];
+        if (justRemovedMac)
+        {
+            if ([justRemovedMac hasSuffix:CAM_JUST_REMOVED_SUFIX_MARK])
+            {
+                justRemovedMac = [justRemovedMac stringByReplacingOccurrencesOfString:CAM_JUST_REMOVED_SUFIX_MARK withString:@""];
+            }
+            else
+            {
+                justRemovedMac = nil;
+            }
+        }
+        [userDefault setObject:justRemovedMac forKey:CAM_MAC_JUST_REMOVED];
+        [userDefault synchronize];
         
         if (_delegate != nil)
         {
