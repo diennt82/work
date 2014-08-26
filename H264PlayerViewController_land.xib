@@ -90,7 +90,7 @@
                         </view>
                     </subviews>
                 </scrollView>
-                <scrollView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="Meo-mp-L42" customClass="ScrollHorizontalMenu">
+                <scrollView hidden="YES" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="Meo-mp-L42" customClass="ScrollHorizontalMenu">
                     <rect key="frame" x="0.0" y="260" width="480" height="41"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" white="0.33333333333333331" alpha="0.19" colorSpace="calibratedWhite"/>

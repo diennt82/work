@@ -92,7 +92,7 @@
                         </imageView>
                     </subviews>
                 </scrollView>
-                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="ftH-qh-QfZ" customClass="ScrollHorizontalMenu">
+                <scrollView hidden="YES" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="ftH-qh-QfZ" customClass="ScrollHorizontalMenu">
                     <rect key="frame" x="0.0" y="695" width="1024" height="60"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" white="0.33333333329999998" alpha="0.19" colorSpace="calibratedWhite"/>
