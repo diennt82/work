@@ -73,7 +73,7 @@
     }
     
     self.navigationController.navigationBarHidden = YES;
-    self.btnCreate.enabled = NO;
+//    self.btnCreate.enabled = NO;
     
     [self.btnCreate setBackgroundImage:[UIImage imageNamed:@"enter"] forState:UIControlStateNormal];
     [self.btnCreate setBackgroundImage:[UIImage imageNamed:@"enter_pressed"] forState:UIControlEventTouchDown];
@@ -232,12 +232,19 @@
 {
     if([self checkInputDataToLogin])
     {
-        NSLog(@"RegistrationVC - Start registration");
-        
-        NSInteger networkFailed = [RegistrationViewController checkNetworkConnectionCallback:self];
-        
-        if (!networkFailed) {
-            [self doSignUp];
+        if (self.btnCheckbox.selected)
+        {
+            NSLog(@"RegistrationVC - Start registration");
+            NSInteger networkFailed = [RegistrationViewController checkNetworkConnectionCallback:self];
+            if (!networkFailed) {
+                [self doSignUp];
+            }
+        }
+        else
+        {
+            NSString *msg = NSLocalizedStringWithDefaultValue(@"alert_mes_you_agree_with_terms_of_services",nil, [NSBundle mainBundle],
+                                                    @"To use our services, you agree with the Terms of Services" , nil);
+            [self showErrorDialog:msg];
         }
     }
 }
@@ -331,12 +338,12 @@
        )
     {
         //Enable the "Create" button
-        self.btnCreate.enabled = YES;
+//        self.btnCreate.enabled = YES;
     }
     else
     {
         //disable the "Create"  button
-        self.btnCreate.enabled = NO;
+//        self.btnCreate.enabled = NO;
     }
 }
 
