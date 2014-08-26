@@ -369,7 +369,10 @@ double _ticks = 0;
         
         //    float deltaY1 = (labelTouchToTalkSize.height + holdTTSize.height)/2.0;
         float alignY1 = (SCREEN_HEIGHT - localPoint.y) - marginBottomText + labelTouchToTalkSize.height/2 - 3*holdTTSize.height/2;
-        
+#if 1
+        [self.ib_labelRecordVideo setCenter:CGPointMake(SCREEN_WIDTH/2, alignY)];
+        [self.ib_labelTouchToTalk setCenter:CGPointMake(SCREEN_WIDTH/2, alignY1)];
+#else
         if (isiOS7AndAbove)
         {
             [self.ib_labelRecordVideo setCenter:CGPointMake(SCREEN_WIDTH/2, alignY)];
@@ -380,6 +383,7 @@ double _ticks = 0;
             [self.ib_labelRecordVideo setCenter:CGPointMake(SCREEN_WIDTH/2, alignY - 64)];
             [self.ib_labelTouchToTalk setCenter:CGPointMake(SCREEN_WIDTH/2, alignY1 - 64)];
         }
+#endif
         
         // update position button
         //Touch to Talk
@@ -389,12 +393,13 @@ double _ticks = 0;
         float alignXButtonDirectionPad = SCREEN_WIDTH/2- directionPadSize.width/2;
         float alignYButton = SCREEN_HEIGHT - localPoint.y - marginBottomButton - holdTTButtonSize.height;
         float alignYButtonDirectionPad = (SCREEN_HEIGHT - localPoint.y - directionPadSize.height)/2;
-        
+#if 0
         if (!isiOS7AndAbove)
         {
             alignYButton = alignYButton - 64;
             alignYButtonDirectionPad = alignYButtonDirectionPad - 44 - 64;
         }
+#endif
         
         [self.ib_buttonTouchToTalk setFrame:CGRectMake(alignXButton, alignYButton, holdTTButtonSize.width, holdTTButtonSize.height)];
         [self.ib_processRecordOrTakePicture setFrame:CGRectMake(alignXButton, alignYButton, holdTTButtonSize.width, holdTTButtonSize.height)];
@@ -2965,11 +2970,12 @@ double _ticks = 0;
     UIFont *degreeFont;
     UIFont *temperatureFont;
     float positionYOfBottomView = self.ib_temperature.frame.origin.y;//240.0f;
-    
+#if 0
     if (!isiOS7AndAbove)
     {
         positionYOfBottomView = positionYOfBottomView - 44;
     }
+#endif
     
     if (_isLandScapeMode)
     {
@@ -4350,13 +4356,16 @@ double _ticks = 0;
     }
     
     [self resetZooming];
-    
+#if 1
+    NSInteger deltaY = HIGH_STATUS_BAR;
+#else
     NSInteger deltaY = 0;
     
     if (isiOS7AndAbove)
     {
         deltaY = HIGH_STATUS_BAR;
     }
+#endif
     
     // Remove all subviews before reloading the xib
 #if 1
@@ -4403,7 +4412,16 @@ double _ticks = 0;
             self.melodyViewController = melodyVC;
             self.melodyViewController.melodyDelegate = self;
             [melodyVC release];
+#if 0
+            //CGRect rectMelody = CGRectMake(SCREEN_WIDTH - 375, 78, 175, 165);
+            CGRect rectMelody = CGRectMake(0, 78, 175, 165);
             
+            if (SYSTEM_VERSION_LESS_THAN(@"8.0")) {
+                rectMelody = CGRectMake(SCREEN_HEIGHT - 275, 78, 175, 165);
+            }
+            
+            self.melodyViewController.view.frame = rectMelody;
+//#else
             if (isiOS7AndAbove)
             {
                 self.melodyViewController.view.frame = CGRectMake(393, 78, 175, 165);
@@ -4412,7 +4430,7 @@ double _ticks = 0;
             {
                 self.melodyViewController.view.frame = CGRectMake(320, 60, 159, 204);
             }
-            
+#endif
         }
         //landscape mode
         //hide navigation bar
@@ -4488,7 +4506,51 @@ double _ticks = 0;
             [self.horizMenu reloadData:NO];
         }
         
+#if 1
+        self.melodyViewController.view.frame = CGRectMake(0, self.ib_ViewTouchToTalk.frame.origin.y - 5, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
         
+        // Control display for TimelineVC
+        
+        if (_timelineVC != nil)
+        {
+            CGFloat alignYTimeLine = self.ib_ViewTouchToTalk.frame.origin.y;
+            
+            if (isiPhone4) // This condition check size of screen. Not iPhone4 or other
+            {
+                CGRect rect = CGRectMake(0, alignYTimeLine, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y + 64);
+                self.timelineVC.view.frame = rect;
+            }
+            else
+            {
+                CGRect rect = CGRectMake(0, alignYTimeLine, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
+                self.timelineVC.view.frame = rect;
+            }
+            
+            _timelineVC.tableView.contentSize = CGSizeMake(SCREEN_WIDTH, _timelineVC.tableView.frame.size.height);
+            //don't show timeline after switch from land to port
+            self.timelineVC.view.hidden = NO;
+            [self.view addSubview:_timelineVC.view];
+            
+            if (_isLandScapeMode)
+            {
+                if (isiPhone4 || isiPhone5)
+                {
+                    //iPhone
+                    self.timelineVC.tableView.contentInset = UIEdgeInsetsMake(0, 0, 275, 0);
+                }
+                else
+                {
+                    //iPad
+                    self.timelineVC.tableView.contentInset = UIEdgeInsetsMake(0, 0, 50, 0);
+                }
+                
+            }
+            else
+            {
+                self.timelineVC.tableView.contentInset = UIEdgeInsetsMake(0, 0, 30, 0);
+            }
+        }
+#else
         CGFloat imageViewHeight = SCREEN_WIDTH * 9 / 16;
         
         if (isiOS7AndAbove)
@@ -4568,8 +4630,8 @@ double _ticks = 0;
                 }
             }
         }
-        
-        [self showControlMenu];
+#endif
+        //[self showControlMenu];
         //add hubble_logo_back
         //[self addHubbleLogo_Back];
         _isLandScapeMode = NO;
@@ -4611,8 +4673,8 @@ double _ticks = 0;
     
     [self setupPtt];
     [self applyFont];
-    [self hideControlMenu];
-    [self hidenAllBottomView];
+    //[self hideControlMenu];
+    //[self hidenAllBottomView];
     [self updateBottomView];
     
     
@@ -5459,29 +5521,29 @@ double _ticks = 0;
                 if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
                 {
                     if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8.0")) {
-                        rect = CGRectMake(SCREEN_WIDTH - 236, SCREEN_HEIGHT - 400, 236, 165);
+                        rect = CGRectMake(SCREEN_WIDTH - 236, SCREEN_HEIGHT - 400, 236, 175);
                     }
                     else
                     {
-                        rect = CGRectMake(SCREEN_HEIGHT - 236, SCREEN_WIDTH - 400, 236, 165);
+                        rect = CGRectMake(SCREEN_HEIGHT - 236, SCREEN_WIDTH - 400, 236, 175);
                     }
                 }
                 else
                 {
-                    if (isiPhone4)
-                    {
-                        rect = CGRectMake(SCREEN_HEIGHT - 159, 65, 159, 204);
+                    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8.0")) {
+                        rect = CGRectMake(SCREEN_WIDTH - 159, 65, 159, 204);
                     }
                     else
                     {
-                        rect = CGRectMake(393, 78, 175, 165);
+                        rect = CGRectMake(SCREEN_HEIGHT - 159, 65, 159, 204);
                     }
                 }
-                
-                //NSLog(@"%s rect:%@, SCREEN_HEIGHT:%f, SCREEN_WIDTH:%f", __FUNCTION__, NSStringFromCGRect(rect), SCREEN_HEIGHT, SCREEN_WIDTH);
             }
             else
             {
+#if 1
+                rect = CGRectMake(0, self.ib_ViewTouchToTalk.frame.origin.y - 5, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
+#else
                 if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
                     rect = CGRectMake(0, self.ib_ViewTouchToTalk.frame.origin.y - 5, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
                 }
@@ -5491,6 +5553,7 @@ double _ticks = 0;
                 }
                 
                 //NSLog(@"%s rect:%@, SCREEN_HEIGHT:%f, SCREEN_WIDTH:%f", __FUNCTION__, NSStringFromCGRect(rect), SCREEN_HEIGHT, SCREEN_WIDTH);
+#endif
             }
             
             self.melodyViewController.view.frame = rect;
