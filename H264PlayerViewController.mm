@@ -82,8 +82,7 @@ double _ticks = 0;
     [self.imageViewStreamer addGestureRecognizer:singleTap];
     [singleTap release];
 #if 1
-    self.tapGestureTemperature = [[UITapGestureRecognizer alloc] initWithTarget:self
-                                                                                            action:@selector(changeDegreeTemperatureType:)];
+    self.tapGestureTemperature = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(changeDegreeTemperatureType:)];
     self.tapGestureTemperature.numberOfTapsRequired = 1;
     self.tapGestureTemperature.numberOfTouchesRequired = 1;
 #endif
@@ -1441,9 +1440,7 @@ double _ticks = 0;
 - (void)singleTapGestureCaptured:(id)sender
 {
     NSLog(@"Single tap singleTapGestureCaptured");
-    
-    //if (_isHorizeShow == TRUE)
-    if (!_horizMenu.isHidden)
+    if (self.isHorizeShow)
     {
         [self hideControlMenu];
     }
@@ -1457,29 +1454,42 @@ double _ticks = 0;
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:@"single tap on video image view"
                                                      withLabel:@"Vide image view"
-                                                     withValue:[NSNumber numberWithDouble:_isHorizeShow]];
+                                                     withValue:[NSNumber numberWithDouble:!self.horizMenu.hidden]];
 }
 
 - (void)hideControlMenu
 {
-    static NSTimeInterval animationDuration = 0.3;
-    [UIView animateWithDuration:animationDuration animations:^{
-        self.isHorizeShow = FALSE;
-        self.horizMenu.hidden = YES;
-        [self.ib_lbCameraName setHidden:YES];
-    }];
+    self.isHorizeShow = NO;
+    self.horizMenu.userInteractionEnabled = NO;
+    if (!self.horizMenu.hidden && self.horizMenu.alpha == 1.0)
+    {
+        [UIView animateWithDuration:5.0
+                         animations:^{
+                             self.horizMenu.alpha = 0.0;
+                             self.ib_lbCameraName.alpha = 0.0;
+                         }
+                         completion:^(BOOL finished){
+                             self.horizMenu.hidden = YES;
+                             [self.ib_lbCameraName setHidden:YES];
+                         }];
+    }
 }
 
 - (void)showControlMenu
 {
-    
-    static NSTimeInterval animationDuration = 0.3;
-    [UIView animateWithDuration:animationDuration animations:^{
-        self.isHorizeShow = TRUE;
-        self.horizMenu.hidden = NO;
-        [self.view bringSubviewToFront:_horizMenu];
-        [self.ib_lbCameraName setHidden:NO];
-    }];
+    self.isHorizeShow = YES;
+    self.horizMenu.userInteractionEnabled = YES;
+    static NSTimeInterval animationDuration = 0.0;
+    [UIView animateWithDuration:animationDuration
+                     animations:^{
+                         self.horizMenu.alpha = 1.0;
+                         self.ib_lbCameraName.alpha = 1.0;
+                     }
+                     completion:^(BOOL finished){
+                         self.horizMenu.hidden = NO;
+                         [self.view bringSubviewToFront:_horizMenu];
+                         [self.ib_lbCameraName setHidden:NO];
+                     }];
     
     if (_timerHideMenu != nil)
     {
@@ -2472,7 +2482,7 @@ double _ticks = 0;
         
         self.imageViewStreamer.userInteractionEnabled = NO;
         
-        if (_isHorizeShow == TRUE)
+        if (self.isHorizeShow)
         {
             [self hideControlMenu];
         }
@@ -4569,7 +4579,7 @@ double _ticks = 0;
             }
         }
         
-        [self showControlMenu];
+//        [self showControlMenu];
         //add hubble_logo_back
         //[self addHubbleLogo_Back];
         _isLandScapeMode = NO;
