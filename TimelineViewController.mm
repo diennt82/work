@@ -1273,7 +1273,7 @@
             //tempValue ->Convert to F
             //
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-            BOOL isFahrenheit = [userDefaults  boolForKey:IS_FAHRENHEIT];
+            BOOL isFahrenheit = [[userDefaults objectForKey:IS_FAHRENHEIT] boolValue];
             if (isFahrenheit == YES)
             {
                 int degreeF =  [self temperatureToFfromC:(float)tempValue];

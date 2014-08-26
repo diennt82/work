@@ -1496,7 +1496,7 @@ typedef enum _WAIT_FOR_UPDATING {
                     self.sensitivityInfo.tempLowValue  = [settingsArray[7] integerValue];
                     self.sensitivityInfo.tempHighValue = [settingsArray[6] integerValue];
                     
-                    self.sensitivityInfo.tempIsFahrenheit = [[NSUserDefaults standardUserDefaults] boolForKey:IS_FAHRENHEIT];
+                    self.sensitivityInfo.tempIsFahrenheit = [[[NSUserDefaults standardUserDefaults] objectForKey:IS_FAHRENHEIT] boolValue];
                     NSLog(@"%s, mv:%d, sv:%d", __FUNCTION__, _sensitivityInfo.motionValue, _sensitivityInfo.soundValue);
 
                     if (_isNewDeviceSettingsCommand) {
