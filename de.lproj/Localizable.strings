@@ -494,7 +494,7 @@
 "monitor_everywhere_all_rights_reserved" = "Monitor überall © alle Rechte vorbehalten";
 
 /* No comment provided by engineer. */
-"monitor_is_offline" = "Monitor is offline";
+"monitor_is_offline" = "Camera appears to be offline";
 
 /* No comment provided by engineer. */
 "motion" = "Bewegung";
