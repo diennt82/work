@@ -4357,7 +4357,7 @@ double _ticks = 0;
     
     [self resetZooming];
 #if 1
-    NSInteger deltaY = HIGH_STATUS_BAR;
+    //NSInteger deltaY = HIGH_STATUS_BAR;
 #else
     NSInteger deltaY = 0;
     
@@ -4638,10 +4638,10 @@ double _ticks = 0;
         
 	}// end of portrait
     
-    
+#if 0
     [self.melodyViewController.melodyTableView setNeedsLayout];
     [self.melodyViewController.melodyTableView setNeedsDisplay];
-   
+#endif
     
     self.imageViewStreamer.frame = _imageViewVideo.frame;
     [self.scrollView insertSubview:_imageViewStreamer aboveSubview:_imageViewVideo];
@@ -4673,10 +4673,11 @@ double _ticks = 0;
     
     [self setupPtt];
     [self applyFont];
-    //[self hideControlMenu];
-    //[self hidenAllBottomView];
-    [self updateBottomView];
+    [self hidenAllBottomView];
     
+#if 0
+    [self hideControlMenu];
+    [self updateBottomView];
     
     //Earlier must at bottom of land, and port
     if (_isFirstLoad || _wantToShowTimeLine || _selectedItemMenu == -1)
@@ -4687,8 +4688,9 @@ double _ticks = 0;
     {
         [self hideTimelineView];
     }
+#endif
     
-    if(_selectedItemMenu!=-1){
+    if(_selectedItemMenu != -1){
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             /*
              * Maintain selected item in horize menu.
@@ -4712,8 +4714,13 @@ double _ticks = 0;
             
             [self.horizMenu setSelectedIndex:selectedItem animated:NO];
         });
+        
+        [self hideTimelineView];
     }
-
+    else if (_isFirstLoad || _wantToShowTimeLine)
+    {
+        [self showTimelineView];
+    }
     
     self.ib_buttonTouchToTalk.enabled = _enablePTT;
     self.ib_labelTouchToTalk.text = _stringStatePTT;
