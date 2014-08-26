@@ -4343,8 +4343,7 @@ double _ticks = 0;
 
 - (void) adjustViewsForOrientation:(UIInterfaceOrientation)orientation
 {
-    NSLog(@"H264VC - adjustViewsForOrientation:");
-    
+    NSLog(@"%s", __FUNCTION__);
     
     if (_isProcessRecording)
     {
@@ -4356,9 +4355,7 @@ double _ticks = 0;
     }
     
     [self resetZooming];
-#if 1
-    //NSInteger deltaY = HIGH_STATUS_BAR;
-#else
+#if 0
     NSInteger deltaY = 0;
     
     if (isiOS7AndAbove)
@@ -4413,15 +4410,6 @@ double _ticks = 0;
             self.melodyViewController.melodyDelegate = self;
             [melodyVC release];
 #if 0
-            //CGRect rectMelody = CGRectMake(SCREEN_WIDTH - 375, 78, 175, 165);
-            CGRect rectMelody = CGRectMake(0, 78, 175, 165);
-            
-            if (SYSTEM_VERSION_LESS_THAN(@"8.0")) {
-                rectMelody = CGRectMake(SCREEN_HEIGHT - 275, 78, 175, 165);
-            }
-            
-            self.melodyViewController.view.frame = rectMelody;
-//#else
             if (isiOS7AndAbove)
             {
                 self.melodyViewController.view.frame = CGRectMake(393, 78, 175, 165);
@@ -4507,24 +4495,33 @@ double _ticks = 0;
         }
         
 #if 1
-        self.melodyViewController.view.frame = CGRectMake(0, self.ib_ViewTouchToTalk.frame.origin.y - 5, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
+        CGFloat alignYTimeLine = self.ib_ViewTouchToTalk.frame.origin.y;
+        
+        self.melodyViewController.view.frame = CGRectMake(0, alignYTimeLine - 5, SCREEN_WIDTH, SCREEN_HEIGHT - alignYTimeLine);
         
         // Control display for TimelineVC
         
         if (_timelineVC != nil)
         {
-            CGFloat alignYTimeLine = self.ib_ViewTouchToTalk.frame.origin.y;
+            CGFloat actualScreenHigh = SCREEN_HEIGHT;
+            
+            if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8.0") && (actualScreenHigh == 320 || actualScreenHigh == 768)) {
+                actualScreenHigh = SCREEN_WIDTH;
+            }
+            
+            CGRect rect = CGRectMake(0, alignYTimeLine, SCREEN_WIDTH, actualScreenHigh - alignYTimeLine);
             
             if (isiPhone4) // This condition check size of screen. Not iPhone4 or other
             {
-                CGRect rect = CGRectMake(0, alignYTimeLine, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y + 64);
-                self.timelineVC.view.frame = rect;
+                rect = CGRectMake(0, alignYTimeLine, SCREEN_WIDTH, actualScreenHigh - alignYTimeLine + 64);
             }
             else
             {
-                CGRect rect = CGRectMake(0, alignYTimeLine, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
-                self.timelineVC.view.frame = rect;
+                // Default
+                //rect = CGRectMake(0, alignYTimeLine, SCREEN_WIDTH, SCREEN_HEIGHT - alignYTimeLine);
             }
+            
+            self.timelineVC.view.frame = rect;
             
             _timelineVC.tableView.contentSize = CGSizeMake(SCREEN_WIDTH, _timelineVC.tableView.frame.size.height);
             //don't show timeline after switch from land to port
