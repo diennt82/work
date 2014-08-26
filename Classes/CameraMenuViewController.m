@@ -486,6 +486,7 @@ typedef enum _WAIT_FOR_UPDATING {
         
         camDetCell.lblCameraName.text = self.camChannel.profile.name;
         camDetCell.lblCamVer.text = self.camChannel.profile.fw_version;
+        camDetCell.lblCamModel.text = NSLocalizedStringWithDefaultValue(@"updating", nil, [NSBundle mainBundle], @"Updating...", nil);
         [self performSelectorInBackground:@selector(getModelID:) withObject:camDetCell];
         
         return camDetCell;
