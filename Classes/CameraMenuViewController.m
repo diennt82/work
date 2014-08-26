@@ -147,6 +147,10 @@ typedef enum _WAIT_FOR_UPDATING {
     vwSnapshot.hidden = YES;
     [self.view addSubview:vwSnapshot];
     self.isNewDeviceSettingsCommand = TRUE;
+    
+    NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
+    [userDefault setObject:nil forKey:CAM_MAC_JUST_REMOVED];
+    [userDefault synchronize];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -762,6 +766,11 @@ typedef enum _WAIT_FOR_UPDATING {
 
 - (void) removeCameraSuccessWithResponse:(NSDictionary *)responseData
 {
+    NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
+    NSString *str = [NSString stringWithFormat:@"%@%@", [Util strip_colon_fr_mac:_camChannel.profile.mac_address], CAM_JUST_REMOVED_SUFIX_MARK];
+    [userDefault setObject:str forKey:CAM_MAC_JUST_REMOVED];
+    [userDefault synchronize];
+    
 	NSLog(@"CameraMenuVC- removeCam success-- fatality");
     self.navigationController.view.userInteractionEnabled = YES;
     [MBProgressHUD hideHUDForView:self.view animated:NO];

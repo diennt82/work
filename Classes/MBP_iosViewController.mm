@@ -720,7 +720,18 @@
     {
         if ([camAlert.alertType isEqualToString:ALERT_TYPE_REMOVED_CAM] && ![self isStayingCameraSettingsPage])
         {
-            [self gotoCamerasListPage:camAlert.registrationID];
+            NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
+            NSString *justRemovedMac = [userDefault objectForKey:CAM_MAC_JUST_REMOVED];
+            if (justRemovedMac)
+            {
+                if ([justRemovedMac hasPrefix:camAlert.cameraMacNoColon])
+                {
+                    [userDefault setObject:nil forKey:CAM_MAC_JUST_REMOVED];
+                    [userDefault synchronize];
+                    return;
+                }
+            }
+            [self refreshCamerasListPage:camAlert.registrationID];
             return;
         }
     }
@@ -972,7 +983,14 @@
             {
                 case 0:
                 {
-                    [self gotoCamerasListPage:pushNotiAlert.camAlert.registrationID];
+                    if ([self isStayingCamerasListPage])
+                    {
+                        [self refreshCamerasListPage:pushNotiAlert.camAlert.registrationID];
+                    }
+                    else
+                    {
+                        [self gotoCamerasListPage:pushNotiAlert.camAlert.registrationID];
+                    }
                 }
                     break;
                 case 1:
@@ -1147,14 +1165,22 @@
     self.pushAlert = nil;
 }
 
+- (void)refreshCamerasListPage:(NSString *)registrationId {
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setObject:registrationId forKey:REG_ID];
+    [userDefaults synchronize];
+    
+    NSLog(@"%s", __FUNCTION__);
+    [self.menuVC refreshCameraList];
+}
+
 - (void)gotoCamerasListPage:(NSString *)registrationId {
 #if 1
-    [self popAllViewControllers];
+     [self popAllViewControllers];
 #else
     [self dismissMenuHubbleView];
     [self dismissNotificationViewController];
 #endif
-    
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setObject:registrationId forKey:REG_ID];
     [userDefaults synchronize];
@@ -1581,7 +1607,7 @@
         {
             if (![self isStayingCameraSettingsPage])
             {
-                [self gotoCamerasListPage:self.camAlert.registrationID];
+                [self refreshCamerasListPage:self.camAlert.registrationID];
             }
             else
             {
