@@ -83,6 +83,9 @@
 "alert_mes_video_clip_is_not_ready" = "Videoclip ist nicht bereit, bitte versuchen Sie es später noch einmal.";
 
 /* No comment provided by engineer. */
+"alert_mes_you_agree_with_terms_of_services" = "To use our services, you agree with the Terms of Services";
+
+/* No comment provided by engineer. */
 "alert_mes_your_have_not_camera" = "Your %@ have not camera.";
 
 /* No comment provided by engineer. */
