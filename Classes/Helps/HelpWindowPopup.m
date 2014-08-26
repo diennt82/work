@@ -17,7 +17,7 @@
 @end
 
 
-@interface HelpWindowPopup() <UIWebViewDelegate>
+@interface HelpWindowPopup()
 @property (nonatomic, retain) MBP_PopupOverlayWindow    *overlayWindow;
 @property (nonatomic, retain) NSString                  *title;
 @property (nonatomic, retain) NSString                  *htmlString;
@@ -77,8 +77,10 @@
     [_overlayWindow release];
     [_title release];
     [_htmlString release];
+    [_headerView release];
     [_webView release];
     [_contentView release];
+    [_closeButton release];
     [super dealloc];
 }
 
@@ -174,21 +176,21 @@
     self.layer.cornerRadius = 10;
 
     float headerHeight = 45;
-    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, headerHeight + 10)];
-    [headerView setBackgroundColor:[UIColor colorWithRed:0 green:171/255.f blue:245/255.f alpha:1.0]];
-    headerView.layer.cornerRadius = 10;
-    [self addSubview:headerView];
+    _headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, headerHeight + 10)];
+    [self.headerView setBackgroundColor:[UIColor colorWithRed:0 green:171/255.f blue:245/255.f alpha:1.0]];
+    self.headerView.layer.cornerRadius = 10;
+    [self addSubview:self.headerView];
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 10, self.frame.size.width - 20, 25)];
     titleLabel.textAlignment = NSTextAlignmentCenter;
     titleLabel.textColor = [UIColor whiteColor];
     titleLabel.font = [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:20];
     titleLabel.text = self.title;
-    [headerView addSubview:titleLabel];
+    [self.headerView addSubview:titleLabel];
     
-    UIButton *closeButton = [[UIButton alloc] initWithFrame:CGRectMake(self.frame.size.width - 45, self.frame.size.height - 40, 35, 35)];
-    [closeButton setImage:[UIImage imageNamed:@"video_fullscreen_close.png"] forState:UIControlStateNormal];
-    [closeButton addTarget:self action:@selector(handleCloseButton:) forControlEvents:UIControlEventTouchUpInside];
-    [self addSubview:closeButton];
+    _closeButton = [[UIButton alloc] initWithFrame:CGRectMake(self.frame.size.width - 45, self.frame.size.height - 40, 35, 35)];
+    [self.closeButton setImage:[UIImage imageNamed:@"video_fullscreen_close.png"] forState:UIControlStateNormal];
+    [self.closeButton addTarget:self action:@selector(handleCloseButton:) forControlEvents:UIControlEventTouchUpInside];
+    [self addSubview:self.closeButton];
     
     
     CGRect rect = CGRectMake(0, headerHeight, self.frame.size.width, self.frame.size.height - headerHeight - 45);
@@ -204,8 +206,6 @@
     [self.contentView addSubview:self.webView];
     
     [titleLabel release];
-    [headerView release];
-    [closeButton release];
 }
 
 - (void)handleCloseButton:(id)sender

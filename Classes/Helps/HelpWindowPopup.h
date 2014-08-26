@@ -14,14 +14,17 @@
 - (void)willDismiss:(id)sender;
 @end
 
-@interface HelpWindowPopup : UIView
+@interface HelpWindowPopup : UIView <UIWebViewDelegate>
 
+@property (nonatomic, retain) UIView        *headerView;
 @property (nonatomic, retain) UIWebView     *webView;
 @property (nonatomic, retain) UIView        *contentView;
+@property (nonatomic, retain) UIButton      *closeButton;
 @property (nonatomic, assign) id <HelpWindowPopupDelegate> delegate;
 
 - (id)initWithTitle:(NSString *)title andHtmlString:(NSString *)htmlString;
 - (id)initWithTitle:(NSString *)title andHtmlString:(NSString *)htmlString andHeight:(CGFloat)height;
+- (void)initUIComponents;
 - (void)show;
 - (void)dismiss;
 - (BOOL)isShowing;

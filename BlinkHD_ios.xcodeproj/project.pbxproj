@@ -647,12 +647,13 @@
 		8BA7F2821851C57200BE0145 /* blink11hd480p.sdp in Resources */ = {isa = PBXBuildFile; fileRef = 8BA7F27F1851C57100BE0145 /* blink11hd480p.sdp */; };
 		8BA7F2831851C57200BE0145 /* blink11hd720p.sdp in Resources */ = {isa = PBXBuildFile; fileRef = 8BA7F2801851C57100BE0145 /* blink11hd720p.sdp */; };
 		8BA8AE881821F3E900DC9E9F /* stream720p_10_926.sdp in Resources */ = {isa = PBXBuildFile; fileRef = 8BA8AE871821F3E900DC9E9F /* stream720p_10_926.sdp */; };
+		8BB1430B19AC8C2400CEA4CF /* CongratHelpWindowPopup.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BB1430A19AC8C2400CEA4CF /* CongratHelpWindowPopup.m */; };
+		8BB404E11999F4AF008277FA /* CamerasListHelpWindowPopup.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BB404E01999F4AF008277FA /* CamerasListHelpWindowPopup.m */; };
+		8BB46F8B1993250700E31A3D /* SettingHeaderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BB46F8A1993250700E31A3D /* SettingHeaderCell.m */; };
 		8BB5007A19A58DFC00BF6B0E /* settings_switch_off.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BB5007619A58DFC00BF6B0E /* settings_switch_off.png */; };
 		8BB5007B19A58DFC00BF6B0E /* settings_switch_off@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BB5007719A58DFC00BF6B0E /* settings_switch_off@2x.png */; };
 		8BB5007C19A58DFC00BF6B0E /* settings_switch_on.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BB5007819A58DFC00BF6B0E /* settings_switch_on.png */; };
 		8BB5007D19A58DFC00BF6B0E /* settings_switch_on@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BB5007919A58DFC00BF6B0E /* settings_switch_on@2x.png */; };
-		8BB404E11999F4AF008277FA /* CamerasListHelpWindowPopup.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BB404E01999F4AF008277FA /* CamerasListHelpWindowPopup.m */; };
-		8BB46F8B1993250700E31A3D /* SettingHeaderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BB46F8A1993250700E31A3D /* SettingHeaderCell.m */; };
 		8BB53A83194826050078B58E /* NotifViewController~iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8BB53A82194826050078B58E /* NotifViewController~iPad.xib */; };
 		8BB7EA9A196E3F5000FDD674 /* Focus73TableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BB7EA98196E3F5000FDD674 /* Focus73TableViewController.m */; };
 		8BB7EA9B196E3F5000FDD674 /* Focus73TableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8BB7EA99196E3F5000FDD674 /* Focus73TableViewController.xib */; };
@@ -1542,15 +1543,17 @@
 		8BA7F27F1851C57100BE0145 /* blink11hd480p.sdp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = blink11hd480p.sdp; sourceTree = "<group>"; };
 		8BA7F2801851C57100BE0145 /* blink11hd720p.sdp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = blink11hd720p.sdp; sourceTree = "<group>"; };
 		8BA8AE871821F3E900DC9E9F /* stream720p_10_926.sdp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stream720p_10_926.sdp; sourceTree = "<group>"; };
+		8BB1430919AC8C2400CEA4CF /* CongratHelpWindowPopup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CongratHelpWindowPopup.h; sourceTree = "<group>"; };
+		8BB1430A19AC8C2400CEA4CF /* CongratHelpWindowPopup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CongratHelpWindowPopup.m; sourceTree = "<group>"; };
 		8BB293D9199B756300B82264 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
-		8BB5007619A58DFC00BF6B0E /* settings_switch_off.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = settings_switch_off.png; sourceTree = "<group>"; };
-		8BB5007719A58DFC00BF6B0E /* settings_switch_off@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "settings_switch_off@2x.png"; sourceTree = "<group>"; };
-		8BB5007819A58DFC00BF6B0E /* settings_switch_on.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = settings_switch_on.png; sourceTree = "<group>"; };
-		8BB5007919A58DFC00BF6B0E /* settings_switch_on@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "settings_switch_on@2x.png"; sourceTree = "<group>"; };
 		8BB404DF1999F4AF008277FA /* CamerasListHelpWindowPopup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CamerasListHelpWindowPopup.h; sourceTree = "<group>"; };
 		8BB404E01999F4AF008277FA /* CamerasListHelpWindowPopup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CamerasListHelpWindowPopup.m; sourceTree = "<group>"; };
 		8BB46F891993250700E31A3D /* SettingHeaderCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingHeaderCell.h; sourceTree = "<group>"; };
 		8BB46F8A1993250700E31A3D /* SettingHeaderCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingHeaderCell.m; sourceTree = "<group>"; };
+		8BB5007619A58DFC00BF6B0E /* settings_switch_off.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = settings_switch_off.png; sourceTree = "<group>"; };
+		8BB5007719A58DFC00BF6B0E /* settings_switch_off@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "settings_switch_off@2x.png"; sourceTree = "<group>"; };
+		8BB5007819A58DFC00BF6B0E /* settings_switch_on.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = settings_switch_on.png; sourceTree = "<group>"; };
+		8BB5007919A58DFC00BF6B0E /* settings_switch_on@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "settings_switch_on@2x.png"; sourceTree = "<group>"; };
 		8BB53A82194826050078B58E /* NotifViewController~iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "NotifViewController~iPad.xib"; sourceTree = "<group>"; };
 		8BB7EA97196E3F5000FDD674 /* Focus73TableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Focus73TableViewController.h; sourceTree = "<group>"; };
 		8BB7EA98196E3F5000FDD674 /* Focus73TableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Focus73TableViewController.m; sourceTree = "<group>"; };
@@ -3308,6 +3311,8 @@
 				8B9E214E1991CBF60026B0CE /* HelpWindowPopup.m */,
 				8BB404DF1999F4AF008277FA /* CamerasListHelpWindowPopup.h */,
 				8BB404E01999F4AF008277FA /* CamerasListHelpWindowPopup.m */,
+				8BB1430919AC8C2400CEA4CF /* CongratHelpWindowPopup.h */,
+				8BB1430A19AC8C2400CEA4CF /* CongratHelpWindowPopup.m */,
 			);
 			path = Helps;
 			sourceTree = "<group>";
@@ -4393,6 +4398,7 @@
 				972E2B8715A4234300E60A96 /* NSData+Base64.m in Sources */,
 				8BA18CB0184879720097D1AF /* DeviceSettingsCell.m in Sources */,
 				8B92A0B818643212005923D2 /* TimelineButtonCell.m in Sources */,
+				8BB1430B19AC8C2400CEA4CF /* CongratHelpWindowPopup.m in Sources */,
 				A1A98E8F180BF5AA00C8EBD3 /* client_main.c in Sources */,
 				8B9384841856E613009C4771 /* CameraSettingsViewController.m in Sources */,
 				8BA5EE841964F08B00A5E128 /* Camera.m in Sources */,
