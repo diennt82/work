@@ -818,7 +818,7 @@
 "xib_cameramenu_label_camdetail" = "Kamera Detail";
 
 /* No comment provided by engineer. */
-"xib_cameramenu_label_sensity" = "Notification Sensity";
+"xib_cameramenu_label_sensity" = "Notification Sensitivity";
 
 /* No comment provided by engineer. */
 "xib_camerasettings_cell_button_cameraname" = "Kameraname ist ungültig";
