@@ -6,12 +6,34 @@
 //  Copyright (c) 2013 Smart Panda Ltd. All rights reserved.
 //
 
-#define NUMBER_CIRCLE 5
-#define ALIGNMENT_LR 40
-
 #import "SensitivityCell.h"
 #import "UIView+Custom.h"
 
+#define NUMBER_CIRCLE 5
+#define ALIGNMENT_LR 40
+
+#define SENSITIVITY_IMAGE_VIEW_CONE 508
+#define SENSITIVITY_IMAGE_VIEW_LINE 509
+
+enum SensitivityImageViewCircleTag
+{
+    SensitivityImageViewCircleTagLow = 500,
+    SensitivityImageViewCircleTagMedium,
+    SensitivityImageViewCircleTagHigh,
+    SensitivityImageViewCircleTagExtraLow,
+    SensitivityImageViewCircleTagExtraHigh,
+};
+typedef enum SensitivityImageViewCircleTag SensitivityImageViewCircleTag;
+
+enum SensitivityLabelTag
+{
+    SensitivityLabelTagLow = 750,
+    SensitivityLabelTagMedium,
+    SensitivityLabelTagHigh,
+    SensitivityLabelTagOptionVideo,
+    SensitivityLabelTagOptionSnapshot,
+};
+typedef enum SensitivityLabelTag SensitivityLabelTag;
 
 @interface SensitivityCell()
 
@@ -77,7 +99,7 @@
     self.btnVideoRecording.selected  = _recordingValue;
     self.btnCaptureSnapshot.selected = _captureSnapshotValue;
     
-    UIImageView *imageViewCone = (UIImageView *)[self viewWithTag:508];
+    UIImageView *imageViewCone = (UIImageView *)[self viewWithTag:SENSITIVITY_IMAGE_VIEW_CONE];
     
     if (_rowIndex == 0)
     {
@@ -88,9 +110,9 @@
         imageViewCone.hidden = YES;
     }
     
-    self.imageViewCircleArray = [NSArray arrayWithObjects:[self viewWithTag:500], [self viewWithTag:501], [self viewWithTag:502], nil];
+    self.imageViewCircleArray = [NSArray arrayWithObjects:[self viewWithTag:SensitivityImageViewCircleTagLow], [self viewWithTag:SensitivityImageViewCircleTagMedium], [self viewWithTag:SensitivityImageViewCircleTagHigh], nil];
     
-    UIImageView *imageViewLine = (UIImageView *)[self viewWithTag:509];
+    UIImageView *imageViewLine = (UIImageView *)[self viewWithTag:SENSITIVITY_IMAGE_VIEW_LINE];
     
     if(_switchValue){
         imageViewLine.image = [UIImage imageNamed:@"settings_line.png"];
@@ -99,10 +121,10 @@
         imageViewLine.image = [UIImage imageNamed:@"settings_line_white.png"];
     }
     
-    UIImageView *imageView3 = (UIImageView *)[self viewWithTag:503];
+    UIImageView *imageView3 = (UIImageView *)[self viewWithTag:SensitivityImageViewCircleTagExtraLow];
     imageView3.center = CGPointMake(imageView3.center.x, imageViewLine.center.y);
     
-    UIImageView *imageView4 = (UIImageView *)[self viewWithTag:504];
+    UIImageView *imageView4 = (UIImageView *)[self viewWithTag:SensitivityImageViewCircleTagExtraHigh];
     imageView4.center = CGPointMake(imageView4.center.x, imageViewLine.center.y);
     
     imageView3.hidden = YES;
@@ -129,14 +151,18 @@
 
 - (void)xibDefaultLocalization
 {
-    [[self viewWithTag:101] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_camerasettings_cell_label_low", nil, [NSBundle mainBundle], @"Low", nil)];
-    [[self viewWithTag:102] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_camerasettings_cell_label_medium", nil, [NSBundle mainBundle], @"Medium", nil)];
-    [[self viewWithTag:103] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_camerasettings_cell_label_high", nil, [NSBundle mainBundle], @"High", nil)];
+    [[self viewWithTag:SensitivityLabelTagLow] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_camerasettings_cell_label_low", nil, [NSBundle mainBundle], @"Low", nil)];
+    [[self viewWithTag:SensitivityLabelTagMedium] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_camerasettings_cell_label_medium", nil, [NSBundle mainBundle], @"Medium", nil)];
+    [[self viewWithTag:SensitivityLabelTagHigh] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_camerasettings_cell_label_high", nil, [NSBundle mainBundle], @"High", nil)];
+    
+    [[self viewWithTag:SensitivityLabelTagOptionVideo] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_camerasettings_cell_label_video_recording", nil, [NSBundle mainBundle], @"Motion Video Recording", nil)];
+    
+    [[self viewWithTag:SensitivityLabelTagOptionSnapshot] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_camerasettings_cell_label_capture_snapshot", nil, [NSBundle mainBundle], @"Motion Capture Snapshot", nil)];
 }
 
 - (void)singleTap: (UITapGestureRecognizer *)recognizer
 {
-    NSInteger tempValue = recognizer.view.tag % 500;
+    NSInteger tempValue = recognizer.view.tag % SensitivityImageViewCircleTagLow;
     
     if (_settingsValue != tempValue)
     {
@@ -167,7 +193,7 @@
             imageView.image = [UIImage imageNamed:@"settings_circle.png"];
         }
     }
-    UIImageView *imageViewLine = (UIImageView *)[self viewWithTag:509];
+    UIImageView *imageViewLine = (UIImageView *)[self viewWithTag:SENSITIVITY_IMAGE_VIEW_LINE];
     if(_switchValue){
         imageViewLine.image = [UIImage imageNamed:@"settings_line.png"];
     }else{

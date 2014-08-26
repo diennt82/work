@@ -146,6 +146,7 @@ typedef enum _WAIT_FOR_UPDATING {
     vwSnapshot.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     vwSnapshot.hidden = YES;
     [self.view addSubview:vwSnapshot];
+    self.isNewDeviceSettingsCommand = TRUE;
 }
 
 - (void)viewWillAppear:(BOOL)animated
