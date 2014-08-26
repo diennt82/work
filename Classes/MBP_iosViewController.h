@@ -19,38 +19,13 @@
 #import "MenuViewController.h"
 #import "TimelineDatabase.h"
 
-#define DIRECTION_V_NON  0x01
-#define DIRECTION_V_UP   0x02
-#define DIRECTION_V_DN   0x04
-#define DIRECTION_V_MASK 0xF0
-
-#define DIRECTION_H_NON 0x10
-#define DIRECTION_H_LF  0x20
-#define DIRECTION_H_RT  0x40
-#define DIRECTION_H_MASK 0x0F
-
-#define CURRENT_VIEW_MODE_MULTI     0x11
-#define CURRENT_VIEW_MODE_SINGLE    0x12
-
-#define DIRECT_MODE_NEXT_BTN 311
-
-#define ALERT_PUSH_RECVED_RESCAN_AFTER  200
-#define ALERT_PUSH_RECVED_RELOGIN_AFTER 201
-#define ALERT_PUSH_SERVER_ANNOUNCEMENT  203
-#define ALERT_PUSH_RECVED_NON_MOTION    204
-
-#define _triggeredByVox @"bool_Vox_Trigger"
-
 #define APP_STAGE_INIT          1
 #define APP_STAGE_LOGGING_IN    2
 #define APP_STAGE_LOGGED_IN     3
 #define APP_STAGE_SETUP         4
 
-#define STAY_AT_CAMERA_LIST 0xcabe
-
 @interface MBP_iosViewController : UIViewController <BonjourDelegate,ConnectionMethodDelegate,UIActionSheetDelegate,ScanForCameraNotifier>
 
-@property (nonatomic, weak) IBOutlet UIView *progressView;
 @property (nonatomic, weak) IBOutlet UIImageView *splashScreen;
 
 @property (nonatomic, strong) NSArray *channelArray;

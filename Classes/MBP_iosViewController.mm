@@ -31,11 +31,6 @@
 
 @interface MBP_iosViewController ()
 
-@property (nonatomic, weak) IBOutlet UIView *backgroundView;
-@property (nonatomic, weak) IBOutlet UIView *statusDialogView;
-@property (nonatomic, weak) IBOutlet UILabel *statusDialogLabel;
-@property (nonatomic, weak) IBOutlet UITextView *statusDialogText;
-
 @property (nonatomic, strong) UIAlertView *pushAlert;
 @property (nonatomic, strong) CameraAlert *latestCamAlert;
 @property (nonatomic, strong) Bonjour *bonjourBrowser;
@@ -53,6 +48,11 @@
 
 @implementation MBP_iosViewController
 
+#define ALERT_PUSH_RECVED_RESCAN_AFTER  200
+#define ALERT_PUSH_RECVED_RELOGIN_AFTER 201
+#define ALERT_PUSH_SERVER_ANNOUNCEMENT  203
+#define ALERT_PUSH_RECVED_NON_MOTION    204
+
 - (void)initialize
 {
 	self.toTakeSnapShot = NO;
@@ -64,13 +64,13 @@
     AudioServicesCreateSystemSoundID(soundFileURLRef, &_soundFileObject);
     
     CFRelease(soundFileURLRef);
-    self.splashScreen.animationImages = @[
-                                        [UIImage imageNamed:@"loader_big_a"],
-                                        [UIImage imageNamed:@"loader_big_b"],
-                                        [UIImage imageNamed:@"loader_big_c"],
-                                        [UIImage imageNamed:@"loader_big_d"],
-                                        [UIImage imageNamed:@"loader_big_e"]
-                                        ];
+    _splashScreen.animationImages = @[
+                                      [UIImage imageNamed:@"loader_big_a"],
+                                      [UIImage imageNamed:@"loader_big_b"],
+                                      [UIImage imageNamed:@"loader_big_c"],
+                                      [UIImage imageNamed:@"loader_big_d"],
+                                      [UIImage imageNamed:@"loader_big_e"]
+                                      ];
 }
 
 - (void)viewDidLoad
@@ -87,14 +87,14 @@
     UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
     [self startAnimationWithOrientation:interfaceOrientation];
     
-    self.splashScreen.image = [UIImage imageNamed:@"loader_big_a"];
+    _splashScreen.image = [UIImage imageNamed:@"loader_big_a"];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     
-    NSString *msg = LocStr(@"Logging_in_to_server");
+    NSString *msg = LocStr(@"Logging in to server...");
     UILabel *labelMessage = (UILabel *)[self.view viewWithTag:509];
     [labelMessage setText:msg];
     
@@ -194,9 +194,7 @@
 
 #pragma mark -  ConnectionMethodDelegate - Views navigation
 
-/**
- * Main program switching point is here 
- */
+// Main program switching point is here
 - (void)sendStatus:(int)method
 {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -237,7 +235,6 @@
         {
 			// May be offline mode
             DLog(@"start scanning");
-            _statusDialogLabel.hidden = NO;
 			self.app_stage = APP_STAGE_LOGGED_IN;
             
             self.isRebinded = [self rebindCameraResource];
@@ -245,14 +242,12 @@
             
 			// Back from login - login success
 			[self dismissViewControllerAnimated:NO completion:nil];
-			self.progressView.hidden = NO;
 
 			break;
         }
 		
 		case AFTER_DEL_RELOGIN: // Only use when cancel from Add camera
         {
-            _statusDialogLabel.hidden = YES;
             [userDefaults setBool:YES forKey:AUTO_LOGIN_KEY];
             [userDefaults synchronize];
             
@@ -266,7 +261,6 @@
 		case BACK_FROM_MENU_NOLOAD: // USED by AppDelegate as well.. please check if modifying this case
         {
             DLog(@"Back from menu");
-            _statusDialogLabel.hidden = YES;
             
             if (self.presentedViewController) {
                 [self dismissViewControllerAnimated:NO completion:nil];
@@ -277,7 +271,6 @@
             
 		case LOGIN_FAILED_OR_LOGOUT : //back from login -failed Or logout
         {
-            _statusDialogLabel.hidden = YES;
             self.app_stage = APP_STAGE_LOGGING_IN;
             [self logoutAndUnregistration];
             [self showLogin];
@@ -294,7 +287,6 @@
              */
             DLog(@"start scanning Bonjour");
             
-            _statusDialogLabel.hidden = NO;
 			self.app_stage = APP_STAGE_LOGGED_IN;
             
             self.isRebinded = [self rebindCameraResource];
@@ -303,7 +295,6 @@
             
             // 1 & 2 work parallely
             // Back from login - login success
-            self.progressView.hidden = NO;
             
             break;
         }
@@ -365,13 +356,13 @@
             [self finishScanning];
         }
         else {
-            self.bonjourThread = [[NSThread alloc] initWithTarget:self selector:@selector(scan_with_bonjour) object:nil];
+            self.bonjourThread = [[NSThread alloc] initWithTarget:self selector:@selector(scanWithBonjour) object:nil];
             [_bonjourThread start];
         }
     }
 }
 
-- (void)scan_with_bonjour
+- (void)scanWithBonjour
 {
     @autoreleasepool {
         self.bonjourBrowser = [[Bonjour alloc] initSetupWith:_restoredProfilesArray];
@@ -388,7 +379,7 @@
     [NSThread exit];
 }
 
-- (BOOL)isThisMacStoredOffline:(NSString *)mac_without_colon
+- (BOOL)isThisMacStoredOffline:(NSString *)macWithoutColon
 {
 	if ( !_restoredProfilesArray && !_channelArray ) {
 		// No offline data is available --> force re login
@@ -398,8 +389,8 @@
 	
 	for ( CamProfile *cp in _restoredProfilesArray ) {
 		if ( cp.mac_address ) {
-			NSString *mac_wo_colon = [Util strip_colon_fr_mac:cp.mac_address];
-			if ([mac_wo_colon isEqualToString:mac_without_colon]) {
+			NSString *macWoColon = [Util strip_colon_fr_mac:cp.mac_address];
+			if ([macWoColon isEqualToString:macWithoutColon]) {
 				return YES;
 			}
 		}
@@ -410,16 +401,13 @@
 
 - (BOOL)pushNotificationRcvedServerAnnouncement:(NSString *)customMessage andUrl:(NSString *)customUrl
 {
-    NSString *title = LocStr(@"Server Announcement");
-    NSString *ignore = LocStr(@"Close");
-    NSString *details = LocStr(@"Details");
     NSString *msg = [NSString stringWithFormat:@"%@ %@", customMessage, customUrl];
     
-    self.pushAlert = [[AlertPrompt alloc] initWithTitle:title
+    self.pushAlert = [[AlertPrompt alloc] initWithTitle:LocStr(@"System Notification")
                                                 message:msg
                                                delegate:self
-                                      cancelButtonTitle:ignore
-                                      otherButtonTitles:details, nil];
+                                      cancelButtonTitle:LocStr(@"Close")
+                                      otherButtonTitles:LocStr(@"Details"), nil];
     
     _pushAlert.tag = ALERT_PUSH_SERVER_ANNOUNCEMENT;
     
@@ -473,14 +461,14 @@
     NSString *msg2= LocStr(@"Go_to_camera");
 
     if ( [camAlert.alertType isEqualToString:ALERT_TYPE_TEMP_HI] ) {
-        msg = LocStr(@"Temperature_too_high");
+        msg = LocStr(@"Temperature too high");
     }
     else if ([camAlert.alertType isEqualToString:ALERT_TYPE_TEMP_LO]) {
-        msg = LocStr(@"Temperature_too_low");
+        msg = LocStr(@"Temperature too low");
     }
     else if ([camAlert.alertType isEqualToString:ALERT_TYPE_MOTION]) {
-        msg = LocStr(@"Motion Detected");
-        msg2 = LocStr(@"View_snapshot");
+        msg = LocStr(@"Motion detected");
+        msg2 = LocStr(@"View snapshot");
     }
     
     NSString *cancel = LocStr(@"Cancel");
@@ -517,7 +505,7 @@
 
 - (void)playSound
 {
-	//Play beep
+	// Play beep
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         AudioServicesPlaySystemSound(_soundFileObject);
     }
@@ -534,7 +522,7 @@
         [userDefaults removeObjectForKey:@"PortalPassword"];
         [userDefaults removeObjectForKey:_push_dev_token];
         
-#if  !(TARGET_IPHONE_SIMULATOR)
+#if !(TARGET_IPHONE_SIMULATOR)
         DLog(@"De-Register push with both parties: APNs and BMS ");
 
         NSString *apiKey = [userDefaults objectForKey:@"PortalApiKey"];
@@ -721,7 +709,7 @@
         switch(buttonIndex)
         {
 			case 0:
-                //IGNORE
+                // Ignore
 				break;
                 
 			case 1:
@@ -790,7 +778,7 @@
     
     cp = (CamProfile *)profiles[i];
     if ( cp.mac_address ) {
-        // Check if we are in the same network as the camera.. IF so
+        // Check if we are in the same network as the camera.. If so
         // Try to scan .. otherwise... no point ..
         // 20121130: phung: incase the ip address is not valid... also try to scan ..
         if ( !cp.ip_address || [self isInTheSameNetworkAsCamera:cp] ) {
@@ -798,7 +786,7 @@
             
             if (skipScan) {
                 cp.port = 80;
-                // Dont need to scan.. call scan_done directly
+                // Don't need to scan.. call scan_done directly
                 [finalResult addObject:cp];
                 [self performSelector:@selector(scan_done:) withObject:finalResult afterDelay:0.1];
             }
@@ -1109,7 +1097,6 @@
 {
     // Back from login- login success
     [self dismissViewControllerAnimated:NO completion:nil];
-    _progressView.hidden = NO;
     
     if ( [_camAlert.alertType isEqualToString:ALERT_TYPE_MOTION] ) {
         NotifViewController *notifVC = [[NotifViewController alloc] initWithNibName:@"NotifViewController" bundle:nil];
@@ -1150,7 +1137,6 @@
 
 - (void)bonjourReturnCameraListAvailable:(NSMutableArray *)cameraList
 {
-    
 }
 
 @end
