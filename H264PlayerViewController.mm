@@ -137,7 +137,7 @@ double _ticks = 0;
     
     self.enablePTT = YES;
     self.currentBitRate = @"128";
-    self.messageStreamingState = NSLocalizedStringWithDefaultValue(@"camera_is_not_accessible", nil, [NSBundle mainBundle], @"Camera is not accessible", nil);
+    self.messageStreamingState = NSLocalizedStringWithDefaultValue(@"camera_is_not_accessible", nil, [NSBundle mainBundle], @"Camera is not accessible...", nil);
     self.timeStartingStageTwo = 0;
     
     
@@ -148,6 +148,8 @@ double _ticks = 0;
     self.backgroundTask = UIBackgroundTaskInvalid;
     self.askForFWUpgradeOnce = YES;
     [self becomeActive];
+    
+    self.helpPopup = nil;
 }
 
 //At first time, we set to FALSE after call checkOrientation()
@@ -721,6 +723,85 @@ double _ticks = 0;
     [alertViewSendingLog release];
 }
 
+- (IBAction)handleOpenHelpButton:(id)sender
+{
+    NSMutableString *html = [[NSMutableString alloc] init];
+    [html appendString:@"<html>"];
+    [html appendString:@"   <header>"];
+    [html appendString:@"       <style>"];
+    [html appendString:@"           ul.first_deep {padding-left:10px}"];
+    [html appendString:@"           ul.first_deep li {list-style-type:square;}"];
+    [html appendString:@"           ul.second_deep {padding-left:10px}"];
+    [html appendString:@"           ul.second_deep li {list-style-type:circle;}"];
+    [html appendString:@"       </style>"];
+    [html appendString:@"   </header>"];
+    [html appendString:@"   <body>"];
+    [html appendString:@"       <div style='margin-left:5px;'>"];
+    [html appendString:@"       <ul class=\"first_deep\">"];
+    [html appendString:@"           <li>#h1#</li>"];
+    [html appendString:@"           <li>#h2#"];
+    [html appendString:@"               <ul class=\"second_deep\">"];
+    [html appendString:@"                   <li>#h2c1#</li>"];
+    [html appendString:@"                   <li>#h2c2#</li>"];
+    [html appendString:@"                   <li>#h2c3#</li>"];
+    [html appendString:@"                   <li>#h2c4#</li>"];
+    [html appendString:@"                   <li>#h2c5#</li>"];
+    [html appendString:@"                   <li>#h2c6#</li>"];
+    [html appendString:@"               </ul>"];
+    [html appendString:@"           </li>"];
+    [html appendString:@"           <br/>"];
+    [html appendString:@"           <li>#h3#</li>"];
+    [html appendString:@"           <li>#h4#</li>"];
+    [html appendString:@"       </ul>"];
+    [html appendString:@"       </div>"];
+    [html appendString:@"   </body>"];
+    [html appendString:@"</html>"];
+    
+    [html replaceOccurrencesOfString:@"#h1#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_Q__why_can’t_access_my_camera", nil, [NSBundle mainBundle], @"Q. Why can’t I access my camera? Why do I keep seeing the warning message \"Low bandwidth detected\"?", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
+    [html replaceOccurrencesOfString:@"#h2#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_following_reasons", nil, [NSBundle mainBundle], @"A. This could be due to one of the following reasons:", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
+    [html replaceOccurrencesOfString:@"#h2c1#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_network_is_too_low", nil, [NSBundle mainBundle], @"The upload bandwidth of your broadband network is too low", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
+    [html replaceOccurrencesOfString:@"#h2c2#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_the_minimum_upload_bandwidth", nil, [NSBundle mainBundle], @"The minimum upload bandwidth required is about 600kbps", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
+    [html replaceOccurrencesOfString:@"#h2c3#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_online_bandwidth_speed_test_tool", nil, [NSBundle mainBundle], @"Please check your upload bandwidth with your Internet Service Provider or use an online bandwidth speed test tool, such as <a href=\"http://www.speedtest.net\">http://www.speedtest.net</a>", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
+    [html replaceOccurrencesOfString:@"#h2c4#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_camera_may_be_too_far", nil, [NSBundle mainBundle], @"Your camera may be too far away from your router. Please try reducing the distance between the router and camera", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
+    [html replaceOccurrencesOfString:@"#h2c5#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_using_a_mobile_network_3G", nil, [NSBundle mainBundle], @"If you are using a mobile network (3G), the bandwidth may be limited", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
+    [html replaceOccurrencesOfString:@"#h2c6#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_closing_any_unnecessary_applications", nil, [NSBundle mainBundle], @"If you are running other applications (eg. games), they could be consuming a lot of bandwidth. This can impact on the performance of the Hubble app. Please try closing any unnecessary applications before using the Hubble app", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
+    [html replaceOccurrencesOfString:@"#h3#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_where_my_recorded", nil, [NSBundle mainBundle], @"Q. Where can I find my recorded videos and snapshots?", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
+    [html replaceOccurrencesOfString:@"#h4#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_go_to_photos_application", nil, [NSBundle mainBundle], @"A. Your recorded video footage and snapshots are all stored inside your Photos application. Please go to ‘Photos' application to view them", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
+    
+    CGFloat height = 280;
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        height = 420;
+    }
+    HelpWindowPopup *popup = [[HelpWindowPopup alloc] initWithTitle:@"Video Screen Help"
+                                                      andHtmlString:html
+                                                          andHeight:height];
+    popup.delegate = self;
+    [popup show];
+    self.helpPopup = popup;
+    [html release];
+    [popup release];
+}
 #pragma mark - Delegate Stream callback
 
 - (void)forceRestartStream:(NSTimer *)timer
@@ -2097,7 +2178,7 @@ double _ticks = 0;
                 if (self.selectedChannel.profile.isInLocal)
                 {
 //                    [self showTimelineView];
-                    self.messageStreamingState = NSLocalizedStringWithDefaultValue(@"camera_is_not_accessible", nil, [NSBundle mainBundle], @"Camera is not accessible", nil);
+                    self.messageStreamingState = NSLocalizedStringWithDefaultValue(@"camera_is_not_accessible", nil, [NSBundle mainBundle], @"Camera is not accessible...", nil);
                 }
                 
                 break;
@@ -3283,11 +3364,11 @@ double _ticks = 0;
                                        //handle Bad response
                                        NSLog(@"%s ERROR: %@", __FUNCTION__, [responseDict objectForKey:@"message"]);
 #if 1
-                                       self.messageStreamingState = NSLocalizedStringWithDefaultValue(@"camera_is_not_accessible", nil, [NSBundle mainBundle], @"Camera is not accessible", nil);
+                                       self.messageStreamingState = NSLocalizedStringWithDefaultValue(@"camera_is_not_accessible", nil, [NSBundle mainBundle], @"Camera is not accessible...", nil);
                                        _isShowTextCameraIsNotAccesible = YES;
                                        
                                        dispatch_async(dispatch_get_main_queue(), ^{
-                                           [self.ib_lbCameraNotAccessible setHidden:NO];
+                                           [self messageNotAccesible:NO];
                                        });
                                        
                                        [self symmetric_check_result:TRUE];
@@ -3304,11 +3385,11 @@ double _ticks = 0;
                                else
                                {
                                    NSLog(@"SERVER unreachable (timeout) ");
-                                   self.messageStreamingState = NSLocalizedStringWithDefaultValue(@"camera_is_not_accessible", nil, [NSBundle mainBundle], @"Camera is not accessible", nil);
+                                   self.messageStreamingState = NSLocalizedStringWithDefaultValue(@"camera_is_not_accessible", nil, [NSBundle mainBundle], @"Camera is not accessible...", nil);
                                    _isShowTextCameraIsNotAccesible = YES;
 #if 1
                                    dispatch_async(dispatch_get_main_queue(), ^{
-                                       [self.ib_lbCameraNotAccessible setHidden:NO];
+                                       [self messageNotAccesible:NO];
                                        [self performSelector:@selector(setupCamera) withObject:nil afterDelay:10];
                                    });
 #else
@@ -4293,7 +4374,10 @@ double _ticks = 0;
 	}
 }
 
-
+- (void)willDismiss:(id)sender
+{
+    self.helpPopup = nil;
+}
 
 #pragma mark - Rotation screen
 - (BOOL)shouldAutorotate
@@ -4322,6 +4406,11 @@ double _ticks = 0;
 - (void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
     //[[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView - will rotate interface" withProperties:nil];
+    if (self.helpPopup != nil)
+    {
+        [self.helpPopup dismiss];
+    }
+    
     
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:@"View will rotate interface"
@@ -4341,10 +4430,14 @@ double _ticks = 0;
 -(void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
     [self applyFont];
-    CGRect rect = self.ib_lbCameraNotAccessible.frame;
-    rect.origin.x = (self.scrollView.frame.size.width - rect.size.width) / 2;
-    rect.origin.y = (self.scrollView.frame.size.height - rect.size.height) / 2 + 55;
-    self.ib_lbCameraNotAccessible.frame = rect;
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+    {
+        CGRect rect = self.ib_lbCameraNotAccessible.frame;
+        rect.origin.x = (self.scrollView.frame.size.width - rect.size.width) / 2;
+        rect.origin.y = (self.scrollView.frame.size.height - rect.size.height) / 2 + 55;
+        self.ib_lbCameraNotAccessible.frame = rect;
+        self.ib_openHelpButton.frame = rect;
+    }
 }
 
 -(void) checkOrientation
@@ -7017,17 +7110,26 @@ double _ticks = 0;
         [self start_animation_with_orientation];
         
         
-        
-        self.ib_lbCameraNotAccessible.text = _messageStreamingState;
+        NSString *message = [NSString stringWithFormat:@"%@ %@", _messageStreamingState, NSLocalizedStringWithDefaultValue(@"more_detail", nil, [NSBundle mainBundle], @"details", nil)];
+        self.ib_lbCameraNotAccessible.text = message;
+        NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithAttributedString:self.ib_lbCameraNotAccessible.attributedText];
+        [attributedString addAttribute:NSUnderlineStyleAttributeName
+                                 value:[NSNumber numberWithInteger:NSUnderlineStyleSingle]
+                                 range:NSMakeRange(attributedString.length - 7, 7)];
+        [attributedString addAttribute:NSForegroundColorAttributeName
+                                 value:[UIColor colorWithRed:51/255.0f green:102/255.f blue:187/255.0f alpha:1.0f]
+                                 range:NSMakeRange(attributedString.length - 7, 7)];
+        [self.ib_lbCameraNotAccessible setAttributedText:attributedString];
         
         if (_isShowTextCameraIsNotAccesible)
         {
             [self.ib_lbCameraNotAccessible setHidden:NO];
             [self showTimelineView];
+            [self messageNotAccesible:NO];
         }
         else
         {
-            [self.ib_lbCameraNotAccessible setHidden:YES];
+            [self messageNotAccesible:YES];
         }
     }
     else
@@ -7036,9 +7138,15 @@ double _ticks = 0;
         _isShowTextCameraIsNotAccesible = NO;
         [self.customIndicator stopAnimating];
         [self.customIndicator setHidden:YES];
-        [self.ib_lbCameraNotAccessible setHidden:YES];
+        [self messageNotAccesible:YES];
         [self.ib_lbCameraName setText:self.selectedChannel.profile.name];
     }
+}
+
+- (void)messageNotAccesible:(BOOL)hidden
+{
+    [self.ib_lbCameraNotAccessible setHidden:hidden];
+    [self.ib_openHelpButton setHidden:hidden];
 }
 
 #pragma mark - Hubble alert view & delegate
@@ -7335,11 +7443,11 @@ double _ticks = 0;
         {
             //handle Bad response
             NSLog(@"%s ERROR: %@", __FUNCTION__, [responseDict objectForKey:@"message"]);
-            self.messageStreamingState = NSLocalizedStringWithDefaultValue(@"camera_is_not_accessible", nil, [NSBundle mainBundle], @"Camera is not accessible", nil);
+            self.messageStreamingState = NSLocalizedStringWithDefaultValue(@"camera_is_not_accessible", nil, [NSBundle mainBundle], @"Camera is not accessible...", nil);
             _isShowTextCameraIsNotAccesible = YES;
             
             dispatch_async(dispatch_get_main_queue(), ^{
-                [self.ib_lbCameraNotAccessible setHidden:NO];
+                [self messageNotAccesible:NO];
             });
             
             [self symmetric_check_result:TRUE];
@@ -7360,11 +7468,11 @@ double _ticks = 0;
     {
         //handle Bad response
         NSLog(@"%s ERROR: %@", __FUNCTION__, [responseDict objectForKey:@"message"]);
-        self.messageStreamingState = NSLocalizedStringWithDefaultValue(@"camera_is_not_accessible", nil, [NSBundle mainBundle], @"Camera is not accessible", nil);
+        self.messageStreamingState = NSLocalizedStringWithDefaultValue(@"camera_is_not_accessible", nil, [NSBundle mainBundle], @"Camera is not accessible...", nil);
         _isShowTextCameraIsNotAccesible = YES;
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self.ib_lbCameraNotAccessible setHidden:NO];
+            [self messageNotAccesible:NO];
         });
         
         [self symmetric_check_result:TRUE];
@@ -7384,9 +7492,9 @@ double _ticks = 0;
         {
             NSLog(@"SERVER unreachable (timeout) ");
 //            [self showTimelineView];
-            self.messageStreamingState = NSLocalizedStringWithDefaultValue(@"camera_is_not_accessible", nil, [NSBundle mainBundle], @"Camera is not accessible", nil);
+            self.messageStreamingState = NSLocalizedStringWithDefaultValue(@"camera_is_not_accessible", nil, [NSBundle mainBundle], @"Camera is not accessible...", nil);
             _isShowTextCameraIsNotAccesible = YES;
-            [self.ib_lbCameraNotAccessible setHidden:NO];
+            [self messageNotAccesible:NO];
             [self performSelector:@selector(setupCamera) withObject:nil afterDelay:10];
         }
         else

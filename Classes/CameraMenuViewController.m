@@ -21,6 +21,7 @@
 #import "PublicDefine.h"
 #import "UIImageView+WebCache.h"
 #import "UIView+Custom.h"
+#import "HelpWindowPopup.h"
 
 
 #define ALERT_REMOVE_CAM        5
@@ -84,6 +85,8 @@ typedef enum _WAIT_FOR_UPDATING {
 @property (nonatomic) BOOL isNewDeviceSettingsCommand;
 @property (nonatomic, retain) NSString *camModelId;
 
+- (IBAction)handleCameraDetailHelp:(id)sender;
+- (IBAction)handleNotiSensityHelp:(id)sender;
 @end
 
 @implementation CameraMenuViewController
@@ -182,7 +185,13 @@ typedef enum _WAIT_FOR_UPDATING {
     [_jsonCommBlock release];
     [_sensitivityTemperatureCell release];
     [_camModelId release];
-    
+    [_selectedReg release];
+    [_sensitivityInfo release];
+    [_sensitivityMessage release];
+    [_stringFW_Version release];
+    [_apiKey release];
+    [_vwHeaderCamDetail release];
+    [_vwHeaderNotSens release];
     [super dealloc];
 }
 
@@ -574,45 +583,7 @@ typedef enum _WAIT_FOR_UPDATING {
 // In a xib-based application, navigation from a table can be handled in -tableView:didSelectRowAtIndexPath:
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Navigation logic may go here, for example:
-    // Create the next view controller.
     
-   /* if (indexPath.row == 0)
-    {
-        _cameraName = self.camChannel.profile.name;
-        
-        if (_alertViewRename == nil)
-        {
-            self.alertViewRename = [[UIAlertView alloc] initWithTitle:@"Enter the new Camera name"
-                                                              message:nil
-                                                             delegate:self
-                                                    cancelButtonTitle:NSLocalizedStringWithDefaultValue(@"cancel", nil, [NSBundle mainBundle], @"Cancel", nil)
-                                                    otherButtonTitles:NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil), nil];
-            self.alertViewRename.alertViewStyle = UIAlertViewStylePlainTextInput;
-            UITextField *textField = [_alertViewRename textFieldAtIndex:0];
-            [textField setText:_cameraName];
-            self.alertViewRename.tag = ALERT_RENAME_CAMERA;
-        }
-        
-        [_alertViewRename show];
-    }
-#if ENABLE_CHANGE_IMAGE
-    else if (indexPath.row == 1)
-    {
-        //change Image
-        ChangeImageViewController *changeImageVC = [[ChangeImageViewController alloc] initWithNibName:@"ChangeImageViewController" bundle:nil];
-        [UIView transitionWithView:self.view
-                          duration:1.0
-                           options:UIViewAnimationOptionTransitionFlipFromBottom
-                        animations:^{
-                            [self.view addSubview:changeImageVC.view];
-                        }
-                        completion:NULL];
-        
-        
-    }
-#endif
-    */
 }
 
 #pragma mark - Server methods
@@ -917,6 +888,136 @@ typedef enum _WAIT_FOR_UPDATING {
         [hud setLabelText:NSLocalizedStringWithDefaultValue(@"loading", nil, [NSBundle mainBundle], @"Loading...", nil)];
         [self performSelector:@selector(getSensitivityInfoFromServer) withObject:nil afterDelay:0.1];
     }
+}
+
+- (IBAction)handleCameraDetailHelp:(id)sender
+{
+    NSMutableString *html = [[NSMutableString alloc] init];
+    [html appendString:@"<html>"];
+    [html appendString:@"   <header>"];
+    [html appendString:@"       <style>"];
+    [html appendString:@"           ul.first_deep {padding-left:10px}"];
+    [html appendString:@"           ul.first_deep li {list-style-type:square;}"];
+    [html appendString:@"           ul.second_deep {padding-left:10px}"];
+    [html appendString:@"           ul.second_deep li {list-style-type:circle;}"];
+    [html appendString:@"       </style>"];
+    [html appendString:@"   </header>"];
+    [html appendString:@"   <body>"];
+    [html appendString:@"       <div style='margin-left:5px;'>"];
+    [html appendString:@"       <ul class=\"first_deep\">"];
+    [html appendString:@"           <li><b>#h1#</b>"];
+    [html appendString:@"               <ul class=\"second_deep\">"];
+    [html appendString:@"                   <li>#h1c1#</li>"];
+    [html appendString:@"               </ul>"];
+    [html appendString:@"           </li>"];
+    [html appendString:@"           <br/>"];
+    [html appendString:@"           <li><b>#h2#</b>"];
+    [html appendString:@"               <ul class=\"second_deep\">"];
+    [html appendString:@"                   <li>#h2c1#</li>"];
+    [html appendString:@"               </ul>"];
+    [html appendString:@"           </li>"];
+    [html appendString:@"       </ul>"];
+    [html appendString:@"       </div>"];
+    [html appendString:@"   </body>"];
+    [html appendString:@"</html>"];
+
+    [html replaceOccurrencesOfString:@"#h1#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_camera_name", nil, [NSBundle mainBundle], @"Camera Name:", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
+    [html replaceOccurrencesOfString:@"#h1c1#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_can_change_name", nil, [NSBundle mainBundle], @"User can change the name of the camera", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
+    [html replaceOccurrencesOfString:@"#h2#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_change_image", nil, [NSBundle mainBundle], @"Change Image:", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
+    [html replaceOccurrencesOfString:@"#h2c1#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_can_change_thumbnail", nil, [NSBundle mainBundle], @"User can change the thumbnail image shown on the camera list screen", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
+    
+    HelpWindowPopup *popup = [[HelpWindowPopup alloc] initWithTitle:@"Camera Details Help"
+                                                         andHtmlString:html];
+    [popup show];
+    [popup release];
+    [html release];
+}
+
+- (IBAction)handleNotiSensityHelp:(id)sender
+{
+    NSMutableString *html = [[NSMutableString alloc] init];
+    [html appendString:@"<html>"];
+    [html appendString:@"   <header>"];
+    [html appendString:@"       <style>"];
+    [html appendString:@"           ul.first_deep {padding-left:10px}"];
+    [html appendString:@"           ul.first_deep li {list-style-type:square;}"];
+    [html appendString:@"           ul.second_deep {padding-left:10px}"];
+    [html appendString:@"           ul.second_deep li {list-style-type:circle;}"];
+    [html appendString:@"       </style>"];
+    [html appendString:@"   </header>"];
+    [html appendString:@"   <body>"];
+    [html appendString:@"       <div style='margin-left:5px;'>"];
+    [html appendString:@"       <ul class=\"first_deep\">"];
+    [html appendString:@"           <li><b>#h1#</b>"];
+    [html appendString:@"               <ul class=\"second_deep\">"];
+    [html appendString:@"                   <li>#h1c1#</li>"];
+    [html appendString:@"                   <li>#h1c2#</li>"];
+    [html appendString:@"               </ul>"];
+    [html appendString:@"           </li>"];
+    [html appendString:@"           <br/>"];
+    [html appendString:@"           <li><b>#h2#</b>"];
+    [html appendString:@"               <ul class=\"second_deep\">"];
+    [html appendString:@"                   <li>#h2c1#</li>"];
+    [html appendString:@"                   <li>#h2c2#</li>"];
+    [html appendString:@"                   <li>#h2c3#</li>"];
+    [html appendString:@"                   <li>#h2c4#</li>"];
+    [html appendString:@"               </ul>"];
+    [html appendString:@"           </li>"];
+    [html appendString:@"           <br/>"];
+    [html appendString:@"           <li><b>#h3#</b>"];
+    [html appendString:@"               <ul class=\"second_deep\">"];
+    [html appendString:@"                   <li>#h3c1#</li>"];
+    [html appendString:@"               </ul>"];
+    [html appendString:@"           </li>"];
+    [html appendString:@"       </ul>"];
+    [html appendString:@"       </div>"];
+    [html appendString:@"   </body>"];
+    [html appendString:@"</html>"];
+    
+    [html replaceOccurrencesOfString:@"#h1#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_motion_detection_sensitivity", nil, [NSBundle mainBundle], @"Motion Detection Sensitivity:", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
+    [html replaceOccurrencesOfString:@"#h1c1#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_motion_detection_is_triggered", nil, [NSBundle mainBundle], @"Motion detection is triggered when 2 consecutive seconds of motion have been detected by your camera", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
+    [html replaceOccurrencesOfString:@"#h1c2#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_the_sensitivity_level_determines", nil, [NSBundle mainBundle], @"The sensitivity level determines how much change in activity your camera needs to detect in order for a motion detection notification to be sent", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
+    [html replaceOccurrencesOfString:@"#h2#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_sound_detection_sensitivity", nil, [NSBundle mainBundle], @"Sound Detection Sensitivity:", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
+    [html replaceOccurrencesOfString:@"#h2c1#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_camera_triggers_notification_high", nil, [NSBundle mainBundle], @"High: Your camera triggers a notification whenever it detects a sound below the low audio threshold that lasts for 0.5 seconds or more", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
+    [html replaceOccurrencesOfString:@"#h2c2#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_camera_triggers_notification_medium", nil, [NSBundle mainBundle], @"Medium : Your camera triggers a notification whenever it detects a sound above the high audio threshold that lasts for 2 seconds or more", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
+    [html replaceOccurrencesOfString:@"#h2c3#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_camera_triggers_notification_low", nil, [NSBundle mainBundle], @"Low : Your camera triggers a notification whenever it detects a sound below the low audio threshold that lasts for 3 seconds or more", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
+    [html replaceOccurrencesOfString:@"#h2c4#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_each_time_sound_is_detected", nil, [NSBundle mainBundle], @"Each time sound is detected, your camera will pause the monitoring of sound levels for approximately 60 seconds before it resumes monitoring them again", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
+    [html replaceOccurrencesOfString:@"#h3#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_temperature", nil, [NSBundle mainBundle], @"Temperature:", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
+    [html replaceOccurrencesOfString:@"#h3c1#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_receive_notification_every_30_minute", nil, [NSBundle mainBundle], @"You will receive a notification every 30 minutes (on average) whenever the temperature falls outside the range you have selected", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
+    
+    HelpWindowPopup *popup = [[HelpWindowPopup alloc] initWithTitle:@"Notification Sensitivity Help"
+                                                         andHtmlString:html];
+    [popup show];
+    [popup release];
+    [html release];
 }
 
 - (void)showUpdatingProgressHUD {

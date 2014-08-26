@@ -34,12 +34,12 @@
                         <outlet property="delegate" destination="-1" id="u5f-uA-Rgr"/>
                     </connections>
                 </tableView>
-                <view contentMode="scaleToFill" id="1Wd-46-fFY">
-                    <rect key="frame" x="0.0" y="523" width="160" height="45"/>
+                <view autoresizesSubviews="NO" contentMode="scaleToFill" id="1Wd-46-fFY">
+                    <rect key="frame" x="0.0" y="523" width="107" height="45"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="dyr-bQ-OQj">
-                            <rect key="frame" x="0.0" y="0.0" width="160" height="45"/>
+                            <rect key="frame" x="0.0" y="0.0" width="107" height="45"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <state key="normal" image="add_camera_btn.png">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -49,26 +49,26 @@
                             </connections>
                         </button>
                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="add_camera.png" id="eLs-I2-D31">
-                            <rect key="frame" x="16" y="7" width="29" height="32"/>
+                            <rect key="frame" x="2" y="8" width="29" height="30"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         </imageView>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add Camera" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="CMg-Sm-LSI">
-                            <rect key="frame" x="46" y="12" width="97" height="21"/>
+                            <rect key="frame" x="30" y="12" width="75" height="21"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                            <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
+                            <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="13"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <nil key="highlightedColor"/>
                         </label>
                     </subviews>
                 </view>
-                <view contentMode="scaleToFill" id="rGT-t0-wFf">
-                    <rect key="frame" x="160" y="523" width="160" height="45"/>
+                <view autoresizesSubviews="NO" contentMode="scaleToFill" id="rGT-t0-wFf">
+                    <rect key="frame" x="107" y="523" width="107" height="45"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="771-Ka-RXo">
-                            <rect key="frame" x="0.0" y="0.0" width="160" height="45"/>
+                            <rect key="frame" x="0.0" y="0.0" width="107" height="45"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                             <state key="normal" image="buy_camera_btn.png">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -78,19 +78,50 @@
                             </connections>
                         </button>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="cart.png" id="9q4-GV-9h1">
-                            <rect key="frame" x="17" y="7" width="29" height="32"/>
+                            <rect key="frame" x="4" y="7" width="29" height="32"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         </imageView>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Buy Camera" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="VIt-u8-8Qh">
-                            <rect key="frame" x="52" y="12" width="97" height="21"/>
+                            <rect key="frame" x="32" y="12" width="73" height="21"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                            <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
+                            <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="13"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <nil key="highlightedColor"/>
                         </label>
                     </subviews>
+                </view>
+                <view autoresizesSubviews="NO" contentMode="scaleToFill" id="UCW-H8-W2a">
+                    <rect key="frame" x="213" y="523" width="107" height="45"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="ZtF-o7-gBw">
+                            <rect key="frame" x="0.0" y="0.0" width="107" height="45"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            <state key="normal">
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="helpButtonTouchUpInside:" destination="-1" eventType="touchUpInside" id="jNt-dT-1d7"/>
+                            </connections>
+                        </button>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="alert_learn.png" id="xH9-oI-p4h">
+                            <rect key="frame" x="4" y="7" width="29" height="32"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        </imageView>
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Help" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="VOb-B2-DL5">
+                            <rect key="frame" x="32" y="12" width="74" height="21"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="13"/>
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" red="1" green="0.7137255072593689" blue="0.25098040699958801" alpha="1" colorSpace="deviceRGB"/>
                 </view>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -127,6 +158,7 @@
     <resources>
         <image name="add_camera.png" width="20" height="20"/>
         <image name="add_camera_btn.png" width="160" height="45"/>
+        <image name="alert_learn.png" width="60" height="60"/>
         <image name="buy_camera_btn.png" width="160" height="45"/>
         <image name="cart.png" width="20" height="20"/>
     </resources>

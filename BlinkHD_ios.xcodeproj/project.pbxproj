@@ -592,6 +592,7 @@
 		8B9CE20518C848A000B1B7F9 /* AddCameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9CE20318C848A000B1B7F9 /* AddCameraViewController.m */; };
 		8B9CE20618C848A000B1B7F9 /* AddCameraViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B9CE20418C848A000B1B7F9 /* AddCameraViewController.xib */; };
 		8B9DC60A190B7ED7005B4210 /* KISSMetricsAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9DC609190B7ED7005B4210 /* KISSMetricsAPI.m */; };
+		8B9E214F1991CBF60026B0CE /* HelpWindowPopup.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9E214E1991CBF60026B0CE /* HelpWindowPopup.m */; };
 		8BA17EFA18B7399100129FE7 /* LoginViewController_35.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8BA17EF918B7399100129FE7 /* LoginViewController_35.xib */; };
 		8BA17EFC18B73E2400129FE7 /* RegistrationViewController_35.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8BA17EFB18B73E2400129FE7 /* RegistrationViewController_35.xib */; };
 		8BA18CB0184879720097D1AF /* DeviceSettingsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BA18CAF184879720097D1AF /* DeviceSettingsCell.m */; };
@@ -650,6 +651,8 @@
 		8BB5007B19A58DFC00BF6B0E /* settings_switch_off@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BB5007719A58DFC00BF6B0E /* settings_switch_off@2x.png */; };
 		8BB5007C19A58DFC00BF6B0E /* settings_switch_on.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BB5007819A58DFC00BF6B0E /* settings_switch_on.png */; };
 		8BB5007D19A58DFC00BF6B0E /* settings_switch_on@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BB5007919A58DFC00BF6B0E /* settings_switch_on@2x.png */; };
+		8BB404E11999F4AF008277FA /* CamerasListHelpWindowPopup.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BB404E01999F4AF008277FA /* CamerasListHelpWindowPopup.m */; };
+		8BB46F8B1993250700E31A3D /* SettingHeaderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BB46F8A1993250700E31A3D /* SettingHeaderCell.m */; };
 		8BB53A83194826050078B58E /* NotifViewController~iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8BB53A82194826050078B58E /* NotifViewController~iPad.xib */; };
 		8BB7EA9A196E3F5000FDD674 /* Focus73TableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BB7EA98196E3F5000FDD674 /* Focus73TableViewController.m */; };
 		8BB7EA9B196E3F5000FDD674 /* Focus73TableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8BB7EA99196E3F5000FDD674 /* Focus73TableViewController.xib */; };
@@ -1478,6 +1481,8 @@
 		8B9CE20418C848A000B1B7F9 /* AddCameraViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AddCameraViewController.xib; sourceTree = "<group>"; };
 		8B9DC608190B7ED7005B4210 /* KISSMetricsAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KISSMetricsAPI.h; sourceTree = "<group>"; };
 		8B9DC609190B7ED7005B4210 /* KISSMetricsAPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KISSMetricsAPI.m; sourceTree = "<group>"; };
+		8B9E214D1991CBF60026B0CE /* HelpWindowPopup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelpWindowPopup.h; sourceTree = "<group>"; };
+		8B9E214E1991CBF60026B0CE /* HelpWindowPopup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelpWindowPopup.m; sourceTree = "<group>"; };
 		8BA17EF918B7399100129FE7 /* LoginViewController_35.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoginViewController_35.xib; sourceTree = "<group>"; };
 		8BA17EFB18B73E2400129FE7 /* RegistrationViewController_35.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RegistrationViewController_35.xib; sourceTree = "<group>"; };
 		8BA18CAE184879720097D1AF /* DeviceSettingsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceSettingsCell.h; sourceTree = "<group>"; };
@@ -1542,6 +1547,10 @@
 		8BB5007719A58DFC00BF6B0E /* settings_switch_off@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "settings_switch_off@2x.png"; sourceTree = "<group>"; };
 		8BB5007819A58DFC00BF6B0E /* settings_switch_on.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = settings_switch_on.png; sourceTree = "<group>"; };
 		8BB5007919A58DFC00BF6B0E /* settings_switch_on@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "settings_switch_on@2x.png"; sourceTree = "<group>"; };
+		8BB404DF1999F4AF008277FA /* CamerasListHelpWindowPopup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CamerasListHelpWindowPopup.h; sourceTree = "<group>"; };
+		8BB404E01999F4AF008277FA /* CamerasListHelpWindowPopup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CamerasListHelpWindowPopup.m; sourceTree = "<group>"; };
+		8BB46F891993250700E31A3D /* SettingHeaderCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingHeaderCell.h; sourceTree = "<group>"; };
+		8BB46F8A1993250700E31A3D /* SettingHeaderCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingHeaderCell.m; sourceTree = "<group>"; };
 		8BB53A82194826050078B58E /* NotifViewController~iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "NotifViewController~iPad.xib"; sourceTree = "<group>"; };
 		8BB7EA97196E3F5000FDD674 /* Focus73TableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Focus73TableViewController.h; sourceTree = "<group>"; };
 		8BB7EA98196E3F5000FDD674 /* Focus73TableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Focus73TableViewController.m; sourceTree = "<group>"; };
@@ -1790,6 +1799,7 @@
 			isa = PBXGroup;
 			children = (
 				8BC2235A199219AC00130294 /* OpenUDID */,
+				8B9E214C1991CBA60026B0CE /* Helps */,
 				8B3E0EE41988FF8A00BF5788 /* TheTimeNow */,
 				8BB7EA94196E337200FDD674 /* Focus73 */,
 				8412C98A195D26F7000FEA1C /* CrittercismSDK */,
@@ -3230,6 +3240,8 @@
 				8B9112C218600B7C004301C5 /* SettingsViewController.h */,
 				8B9112C318600B7C004301C5 /* SettingsViewController.m */,
 				8B9112C418600B7C004301C5 /* SettingsViewController.xib */,
+				8BB46F891993250700E31A3D /* SettingHeaderCell.h */,
+				8BB46F8A1993250700E31A3D /* SettingHeaderCell.m */,
 				8B9C7E11185F262D0038B3A8 /* Account */,
 			);
 			name = Settings;
@@ -3287,6 +3299,17 @@
 				8B9DC609190B7ED7005B4210 /* KISSMetricsAPI.m */,
 			);
 			name = KM;
+			sourceTree = "<group>";
+		};
+		8B9E214C1991CBA60026B0CE /* Helps */ = {
+			isa = PBXGroup;
+			children = (
+				8B9E214D1991CBF60026B0CE /* HelpWindowPopup.h */,
+				8B9E214E1991CBF60026B0CE /* HelpWindowPopup.m */,
+				8BB404DF1999F4AF008277FA /* CamerasListHelpWindowPopup.h */,
+				8BB404E01999F4AF008277FA /* CamerasListHelpWindowPopup.m */,
+			);
+			path = Helps;
 			sourceTree = "<group>";
 		};
 		8BA18CA8184870330097D1AF /* DeviceSettings */ = {
@@ -4329,6 +4352,7 @@
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
 				8B92A0901863E68B005923D2 /* TimelineCell.m in Sources */,
 				8B92A0951863E9DC005923D2 /* TimelineActivityCell.m in Sources */,
+				8B9E214F1991CBF60026B0CE /* HelpWindowPopup.m in Sources */,
 				1D3623260D0F684500981E51 /* MBP_iosAppDelegate.mm in Sources */,
 				8B9ABB6518A9F8EF0079F4A3 /* UIFont+IBCustomFonts.m in Sources */,
 				8B92A0A11863F655005923D2 /* SavedEventViewController.m in Sources */,
@@ -4389,6 +4413,7 @@
 				8B977C9E18C70BDA00A61115 /* HubbleProgressView.m in Sources */,
 				84A6625A195C0C2500EF7DB5 /* SDWebImageManager.m in Sources */,
 				84F27EC118AE10750000CA7A /* UARTPeripheral.m in Sources */,
+				8BB404E11999F4AF008277FA /* CamerasListHelpWindowPopup.m in Sources */,
 				5EAFC058192A0CB9001FB3AA /* CameraDetailCell.m in Sources */,
 				8B3E0EF1198902A600BF5788 /* NSDate+NetworkClock.m in Sources */,
 				A1AC859518913014002A8CCD /* UIColor+Hubble.m in Sources */,
@@ -4397,6 +4422,7 @@
 				A1ABF1A3187537170014FCB4 /* BLEConnectionManager.m in Sources */,
 				8B977B6A18C7025200A61115 /* BLEConnectionCell.m in Sources */,
 				8B9CCBA3183EF8B2007C0F65 /* MelodyViewController.m in Sources */,
+				8BB46F8B1993250700E31A3D /* SettingHeaderCell.m in Sources */,
 				8B9DC60A190B7ED7005B4210 /* KISSMetricsAPI.m in Sources */,
 				8B9C7E0D185F260A0038B3A8 /* MenuViewController.mm in Sources */,
 				844359ED1908F64D00148436 /* TimelineDatabase.m in Sources */,
