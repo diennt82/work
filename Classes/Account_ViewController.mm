@@ -543,8 +543,12 @@
     
     
     NSString *strUserId = [[NSUserDefaults standardUserDefaults] objectForKey:@"PortalUsername"];
+#if 1
+    [jsonComm loginPostWithLogin:strUserId
+                        password:strOldPass];
+#else
     [jsonComm loginWithLogin:strUserId andPassword:strOldPass];
-    
+#endif
 }
 
 #pragma mark Login Callbacks
@@ -662,13 +666,17 @@
     
     
     NSString *strUserId = [[NSUserDefaults standardUserDefaults] objectForKey:@"PortalUsername"];
+#if 1
+    [jsonComm loginPostWithLogin:strUserId
+                        password:strNewpass];
+#else
     [jsonComm loginWithLogin:strUserId andPassword:strNewpass];
-    
+#endif
 }
 - (void) reloginSuccessWithResponse:(NSDictionary *)responseDict
 {
    	if (responseDict) {
-        NSLog(@"%s Relogin after changed password %@", __FUNCTION__, [responseDict description]);
+        //NSLog(@"%s Relogin after changed password %@", __FUNCTION__, [responseDict description]);
         NSInteger statusCode = [[responseDict objectForKey:@"status"] intValue];
         
         if (statusCode == 200) // success
@@ -686,7 +694,8 @@
         }
         else
         {
-            NSLog(@"Invalid response: %@", responseDict);
+            NSLog(@"%s Invalid response: %@", __FUNCTION__, responseDict);
+            
             [MBProgressHUD hideAllHUDsForView:self.view animated:NO];
             [[[[UIAlertView alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"alert_title_change_password_failed", nil, [NSBundle mainBundle], @"Change Password Failed", nil)
                                          message:NSLocalizedStringWithDefaultValue(@"alert_mes_enter_correct_old_password", nil, [NSBundle mainBundle], @"Enter correct old password.", nil)
@@ -700,6 +709,7 @@
         [MBProgressHUD hideAllHUDsForView:self.view animated:NO];
         NSLog(@"Error - loginSuccessWithResponse: reponseDict = nil");
     }
+    
     MenuViewController *tabBarController = (MenuViewController *)self.parentVC;
     [tabBarController.menuDelegate finishPasswordChanged];
 }
