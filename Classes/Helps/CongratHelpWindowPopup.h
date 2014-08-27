@@ -20,8 +20,6 @@ typedef enum _CONGRAT_TYPE {
 
 @protocol CongratHelpDelegate <NSObject>
 - (void)triggerSoundsGreat;
-@optional
-- (void)mayBeLater;
 @end
 
 @interface CongratHelpWindowPopup : HelpWindowPopup

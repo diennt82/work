@@ -139,14 +139,11 @@
             {
                 [self.congratDelegate triggerSoundsGreat];
             }
+            [self dismiss];
             break;
         }
         case MAYBE_LATER:
         {
-            if ([self.congratDelegate respondsToSelector:@selector(mayBeLater)])
-            {
-                [self.congratDelegate mayBeLater];
-            }
             [self dismiss];
             break;
         }

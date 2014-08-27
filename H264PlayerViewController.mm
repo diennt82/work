@@ -4386,6 +4386,12 @@ double _ticks = 0;
     self.helpPopup = nil;
 }
 
+#pragma mark - CongratHelpDelegate
+- (void)triggerSoundsGreat
+{
+    
+}
+
 #pragma mark - Rotation screen
 - (BOOL)shouldAutorotate
 {

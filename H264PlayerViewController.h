@@ -43,6 +43,7 @@
 #import "MBProgressHUD.h"
 #import "UserAccount.h"
 #import "HelpWindowPopup.h"
+#import "CongratHelpWindowPopup.h"
 
 #define H264_STREAM_STARTED              1
 #define H264_STREAM_STOPPED_UNEXPECTEDLY 2
@@ -154,7 +155,7 @@
 
 
 @interface H264PlayerViewController: GAITrackedViewController
-<PlayerCallbackHandler, ScanForCameraNotifier, StunClientDelegate, UIScrollViewDelegate, ScrollHorizontalMenuDelegate, AudioOutStreamerDelegate, TimelineVCDelegate, AudioOutStreamRemoteDelegate, BonjourDelegate, CustomIOS7AlertViewDelegate, MelodySetingDelegate, HelpWindowPopupDelegate>
+<PlayerCallbackHandler, ScanForCameraNotifier, StunClientDelegate, UIScrollViewDelegate, ScrollHorizontalMenuDelegate, AudioOutStreamerDelegate, TimelineVCDelegate, AudioOutStreamRemoteDelegate, BonjourDelegate, CustomIOS7AlertViewDelegate, MelodySetingDelegate, HelpWindowPopupDelegate, CongratHelpDelegate>
 {
     ScrollHorizontalMenu *_horizMenu;
     int _selectedItemMenu;
