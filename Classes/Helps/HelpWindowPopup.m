@@ -206,6 +206,8 @@
     [self.contentView addSubview:self.webView];
     
     [titleLabel release];
+    
+    [self bringSubviewToFront:self.closeButton];
 }
 
 - (void)handleCloseButton:(id)sender
