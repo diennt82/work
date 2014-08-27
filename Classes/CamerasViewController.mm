@@ -38,7 +38,7 @@
 @property (retain, nonatomic) IBOutlet UITableViewCell *addCameraCell;
 @property (retain, nonatomic) IBOutlet UIView *ibViewAddCamera;
 @property (retain, nonatomic) IBOutlet UIView *ibViewBuyCamera;
-
+@property (assign, nonatomic) IBOutlet UIView *ibViewHelp;
 
 @property (retain, nonatomic) IBOutlet UIImageView *ibBGAddCamera;
 @property (retain, nonatomic) IBOutlet UIImageView *ibIconAddCamera;
@@ -49,7 +49,6 @@
 @property (retain, nonatomic) IBOutlet UIImageView *ibIconBuyCamera;
 @property (retain, nonatomic) IBOutlet UILabel *ibTextBuyCamera;
 @property (retain, nonatomic) IBOutlet UIButton *ibBuyCameraButton;
-
 
 - (IBAction)addCameraButtonTouchAction:(id)sender;
 - (IBAction)buyCameraButtonTouchAction:(id)sender;
@@ -110,10 +109,12 @@
     NSArray *paths = NSSearchPathForDirectoriesInDomains
     (NSDocumentDirectory, NSUserDomainMask, YES);
     strDocDirPath = [[paths objectAtIndex:0] copy];
-        
+    
+    CGFloat width = SCREEN_WIDTH / 3;
     [self.ibTableListCamera setContentSize:CGSizeMake(SCREEN_WIDTH, SCREEN_HEIGHT - 69 - 45)];
-//    [self.ibViewAddCamera setFrame:CGRectMake(0, SCREEN_HEIGHT - 45, 160, 45)];
-//    [self.ibViewBuyCamera setFrame:CGRectMake(160, SCREEN_HEIGHT - 45, 160, 45)];
+    [self.ibViewAddCamera setFrame:CGRectMake(0, SCREEN_HEIGHT - 45, width, 45)];
+    [self.ibViewBuyCamera setFrame:CGRectMake(width, SCREEN_HEIGHT - 45, width, 45)];
+    [self.ibViewHelp setFrame:CGRectMake(width * 2, SCREEN_HEIGHT - 45, width + 1, 45)];
     
     [self.ibAddCameraButton setImage:[UIImage imageNamed:@"add_camera_btn"] forState:UIControlStateNormal];
     [self.ibAddCameraButton setImage:[UIImage imageNamed:@"add_camera_btn_pressed"] forState:UIControlEventTouchDown];
