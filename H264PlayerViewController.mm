@@ -1518,6 +1518,12 @@ double _ticks = 0;
     {
         [_audioOutStreamRemote disconnectFromAudioSocketRemote];
     }
+    
+    if (_timerBufferingTimeout)
+    {
+        NSLog(@"%s Invalidate timerBufferingTimeout.", __FUNCTION__);
+        [_timerBufferingTimeout invalidate];
+    }
 
     [self stopMediaProcessGoBack:NO backgroundMode:NO];
     
