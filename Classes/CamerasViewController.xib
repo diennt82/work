@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6205" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6198"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CamerasViewController">
@@ -16,6 +16,7 @@
                 <outlet property="ibTextBuyCamera" destination="VIt-u8-8Qh" id="Vaf-Ci-ceA"/>
                 <outlet property="ibViewAddCamera" destination="1Wd-46-fFY" id="lLw-lj-vsP"/>
                 <outlet property="ibViewBuyCamera" destination="rGT-t0-wFf" id="bO7-Tg-IZ8"/>
+                <outlet property="ibViewHelp" destination="UCW-H8-W2a" id="io8-lS-AXi"/>
                 <outlet property="view" destination="3hg-NN-K2G" id="y53-sp-8kP"/>
             </connections>
         </placeholder>
@@ -162,12 +163,4 @@
         <image name="buy_camera_btn.png" width="160" height="45"/>
         <image name="cart.png" width="20" height="20"/>
     </resources>
-    <simulatedMetricsContainer key="defaultSimulatedMetrics">
-        <simulatedStatusBarMetrics key="statusBar"/>
-        <simulatedOrientationMetrics key="orientation"/>
-        <simulatedScreenMetrics key="destination" type="retina4">
-            <size key="portraitSize" width="320" height="568"/>
-            <size key="landscapeSize" width="568" height="320"/>
-        </simulatedScreenMetrics>
-    </simulatedMetricsContainer>
 </document>

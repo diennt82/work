@@ -375,6 +375,11 @@
     }
     else
     {
+        if (SCREEN_HEIGHT < 568)
+        {
+            self.viewError.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+        }
+        
         [self.view addSubview:_viewError];
         [self.view bringSubviewToFront:_viewError];
     }
