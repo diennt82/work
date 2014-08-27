@@ -740,7 +740,7 @@
         case ALERT_ADD_CAM_FAILED:
         case ALERT_CHECK_STATUS:
         {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:LocStr(@"AddCam Error")
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:LocStr(@"Add camera error")
                                                             message:msg
                                                            delegate:nil
                                                   cancelButtonTitle:nil
@@ -758,7 +758,7 @@
                 return;
             }
             
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:LocStr(@"AddCam Error")
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:LocStr(@"Add camera error")
                                                             message:LocStr(@"The device is not able to connect to the server. Go to device settings to confirm device is connected to the Internet.")
                                                            delegate:self
                                                   cancelButtonTitle:LocStr(@"Cancel")

@@ -297,7 +297,7 @@
         cell = [tableView dequeueReusableCellWithIdentifier:AddCellIdentifier];
         if ( !cell ) {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:AddCellIdentifier];
-            cell.textLabel.text = @"Add Camera";
+            cell.textLabel.text = @"Add camera";
             cell.textLabel.textColor = [UIColor whiteColor];
             cell.imageView.image = [UIImage imageNamed:@"add_camera"];
             cell.contentView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"add_camera_btn"]];

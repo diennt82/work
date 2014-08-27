@@ -91,7 +91,7 @@
     [_btnRmoveCamera setBackgroundImage:[UIImage imageNamed:@"remove_camera_pressed"]
                                forState:UIControlEventTouchDown];
     
-    self.stringFW_Version = LocStr(@"firmware_version");
+    self.stringFW_Version = LocStr(@"Firmware version");
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     self.apiKey = [userDefaults stringForKey:@"PortalApiKey"];
     
