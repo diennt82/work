@@ -25,7 +25,7 @@
 {
     [super viewDidLoad];
 
-    self.title = LocStr(@"Camera Settings");
+    self.title = LocStr(@"Camera settings");
     
     valueSettings[0] = self.volumeValue;
     valueSettings[1] = self.brightnessValue;

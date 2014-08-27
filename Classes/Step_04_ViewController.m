@@ -116,15 +116,15 @@
     [_tfCamName resignFirstResponder];
     
     if ([cameraName_text length] < MIN_LENGTH_CAMERA_NAME || [cameraName_text length] > MAX_LENGTH_CAMERA_NAME ) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:LocStr(@"Invalid Camera Name")
-                                                    message:LocStr(@"Camera Name has to be between 5-30 characters")
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:LocStr(@"Invalid camera name")
+                                                    message:LocStr(@"Camera name must be between 5-30 characters.")
                                                     delegate:nil
                                                     cancelButtonTitle:nil
                                                     otherButtonTitles:LocStr(@"Ok"), nil];
         [alert show];
     }
     else if (![self isCameraNameValidated:cameraName_text]) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:LocStr(@"Invalid Camera Name")
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:LocStr(@"Invalid camera name")
                                                         message:LocStr(@"Camera name is invalid. Please enter [0-9],[a-Z], space, dot, hyphen, underscore & single quote only.")
                                                        delegate:nil
                                               cancelButtonTitle:nil

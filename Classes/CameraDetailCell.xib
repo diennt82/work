@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
@@ -75,10 +75,11 @@
             </tableViewCellContentView>
             <color key="backgroundColor" red="0.16862745100000001" green="0.1960784314" blue="0.21960784310000001" alpha="1" colorSpace="calibratedRGB"/>
             <connections>
-                <outlet property="btnChangeImage" destination="IRl-qw-7hb" id="N7q-8y-apT"/>
-                <outlet property="btnChangeName" destination="SFG-3Z-44k" id="ihF-xz-5Yx"/>
-                <outlet property="lblCamVer" destination="IIL-PM-DO3" id="RAQ-UM-lRd"/>
-                <outlet property="lblCameraName" destination="53J-p0-3cn" id="rXc-aP-2Bf"/>
+                <outlet property="cameraNameButton" destination="SFG-3Z-44k" id="fcj-EJ-iXh"/>
+                <outlet property="cameraNameLabel" destination="53J-p0-3cn" id="xpU-Tb-t5I"/>
+                <outlet property="cameraVersionLabel" destination="IIL-PM-DO3" id="pW5-aW-d6G"/>
+                <outlet property="changeImageButton" destination="IRl-qw-7hb" id="iar-Jr-ifs"/>
+                <outlet property="firmwareVersionButton" destination="9NU-1Y-H61" id="LkN-d0-i34"/>
             </connections>
         </tableViewCell>
     </objects>

@@ -4577,7 +4577,7 @@
     }
     else {
         // now is for take pictures
-        [_ib_labelRecordVideo setText:LocStr(@"Take picture")];
+        [_ib_labelRecordVideo setText:LocStr(@"Take photo")];
         [_ib_processRecordOrTakePicture setBackgroundImage:[UIImage imageTakePhoto] forState:UIControlStateNormal];
         [_ib_processRecordOrTakePicture setBackgroundImage:[UIImage imageTakePhoto] forState:UIControlEventTouchUpInside];
         [_ib_processRecordOrTakePicture setBackgroundImage:[UIImage imageTakePhotoPressed] forState:UIControlEventTouchDown];
@@ -4666,7 +4666,7 @@
             [_ib_buttonChangeAction setHidden:YES];
             [_ib_changeToMainRecording setHidden:NO];
             [self.view bringSubviewToFront:_ib_changeToMainRecording];
-            [_ib_labelRecordVideo setText:LocStr(@"Take picture")];
+            [_ib_labelRecordVideo setText:LocStr(@"Take photo")];
         }
         else {
             // not recording
@@ -4675,7 +4675,7 @@
             [self.view bringSubviewToFront:_ib_buttonChangeAction];
             [_ib_buttonChangeAction setBackgroundImage:[UIImage imageVideoGrey] forState:UIControlStateNormal];
             [_ib_buttonChangeAction setBackgroundImage:[UIImage imageVideoGreyPressed] forState:UIControlStateSelected];
-            [_ib_labelRecordVideo setText:LocStr(@"Take picture")];
+            [_ib_labelRecordVideo setText:LocStr(@"Take photo")];
             _syncPortraitAndLandscape = NO;
         }
     }
@@ -4698,7 +4698,7 @@
         [self applyFont];
     }
     else {
-        _ib_labelRecordVideo.text = LocStr(@"Take picture");
+        _ib_labelRecordVideo.text = LocStr(@"Take photo");
         
         // now is interface take picture
         if (_isProcessRecording) {
