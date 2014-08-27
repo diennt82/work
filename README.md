@@ -36,5 +36,5 @@ http://cocoapods.org
 Developer Notes:
 ----------------
 
-Delete comments and extra lines using vi...
-:%s/\n\n\/\* No comment provided by engineer\. \*\///g
+1. Delete comments and extra lines using vi... <br>
+ `:%s/\n\n\/\* No comment provided by engineer\. \*\///g`
