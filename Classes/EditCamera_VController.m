@@ -251,7 +251,7 @@
         });
     }
     else {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:LocStr(@"Add Camera Error")
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:LocStr(@"Add camera error")
                                                         message:LocStr(@"Failed to connect to camera. Please make sure you stay close to the camera and retry")
                                                        delegate:self
                                               cancelButtonTitle:LocStr(@"Cancel")
@@ -321,7 +321,7 @@
     
     DLog(@"addcam failed with error code:%d", [errorResponse[@"status"] intValue]);
     
-	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:LocStr(@"Add Camera Error")
+	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:LocStr(@"Add camera error")
                                                     message:errorResponse[@"message"]
                                                    delegate:nil
                                           cancelButtonTitle:nil
@@ -336,7 +336,7 @@
     [_viewProgress removeFromSuperview];
 	DLog(@"addcam failed : server unreachable");
     
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:LocStr(@"Add Camera Error")
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:LocStr(@"Add camera error")
                                                     message:LocStr(@"The device is not able to connect to the server. Go to device settings to confirm device is connected to the Internet.")
                                                    delegate:self
                                           cancelButtonTitle:LocStr(@"Cancel")

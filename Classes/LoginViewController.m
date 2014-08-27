@@ -708,7 +708,7 @@
 {
     DLog(@"%s responseDict: %@", __FUNCTION__, responseDict);
     
-	[[[UIAlertView alloc] initWithTitle:LocStr(@"Get User info failed!")
+	[[[UIAlertView alloc] initWithTitle:LocStr(@"Get user info failed!")
                                  message:responseDict[@"message"]
                                 delegate:nil
                        cancelButtonTitle:LocStr(@"Ok")

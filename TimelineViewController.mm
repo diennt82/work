@@ -706,16 +706,6 @@
     }
 }
 
-- (void)showDialogToConfirm
-{
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:LocStr(@"Notice")
-                                                        message:LocStr(@"Video clip is not ready, please try again later.")
-                                                       delegate:self
-                                              cancelButtonTitle:@"Cancel"
-                                              otherButtonTitles:nil, nil];
-    [alertView show];
-}
-
 #pragma mark - Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -756,7 +746,12 @@
         }
         else {
             DLog(@"URL file is not correct");
-            [self showDialogToConfirm];
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil
+                                                                message:LocStr(@"Video clip is not available, please try again later.")
+                                                               delegate:nil
+                                                      cancelButtonTitle:nil
+                                                      otherButtonTitles:LocStr(@"Ok"), nil];
+            [alertView show];
         }
     }
 }
