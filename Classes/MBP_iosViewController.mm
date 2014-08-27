@@ -41,6 +41,7 @@
 #import "NotifViewController.h"
 #import "PushNotificationAlert.h"
 #import "PublicDefine.h"
+#import <objc/message.h>
 
 @interface MBP_iosViewController () <MFMailComposeViewControllerDelegate, ConnectionMethodDelegate, UIActionSheetDelegate>
 {
@@ -106,14 +107,17 @@
     
 	[self initialize];
     
-    
+#if 1
+    [self showLoginViewController];
+#else
 	//go Back to main menu
 	[NSTimer scheduledTimerWithTimeInterval:0.1
                                      target:self
                                    selector:@selector(wakeup_display_login:)
                                    userInfo:nil
                                     repeats:NO];
-    
+#endif
+
     UIInterfaceOrientation interfaceOrientation = [UIApplication sharedApplication].statusBarOrientation;
     //    [self adjustViewsForOrientations:interfaceOrientation];
     
@@ -125,6 +129,24 @@
 -(void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    if (UIDeviceOrientationIsLandscape([UIDevice currentDevice].orientation) ||
+        UIInterfaceOrientationIsLandscape([UIApplication sharedApplication].statusBarOrientation)) {
+        if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]) {
+            objc_msgSend([UIDevice currentDevice], @selector(setOrientation:),   UIDeviceOrientationPortrait);
+            
+            NSLog(@"%s respondsToSelector.", __FUNCTION__);
+        }
+        else
+        {
+            NSLog(@"%s NOT respondsToSelector.", __FUNCTION__);
+        }
+    }
+    else
+    {
+        NSLog(@"%s isPortrait.", __FUNCTION__);
+    }
+    
     self.navigationController.navigationBarHidden = YES;
     
     NSString * msg = NSLocalizedStringWithDefaultValue(@"Logging_in_to_server" ,nil, [NSBundle mainBundle],
@@ -175,18 +197,8 @@
     //    [_splashScreen startAnimating];
 }
 
-
-- (void)wakeup_start_animte:(NSTimer*) timer_exp
-{
-    
-    NSLog(@"is animating? %d", [self.splashScreen isAnimating]);
-    
-    NSLog(@"animating images == nil? %d", (self.splashScreen.animationImages == nil));
-    NSLog(@"count? %d", [self.splashScreen.animationImages count]);
-    //[self.splashScreen startAnimating];
-    
-}
-
+#if 1
+#else
 - (void)wakeup_display_login:(NSTimer*) timer_exp
 {
 #if 0
@@ -207,25 +219,27 @@
     if ([userDefaults boolForKey:_AutoLogin])
     {
         NSLog(@"Auto login from AppDelegate. Do nothing");
+#if 1
+        [self showLoginViewController];
+#else
         [self show_login_or_reg:nil];
+#endif
     }
     else
     {
         self.app_stage = APP_STAGE_LOGGING_IN;
         NSLog(@"MBP_iosVC - show LoginVC from viewDidLoad after 4s");
-        
+#if 1
+        [self showLoginViewController];
+#else
         [self show_login_or_reg:nil];
+#endif
     }
     
     
 #endif
 }
-
-
-- (void)wakeup_display_first_page:(NSTimer*) timer_exp
-{
-    
-}
+#endif
 
 -(void) startShowingCameraList:(NSNumber *) option
 {
@@ -252,7 +266,6 @@
             ch.profile.hasUpdateLocalStatus = YES;
 			[validChannels addObject:[channel_array objectAtIndex:i]];
         }
-        
 	}
     
     if (option != nil && [option intValue] == STAY_AT_CAMERA_LIST)
@@ -283,19 +296,25 @@
     [validChannels release];
 }
 
-
-
 /*
  // Override to allow orientations other than the default portrait orientation.
  */
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     
 	return NO;
-    
 }
 
 - (BOOL) shouldAutorotate
 {
+    if (UIDeviceOrientationIsLandscape([UIDevice currentDevice].orientation) ||
+        UIInterfaceOrientationIsLandscape([UIApplication sharedApplication].statusBarOrientation)) {
+        NSLog(@"%s IsLandscape.", __FUNCTION__);
+        return YES;
+    }
+    else
+    {
+        NSLog(@"%s isPortrait.", __FUNCTION__);
+    }
     
     return NO;
 }
@@ -312,12 +331,6 @@
     
 	// Release any cached data, images, etc that aren't in use.
 }
-
-- (void)viewDidUnload {
-	// Release any retained subviews of the main view.
-	// e.g. self.myOutlet = nil;
-}
-
 
 - (void)dealloc {
     
@@ -396,7 +409,11 @@
             
             
             [self logoutAndUnregistration_bg];
+#if 1
+            [self showLoginViewController];
+#else
             [self show_login_or_reg:nil];
+#endif
         }
             break;
             
@@ -703,7 +720,18 @@
     {
         if ([camAlert.alertType isEqualToString:ALERT_TYPE_REMOVED_CAM] && ![self isStayingCameraSettingsPage])
         {
-            [self gotoCamerasListPage:camAlert.registrationID];
+            NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
+            NSString *justRemovedMac = [userDefault objectForKey:CAM_MAC_JUST_REMOVED];
+            if (justRemovedMac)
+            {
+                if ([justRemovedMac hasPrefix:camAlert.cameraMacNoColon])
+                {
+                    [userDefault setObject:nil forKey:CAM_MAC_JUST_REMOVED];
+                    [userDefault synchronize];
+                    return;
+                }
+            }
+            [self refreshCamerasListPage:camAlert.registrationID];
             return;
         }
     }
@@ -955,7 +983,14 @@
             {
                 case 0:
                 {
-                    [self gotoCamerasListPage:pushNotiAlert.camAlert.registrationID];
+                    if ([self isStayingCamerasListPage])
+                    {
+                        [self refreshCamerasListPage:pushNotiAlert.camAlert.registrationID];
+                    }
+                    else
+                    {
+                        [self gotoCamerasListPage:pushNotiAlert.camAlert.registrationID];
+                    }
                 }
                     break;
                 case 1:
@@ -1024,7 +1059,11 @@
                 {
 #if 1
                     [self popAllViewControllers];
+#if 1
+                    [self showLoginViewController];
+#else
                     [self show_login_or_reg:nil];
+#endif
 #else
                     [self dismissMenuHubbleView];
                     [self sendStatus:LOGIN];
@@ -1099,8 +1138,11 @@
                      * 1. Try to remove crashed log file.
                      * 2. Force show login view, do not check again
                      */
-                    
+#if 1
+                    [self showLoginViewController];
+#else
                     [self show_login_or_reg:nil];
+#endif
                     [self removeCrashedLogFile];
                 }
             }
@@ -1110,8 +1152,11 @@
                  * 1. Try to remove crashed log file.
                  * 2. Force show login view, do not check again
                  */
-                
+#if 1
+                [self showLoginViewController];
+#else
                 [self show_login_or_reg:nil];
+#endif
                 [self removeCrashedLogFile];
             }
         }
@@ -1120,14 +1165,22 @@
     self.pushAlert = nil;
 }
 
+- (void)refreshCamerasListPage:(NSString *)registrationId {
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setObject:registrationId forKey:REG_ID];
+    [userDefaults synchronize];
+    
+    NSLog(@"%s", __FUNCTION__);
+    [self.menuVC refreshCameraList];
+}
+
 - (void)gotoCamerasListPage:(NSString *)registrationId {
 #if 1
-    [self popAllViewControllers];
+     [self popAllViewControllers];
 #else
     [self dismissMenuHubbleView];
     [self dismissNotificationViewController];
 #endif
-    
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setObject:registrationId forKey:REG_ID];
     [userDefaults synchronize];
@@ -1463,7 +1516,18 @@
 	
 	return ;
 }
-
+#if 1
+- (void)showLoginViewController
+{
+    NSLog(@"show_login... ");
+    
+    self.app_stage = APP_STAGE_LOGGING_IN;
+    
+    LoginViewController *loginVC = [[LoginViewController alloc] initWithDelegate:self];
+    [self.navigationController pushViewController:loginVC animated:NO];
+    [loginVC release];
+}
+#else
 #pragma mark -
 #pragma mark SetupHTTPDelegate --- NOT USED --- check ..
 
@@ -1512,6 +1576,7 @@
         [loginVC release];
     }
 }
+#endif
 
 - (void)showNotificationViewController: (NSTimer *)exp
 {
@@ -1542,7 +1607,7 @@
         {
             if (![self isStayingCameraSettingsPage])
             {
-                [self gotoCamerasListPage:self.camAlert.registrationID];
+                [self refreshCamerasListPage:self.camAlert.registrationID];
             }
             else
             {
@@ -1648,7 +1713,11 @@
          * 1. Try to remove crashed log file
          * 2. Force show login view
          */
+#if 1
+        [self showLoginViewController];
+#else
         [self show_login_or_reg:nil];
+#endif
         [self removeCrashedLogFile];
     }];
 }
@@ -1813,7 +1882,23 @@
     [self.pushAlert show];
 }
 
+// TODO: DELETE
 #if 0 // As far as, this flow has been terminated!
+
+- (void)wakeup_start_animte:(NSTi mer*) timer_exp
+{
+    NSLog(@"is animating? %d", [self.splashScreen isAnimating]);
+    
+    NSLog(@"animating images == nil? %d", (self.splashScreen.animationImages == nil));
+    NSLog(@"count? %d", [self.splashScreen.animationImages count]);
+    //[self.splashScreen startAnimating];
+}
+
+- (void)wakeup_display_first_page:(NSTimer*) timer_exp
+{
+    
+}
+
 #pragma mark -
 #pragma mark Scan For cameras
 

@@ -83,6 +83,9 @@
 "alert_mes_video_clip_is_not_ready" = "Videoclip ist nicht bereit, bitte versuchen Sie es später noch einmal.";
 
 /* No comment provided by engineer. */
+"alert_mes_you_agree_with_terms_of_services" = "To use our services, you agree with the Terms of Services";
+
+/* No comment provided by engineer. */
 "alert_mes_your_have_not_camera" = "Your %@ have not camera.";
 
 /* No comment provided by engineer. */
@@ -365,6 +368,108 @@
 "Go_to_camera" = "Gehe zu Kamera";
 
 /* No comment provided by engineer. */
+"help_text_camera_is_not_connected" = "Camera is not connected to the internet";
+
+/* No comment provided by engineer. */
+"help_text_camera_is_OFF" = "Your camera is OFF / LED light on the camera is OFF";
+
+/* No comment provided by engineer. */
+"help_text_camera_is_online_and_operational" = "Camera is online and operational";
+
+/* No comment provided by engineer. */
+"help_text_camera_may_be_too_far" = "Your camera may be too far away from your router. Please try reducing the distance between the router and camera";
+
+/* No comment provided by engineer. */
+"help_text_camera_name" = "Camera Name:";
+
+/* No comment provided by engineer. */
+"help_text_camera_triggers_notification_high" = "High: Your camera triggers a notification whenever it detects a sound below the low audio threshold that lasts for 0.5 seconds or more";
+
+/* No comment provided by engineer. */
+"help_text_camera_triggers_notification_low" = "Low : Your camera triggers a notification whenever it detects a sound below the low audio threshold that lasts for 3 seconds or more";
+
+/* No comment provided by engineer. */
+"help_text_camera_triggers_notification_medium" = "Medium : Your camera triggers a notification whenever it detects a sound above the high audio threshold that lasts for 2 seconds or more";
+
+/* No comment provided by engineer. */
+"help_text_camera_upgrading_to_the_latest" = "Your camera is upgrading to the latest firmware version. Please do not turn the camera off during this process";
+
+/* No comment provided by engineer. */
+"help_text_can_change_name" = "User can change the name of the camera";
+
+/* No comment provided by engineer. */
+"help_text_can_change_thumbnail" = "User can change the thumbnail image shown on the camera list screen";
+
+/* No comment provided by engineer. */
+"help_text_change_image" = "Change Image:";
+
+/* No comment provided by engineer. */
+"help_text_check_router_to_ensure" = "Please check your router to ensure it is connected to internet";
+
+/* No comment provided by engineer. */
+"help_text_check_your_camera_power" = "Please check your camera’s power status and that the ON/OFF switch is set to ON";
+
+/* No comment provided by engineer. */
+"help_text_closing_any_unnecessary_applications" = "If you are running other applications (eg. games), they could be consuming a lot of bandwidth. This can impact on the performance of the Hubble app. Please try closing any unnecessary applications before using the Hubble app";
+
+/* No comment provided by engineer. */
+"help_text_each_time_sound_is_detected" = "Each time sound is detected, your camera will pause the monitoring of sound levels for approximately 60 seconds before it resumes monitoring them again";
+
+/* No comment provided by engineer. */
+"help_text_firmware_upgrade" = "Firmware Upgrade in Progress:";
+
+/* No comment provided by engineer. */
+"help_text_following_reasons" = "A. This could be due to one of the following reasons:";
+
+/* No comment provided by engineer. */
+"help_text_go_to_photos_application" = "A. Your recorded video footage and snapshots are all stored inside your Photos application. Please go to ‘Photos' application to view them";
+
+/* No comment provided by engineer. */
+"help_text_motion_detection_is_triggered" = "Motion detection is triggered when 2 consecutive seconds of motion have been detected by your camera";
+
+/* No comment provided by engineer. */
+"help_text_motion_detection_sensitivity" = "Motion Detection Sensitivity:";
+
+/* No comment provided by engineer. */
+"help_text_network_is_too_low" = "The upload bandwidth of your broadband network is too low";
+
+/* No comment provided by engineer. */
+"help_text_offline" = "Offline:";
+
+/* No comment provided by engineer. */
+"help_text_online" = "Online:";
+
+/* No comment provided by engineer. */
+"help_text_online_bandwidth_speed_test_tool" = "Please check your upload bandwidth with your Internet Service Provider or use an online bandwidth speed test tool, such as <a href=\"http://www.speedtest.net\">http://www.speedtest.net</a>";
+
+/* No comment provided by engineer. */
+"help_text_Q__why_can’t_access_my_camera" = "Q. Why can’t I access my camera? Why do I keep seeing the warning message \"Low bandwidth detected\"?";
+
+/* No comment provided by engineer. */
+"help_text_receive_notification_every_30_minute" = "You will receive a notification every 30 minutes (on average) whenever the temperature falls outside the range you have selected";
+
+/* No comment provided by engineer. */
+"help_text_sound_detection_sensitivity" = "Sound Detection Sensitivity:";
+
+/* No comment provided by engineer. */
+"help_text_temperature" = "Temperature:";
+
+/* No comment provided by engineer. */
+"help_text_the_minimum_upload_bandwidth" = "The minimum upload bandwidth required is about 600kbps";
+
+/* No comment provided by engineer. */
+"help_text_the_sensitivity_level_determines" = "The sensitivity level determines how much change in activity your camera needs to detect in order for a motion detection notification to be sent";
+
+/* No comment provided by engineer. */
+"help_text_upgrade_may_take_around_3-5_minutes" = "This upgrade may take around 3-5 minutes to complete";
+
+/* No comment provided by engineer. */
+"help_text_using_a_mobile_network_3G" = "If you are using a mobile network (3G), the bandwidth may be limited";
+
+/* No comment provided by engineer. */
+"help_text_where_my_recorded" = "Q. Where can I find my recorded videos and snapshots?";
+
+/* No comment provided by engineer. */
 "high_quality" = "Hohe Qualität";
 
 /* No comment provided by engineer. */
@@ -494,7 +599,10 @@
 "monitor_everywhere_all_rights_reserved" = "Monitor überall © alle Rechte vorbehalten";
 
 /* No comment provided by engineer. */
-"monitor_is_offline" = "Monitor is offline";
+"monitor_is_offline" = "Camera appears to be offline";
+
+/* No comment provided by engineer. */
+"more_detail" = "details";
 
 /* No comment provided by engineer. */
 "motion" = "Bewegung";
@@ -818,7 +926,7 @@
 "xib_cameramenu_label_camdetail" = "Kamera Detail";
 
 /* No comment provided by engineer. */
-"xib_cameramenu_label_sensity" = "Notification Sensity";
+"xib_cameramenu_label_sensity" = "Notification Sensitivity";
 
 /* No comment provided by engineer. */
 "xib_camerasettings_cell_button_cameraname" = "Kameraname ist ungültig";

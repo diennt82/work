@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6205" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
         <deployment version="1792" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6198"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="H264PlayerViewController">
@@ -20,6 +20,7 @@
                 <outlet property="ib_labelTouchToTalk" destination="hzo-Tk-4BY" id="DmV-LE-eBQ"/>
                 <outlet property="ib_lbCameraName" destination="qA2-dz-rIn" id="6MH-gl-pvH"/>
                 <outlet property="ib_lbCameraNotAccessible" destination="mBz-E2-gyQ" id="UqX-qR-ETL"/>
+                <outlet property="ib_openHelpButton" destination="Eju-fM-8pq" id="TYi-Y4-ORc"/>
                 <outlet property="ib_processRecordOrTakePicture" destination="W9D-nx-A3Q" id="Txd-Mh-4Ks"/>
                 <outlet property="ib_switchDegree" destination="9xB-eU-NWr" id="IaO-7Q-Hj9"/>
                 <outlet property="ib_temperature" destination="SMn-Fi-rED" id="8O7-0t-yFB"/>
@@ -64,6 +65,17 @@
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <nil key="highlightedColor"/>
                         </label>
+                        <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Eju-fM-8pq">
+                            <rect key="frame" x="20" y="115" width="280" height="40"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            <state key="normal">
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="handleOpenHelpButton:" destination="-1" eventType="touchUpInside" id="ZQ1-mg-tO0"/>
+                            </connections>
+                        </button>
                         <view hidden="YES" contentMode="scaleToFill" id="4Wi-b3-XAk">
                             <rect key="frame" x="223" y="0.0" width="97" height="100"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -127,7 +139,7 @@
                     <rect key="frame" x="136" y="216" width="40" height="40"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
-                <scrollView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="nTa-Ux-yAc" customClass="ScrollHorizontalMenu">
+                <scrollView hidden="YES" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="nTa-Ux-yAc" customClass="ScrollHorizontalMenu">
                     <rect key="frame" x="0.0" y="197" width="320" height="41"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" white="0.33333333333333331" alpha="0.19" colorSpace="calibratedWhite"/>
@@ -257,6 +269,7 @@
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 </view>
             </subviews>
+            <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
         </view>
     </objects>
     <resources>
@@ -269,12 +282,4 @@
         <image name="photo_grey_5.png" width="64" height="38"/>
         <image name="temp_bg.png" width="85" height="37"/>
     </resources>
-    <simulatedMetricsContainer key="defaultSimulatedMetrics">
-        <simulatedStatusBarMetrics key="statusBar"/>
-        <simulatedOrientationMetrics key="orientation"/>
-        <simulatedScreenMetrics key="destination" type="retina4">
-            <size key="portraitSize" width="320" height="568"/>
-            <size key="landscapeSize" width="568" height="320"/>
-        </simulatedScreenMetrics>
-    </simulatedMetricsContainer>
 </document>

@@ -82,8 +82,7 @@ double _ticks = 0;
     [self.imageViewStreamer addGestureRecognizer:singleTap];
     [singleTap release];
 #if 1
-    self.tapGestureTemperature = [[UITapGestureRecognizer alloc] initWithTarget:self
-                                                                                            action:@selector(changeDegreeTemperatureType:)];
+    self.tapGestureTemperature = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(changeDegreeTemperatureType:)];
     self.tapGestureTemperature.numberOfTapsRequired = 1;
     self.tapGestureTemperature.numberOfTouchesRequired = 1;
 #endif
@@ -105,7 +104,7 @@ double _ticks = 0;
     //set text name for camera name
     [self.ib_lbCameraName setText:self.selectedChannel.profile.name];
     
-    _isDegreeFDisplay = [userDefaults boolForKey:IS_FAHRENHEIT];
+    _isDegreeFDisplay = [[userDefaults objectForKey:IS_FAHRENHEIT] boolValue];
     _resolution = @"";
     
     NSString *serverInput = [userDefaults stringForKey:@"name_server1"];
@@ -138,7 +137,7 @@ double _ticks = 0;
     
     self.enablePTT = YES;
     self.currentBitRate = @"128";
-    self.messageStreamingState = NSLocalizedStringWithDefaultValue(@"camera_is_not_accessible", nil, [NSBundle mainBundle], @"Camera is not accessible", nil);
+    self.messageStreamingState = NSLocalizedStringWithDefaultValue(@"camera_is_not_accessible", nil, [NSBundle mainBundle], @"Camera is not accessible...", nil);
     self.timeStartingStageTwo = 0;
     
     
@@ -149,6 +148,8 @@ double _ticks = 0;
     self.backgroundTask = UIBackgroundTaskInvalid;
     self.askForFWUpgradeOnce = YES;
     [self becomeActive];
+    
+    self.helpPopup = nil;
 }
 
 //At first time, we set to FALSE after call checkOrientation()
@@ -369,7 +370,10 @@ double _ticks = 0;
         
         //    float deltaY1 = (labelTouchToTalkSize.height + holdTTSize.height)/2.0;
         float alignY1 = (SCREEN_HEIGHT - localPoint.y) - marginBottomText + labelTouchToTalkSize.height/2 - 3*holdTTSize.height/2;
-        
+#if 1
+        [self.ib_labelRecordVideo setCenter:CGPointMake(SCREEN_WIDTH/2, alignY)];
+        [self.ib_labelTouchToTalk setCenter:CGPointMake(SCREEN_WIDTH/2, alignY1)];
+#else
         if (isiOS7AndAbove)
         {
             [self.ib_labelRecordVideo setCenter:CGPointMake(SCREEN_WIDTH/2, alignY)];
@@ -380,6 +384,7 @@ double _ticks = 0;
             [self.ib_labelRecordVideo setCenter:CGPointMake(SCREEN_WIDTH/2, alignY - 64)];
             [self.ib_labelTouchToTalk setCenter:CGPointMake(SCREEN_WIDTH/2, alignY1 - 64)];
         }
+#endif
         
         // update position button
         //Touch to Talk
@@ -389,12 +394,13 @@ double _ticks = 0;
         float alignXButtonDirectionPad = SCREEN_WIDTH/2- directionPadSize.width/2;
         float alignYButton = SCREEN_HEIGHT - localPoint.y - marginBottomButton - holdTTButtonSize.height;
         float alignYButtonDirectionPad = (SCREEN_HEIGHT - localPoint.y - directionPadSize.height)/2;
-        
+#if 0
         if (!isiOS7AndAbove)
         {
             alignYButton = alignYButton - 64;
             alignYButtonDirectionPad = alignYButtonDirectionPad - 44 - 64;
         }
+#endif
         
         [self.ib_buttonTouchToTalk setFrame:CGRectMake(alignXButton, alignYButton, holdTTButtonSize.width, holdTTButtonSize.height)];
         [self.ib_processRecordOrTakePicture setFrame:CGRectMake(alignXButton, alignYButton, holdTTButtonSize.width, holdTTButtonSize.height)];
@@ -717,6 +723,85 @@ double _ticks = 0;
     [alertViewSendingLog release];
 }
 
+- (IBAction)handleOpenHelpButton:(id)sender
+{
+    NSMutableString *html = [[NSMutableString alloc] init];
+    [html appendString:@"<html>"];
+    [html appendString:@"   <header>"];
+    [html appendString:@"       <style>"];
+    [html appendString:@"           ul.first_deep {padding-left:10px}"];
+    [html appendString:@"           ul.first_deep li {list-style-type:square;}"];
+    [html appendString:@"           ul.second_deep {padding-left:10px}"];
+    [html appendString:@"           ul.second_deep li {list-style-type:circle;}"];
+    [html appendString:@"       </style>"];
+    [html appendString:@"   </header>"];
+    [html appendString:@"   <body>"];
+    [html appendString:@"       <div style='margin-left:5px;'>"];
+    [html appendString:@"       <ul class=\"first_deep\">"];
+    [html appendString:@"           <li>#h1#</li>"];
+    [html appendString:@"           <li>#h2#"];
+    [html appendString:@"               <ul class=\"second_deep\">"];
+    [html appendString:@"                   <li>#h2c1#</li>"];
+    [html appendString:@"                   <li>#h2c2#</li>"];
+    [html appendString:@"                   <li>#h2c3#</li>"];
+    [html appendString:@"                   <li>#h2c4#</li>"];
+    [html appendString:@"                   <li>#h2c5#</li>"];
+    [html appendString:@"                   <li>#h2c6#</li>"];
+    [html appendString:@"               </ul>"];
+    [html appendString:@"           </li>"];
+    [html appendString:@"           <br/>"];
+    [html appendString:@"           <li>#h3#</li>"];
+    [html appendString:@"           <li>#h4#</li>"];
+    [html appendString:@"       </ul>"];
+    [html appendString:@"       </div>"];
+    [html appendString:@"   </body>"];
+    [html appendString:@"</html>"];
+    
+    [html replaceOccurrencesOfString:@"#h1#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_Q__why_can’t_access_my_camera", nil, [NSBundle mainBundle], @"Q. Why can’t I access my camera? Why do I keep seeing the warning message \"Low bandwidth detected\"?", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
+    [html replaceOccurrencesOfString:@"#h2#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_following_reasons", nil, [NSBundle mainBundle], @"A. This could be due to one of the following reasons:", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
+    [html replaceOccurrencesOfString:@"#h2c1#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_network_is_too_low", nil, [NSBundle mainBundle], @"The upload bandwidth of your broadband network is too low", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
+    [html replaceOccurrencesOfString:@"#h2c2#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_the_minimum_upload_bandwidth", nil, [NSBundle mainBundle], @"The minimum upload bandwidth required is about 600kbps", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
+    [html replaceOccurrencesOfString:@"#h2c3#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_online_bandwidth_speed_test_tool", nil, [NSBundle mainBundle], @"Please check your upload bandwidth with your Internet Service Provider or use an online bandwidth speed test tool, such as <a href=\"http://www.speedtest.net\">http://www.speedtest.net</a>", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
+    [html replaceOccurrencesOfString:@"#h2c4#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_camera_may_be_too_far", nil, [NSBundle mainBundle], @"Your camera may be too far away from your router. Please try reducing the distance between the router and camera", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
+    [html replaceOccurrencesOfString:@"#h2c5#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_using_a_mobile_network_3G", nil, [NSBundle mainBundle], @"If you are using a mobile network (3G), the bandwidth may be limited", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
+    [html replaceOccurrencesOfString:@"#h2c6#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_closing_any_unnecessary_applications", nil, [NSBundle mainBundle], @"If you are running other applications (eg. games), they could be consuming a lot of bandwidth. This can impact on the performance of the Hubble app. Please try closing any unnecessary applications before using the Hubble app", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
+    [html replaceOccurrencesOfString:@"#h3#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_where_my_recorded", nil, [NSBundle mainBundle], @"Q. Where can I find my recorded videos and snapshots?", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
+    [html replaceOccurrencesOfString:@"#h4#"
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_go_to_photos_application", nil, [NSBundle mainBundle], @"A. Your recorded video footage and snapshots are all stored inside your Photos application. Please go to ‘Photos' application to view them", nil)
+                             options:nil range:NSMakeRange(0, html.length)];
+    
+    CGFloat height = 280;
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        height = 420;
+    }
+    HelpWindowPopup *popup = [[HelpWindowPopup alloc] initWithTitle:@"Video Screen Help"
+                                                      andHtmlString:html
+                                                          andHeight:height];
+    popup.delegate = self;
+    [popup show];
+    self.helpPopup = popup;
+    [html release];
+    [popup release];
+}
 #pragma mark - Delegate Stream callback
 
 - (void)forceRestartStream:(NSTimer *)timer
@@ -993,7 +1078,10 @@ double _ticks = 0;
                 
                 self.imageViewStreamer.userInteractionEnabled = YES;
                 self.imgViewDrectionPad.userInteractionEnabled = YES;
-                [self showControlMenu];
+                
+                if (!_earlierNavi.isEarlierView) {
+                    [self showControlMenu];
+                }
                 
                 if (isiPhone4)
                 {
@@ -1430,6 +1518,12 @@ double _ticks = 0;
     {
         [_audioOutStreamRemote disconnectFromAudioSocketRemote];
     }
+    
+    if (_timerBufferingTimeout)
+    {
+        NSLog(@"%s Invalidate timerBufferingTimeout.", __FUNCTION__);
+        [_timerBufferingTimeout invalidate];
+    }
 
     [self stopMediaProcessGoBack:NO backgroundMode:NO];
     
@@ -1441,9 +1535,7 @@ double _ticks = 0;
 - (void)singleTapGestureCaptured:(id)sender
 {
     NSLog(@"Single tap singleTapGestureCaptured");
-    
-    //if (_isHorizeShow == TRUE)
-    if (!_horizMenu.isHidden)
+    if (self.isHorizeShow)
     {
         [self hideControlMenu];
     }
@@ -1457,29 +1549,42 @@ double _ticks = 0;
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:@"single tap on video image view"
                                                      withLabel:@"Vide image view"
-                                                     withValue:[NSNumber numberWithDouble:_isHorizeShow]];
+                                                     withValue:[NSNumber numberWithDouble:!self.horizMenu.hidden]];
 }
 
 - (void)hideControlMenu
 {
-    static NSTimeInterval animationDuration = 0.3;
-    [UIView animateWithDuration:animationDuration animations:^{
-        self.isHorizeShow = FALSE;
-        self.horizMenu.hidden = YES;
-        [self.ib_lbCameraName setHidden:YES];
-    }];
+    self.isHorizeShow = NO;
+    self.horizMenu.userInteractionEnabled = NO;
+    if (!self.horizMenu.hidden && self.horizMenu.alpha == 1.0)
+    {
+        [UIView animateWithDuration:5.0
+                         animations:^{
+                             self.horizMenu.alpha = 0.0;
+                             self.ib_lbCameraName.alpha = 0.0;
+                         }
+                         completion:^(BOOL finished){
+                             self.horizMenu.hidden = YES;
+                             [self.ib_lbCameraName setHidden:YES];
+                         }];
+    }
 }
 
 - (void)showControlMenu
 {
-    
-    static NSTimeInterval animationDuration = 0.3;
-    [UIView animateWithDuration:animationDuration animations:^{
-        self.isHorizeShow = TRUE;
-        self.horizMenu.hidden = NO;
-        [self.view bringSubviewToFront:_horizMenu];
-        [self.ib_lbCameraName setHidden:NO];
-    }];
+    self.isHorizeShow = YES;
+    self.horizMenu.userInteractionEnabled = YES;
+    static NSTimeInterval animationDuration = 0.0;
+    [UIView animateWithDuration:animationDuration
+                     animations:^{
+                         self.horizMenu.alpha = 1.0;
+                         self.ib_lbCameraName.alpha = 1.0;
+                     }
+                     completion:^(BOOL finished){
+                         self.horizMenu.hidden = NO;
+                         [self.view bringSubviewToFront:_horizMenu];
+                         [self.ib_lbCameraName setHidden:NO];
+                     }];
     
     if (_timerHideMenu != nil)
     {
@@ -2079,7 +2184,7 @@ double _ticks = 0;
                 if (self.selectedChannel.profile.isInLocal)
                 {
 //                    [self showTimelineView];
-                    self.messageStreamingState = NSLocalizedStringWithDefaultValue(@"camera_is_not_accessible", nil, [NSBundle mainBundle], @"Camera is not accessible", nil);
+                    self.messageStreamingState = NSLocalizedStringWithDefaultValue(@"camera_is_not_accessible", nil, [NSBundle mainBundle], @"Camera is not accessible...", nil);
                 }
                 
                 break;
@@ -2472,7 +2577,7 @@ double _ticks = 0;
         
         self.imageViewStreamer.userInteractionEnabled = NO;
         
-        if (_isHorizeShow == TRUE)
+        if (self.isHorizeShow)
         {
             [self hideControlMenu];
         }
@@ -2965,11 +3070,12 @@ double _ticks = 0;
     UIFont *degreeFont;
     UIFont *temperatureFont;
     float positionYOfBottomView = self.ib_temperature.frame.origin.y;//240.0f;
-    
+#if 0
     if (!isiOS7AndAbove)
     {
         positionYOfBottomView = positionYOfBottomView - 44;
     }
+#endif
     
     if (_isLandScapeMode)
     {
@@ -3264,11 +3370,11 @@ double _ticks = 0;
                                        //handle Bad response
                                        NSLog(@"%s ERROR: %@", __FUNCTION__, [responseDict objectForKey:@"message"]);
 #if 1
-                                       self.messageStreamingState = NSLocalizedStringWithDefaultValue(@"camera_is_not_accessible", nil, [NSBundle mainBundle], @"Camera is not accessible", nil);
+                                       self.messageStreamingState = NSLocalizedStringWithDefaultValue(@"camera_is_not_accessible", nil, [NSBundle mainBundle], @"Camera is not accessible...", nil);
                                        _isShowTextCameraIsNotAccesible = YES;
                                        
                                        dispatch_async(dispatch_get_main_queue(), ^{
-                                           [self.ib_lbCameraNotAccessible setHidden:NO];
+                                           [self messageNotAccesible:NO];
                                        });
                                        
                                        [self symmetric_check_result:TRUE];
@@ -3285,11 +3391,11 @@ double _ticks = 0;
                                else
                                {
                                    NSLog(@"SERVER unreachable (timeout) ");
-                                   self.messageStreamingState = NSLocalizedStringWithDefaultValue(@"camera_is_not_accessible", nil, [NSBundle mainBundle], @"Camera is not accessible", nil);
+                                   self.messageStreamingState = NSLocalizedStringWithDefaultValue(@"camera_is_not_accessible", nil, [NSBundle mainBundle], @"Camera is not accessible...", nil);
                                    _isShowTextCameraIsNotAccesible = YES;
 #if 1
                                    dispatch_async(dispatch_get_main_queue(), ^{
-                                       [self.ib_lbCameraNotAccessible setHidden:NO];
+                                       [self messageNotAccesible:NO];
                                        [self performSelector:@selector(setupCamera) withObject:nil afterDelay:10];
                                    });
 #else
@@ -4274,7 +4380,10 @@ double _ticks = 0;
 	}
 }
 
-
+- (void)willDismiss:(id)sender
+{
+    self.helpPopup = nil;
+}
 
 #pragma mark - Rotation screen
 - (BOOL)shouldAutorotate
@@ -4303,6 +4412,11 @@ double _ticks = 0;
 - (void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
     //[[KISSMetricsAPI sharedAPI] recordEvent:@"PlayerView - will rotate interface" withProperties:nil];
+    if (self.helpPopup != nil)
+    {
+        [self.helpPopup dismiss];
+    }
+    
     
     [[GAI sharedInstance].defaultTracker sendEventWithCategory:GAI_CATEGORY
                                                     withAction:@"View will rotate interface"
@@ -4322,10 +4436,14 @@ double _ticks = 0;
 -(void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
     [self applyFont];
-    CGRect rect = self.ib_lbCameraNotAccessible.frame;
-    rect.origin.x = (self.scrollView.frame.size.width - rect.size.width) / 2;
-    rect.origin.y = (self.scrollView.frame.size.height - rect.size.height) / 2 + 55;
-    self.ib_lbCameraNotAccessible.frame = rect;
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+    {
+        CGRect rect = self.ib_lbCameraNotAccessible.frame;
+        rect.origin.x = (self.scrollView.frame.size.width - rect.size.width) / 2;
+        rect.origin.y = (self.scrollView.frame.size.height - rect.size.height) / 2 + 55;
+        self.ib_lbCameraNotAccessible.frame = rect;
+        self.ib_openHelpButton.frame = rect;
+    }
 }
 
 -(void) checkOrientation
@@ -4337,8 +4455,7 @@ double _ticks = 0;
 
 - (void) adjustViewsForOrientation:(UIInterfaceOrientation)orientation
 {
-    NSLog(@"H264VC - adjustViewsForOrientation:");
-    
+    NSLog(@"%s", __FUNCTION__);
     
     if (_isProcessRecording)
     {
@@ -4350,13 +4467,14 @@ double _ticks = 0;
     }
     
     [self resetZooming];
-    
+#if 0
     NSInteger deltaY = 0;
     
     if (isiOS7AndAbove)
     {
         deltaY = HIGH_STATUS_BAR;
     }
+#endif
     
     // Remove all subviews before reloading the xib
 #if 1
@@ -4403,7 +4521,7 @@ double _ticks = 0;
             self.melodyViewController = melodyVC;
             self.melodyViewController.melodyDelegate = self;
             [melodyVC release];
-            
+#if 0
             if (isiOS7AndAbove)
             {
                 self.melodyViewController.view.frame = CGRectMake(393, 78, 175, 165);
@@ -4412,7 +4530,7 @@ double _ticks = 0;
             {
                 self.melodyViewController.view.frame = CGRectMake(320, 60, 159, 204);
             }
-            
+#endif
         }
         //landscape mode
         //hide navigation bar
@@ -4488,7 +4606,60 @@ double _ticks = 0;
             [self.horizMenu reloadData:NO];
         }
         
+#if 1
+        CGFloat alignYTimeLine = self.ib_ViewTouchToTalk.frame.origin.y;
         
+        self.melodyViewController.view.frame = CGRectMake(0, alignYTimeLine - 5, SCREEN_WIDTH, SCREEN_HEIGHT - alignYTimeLine);
+        
+        // Control display for TimelineVC
+        
+        if (_timelineVC != nil)
+        {
+            CGFloat actualScreenHigh = SCREEN_HEIGHT;
+            
+            if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8.0") && (actualScreenHigh == 320 || actualScreenHigh == 768)) {
+                actualScreenHigh = SCREEN_WIDTH;
+            }
+            
+            CGRect rect = CGRectMake(0, alignYTimeLine, SCREEN_WIDTH, actualScreenHigh - alignYTimeLine);
+            
+            if (isiPhone4) // This condition check size of screen. Not iPhone4 or other
+            {
+                rect = CGRectMake(0, alignYTimeLine, SCREEN_WIDTH, actualScreenHigh - alignYTimeLine + 64);
+            }
+            else
+            {
+                // Default
+                //rect = CGRectMake(0, alignYTimeLine, SCREEN_WIDTH, SCREEN_HEIGHT - alignYTimeLine);
+            }
+            
+            self.timelineVC.view.frame = rect;
+            
+            _timelineVC.tableView.contentSize = CGSizeMake(SCREEN_WIDTH, _timelineVC.tableView.frame.size.height);
+            //don't show timeline after switch from land to port
+            self.timelineVC.view.hidden = NO;
+            [self.view addSubview:_timelineVC.view];
+            
+            if (_isLandScapeMode)
+            {
+                if (isiPhone4 || isiPhone5)
+                {
+                    //iPhone
+                    self.timelineVC.tableView.contentInset = UIEdgeInsetsMake(0, 0, 275, 0);
+                }
+                else
+                {
+                    //iPad
+                    self.timelineVC.tableView.contentInset = UIEdgeInsetsMake(0, 0, 50, 0);
+                }
+                
+            }
+            else
+            {
+                self.timelineVC.tableView.contentInset = UIEdgeInsetsMake(0, 0, 30, 0);
+            }
+        }
+#else
         CGFloat imageViewHeight = SCREEN_WIDTH * 9 / 16;
         
         if (isiOS7AndAbove)
@@ -4568,18 +4739,18 @@ double _ticks = 0;
                 }
             }
         }
-        
-        [self showControlMenu];
+#endif
+        //[self showControlMenu];
         //add hubble_logo_back
         //[self addHubbleLogo_Back];
         _isLandScapeMode = NO;
         
 	}// end of portrait
     
-    
+#if 0
     [self.melodyViewController.melodyTableView setNeedsLayout];
     [self.melodyViewController.melodyTableView setNeedsDisplay];
-   
+#endif
     
     self.imageViewStreamer.frame = _imageViewVideo.frame;
     [self.scrollView insertSubview:_imageViewStreamer aboveSubview:_imageViewVideo];
@@ -4611,10 +4782,11 @@ double _ticks = 0;
     
     [self setupPtt];
     [self applyFont];
-    [self hideControlMenu];
     [self hidenAllBottomView];
-    [self updateBottomView];
     
+#if 0
+    [self hideControlMenu];
+    [self updateBottomView];
     
     //Earlier must at bottom of land, and port
     if (_isFirstLoad || _wantToShowTimeLine || _selectedItemMenu == -1)
@@ -4625,8 +4797,9 @@ double _ticks = 0;
     {
         [self hideTimelineView];
     }
+#endif
     
-    if(_selectedItemMenu!=-1){
+    if(_selectedItemMenu != -1){
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             /*
              * Maintain selected item in horize menu.
@@ -4650,8 +4823,13 @@ double _ticks = 0;
             
             [self.horizMenu setSelectedIndex:selectedItem animated:NO];
         });
+        
+        [self hideTimelineView];
     }
-
+    else if (_isFirstLoad || _wantToShowTimeLine)
+    {
+        [self showTimelineView];
+    }
     
     self.ib_buttonTouchToTalk.enabled = _enablePTT;
     self.ib_labelTouchToTalk.text = _stringStatePTT;
@@ -5459,29 +5637,29 @@ double _ticks = 0;
                 if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
                 {
                     if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8.0")) {
-                        rect = CGRectMake(SCREEN_WIDTH - 236, SCREEN_HEIGHT - 400, 236, 165);
+                        rect = CGRectMake(SCREEN_WIDTH - 236, SCREEN_HEIGHT - 400, 236, 175);
                     }
                     else
                     {
-                        rect = CGRectMake(SCREEN_HEIGHT - 236, SCREEN_WIDTH - 400, 236, 165);
+                        rect = CGRectMake(SCREEN_HEIGHT - 236, SCREEN_WIDTH - 400, 236, 175);
                     }
                 }
                 else
                 {
-                    if (isiPhone4)
-                    {
-                        rect = CGRectMake(SCREEN_HEIGHT - 159, 65, 159, 204);
+                    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8.0")) {
+                        rect = CGRectMake(SCREEN_WIDTH - 159, 65, 159, 204);
                     }
                     else
                     {
-                        rect = CGRectMake(393, 78, 175, 165);
+                        rect = CGRectMake(SCREEN_HEIGHT - 159, 65, 159, 204);
                     }
                 }
-                
-                //NSLog(@"%s rect:%@, SCREEN_HEIGHT:%f, SCREEN_WIDTH:%f", __FUNCTION__, NSStringFromCGRect(rect), SCREEN_HEIGHT, SCREEN_WIDTH);
             }
             else
             {
+#if 1
+                rect = CGRectMake(0, self.ib_ViewTouchToTalk.frame.origin.y - 5, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
+#else
                 if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
                     rect = CGRectMake(0, self.ib_ViewTouchToTalk.frame.origin.y - 5, SCREEN_WIDTH, SCREEN_HEIGHT - self.ib_ViewTouchToTalk.frame.origin.y);
                 }
@@ -5491,6 +5669,7 @@ double _ticks = 0;
                 }
                 
                 //NSLog(@"%s rect:%@, SCREEN_HEIGHT:%f, SCREEN_WIDTH:%f", __FUNCTION__, NSStringFromCGRect(rect), SCREEN_HEIGHT, SCREEN_WIDTH);
+#endif
             }
             
             self.melodyViewController.view.frame = rect;
@@ -6937,17 +7116,26 @@ double _ticks = 0;
         [self start_animation_with_orientation];
         
         
-        
-        self.ib_lbCameraNotAccessible.text = _messageStreamingState;
+        NSString *message = [NSString stringWithFormat:@"%@ %@", _messageStreamingState, NSLocalizedStringWithDefaultValue(@"more_detail", nil, [NSBundle mainBundle], @"details", nil)];
+        self.ib_lbCameraNotAccessible.text = message;
+        NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithAttributedString:self.ib_lbCameraNotAccessible.attributedText];
+        [attributedString addAttribute:NSUnderlineStyleAttributeName
+                                 value:[NSNumber numberWithInteger:NSUnderlineStyleSingle]
+                                 range:NSMakeRange(attributedString.length - 7, 7)];
+        [attributedString addAttribute:NSForegroundColorAttributeName
+                                 value:[UIColor colorWithRed:51/255.0f green:102/255.f blue:187/255.0f alpha:1.0f]
+                                 range:NSMakeRange(attributedString.length - 7, 7)];
+        [self.ib_lbCameraNotAccessible setAttributedText:attributedString];
         
         if (_isShowTextCameraIsNotAccesible)
         {
             [self.ib_lbCameraNotAccessible setHidden:NO];
             [self showTimelineView];
+            [self messageNotAccesible:NO];
         }
         else
         {
-            [self.ib_lbCameraNotAccessible setHidden:YES];
+            [self messageNotAccesible:YES];
         }
     }
     else
@@ -6956,9 +7144,15 @@ double _ticks = 0;
         _isShowTextCameraIsNotAccesible = NO;
         [self.customIndicator stopAnimating];
         [self.customIndicator setHidden:YES];
-        [self.ib_lbCameraNotAccessible setHidden:YES];
+        [self messageNotAccesible:YES];
         [self.ib_lbCameraName setText:self.selectedChannel.profile.name];
     }
+}
+
+- (void)messageNotAccesible:(BOOL)hidden
+{
+    [self.ib_lbCameraNotAccessible setHidden:hidden];
+    [self.ib_openHelpButton setHidden:hidden];
 }
 
 #pragma mark - Hubble alert view & delegate
@@ -7255,11 +7449,11 @@ double _ticks = 0;
         {
             //handle Bad response
             NSLog(@"%s ERROR: %@", __FUNCTION__, [responseDict objectForKey:@"message"]);
-            self.messageStreamingState = NSLocalizedStringWithDefaultValue(@"camera_is_not_accessible", nil, [NSBundle mainBundle], @"Camera is not accessible", nil);
+            self.messageStreamingState = NSLocalizedStringWithDefaultValue(@"camera_is_not_accessible", nil, [NSBundle mainBundle], @"Camera is not accessible...", nil);
             _isShowTextCameraIsNotAccesible = YES;
             
             dispatch_async(dispatch_get_main_queue(), ^{
-                [self.ib_lbCameraNotAccessible setHidden:NO];
+                [self messageNotAccesible:NO];
             });
             
             [self symmetric_check_result:TRUE];
@@ -7280,11 +7474,11 @@ double _ticks = 0;
     {
         //handle Bad response
         NSLog(@"%s ERROR: %@", __FUNCTION__, [responseDict objectForKey:@"message"]);
-        self.messageStreamingState = NSLocalizedStringWithDefaultValue(@"camera_is_not_accessible", nil, [NSBundle mainBundle], @"Camera is not accessible", nil);
+        self.messageStreamingState = NSLocalizedStringWithDefaultValue(@"camera_is_not_accessible", nil, [NSBundle mainBundle], @"Camera is not accessible...", nil);
         _isShowTextCameraIsNotAccesible = YES;
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self.ib_lbCameraNotAccessible setHidden:NO];
+            [self messageNotAccesible:NO];
         });
         
         [self symmetric_check_result:TRUE];
@@ -7304,9 +7498,9 @@ double _ticks = 0;
         {
             NSLog(@"SERVER unreachable (timeout) ");
 //            [self showTimelineView];
-            self.messageStreamingState = NSLocalizedStringWithDefaultValue(@"camera_is_not_accessible", nil, [NSBundle mainBundle], @"Camera is not accessible", nil);
+            self.messageStreamingState = NSLocalizedStringWithDefaultValue(@"camera_is_not_accessible", nil, [NSBundle mainBundle], @"Camera is not accessible...", nil);
             _isShowTextCameraIsNotAccesible = YES;
-            [self.ib_lbCameraNotAccessible setHidden:NO];
+            [self messageNotAccesible:NO];
             [self performSelector:@selector(setupCamera) withObject:nil afterDelay:10];
         }
         else

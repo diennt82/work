@@ -42,6 +42,7 @@
 #import "HubbleProgressView.h"
 #import "MBProgressHUD.h"
 #import "UserAccount.h"
+#import "HelpWindowPopup.h"
 
 
 #define H264_STREAM_STARTED              1
@@ -154,7 +155,7 @@
 
 
 @interface H264PlayerViewController: GAITrackedViewController
-<PlayerCallbackHandler, ScanForCameraNotifier, StunClientDelegate, UIScrollViewDelegate, ScrollHorizontalMenuDelegate, AudioOutStreamerDelegate, TimelineVCDelegate, AudioOutStreamRemoteDelegate, BonjourDelegate, CustomIOS7AlertViewDelegate, MelodySetingDelegate>
+<PlayerCallbackHandler, ScanForCameraNotifier, StunClientDelegate, UIScrollViewDelegate, ScrollHorizontalMenuDelegate, AudioOutStreamerDelegate, TimelineVCDelegate, AudioOutStreamRemoteDelegate, BonjourDelegate, CustomIOS7AlertViewDelegate, MelodySetingDelegate, HelpWindowPopupDelegate>
 {
     ScrollHorizontalMenu *_horizMenu;
     int _selectedItemMenu;
@@ -248,6 +249,7 @@
 @property (retain, nonatomic) IBOutlet UIActivityIndicatorView *activityStopStreamingProgress;
 @property (retain, nonatomic) IBOutlet UIImageView *customIndicator;
 @property (retain, nonatomic) IBOutlet UILabel *ib_lbCameraNotAccessible;
+@property (assign, nonatomic) IBOutlet UIButton *ib_openHelpButton;
 @property (retain, nonatomic) IBOutlet UILabel *ib_lbCameraName;
 @property (retain, nonatomic) IBOutlet UIButton *ib_btShowDebugInfo;
 @property (nonatomic) BOOL h264StreamerIsInStopped;
@@ -354,6 +356,7 @@
 @property (nonatomic) BOOL isFwUpgradedByAnotherDevice;
 @property (nonatomic, retain) NSTimer *timerCheckMelodyState;
 @property (nonatomic, retain) UITapGestureRecognizer *tapGestureTemperature;
+@property (nonatomic, assign) HelpWindowPopup *helpPopup;
 
 - (void)scan_done:(NSArray *) _scan_results;
 
