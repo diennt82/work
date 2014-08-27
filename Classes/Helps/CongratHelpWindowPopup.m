@@ -53,8 +53,9 @@
         rect = CGRectMake(0, buttonOffsetY, self.contentView.frame.size.width, buttonHeight - 1);
         UIButton *button = [[UIButton alloc] initWithFrame:rect];
         [button setTitle:title forState:UIControlStateNormal];
-        [button.titleLabel setTextColor:[UIColor blackColor]];
-        button.tag = (int)key;
+        [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        [button setTitleColor:[UIColor blueColor] forState:UIControlStateHighlighted];
+        button.tag = [key intValue];
         [button addTarget:self action:@selector(handleButtonTouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
         [self.actionView addSubview:button];
         
@@ -85,7 +86,14 @@
 - (void)handleButtonTouchUpInside:(id)sender
 {
     UIButton *button = sender;
-    [self reloadUIComponents];
+    if (button.tag == MAYBE_LATER)
+    {
+        [self dismiss];
+    }
+    else
+    {
+        [self reloadUIComponents];
+    }
 }
 
 #pragma mark - Override method
