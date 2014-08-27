@@ -779,7 +779,7 @@
         self.jsonComm = [[BMS_JSON_Communication alloc] initWithCaller:self];
     }
     
-    NSDictionary *responseDict = [_jsonComm getListOfEventsBlockedWithRegisterId:_camChannel.profile.registrationID
+    NSDictionary *responseDict = [_jsonComm getListOfEventsBlockedWithRegisterId:self.camChannel.profile.registrationID
                                                                  beforeStartTime:dateInStringFormated//@"2013-12-28 20:10:18"
                                                                        eventCode:nil
                                                                           alerts:nil
