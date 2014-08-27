@@ -197,50 +197,6 @@
     //    [_splashScreen startAnimating];
 }
 
-#if 1
-#else
-- (void)wakeup_display_login:(NSTimer*) timer_exp
-{
-#if 0
-    NSLog(@">>> DBG PLAYER  ");
-    PlaybackViewController *playbackViewController = [[PlaybackViewController alloc] init];
-    //playbackViewController.urlVideo = @"http://nxcomm:2009nxcomm@nxcomm-office.no-ip.info/app_release/sub_clips/48022A2CAC31_04_20130917065256730_00001.flv";
-    
-    playbackViewController.urlVideo = @"http://s3.amazonaws.com/sm.wowza.content/48022A2CAC31/clips/48022A2CAC31_04_20130918083756010_00001_last.flv?AWSAccessKeyId=AKIAIDBFDZTAR2EB4KPQ&Expires=1379501535&Signature=m%2FGcG%2BOh8wlwXcWqkiw%2BztAqAn8%3D";
-    
-    //[playbackViewController autorelease];
-    
-    [self presentViewController:playbackViewController animated:NO  completion:nil];
-#else
-    
-    
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    
-    if ([userDefaults boolForKey:_AutoLogin])
-    {
-        NSLog(@"Auto login from AppDelegate. Do nothing");
-#if 1
-        [self showLoginViewController];
-#else
-        [self show_login_or_reg:nil];
-#endif
-    }
-    else
-    {
-        self.app_stage = APP_STAGE_LOGGING_IN;
-        NSLog(@"MBP_iosVC - show LoginVC from viewDidLoad after 4s");
-#if 1
-        [self showLoginViewController];
-#else
-        [self show_login_or_reg:nil];
-#endif
-    }
-    
-    
-#endif
-}
-#endif
-
 -(void) startShowingCameraList:(NSNumber *) option
 {
 #if 1
@@ -577,18 +533,6 @@
 - (void)finishPasswordChanged {
     self.changePasswordReady = YES;
 }
-#pragma mark - 
-
-- (void)createAccount
-{
-    NSLog(@"MBP_iosVC - Load RegistrationVC");
-    RegistrationViewController *registrationVC = [[RegistrationViewController alloc] init];
-    registrationVC.delegate = self;
-    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:registrationVC];
-    [self presentViewController:nav animated:YES completion:^{}];
-    //[self.navigationController presentViewController:registrationVC animated:YES completion:^{}];
-    [registrationVC release];
-}
 
 -(BOOL) rebindCameraResource
 {
@@ -907,8 +851,7 @@
         [userDefaults removeObjectForKey:@"PortalPassword"];
         [userDefaults removeObjectForKey:_push_dev_token];
         
-#if  TARGET_IPHONE_SIMULATOR
-#else
+#if  !TARGET_IPHONE_SIMULATOR
         
         NSLog(@"De-Register push with both parties: APNs and BMS ");
         
@@ -1261,72 +1204,6 @@
     [picker release];
 }
 
-- (void)dismissMenuHubbleView
-{
-    NSLog(@"%s", __FUNCTION__);
-    
-    if (_menuVC != nil)
-    {
-        NSArray * views = _menuVC.navigationController.viewControllers;
-        NSLog(@"views count = %d",[views count] );
-        
-        if ( [views count] > 1)
-        {
-            if (views.count > 2)
-            {
-                id obj2 = [views objectAtIndex:2];
-                
-                if ([obj2 isKindOfClass:[PlaybackViewController class]])
-                {
-                    PlaybackViewController *playbackViewController = (PlaybackViewController *)obj2;
-                    [playbackViewController closePlayBack:nil];
-                }
-            }
-            
-            id obj = [views objectAtIndex:1];
-            
-            if ([obj isKindOfClass:[H264PlayerViewController class]])
-            {
-                H264PlayerViewController * h264PlayerViewController = (H264PlayerViewController *) obj;
-                [h264PlayerViewController prepareGoBackToCameraList:nil];
-    
-                
-            }
-            else if([obj isKindOfClass:[EarlierViewController class]]) // Camera is offline
-            {
-                [((EarlierViewController *)obj).navigationController popToRootViewControllerAnimated:NO];
-            }
-        }
-
-        [_menuVC removeSubviews];
-        _menuVC.menuDelegate = nil;
-    }
-    
-    [self dismissViewControllerAnimated:NO completion:^{}];
-}
-
-- (void)dismissNotificationViewController
-{    
-    id aViewController = [self.navigationController.viewControllers lastObject];
-    
-    NSLog(@"%s %d %@", __FUNCTION__, self.navigationController.viewControllers.count, aViewController);
-    
-    if ([aViewController isKindOfClass:[PlaybackViewController class]])
-    {
-        PlaybackViewController *playbackViewController = (PlaybackViewController *)aViewController;
-        [playbackViewController closePlayBack:nil];
-    }
-    else if ([aViewController isKindOfClass:[NotifViewController class]])
-    {
-        NotifViewController *aNotifVC = ((NotifViewController *)aViewController);
-        aNotifVC.notifDelegate = nil;
-        [aNotifVC cancelTaskDoInBackground];
-        //[aNotifVC.navigationController popToRootViewControllerAnimated:NO];
-    }
-    
-    [self.navigationController popToRootViewControllerAnimated:NO];
-}
-
 - (void)popAllViewControllers
 {
     UIViewController *aViewController = [self.navigationController topViewController];
@@ -1516,7 +1393,7 @@
 	
 	return ;
 }
-#if 1
+
 - (void)showLoginViewController
 {
     NSLog(@"show_login... ");
@@ -1527,56 +1404,6 @@
     [self.navigationController pushViewController:loginVC animated:NO];
     [loginVC release];
 }
-#else
-#pragma mark -
-#pragma mark SetupHTTPDelegate --- NOT USED --- check ..
-
--(void) show_login_or_reg:(NSTimer *)timer
-{
-    /*
-     * 1. If timer is NOT nil --> - check exist of crashed log file
-     * 2. If time is nil need not to check.
-     */
-    
-    BOOL hasOptionSendEmail = FALSE;
-    
-    if (timer != nil )
-    {
-        NSString *cachesDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-        NSString *logCrashedPath = [cachesDirectory stringByAppendingPathComponent:@"application_crash.log"];
-        
-        NSFileManager * fileManager = [NSFileManager defaultManager];
-        
-        if ([fileManager fileExistsAtPath:logCrashedPath])
-        {
-            NSLog(@"App was crashed!");
-            hasOptionSendEmail = TRUE;
-            
-            UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Send app log"
-                                                         message:nil
-                                                        delegate:self
-                                               cancelButtonTitle:NSLocalizedStringWithDefaultValue(@"cancel", nil, [NSBundle mainBundle], @"Cancel", nil)
-                                               otherButtonTitles:NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil), nil];
-            av.tag = 11;
-            [av show];
-            [av release];
-        }
-    }
-    
-    NSLog(@"%s: show login view - timer: %p, has crashed log: %d", __FUNCTION__, timer, hasOptionSendEmail);
-    
-    if (!hasOptionSendEmail)
-    {
-        NSLog(@"show_login... ");
-        
-        self.app_stage = APP_STAGE_LOGGING_IN;
-        
-        LoginViewController *loginVC = [[LoginViewController alloc] initWithDelegate:self];
-        [self.navigationController pushViewController:loginVC animated:NO];
-        [loginVC release];
-    }
-}
-#endif
 
 - (void)showNotificationViewController: (NSTimer *)exp
 {
@@ -1884,6 +1711,175 @@
 
 // TODO: DELETE
 #if 0 // As far as, this flow has been terminated!
+
+- (void)wakeup_display_login:(NSTimer*) timer_exp
+{
+#if 0
+    NSLog(@">>> DBG PLAYER  ");
+    PlaybackViewController *playbackViewController = [[PlaybackViewController alloc] init];
+    //playbackViewController.urlVideo = @"http://nxcomm:2009nxcomm@nxcomm-office.no-ip.info/app_release/sub_clips/48022A2CAC31_04_20130917065256730_00001.flv";
+    
+    playbackViewController.urlVideo = @"http://s3.amazonaws.com/sm.wowza.content/48022A2CAC31/clips/48022A2CAC31_04_20130918083756010_00001_last.flv?AWSAccessKeyId=AKIAIDBFDZTAR2EB4KPQ&Expires=1379501535&Signature=m%2FGcG%2BOh8wlwXcWqkiw%2BztAqAn8%3D";
+    
+    //[playbackViewController autorelease];
+    
+    [self presentViewController:playbackViewController animated:NO  completion:nil];
+#else
+    
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    
+    if ([userDefaults boolForKey:_AutoLogin])
+    {
+        NSLog(@"Auto login from AppDelegate. Do nothing");
+#if 1
+        [self showLoginViewController];
+#else
+        [self show_login_or_reg:nil];
+#endif
+    }
+    else
+    {
+        self.app_stage = APP_STAGE_LOGGING_IN;
+        NSLog(@"MBP_iosVC - show LoginVC from viewDidLoad after 4s");
+#if 1
+        [self showLoginViewController];
+#else
+        [self show_login_or_reg:nil];
+#endif
+    }
+    
+    
+#endif
+}
+
+#pragma mark -
+
+- (void)createAccount
+{
+    NSLog(@"MBP_iosVC - Load RegistrationVC");
+    RegistrationViewController *registrationVC = [[RegistrationViewController alloc] init];
+    registrationVC.delegate = self;
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:registrationVC];
+    [self presentViewController:nav animated:YES completion:^{}];
+    //[self.navigationController presentViewController:registrationVC animated:YES completion:^{}];
+    [registrationVC release];
+}
+
+#pragma mark -
+#pragma mark SetupHTTPDelegate --- NOT USED --- check ..
+
+-(void) show_login_or_reg:(NSTimer *)timer
+{
+    /*
+     * 1. If timer is NOT nil --> - check exist of crashed log file
+     * 2. If time is nil need not to check.
+     */
+    
+    BOOL hasOptionSendEmail = FALSE;
+    
+    if (timer != nil )
+    {
+        NSString *cachesDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+        NSString *logCrashedPath = [cachesDirectory stringByAppendingPathComponent:@"application_crash.log"];
+        
+        NSFileManager * fileManager = [NSFileManager defaultManager];
+        
+        if ([fileManager fileExistsAtPath:logCrashedPath])
+        {
+            NSLog(@"App was crashed!");
+            hasOptionSendEmail = TRUE;
+            
+            UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Send app log"
+                                                         message:nil
+                                                        delegate:self
+                                               cancelButtonTitle:NSLocalizedStringWithDefaultValue(@"cancel", nil, [NSBundle mainBundle], @"Cancel", nil)
+                                               otherButtonTitles:NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil), nil];
+            av.tag = 11;
+            [av show];
+            [av release];
+        }
+    }
+    
+    NSLog(@"%s: show login view - timer: %p, has crashed log: %d", __FUNCTION__, timer, hasOptionSendEmail);
+    
+    if (!hasOptionSendEmail)
+    {
+        NSLog(@"show_login... ");
+        
+        self.app_stage = APP_STAGE_LOGGING_IN;
+        
+        LoginViewController *loginVC = [[LoginViewController alloc] initWithDelegate:self];
+        [self.navigationController pushViewController:loginVC animated:NO];
+        [loginVC release];
+    }
+}
+
+- (void)dismissNotificationViewController
+{
+    id aViewController = [self.navigationController.viewControllers lastObject];
+    
+    NSLog(@"%s %d %@", __FUNCTION__, self.navigationController.viewControllers.count, aViewController);
+    
+    if ([aViewController isKindOfClass:[PlaybackViewController class]])
+    {
+        PlaybackViewController *playbackViewController = (PlaybackViewController *)aViewController;
+        [playbackViewController closePlayBack:nil];
+    }
+    else if ([aViewController isKindOfClass:[NotifViewController class]])
+    {
+        NotifViewController *aNotifVC = ((NotifViewController *)aViewController);
+        aNotifVC.notifDelegate = nil;
+        [aNotifVC cancelTaskDoInBackground];
+        //[aNotifVC.navigationController popToRootViewControllerAnimated:NO];
+    }
+    
+    [self.navigationController popToRootViewControllerAnimated:NO];
+}
+
+- (void)dismissMenuHubbleView
+{
+    NSLog(@"%s", __FUNCTION__);
+    
+    if (_menuVC != nil)
+    {
+        NSArray * views = _menuVC.navigationController.viewControllers;
+        NSLog(@"views count = %d",[views count] );
+        
+        if ( [views count] > 1)
+        {
+            if (views.count > 2)
+            {
+                id obj2 = [views objectAtIndex:2];
+                
+                if ([obj2 isKindOfClass:[PlaybackViewController class]])
+                {
+                    PlaybackViewController *playbackViewController = (PlaybackViewController *)obj2;
+                    [playbackViewController closePlayBack:nil];
+                }
+            }
+            
+            id obj = [views objectAtIndex:1];
+            
+            if ([obj isKindOfClass:[H264PlayerViewController class]])
+            {
+                H264PlayerViewController * h264PlayerViewController = (H264PlayerViewController *) obj;
+                [h264PlayerViewController prepareGoBackToCameraList:nil];
+                
+                
+            }
+            else if([obj isKindOfClass:[EarlierViewController class]]) // Camera is offline
+            {
+                [((EarlierViewController *)obj).navigationController popToRootViewControllerAnimated:NO];
+            }
+        }
+        
+        [_menuVC removeSubviews];
+        _menuVC.menuDelegate = nil;
+    }
+    
+    [self dismissViewControllerAnimated:NO completion:^{}];
+}
 
 - (void)wakeup_start_animte:(NSTi mer*) timer_exp
 {
