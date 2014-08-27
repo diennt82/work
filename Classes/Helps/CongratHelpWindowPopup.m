@@ -10,6 +10,7 @@
 
 @interface CongratHelpWindowPopup()
 @property (nonatomic, retain) UIView *actionView;
+@property (nonatomic, assign) id <CongratHelpDelegate> congratDelegate;
 @end
 
 @implementation CongratHelpWindowPopup
@@ -23,6 +24,23 @@
     return self;
 }
 
+- (id)initWithTarget:(id)target
+{
+    self = [super initWithTitle:@"" andHtmlString:@""];
+    if (self) {
+        self.congratDelegate = target;
+        self.title = @"Congratulations!";
+        self.htmlString = [self htmlString:@"Congratulations – you have qualified for a free two week trial of our optional motion-triggered Cloud Video Recording service."];
+        
+        NSMutableDictionary *buttonTitles = [NSMutableDictionary dictionaryWithObjects:kCongratValues forKeys:kCongratKeys];
+        [buttonTitles removeObjectForKey:@(SOUND_GREAT)];
+        self.buttonTitles = buttonTitles;
+        
+        [self reloadUIComponents];
+    }
+    return self;
+}
+
 - (void)dealloc
 {
     [_buttonTitles release];
@@ -32,6 +50,8 @@
 
 - (void)reloadUIComponents
 {
+    self.titleLabel.text = self.title;
+    
     if (self.actionView)
     {
         [self.actionView removeFromSuperview];
@@ -86,14 +106,66 @@
 - (void)handleButtonTouchUpInside:(id)sender
 {
     UIButton *button = sender;
-    if (button.tag == MAYBE_LATER)
-    {
-        [self dismiss];
+    switch (button.tag) {
+        case START_FREE_TRIAL:
+        {
+            NSMutableDictionary *buttonTitles = [NSMutableDictionary dictionaryWithObjects:kCongratValues forKeys:kCongratKeys];
+            [buttonTitles removeObjectForKey:@(START_FREE_TRIAL)];
+            [buttonTitles removeObjectForKey:@(FIND_OUT_MORE)];
+            self.buttonTitles = buttonTitles;
+            self.title = @"Free Trial!";
+            [self reloadUIComponents];
+            
+            self.htmlString = [self htmlString:@"With our motion-triggered video recording, you’ll never miss a moment again. Any time movement is detected by your camera you’ll receive a video of the whole event. The free trial will last for two weeks and you can turn this feature on/off at any time by going to ‘Settings’."];
+            [self loadHtml];
+            break;
+        }
+        case FIND_OUT_MORE:
+        {
+            NSMutableDictionary *buttonTitles = [NSMutableDictionary dictionaryWithObjects:kCongratValues forKeys:kCongratKeys];
+            [buttonTitles removeObjectForKey:@(START_FREE_TRIAL)];
+            [buttonTitles removeObjectForKey:@(FIND_OUT_MORE)];
+            self.buttonTitles = buttonTitles;
+            self.title = @"Free Trial!";
+            [self reloadUIComponents];
+            
+            self.htmlString = [self htmlString:@"With our optional motion-triggered video recording service, you’ll never miss a moment again. Any time movement is detected by your camera you’ll receive a video of the whole event. Click to view immediately or scroll back through your timeline to see all of the day’s events.<P/>Your free trial will last for two weeks and you can turn this feature on/off at any time by going to ‘Settings’.<P/>If you’d like even more detailed information, please <a href=\"http://hubbleconnected.com/free-trial/\">click here</a>."];
+            [self loadHtml];
+            break;
+        }
+        case SOUND_GREAT:
+        {
+            if ([self.congratDelegate respondsToSelector:@selector(triggerSoundsGreat)])
+            {
+                [self.congratDelegate triggerSoundsGreat];
+            }
+            break;
+        }
+        case MAYBE_LATER:
+        {
+            if ([self.congratDelegate respondsToSelector:@selector(mayBeLater)])
+            {
+                [self.congratDelegate mayBeLater];
+            }
+            [self dismiss];
+            break;
+        }
+        default:
+            break;
     }
-    else
-    {
-        [self reloadUIComponents];
-    }
+}
+
+- (NSString *)htmlString:(NSString *)content
+{
+    NSMutableString *html = [[NSMutableString alloc] init];
+    [html appendString:@"<html>"];
+    [html appendString:@"   <body>"];
+    [html appendString:@"       <div style='margin-left:5px;'>"];
+    [html appendString:content];
+    [html appendString:@"       </div>"];
+    [html appendString:@"   </body>"];
+    [html appendString:@"</html>"];
+    return [html autorelease];
 }
 
 #pragma mark - Override method
@@ -101,7 +173,7 @@
 {
     [super initUIComponents];
     
-//    [self.closeButton removeFromSuperview];
+    [self.closeButton removeFromSuperview];
     
     CGRect rect = self.webView.frame;
     rect.size.height -= 100;
@@ -114,6 +186,12 @@
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
-    return YES;
+    NSString *url = [request.URL absoluteString];
+    if ([url hasPrefix:@"file:"])
+    {
+        return YES;
+    }
+    [[UIApplication sharedApplication] openURL:request.URL];
+    return NO;
 }
 @end

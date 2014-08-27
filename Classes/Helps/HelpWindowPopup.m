@@ -19,8 +19,6 @@
 
 @interface HelpWindowPopup()
 @property (nonatomic, retain) MBP_PopupOverlayWindow    *overlayWindow;
-@property (nonatomic, retain) NSString                  *title;
-@property (nonatomic, retain) NSString                  *htmlString;
 @end
 
 @implementation HelpWindowPopup
@@ -78,6 +76,7 @@
     [_title release];
     [_htmlString release];
     [_headerView release];
+    [_titleLabel release];
     [_webView release];
     [_contentView release];
     [_closeButton release];
@@ -118,9 +117,7 @@
         transform = CGAffineTransformRotate(transform, (M_PI / 2.0));
     }
     self.transform = transform;
-    
-    NSData *htmlData = [self.htmlString dataUsingEncoding:NSUTF8StringEncoding];
-    [self.webView loadData:htmlData MIMEType:@"text/html" textEncodingName:@"UTF-8" baseURL:[NSURL URLWithString:@""]];
+    [self loadHtml];
     
 //    
 //    self.layer.opacity = 0.5f;
@@ -134,6 +131,12 @@
 //                         self.transform = transform;
 //					 }
 //    ];
+}
+
+- (void)loadHtml
+{
+    NSData *htmlData = [self.htmlString dataUsingEncoding:NSUTF8StringEncoding];
+    [self.webView loadData:htmlData MIMEType:@"text/html" textEncodingName:@"UTF-8" baseURL:[NSURL URLWithString:@""]];
 }
 
 - (void)dismiss
@@ -180,12 +183,12 @@
     [self.headerView setBackgroundColor:[UIColor colorWithRed:0 green:171/255.f blue:245/255.f alpha:1.0]];
     self.headerView.layer.cornerRadius = 10;
     [self addSubview:self.headerView];
-    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 10, self.frame.size.width - 20, 25)];
-    titleLabel.textAlignment = NSTextAlignmentCenter;
-    titleLabel.textColor = [UIColor whiteColor];
-    titleLabel.font = [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:20];
-    titleLabel.text = self.title;
-    [self.headerView addSubview:titleLabel];
+    _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 10, self.frame.size.width - 20, 25)];
+    self.titleLabel.textAlignment = NSTextAlignmentCenter;
+    self.titleLabel.textColor = [UIColor whiteColor];
+    self.titleLabel.font = [UIFont applyHubbleFontName:PN_REGULAR_FONT withSize:20];
+    self.titleLabel.text = self.title;
+    [self.headerView addSubview:self.titleLabel];
     
     _closeButton = [[UIButton alloc] initWithFrame:CGRectMake(self.frame.size.width - 45, self.frame.size.height - 40, 35, 35)];
     [self.closeButton setImage:[UIImage imageNamed:@"video_fullscreen_close.png"] forState:UIControlStateNormal];
@@ -204,8 +207,6 @@
     [self.webView setBackgroundColor:[UIColor whiteColor]];
     self.webView.delegate = self;
     [self.contentView addSubview:self.webView];
-    
-    [titleLabel release];
     
     [self bringSubviewToFront:self.closeButton];
 }
@@ -263,7 +264,14 @@
 #pragma mark - UIWebviewDelegate
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
-    
+    if (self.webView.scrollView.contentSize.height - 12 <= self.webView.frame.size.height)
+    {
+        self.webView.scrollView.scrollEnabled = NO;
+    }
+    else
+    {
+        self.webView.scrollView.scrollEnabled = YES;
+    }
 }
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error

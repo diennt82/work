@@ -18,8 +18,15 @@ typedef enum _CONGRAT_TYPE {
 
 #import "HelpWindowPopup.h"
 
+@protocol CongratHelpDelegate <NSObject>
+- (void)triggerSoundsGreat;
+@optional
+- (void)mayBeLater;
+@end
+
 @interface CongratHelpWindowPopup : HelpWindowPopup
 @property (nonatomic, retain) NSDictionary *buttonTitles;
 
+- (id)initWithTarget:(id)target;
 - (void)reloadUIComponents;
 @end

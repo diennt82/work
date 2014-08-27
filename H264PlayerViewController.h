@@ -44,7 +44,6 @@
 #import "UserAccount.h"
 #import "HelpWindowPopup.h"
 
-
 #define H264_STREAM_STARTED              1
 #define H264_STREAM_STOPPED_UNEXPECTEDLY 2
 #define H264_STREAM_RESTARTED            3

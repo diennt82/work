@@ -17,14 +17,18 @@
 @interface HelpWindowPopup : UIView <UIWebViewDelegate>
 
 @property (nonatomic, retain) UIView        *headerView;
+@property (nonatomic, retain) UILabel       *titleLabel;
 @property (nonatomic, retain) UIWebView     *webView;
 @property (nonatomic, retain) UIView        *contentView;
 @property (nonatomic, retain) UIButton      *closeButton;
+@property (nonatomic, retain) NSString      *title;
+@property (nonatomic, retain) NSString      *htmlString;
 @property (nonatomic, assign) id <HelpWindowPopupDelegate> delegate;
 
 - (id)initWithTitle:(NSString *)title andHtmlString:(NSString *)htmlString;
 - (id)initWithTitle:(NSString *)title andHtmlString:(NSString *)htmlString andHeight:(CGFloat)height;
 - (void)initUIComponents;
+- (void)loadHtml;
 - (void)show;
 - (void)dismiss;
 - (BOOL)isShowing;
