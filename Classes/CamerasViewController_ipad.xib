@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.iPad.XIB" version="3.0" toolsVersion="6205" systemVersion="13E28" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.iPad.XIB" version="3.0" toolsVersion="5056" systemVersion="13C64" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment defaultVersion="1792" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6198"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CamerasViewController">
@@ -17,6 +17,7 @@
                 <outlet property="ibTextBuyCamera" destination="rqE-O3-kkh" id="jqC-R2-uA1"/>
                 <outlet property="ibViewAddCamera" destination="v32-Ax-rwu" id="YuC-Mk-C9d"/>
                 <outlet property="ibViewBuyCamera" destination="vo7-EN-jse" id="qYQ-89-Vx5"/>
+                <outlet property="ibViewHelp" destination="3QG-Mj-bQm" id="43q-eU-tCg"/>
                 <outlet property="view" destination="iN0-l3-epB" id="JIN-bF-HEc"/>
             </connections>
         </placeholder>
@@ -109,7 +110,6 @@
                 </view>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-            <nil key="simulatedStatusBarMetrics"/>
         </view>
         <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="40" id="c5a-Mu-dEr">
             <rect key="frame" x="0.0" y="0.0" width="768" height="40"/>
@@ -144,12 +144,4 @@
         <image name="buy_camera_btn.png" width="160" height="45"/>
         <image name="cart.png" width="20" height="20"/>
     </resources>
-    <simulatedMetricsContainer key="defaultSimulatedMetrics">
-        <simulatedStatusBarMetrics key="statusBar"/>
-        <simulatedOrientationMetrics key="orientation"/>
-        <simulatedScreenMetrics key="destination">
-            <size key="portraitSize" width="768" height="1024"/>
-            <size key="landscapeSize" width="1024" height="768"/>
-        </simulatedScreenMetrics>
-    </simulatedMetricsContainer>
 </document>
