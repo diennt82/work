@@ -81,13 +81,13 @@
                                      action:nil] autorelease];
     self.navigationItem.hidesBackButton = NO;
     
-    self.btnContinue = (UIButton *)[_viewError viewWithTag:599];
+    self.btnContinue = (UIButton *)[_viewError viewWithTag:BTN_CONTINUE_TAG];
     [self.btnContinue setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
     [self.btnContinue setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
     [self.btnContinue addTarget:self action:@selector(btnContinueTouchUpInsideAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.btnContinue setTitle:NSLocalizedStringWithDefaultValue(@"continue", nil, [NSBundle mainBundle], @"Continue", nil) forState:UIControlStateNormal];
     
-    self.btnTryAgain = (UIButton *)[_viewError viewWithTag:559];
+    self.btnTryAgain = (UIButton *)[_viewError viewWithTag:BTN_TRY_AGAIN_TAG];
     [self.btnTryAgain setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
     [self.btnTryAgain setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
     [self.btnTryAgain addTarget:self action:@selector(btnTryAgainTouchUpInsideAction:) forControlEvents:UIControlEventTouchUpInside];
