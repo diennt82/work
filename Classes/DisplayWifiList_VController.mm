@@ -404,6 +404,7 @@
 - (void)timeoutBLESetupProcessing:(NSTimer *)timer
 {
     self.shouldTimeoutProcessing = TRUE;
+    self.navigationItem.leftBarButtonItem.enabled = NO;
 #if 1
     NSTimeInterval timeInterval = 5.f;
     

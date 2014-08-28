@@ -809,7 +809,7 @@
 
 - (void)timeoutBLESetupProcessing:(NSTimer *)timer
 {
-    self.view.userInteractionEnabled = YES;
+    self.view.userInteractionEnabled = NO;
     
     self.shouldTimeoutProcessing = TRUE;
 #if 1
@@ -875,6 +875,7 @@
     {
         NSLog(@"%s Invalidate timer.", __FUNCTION__);
         [timer invalidate];
+        self.view.userInteractionEnabled = YES;
         
         [self.viewProgress removeFromSuperview];
         [self.view addSubview:_viewError];
