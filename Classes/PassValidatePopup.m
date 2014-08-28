@@ -110,7 +110,7 @@
     NSArray *matches = [regex matchesInString:self.password options:0 range:NSMakeRange(0, self.password.length)];
     if (matches.count == 0)
     {
-        [self.imv1Number setImage:[UIImage imageNamed:@"checkbox.png"]];
+        [self.imv1Number setImage:[UIImage imageNamed:@"password_fail.png"]];
     }
 }
 
@@ -121,7 +121,7 @@
     NSArray *matches = [regex matchesInString:self.password options:0 range:NSMakeRange(0, self.password.length)];
     if (matches.count == 0)
     {
-        [self.imv1Leter setImage:[UIImage imageNamed:@"checkbox.png"]];
+        [self.imv1Leter setImage:[UIImage imageNamed:@"password_fail.png"]];
     }
 }
 
@@ -129,7 +129,7 @@
 {
     if (self.password.length < 8)
     {
-        [self.imv8CharsLength setImage:[UIImage imageNamed:@"checkbox.png"]];
+        [self.imv8CharsLength setImage:[UIImage imageNamed:@"password_fail.png"]];
     }
 }
 
@@ -137,7 +137,7 @@
 {
     if (self.password.length > 12)
     {
-        [self.imv12CharsLength setImage:[UIImage imageNamed:@"checkbox.png"]];
+        [self.imv12CharsLength setImage:[UIImage imageNamed:@"password_fail.png"]];
     }
 }
 

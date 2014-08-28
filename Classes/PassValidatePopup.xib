@@ -17,20 +17,20 @@
                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="checkbox_active.png" translatesAutoresizingMaskIntoConstraints="NO" id="Knt-RL-Vq4">
-                    <rect key="frame" x="22" y="43" width="23" height="22"/>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="setup_check.png" translatesAutoresizingMaskIntoConstraints="NO" id="Knt-RL-Vq4">
+                    <rect key="frame" x="25" y="48" width="15" height="15"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="checkbox_active.png" translatesAutoresizingMaskIntoConstraints="NO" id="wgy-dg-rKk">
-                    <rect key="frame" x="22" y="71" width="23" height="22"/>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="setup_check.png" translatesAutoresizingMaskIntoConstraints="NO" id="wgy-dg-rKk">
+                    <rect key="frame" x="25" y="76" width="15" height="15"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="checkbox_active.png" translatesAutoresizingMaskIntoConstraints="NO" id="Rs4-vQ-Avt">
-                    <rect key="frame" x="22" y="99" width="23" height="22"/>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="setup_check.png" translatesAutoresizingMaskIntoConstraints="NO" id="Rs4-vQ-Avt">
+                    <rect key="frame" x="25" y="104" width="15" height="15"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="checkbox_active.png" translatesAutoresizingMaskIntoConstraints="NO" id="9Xh-an-kKO">
-                    <rect key="frame" x="22" y="128" width="23" height="22"/>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="setup_check.png" translatesAutoresizingMaskIntoConstraints="NO" id="9Xh-an-kKO">
+                    <rect key="frame" x="25" y="132" width="15" height="15"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="at least 1 digit" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uEF-27-4Im">
@@ -86,6 +86,6 @@
         </view>
     </objects>
     <resources>
-        <image name="checkbox_active.png" width="25" height="23"/>
+        <image name="setup_check.png" width="20" height="20"/>
     </resources>
 </document>
