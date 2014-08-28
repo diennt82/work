@@ -15,6 +15,7 @@
 #import "ToUViewController.h"
 #import "define.h"
 #import "UIView+Custom.h"
+#import "PassValidatePopup.h"
 
 #define GAI_CATEGORY            @"Registration view"
 #define ERROR_MESSAGE_TEXT      @"error_message_text"
@@ -282,15 +283,9 @@
 
 - (IBAction)handlePasswordErrorButton:(id)sender
 {
-    UIButton *button = sender;
-    NSString *msg = [self.errorMessageDict objectForKey:@(button.tag)];
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-    {
-        [self showErrorMessageiPadOnly:msg besideErrorButton:button];
-    }
-    else {
-        [self showErrorDialog:msg];
-    }
+    PassValidatePopup *popup = [[PassValidatePopup alloc] initwithPassword:self.tfPassword.text];
+    [popup show];
+    [popup release];
 }
 
 - (IBAction)handleCPasswordErrorButton:(id)sender
@@ -394,10 +389,12 @@
         msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg5", nil, [NSBundle mainBundle],
                                                 @"Username should not contain special characters except for - _ and ."  , nil);
     }
-    else if (([_tfPassword.text length] < 8) || ([_tfPassword.text length] > 12) )
+    else if (![self validatePassword:_tfPassword.text])
     {
-        msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg1",nil, [NSBundle mainBundle],
-                                                @"Password has to be between 8-12 characters" , nil);
+//        msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg1",nil, [NSBundle mainBundle],
+//                                                @"Password has to be between 8-12 characters" , nil);
+        [self handlePasswordErrorButton:nil];
+        return NO;
     }
     else if ( ![_tfPassword.text isEqualToString:_tfConfirmPassword.text])
     {
@@ -628,11 +625,11 @@
     }
     else if(textField == _tfPassword)
     {
-        if (([textField.text length] < 8) || ([textField.text length] > 12) )
+        if (![self validatePassword:_tfPassword.text])
         {
-            NSString *msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg1",nil, [NSBundle mainBundle],
-                                                    @"Password has to be between 8-12 characters" , nil);
-            [self displayErrorForTextField:textField withMesage:msg];
+//            NSString *msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg1",nil, [NSBundle mainBundle],
+//                                                    @"Password has to be between 8-12 characters" , nil);
+            [self displayErrorForTextField:textField withMesage:@""];
         }
     }
     else if(textField == _tfConfirmPassword)
@@ -644,6 +641,16 @@
             [self displayErrorForTextField:textField withMesage:msg];
         }
     }
+}
+
+- (BOOL)validatePassword:(NSString *)text
+{
+    NSString *pattern = @"^(?=.*\\d)(?=.*[a-zA-Z]).{8,12}$";
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:pattern options:0 error:nil];
+    
+    NSArray *matches = [regex matchesInString:text options:0 range:NSMakeRange(0, text.length)];
+    
+    return matches.count > 0;
 }
 
 #pragma mark - JSON call back
