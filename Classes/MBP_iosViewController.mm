@@ -43,7 +43,7 @@
 #import "PublicDefine.h"
 #import <objc/message.h>
 
-@interface MBP_iosViewController () <MFMailComposeViewControllerDelegate, ConnectionMethodDelegate, UIActionSheetDelegate>
+@interface MBP_iosViewController () <MFMailComposeViewControllerDelegate, ConnectionMethodDelegate, UIActionSheetDelegate, CongratHelpDelegate>
 {
     SystemSoundID soundFileObject;
     NSArray * channel_array;
@@ -395,131 +395,131 @@
             
             break;
         }
-#if 0
-        case SETUP_CAMERA:
-        {
-            self.app_stage = APP_STAGE_SETUP;
-            
-            BOOL isFirstTimeSetup = [userDefaults boolForKey:FIRST_TIME_SETUP];
-            
-            if (isFirstTimeSetup == FALSE)
-            {
-                NSLog(@">>> SETUP ");
-                //Normal add cam sequence
-                //Load the next xib
-                
-                [self.navigationController popToRootViewControllerAnimated:NO];
-                
-                Step_02_ViewController *step02ViewController = nil;
-                
-                if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-                {
-                    step02ViewController = [[Step_02_ViewController alloc]
-                                            initWithNibName:@"Step_02_ViewController_ipad" bundle:nil];
-                }
-                else
-                {
-                    step02ViewController = [[Step_02_ViewController alloc]
-                                            initWithNibName:@"Step_02_ViewController" bundle:nil];
-                }
-                
-                step02ViewController.delegate = self;
-                step02ViewController.cameraType = [userDefaults integerForKey:SET_UP_CAMERA];
-                UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:step02ViewController];
-                //[self presentViewController:nav animated:NO completion:^{}];
-                [step02ViewController release];
-                
-                if (self.presentedViewController) {
-                    [self dismissViewControllerAnimated:NO completion:^{
-                        [self presentViewController:nav animated:YES completion:nil];
-                    }];
-                } else {
-                    [self presentViewController:nav animated:YES completion:nil];
-                }
-                [nav release];
-            }
-            else
-            {
-                NSLog(@">>> REGISTER");
-                [self createAccount];
-            }
-        }
-            break;
-            
-        case SCAN_CAMERA:
-        {
-            //may be offline mode
-            NSLog(@"start scanning");
-            //statusDialogLabel.hidden = NO;
-            self.app_stage = APP_STAGE_LOGGED_IN;
-            
-            isRebinded = [self rebindCameraResource];
-            [self performSelector:@selector(scan_for_devices)
-                       withObject:nil
-                       afterDelay:0.1];
-            
-            //Back from login- login success
-            [self dismissViewControllerAnimated:NO completion:nil];
-            //self.progressView.hidden = NO;
-        }
-            break;
-            
-        case AFTER_DEL_RELOGIN: //Only use when cancel from Add camera
-        {
-            
-            //statusDialogLabel.hidden = YES;
-            
-            [userDefaults setBool:TRUE forKey:_AutoLogin];
-            [userDefaults synchronize];
-            
-            [NSTimer scheduledTimerWithTimeInterval:2.0
-                                             target:self
-                                           selector:@selector(show_login_or_reg:)
-                                           userInfo:nil
-                                            repeats:NO];
-            
-            break;
-        }
-            
-        case  BACK_FRM_MENU_NOLOAD: //USED by AppDelegate as well.. please check if modifying this case
-        {
-            NSLog(@"Back from menu");
-            //statusDialogLabel.hidden = YES;
-            //[self dismissViewControllerAnimated:NO completion:nil];
-            
-            if (self.presentedViewController)
-            {
-                [self dismissViewControllerAnimated:NO completion:^{}];
-            }
-            
-            break;
-        }
-            
-        case SCAN_BONJOUR_CAMERA :
-        {
-            /*
-             20130523_nguyendang :
-             Scan camera with bonjour here
-             If have any problem ? Back to Scan_for_camera
-             */
-            NSLog(@"start scanning Bonjour");
-            
-            //statusDialogLabel.hidden = NO;
-			self.app_stage = APP_STAGE_LOGGED_IN;
-            
-            isRebinded = [self rebindCameraResource];
-            [self callForStartScanningBonjour]; // 1. Scan with Bonjour
-            [self scan_for_devices];            // 2. Scan with ip server
-            
-            // 1 & 2 work parallely
-            
-            //Back from login- login success
-            //[self dismissViewControllerAnimated:NO completion:^{}];
-            //self.progressView.hidden = NO;
-
-            break;
-        }
-#endif
+//#if 0
+//        case SETUP_CAMERA:
+//        {
+//            self.app_stage = APP_STAGE_SETUP;
+//            
+//            BOOL isFirstTimeSetup = [userDefaults boolForKey:FIRST_TIME_SETUP];
+//            
+//            if (isFirstTimeSetup == FALSE)
+//            {
+//                NSLog(@">>> SETUP ");
+//                //Normal add cam sequence
+//                //Load the next xib
+//                
+//                [self.navigationController popToRootViewControllerAnimated:NO];
+//                
+//                Step_02_ViewController *step02ViewController = nil;
+//                
+//                if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+//                {
+//                    step02ViewController = [[Step_02_ViewController alloc]
+//                                            initWithNibName:@"Step_02_ViewController_ipad" bundle:nil];
+//                }
+//                else
+//                {
+//                    step02ViewController = [[Step_02_ViewController alloc]
+//                                            initWithNibName:@"Step_02_ViewController" bundle:nil];
+//                }
+//                
+//                step02ViewController.delegate = self;
+//                step02ViewController.cameraType = [userDefaults integerForKey:SET_UP_CAMERA];
+//                UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:step02ViewController];
+//                //[self presentViewController:nav animated:NO completion:^{}];
+//                [step02ViewController release];
+//                
+//                if (self.presentedViewController) {
+//                    [self dismissViewControllerAnimated:NO completion:^{
+//                        [self presentViewController:nav animated:YES completion:nil];
+//                    }];
+//                } else {
+//                    [self presentViewController:nav animated:YES completion:nil];
+//                }
+//                [nav release];
+//            }
+//            else
+//            {
+//                NSLog(@">>> REGISTER");
+//                [self createAccount];
+//            }
+//        }
+//            break;
+//            
+//        case SCAN_CAMERA:
+//        {
+//            //may be offline mode
+//            NSLog(@"start scanning");
+//            //statusDialogLabel.hidden = NO;
+//            self.app_stage = APP_STAGE_LOGGED_IN;
+//            
+//            isRebinded = [self rebindCameraResource];
+//            [self performSelector:@selector(scan_for_devices)
+//                       withObject:nil
+//                       afterDelay:0.1];
+//            
+//            //Back from login- login success
+//            [self dismissViewControllerAnimated:NO completion:nil];
+//            //self.progressView.hidden = NO;
+//        }
+//            break;
+//            
+//        case AFTER_DEL_RELOGIN: //Only use when cancel from Add camera
+//        {
+//            
+//            //statusDialogLabel.hidden = YES;
+//            
+//            [userDefaults setBool:TRUE forKey:_AutoLogin];
+//            [userDefaults synchronize];
+//            
+//            [NSTimer scheduledTimerWithTimeInterval:2.0
+//                                             target:self
+//                                           selector:@selector(show_login_or_reg:)
+//                                           userInfo:nil
+//                                            repeats:NO];
+//            
+//            break;
+//        }
+//            
+//        case  BACK_FRM_MENU_NOLOAD: //USED by AppDelegate as well.. please check if modifying this case
+//        {
+//            NSLog(@"Back from menu");
+//            //statusDialogLabel.hidden = YES;
+//            //[self dismissViewControllerAnimated:NO completion:nil];
+//            
+//            if (self.presentedViewController)
+//            {
+//                [self dismissViewControllerAnimated:NO completion:^{}];
+//            }
+//            
+//            break;
+//        }
+//            
+//        case SCAN_BONJOUR_CAMERA :
+//        {
+//            /*
+//             20130523_nguyendang :
+//             Scan camera with bonjour here
+//             If have any problem ? Back to Scan_for_camera
+//             */
+//            NSLog(@"start scanning Bonjour");
+//            
+//            //statusDialogLabel.hidden = NO;
+//			self.app_stage = APP_STAGE_LOGGED_IN;
+//            
+//            isRebinded = [self rebindCameraResource];
+//            [self callForStartScanningBonjour]; // 1. Scan with Bonjour
+//            [self scan_for_devices];            // 2. Scan with ip server
+//            
+//            // 1 & 2 work parallely
+//            
+//            //Back from login- login success
+//            //[self dismissViewControllerAnimated:NO completion:^{}];
+//            //self.progressView.hidden = NO;
+//
+//            break;
+//        }
+//#endif
 		default:
 			break;
 	}
@@ -534,6 +534,82 @@
     self.changePasswordReady = YES;
 }
 
+- (void)finishCameraSettup:(BOOL)success
+{
+    if (success)
+    {
+        [NSTimer scheduledTimerWithTimeInterval:1.5 target:self selector:@selector(openCongratePopup:) userInfo:nil repeats:NO];
+    }
+}
+
+- (void)openCongratePopup:(NSTimer *)timer
+{
+    NSString *pairedCameraUUID = [[NSUserDefaults standardUserDefaults] stringForKey:CAMERA_UDID];
+    NSUserDefaults *userDeraults = [NSUserDefaults standardUserDefaults];
+    NSMutableArray *cameraPairedBefore = [NSMutableArray arrayWithArray:[userDeraults objectForKey:@"camera_uuid_paired_before"]];
+    if (cameraPairedBefore == nil)
+    {
+        cameraPairedBefore = [[[NSMutableArray alloc] init] autorelease];
+    }
+    
+    BOOL exist = NO;
+    for (NSString *camUUID in cameraPairedBefore)
+    {
+        if ([camUUID isEqualToString:pairedCameraUUID])
+        {
+            exist = YES;
+        }
+    }
+    
+    if (exist == NO)
+    {
+        [cameraPairedBefore addObject:pairedCameraUUID];
+        [userDeraults setObject:cameraPairedBefore forKey:@"camera_uuid_paired_before"];
+        [userDeraults synchronize];
+        CongratHelpWindowPopup *popup = [[CongratHelpWindowPopup alloc] initWithTarget:self];
+        [popup show];
+        [popup release];
+    }
+    else
+    {
+        [self performSelectorInBackground:@selector(sendToServerTheCommand) withObject:nil];
+    }
+}
+
+#pragma mark - CongratHelpDelegate
+- (void)triggerSoundsGreat
+{
+    [self performSelectorInBackground:@selector(sendToServerTheCommand) withObject:nil];
+}
+
+- (void)sendToServerTheCommand
+{
+    NSLog(@"%s Camera registration id: %@", __FUNCTION__, [[NSUserDefaults standardUserDefaults] stringForKey:CAMERA_UDID]);
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString * userEmail  = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
+    NSString * userPass   = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
+    NSString * userApiKey = (NSString *) [userDefaults objectForKey:@"PortalApiKey"];
+    
+    UserAccount *userAccount = [[UserAccount alloc] initWithUser:userEmail
+                                                        password:userPass
+                                                          apiKey:userApiKey
+                                                        listener:nil];
+    [userAccount sendToServerTheCommand:@"set_motion_area&grid=1x1&zone=00"];
+    
+    if ([[NSUserDefaults standardUserDefaults] integerForKey:SET_UP_CAMERA] != SETUP_CAMERA_FOCUS73)
+    {
+        [userAccount sendToServerTheCommand:@"vox_enable"];
+        [userAccount sendToServerTheCommand:@"set_temp_lo_enable&value=1"];
+        [userAccount sendToServerTheCommand:@"set_temp_hi_enable&value=1"];
+    }
+    else
+    {
+        NSLog(@"%s Setup model Focus73.", __FUNCTION__);
+    }
+    [userAccount release];
+}
+
+#pragma mark -
 -(BOOL) rebindCameraResource
 {
     BOOL restore_successful = FALSE;
@@ -1709,616 +1785,616 @@
     [self.pushAlert show];
 }
 
-// TODO: DELETE
-#if 0 // As far as, this flow has been terminated!
-
-- (void)wakeup_display_login:(NSTimer*) timer_exp
-{
-#if 0
-    NSLog(@">>> DBG PLAYER  ");
-    PlaybackViewController *playbackViewController = [[PlaybackViewController alloc] init];
-    //playbackViewController.urlVideo = @"http://nxcomm:2009nxcomm@nxcomm-office.no-ip.info/app_release/sub_clips/48022A2CAC31_04_20130917065256730_00001.flv";
-    
-    playbackViewController.urlVideo = @"http://s3.amazonaws.com/sm.wowza.content/48022A2CAC31/clips/48022A2CAC31_04_20130918083756010_00001_last.flv?AWSAccessKeyId=AKIAIDBFDZTAR2EB4KPQ&Expires=1379501535&Signature=m%2FGcG%2BOh8wlwXcWqkiw%2BztAqAn8%3D";
-    
-    //[playbackViewController autorelease];
-    
-    [self presentViewController:playbackViewController animated:NO  completion:nil];
-#else
-    
-    
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    
-    if ([userDefaults boolForKey:_AutoLogin])
-    {
-        NSLog(@"Auto login from AppDelegate. Do nothing");
-#if 1
-        [self showLoginViewController];
-#else
-        [self show_login_or_reg:nil];
-#endif
-    }
-    else
-    {
-        self.app_stage = APP_STAGE_LOGGING_IN;
-        NSLog(@"MBP_iosVC - show LoginVC from viewDidLoad after 4s");
-#if 1
-        [self showLoginViewController];
-#else
-        [self show_login_or_reg:nil];
-#endif
-    }
-    
-    
-#endif
-}
-
-#pragma mark -
-
-- (void)createAccount
-{
-    NSLog(@"MBP_iosVC - Load RegistrationVC");
-    RegistrationViewController *registrationVC = [[RegistrationViewController alloc] init];
-    registrationVC.delegate = self;
-    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:registrationVC];
-    [self presentViewController:nav animated:YES completion:^{}];
-    //[self.navigationController presentViewController:registrationVC animated:YES completion:^{}];
-    [registrationVC release];
-}
-
-#pragma mark -
-#pragma mark SetupHTTPDelegate --- NOT USED --- check ..
-
--(void) show_login_or_reg:(NSTimer *)timer
-{
-    /*
-     * 1. If timer is NOT nil --> - check exist of crashed log file
-     * 2. If time is nil need not to check.
-     */
-    
-    BOOL hasOptionSendEmail = FALSE;
-    
-    if (timer != nil )
-    {
-        NSString *cachesDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-        NSString *logCrashedPath = [cachesDirectory stringByAppendingPathComponent:@"application_crash.log"];
-        
-        NSFileManager * fileManager = [NSFileManager defaultManager];
-        
-        if ([fileManager fileExistsAtPath:logCrashedPath])
-        {
-            NSLog(@"App was crashed!");
-            hasOptionSendEmail = TRUE;
-            
-            UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Send app log"
-                                                         message:nil
-                                                        delegate:self
-                                               cancelButtonTitle:NSLocalizedStringWithDefaultValue(@"cancel", nil, [NSBundle mainBundle], @"Cancel", nil)
-                                               otherButtonTitles:NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil), nil];
-            av.tag = 11;
-            [av show];
-            [av release];
-        }
-    }
-    
-    NSLog(@"%s: show login view - timer: %p, has crashed log: %d", __FUNCTION__, timer, hasOptionSendEmail);
-    
-    if (!hasOptionSendEmail)
-    {
-        NSLog(@"show_login... ");
-        
-        self.app_stage = APP_STAGE_LOGGING_IN;
-        
-        LoginViewController *loginVC = [[LoginViewController alloc] initWithDelegate:self];
-        [self.navigationController pushViewController:loginVC animated:NO];
-        [loginVC release];
-    }
-}
-
-- (void)dismissNotificationViewController
-{
-    id aViewController = [self.navigationController.viewControllers lastObject];
-    
-    NSLog(@"%s %d %@", __FUNCTION__, self.navigationController.viewControllers.count, aViewController);
-    
-    if ([aViewController isKindOfClass:[PlaybackViewController class]])
-    {
-        PlaybackViewController *playbackViewController = (PlaybackViewController *)aViewController;
-        [playbackViewController closePlayBack:nil];
-    }
-    else if ([aViewController isKindOfClass:[NotifViewController class]])
-    {
-        NotifViewController *aNotifVC = ((NotifViewController *)aViewController);
-        aNotifVC.notifDelegate = nil;
-        [aNotifVC cancelTaskDoInBackground];
-        //[aNotifVC.navigationController popToRootViewControllerAnimated:NO];
-    }
-    
-    [self.navigationController popToRootViewControllerAnimated:NO];
-}
-
-- (void)dismissMenuHubbleView
-{
-    NSLog(@"%s", __FUNCTION__);
-    
-    if (_menuVC != nil)
-    {
-        NSArray * views = _menuVC.navigationController.viewControllers;
-        NSLog(@"views count = %d",[views count] );
-        
-        if ( [views count] > 1)
-        {
-            if (views.count > 2)
-            {
-                id obj2 = [views objectAtIndex:2];
-                
-                if ([obj2 isKindOfClass:[PlaybackViewController class]])
-                {
-                    PlaybackViewController *playbackViewController = (PlaybackViewController *)obj2;
-                    [playbackViewController closePlayBack:nil];
-                }
-            }
-            
-            id obj = [views objectAtIndex:1];
-            
-            if ([obj isKindOfClass:[H264PlayerViewController class]])
-            {
-                H264PlayerViewController * h264PlayerViewController = (H264PlayerViewController *) obj;
-                [h264PlayerViewController prepareGoBackToCameraList:nil];
-                
-                
-            }
-            else if([obj isKindOfClass:[EarlierViewController class]]) // Camera is offline
-            {
-                [((EarlierViewController *)obj).navigationController popToRootViewControllerAnimated:NO];
-            }
-        }
-        
-        [_menuVC removeSubviews];
-        _menuVC.menuDelegate = nil;
-    }
-    
-    [self dismissViewControllerAnimated:NO completion:^{}];
-}
-
-- (void)wakeup_start_animte:(NSTi mer*) timer_exp
-{
-    NSLog(@"is animating? %d", [self.splashScreen isAnimating]);
-    
-    NSLog(@"animating images == nil? %d", (self.splashScreen.animationImages == nil));
-    NSLog(@"count? %d", [self.splashScreen.animationImages count]);
-    //[self.splashScreen startAnimating];
-}
-
-- (void)wakeup_display_first_page:(NSTimer*) timer_exp
-{
-    
-}
-
-#pragma mark -
-#pragma mark Scan For cameras
-
-- (void) scan_for_devices
-{
-    if (isRebinded)
-    {
-        
-        if ( [self isCurrentConnection3G] ||
-            [self.restored_profiles count] ==0 )
-        {
-            NSLog(@" Connection over 3g OR empty cam list  --> Skip scanning all together");
-            
-            
-            for (int j = 0; j < [restored_profiles count]; j++)
-            {
-                CamProfile * cp = (CamProfile *) [restored_profiles objectAtIndex:j];
-                
-                cp.isInLocal = FALSE;
-                cp.hasUpdateLocalStatus = TRUE;
-            }
-            [self finish_scanning];
-        }
-        else
-        {
-            nextCameraToScanIndex = self.restored_profiles.count - 1;
-            [self scan_next_camera:self.restored_profiles index:nextCameraToScanIndex];
-            
-        }
-        
-        [self performSelectorOnMainThread:@selector(startShowingCameraList:)
-                               withObject:[NSNumber numberWithInt:0]
-                            waitUntilDone:NO];
-    }
-}
-
-- (void) scan_next_camera:(NSArray *) profiles index:(int) i
-{
-    NSMutableArray * finalResult = [[NSMutableArray alloc] init];
-    CamProfile * cp = nil;
-    
-    BOOL skipScan = FALSE;
-    
-    cp =(CamProfile *) [profiles objectAtIndex:i];
-    
-    if (cp != nil &&
-        cp.mac_address !=nil)
-    {
-        
-        //Check if we are in the same network as the camera.. IF so
-        // Try to scan .. otherwise... no point ..
-        //20121130: phung: incase the ip address is not valid... also try to scan ..
-        if (cp.ip_address == nil || [self isInTheSameNetworkAsCamera:cp ])
-        {
-            skipScan = [self isCurrentIpAddressValid:cp];
-            
-            if (skipScan)
-            {
-                
-                cp.port = 80;
-                //Dont need to scan.. call scan_done directly
-                [finalResult addObject:cp];
-                
-                [self performSelector:@selector(scan_done:)
-                           withObject:finalResult afterDelay:0.1];
-                
-            }
-            else // NEED to do local scan
-            {
-                ScanForCamera *scanner = [[ScanForCamera alloc] initWithNotifier:self];
-                [scanner scan_for_device:cp.mac_address];
-                //Can't call release because app is crashed, will fix later
-                //[scanner release];
-                
-            } /* skipScan = false*/
-            
-        }
-        else
-        {
-            //Skip scanning too and assume we don't get any result
-            [self performSelector:@selector(scan_done:)
-                       withObject:nil afterDelay:0.1];
-        }
-    }
-    
-    [finalResult release];
-}
-
-- (void)scan_done:(NSArray *) _scan_results
-{
-    //limit value of nextCameraToScanIndex
-    if (nextCameraToScanIndex < 0)
-        return;
-    CamProfile * cp =(CamProfile *) [self.restored_profiles objectAtIndex:nextCameraToScanIndex];
-    //scan Done. read scan result
-    
-    
-    
-    if ( _scan_results == nil  || [_scan_results count] == 0 )
-    {
-        //Empty ..not found & also can't use the current IP?
-        //Dont add to the final result
-        cp.isInLocal = FALSE;
-        //cp.hasUpdateLocalStatus = TRUE;
-        
-    }
-    else
-    {
-        //found the camera ..
-        // --> update local IP and other info
-        
-        CamProfile* scanned;
-        for (int i=0 ; i< [_scan_results count]; i++)
-        {
-            scanned = ((CamProfile*) [_scan_results objectAtIndex:i]);
-            
-            if ([scanned.mac_address isEqualToString:cp.mac_address])
-            {
-                cp.ip_address = ((CamProfile*) [_scan_results objectAtIndex:i]).ip_address;
-                cp.isInLocal = TRUE;
-                cp.port = ((CamProfile*) [_scan_results objectAtIndex:i]).port;//localport is always 80
-                cp.hasUpdateLocalStatus = TRUE;
-                
-                break;
-            }
-            
-        }
-    }
-    
-    NSLog(@"cam:%@ -is in Local:%d -fw:%@", cp.mac_address, cp.isInLocal, cp.fw_version);
-    --nextCameraToScanIndex;
-    [self scanNextIndex:&nextCameraToScanIndex]; // Sync results of ipserver & bonjour
-}
-
-- (void) scanNextIndex: (int *) index
-{
-    // Stop scanning
-    if (*index == -1)
-    {
-        NSLog(@"Scan done with ipserver");
-        NSDate * endDate = [NSDate dateWithTimeIntervalSinceNow:0.5];
-        while ([bonjourThread isExecuting])
-        {
-            [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:endDate];
-        }
-        
-        NSLog(@"\n=================================\nSCAN DONE - IPSERVER SYNC BONJOUR\nrestored_profiles: %@\nbonjourList: %@\n=================================\n", restored_profiles, bonjourList);
-        
-        if(bonjourList && [bonjourList count] != 0)
-        {
-            for (CamProfile * cp in restored_profiles)
-            {
-                for (CamProfile * cam in bonjourList)
-                {
-                    if ([cp.mac_address isEqualToString:cam.mac_address])
-                    {
-                        NSLog(@"Camera %@ is on Bonjour, -port: %d", cp.mac_address, cam.port);
-                        
-                        cp.ip_address = cam.ip_address;
-                        cp.isInLocal = YES;
-                        cp.port = cam.port;
-                        
-                        break;
-                    }
-                }
-                
-                //cp.hasUpdateLocalStatus = YES;
-            }
-        }
-        
-        for (CamProfile * cp in restored_profiles)
-        {
-            cp.hasUpdateLocalStatus = YES;
-        }
-        
-        [self finish_scanning];
-    }
-    // this camera at index has not been scanned
-#if 1
-    else if (*index > -1)
-    {
-        if (self.menuVC != nil)
-        {
-            NSLog(@"reload CamerasTableView in scan_done");
-            // Notify to menuVC
-            NSLog(@"%p, %p, %p", self, self.menuVC, self.menuVC.camerasVC);
-            [self.menuVC.camerasVC camerasReloadData];
-        }
-        
-        if (((CamProfile *)[self.restored_profiles objectAtIndex:*index]).hasUpdateLocalStatus == NO)
-        {
-            NSLog(@"This camera at index has not been scanned");
-            [self scan_next_camera:self.restored_profiles index:*index];
-        }
-        else
-        {
-            NSLog(@"This camera at index has been scanned");
-            
-            --(*index);
-            [self scanNextIndex:index];
-        }
-    }
-#else
-
-#endif
-}
-
-- (void)finish_scanning
-{
-#if 1
-    //Notify to MenuVC
-    [self.menuVC.camerasVC camerasReloadData];
-#else
-
-#endif
-}
-
-
-
--(BOOL) isInTheSameNetworkAsCamera :(CamProfile *) cp
-{
-    long ip = 0, ownip =0 ;
-    long netMask = 0 ;
-    struct ifaddrs *ifa = NULL, *ifList;
-    
-    NSString * bc = @"";
-    NSString * own = @"";
-    [MBP_iosViewController getBroadcastAddress:&bc AndOwnIp:&own ipasLong:&ownip];
-    
-    
-    getifaddrs(&ifList); // should check for errors
-    for (ifa = ifList; ifa != NULL; ifa = ifa->ifa_next) {
-        
-        
-        if (ifa->ifa_netmask != NULL)
-        {
-            ip = (( struct sockaddr_in *)ifa->ifa_addr)->sin_addr.s_addr;
-            if (ip == ownip)
-            {
-                netMask = (( struct sockaddr_in *)ifa->ifa_netmask)->sin_addr.s_addr;
-                
-                break;
-            }
-        }
-        
-    }
-    freeifaddrs(ifList); // clean up after yourself
-    
-    
-    if (netMask ==0 || ip ==0)
-    {
-        return FALSE;
-    }
-    
-    long camera_ip =0 ;
-    if (cp != nil &&
-        cp.ip_address != nil)
-    {
-        NSArray * tokens = [cp.ip_address componentsSeparatedByString:@"."];
-        if ([tokens count] != 4)
-        {
-            //sth is wrong
-            return FALSE;
-        }
-        
-        camera_ip = [tokens[0] integerValue] |
-        ([tokens[1] integerValue] << 8) |
-        ([tokens[2] integerValue] << 16) |
-        ([tokens[3] integerValue] << 24) ;
-        
-        
-        
-        if ( (camera_ip & netMask) == (ip & netMask))
-        {
-            NSLog(@"in same subnet");
-            return TRUE;
-        }
-    }
-    
-    return FALSE;
-}
-
--(BOOL) isCurrentIpAddressValid :(CamProfile *) cp
-{
-    if (cp != nil &&
-        cp.ip_address != nil)
-    {
-        HttpCommunication * dev_com = [[HttpCommunication alloc] init];
-        
-        dev_com.device_ip = cp.ip_address;
-        
-        NSString * mac = [dev_com sendCommandAndBlock:GET_MAC_ADDRESS withTimeout:3.0];
-        
-        [dev_com release];
-        
-        if (mac != nil && mac.length == 12)
-        {
-            mac = [Util add_colon_to_mac:mac];
-            
-            
-            if([mac isEqualToString:cp.mac_address])
-            {
-                return TRUE;
-            }
-        }
-        
-    }
-    
-    
-    return FALSE;
-}
-
-
-#pragma mark -
-#pragma mark 3G connection checks
-
-
--(BOOL) isCurrentConnection3G
-{
-    Reachability *reachability = [Reachability reachabilityForInternetConnection];
-    [reachability startNotifier];
-    
-    NetworkStatus status = [reachability currentReachabilityStatus];
-    
-    if(status == NotReachable)
-    {
-        //No internet
-    }
-    else if (status == ReachableViaWiFi)
-    {
-        //WiFi
-    }
-    else if (status == ReachableViaWWAN)
-    {
-        //3G
-        
-        return TRUE;
-    }
-    
-    
-    return FALSE;
-    
-}
-
--(void) callForStartScanningBonjour
-{
-    
-    if (isRebinded)
-    {
-        if ( [self isCurrentConnection3G] ||
-            [self.restored_profiles count] ==0)
-        {
-            NSLog(@" Connection over 3g OR empty cam list  --> Skip scanning all together");
-            
-            
-            for (int j = 0; j < [restored_profiles count]; j++)
-            {
-                CamProfile * cp = (CamProfile *) [restored_profiles objectAtIndex:j];
-                
-                cp.isInLocal = FALSE;
-                cp.hasUpdateLocalStatus = TRUE;
-            }
-            
-            [self finish_scanning];
-        }
-        else
-        {
-            bonjourThread = [[NSThread alloc] initWithTarget:self selector:@selector(scan_with_bonjour) object:nil];
-            [bonjourThread start];
-        }
-    }
-}
-
--(void) scan_with_bonjour
-{
-    @autoreleasepool
-    {
-        NSDate * endDate;
-        // When use autoreleseapool, no need to call autorelease.
-        _bonjourBrowser = [[Bonjour alloc] initSetupWith:self.restored_profiles];
-        [_bonjourBrowser setDelegate:self];
-        
-        [_bonjourBrowser startScanLocalWiFi];
-        
-        endDate = [NSDate dateWithTimeIntervalSinceNow:0.5];
-        while (_bonjourBrowser.isSearching)
-        {
-            [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:endDate];
-        }
-        bonjourList = _bonjourBrowser.cameraList;
-    }
-    
-    [NSThread exit];
-}
-
-- (BOOL) isThisMacStoredOffline:(NSString*) mac_without_colon
-{
-    
-    if (self.restored_profiles == nil &&
-        self.channel_array == nil)
-    {
-        // No offline data is available --> force re login
-        return FALSE;
-        
-    }
-    
-    
-    CamProfile * cp = nil;
-    for (int i =0; i< [self.restored_profiles count]; i++)
-    {
-        cp = (CamProfile *) [self.restored_profiles objectAtIndex:i];
-        if (cp!= nil &&
-            cp.mac_address != nil )
-        {
-            NSString *  mac_wo_colon = [Util strip_colon_fr_mac:cp.mac_address];
-            if ([mac_wo_colon isEqualToString:mac_without_colon])
-            {
-                return TRUE;
-            }
-        }
-        
-    }
-    
-    return FALSE;
-}
-#endif
+//// TODO: DELETE
+//#if 0 // As far as, this flow has been terminated!
+//
+//- (void)wakeup_display_login:(NSTimer*) timer_exp
+//{
+//#if 0
+//    NSLog(@">>> DBG PLAYER  ");
+//    PlaybackViewController *playbackViewController = [[PlaybackViewController alloc] init];
+//    //playbackViewController.urlVideo = @"http://nxcomm:2009nxcomm@nxcomm-office.no-ip.info/app_release/sub_clips/48022A2CAC31_04_20130917065256730_00001.flv";
+//    
+//    playbackViewController.urlVideo = @"http://s3.amazonaws.com/sm.wowza.content/48022A2CAC31/clips/48022A2CAC31_04_20130918083756010_00001_last.flv?AWSAccessKeyId=AKIAIDBFDZTAR2EB4KPQ&Expires=1379501535&Signature=m%2FGcG%2BOh8wlwXcWqkiw%2BztAqAn8%3D";
+//    
+//    //[playbackViewController autorelease];
+//    
+//    [self presentViewController:playbackViewController animated:NO  completion:nil];
+//#else
+//    
+//    
+//    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+//    
+//    if ([userDefaults boolForKey:_AutoLogin])
+//    {
+//        NSLog(@"Auto login from AppDelegate. Do nothing");
+//#if 1
+//        [self showLoginViewController];
+//#else
+//        [self show_login_or_reg:nil];
+//#endif
+//    }
+//    else
+//    {
+//        self.app_stage = APP_STAGE_LOGGING_IN;
+//        NSLog(@"MBP_iosVC - show LoginVC from viewDidLoad after 4s");
+//#if 1
+//        [self showLoginViewController];
+//#else
+//        [self show_login_or_reg:nil];
+//#endif
+//    }
+//    
+//    
+//#endif
+//}
+//
+//#pragma mark -
+//
+//- (void)createAccount
+//{
+//    NSLog(@"MBP_iosVC - Load RegistrationVC");
+//    RegistrationViewController *registrationVC = [[RegistrationViewController alloc] init];
+//    registrationVC.delegate = self;
+//    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:registrationVC];
+//    [self presentViewController:nav animated:YES completion:^{}];
+//    //[self.navigationController presentViewController:registrationVC animated:YES completion:^{}];
+//    [registrationVC release];
+//}
+//
+//#pragma mark -
+//#pragma mark SetupHTTPDelegate --- NOT USED --- check ..
+//
+//-(void) show_login_or_reg:(NSTimer *)timer
+//{
+//    /*
+//     * 1. If timer is NOT nil --> - check exist of crashed log file
+//     * 2. If time is nil need not to check.
+//     */
+//    
+//    BOOL hasOptionSendEmail = FALSE;
+//    
+//    if (timer != nil )
+//    {
+//        NSString *cachesDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+//        NSString *logCrashedPath = [cachesDirectory stringByAppendingPathComponent:@"application_crash.log"];
+//        
+//        NSFileManager * fileManager = [NSFileManager defaultManager];
+//        
+//        if ([fileManager fileExistsAtPath:logCrashedPath])
+//        {
+//            NSLog(@"App was crashed!");
+//            hasOptionSendEmail = TRUE;
+//            
+//            UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Send app log"
+//                                                         message:nil
+//                                                        delegate:self
+//                                               cancelButtonTitle:NSLocalizedStringWithDefaultValue(@"cancel", nil, [NSBundle mainBundle], @"Cancel", nil)
+//                                               otherButtonTitles:NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil), nil];
+//            av.tag = 11;
+//            [av show];
+//            [av release];
+//        }
+//    }
+//    
+//    NSLog(@"%s: show login view - timer: %p, has crashed log: %d", __FUNCTION__, timer, hasOptionSendEmail);
+//    
+//    if (!hasOptionSendEmail)
+//    {
+//        NSLog(@"show_login... ");
+//        
+//        self.app_stage = APP_STAGE_LOGGING_IN;
+//        
+//        LoginViewController *loginVC = [[LoginViewController alloc] initWithDelegate:self];
+//        [self.navigationController pushViewController:loginVC animated:NO];
+//        [loginVC release];
+//    }
+//}
+//
+//- (void)dismissNotificationViewController
+//{
+//    id aViewController = [self.navigationController.viewControllers lastObject];
+//    
+//    NSLog(@"%s %d %@", __FUNCTION__, self.navigationController.viewControllers.count, aViewController);
+//    
+//    if ([aViewController isKindOfClass:[PlaybackViewController class]])
+//    {
+//        PlaybackViewController *playbackViewController = (PlaybackViewController *)aViewController;
+//        [playbackViewController closePlayBack:nil];
+//    }
+//    else if ([aViewController isKindOfClass:[NotifViewController class]])
+//    {
+//        NotifViewController *aNotifVC = ((NotifViewController *)aViewController);
+//        aNotifVC.notifDelegate = nil;
+//        [aNotifVC cancelTaskDoInBackground];
+//        //[aNotifVC.navigationController popToRootViewControllerAnimated:NO];
+//    }
+//    
+//    [self.navigationController popToRootViewControllerAnimated:NO];
+//}
+//
+//- (void)dismissMenuHubbleView
+//{
+//    NSLog(@"%s", __FUNCTION__);
+//    
+//    if (_menuVC != nil)
+//    {
+//        NSArray * views = _menuVC.navigationController.viewControllers;
+//        NSLog(@"views count = %d",[views count] );
+//        
+//        if ( [views count] > 1)
+//        {
+//            if (views.count > 2)
+//            {
+//                id obj2 = [views objectAtIndex:2];
+//                
+//                if ([obj2 isKindOfClass:[PlaybackViewController class]])
+//                {
+//                    PlaybackViewController *playbackViewController = (PlaybackViewController *)obj2;
+//                    [playbackViewController closePlayBack:nil];
+//                }
+//            }
+//            
+//            id obj = [views objectAtIndex:1];
+//            
+//            if ([obj isKindOfClass:[H264PlayerViewController class]])
+//            {
+//                H264PlayerViewController * h264PlayerViewController = (H264PlayerViewController *) obj;
+//                [h264PlayerViewController prepareGoBackToCameraList:nil];
+//                
+//                
+//            }
+//            else if([obj isKindOfClass:[EarlierViewController class]]) // Camera is offline
+//            {
+//                [((EarlierViewController *)obj).navigationController popToRootViewControllerAnimated:NO];
+//            }
+//        }
+//        
+//        [_menuVC removeSubviews];
+//        _menuVC.menuDelegate = nil;
+//    }
+//    
+//    [self dismissViewControllerAnimated:NO completion:^{}];
+//}
+//
+//- (void)wakeup_start_animte:(NSTi mer*) timer_exp
+//{
+//    NSLog(@"is animating? %d", [self.splashScreen isAnimating]);
+//    
+//    NSLog(@"animating images == nil? %d", (self.splashScreen.animationImages == nil));
+//    NSLog(@"count? %d", [self.splashScreen.animationImages count]);
+//    //[self.splashScreen startAnimating];
+//}
+//
+//- (void)wakeup_display_first_page:(NSTimer*) timer_exp
+//{
+//    
+//}
+//
+//#pragma mark -
+//#pragma mark Scan For cameras
+//
+//- (void) scan_for_devices
+//{
+//    if (isRebinded)
+//    {
+//        
+//        if ( [self isCurrentConnection3G] ||
+//            [self.restored_profiles count] ==0 )
+//        {
+//            NSLog(@" Connection over 3g OR empty cam list  --> Skip scanning all together");
+//            
+//            
+//            for (int j = 0; j < [restored_profiles count]; j++)
+//            {
+//                CamProfile * cp = (CamProfile *) [restored_profiles objectAtIndex:j];
+//                
+//                cp.isInLocal = FALSE;
+//                cp.hasUpdateLocalStatus = TRUE;
+//            }
+//            [self finish_scanning];
+//        }
+//        else
+//        {
+//            nextCameraToScanIndex = self.restored_profiles.count - 1;
+//            [self scan_next_camera:self.restored_profiles index:nextCameraToScanIndex];
+//            
+//        }
+//        
+//        [self performSelectorOnMainThread:@selector(startShowingCameraList:)
+//                               withObject:[NSNumber numberWithInt:0]
+//                            waitUntilDone:NO];
+//    }
+//}
+//
+//- (void) scan_next_camera:(NSArray *) profiles index:(int) i
+//{
+//    NSMutableArray * finalResult = [[NSMutableArray alloc] init];
+//    CamProfile * cp = nil;
+//    
+//    BOOL skipScan = FALSE;
+//    
+//    cp =(CamProfile *) [profiles objectAtIndex:i];
+//    
+//    if (cp != nil &&
+//        cp.mac_address !=nil)
+//    {
+//        
+//        //Check if we are in the same network as the camera.. IF so
+//        // Try to scan .. otherwise... no point ..
+//        //20121130: phung: incase the ip address is not valid... also try to scan ..
+//        if (cp.ip_address == nil || [self isInTheSameNetworkAsCamera:cp ])
+//        {
+//            skipScan = [self isCurrentIpAddressValid:cp];
+//            
+//            if (skipScan)
+//            {
+//                
+//                cp.port = 80;
+//                //Dont need to scan.. call scan_done directly
+//                [finalResult addObject:cp];
+//                
+//                [self performSelector:@selector(scan_done:)
+//                           withObject:finalResult afterDelay:0.1];
+//                
+//            }
+//            else // NEED to do local scan
+//            {
+//                ScanForCamera *scanner = [[ScanForCamera alloc] initWithNotifier:self];
+//                [scanner scan_for_device:cp.mac_address];
+//                //Can't call release because app is crashed, will fix later
+//                //[scanner release];
+//                
+//            } /* skipScan = false*/
+//            
+//        }
+//        else
+//        {
+//            //Skip scanning too and assume we don't get any result
+//            [self performSelector:@selector(scan_done:)
+//                       withObject:nil afterDelay:0.1];
+//        }
+//    }
+//    
+//    [finalResult release];
+//}
+//
+//- (void)scan_done:(NSArray *) _scan_results
+//{
+//    //limit value of nextCameraToScanIndex
+//    if (nextCameraToScanIndex < 0)
+//        return;
+//    CamProfile * cp =(CamProfile *) [self.restored_profiles objectAtIndex:nextCameraToScanIndex];
+//    //scan Done. read scan result
+//    
+//    
+//    
+//    if ( _scan_results == nil  || [_scan_results count] == 0 )
+//    {
+//        //Empty ..not found & also can't use the current IP?
+//        //Dont add to the final result
+//        cp.isInLocal = FALSE;
+//        //cp.hasUpdateLocalStatus = TRUE;
+//        
+//    }
+//    else
+//    {
+//        //found the camera ..
+//        // --> update local IP and other info
+//        
+//        CamProfile* scanned;
+//        for (int i=0 ; i< [_scan_results count]; i++)
+//        {
+//            scanned = ((CamProfile*) [_scan_results objectAtIndex:i]);
+//            
+//            if ([scanned.mac_address isEqualToString:cp.mac_address])
+//            {
+//                cp.ip_address = ((CamProfile*) [_scan_results objectAtIndex:i]).ip_address;
+//                cp.isInLocal = TRUE;
+//                cp.port = ((CamProfile*) [_scan_results objectAtIndex:i]).port;//localport is always 80
+//                cp.hasUpdateLocalStatus = TRUE;
+//                
+//                break;
+//            }
+//            
+//        }
+//    }
+//    
+//    NSLog(@"cam:%@ -is in Local:%d -fw:%@", cp.mac_address, cp.isInLocal, cp.fw_version);
+//    --nextCameraToScanIndex;
+//    [self scanNextIndex:&nextCameraToScanIndex]; // Sync results of ipserver & bonjour
+//}
+//
+//- (void) scanNextIndex: (int *) index
+//{
+//    // Stop scanning
+//    if (*index == -1)
+//    {
+//        NSLog(@"Scan done with ipserver");
+//        NSDate * endDate = [NSDate dateWithTimeIntervalSinceNow:0.5];
+//        while ([bonjourThread isExecuting])
+//        {
+//            [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:endDate];
+//        }
+//        
+//        NSLog(@"\n=================================\nSCAN DONE - IPSERVER SYNC BONJOUR\nrestored_profiles: %@\nbonjourList: %@\n=================================\n", restored_profiles, bonjourList);
+//        
+//        if(bonjourList && [bonjourList count] != 0)
+//        {
+//            for (CamProfile * cp in restored_profiles)
+//            {
+//                for (CamProfile * cam in bonjourList)
+//                {
+//                    if ([cp.mac_address isEqualToString:cam.mac_address])
+//                    {
+//                        NSLog(@"Camera %@ is on Bonjour, -port: %d", cp.mac_address, cam.port);
+//                        
+//                        cp.ip_address = cam.ip_address;
+//                        cp.isInLocal = YES;
+//                        cp.port = cam.port;
+//                        
+//                        break;
+//                    }
+//                }
+//                
+//                //cp.hasUpdateLocalStatus = YES;
+//            }
+//        }
+//        
+//        for (CamProfile * cp in restored_profiles)
+//        {
+//            cp.hasUpdateLocalStatus = YES;
+//        }
+//        
+//        [self finish_scanning];
+//    }
+//    // this camera at index has not been scanned
+//#if 1
+//    else if (*index > -1)
+//    {
+//        if (self.menuVC != nil)
+//        {
+//            NSLog(@"reload CamerasTableView in scan_done");
+//            // Notify to menuVC
+//            NSLog(@"%p, %p, %p", self, self.menuVC, self.menuVC.camerasVC);
+//            [self.menuVC.camerasVC camerasReloadData];
+//        }
+//        
+//        if (((CamProfile *)[self.restored_profiles objectAtIndex:*index]).hasUpdateLocalStatus == NO)
+//        {
+//            NSLog(@"This camera at index has not been scanned");
+//            [self scan_next_camera:self.restored_profiles index:*index];
+//        }
+//        else
+//        {
+//            NSLog(@"This camera at index has been scanned");
+//            
+//            --(*index);
+//            [self scanNextIndex:index];
+//        }
+//    }
+//#else
+//
+//#endif
+//}
+//
+//- (void)finish_scanning
+//{
+//#if 1
+//    //Notify to MenuVC
+//    [self.menuVC.camerasVC camerasReloadData];
+//#else
+//
+//#endif
+//}
+//
+//
+//
+//-(BOOL) isInTheSameNetworkAsCamera :(CamProfile *) cp
+//{
+//    long ip = 0, ownip =0 ;
+//    long netMask = 0 ;
+//    struct ifaddrs *ifa = NULL, *ifList;
+//    
+//    NSString * bc = @"";
+//    NSString * own = @"";
+//    [MBP_iosViewController getBroadcastAddress:&bc AndOwnIp:&own ipasLong:&ownip];
+//    
+//    
+//    getifaddrs(&ifList); // should check for errors
+//    for (ifa = ifList; ifa != NULL; ifa = ifa->ifa_next) {
+//        
+//        
+//        if (ifa->ifa_netmask != NULL)
+//        {
+//            ip = (( struct sockaddr_in *)ifa->ifa_addr)->sin_addr.s_addr;
+//            if (ip == ownip)
+//            {
+//                netMask = (( struct sockaddr_in *)ifa->ifa_netmask)->sin_addr.s_addr;
+//                
+//                break;
+//            }
+//        }
+//        
+//    }
+//    freeifaddrs(ifList); // clean up after yourself
+//    
+//    
+//    if (netMask ==0 || ip ==0)
+//    {
+//        return FALSE;
+//    }
+//    
+//    long camera_ip =0 ;
+//    if (cp != nil &&
+//        cp.ip_address != nil)
+//    {
+//        NSArray * tokens = [cp.ip_address componentsSeparatedByString:@"."];
+//        if ([tokens count] != 4)
+//        {
+//            //sth is wrong
+//            return FALSE;
+//        }
+//        
+//        camera_ip = [tokens[0] integerValue] |
+//        ([tokens[1] integerValue] << 8) |
+//        ([tokens[2] integerValue] << 16) |
+//        ([tokens[3] integerValue] << 24) ;
+//        
+//        
+//        
+//        if ( (camera_ip & netMask) == (ip & netMask))
+//        {
+//            NSLog(@"in same subnet");
+//            return TRUE;
+//        }
+//    }
+//    
+//    return FALSE;
+//}
+//
+//-(BOOL) isCurrentIpAddressValid :(CamProfile *) cp
+//{
+//    if (cp != nil &&
+//        cp.ip_address != nil)
+//    {
+//        HttpCommunication * dev_com = [[HttpCommunication alloc] init];
+//        
+//        dev_com.device_ip = cp.ip_address;
+//        
+//        NSString * mac = [dev_com sendCommandAndBlock:GET_MAC_ADDRESS withTimeout:3.0];
+//        
+//        [dev_com release];
+//        
+//        if (mac != nil && mac.length == 12)
+//        {
+//            mac = [Util add_colon_to_mac:mac];
+//            
+//            
+//            if([mac isEqualToString:cp.mac_address])
+//            {
+//                return TRUE;
+//            }
+//        }
+//        
+//    }
+//    
+//    
+//    return FALSE;
+//}
+//
+//
+//#pragma mark -
+//#pragma mark 3G connection checks
+//
+//
+//-(BOOL) isCurrentConnection3G
+//{
+//    Reachability *reachability = [Reachability reachabilityForInternetConnection];
+//    [reachability startNotifier];
+//    
+//    NetworkStatus status = [reachability currentReachabilityStatus];
+//    
+//    if(status == NotReachable)
+//    {
+//        //No internet
+//    }
+//    else if (status == ReachableViaWiFi)
+//    {
+//        //WiFi
+//    }
+//    else if (status == ReachableViaWWAN)
+//    {
+//        //3G
+//        
+//        return TRUE;
+//    }
+//    
+//    
+//    return FALSE;
+//    
+//}
+//
+//-(void) callForStartScanningBonjour
+//{
+//    
+//    if (isRebinded)
+//    {
+//        if ( [self isCurrentConnection3G] ||
+//            [self.restored_profiles count] ==0)
+//        {
+//            NSLog(@" Connection over 3g OR empty cam list  --> Skip scanning all together");
+//            
+//            
+//            for (int j = 0; j < [restored_profiles count]; j++)
+//            {
+//                CamProfile * cp = (CamProfile *) [restored_profiles objectAtIndex:j];
+//                
+//                cp.isInLocal = FALSE;
+//                cp.hasUpdateLocalStatus = TRUE;
+//            }
+//            
+//            [self finish_scanning];
+//        }
+//        else
+//        {
+//            bonjourThread = [[NSThread alloc] initWithTarget:self selector:@selector(scan_with_bonjour) object:nil];
+//            [bonjourThread start];
+//        }
+//    }
+//}
+//
+//-(void) scan_with_bonjour
+//{
+//    @autoreleasepool
+//    {
+//        NSDate * endDate;
+//        // When use autoreleseapool, no need to call autorelease.
+//        _bonjourBrowser = [[Bonjour alloc] initSetupWith:self.restored_profiles];
+//        [_bonjourBrowser setDelegate:self];
+//        
+//        [_bonjourBrowser startScanLocalWiFi];
+//        
+//        endDate = [NSDate dateWithTimeIntervalSinceNow:0.5];
+//        while (_bonjourBrowser.isSearching)
+//        {
+//            [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:endDate];
+//        }
+//        bonjourList = _bonjourBrowser.cameraList;
+//    }
+//    
+//    [NSThread exit];
+//}
+//
+//- (BOOL) isThisMacStoredOffline:(NSString*) mac_without_colon
+//{
+//    
+//    if (self.restored_profiles == nil &&
+//        self.channel_array == nil)
+//    {
+//        // No offline data is available --> force re login
+//        return FALSE;
+//        
+//    }
+//    
+//    
+//    CamProfile * cp = nil;
+//    for (int i =0; i< [self.restored_profiles count]; i++)
+//    {
+//        cp = (CamProfile *) [self.restored_profiles objectAtIndex:i];
+//        if (cp!= nil &&
+//            cp.mac_address != nil )
+//        {
+//            NSString *  mac_wo_colon = [Util strip_colon_fr_mac:cp.mac_address];
+//            if ([mac_wo_colon isEqualToString:mac_without_colon])
+//            {
+//                return TRUE;
+//            }
+//        }
+//        
+//    }
+//    
+//    return FALSE;
+//}
+//#endif
 @end

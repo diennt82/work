@@ -73,8 +73,8 @@
         rect = CGRectMake(0, buttonOffsetY, self.contentView.frame.size.width, buttonHeight - 1);
         UIButton *button = [[UIButton alloc] initWithFrame:rect];
         [button setTitle:title forState:UIControlStateNormal];
-        [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        [button setTitleColor:[UIColor blueColor] forState:UIControlStateHighlighted];
+        [button setTitleColor:button.tintColor forState:UIControlStateNormal];
+        [button setTitleColor:[UIColor grayColor] forState:UIControlStateHighlighted];
         button.tag = [key intValue];
         [button addTarget:self action:@selector(handleButtonTouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
         [self.actionView addSubview:button];

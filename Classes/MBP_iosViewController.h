@@ -10,6 +10,7 @@
 
 #import "ConnectionMethodDelegate.h"
 #import "CameraAlert.h"
+#import "CongratHelpWindowPopup.h"
 
 #define APP_STAGE_INIT          1
 #define APP_STAGE_LOGGING_IN    2
