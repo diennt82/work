@@ -102,7 +102,7 @@
             }
         }
         else {
-            NSLog(@"[CamerasViewController viewDidAppear:] did not find a camera!");
+            DLog(@"[CamerasViewController viewDidAppear:] did not find a camera!");
         }
     }
     else {
@@ -154,7 +154,7 @@
             obj.waitingForStreamerToClose = NO;
         }
         else {
-            NSLog(@"%@ ->waitingForClose: %d", obj.profile.name, obj.waitingForStreamerToClose);
+            DLog(@"%@ ->waitingForClose: %d", obj.profile.name, obj.waitingForStreamerToClose);
         }
     }
     
@@ -183,11 +183,11 @@
 	switch (dialogType) {
 		case DIALOG_CANT_ADD_CAM:
 		{
-			UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
-                                                            message:LocStr(@"remove_one_cam")
+			UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil
+                                                            message:LocStr(@"Remove one camera from the current list before addding a new one.")
                                                            delegate:nil
-                                                  cancelButtonTitle:LocStr(@"OK")
-                                                  otherButtonTitles:nil];
+                                                  cancelButtonTitle:nil
+                                                  otherButtonTitles:LocStr(@"Ok"), nil];
 			[alert show];
 			break;
 		}
@@ -297,7 +297,7 @@
         cell = [tableView dequeueReusableCellWithIdentifier:AddCellIdentifier];
         if ( !cell ) {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:AddCellIdentifier];
-            cell.textLabel.text = @"Add camera";
+            cell.textLabel.text = LocStr(@"Add camera");
             cell.textLabel.textColor = [UIColor whiteColor];
             cell.imageView.image = [UIImage imageNamed:@"add_camera"];
             cell.contentView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"add_camera_btn"]];
@@ -362,20 +362,20 @@
         
         if ([ch.profile isFwUpgrading:[NSDate date]]) {
             camerasCell.ibIconStatusCamera.image = [UIImage imageNamed:@"online"];
-            camerasCell.ibTextStatusCamera.text = @"Upgrading...";
+            camerasCell.ibTextStatusCamera.text = LocStr(@"Upgrading...");
             camerasCell.selectionStyle = UITableViewCellSelectionStyleNone;
             camerasCell.accessoryType = UITableViewCellAccessoryNone;
             
-            NSLog(@"%s Fw is upgrading...", __FUNCTION__);
+            DLog(@"%s Fw is upgrading...", __FUNCTION__);
             [self performSelectorOnMainThread:@selector(updateCameraInfoWithDelay) withObject:nil waitUntilDone:NO];
         }
         else if ([ch.profile isNotAvailable]) {
             [camerasCell.ibIconStatusCamera setImage:[UIImage imageNamed:@"offline"]];
-            [camerasCell.ibTextStatusCamera setText:@"Offline"];
+            [camerasCell.ibTextStatusCamera setText:LocStr(@"Offline")];
         }
         else {
             [camerasCell.ibIconStatusCamera setImage:[UIImage imageNamed:@"online"]];
-            [camerasCell.ibTextStatusCamera setText:@"Online"];
+            [camerasCell.ibTextStatusCamera setText:LocStr(@"Online")];
         }
     }
     
@@ -399,7 +399,7 @@
         
         if ([ch.profile isNotAvailable]) {
             if ([ch.profile isSharedCam]) {
-                NSLog(@"CamerasVC - didSelectRowAtIndexPath - Selected camera is NOT available & is SHARED_CAM");
+                DLog(@"CamerasVC - didSelectRowAtIndexPath - Selected camera is NOT available & is SHARED_CAM");
             }
             else {
                 // Show Timeline view
