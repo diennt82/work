@@ -32,7 +32,16 @@
     [super viewDidLoad];
     
     self.imageCellWidth = UIScreen.mainScreen.bounds.size.width / 8;
-    self.dayArray = [NSArray arrayWithObjects:@"Hours", @"Mon", @"Tue", @"Wed", @"Thur", @"Fri", @"Sat", @"Sun", nil];
+    self.dayArray = @[
+                      LocStr(@"Hours"),
+                      LocStr(@"Mon"),
+                      LocStr(@"Tue"),
+                      LocStr(@"Wed"),
+                      LocStr(@"Thur"),
+                      LocStr(@"Fri"),
+                      LocStr(@"Sat"),
+                      LocStr(@"Sun")
+                      ];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 }
 
@@ -139,17 +148,17 @@
             [dayLabel setBackgroundColor:[UIColor colorWithPatternImage:image]];
             
             if (indexPath.row == 0) {
-                dayLabel.text = @"Midnight";
+                dayLabel.text = LocStr(@"Midnight");
             }
             else {
                 if (indexPath.row < 12) {
-                    dayLabel.text = [NSString stringWithFormat:@"%d am", indexPath.row];
+                    dayLabel.text = [NSString stringWithFormat:LocStr(@"%d am"), indexPath.row];
                 }
                 else if(indexPath.row == 12) {
-                    dayLabel.text = @"Noon";
+                    dayLabel.text = LocStr(@"Noon");
                 }
                 else {
-                    dayLabel.text = [NSString stringWithFormat:@"%d pm", indexPath.row - 12];
+                    dayLabel.text = [NSString stringWithFormat:LocStr(@"%d pm"), indexPath.row - 12];
                 }
             }
             dayLabel.textColor = [UIColor whiteColor];

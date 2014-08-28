@@ -26,21 +26,20 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
+
     [self.collectionViewMap registerClass:[SchedulingCell class] forCellWithReuseIdentifier:@"SchedulingCell"];
-    self.collectionViewMap.multipleTouchEnabled = YES;
-    self.collectionViewMap.allowsMultipleSelection = YES;
+    _collectionViewMap.multipleTouchEnabled = YES;
+    _collectionViewMap.allowsMultipleSelection = YES;
     
-    self.collectionViewMap.delegate = self;
-    self.collectionViewMap.dataSource = self;
-    self.collectionViewMap.contentSize = CGSizeMake(UIScreen.mainScreen.bounds.size.width, 320);
+    _collectionViewMap.delegate = self;
+    _collectionViewMap.dataSource = self;
+    _collectionViewMap.contentSize = CGSizeMake(UIScreen.mainScreen.bounds.size.width, 320);
     
     UIPanGestureRecognizer *gestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handleGesture:)];
     [self.view addGestureRecognizer:gestureRecognizer];
     [gestureRecognizer setMinimumNumberOfTouches:1];
     [gestureRecognizer setMaximumNumberOfTouches:1];
     
-    //self.everydayFlag = TRUE;
     if ([[UIDevice currentDevice].systemVersion floatValue] < 7.0f &&
         UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
     {
@@ -52,14 +51,22 @@
         self.cellSizeMax = UIScreen.mainScreen.bounds.size.width - _cellSize;
     }
     
-    self.arrayDays = [NSArray arrayWithObjects:@"M", @"T", @"W", @"Th", @"F", @"S", @"Su", nil];
+    self.arrayDays = @[
+                       LocStr(@"M"),
+                       LocStr(@"T"),
+                       LocStr(@"W"),
+                       LocStr(@"Th"),
+                       LocStr(@"F"),
+                       LocStr(@"S"),
+                       LocStr(@"Su")
+                       ];
 }
 
 #pragma mark - UICollectionViewDataSource
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    if (_everydayFlag == YES) {
+    if ( _everydayFlag ) {
         return 2;
     }
     return 8;
@@ -75,7 +82,7 @@
     SchedulingCell *cell = (SchedulingCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"SchedulingCell" forIndexPath:indexPath];
     CGSize sizeScale = CGSizeZero;
     
-    if (_everydayFlag == YES) {
+    if ( _everydayFlag ) {
         sizeScale = CGSizeMake(_cellSizeMax, _cellSize);
     }
     else {
@@ -102,8 +109,8 @@
                 labelTitle = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, sizeScale.width, sizeScale.height)];
             }
             
-            if (_everydayFlag == YES) {
-                labelTitle.text = @"Everyday";
+            if ( _everydayFlag ) {
+                labelTitle.text = LocStr(@"Everyday");
             }
             else {
                 labelTitle.text = _arrayDays[indexPath.item - 1];
@@ -126,24 +133,24 @@
         
         if (indexPath.section == 1) {
             // Midnight
-            labelTitle.text = @"MN";
+            labelTitle.text = LocStr(@"MN");
         }
         else {
             if (indexPath.section < 13) {
                 // morning
-                labelTitle.text = [NSString stringWithFormat:@"%ld am", (long)indexPath.section - 1];
+                labelTitle.text = [NSString stringWithFormat:LocStr(@"%ld am"), (long)indexPath.section - 1];
             }
             else if (indexPath.section == 13) {
                 // Noon
-                labelTitle.text = @"Noon";
+                labelTitle.text = LocStr(@"Noon");
             }
             else if (indexPath.section < 25) {
                 // Afternoon
-                labelTitle.text = [NSString stringWithFormat:@"%ld pm", ((long)indexPath.section - 1) % 12];
+                labelTitle.text = [NSString stringWithFormat:LocStr(@"%ld pm"), ((long)indexPath.section - 1) % 12];
             }
             else {
                 // Midnight
-                labelTitle.text = @"MN";
+                labelTitle.text = LocStr(@"MN");
             }
         }
         
@@ -181,24 +188,24 @@
 
 - (void) handleGesture:(UIPanGestureRecognizer *)gestureRecognizer
 {
-    float pointerX = [gestureRecognizer locationInView:self.collectionViewMap].x;
-    float pointerY = [gestureRecognizer locationInView:self.collectionViewMap].y;
+    float pointerX = [gestureRecognizer locationInView:_collectionViewMap].x;
+    float pointerY = [gestureRecognizer locationInView:_collectionViewMap].y;
     
-    for (UICollectionViewCell *cell in self.collectionViewMap.visibleCells) {
+    for (UICollectionViewCell *cell in _collectionViewMap.visibleCells) {
         float cellSX = cell.frame.origin.x;
         float cellEX = cell.frame.origin.x + cell.frame.size.width;
         float cellSY = cell.frame.origin.y;
         float cellEY = cell.frame.origin.y + cell.frame.size.height;
         
         if (pointerX >= cellSX && pointerX <= cellEX && pointerY >= cellSY && pointerY <= cellEY) {
-            NSIndexPath *touchOver = [self.collectionViewMap indexPathForCell:cell];
+            NSIndexPath *touchOver = [_collectionViewMap indexPathForCell:cell];
             
             if (_lastAccessed != touchOver) {
                 if (cell.selected) {
-                    [self deselectCellForCollectionView:self.collectionViewMap atIndexPath:touchOver];
+                    [self deselectCellForCollectionView:_collectionViewMap atIndexPath:touchOver];
                 }
                 else {
-                    [self selectCellForCollectionView:self.collectionViewMap atIndexPath:touchOver];
+                    [self selectCellForCollectionView:_collectionViewMap atIndexPath:touchOver];
                 }
             }
             
@@ -208,7 +215,7 @@
     
     if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
         self.lastAccessed = nil;
-        self.collectionViewMap.scrollEnabled = YES;
+        _collectionViewMap.scrollEnabled = YES;
     }
 }
 

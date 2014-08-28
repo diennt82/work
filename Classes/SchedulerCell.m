@@ -8,7 +8,22 @@
 
 #import "SchedulerCell.h"
 
+@interface SchedulerCell ()
+
+@property (nonatomic, weak) IBOutlet UILabel *schedulerLabel;
+@property (nonatomic, weak) IBOutlet UILabel *byDayLabel;
+
+@end
+
 @implementation SchedulerCell
+
+- (void)layoutSubviews
+{
+    _schedulerLabel.text = LocStr(@"Scheduler");
+    _byDayLabel.text = LocStr(@"By day");
+    
+    [super layoutSubviews];
+}
 
 - (IBAction)schedulerSwitchValueChangedAtion:(id)sender
 {
