@@ -638,6 +638,9 @@
 "normal_quality" = "Normale Menge";
 
 /* No comment provided by engineer. */
+"not_found" = "Not Found";
+
+/* No comment provided by engineer. */
 "note_camera_upgrade_lasted_software" = "Hinweis: Ihre Kamera kann auf die neuste Software aktualisiert werden. Dies kann etwa 5 Minuten dauern. In dieser Zeit können Sie nicht auf die Kamera zugreifen.";
 
 /* No comment provided by engineer. */
@@ -944,6 +947,9 @@
 "xib_camerasettings_cell_button_remove_camera" = "Remove Camera";
 
 /* No comment provided by engineer. */
+"xib_camerasettings_cell_label_capture_snapshot" = "Motion Capture Snapshot";
+
+/* No comment provided by engineer. */
 "xib_camerasettings_cell_label_high" = "Hohe Qualität";
 
 /* No comment provided by engineer. */
@@ -954,6 +960,9 @@
 
 /* No comment provided by engineer. */
 "xib_camerasettings_cell_label_temperature" = "Temperatureinheit";
+
+/* No comment provided by engineer. */
+"xib_camerasettings_cell_label_video_recording" = "Motion Video Recording";
 
 /* No comment provided by engineer. */
 "xib_cameraspage_button_text_addcamera" = "Kamera Hinzufügen";
