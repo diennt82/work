@@ -31,4 +31,5 @@
 - (void)sendStatus:(int) status;
 - (void)startPasswordChanged;
 - (void)finishPasswordChanged;
+- (void)finishCameraSettup:(BOOL)success;
 @end

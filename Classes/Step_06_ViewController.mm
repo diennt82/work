@@ -897,24 +897,24 @@
 
 - (void)defaultOnAllPNToCamera
 {
-    NSString *result = @"";
-    
-    NSString *response = [[HttpCom instance].comWithDevice sendCommandAndBlock:@"set_motion_area&grid=1x1&zone=00"];
-    result = [result stringByAppendingString:response];
-    
-    if ([[NSUserDefaults standardUserDefaults] integerForKey:SET_UP_CAMERA] != SETUP_CAMERA_FOCUS73)
-    {
-        response = [[HttpCom instance].comWithDevice sendCommandAndBlock:@"vox_enable"];
-        result = [result stringByAppendingFormat:@", %@", response];
-        
-        response = [[HttpCom instance].comWithDevice sendCommandAndBlock:@"set_temp_lo_enable&value=1"];
-        result = [result stringByAppendingFormat:@", %@", response];
-        
-        response = [[HttpCom instance].comWithDevice sendCommandAndBlock:@"set_temp_hi_enable&value=1"];
-        result = [result stringByAppendingFormat:@", %@", response];
-    }
-    
-    NSLog(@"%s respnse:%@", __FUNCTION__, result);
+//    NSString *result = @"";
+//    
+//    NSString *response = [[HttpCom instance].comWithDevice sendCommandAndBlock:@"set_motion_area&grid=1x1&zone=00"];
+//    result = [result stringByAppendingString:response];
+//    
+//    if ([[NSUserDefaults standardUserDefaults] integerForKey:SET_UP_CAMERA] != SETUP_CAMERA_FOCUS73)
+//    {
+//        response = [[HttpCom instance].comWithDevice sendCommandAndBlock:@"vox_enable"];
+//        result = [result stringByAppendingFormat:@", %@", response];
+//        
+//        response = [[HttpCom instance].comWithDevice sendCommandAndBlock:@"set_temp_lo_enable&value=1"];
+//        result = [result stringByAppendingFormat:@", %@", response];
+//        
+//        response = [[HttpCom instance].comWithDevice sendCommandAndBlock:@"set_temp_hi_enable&value=1"];
+//        result = [result stringByAppendingFormat:@", %@", response];
+//    }
+//    
+//    NSLog(@"%s respnse:%@", __FUNCTION__, result);
 }
 
 -(void)moveOnToCheckCameraOnlineStatus

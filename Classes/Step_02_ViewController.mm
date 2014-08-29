@@ -176,6 +176,7 @@
         }
         
         [self.delegate sendStatus:status];
+        [self.delegate finishCameraSettup:success];
     }];
 }
 
