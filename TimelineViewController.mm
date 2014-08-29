@@ -1201,17 +1201,17 @@
         static NSString *CellIdentifier = @"TimelineActivityCell";
         TimelineActivityCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 #if 0
-        NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"TimelineActivityCell" owner:nil options:nil];
-        
-        for (id curObj in objects)
-        {
-            
-            if([curObj isKindOfClass:[UITableViewCell class]])
-            {
-                cell = (TimelineActivityCell *)curObj;
-                break;
-            }
-        }
+//        NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"TimelineActivityCell" owner:nil options:nil];
+//        
+//        for (id curObj in objects)
+//        {
+//            
+//            if([curObj isKindOfClass:[UITableViewCell class]])
+//            {
+//                cell = (TimelineActivityCell *)curObj;
+//                break;
+//            }
+//        }
         
 #else
         
@@ -1301,48 +1301,48 @@
             
 #if 0
             
-            cell.snapshotImage.image = [UIImage imageNamed:@"no_img_available"];
-            
-            if (eventInfo.clipInfo.imgSnapshot == nil &&
-                (eventInfo.clipInfo.urlImage != nil))// && (![eventInfo.clipInfo.urlImage isEqualToString:@""]))
-            {
-                [cell.activityIndicatorLoading startAnimating];
-                
-                dispatch_queue_t q = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0ul);
-                dispatch_async(q,
-                               ^{
-                                   NSData * imgData =[NSData dataWithContentsOfURL:[NSURL URLWithString:eventInfo.clipInfo.urlImage]];
-                                   
-                                   if (imgData)
-                                   {
-                                       eventInfo.clipInfo.imgSnapshot =[UIImage imageWithData:imgData];
-                                       dispatch_async(dispatch_get_main_queue(),
-                                                      ^{
-                                                          TimelineActivityCell * updateCell = (id)[tableView cellForRowAtIndexPath:indexPath];
-                                                          if (updateCell)
-                                                          {
-                                                              cell.snapshotImage.image = eventInfo.clipInfo.imgSnapshot;
-                                                              [cell.activityIndicatorLoading stopAnimating];
-                                                              cell.activityIndicatorLoading.hidden = YES;
-                                                          }
-                                                          else
-                                                          {
-                                                              NSLog(@" *)(*)(* NIL updateCell");
-                                                          }
-                                                      }
-                                                      );
-                                   }
-                               });
-                dispatch_release(q);
-                
-            }
-            else
-            {
-                NSLog(@"TableView -playlistInfo.imgSnapshot already loaded");
-                
-                cell.snapshotImage.image = eventInfo.clipInfo.imgSnapshot;
-                cell.activityIndicatorLoading.hidden = YES;
-            }
+//            cell.snapshotImage.image = [UIImage imageNamed:@"no_img_available"];
+//            
+//            if (eventInfo.clipInfo.imgSnapshot == nil &&
+//                (eventInfo.clipInfo.urlImage != nil))// && (![eventInfo.clipInfo.urlImage isEqualToString:@""]))
+//            {
+//                [cell.activityIndicatorLoading startAnimating];
+//                
+//                dispatch_queue_t q = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0ul);
+//                dispatch_async(q,
+//                               ^{
+//                                   NSData * imgData =[NSData dataWithContentsOfURL:[NSURL URLWithString:eventInfo.clipInfo.urlImage]];
+//                                   
+//                                   if (imgData)
+//                                   {
+//                                       eventInfo.clipInfo.imgSnapshot =[UIImage imageWithData:imgData];
+//                                       dispatch_async(dispatch_get_main_queue(),
+//                                                      ^{
+//                                                          TimelineActivityCell * updateCell = (id)[tableView cellForRowAtIndexPath:indexPath];
+//                                                          if (updateCell)
+//                                                          {
+//                                                              cell.snapshotImage.image = eventInfo.clipInfo.imgSnapshot;
+//                                                              [cell.activityIndicatorLoading stopAnimating];
+//                                                              cell.activityIndicatorLoading.hidden = YES;
+//                                                          }
+//                                                          else
+//                                                          {
+//                                                              NSLog(@" *)(*)(* NIL updateCell");
+//                                                          }
+//                                                      }
+//                                                      );
+//                                   }
+//                               });
+//                dispatch_release(q);
+//                
+//            }
+//            else
+//            {
+//                NSLog(@"TableView -playlistInfo.imgSnapshot already loaded");
+//                
+//                cell.snapshotImage.image = eventInfo.clipInfo.imgSnapshot;
+//                cell.activityIndicatorLoading.hidden = YES;
+//            }
 #else
             if (eventInfo.clipInfo.urlImage  != nil)
             {
@@ -1356,6 +1356,11 @@
                                           }];
                 
                 
+            }
+            
+            if ([eventInfo.clipInfo.urlFile isEqual:[NSNull null]] || [eventInfo.clipInfo.urlFile isEqualToString:@""])
+            {
+                [cell.feedImageVideo setHidden:YES];
             }
 #endif
             
@@ -1513,8 +1518,7 @@
         
         ClipInfo * clip =  event.clipInfo;
         NSString *urlFile = clip.urlFile;
-        if (![urlFile isEqual:[NSNull null]] &&
-            ![urlFile isEqualToString:@""])
+        if (![urlFile isEqual:[NSNull null]] && ![urlFile isEqualToString:@""])
         {
             if (self.timelineVCDelegate != nil)
             {
