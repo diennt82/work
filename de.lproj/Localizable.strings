@@ -281,7 +281,7 @@
 "Create_Account_Failed_msg" = "Username muss zwischen 5 und 20 Zeichen haben";
 
 /* No comment provided by engineer. */
-"Create_Account_Failed_msg1" = "Passwort muss 8-12 Zeichen haben";
+"Create_Account_Failed_msg1" = "Password has to be between 8-12 characters, at least 1 digit, at least 1 letter";
 
 /* No comment provided by engineer. */
 "Create_Account_Failed_msg2" = "Password does not match";
@@ -294,6 +294,18 @@
 
 /* No comment provided by engineer. */
 "Create_Account_Failed_msg5" = "Username sollte keine Sonderzeichen enthalten, mit Ausnahme von - _ und .";
+
+/* No comment provided by engineer. */
+"Create_Account_Help" = "Create Account Help";
+
+/* No comment provided by engineer. */
+"Create_Account_Help_msg2" = "Confirm password must match the password";
+
+/* No comment provided by engineer. */
+"Create_Account_Help_msg3" = "Email address should be of the form somebody@somewhere.com";
+
+/* No comment provided by engineer. */
+"Create_Account_Help_msg_username" = "Username must:\n- Be between 5-20 characters\n- Not contain special characters except for -_ and .";
 
 /* No comment provided by engineer. */
 "default" = "Voreinstellung";
@@ -638,6 +650,9 @@
 "normal_quality" = "Normale Menge";
 
 /* No comment provided by engineer. */
+"not_found" = "Not Found";
+
+/* No comment provided by engineer. */
 "note_camera_upgrade_lasted_software" = "Hinweis: Ihre Kamera kann auf die neuste Software aktualisiert werden. Dies kann etwa 5 Minuten dauern. In dieser Zeit können Sie nicht auf die Kamera zugreifen.";
 
 /* No comment provided by engineer. */
@@ -944,6 +959,9 @@
 "xib_camerasettings_cell_button_remove_camera" = "Remove Camera";
 
 /* No comment provided by engineer. */
+"xib_camerasettings_cell_label_capture_snapshot" = "Motion Capture Snapshot";
+
+/* No comment provided by engineer. */
 "xib_camerasettings_cell_label_high" = "Hohe Qualität";
 
 /* No comment provided by engineer. */
@@ -954,6 +972,9 @@
 
 /* No comment provided by engineer. */
 "xib_camerasettings_cell_label_temperature" = "Temperatureinheit";
+
+/* No comment provided by engineer. */
+"xib_camerasettings_cell_label_video_recording" = "Motion Video Recording";
 
 /* No comment provided by engineer. */
 "xib_cameraspage_button_text_addcamera" = "Kamera Hinzufügen";
@@ -1424,7 +1445,7 @@
 "xib_step10_ble_label_with" = "mit";
 
 /* No comment provided by engineer. */
-"xib_step10_ble_textview_access_camera_any_time" = "You can access your camera any time from this app from home or work. Or on the web at www.monitoreverywhere.com";
+"xib_step10_ble_textview_access_camera_any_time" = "You can access your camera any time from this app from home or work. Or on the web at www.hubblehome.com";
 
 /* No comment provided by engineer. */
 "xib_step10_ble_textview_camera_now_configured" = "Your camera is now configured.";
@@ -1551,6 +1572,21 @@
 
 /* No comment provided by engineer. */
 "xib_Zone_button_save" = "Gespeichert";
+
+/* No comment provided by engineer. */
+"xibPassValidatePopup_label_at_least_8_characters" = "at least 8 characters";
+
+/* No comment provided by engineer. */
+"xibPassValidatePopup_label_at_leat_1_digit" = "at least 1 digit";
+
+/* No comment provided by engineer. */
+"xibPassValidatePopup_label_at_leat_1_letter" = "at least 1 letter";
+
+/* No comment provided by engineer. */
+"xibPassValidatePopup_label_at_most_12_characters" = "at most 12 characters";
+
+/* No comment provided by engineer. */
+"xibPassValidatePopup_label_password_must_be" = "Password must be:";
 
 /* No comment provided by engineer. */
 "yes" = "JA";

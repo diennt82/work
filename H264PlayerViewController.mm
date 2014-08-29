@@ -4380,6 +4380,7 @@ double _ticks = 0;
 	}
 }
 
+#pragma mark - HelpWindowPopupDelegate
 - (void)willDismiss:(id)sender
 {
     self.helpPopup = nil;

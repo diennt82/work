@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6205" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
-        <deployment defaultVersion="1792" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6198"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="DisplayWifiList_VController">
             <connections>
                 <outlet property="btnContinue" destination="F8K-jw-sqC" id="mmF-xT-2iZ"/>
+                <outlet property="btnHelpSkipWifiSetup" destination="edk-7N-LOu" id="q81-AC-gPJ"/>
                 <outlet property="btnSkipWIFISetup" destination="WDg-OD-aCf" id="Cgz-F7-wGe"/>
                 <outlet property="cellOtherNetwork" destination="atd-dz-3i4" id="Tak-9Y-y0q"/>
                 <outlet property="cellRefresh" destination="1Py-Td-ydc" id="rPg-6B-6w4"/>
@@ -76,8 +76,18 @@
                         <action selector="btnContinueTouchUpInsideAction:" destination="-1" eventType="touchUpInside" id="tcY-cb-gOk"/>
                     </connections>
                 </button>
+                <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="edk-7N-LOu">
+                    <rect key="frame" x="287" y="460" width="25" height="25"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                    <state key="normal" image="alert_learn.png">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="btnHelpSkipWifiSetupTouchUpInsideAction:" destination="-1" eventType="touchUpInside" id="Ddk-72-mGQ"/>
+                    </connections>
+                </button>
                 <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="WDg-OD-aCf">
-                    <rect key="frame" x="20" y="448" width="280" height="50"/>
+                    <rect key="frame" x="45" y="448" width="231" height="50"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="20"/>
                     <state key="normal" title="Skip WIFI Setup" backgroundImage="green_btn.png">
@@ -89,8 +99,6 @@
                 </button>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-            <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
-            <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
             <inset key="insetFor6xAndEarlier" minX="0.0" minY="-64" maxX="0.0" maxY="64"/>
         </view>
         <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="atd-dz-3i4">
@@ -163,6 +171,7 @@
                 </progressView>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <nil key="simulatedStatusBarMetrics"/>
         </view>
         <view contentMode="scaleToFill" id="ycG-K6-zpc">
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
@@ -211,16 +220,17 @@
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
-                        <action selector="btnRetryTouchUpInsideAction:" destination="-1" eventType="touchUpInside" id="S9t-8X-3yh"/>
                         <action selector="btnSetupWithWifiAction:" destination="-1" eventType="touchUpInside" id="6UJ-YY-61W"/>
                     </connections>
                 </button>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <nil key="simulatedStatusBarMetrics"/>
         </view>
     </objects>
     <resources>
         <image name="BLE_camera_search.png" width="25" height="25"/>
+        <image name="alert_learn.png" width="60" height="60"/>
         <image name="green_btn.png" width="295" height="50"/>
         <image name="loader_a.png" width="30" height="30"/>
         <image name="setup_add.png" width="25" height="25"/>
@@ -228,4 +238,12 @@
         <image name="setup_progress_blue.png" width="8" height="8"/>
         <image name="setup_progress_grey.png" width="8" height="8"/>
     </resources>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination" type="retina4">
+            <size key="portraitSize" width="320" height="568"/>
+            <size key="landscapeSize" width="568" height="320"/>
+        </simulatedScreenMetrics>
+    </simulatedMetricsContainer>
 </document>

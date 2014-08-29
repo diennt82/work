@@ -15,7 +15,7 @@
 #import "Step_02_ViewController.h"
 #import "UIView+Custom.h"
 
-#define BLE_TIMEOUT_PROCESS 1*60
+#define BLE_TIMEOUT_PROCESS 40
 #define BTN_RETRY_TAG       599
 #define BTN_SETUP_WIFI      699
 
@@ -28,6 +28,7 @@
 @property (retain, nonatomic) IBOutlet UIView *viewProgress;
 @property (retain, nonatomic) IBOutlet UIView *viewError;
 @property (retain, nonatomic) IBOutlet UIButton *btnSkipWIFISetup;
+@property (retain, nonatomic) IBOutlet UIButton *btnHelpSkipWifiSetup;
 
 @property (retain, nonatomic) WifiEntry *selectedWifiEntry;
 @property (nonatomic) BOOL newCmdFlag;
@@ -36,6 +37,7 @@
 @property (nonatomic) BOOL isAlreadyWifiList;
 @property (nonatomic, retain) UIButton *btnRetry;
 @property (nonatomic, retain) UIButton *btnSetupWithWifi;
+@property (nonatomic, retain) NSTimer *timerShowViewError;
 
 @end
 
@@ -69,6 +71,7 @@
     [_cellRefresh release];
     [_viewError release];
     [_btnSkipWIFISetup release];
+    [_btnHelpSkipWifiSetup release];
     [super dealloc];
 }
 
@@ -111,6 +114,7 @@
         NSString *skipWIFISetup = NSLocalizedStringWithDefaultValue(@"skip_wifi_setup", nil, [NSBundle mainBundle], @"Skip WIFI Setup", nil);
         [self.btnSkipWIFISetup setTitle:skipWIFISetup forState:UIControlStateNormal];
         self.btnSkipWIFISetup.hidden = NO;
+        self.btnHelpSkipWifiSetup.hidden = NO;
     }
     
     self.newCmdFlag = TRUE;
@@ -251,6 +255,7 @@
 
 - (IBAction)btnSkipWIFISetupTouchUpInsideAction:(id)sender
 {
+    self.navigationItem.leftBarButtonItem.enabled = NO;
     MBProgressHUD *hub = [MBProgressHUD showHUDAddedTo:self.view animated:NO];
     hub.labelText = NSLocalizedStringWithDefaultValue(@"hud_configure_camera", nil, [NSBundle mainBundle], @"Configure camera...", nil);
     
@@ -291,6 +296,16 @@
     {
         NSLog(@"%s aViewController:%@", __FUNCTION__, aViewController);
     }
+}
+
+- (IBAction)btnHelpSkipWifiSetupTouchUpInsideAction:(id)sender
+{
+    [[[[UIAlertView alloc] initWithTitle:@"Choose this option if you are setting up your camera using the LAN cable and you do not want to setup the WIFI"
+                               message:nil
+                              delegate:nil
+                     cancelButtonTitle:NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"Ok", nil)
+                     otherButtonTitles:nil, nil] autorelease] show];
+    
 }
 
 #pragma mark - Methods
@@ -403,13 +418,73 @@
 - (void)timeoutBLESetupProcessing:(NSTimer *)timer
 {
     self.shouldTimeoutProcessing = TRUE;
+    self.navigationItem.leftBarButtonItem.enabled = NO;
+#if 1
+    NSTimeInterval timeInterval = 5.f;
     
+    if ([BLEConnectionManager getInstanceBLE].state == CONNECTED)
+    {
+        NSLog(@"%s sendCommandRestartSystem.", __FUNCTION__);
+        
+        [self sendCommandRestartSystem];
+        
+        [BLEConnectionManager getInstanceBLE].needReconnect = NO;
+        [[BLEConnectionManager getInstanceBLE] stopScanBLE];
+        [BLEConnectionManager getInstanceBLE].delegate = self;
+        [[BLEConnectionManager getInstanceBLE] disconnect];
+    }
+    else
+    {
+        NSLog(@"%s timeInterval = 60.f.", __FUNCTION__);
+        timeInterval = 60.f;
+    }
+    
+    if (_timerShowViewError)
+    {
+        [_timerShowViewError invalidate];
+        self.timerShowViewError = nil;
+    }
+    
+    self.timerShowViewError = [NSTimer scheduledTimerWithTimeInterval:timeInterval
+                                                               target:self
+                                                             selector:@selector(showViewError:)
+                                                             userInfo:nil
+                                                              repeats:YES];
+#else
     [[BLEConnectionManager getInstanceBLE].uartPeripheral didDisconnect];
     [BLEConnectionManager getInstanceBLE].delegate = nil;
     
     [self.viewProgress removeFromSuperview];
     [self.view addSubview:_viewError];
     [self.view bringSubviewToFront:_viewError];
+#endif
+}
+
+- (void)showViewError:(NSTimer *)timer
+{
+    NSLog(@"%s timeInterval:%f", __FUNCTION__, timer.timeInterval);
+    
+    if (timer.timeInterval == 5.f &&
+        [BLEConnectionManager getInstanceBLE].state == CONNECTED)
+    {
+        NSLog(@"%s Loop timer.", __FUNCTION__);
+        
+        [self sendCommandRestartSystem];
+        
+        [BLEConnectionManager getInstanceBLE].needReconnect = NO;
+        [[BLEConnectionManager getInstanceBLE] stopScanBLE];
+        [BLEConnectionManager getInstanceBLE].delegate = self;
+        [[BLEConnectionManager getInstanceBLE] disconnect];
+    }
+    else
+    {
+        NSLog(@"%s Invalidate timer.", __FUNCTION__);
+        [timer invalidate];
+        
+        [self.viewProgress removeFromSuperview];
+        [self.view addSubview:_viewError];
+        [self.view bringSubviewToFront:_viewError];
+    }
 }
 
 - (void)sendCommandRestartSystem
@@ -424,11 +499,13 @@
         [[NSRunLoop currentRunLoop] runUntilDate:date];
     }
     
+#if 0
     if ( self.shouldTimeoutProcessing == TRUE)
     {
         NSLog(@"%s SETUP PROCESS TIMEOUT --> return", __FUNCTION__);
         return ;
     }
+#endif
     
     [BLEConnectionManager getInstanceBLE].delegate = self;
     [[BLEConnectionManager getInstanceBLE].uartPeripheral writeString:RESTART_HTTP_CMD withTimeOut:SHORT_TIME_OUT_SEND_COMMAND];
@@ -753,7 +830,7 @@
     //NSLog(@"Data Receiving router list is %@", string);
     //processing data receive wifi list
     
-    if (string !=nil && [string length] > 0)
+    if (string != nil && [string length] > 0)
     {
         NSData *router_list_raw = [string dataUsingEncoding:NSUTF8StringEncoding];
         

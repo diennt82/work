@@ -15,7 +15,7 @@
 #define BTN_CONTINUE_TAG    599
 #define BTN_TRY_AGAIN_TAG   559
 #define BTN_SETUP_WIFI      569
-#define BLE_TIMEOUT_PROCESS 4*60.0
+#define BLE_TIMEOUT_PROCESS 3*60//4*60.0
 
 @interface NetworkInfoToCamera_VController () <UITextFieldDelegate, SecurityChangingDelegate>
 
@@ -32,7 +32,9 @@
 @property (nonatomic, retain) UIButton *btnContinue;
 @property (nonatomic, retain) UIButton *btnTryAgain;
 @property (nonatomic, retain) UIButton *btnSetupWithWifi;
-@property (assign, nonatomic) IBOutlet UILabel  *lblNameTitle, *lblSecurityTitle;
+@property (retain, nonatomic) IBOutlet UILabel  *lblNameTitle, *lblSecurityTitle;
+@property (nonatomic, retain) NSTimer *timerShowViewError;
+
 @end
 
 @implementation NetworkInfoToCamera_VController
@@ -81,13 +83,13 @@
                                      action:nil] autorelease];
     self.navigationItem.hidesBackButton = NO;
     
-    self.btnContinue = (UIButton *)[_viewError viewWithTag:599];
+    self.btnContinue = (UIButton *)[_viewError viewWithTag:BTN_CONTINUE_TAG];
     [self.btnContinue setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
     [self.btnContinue setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
     [self.btnContinue addTarget:self action:@selector(btnContinueTouchUpInsideAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.btnContinue setTitle:NSLocalizedStringWithDefaultValue(@"continue", nil, [NSBundle mainBundle], @"Continue", nil) forState:UIControlStateNormal];
     
-    self.btnTryAgain = (UIButton *)[_viewError viewWithTag:559];
+    self.btnTryAgain = (UIButton *)[_viewError viewWithTag:BTN_TRY_AGAIN_TAG];
     [self.btnTryAgain setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
     [self.btnTryAgain setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
     [self.btnTryAgain addTarget:self action:@selector(btnTryAgainTouchUpInsideAction:) forControlEvents:UIControlEventTouchUpInside];
@@ -807,10 +809,38 @@
 
 - (void)timeoutBLESetupProcessing:(NSTimer *)timer
 {
-    self.view.userInteractionEnabled = YES;
+    self.view.userInteractionEnabled = NO;
     
     self.shouldTimeoutProcessing = TRUE;
+#if 1
+    NSTimeInterval timeInterval = 5.f;
     
+    if ([BLEConnectionManager getInstanceBLE].state == CONNECTED)
+    {
+        [self sendCommandRestartSystem];
+        
+        [BLEConnectionManager getInstanceBLE].needReconnect = NO;
+        [[BLEConnectionManager getInstanceBLE] stopScanBLE];
+        [self disconnectToBLE];
+    }
+    else
+    {
+        timeInterval = 60.f;
+    }
+    
+    if (_timerShowViewError)
+    {
+        [_timerShowViewError invalidate];
+        self.timerShowViewError = nil;
+    }
+    
+    self.timerShowViewError = [NSTimer scheduledTimerWithTimeInterval:timeInterval
+                                                               target:self
+                                                             selector:@selector(showViewError:)
+                                                             userInfo:nil
+                                                              repeats:YES];
+    
+#else
     //disconnect to BLE and return to guide screen.
     if ([BLEConnectionManager getInstanceBLE].state == CONNECTED)
     {
@@ -822,6 +852,32 @@
     {
         [self.viewProgress removeFromSuperview];
         
+        [self.view addSubview:_viewError];
+        [self.view bringSubviewToFront:_viewError];
+    }
+#endif
+}
+
+- (void)showViewError:(NSTimer *)timer
+{
+    if (timer.timeInterval == 5.f &&
+        [BLEConnectionManager getInstanceBLE].state == CONNECTED)
+    {
+        NSLog(@"%s Loop timer.", __FUNCTION__);
+        
+        [self sendCommandRestartSystem];
+        
+        [BLEConnectionManager getInstanceBLE].needReconnect = NO;
+        [[BLEConnectionManager getInstanceBLE] stopScanBLE];
+        [self disconnectToBLE];
+    }
+    else
+    {
+        NSLog(@"%s Invalidate timer.", __FUNCTION__);
+        [timer invalidate];
+        self.view.userInteractionEnabled = YES;
+        
+        [self.viewProgress removeFromSuperview];
         [self.view addSubview:_viewError];
         [self.view bringSubviewToFront:_viewError];
     }
@@ -892,18 +948,22 @@
     
     if (_shouldTimeoutProcessing)
     {
+#if 1
+#else
         //NSLog(@"NWINFO - bleDisconnected");
         [self.viewProgress removeFromSuperview];
         
         [self.view addSubview:_viewError];
 
         [self.view bringSubviewToFront:_viewError];
+#endif
     }
     else
     {
         [self rescanToConnectToBLE];
     }
 }
+
 - (void)disconnectToBLE
 {
     [BLEConnectionManager getInstanceBLE].delegate = self;
@@ -999,12 +1059,13 @@
         date = [NSDate dateWithTimeInterval:2.0 sinceDate:[NSDate date]];
         [[NSRunLoop currentRunLoop] runUntilDate:date];
     }
-    
+#if 0
     if ( self.shouldTimeoutProcessing == TRUE)
     {
         NSLog(@"sendCommandRestartSystem: SETUP PROCESS TIMEOUT -- return");
         return ;
     }
+#endif
     
     [BLEConnectionManager getInstanceBLE].delegate = self;
     [[BLEConnectionManager getInstanceBLE].uartPeripheral writeString:RESTART_HTTP_CMD withTimeOut:SHORT_TIME_OUT_SEND_COMMAND];

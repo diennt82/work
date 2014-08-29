@@ -75,13 +75,6 @@
     self.cameraMac = (NSString *) [userDefaults objectForKey:@"CameraMacWithQuote"];
     self.stringUDID = [userDefaults stringForKey:CAMERA_UDID];
     
-    if (self.progressView == nil)
-    {
-        NSLog(@"progressView = nil!!!!");
-    }
-    
-    
-    
     self.navigationItem.hidesBackButton = YES;
     
     UIImage *hubbleLogoBack = [UIImage imageNamed:@"Hubble_back_text"];
@@ -117,7 +110,7 @@
     UILabel *lblProgress = (UILabel *)[_progressView viewWithTag:695];
     lblProgress.text = message;
     
-    [self.view addSubview:self.progressView];
+    [self.view addSubview:_progressView];
     [imageView startAnimating];
     self.progressView.hidden = NO;
     [self.view bringSubviewToFront:_progressView];
@@ -132,16 +125,6 @@
     /*
      * Updating the information below after camera is available --> Make sure updating succeeded.
      */
-#if 0
-    // Trying to enable all PN.
-    [self sendToServerTheCommand:@"set_motion_area&grid=1x1&zone=00"];
-    [self sendToServerTheCommand:@"vox_enable"];
-    [self sendToServerTheCommand:@"set_temp_lo_enable&value=1"];
-    [self sendToServerTheCommand:@"set_temp_hi_enable&value=1"];
-    
-    // Trying to update host ssid to server.
-    [self updatesBasicInfoForCamera];
-#endif
     // 2 of 3. no need to schedule timer here.
     [self wait_for_camera_to_reboot:nil];
 }
@@ -150,7 +133,7 @@
 {
     [[self.view viewWithTag:3] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step10_ble_label_with", nil, [NSBundle mainBundle], @"with", nil)];
     [[self.view viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step10_ble_textview_signed_up", nil, [NSBundle mainBundle], @"You are signed up as ", nil)];
-    [[self.view viewWithTag:2] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step10_ble_textview_access_camera_any_time", nil, [NSBundle mainBundle], @"You can access your camera any time from this app from home or work. Or on the web at www.monitoreverywhere.com", nil)];
+    [[self.view viewWithTag:2] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step10_ble_textview_access_camera_any_time", nil, [NSBundle mainBundle], @"You can access your camera any time from this app from home or work. Or on the web at www.hubblehome.com", nil)];
     [[self.progressView viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step10_ble_label_checking_connection_to_camera", nil, [NSBundle mainBundle], @"Checking connection to camera", nil)];
     [[self.progressView viewWithTag:695] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step10_ble_label_takeup_a_minute", nil, [NSBundle mainBundle], @"This may take up to a minute", nil)];
     [[cameraAddedView viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step10_ble_textview_return_here_to_test_camera", nil, [NSBundle mainBundle], @"Once the above step is done, return here to test your camera. ", nil)];
@@ -256,52 +239,26 @@
                                                       apiKey:userApiKey
                                                     listener:nil];
     }
-#if 1
     if ([_userAccount checkCameraIsAvailable:self.cameraMac])
-#else
-    if ([self checkItOnline])
-#endif
     {
         //Found it online
         NSLog(@"Found it online");
-#if 1
-        [_userAccount sendToServerTheCommand:@"set_motion_area&grid=1x1&zone=00"];
-        
-        if ([[NSUserDefaults standardUserDefaults] integerForKey:SET_UP_CAMERA] != SETUP_CAMERA_FOCUS73)
-        {
-            [_userAccount sendToServerTheCommand:@"vox_enable"];
-            [_userAccount sendToServerTheCommand:@"set_temp_lo_enable&value=1"];
-            [_userAccount sendToServerTheCommand:@"set_temp_hi_enable&value=1"];
-        }
-        else
-        {
-            NSLog(@"%s Setup model Focus73.", __FUNCTION__);
-        }
-#else
-        // Trying to enable all PN.
-        [self sendToServerTheCommand:@"set_motion_area&grid=1x1&zone=00"];
-        
-        if ([[NSUserDefaults standardUserDefaults] integerForKey:SET_UP_CAMERA] != SETUP_CAMERA_FOCUS73)
-        {
-            [self sendToServerTheCommand:@"vox_enable"];
-            [self sendToServerTheCommand:@"set_temp_lo_enable&value=1"];
-            [self sendToServerTheCommand:@"set_temp_hi_enable&value=1"];
-        }
-        else
-        {
-            NSLog(@"%s Setup model Focus73.", __FUNCTION__);
-        }
-#endif
+//        [_userAccount sendToServerTheCommand:@"set_motion_area&grid=1x1&zone=00"];
+//        
+//        if ([[NSUserDefaults standardUserDefaults] integerForKey:SET_UP_CAMERA] != SETUP_CAMERA_FOCUS73)
+//        {
+//            [_userAccount sendToServerTheCommand:@"vox_enable"];
+//            [_userAccount sendToServerTheCommand:@"set_temp_lo_enable&value=1"];
+//            [_userAccount sendToServerTheCommand:@"set_temp_hi_enable&value=1"];
+//        }
+//        else
+//        {
+//            NSLog(@"%s Setup model Focus73.", __FUNCTION__);
+//        }
         
         // Trying to update host ssid to server.
-#if 1
         [_userAccount updatesBasicInfoForCamera];
         [_userAccount checkCameraIsAvailable:self.cameraMac];
-#else
-        [self updatesBasicInfoForCamera];
-        
-        [self checkItOnline]; // Just synch up data with offline data.
-#endif
         
         [self setupCompleted];
         return;
@@ -316,133 +273,133 @@
 
 #pragma mark - MBS_JSON communication
 
-#if 0
--(BOOL) checkItOnline
-{
-    NSLog(@"--> Try to search IP online...");
-    
-    if (_userAccount == nil)
-    {
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        NSString * userEmail  = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
-        NSString * userPass   = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
-        NSString * userApiKey = (NSString *) [userDefaults objectForKey:@"PortalApiKey"];
-        
-        UserAccount *user = [[UserAccount alloc] initWithUser:userEmail
-                                 password:userPass
-                                   apiKey:userApiKey
-                                 listener:nil];
-        self.userAccount = user;
-        [user release];
-    }
-
-#if 1
-    if ([_userAccount checkCameraIsAvailable:self.cameraMac])
-    {
-        self.errorCode = @"NoErr";
-        return TRUE;
-    }
-#else
-    NSString *localIp = [_userAccount query_cam_ip_online: self.cameraMac];
-    
-    if ( localIp != nil)
-    {
-        NSLog(@"Found a local ip: %@", localIp);
-        return TRUE;
-    }
-#endif
-    
-    self.errorCode =@"NotAvail";
-    
-    return FALSE;
-}
-
-- (void)updatesBasicInfoForCamera
-{
-    if (!_jsonCommBlocked)
-    {
-        self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                                     Selector:nil
-                                                                 FailSelector:nil
-                                                                    ServerErr:nil];
-    }
-    
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    
-    NSString *apiKey     = [userDefaults objectForKey:@"PortalApiKey"];
-    NSString *hostSSID   = [userDefaults objectForKey:HOST_SSID];
-    NSString *deviceName = [userDefaults objectForKey:CAMERA_NAME];
-    
-    NSDictionary *responseDict = [_jsonCommBlocked updateDeviceBasicInfoBlockedWithRegistrationId:_stringUDID
-                                                                                       deviceName:deviceName
-                                                                                         timeZone:nil
-                                                                                             mode:nil
-                                                                                  firmwareVersion:nil
-                                                                                         hostSSID:hostSSID
-                                                                                       hostRouter:nil
-                                                                                        andApiKey:apiKey];
-    BOOL updateFailed = TRUE;
-    
-    if (responseDict)
-    {
-        if ([[responseDict objectForKey:@"status"] integerValue] == 200)
-        {
-            NSString *bodyKey = [[responseDict objectForKey:@"data"] objectForKey:@"host_ssid"];
-            
-            if (![bodyKey isEqual:[NSNull null]])
-            {
-                if ([bodyKey isEqualToString:hostSSID])
-                {
-                    updateFailed = FALSE;
-                }
-            }
-        }
-    }
-    
-    if (updateFailed)
-    {
-        NSLog(@"Step10VC - updatesBasicInfoForCamera: %@", responseDict);
-    }
-    else
-    {
-        NSLog(@"Step10VC - updatesBasicInforForCamera successfully!");
-    }
-}
-
-- (void)sendToServerTheCommand:(NSString *) command
-{
-    if (!_jsonCommBlocked)
-    {
-        self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
-                                                                             Selector:nil
-                                                                         FailSelector:nil
-                                                                            ServerErr:nil];
-    }
-    
-    NSDictionary *responseDict = [_jsonCommBlocked sendCommandBlockedWithRegistrationId:_stringUDID
-                                                                             andCommand:command
-                                                                              andApiKey:[[NSUserDefaults standardUserDefaults] objectForKey:@"PortalApiKey"]];
-    
-    NSInteger errorCode = -1;
-    NSString *errorMessage = @"Update failed";
-    
-    if (responseDict)
-    {
-        errorCode = [[responseDict objectForKey:@"status"] integerValue];
-        
-        if (errorCode == 200)
-        {
-            errorCode = [[[[responseDict objectForKey:@"data"] objectForKey:@"device_response"] objectForKey:@"device_response_code"] integerValue];
-        }
-        else
-        {
-            errorMessage = [responseDict objectForKey:@"message"];
-        }
-    }
-    
-    NSLog(@"%s cmd:%@, error: %d", __func__, command, errorCode);
-}
-#endif
+//#if 0
+//-(BOOL) checkItOnline
+//{
+//    NSLog(@"--> Try to search IP online...");
+//    
+//    if (_userAccount == nil)
+//    {
+//        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+//        NSString * userEmail  = (NSString *) [userDefaults objectForKey:@"PortalUseremail"];
+//        NSString * userPass   = (NSString *) [userDefaults objectForKey:@"PortalPassword"];
+//        NSString * userApiKey = (NSString *) [userDefaults objectForKey:@"PortalApiKey"];
+//        
+//        UserAccount *user = [[UserAccount alloc] initWithUser:userEmail
+//                                 password:userPass
+//                                   apiKey:userApiKey
+//                                 listener:nil];
+//        self.userAccount = user;
+//        [user release];
+//    }
+//
+//#if 1
+//    if ([_userAccount checkCameraIsAvailable:self.cameraMac])
+//    {
+//        self.errorCode = @"NoErr";
+//        return TRUE;
+//    }
+//#else
+//    NSString *localIp = [_userAccount query_cam_ip_online: self.cameraMac];
+//    
+//    if ( localIp != nil)
+//    {
+//        NSLog(@"Found a local ip: %@", localIp);
+//        return TRUE;
+//    }
+//#endif
+//    
+//    self.errorCode =@"NotAvail";
+//    
+//    return FALSE;
+//}
+//
+//- (void)updatesBasicInfoForCamera
+//{
+//    if (!_jsonCommBlocked)
+//    {
+//        self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
+//                                                                     Selector:nil
+//                                                                 FailSelector:nil
+//                                                                    ServerErr:nil];
+//    }
+//    
+//    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+//    
+//    NSString *apiKey     = [userDefaults objectForKey:@"PortalApiKey"];
+//    NSString *hostSSID   = [userDefaults objectForKey:HOST_SSID];
+//    NSString *deviceName = [userDefaults objectForKey:CAMERA_NAME];
+//    
+//    NSDictionary *responseDict = [_jsonCommBlocked updateDeviceBasicInfoBlockedWithRegistrationId:_stringUDID
+//                                                                                       deviceName:deviceName
+//                                                                                         timeZone:nil
+//                                                                                             mode:nil
+//                                                                                  firmwareVersion:nil
+//                                                                                         hostSSID:hostSSID
+//                                                                                       hostRouter:nil
+//                                                                                        andApiKey:apiKey];
+//    BOOL updateFailed = TRUE;
+//    
+//    if (responseDict)
+//    {
+//        if ([[responseDict objectForKey:@"status"] integerValue] == 200)
+//        {
+//            NSString *bodyKey = [[responseDict objectForKey:@"data"] objectForKey:@"host_ssid"];
+//            
+//            if (![bodyKey isEqual:[NSNull null]])
+//            {
+//                if ([bodyKey isEqualToString:hostSSID])
+//                {
+//                    updateFailed = FALSE;
+//                }
+//            }
+//        }
+//    }
+//    
+//    if (updateFailed)
+//    {
+//        NSLog(@"Step10VC - updatesBasicInfoForCamera: %@", responseDict);
+//    }
+//    else
+//    {
+//        NSLog(@"Step10VC - updatesBasicInforForCamera successfully!");
+//    }
+//}
+//
+//- (void)sendToServerTheCommand:(NSString *) command
+//{
+//    if (!_jsonCommBlocked)
+//    {
+//        self.jsonCommBlocked = [[BMS_JSON_Communication alloc] initWithObject:self
+//                                                                             Selector:nil
+//                                                                         FailSelector:nil
+//                                                                            ServerErr:nil];
+//    }
+//    
+//    NSDictionary *responseDict = [_jsonCommBlocked sendCommandBlockedWithRegistrationId:_stringUDID
+//                                                                             andCommand:command
+//                                                                              andApiKey:[[NSUserDefaults standardUserDefaults] objectForKey:@"PortalApiKey"]];
+//    
+//    NSInteger errorCode = -1;
+//    NSString *errorMessage = @"Update failed";
+//    
+//    if (responseDict)
+//    {
+//        errorCode = [[responseDict objectForKey:@"status"] integerValue];
+//        
+//        if (errorCode == 200)
+//        {
+//            errorCode = [[[[responseDict objectForKey:@"data"] objectForKey:@"device_response"] objectForKey:@"device_response_code"] integerValue];
+//        }
+//        else
+//        {
+//            errorMessage = [responseDict objectForKey:@"message"];
+//        }
+//    }
+//    
+//    NSLog(@"%s cmd:%@, error: %d", __func__, command, errorCode);
+//}
+//#endif
 
 - (void) setupCompleted
 {

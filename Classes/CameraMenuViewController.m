@@ -666,7 +666,9 @@ typedef enum _WAIT_FOR_UPDATING {
 
 - (void)getModelID:(id)obj
 {
-    if (self.camModelId)
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    self.camModelId = [userDefaults objectForKey:[NSString stringWithFormat:@"MODEL_ID_%@", self.camChannel.profile.registrationID]];
+    if (self.camModelId && ![self.camModelId isEqualToString:@"not_found"])
     {
         if ([obj isKindOfClass:[CameraDetailCell class]])
         {
@@ -682,6 +684,7 @@ typedef enum _WAIT_FOR_UPDATING {
     NSDictionary *responseDict = [comm sendCommandBlockedWithRegistrationId:self.camChannel.profile.registrationID
                                                                            andCommand:@"get_model"
                                                                             andApiKey:[[NSUserDefaults standardUserDefaults] objectForKey:@"PortalApiKey"]];
+    self.camModelId = @"not_found";
     if (responseDict != nil)
     {
         NSInteger status = [[responseDict objectForKey:@"status"] intValue];
@@ -689,17 +692,30 @@ typedef enum _WAIT_FOR_UPDATING {
         if (status == 200)
         {
             NSString *modelID = [[[responseDict objectForKey:@"data"] objectForKey:@"device_response"] objectForKey:@"body"];
-            self.camModelId = [modelID stringByReplacingOccurrencesOfString:@"get_model: " withString:@""];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if ([obj isKindOfClass:[CameraDetailCell class]])
-                {
-                    CameraDetailCell *cell = obj;
-                    cell.lblCamModel.text = self.camModelId;
-                }
-            });
+            if ([modelID hasPrefix:@"get_model: "])
+            {
+                self.camModelId = [modelID stringByReplacingOccurrencesOfString:@"get_model: " withString:@""];
+            }
         }
     }
     [comm release];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if ([obj isKindOfClass:[CameraDetailCell class]])
+        {
+            CameraDetailCell *cell = obj;
+            if ([self.camModelId isEqualToString:@"not_found"])
+            {
+                cell.lblCamModel.text = NSLocalizedStringWithDefaultValue(@"not_found", nil, [NSBundle mainBundle], @"Not Found", nil);
+            }
+            else
+            {
+                cell.lblCamModel.text = self.camModelId;
+            }
+        }
+    });
+    [userDefaults setObject:self.camModelId forKey:[NSString stringWithFormat:@"MODEL_ID_%@", self.camChannel.profile.registrationID]];
+    [userDefaults synchronize];
 }
 
 - (void)changeCameraName_bg

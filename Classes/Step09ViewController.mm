@@ -193,7 +193,7 @@
         title = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed",nil, [NSBundle mainBundle],
                                                   @"Create Account Failed" , nil);
         msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg",nil, [NSBundle mainBundle],
-                                                @"User name has to be between 5-20 characters" , nil);
+                                                @"Username has to be between 5-20 characters" , nil);
         //ERROR condition
         UIAlertView *_alert = [[UIAlertView alloc]
                                initWithTitle:title
@@ -226,7 +226,7 @@
         title = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed",nil, [NSBundle mainBundle],
                                                   @"Create Account Failed" , nil);
         msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg1",nil, [NSBundle mainBundle],
-                                                @"Password has to be between 8-12 characters" , nil);
+                                                @"Password has to be between 8-12 characters, at least 1 digit, at least 1 letter" , nil);
         //ERROR condition
         UIAlertView *_alert = [[UIAlertView alloc]
                                initWithTitle:title
