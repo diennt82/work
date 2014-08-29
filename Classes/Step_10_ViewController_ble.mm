@@ -150,7 +150,7 @@
 {
     [[self.view viewWithTag:3] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step10_ble_label_with", nil, [NSBundle mainBundle], @"with", nil)];
     [[self.view viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step10_ble_textview_signed_up", nil, [NSBundle mainBundle], @"You are signed up as ", nil)];
-    [[self.view viewWithTag:2] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step10_ble_textview_access_camera_any_time", nil, [NSBundle mainBundle], @"You can access your camera any time from this app from home or work. Or on the web at www.monitoreverywhere.com", nil)];
+    [[self.view viewWithTag:2] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step10_ble_textview_access_camera_any_time", nil, [NSBundle mainBundle], @"You can access your camera any time from this app from home or work. Or on the web at www.hubblehome.com", nil)];
     [[self.progressView viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step10_ble_label_checking_connection_to_camera", nil, [NSBundle mainBundle], @"Checking connection to camera", nil)];
     [[self.progressView viewWithTag:695] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step10_ble_label_takeup_a_minute", nil, [NSBundle mainBundle], @"This may take up to a minute", nil)];
     [[cameraAddedView viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xib_step10_ble_textview_return_here_to_test_camera", nil, [NSBundle mainBundle], @"Once the above step is done, return here to test your camera. ", nil)];
