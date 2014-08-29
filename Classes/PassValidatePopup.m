@@ -19,6 +19,7 @@
 
 @interface PassValidatePopup()
 @property (nonatomic, retain) MBP_ValidatePopupOverlayWindow    *overlayWindow;
+@property (nonatomic, assign) IBOutlet UILabel          *titleLabel;
 @property (nonatomic, assign) IBOutlet UIButton         *closeButon;
 @property (nonatomic, assign) IBOutlet UIImageView      *imv1Number;
 @property (nonatomic, assign) IBOutlet UIImageView      *imv1Leter;
@@ -89,9 +90,12 @@
         rect.size.width = POPUP_WIDTH_IPAD;
         self.frame = rect;
         
-        CGRect btnRect = self.closeButon.frame;
-        btnRect.origin.x = (self.frame.size.width - self.closeButon.frame.size.width) / 2;
-        self.closeButon.frame = btnRect;
+        CGRect ctRect = self.closeButon.frame;
+        ctRect.origin.x = (self.frame.size.width - self.closeButon.frame.size.width) / 2;
+        self.closeButon.frame = ctRect;
+        ctRect = self.titleLabel.frame;
+        ctRect.origin.x = (self.frame.size.width - self.titleLabel.frame.size.width) / 2;
+        self.titleLabel.frame = ctRect;
     }
     rect.origin.x = (self.overlayWindow.frame.size.width - self.frame.size.width) / 2;
     rect.origin.y = (self.overlayWindow.frame.size.height - self.frame.size.height) / 2;
