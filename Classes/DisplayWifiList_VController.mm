@@ -252,6 +252,7 @@
 
 - (IBAction)btnSkipWIFISetupTouchUpInsideAction:(id)sender
 {
+    self.navigationItem.leftBarButtonItem.enabled = NO;
     MBProgressHUD *hub = [MBProgressHUD showHUDAddedTo:self.view animated:NO];
     hub.labelText = NSLocalizedStringWithDefaultValue(@"hud_configure_camera", nil, [NSBundle mainBundle], @"Configure camera...", nil);
     

@@ -75,13 +75,6 @@
     self.cameraMac = (NSString *) [userDefaults objectForKey:@"CameraMacWithQuote"];
     self.stringUDID = [userDefaults stringForKey:CAMERA_UDID];
     
-    if (self.progressView == nil)
-    {
-        NSLog(@"progressView = nil!!!!");
-    }
-    
-    
-    
     self.navigationItem.hidesBackButton = YES;
     
     UIImage *hubbleLogoBack = [UIImage imageNamed:@"Hubble_back_text"];
@@ -117,7 +110,7 @@
     UILabel *lblProgress = (UILabel *)[_progressView viewWithTag:695];
     lblProgress.text = message;
     
-    [self.view addSubview:self.progressView];
+    [self.view addSubview:_progressView];
     [imageView startAnimating];
     self.progressView.hidden = NO;
     [self.view bringSubviewToFront:_progressView];

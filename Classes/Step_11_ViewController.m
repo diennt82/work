@@ -56,9 +56,10 @@
     
     //NSString *stringModel = @"";
     
-    //NSInteger model = [[NSUserDefaults standardUserDefaults] integerForKey:SET_UP_CAMERA];
+    NSInteger model = [[NSUserDefaults standardUserDefaults] integerForKey:SET_UP_CAMERA];
     
-    if ([[NSUserDefaults standardUserDefaults] integerForKey:SET_UP_CAMERA] == BLUETOOTH_SETUP)
+    if (model == BLUETOOTH_SETUP ||
+         model == SETUP_CAMERA_FOCUS73)
     {
         [self.btnSetupWithWifi setBackgroundImage:[UIImage imageNamed:@"green_btn"] forState:UIControlStateNormal];
         [self.btnSetupWithWifi setBackgroundImage:[UIImage imageNamed:@"green_btn_pressed"] forState:UIControlEventTouchDown];
