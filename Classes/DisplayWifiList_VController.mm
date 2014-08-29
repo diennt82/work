@@ -28,6 +28,7 @@
 @property (retain, nonatomic) IBOutlet UIView *viewProgress;
 @property (retain, nonatomic) IBOutlet UIView *viewError;
 @property (retain, nonatomic) IBOutlet UIButton *btnSkipWIFISetup;
+@property (retain, nonatomic) IBOutlet UIButton *btnHelpSkipWifiSetup;
 
 @property (retain, nonatomic) WifiEntry *selectedWifiEntry;
 @property (nonatomic) BOOL newCmdFlag;
@@ -70,6 +71,7 @@
     [_cellRefresh release];
     [_viewError release];
     [_btnSkipWIFISetup release];
+    [_btnHelpSkipWifiSetup release];
     [super dealloc];
 }
 
@@ -112,6 +114,7 @@
         NSString *skipWIFISetup = NSLocalizedStringWithDefaultValue(@"skip_wifi_setup", nil, [NSBundle mainBundle], @"Skip WIFI Setup", nil);
         [self.btnSkipWIFISetup setTitle:skipWIFISetup forState:UIControlStateNormal];
         self.btnSkipWIFISetup.hidden = NO;
+        self.btnHelpSkipWifiSetup.hidden = NO;
     }
     
     self.newCmdFlag = TRUE;
@@ -293,6 +296,16 @@
     {
         NSLog(@"%s aViewController:%@", __FUNCTION__, aViewController);
     }
+}
+
+- (IBAction)btnHelpSkipWifiSetupTouchUpInsideAction:(id)sender
+{
+    [[[[UIAlertView alloc] initWithTitle:@"Choose this option if you are setting up your camera using the LAN cable and you do not want to setup the WIFI"
+                               message:nil
+                              delegate:nil
+                     cancelButtonTitle:NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"Ok", nil)
+                     otherButtonTitles:nil, nil] autorelease] show];
+    
 }
 
 #pragma mark - Methods
