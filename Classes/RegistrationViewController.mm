@@ -43,6 +43,7 @@
 @property (retain, nonatomic) NSString *stringEmail;
 @property (retain, nonatomic) NSMutableDictionary *errorMessageDict;
 @property (nonatomic) BOOL keyBoardShowing;
+@property (nonatomic, retain) NSMutableArray                *errorViews;
 
 - (IBAction)handleUserNameErrorButton:(id)sender;
 - (IBAction)handleEmailErrorButton:(id)sender;
@@ -120,6 +121,7 @@
                                                  name:UIKeyboardWillHideNotification object:nil];
     
     _errorMessageDict = [[NSMutableDictionary alloc] init];
+    _errorViews = [[NSMutableArray alloc] init];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -263,7 +265,7 @@
     {
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
-            [self showErrorMessageiPadOnly:msg besideErrorButton:button];
+            [self showBesideMessageiPadOnly:msg besideErrorButton:button andTextColor:[UIColor redColor]];
         }
         else {
             [self showErrorDialog:msg];
@@ -271,11 +273,15 @@
     }
     else
     {
-        NSString *msg1 = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg",nil, [NSBundle mainBundle],
-                                                           @"Username has to be between 5-20 characters" , nil);
-        NSString *msg2 = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg5", nil, [NSBundle mainBundle],
-                                                           @"Username should not contain special characters except for - _ and ."  , nil);
-        [self showHelpDialog:[NSString stringWithFormat:@"%@\n%@", msg1, msg2]];
+        NSString *message = NSLocalizedStringWithDefaultValue(@"Create_Account_Help_msg_username",nil, [NSBundle mainBundle],
+                                                           @"Username must:\n- Be between 5-20 characters\n- Not contain special characters except for -_ and ." , nil);
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+            [self showBesideMessageiPadOnly:message besideErrorButton:button andTextColor:[UIColor blueColor]];
+        }
+        else {
+            [self showHelpDialog:message];
+        }
     }
 }
 
@@ -287,7 +293,7 @@
     {
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
-            [self showErrorMessageiPadOnly:msg besideErrorButton:button];
+            [self showBesideMessageiPadOnly:msg besideErrorButton:button andTextColor:[UIColor redColor]];
         }
         else {
             [self showErrorDialog:msg];
@@ -295,8 +301,15 @@
     }
     else
     {
-        [self showHelpDialog:NSLocalizedStringWithDefaultValue(@"Create_Account_Help_msg3",nil, [NSBundle mainBundle],
-                                                               @"Email address should be of the form somebody@somewhere.com"  , nil)];
+        NSString *message = NSLocalizedStringWithDefaultValue(@"Create_Account_Help_msg3",nil, [NSBundle mainBundle],
+                                                              @"Email address should be of the form somebody@somewhere.com"  , nil);
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+            [self showBesideMessageiPadOnly:message besideErrorButton:button andTextColor:[UIColor blueColor]];
+        }
+        else {
+            [self showHelpDialog:message];
+        }
     }
 }
 
@@ -309,7 +322,22 @@
         // user touch in password warning button
         PassValidatePopup *popup = [[PassValidatePopup alloc] initwithPassword:self.tfPassword.text
                                                                       andTitle:NSLocalizedStringWithDefaultValue(@"Create_Account_Failed",nil, [NSBundle mainBundle], @"Create Account Failed" , nil)];
-        [popup show];
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+            [popup formatAllTextByFont:[UIFont fontWithName:@"Helvetica" size:13] andTextColor:[UIColor redColor]];
+            UIView *errorView = popup.contentView;
+            CGRect rect = errorView.frame;
+            rect.origin.x = 430;
+            rect.origin.y = 290;
+            rect.size.height -= 5;
+            errorView.frame = rect;
+            [self animationDisplayErrorView:errorView];
+            [popup release];
+        }
+        else
+        {
+            [popup show];
+        }
         [popup release];
     }
     else
@@ -317,7 +345,23 @@
         // user touch in password help button
         PassValidatePopup *popup = [[PassValidatePopup alloc] initwithPassword:nil
                                                                       andTitle:NSLocalizedStringWithDefaultValue(@"Create_Account_Help",nil, [NSBundle mainBundle], @"Create Account Help" , nil)];
-        [popup show];
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+            [popup formatAllTextByFont:[UIFont fontWithName:@"Helvetica" size:13] andTextColor:[UIColor blueColor]];
+            UIView *errorView = popup.contentView;
+            CGRect rect = errorView.frame;
+            rect.origin.x = 430;
+            rect.origin.y = 290;
+            rect.size.height -= 5;
+            errorView.frame = rect;
+            [self animationDisplayErrorView:errorView];
+            [popup release];
+        }
+        else
+        {
+            
+            [popup show];
+        }
         [popup release];
     }
 }
@@ -330,7 +374,7 @@
     {
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
-            [self showErrorMessageiPadOnly:msg besideErrorButton:button];
+            [self showBesideMessageiPadOnly:msg besideErrorButton:button andTextColor:[UIColor redColor]];
         }
         else {
             [self showErrorDialog:msg];
@@ -338,8 +382,15 @@
     }
     else
     {
-        [self showHelpDialog:NSLocalizedStringWithDefaultValue(@"Create_Account_Help_msg2",nil, [NSBundle mainBundle],
-                                                               @"Confirm password must match the password" , nil)];
+        NSString *message = NSLocalizedStringWithDefaultValue(@"Create_Account_Help_msg2",nil, [NSBundle mainBundle],
+                                                              @"Confirm password must match the password" , nil);
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+            [self showBesideMessageiPadOnly:message besideErrorButton:button andTextColor:[UIColor blueColor]];
+        }
+        else {
+            [self showHelpDialog:message];
+        }
     }
 }
 
@@ -887,6 +938,7 @@
     [_viewProgress release];
     [_tfUsername release];
     [_errorMessageDict release];
+    [_errorViews release];
     [super dealloc];
 }
 
@@ -1046,12 +1098,12 @@
     [alertViewError release];
 }
 
-- (void)showErrorMessageiPadOnly:(NSString *)message besideErrorButton:(UIButton *)button {
+- (void)showBesideMessageiPadOnly:(NSString *)message besideErrorButton:(UIButton *)button andTextColor:(UIColor *)color {
     CGPoint point = [button convertPoint:button.frame.origin toView:self.view];
     CGRect rect = CGRectMake(CGRectGetMaxX(self.containtView.frame), point.y - 5, 200, 100);
     UILabel *label = [[UILabel alloc] initWithFrame:rect];
     label.text = message;
-    label.textColor = [UIColor redColor];
+    label.textColor = color;
     label.textAlignment = NSTextAlignmentLeft;
     label.numberOfLines = 0;
     label.font = [UIFont fontWithName:@"Helvetica" size:13];
@@ -1059,25 +1111,37 @@
     rect = label.frame;
     rect.size.height = labelSize.height;
     label.frame = rect;
-    [self.view addSubview:label];
+    [self animationDisplayErrorView:label];
+    [label release];
+}
+
+- (void)animationDisplayErrorView:(UIView *)errorView
+{
+    for (UIView *v in self.errorViews)
+    {
+        [v removeFromSuperview];
+    }
+    
+    [self.errorViews addObject:errorView];
+    [self.view addSubview:errorView];
     
     [UIView animateWithDuration:0.5
                           delay:0.0
                         options: UIViewAnimationCurveEaseOut
                      animations:^{
-                         label.alpha = 1.0;
+                         errorView.alpha = 1.0;
                      }
                      completion:^(BOOL finished){
-                         [UIView animateWithDuration:0.5
+                         [UIView animateWithDuration:1.5
                                                delay:2.0
                                              options: UIViewAnimationCurveEaseOut
                                           animations:^{
-                                              label.alpha = 0.0;
+                                              errorView.alpha = 0.0;
                                           }
                                           completion:^(BOOL finished){
-                                              [label removeFromSuperview];
+                                              [errorView removeFromSuperview];
+                                              [self.errorViews removeObject:errorView];
                                           }];
                      }];
-    [label release];
 }
 @end

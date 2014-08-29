@@ -305,6 +305,9 @@
 "Create_Account_Help_msg3" = "Email address should be of the form somebody@somewhere.com";
 
 /* No comment provided by engineer. */
+"Create_Account_Help_msg_username" = "Username must:\n- Be between 5-20 characters\n- Not contain special characters except for -_ and .";
+
+/* No comment provided by engineer. */
 "default" = "Voreinstellung";
 
 /* No comment provided by engineer. */

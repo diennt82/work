@@ -69,11 +69,11 @@
 
 - (void)xibDefaultLocalization
 {
-    [[self viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xibPassValidatePopup_label_password_must_be", nil, [NSBundle mainBundle], @"Password must be:", nil)];
-    [[self viewWithTag:2] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xibPassValidatePopup_label_at_leat_1_digit", nil, [NSBundle mainBundle], @"at least 1 digit", nil)];
-    [[self viewWithTag:3] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xibPassValidatePopup_label_at_leat_1_letter", nil, [NSBundle mainBundle], @"at least 1 letter", nil)];
-    [[self viewWithTag:4] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xibPassValidatePopup_label_at_least_8_characters", nil, [NSBundle mainBundle], @"at least 8 characters", nil)];
-    [[self viewWithTag:5] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xibPassValidatePopup_label_at_most_12_characters", nil, [NSBundle mainBundle], @"at most 12 characters", nil)];
+    [[self.contentView viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xibPassValidatePopup_label_password_must_be", nil, [NSBundle mainBundle], @"Password must be:", nil)];
+    [[self.contentView viewWithTag:2] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xibPassValidatePopup_label_at_leat_1_digit", nil, [NSBundle mainBundle], @"at least 1 digit", nil)];
+    [[self.contentView viewWithTag:3] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xibPassValidatePopup_label_at_leat_1_letter", nil, [NSBundle mainBundle], @"at least 1 letter", nil)];
+    [[self.contentView viewWithTag:4] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xibPassValidatePopup_label_at_least_8_characters", nil, [NSBundle mainBundle], @"at least 8 characters", nil)];
+    [[self.contentView viewWithTag:5] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xibPassValidatePopup_label_at_most_12_characters", nil, [NSBundle mainBundle], @"at most 12 characters", nil)];
 }
 
 - (void)initUIComponents
@@ -165,6 +165,29 @@
     {
         [self.imv12CharsLength setImage:[UIImage imageNamed:@"password_fail.png"]];
     }
+}
+
+- (void)formatAllTextByFont:(UIFont *)font andTextColor:(UIColor *)color
+{
+    UILabel *label = (UILabel *)[self.contentView viewWithTag:1];
+    [label setFont:font];
+    [label setTextColor:color];
+    
+    label = (UILabel *)[self.contentView viewWithTag:2];
+    [label setFont:font];
+    [label setTextColor:color];
+    
+    label = (UILabel *)[self.contentView viewWithTag:3];
+    [label setFont:font];
+    [label setTextColor:color];
+    
+    label = (UILabel *)[self.contentView viewWithTag:4];
+    [label setFont:font];
+    [label setTextColor:color];
+    
+    label = (UILabel *)[self.contentView viewWithTag:5];
+    [label setFont:font];
+    [label setTextColor:color];
 }
 
 - (void)show
