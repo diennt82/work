@@ -11,6 +11,7 @@
 #define POPUP_WIDTH_IPAD    320
 
 #import "PassValidatePopup.h"
+#import "UIView+Custom.h"
 
 @interface MBP_ValidatePopupOverlayWindow : UIWindow
 @property (nonatomic, retain) PassValidatePopup         *dialog;
@@ -40,17 +41,15 @@
     return self;
 }
 
-- (id)initwithPassword:(NSString *)text
+- (id)initwithPassword:(NSString *)text andTitle:(NSString *)title
 {
     NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"PassValidatePopup" owner:nil options:nil];
     if (objects.count > 0)
     {
         self = [[objects objectAtIndex:0] retain];
         self.password = text;
-        if (self.password == nil)
-        {
-            self.password = @"";
-        }
+        self.titleLabel.text = title;
+        [self xibDefaultLocalization];
         [self initUIComponents];
     }
     return self;
@@ -66,6 +65,15 @@
     [_overlayWindow release];
     [_password release];
     [super dealloc];
+}
+
+- (void)xibDefaultLocalization
+{
+    [[self viewWithTag:1] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xibPassValidatePopup_label_password_must_be", nil, [NSBundle mainBundle], @"Password must be:", nil)];
+    [[self viewWithTag:2] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xibPassValidatePopup_label_at_leat_1_digit", nil, [NSBundle mainBundle], @"at least 1 digit", nil)];
+    [[self viewWithTag:3] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xibPassValidatePopup_label_at_leat_1_letter", nil, [NSBundle mainBundle], @"at least 1 letter", nil)];
+    [[self viewWithTag:4] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xibPassValidatePopup_label_at_least_8_characters", nil, [NSBundle mainBundle], @"at least 8 characters", nil)];
+    [[self viewWithTag:5] setLocalizationText:NSLocalizedStringWithDefaultValue(@"xibPassValidatePopup_label_at_most_12_characters", nil, [NSBundle mainBundle], @"at most 12 characters", nil)];
 }
 
 - (void)initUIComponents
@@ -109,10 +117,17 @@
 
 - (void)checkAtLeast1Degit
 {
-    NSString *pattern = @"(?=.*\\d)";
-    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:pattern options:0 error:nil];
-    NSArray *matches = [regex matchesInString:self.password options:0 range:NSMakeRange(0, self.password.length)];
-    if (matches.count == 0)
+    if (self.password != nil)
+    {
+        NSString *pattern = @"(?=.*\\d)";
+        NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:pattern options:0 error:nil];
+        NSArray *matches = [regex matchesInString:self.password options:0 range:NSMakeRange(0, self.password.length)];
+        if (matches.count == 0)
+        {
+            [self.imv1Number setImage:[UIImage imageNamed:@"password_fail.png"]];
+        }
+    }
+    else
     {
         [self.imv1Number setImage:[UIImage imageNamed:@"password_fail.png"]];
     }
@@ -120,10 +135,17 @@
 
 - (void)checkAtLeast1Letter
 {
-    NSString *pattern = @"(?=.*[a-zA-Z])";
-    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:pattern options:0 error:nil];
-    NSArray *matches = [regex matchesInString:self.password options:0 range:NSMakeRange(0, self.password.length)];
-    if (matches.count == 0)
+    if (self.password != nil)
+    {
+        NSString *pattern = @"(?=.*[a-zA-Z])";
+        NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:pattern options:0 error:nil];
+        NSArray *matches = [regex matchesInString:self.password options:0 range:NSMakeRange(0, self.password.length)];
+        if (matches.count == 0)
+        {
+            [self.imv1Leter setImage:[UIImage imageNamed:@"password_fail.png"]];
+        }
+    }
+    else
     {
         [self.imv1Leter setImage:[UIImage imageNamed:@"password_fail.png"]];
     }
@@ -139,7 +161,7 @@
 
 - (void)checkAtMost12Charecters
 {
-    if (self.password.length > 12)
+    if (self.password == nil || self.password.length > 12)
     {
         [self.imv12CharsLength setImage:[UIImage imageNamed:@"password_fail.png"]];
     }

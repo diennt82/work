@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface PassValidatePopup : UIView
-- (id)initwithPassword:(NSString *)text;
+- (id)initwithPassword:(NSString *)text andTitle:(NSString *)title;
 - (void)show;
 - (void)dismiss;
 @end

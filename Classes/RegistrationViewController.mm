@@ -226,7 +226,7 @@
     [self.tfPassword resignFirstResponder];
     [self.tfConfirmPassword resignFirstResponder];
     [self.btnCheckbox setSelected:!self.btnCheckbox.selected];
-    [self validateAllFieldsAndEnableSignUp];
+//    [self validateAllFieldsAndEnableSignUp];
 }
 
 - (IBAction)btnCreateTouchUpInsideAction:(id)sender
@@ -259,12 +259,23 @@
 {
     UIButton *button = sender;
     NSString *msg = [self.errorMessageDict objectForKey:@(button.tag)];
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    if (msg)
     {
-        [self showErrorMessageiPadOnly:msg besideErrorButton:button];
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+            [self showErrorMessageiPadOnly:msg besideErrorButton:button];
+        }
+        else {
+            [self showErrorDialog:msg];
+        }
     }
-    else {
-        [self showErrorDialog:msg];
+    else
+    {
+        NSString *msg1 = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg",nil, [NSBundle mainBundle],
+                                                           @"Username has to be between 5-20 characters" , nil);
+        NSString *msg2 = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg5", nil, [NSBundle mainBundle],
+                                                           @"Username should not contain special characters except for - _ and ."  , nil);
+        [self showHelpDialog:[NSString stringWithFormat:@"%@\n%@", msg1, msg2]];
     }
 }
 
@@ -272,32 +283,63 @@
 {
     UIButton *button = sender;
     NSString *msg = [self.errorMessageDict objectForKey:@(button.tag)];
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    if (msg)
     {
-        [self showErrorMessageiPadOnly:msg besideErrorButton:button];
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+            [self showErrorMessageiPadOnly:msg besideErrorButton:button];
+        }
+        else {
+            [self showErrorDialog:msg];
+        }
     }
-    else {
-        [self showErrorDialog:msg];
+    else
+    {
+        [self showHelpDialog:NSLocalizedStringWithDefaultValue(@"Create_Account_Help_msg3",nil, [NSBundle mainBundle],
+                                                               @"Email address should be of the form somebody@somewhere.com"  , nil)];
     }
 }
 
 - (IBAction)handlePasswordErrorButton:(id)sender
 {
-    PassValidatePopup *popup = [[PassValidatePopup alloc] initwithPassword:self.tfPassword.text];
-    [popup show];
-    [popup release];
+    UIButton *button = sender;
+    NSString *msg = [self.errorMessageDict objectForKey:@(button.tag)];
+    if (msg)
+    {
+        // user touch in password warning button
+        PassValidatePopup *popup = [[PassValidatePopup alloc] initwithPassword:self.tfPassword.text
+                                                                      andTitle:NSLocalizedStringWithDefaultValue(@"Create_Account_Failed",nil, [NSBundle mainBundle], @"Create Account Failed" , nil)];
+        [popup show];
+        [popup release];
+    }
+    else
+    {
+        // user touch in password help button
+        PassValidatePopup *popup = [[PassValidatePopup alloc] initwithPassword:nil
+                                                                      andTitle:NSLocalizedStringWithDefaultValue(@"Create_Account_Help",nil, [NSBundle mainBundle], @"Create Account Help" , nil)];
+        [popup show];
+        [popup release];
+    }
 }
 
 - (IBAction)handleCPasswordErrorButton:(id)sender
 {
     UIButton *button = sender;
     NSString *msg = [self.errorMessageDict objectForKey:@(button.tag)];
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    if (msg)
     {
-        [self showErrorMessageiPadOnly:msg besideErrorButton:button];
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+            [self showErrorMessageiPadOnly:msg besideErrorButton:button];
+        }
+        else {
+            [self showErrorDialog:msg];
+        }
     }
-    else {
-        [self showErrorDialog:msg];
+    else
+    {
+        [self showHelpDialog:NSLocalizedStringWithDefaultValue(@"Create_Account_Help_msg2",nil, [NSBundle mainBundle],
+                                                               @"Confirm password must match the password" , nil)];
     }
 }
 
@@ -382,9 +424,9 @@
     if ([_tfUsername.text length] < 5 || 20 < [_tfUsername.text length])
     {
         msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg",nil, [NSBundle mainBundle],
-                                                @"User name has to be between 5-20 characters" , nil);
+                                                @"Username has to be between 5-20 characters" , nil);
     }
-    else if (![self checkValidateUsername])
+    else if (![self checkValidateUsername:_tfUsername.text])
     {
         msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg5", nil, [NSBundle mainBundle],
                                                 @"Username should not contain special characters except for - _ and ."  , nil);
@@ -565,8 +607,57 @@
 #pragma mark - Text field delegate
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
-    [self validateAllFieldsAndEnableSignUp];
+//    [self validateAllFieldsAndEnableSignUp];
+    NSString *aNewString = [textField.text stringByReplacingCharactersInRange:range withString:string];
     
+    NSString *msg = nil;
+    if (textField == _tfUsername)
+    {
+        if ([textField.text length] < 5 || 20 < [textField.text length])
+        {
+            msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg",nil, [NSBundle mainBundle],
+                                                              @"Username has to be between 5-20 characters" , nil);
+        }
+        else if (![self checkValidateUsername:aNewString])
+        {
+            msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg5", nil, [NSBundle mainBundle],
+                                                              @"Username should not contain special characters except for - _ and ."  , nil);
+        }
+    }
+    else if (textField == _tfEmail)
+    {
+        if(![self isValidEmail:aNewString])
+        {
+            msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg3",nil, [NSBundle mainBundle],
+                                                              @"Invalid email. Email address should be of the form somebody@somewhere.com"  , nil);
+        }
+    }
+    else if(textField == _tfPassword)
+    {
+        if (![self validatePassword:aNewString])
+        {
+            //            NSString *msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg1",nil, [NSBundle mainBundle],
+            //                                                    @"Password has to be between 8-12 characters" , nil);
+            msg = @"";
+        }
+    }
+    else if(textField == _tfConfirmPassword)
+    {
+        if (![_tfPassword.text isEqualToString:aNewString] && ![aNewString isEqualToString:@""])
+        {
+            msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg2",nil, [NSBundle mainBundle],
+                                                              @"Password does not match" , nil);
+        }
+    }
+    
+    if (msg != nil)
+    {
+        [self displayErrorForTextField:textField withMesage:msg];
+    }
+    else
+    {
+        [self dismisErrorForTextField:textField];
+    }
     return YES;
 }
 
@@ -593,53 +684,17 @@
 }
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
-    [self dismisErrorForTextField:textField];
+    if ([textField.text isEqualToString:@""])
+    {
+        [self displayQuestionForTextField:textField];
+    }
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
-    if ([textField.text isEqualToString:@""]) return;
-    
-    if (textField == _tfUsername)
+    if ([textField.text isEqualToString:@""])
     {
-        if ([textField.text length] < 5 || 20 < [textField.text length])
-        {
-            NSString *msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg",nil, [NSBundle mainBundle],
-                                                    @"User name has to be between 5-20 characters" , nil);
-            [self displayErrorForTextField:textField withMesage:msg];
-        }
-        else if (![self checkValidateUsername])
-        {
-            NSString *msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg5", nil, [NSBundle mainBundle],
-                                                    @"Username should not contain special characters except for - _ and ."  , nil);
-            [self displayErrorForTextField:textField withMesage:msg];
-        }
-    }
-    else if (textField == _tfEmail)
-    {
-        if(![self isValidEmail:textField.text])
-        {
-            NSString *msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg3",nil, [NSBundle mainBundle],
-                                                    @"Invalid email. Email address should be of the form somebody@somewhere.com"  , nil);
-            [self displayErrorForTextField:textField withMesage:msg];
-        }
-    }
-    else if(textField == _tfPassword)
-    {
-        if (![self validatePassword:_tfPassword.text])
-        {
-//            NSString *msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg1",nil, [NSBundle mainBundle],
-//                                                    @"Password has to be between 8-12 characters" , nil);
-            [self displayErrorForTextField:textField withMesage:@""];
-        }
-    }
-    else if(textField == _tfConfirmPassword)
-    {
-        if (![_tfPassword.text isEqualToString:textField.text] && ![textField.text isEqualToString:@""])
-        {
-            NSString *msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg2",nil, [NSBundle mainBundle],
-                                                    @"Password does not match" , nil);
-            [self displayErrorForTextField:textField withMesage:msg];
-        }
+        [self displayQuestionForTextField:textField];
+        return;
     }
 }
 
@@ -835,10 +890,10 @@
     [super dealloc];
 }
 
-- (BOOL)checkValidateUsername {
+- (BOOL)checkValidateUsername:(NSString *)username {
     NSString * regex = @"[a-zA-Z0-9._-]+";
     NSPredicate * validatedUsername = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
-    return [validatedUsername evaluateWithObject:_tfUsername.text];
+    return [validatedUsername evaluateWithObject:username];
 }
 
 - (void)displayErrorForTextField:(UITextField *)textField withMesage:(NSString *)message {
@@ -863,18 +918,23 @@
     id <NSCopying> key = @(animatButton.tag);
     [self.errorMessageDict setObject:message forKey:key];
     
+    [animatButton setImage:[UIImage imageNamed:@"alert.png"] forState:UIControlStateNormal];
     [animatButton setHidden:NO];
     UIView *spView = [animatButton superview];
     [spView bringSubviewToFront:animatButton];
-    [UIView animateWithDuration:1.0
-                          delay:0.0
-                        options: UIViewAnimationCurveEaseOut
-                     animations:^{
-                         animatButton.alpha = 1.0;
-                     } 
-                     completion:^(BOOL finished){
-                         
-                     }];
+    
+    if (animatButton.alpha == 0.0)
+    {
+        [UIView animateWithDuration:1.0
+                              delay:0.0
+                            options: UIViewAnimationCurveEaseOut
+                         animations:^{
+                             animatButton.alpha = 1.0;
+                         }
+                         completion:^(BOOL finished){
+                             
+                         }];
+    }
 }
 
 - (void)dismisErrorForTextField:(UITextField *)textField {
@@ -902,21 +962,80 @@
     [animatButton setHidden:YES];
     UIView *spView = [animatButton superview];
     [spView bringSubviewToFront:animatButton];
-    [UIView animateWithDuration:1.0
-                          delay:0.0
-                        options: UIViewAnimationCurveEaseOut
-                     animations:^{
-                         animatButton.alpha = 0.0;
-                     }
-                     completion:^(BOOL finished){
-                         
-                     }];
+    
+    if (animatButton.alpha == 1.0)
+    {
+        [UIView animateWithDuration:1.0
+                              delay:0.0
+                            options: UIViewAnimationCurveEaseOut
+                         animations:^{
+                             animatButton.alpha = 0.0;
+                         }
+                         completion:^(BOOL finished){
+                             
+                         }];
+    }
+}
+
+- (void)displayQuestionForTextField:(UITextField *)textField {
+    UIButton *animatButton = nil;
+    if (textField == _tfUsername)
+    {
+        animatButton = self.btnUserNameErr;
+    }
+    else if (textField == _tfEmail)
+    {
+        animatButton = self.btnEmailErr;
+    }
+    else if(textField == _tfPassword)
+    {
+        animatButton = self.btnPasswordErr;
+    }
+    else
+    {
+        animatButton = self.btnCPasswordErr;
+    }
+    
+    id <NSCopying> key = @(animatButton.tag);
+    [self.errorMessageDict removeObjectForKey:key];
+    
+    [animatButton setHidden:NO];
+    [animatButton setImage:[UIImage imageNamed:@"alert_learn.png"] forState:UIControlStateNormal];
+    UIView *spView = [animatButton superview];
+    [spView bringSubviewToFront:animatButton];
+    
+    if (animatButton.alpha == 0.0)
+    {
+        [UIView animateWithDuration:1.0
+                              delay:0.0
+                            options: UIViewAnimationCurveEaseOut
+                         animations:^{
+                             animatButton.alpha = 1.0;
+                         }
+                         completion:^(BOOL finished){
+                             
+                         }];
+    }
 }
 
 - (void)showErrorDialog:(NSString *)message {
     NSString * ok = NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil);
     NSString *title = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed",nil, [NSBundle mainBundle],
                                                         @"Create Account Failed" , nil);
+    UIAlertView *alertViewError = [[UIAlertView alloc]
+                                   initWithTitle:title
+                                   message:message
+                                   delegate:nil
+                                   cancelButtonTitle:nil
+                                   otherButtonTitles:ok, nil];
+    [alertViewError show];
+    [alertViewError release];
+}
+
+- (void)showHelpDialog:(NSString *)message {
+    NSString * ok = NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil);
+    NSString *title = NSLocalizedStringWithDefaultValue(@"Create_Account_Help",nil, [NSBundle mainBundle],
+                                                        @"Create Account Help" , nil);
     UIAlertView *alertViewError = [[UIAlertView alloc]
                                    initWithTitle:title
                                    message:message
