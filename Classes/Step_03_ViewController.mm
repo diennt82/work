@@ -128,6 +128,8 @@
     // Do any additional setup after loading the view.
     
     [super viewWillAppear:animated];
+
+    self.navigationController.navigationBar.userInteractionEnabled = YES;
     
     self.trackedViewName = GAI_CATEGORY;
     
@@ -198,6 +200,7 @@
     [super dealloc];
 }
 
+#if 0
 - (IBAction)handleButtonPress:(id)sender
 {
     int tag = ((UIButton*)sender).tag;
@@ -210,6 +213,7 @@
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"prefs:root=WIFI"]];
     }
 }
+#endif
 
 -(void) handleEnteredBackground
 {
@@ -497,4 +501,7 @@
     }
     return nil;
 }
+
+
+
 @end

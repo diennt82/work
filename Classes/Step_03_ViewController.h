@@ -39,8 +39,10 @@
 @property (nonatomic, retain) NSString * cameraMac, * cameraName, * homeWifiSSID;
 @property (nonatomic, assign) id<Step_03Delegate> delegate;
 
+#if 0
 - (IBAction)handleButtonPress:(id)sender;
 - (void) hideProgess;
+#endif
 -(void) showProgress:(NSTimer *) exp;
 - (void) checkConnectionToCamera:(NSTimer *) expired;
 -(void) moveToNextStep;

@@ -47,6 +47,7 @@
 @property (nonatomic) NSInteger setupType;
 @property (nonatomic) BOOL isBackPress;
 @property (nonatomic, retain) UIButton *btnSetupWithWifi;
+@property (nonatomic, retain) NSTimer *timerShowViewError;
 
 @end
 
@@ -227,6 +228,18 @@
     }
     else
     {
+        if (_timerTimeoutConnectBLE != nil)
+        {
+            [self.timerTimeoutConnectBLE invalidate];
+            self.timerTimeoutConnectBLE = nil;
+        }
+        
+        self.timerTimeoutConnectBLE = [NSTimer scheduledTimerWithTimeInterval:BLE_TIMEOUT_PROCESS
+                                                                       target:self
+                                                                     selector:@selector(timeoutBLESetupProcessing:)
+                                                                     userInfo:nil
+                                                                      repeats:NO];
+        
         [[BLEConnectionManager getInstanceBLE] stopScanBLE];
         
         if ([BLEConnectionManager getInstanceBLE].state == CONNECTING )
@@ -365,23 +378,135 @@
     
     [[BLEConnectionManager getInstanceBLE] stopScanBLE];
     
-
-    [self.viewPairNDetecting removeFromSuperview];
-    [self customIOS7dialogButtonTouchUpInside:_alertView clickedButtonAtIndex:0];
-    
-    if (_cameraType == SETUP_CAMERA_FOCUS73)
+    /**
+     * 1. Never connects to an BLE.
+     * 2. At least connected to an BLE.
+     */
+    if (!_rescanFlag)
     {
-        [self btnSetupWithWifiAction:_btnSetupWithWifi];
+        [self.viewPairNDetecting removeFromSuperview];
+        [self customIOS7dialogButtonTouchUpInside:_alertView clickedButtonAtIndex:0];
+        
+        if (_cameraType == SETUP_CAMERA_FOCUS73)
+        {
+            [self btnSetupWithWifiAction:_btnSetupWithWifi];
+        }
+        else
+        {
+            if (SCREEN_HEIGHT < 568)
+            {
+                self.viewError.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+            }
+            
+            [self.view addSubview:_viewError];
+            [self.view bringSubviewToFront:_viewError];
+        }
     }
     else
     {
-        if (SCREEN_HEIGHT < 568)
+        self.navigationItem.leftBarButtonItem.enabled = NO;
+        
+        NSTimeInterval timeInterval = 5.f;
+        
+        if ([BLEConnectionManager getInstanceBLE].state == CONNECTED)
         {
-            self.viewError.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+            NSLog(@"%s sendCommandRestartSystem.", __FUNCTION__);
+            
+            [self sendCommandRestartSystem];
+            
+            [BLEConnectionManager getInstanceBLE].needReconnect = NO;
+            [[BLEConnectionManager getInstanceBLE] stopScanBLE];
+            [BLEConnectionManager getInstanceBLE].delegate = self;
+            [[BLEConnectionManager getInstanceBLE] disconnect];
+        }
+        else
+        {
+            NSLog(@"%s timeInterval = 60.f.", __FUNCTION__);
+            timeInterval = 60.f;
         }
         
-        [self.view addSubview:_viewError];
-        [self.view bringSubviewToFront:_viewError];
+        if (_timerShowViewError)
+        {
+            [_timerShowViewError invalidate];
+            self.timerShowViewError = nil;
+        }
+        
+        self.timerShowViewError = [NSTimer scheduledTimerWithTimeInterval:timeInterval
+                                                                   target:self
+                                                                 selector:@selector(showViewError:)
+                                                                 userInfo:nil
+                                                                  repeats:YES];
+    }
+}
+
+- (void)sendCommandRestartSystem
+{
+    NSLog(@"%s", __FUNCTION__);
+    
+    NSDate * date;
+    while( ([BLEConnectionManager getInstanceBLE].state != CONNECTED) &&
+          ( self.shouldTimeoutProcessing == FALSE ) )
+    {
+        date = [NSDate dateWithTimeInterval:2.0 sinceDate:[NSDate date]];
+        [[NSRunLoop currentRunLoop] runUntilDate:date];
+    }
+    
+    [BLEConnectionManager getInstanceBLE].delegate = self;
+    [[BLEConnectionManager getInstanceBLE].uartPeripheral writeString:RESTART_HTTP_CMD withTimeOut:SHORT_TIME_OUT_SEND_COMMAND];
+    
+    if ([BLEConnectionManager getInstanceBLE].uartPeripheral.isBusy  )
+    {
+        date = [NSDate dateWithTimeInterval:1.5 sinceDate:[NSDate date]];
+        
+        [[NSRunLoop currentRunLoop] runUntilDate:date];
+        
+        if([BLEConnectionManager getInstanceBLE].uartPeripheral.isBusy  )
+        {
+            NSLog(@"BLE still busy, camera may have already rebooted. Moving on..");
+        }
+    }
+}
+
+- (void)showViewError:(NSTimer *)timer
+{
+    NSLog(@"%s timeInterval:%f", __FUNCTION__, timer.timeInterval);
+    
+    if (timer.timeInterval == 5.f &&
+        [BLEConnectionManager getInstanceBLE].state == CONNECTED)
+    {
+        NSLog(@"%s Loop timer.", __FUNCTION__);
+        
+        [self sendCommandRestartSystem];
+        
+        [BLEConnectionManager getInstanceBLE].needReconnect = NO;
+        [[BLEConnectionManager getInstanceBLE] stopScanBLE];
+        [BLEConnectionManager getInstanceBLE].delegate = self;
+        [[BLEConnectionManager getInstanceBLE] disconnect];
+    }
+    else
+    {
+        NSLog(@"%s Invalidate timer.", __FUNCTION__);
+        [timer invalidate];
+        
+        self.navigationItem.leftBarButtonItem.enabled = YES;
+        
+        [self.viewPairNDetecting removeFromSuperview];
+        [self customIOS7dialogButtonTouchUpInside:_alertView clickedButtonAtIndex:0];
+        
+        if (_cameraType == SETUP_CAMERA_FOCUS73)
+        {
+            [self btnSetupWithWifiAction:_btnSetupWithWifi];
+        }
+        else
+        {
+            if (SCREEN_HEIGHT < 568)
+            {
+                self.viewError.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+            }
+            
+            [self.view addSubview:_viewError];
+            [self.view bringSubviewToFront:_viewError];
+        }
     }
 }
 
