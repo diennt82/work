@@ -308,7 +308,7 @@
         NSLog(@"%s Waiting for bg task", __FUNCTION__);
     }
     
-    [self.navigationController popToRootViewControllerAnimated:NO];
+    //[self.navigationController popToRootViewControllerAnimated:NO];
     [_notifDelegate sendStatus:SHOW_CAMERA_LIST2];
     
     

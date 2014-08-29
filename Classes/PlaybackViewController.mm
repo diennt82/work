@@ -18,6 +18,8 @@
 #import "MBProgressHUD.h"
 #import "MBP_iosAppDelegate.h"
 #import "UIView+Custom.h"
+#import "H264PlayerViewController.h"
+#import "ConnectionMethodDelegate.h"
 
 #define START 0
 #define END   100.0
@@ -490,7 +492,33 @@
         
         [[UIApplication sharedApplication] setStatusBarHidden:NO
                                                 withAnimation:UIStatusBarAnimationNone];
-        [self.navigationController popViewControllerAnimated:YES];
+        
+        id aViewController = self.navigationController.viewControllers[self.navigationController.viewControllers.count - 2];
+        
+        if ([aViewController isKindOfClass:[H264PlayerViewController class]])
+        {
+            NSLog(@"%s Player view.", __FUNCTION__);
+            [self.navigationController popViewControllerAnimated:YES];
+        }
+        else if([aViewController isKindOfClass:[NotifViewController class]])
+        {
+            NSLog(@"%s Notif view.", __FUNCTION__);
+            
+            id rootDelegate = self.navigationController.viewControllers[0];
+            
+            if ([rootDelegate isKindOfClass:[MBP_iosViewController class]])
+            {
+                [rootDelegate sendStatus:SHOW_CAMERA_LIST2];
+            }
+            else
+            {
+                NSLog(@"%s rootDelegate:%@.", __FUNCTION__, rootDelegate);
+            }
+        }
+        else
+        {
+            NSLog(@"%s aViewController:%@.", __FUNCTION__, aViewController);
+        }
     }
     else
     {
