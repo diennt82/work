@@ -332,7 +332,7 @@
             rect.size.height -= 5;
             errorView.frame = rect;
             [self animationDisplayErrorView:errorView];
-            [popup release];
+            [popup dismiss];
         }
         else
         {
@@ -355,7 +355,7 @@
             rect.size.height -= 5;
             errorView.frame = rect;
             [self animationDisplayErrorView:errorView];
-            [popup release];
+            [popup dismiss];
         }
         else
         {
