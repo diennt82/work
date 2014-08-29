@@ -655,6 +655,10 @@
 		8BB5007C19A58DFC00BF6B0E /* settings_switch_on.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BB5007819A58DFC00BF6B0E /* settings_switch_on.png */; };
 		8BB5007D19A58DFC00BF6B0E /* settings_switch_on@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BB5007919A58DFC00BF6B0E /* settings_switch_on@2x.png */; };
 		8BB53A83194826050078B58E /* NotifViewController~iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8BB53A82194826050078B58E /* NotifViewController~iPad.xib */; };
+		8BB6494219AF1F2700916FD7 /* PassValidatePopup.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BB6494119AF1F2700916FD7 /* PassValidatePopup.m */; };
+		8BB6494619AF27D000916FD7 /* PassValidatePopup.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8BB6494519AF27D000916FD7 /* PassValidatePopup.xib */; };
+		8BB6494919AF43AE00916FD7 /* password_fail.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BB6494719AF43AE00916FD7 /* password_fail.png */; };
+		8BB6494A19AF43AE00916FD7 /* password_fail@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BB6494819AF43AE00916FD7 /* password_fail@2x.png */; };
 		8BB7EA9A196E3F5000FDD674 /* Focus73TableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BB7EA98196E3F5000FDD674 /* Focus73TableViewController.m */; };
 		8BB7EA9B196E3F5000FDD674 /* Focus73TableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8BB7EA99196E3F5000FDD674 /* Focus73TableViewController.xib */; };
 		8BC0A02F1844A87700A5FD52 /* temp_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BC0A02E1844A87700A5FD52 /* temp_bg.png */; };
@@ -1555,6 +1559,11 @@
 		8BB5007819A58DFC00BF6B0E /* settings_switch_on.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = settings_switch_on.png; sourceTree = "<group>"; };
 		8BB5007919A58DFC00BF6B0E /* settings_switch_on@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "settings_switch_on@2x.png"; sourceTree = "<group>"; };
 		8BB53A82194826050078B58E /* NotifViewController~iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "NotifViewController~iPad.xib"; sourceTree = "<group>"; };
+		8BB6494019AF1F2700916FD7 /* PassValidatePopup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PassValidatePopup.h; sourceTree = "<group>"; };
+		8BB6494119AF1F2700916FD7 /* PassValidatePopup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PassValidatePopup.m; sourceTree = "<group>"; };
+		8BB6494519AF27D000916FD7 /* PassValidatePopup.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PassValidatePopup.xib; sourceTree = "<group>"; };
+		8BB6494719AF43AE00916FD7 /* password_fail.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = password_fail.png; sourceTree = "<group>"; };
+		8BB6494819AF43AE00916FD7 /* password_fail@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "password_fail@2x.png"; sourceTree = "<group>"; };
 		8BB7EA97196E3F5000FDD674 /* Focus73TableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Focus73TableViewController.h; sourceTree = "<group>"; };
 		8BB7EA98196E3F5000FDD674 /* Focus73TableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Focus73TableViewController.m; sourceTree = "<group>"; };
 		8BB7EA99196E3F5000FDD674 /* Focus73TableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Focus73TableViewController.xib; sourceTree = "<group>"; };
@@ -2985,6 +2994,8 @@
 				8B95076D18C9960D006D4945 /* setup_camera_plug@2x.png */,
 				8B95076E18C9960D006D4945 /* setup_check.png */,
 				8B95076F18C9960D006D4945 /* setup_check@2x.png */,
+				8BB6494719AF43AE00916FD7 /* password_fail.png */,
+				8BB6494819AF43AE00916FD7 /* password_fail@2x.png */,
 				8B95077018C9960D006D4945 /* setup_clock.png */,
 				8B95077118C9960D006D4945 /* setup_clock@2x.png */,
 				8B95077218C9960D006D4945 /* Setup_iphone.png */,
@@ -3124,6 +3135,9 @@
 				8B9ABB6818A9FDEC0079F4A3 /* RegistrationViewController.mm */,
 				8B9ABB6918A9FDEC0079F4A3 /* RegistrationViewController.xib */,
 				8BA17EFB18B73E2400129FE7 /* RegistrationViewController_35.xib */,
+				8BB6494019AF1F2700916FD7 /* PassValidatePopup.h */,
+				8BB6494119AF1F2700916FD7 /* PassValidatePopup.m */,
+				8BB6494519AF27D000916FD7 /* PassValidatePopup.xib */,
 			);
 			name = RegistrationVC;
 			sourceTree = "<group>";
@@ -3786,6 +3800,7 @@
 				8B9507A718C9960D006D4945 /* setup_arrow@2x.png in Resources */,
 				5E769B0419345B0E008D9CA7 /* loader_big_a@2x.png in Resources */,
 				5EBA459019405BEA00695155 /* SongTitleView.xib in Resources */,
+				8BB6494919AF43AE00916FD7 /* password_fail.png in Resources */,
 				A18635F518B74BF400CB5CDA /* CellMelody_Portrait_iPad.xib in Resources */,
 				8B29A04018AF500900D36BE5 /* dont_disturb_handle@2x.png in Resources */,
 				8B299FE118AF500900D36BE5 /* tab_inactive.png in Resources */,
@@ -4021,6 +4036,7 @@
 				8B95079B18C9960D006D4945 /* detect_camera_3@2x.png in Resources */,
 				5EBA458E19405BEA00695155 /* FWUpgradeView_land.xib in Resources */,
 				8B29A07918AF500A00D36BE5 /* video_overlay_del.png in Resources */,
+				8BB6494619AF27D000916FD7 /* PassValidatePopup.xib in Resources */,
 				8BA7F2811851C57200BE0145 /* blink11hd360p.sdp in Resources */,
 				8BC0A0461844B31700A5FD52 /* mbp_icon57x57.png in Resources */,
 				8B299F9618AF500900D36BE5 /* camera_action_video_stop_pressed_land@2x.png in Resources */,
@@ -4328,6 +4344,7 @@
 				8B95078E18C9960D006D4945 /* setup_camera_c4.png in Resources */,
 				8B29A02718AF500900D36BE5 /* loader_iphone@2x.png in Resources */,
 				8B29A07818AF500A00D36BE5 /* video_overlay_bg@2x.png in Resources */,
+				8BB6494A19AF43AE00916FD7 /* password_fail@2x.png in Resources */,
 				8B68F5D118066CE500661527 /* PlaybackViewController_ipad.xib in Resources */,
 				8BA5651119A1B5210001D9A8 /* camera_action_play_5.png in Resources */,
 				8B93848A1856E97D009C4771 /* CameraSettingsCell.xib in Resources */,
@@ -4366,6 +4383,7 @@
 				8B98D53119235E910084C2FD /* NSData+AESCrypt.m in Sources */,
 				28D7ACF80DDB3853001CB0EB /* MBP_iosViewController.mm in Sources */,
 				5E712D91192B3332000858F1 /* UIActionSheet+Blocks.m in Sources */,
+				8BB6494219AF1F2700916FD7 /* PassValidatePopup.m in Sources */,
 				8B9112CA186010F1004301C5 /* GeneralCell.m in Sources */,
 				84A6625C195C0C2500EF7DB5 /* UIButton+WebCache.m in Sources */,
 				8BC2235D199219BE00130294 /* OpenUDID.m in Sources */,

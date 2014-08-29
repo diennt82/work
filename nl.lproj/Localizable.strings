@@ -169,7 +169,7 @@
 "Create_Account_Failed" = "Account aanmaken is mislukt";
 
 /* No comment provided by engineer. */
-"Create_Account_Failed_msg" = "User name has to be between 5-20 characters";
+"Create_Account_Failed_msg" = "Username has to be between 5-20 characters";
 
 /* No comment provided by engineer. */
 "Create_Account_Failed_msg1" = "Password has to be between 8-12 characters";
