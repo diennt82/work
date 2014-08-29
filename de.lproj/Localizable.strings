@@ -281,7 +281,7 @@
 "Create_Account_Failed_msg" = "Username muss zwischen 5 und 20 Zeichen haben";
 
 /* No comment provided by engineer. */
-"Create_Account_Failed_msg1" = "Passwort muss 8-12 Zeichen haben";
+"Create_Account_Failed_msg1" = "Password has to be between 8-12 characters, at least 1 digit, at least 1 letter";
 
 /* No comment provided by engineer. */
 "Create_Account_Failed_msg2" = "Password does not match";

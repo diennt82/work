@@ -484,10 +484,10 @@
     }
     else if (![self validatePassword:_tfPassword.text])
     {
-//        msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg1",nil, [NSBundle mainBundle],
-//                                                @"Password has to be between 8-12 characters" , nil);
-        [self handlePasswordErrorButton:nil];
-        return NO;
+        msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg1",nil, [NSBundle mainBundle],
+                                                @"Password has to be between 8-12 characters, at least 1 digit, at least 1 letter" , nil);
+//        [self handlePasswordErrorButton:self.btnPasswordErr];
+//        return NO;
     }
     else if ( ![_tfPassword.text isEqualToString:_tfConfirmPassword.text])
     {
@@ -687,8 +687,6 @@
     {
         if (![self validatePassword:aNewString])
         {
-            //            NSString *msg = NSLocalizedStringWithDefaultValue(@"Create_Account_Failed_msg1",nil, [NSBundle mainBundle],
-            //                                                    @"Password has to be between 8-12 characters" , nil);
             msg = @"";
         }
     }
