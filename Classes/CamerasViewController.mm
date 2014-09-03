@@ -331,7 +331,7 @@
                           withString:NSLocalizedStringWithDefaultValue(@"help_text_upgrade_may_take_around_3-5_minutes", nil, [NSBundle mainBundle], @"This upgrade may take around 3-5 minutes to complete", nil)
                              options:nil range:NSMakeRange(0, html.length)];
     
-    CamerasListHelpWindowPopup *popup = [[CamerasListHelpWindowPopup alloc] initWithTitle:@"Camera Status Help"
+    CamerasListHelpWindowPopup *popup = [[CamerasListHelpWindowPopup alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"help_title_camera_status", nil, [NSBundle mainBundle], @"Camera Status Help", nil)
                                                       andHtmlString:html];
     [popup show];
     [popup release];

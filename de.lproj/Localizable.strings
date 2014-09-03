@@ -380,6 +380,33 @@
 "Go_to_camera" = "Gehe zu Kamera";
 
 /* No comment provided by engineer. */
+"help_congrat_button_find_out_more" = "Find Out More";
+
+/* No comment provided by engineer. */
+"help_congrat_button_no_thanks_maybe_later" = "No Thanks! Maybe Later";
+
+/* No comment provided by engineer. */
+"help_congrat_button_sounds_great_start_free_trial" = "Sounds Great! Start Free Trial";
+
+/* No comment provided by engineer. */
+"help_congrat_button_start_free_trial" = "Start Free Trial";
+
+/* No comment provided by engineer. */
+"help_congrat_text_congratulations" = "Congratulations – you have qualified for a free two week trial of our optional motion-triggered Cloud Video Recording service.";
+
+/* No comment provided by engineer. */
+"help_congrat_text_find_out_more" = "With our optional motion-triggered video recording service, you’ll never miss a moment again. Any time movement is detected by your camera you’ll receive a video of the whole event. Click to view immediately or scroll back through your timeline to see all of the day’s events.<P/>Your free trial will last for two weeks and you can turn this feature on/off at any time by going to ‘Settings’.<P/>If you’d like even more detailed information, please <a href=\"http://hubbleconnected.com/free-trial/\">click here</a>.";
+
+/* No comment provided by engineer. */
+"help_congrat_text_start_free_trial" = "With our motion-triggered video recording, you’ll never miss a moment again. Any time movement is detected by your camera you’ll receive a video of the whole event. The free trial will last for two weeks and you can turn this feature on/off at any time by going to ‘Settings’.";
+
+/* No comment provided by engineer. */
+"help_congrat_title_congratulations" = "Congratulations!";
+
+/* No comment provided by engineer. */
+"help_congrat_title_free_trial" = "Free Trial!";
+
+/* No comment provided by engineer. */
 "help_text_camera_is_not_connected" = "Camera is not connected to the internet";
 
 /* No comment provided by engineer. */
@@ -480,6 +507,18 @@
 
 /* No comment provided by engineer. */
 "help_text_where_my_recorded" = "Q. Where can I find my recorded videos and snapshots?";
+
+/* No comment provided by engineer. */
+"help_title_camera_details" = "Camera Details Help";
+
+/* No comment provided by engineer. */
+"help_title_camera_status" = "Camera Status Help";
+
+/* No comment provided by engineer. */
+"help_title_notification_sensitivity" = "Notification Sensitivity Help";
+
+/* No comment provided by engineer. */
+"help_title_video_screen" = "Video Screen Help";
 
 /* No comment provided by engineer. */
 "high_quality" = "Hohe Qualität";

@@ -13,9 +13,6 @@ typedef enum _CONGRAT_TYPE {
     SOUND_GREAT = 3
 } CONGRAT_TYPE;
 
-#define kCongratValues [NSArray arrayWithObjects:@"Start Free Trial", @"Find Out More", @"No Thanks! Maybe Later", @"Sounds Great! Start Free Trial", nil]
-#define kCongratKeys [NSArray arrayWithObjects:@(START_FREE_TRIAL), @(FIND_OUT_MORE), @(MAYBE_LATER), @(SOUND_GREAT), nil]
-
 #import "HelpWindowPopup.h"
 
 @protocol CongratHelpDelegate <NSObject>
@@ -23,7 +20,7 @@ typedef enum _CONGRAT_TYPE {
 @end
 
 @interface CongratHelpWindowPopup : HelpWindowPopup
-@property (nonatomic, retain) NSDictionary *buttonTitles;
+@property (nonatomic, retain) NSMutableDictionary *buttonTitles;
 
 - (id)initWithTarget:(id)target;
 - (void)reloadUIComponents;

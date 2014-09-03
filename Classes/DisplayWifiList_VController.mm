@@ -303,7 +303,7 @@
     [[[[UIAlertView alloc] initWithTitle:@"Choose this option if you are setting up your camera using the LAN cable and you do not want to setup the WIFI"
                                message:nil
                               delegate:nil
-                     cancelButtonTitle:NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"Ok", nil)
+                     cancelButtonTitle:NSLocalizedStringWithDefaultValue(@"ok", nil, [NSBundle mainBundle], @"OK", nil)
                      otherButtonTitles:nil, nil] autorelease] show];
     
 }

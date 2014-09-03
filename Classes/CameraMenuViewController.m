@@ -950,7 +950,7 @@ typedef enum _WAIT_FOR_UPDATING {
                           withString:NSLocalizedStringWithDefaultValue(@"help_text_can_change_thumbnail", nil, [NSBundle mainBundle], @"User can change the thumbnail image shown on the camera list screen", nil)
                              options:nil range:NSMakeRange(0, html.length)];
     
-    HelpWindowPopup *popup = [[HelpWindowPopup alloc] initWithTitle:@"Camera Details Help"
+    HelpWindowPopup *popup = [[HelpWindowPopup alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"help_title_camera_details", nil, [NSBundle mainBundle], @"Camera Details Help", nil)
                                                          andHtmlString:html];
     [popup show];
     [popup release];
@@ -1029,7 +1029,7 @@ typedef enum _WAIT_FOR_UPDATING {
                           withString:NSLocalizedStringWithDefaultValue(@"help_text_receive_notification_every_30_minute", nil, [NSBundle mainBundle], @"You will receive a notification every 30 minutes (on average) whenever the temperature falls outside the range you have selected", nil)
                              options:nil range:NSMakeRange(0, html.length)];
     
-    HelpWindowPopup *popup = [[HelpWindowPopup alloc] initWithTitle:@"Notification Sensitivity Help"
+    HelpWindowPopup *popup = [[HelpWindowPopup alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"help_title_notification_sensitivity", nil, [NSBundle mainBundle], @"Notification Sensitivity Help", nil)
                                                          andHtmlString:html];
     [popup show];
     [popup release];

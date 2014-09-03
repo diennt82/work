@@ -793,7 +793,7 @@ double _ticks = 0;
     {
         height = 420;
     }
-    HelpWindowPopup *popup = [[HelpWindowPopup alloc] initWithTitle:@"Video Screen Help"
+    HelpWindowPopup *popup = [[HelpWindowPopup alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"help_title_video_screen", nil, [NSBundle mainBundle], @"Video Screen Help", nil)
                                                       andHtmlString:html
                                                           andHeight:height];
     popup.delegate = self;

@@ -6,6 +6,8 @@
 //  Copyright (c) 2014 Smart Panda Ltd. All rights reserved.
 //
 
+#define kCongratKeys [NSArray arrayWithObjects:@(START_FREE_TRIAL), @(FIND_OUT_MORE), @(MAYBE_LATER), @(SOUND_GREAT), nil]
+
 #import "CongratHelpWindowPopup.h"
 
 @interface CongratHelpWindowPopup()
@@ -29,12 +31,11 @@
     self = [super initWithTitle:@"" andHtmlString:@""];
     if (self) {
         self.congratDelegate = target;
-        self.title = @"Congratulations!";
-        self.htmlString = [self htmlString:@"Congratulations – you have qualified for a free two week trial of our optional motion-triggered Cloud Video Recording service."];
+        self.title = NSLocalizedStringWithDefaultValue(@"help_congrat_title_congratulations", nil, [NSBundle mainBundle], @"Congratulations!", nil);
+        self.htmlString = [self htmlString:NSLocalizedStringWithDefaultValue(@"help_congrat_text_congratulations", nil, [NSBundle mainBundle], @"Congratulations – you have qualified for a free two week trial of our optional motion-triggered Cloud Video Recording service.", nil)];
         
-        NSMutableDictionary *buttonTitles = [NSMutableDictionary dictionaryWithObjects:kCongratValues forKeys:kCongratKeys];
-        [buttonTitles removeObjectForKey:@(SOUND_GREAT)];
-        self.buttonTitles = buttonTitles;
+        [self getDefaultButtonTitles];
+        [self.buttonTitles removeObjectForKey:@(SOUND_GREAT)];
         
         [self reloadUIComponents];
     }
@@ -103,33 +104,44 @@
     self.webView.frame = rect;
 }
 
+- (void)getDefaultButtonTitles
+{
+    NSMutableArray *congratValues = [[NSMutableArray alloc] init];
+    [congratValues addObject:NSLocalizedStringWithDefaultValue(@"help_congrat_button_start_free_trial", nil, [NSBundle mainBundle], @"Start Free Trial", nil)];
+    [congratValues addObject:NSLocalizedStringWithDefaultValue(@"help_congrat_button_find_out_more", nil, [NSBundle mainBundle], @"Find Out More", nil)];
+    [congratValues addObject:NSLocalizedStringWithDefaultValue(@"help_congrat_button_no_thanks_maybe_later", nil, [NSBundle mainBundle], @"No Thanks! Maybe Later", nil)];
+    [congratValues addObject:NSLocalizedStringWithDefaultValue(@"help_congrat_button_sounds_great_start_free_trial", nil, [NSBundle mainBundle], @"Sounds Great! Start Free Trial", nil)];
+    
+    NSMutableDictionary *buttonTitles = [NSMutableDictionary dictionaryWithObjects:congratValues forKeys:kCongratKeys];
+    self.buttonTitles = buttonTitles;
+    [congratValues release];
+}
+
 - (void)handleButtonTouchUpInside:(id)sender
 {
     UIButton *button = sender;
     switch (button.tag) {
         case START_FREE_TRIAL:
         {
-            NSMutableDictionary *buttonTitles = [NSMutableDictionary dictionaryWithObjects:kCongratValues forKeys:kCongratKeys];
-            [buttonTitles removeObjectForKey:@(START_FREE_TRIAL)];
-            [buttonTitles removeObjectForKey:@(FIND_OUT_MORE)];
-            self.buttonTitles = buttonTitles;
-            self.title = @"Free Trial!";
+            [self getDefaultButtonTitles];
+            [self.buttonTitles removeObjectForKey:@(START_FREE_TRIAL)];
+            [self.buttonTitles removeObjectForKey:@(FIND_OUT_MORE)];
+            self.title = NSLocalizedStringWithDefaultValue(@"help_congrat_title_free_trial", nil, [NSBundle mainBundle], @"Free Trial!", nil);
             [self reloadUIComponents];
             
-            self.htmlString = [self htmlString:@"With our motion-triggered video recording, you’ll never miss a moment again. Any time movement is detected by your camera you’ll receive a video of the whole event. The free trial will last for two weeks and you can turn this feature on/off at any time by going to ‘Settings’."];
+            self.htmlString = [self htmlString:NSLocalizedStringWithDefaultValue(@"help_congrat_text_start_free_trial", nil, [NSBundle mainBundle], @"With our motion-triggered video recording, you’ll never miss a moment again. Any time movement is detected by your camera you’ll receive a video of the whole event. The free trial will last for two weeks and you can turn this feature on/off at any time by going to ‘Settings’.", nil)];
             [self loadHtml];
             break;
         }
         case FIND_OUT_MORE:
         {
-            NSMutableDictionary *buttonTitles = [NSMutableDictionary dictionaryWithObjects:kCongratValues forKeys:kCongratKeys];
-            [buttonTitles removeObjectForKey:@(START_FREE_TRIAL)];
-            [buttonTitles removeObjectForKey:@(FIND_OUT_MORE)];
-            self.buttonTitles = buttonTitles;
-            self.title = @"Free Trial!";
+            [self getDefaultButtonTitles];
+            [self.buttonTitles removeObjectForKey:@(START_FREE_TRIAL)];
+            [self.buttonTitles removeObjectForKey:@(FIND_OUT_MORE)];
+            self.title = NSLocalizedStringWithDefaultValue(@"help_congrat_title_free_trial", nil, [NSBundle mainBundle], @"Free Trial!", nil);
             [self reloadUIComponents];
             
-            self.htmlString = [self htmlString:@"With our optional motion-triggered video recording service, you’ll never miss a moment again. Any time movement is detected by your camera you’ll receive a video of the whole event. Click to view immediately or scroll back through your timeline to see all of the day’s events.<P/>Your free trial will last for two weeks and you can turn this feature on/off at any time by going to ‘Settings’.<P/>If you’d like even more detailed information, please <a href=\"http://hubbleconnected.com/free-trial/\">click here</a>."];
+            self.htmlString = [self htmlString:NSLocalizedStringWithDefaultValue(@"help_congrat_text_find_out_more", nil, [NSBundle mainBundle], @"With our optional motion-triggered video recording service, you’ll never miss a moment again. Any time movement is detected by your camera you’ll receive a video of the whole event. Click to view immediately or scroll back through your timeline to see all of the day’s events.<P/>Your free trial will last for two weeks and you can turn this feature on/off at any time by going to ‘Settings’.<P/>If you’d like even more detailed information, please <a href=\"http://hubbleconnected.com/free-trial/\">click here</a>.", nil)];
             [self loadHtml];
             break;
         }
