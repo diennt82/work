@@ -398,10 +398,10 @@
 "help_text_camera_triggers_notification_high" = "High: Your camera triggers a notification whenever it detects a sound below the low audio threshold that lasts for 0.5 seconds or more";
 
 /* No comment provided by engineer. */
-"help_text_camera_triggers_notification_low" = "Low : Your camera triggers a notification whenever it detects a sound below the low audio threshold that lasts for 3 seconds or more";
+"help_text_camera_triggers_notification_low" = "Low: Your camera triggers a notification whenever it detects a sound below the low audio threshold that lasts for 3 seconds or more";
 
 /* No comment provided by engineer. */
-"help_text_camera_triggers_notification_medium" = "Medium : Your camera triggers a notification whenever it detects a sound above the high audio threshold that lasts for 2 seconds or more";
+"help_text_camera_triggers_notification_medium" = "Medium: Your camera triggers a notification whenever it detects a sound above the high audio threshold that lasts for 2 seconds or more";
 
 /* No comment provided by engineer. */
 "help_text_camera_upgrading_to_the_latest" = "Your camera is upgrading to the latest firmware version. Please do not turn the camera off during this process";

@@ -1014,10 +1014,10 @@ typedef enum _WAIT_FOR_UPDATING {
                           withString:NSLocalizedStringWithDefaultValue(@"help_text_camera_triggers_notification_high", nil, [NSBundle mainBundle], @"High: Your camera triggers a notification whenever it detects a sound below the low audio threshold that lasts for 0.5 seconds or more", nil)
                              options:nil range:NSMakeRange(0, html.length)];
     [html replaceOccurrencesOfString:@"#h2c2#"
-                          withString:NSLocalizedStringWithDefaultValue(@"help_text_camera_triggers_notification_medium", nil, [NSBundle mainBundle], @"Medium : Your camera triggers a notification whenever it detects a sound above the high audio threshold that lasts for 2 seconds or more", nil)
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_camera_triggers_notification_medium", nil, [NSBundle mainBundle], @"Medium: Your camera triggers a notification whenever it detects a sound above the high audio threshold that lasts for 2 seconds or more", nil)
                              options:nil range:NSMakeRange(0, html.length)];
     [html replaceOccurrencesOfString:@"#h2c3#"
-                          withString:NSLocalizedStringWithDefaultValue(@"help_text_camera_triggers_notification_low", nil, [NSBundle mainBundle], @"Low : Your camera triggers a notification whenever it detects a sound below the low audio threshold that lasts for 3 seconds or more", nil)
+                          withString:NSLocalizedStringWithDefaultValue(@"help_text_camera_triggers_notification_low", nil, [NSBundle mainBundle], @"Low: Your camera triggers a notification whenever it detects a sound below the low audio threshold that lasts for 3 seconds or more", nil)
                              options:nil range:NSMakeRange(0, html.length)];
     [html replaceOccurrencesOfString:@"#h2c4#"
                           withString:NSLocalizedStringWithDefaultValue(@"help_text_each_time_sound_is_detected", nil, [NSBundle mainBundle], @"Each time sound is detected, your camera will pause the monitoring of sound levels for approximately 60 seconds before it resumes monitoring them again", nil)
